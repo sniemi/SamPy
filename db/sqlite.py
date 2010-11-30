@@ -1,4 +1,7 @@
 '''
+A file containing SQLite3 related functions.
+
+@note: The following is the orinal note:
 This little script can be used to generate an
 SQLite3 database from Rachel's GF output.
 
@@ -15,7 +18,25 @@ is stored to output variable.
 
 import sqlite3
 import glob as g
-import sextutils as su
+import io.sextutils as su
+import numpy as N
+
+def get_data_sqlite(path, db, query):
+    '''
+    This function can be used to pull out data
+    from an slite3 database. Output is given as
+    a numpy array for ease of further processing.
+    @param path: path to the db file, should end with /
+    @param db: name of the database file
+    @param query: query to be performed
+    @return: numpy array of data 
+    '''
+    conn = sqlite3.connect(path + db)
+    c = conn.cursor()
+    c.execute(query)
+    data = c.fetchall()
+    c.close()
+    return N.array(data)
 
 def parse_column_names(filename, commentchar = '#', colnumber = 2):
     '''

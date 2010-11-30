@@ -8,28 +8,15 @@ matplotlib.rcParams['legend.fontsize'] = 10
 matplotlib.rcParams['legend.handlelength'] = 5
 matplotlib.rcParams['font.size'] = 12
 matplotlib.rcParams['xtick.major.size'] = 5
-#matplotlib.rcParams['xtick.labelsize'] = 'large'
 matplotlib.rcParams['ytick.major.size'] = 5
-#matplotlib.rcParams['ytick.labelsize'] = 'large'
-#matplotlib.rcParams['legend.fancybox'] = True
 matplotlib.use('PDF')
 from matplotlib.ticker import MultipleLocator, FormatStrFormatter, NullFormatter, LogLocator
 
-
 import numpy as N
 import pylab as P
-import sqlite3
 import glob, shutil, os
 import re
-
-
-def get_data_sqlite(path, db, query):
-    conn = sqlite3.connect(path + db)
-    c = conn.cursor()
-    c.execute(query)
-    data = c.fetchall()
-    c.close()
-    return N.array(data)
+import db.sqlite
 
 def fstar_ben(mh, m1, f0, beta, gamma):
   mstar = 2.0*f0*10.0**mh / ((10.0**mh/10.0**m1)**(-beta)+(10.0**mh/10.0**m1)**gamma)
@@ -104,9 +91,10 @@ def gallazzi(file, h = 0.7, comments = ';'):
     twologh = 2.0*N.log10(h)
     return data[:,0]+twologh, data[:,1], data[:,2], data[:,3]
 
-def stellarmassfunc_plot(path, db, redshifts, mmax = 12.5, mmin = 5.0, 
+def stellarmassfunc_plot(path, database, redshifts, mmax = 12.5, mmin = 5.0, 
                          nbins = 40, nvolumes = 8, h = 0.7,
-                         obs = '/Users/niemi/Desktop/Research/IDL/obs/'):
+                         obs = '/Users/niemi/Desktop/Research/IDL/obs/',
+                         output_folder = '/Users/niemi/Desktop/Research/stellar_mass_functions/'):
     '''
     Plots stellar mass functions as a function of redshift
     '''
@@ -130,7 +118,8 @@ def stellarmassfunc_plot(path, db, redshifts, mmax = 12.5, mmin = 5.0,
     for redshift in redshifts:
         query = '''select mstar_disk, mbulge, gal_id from galpropz where ''' + redshift
         query += ' and mstar_disk + mbulge > 0'
-        data = get_data_sqlite(path, db, query)
+        
+        data = db.sqlite.get_data_sqlite(path, database, query)
 
 #        disk = N.log10(data[:,0] * multiply)
 #        bulge = N.log10(data[:,1] * multiply)
@@ -194,25 +183,24 @@ def stellarmassfunc_plot(path, db, redshifts, mmax = 12.5, mmin = 5.0,
     ax.xaxis.set_minor_formatter(xminorFormattor) 
 
     P.legend(shadow = True, fancybox = True)
-    P.savefig('stellarmf.pdf')
+    P.savefig(output_folder+'stellarmf.pdf')
     P.close()
-
 
 def findgen(x):
     '''
-    IDL function.
+    IDL function findgen, same as numpy.arange.
     '''
     return N.arange(x)
 
 def fix(x):
     '''
-    IDL function.
+    IDL function fix, same as numpy.floor.
     '''
     return int(N.floor(x))
 
 def alog10(x):
     '''
-    IDL function.
+    IDL function alog10, same as numpy.log10.
     '''
     return N.log10(x)
 
@@ -227,7 +215,7 @@ def haering_rix(file, comments = ';'):
 
     return m_bulge, m_bh, ellip, spiral, s0
 
-def main(path, db):
+def main(path, database):
     '''
     Driver function, call this with a path to the data,
     and label you wish to use for the files.
@@ -240,19 +228,9 @@ def main(path, db):
                  'galpropz.zgal > 5.9 and galpropz.zgal <= 6.1',
                  'galpropz.zgal > 6.9 and galpropz.zgal <= 7.1']
 
-#    redshifts = ['galpropz.zgal > 0.5 and galpropz.zgal <= 1.5',
-#                 'galpropz.zgal > 1.5 and galpropz.zgal <= 2.5',
-#                 'galpropz.zgal > 2.5 and galpropz.zgal <= 3.5',
-#                 'galpropz.zgal > 3.5 and galpropz.zgal <= 4.5',
-#                 'galpropz.zgal > 4.5 and galpropz.zgal <= 5.5',
-#                 'galpropz.zgal > 5.5 and galpropz.zgal <= 6.5',
-#                 'galpropz.zgal > 6.5 and galpropz.zgal <= 7.5']
-
-    stellarmassfunc_plot(path, db, redshifts)
+    stellarmassfunc_plot(path, database, redshifts)
 
 if __name__ == '__main__':    
-
     path = '/Users/niemi/Desktop/Research/run/trial1/'
-    db = 'sams.db'
-
-    main(path, db)
+    database = 'sams.db'
+    main(path, database)
