@@ -27,17 +27,23 @@ import datetime, sys
 __author__ = 'Sami-Matias Niemi'
 __version__ = '0.1'
 
-if len(sys.argv) != 2:
-    print 'Usage:'
-    print '\tNumberDate day_number'
-    sys.exit(-9)
+def print_day_number(day):
+    currentYear = datetime.datetime.today().year
+    date = datetime.datetime.strptime(str(currentYear) + day, '%Y%j')
+    
+    print 'Day %s of year %s corresponds to %s.' % (day, currentYear, date.strftime("%A %d. %B %Y"))
 
-if int(sys.argv[1]) > 366 or int(sys.argv[1]) < 1:
-    print 'You gave an invalid day number, please use day_number = [1,366]'
-    sys.exit(-8)
 
-currentYear = datetime.datetime.today().year
-day = sys.argv[1]
-date = datetime.datetime.strptime(str(currentYear) + day, '%Y%j')
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print 'Usage:'
+        print '\tNumberDate day_number'
+        sys.exit(-9)
+    
+    if int(sys.argv[1]) > 366 or int(sys.argv[1]) < 1:
+        print 'You gave an invalid day number, please use day_number = [1,366]'
+        sys.exit(-8)
 
-print 'Day %s of year %s corresponds to %s.' % (day, currentYear, date.strftime("%A %d. %B %Y"))
+    day = sys.argv[1]
+
+    print_day_number(day)
