@@ -1,0 +1,917 @@
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svnroot/matplotlib/!svn/ver/4613/trunk/htdocs/examples
+END
+webapp_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/webapp_demo.py
+END
+embedding_in_qt.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/embedding_in_qt.py
+END
+matplotlib_icon.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/matplotlib/!svn/ver/2807/trunk/htdocs/examples/matplotlib_icon.py
+END
+anim.py
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/matplotlib/!svn/ver/2807/trunk/htdocs/examples/anim.py
+END
+set_and_get.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/set_and_get.py
+END
+dash_control.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/matplotlib/!svn/ver/759/trunk/htdocs/examples/dash_control.py
+END
+invert_axes.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/matplotlib/!svn/ver/759/trunk/htdocs/examples/invert_axes.py
+END
+scatter_demo2.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/matplotlib/!svn/ver/2807/trunk/htdocs/examples/scatter_demo2.py
+END
+line_styles.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/line_styles.py
+END
+pythonic_matplotlib.py
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/pythonic_matplotlib.py
+END
+cursor_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/cursor_demo.py
+END
+image_demo2.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/image_demo2.py
+END
+image_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/image_demo.py
+END
+accented_text.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/matplotlib/!svn/ver/1122/trunk/htdocs/examples/accented_text.py
+END
+toggle_images.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/toggle_images.py
+END
+color_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/matplotlib/!svn/ver/2807/trunk/htdocs/examples/color_demo.py
+END
+embedding_in_wx2.py
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/embedding_in_wx2.py
+END
+date_demo2.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/matplotlib/!svn/ver/3311/trunk/htdocs/examples/date_demo2.py
+END
+histogram_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/histogram_demo.py
+END
+mri_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/matplotlib/!svn/ver/4812/trunk/htdocs/examples/mri_demo.py
+END
+agg_oo.py
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svnroot/matplotlib/!svn/ver/974/trunk/htdocs/examples/agg_oo.py
+END
+text_themes.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/matplotlib/!svn/ver/4812/trunk/htdocs/examples/text_themes.py
+END
+pcolor_small.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/pcolor_small.py
+END
+vline_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/vline_demo.py
+END
+log_bar.py
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/matplotlib/!svn/ver/759/trunk/htdocs/examples/log_bar.py
+END
+axes_props.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/axes_props.py
+END
+coords_report.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/matplotlib/!svn/ver/4812/trunk/htdocs/examples/coords_report.py
+END
+interactive2.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/interactive2.py
+END
+dashtick.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/matplotlib/!svn/ver/1418/trunk/htdocs/examples/dashtick.py
+END
+image_demo_na.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/matplotlib/!svn/ver/759/trunk/htdocs/examples/image_demo_na.py
+END
+wxcursor_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/wxcursor_demo.py
+END
+logo.py
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/matplotlib/!svn/ver/4812/trunk/htdocs/examples/logo.py
+END
+system_monitor.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/system_monitor.py
+END
+embedding_in_tk.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/embedding_in_tk.py
+END
+histogram_demo_canvasagg.py
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/histogram_demo_canvasagg.py
+END
+colours.py
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/colours.py
+END
+embedding_in_gtk2.py
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/embedding_in_gtk2.py
+END
+anim_tk.py
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/matplotlib/!svn/ver/818/trunk/htdocs/examples/anim_tk.py
+END
+major_minor_demo2.py
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/major_minor_demo2.py
+END
+fill_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/matplotlib/!svn/ver/759/trunk/htdocs/examples/fill_demo.py
+END
+matshow.py
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/matplotlib/!svn/ver/972/trunk/htdocs/examples/matshow.py
+END
+subplot_toolbar.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/matplotlib/!svn/ver/1574/trunk/htdocs/examples/subplot_toolbar.py
+END
+subplots_adjust.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/matplotlib/!svn/ver/1467/trunk/htdocs/examples/subplots_adjust.py
+END
+image_interp.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/image_interp.py
+END
+masked_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/masked_demo.py
+END
+pie_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/pie_demo.py
+END
+contour_image.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/matplotlib/!svn/ver/2807/trunk/htdocs/examples/contour_image.py
+END
+picker_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/matplotlib/!svn/ver/881/trunk/htdocs/examples/picker_demo.py
+END
+specgram_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/specgram_demo.py
+END
+fill_between_posneg.py
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/matplotlib/!svn/ver/2807/trunk/htdocs/examples/fill_between_posneg.py
+END
+embedding_in_gtk.py
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/embedding_in_gtk.py
+END
+line_collection.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/matplotlib/!svn/ver/1418/trunk/htdocs/examples/line_collection.py
+END
+vertical_ticklabels.py
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/matplotlib/!svn/ver/1418/trunk/htdocs/examples/vertical_ticklabels.py
+END
+arctest.py
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/matplotlib/!svn/ver/1418/trunk/htdocs/examples/arctest.py
+END
+break.py
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svnroot/matplotlib/!svn/ver/759/trunk/htdocs/examples/break.py
+END
+barchart_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/matplotlib/!svn/ver/759/trunk/htdocs/examples/barchart_demo.py
+END
+integral_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/integral_demo.py
+END
+text_rotation.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/matplotlib/!svn/ver/2807/trunk/htdocs/examples/text_rotation.py
+END
+gdtest.py
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/matplotlib/!svn/ver/1418/trunk/htdocs/examples/gdtest.py
+END
+object_picker.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/matplotlib/!svn/ver/1418/trunk/htdocs/examples/object_picker.py
+END
+fill_spiral.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/matplotlib/!svn/ver/759/trunk/htdocs/examples/fill_spiral.py
+END
+barh_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/matplotlib/!svn/ver/2937/trunk/htdocs/examples/barh_demo.py
+END
+image_demo3.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/matplotlib/!svn/ver/2807/trunk/htdocs/examples/image_demo3.py
+END
+date_demo_convert.py
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/date_demo_convert.py
+END
+ganged_plots.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/matplotlib/!svn/ver/1468/trunk/htdocs/examples/ganged_plots.py
+END
+quiver_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/quiver_demo.py
+END
+multiple_figs_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svnroot/matplotlib/!svn/ver/1418/trunk/htdocs/examples/multiple_figs_demo.py
+END
+newscalarformatter_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svnroot/matplotlib/!svn/ver/2807/trunk/htdocs/examples/newscalarformatter_demo.py
+END
+scatter_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/scatter_demo.py
+END
+pcolor_demo2.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/pcolor_demo2.py
+END
+legend_auto.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/legend_auto.py
+END
+psd_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/psd_demo.py
+END
+embedding_in_wx3.py
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/embedding_in_wx3.py
+END
+poly_editor.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/matplotlib/!svn/ver/4812/trunk/htdocs/examples/poly_editor.py
+END
+print_stdout.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/matplotlib/!svn/ver/759/trunk/htdocs/examples/print_stdout.py
+END
+two_scales.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/matplotlib/!svn/ver/2807/trunk/htdocs/examples/two_scales.py
+END
+custom_ticker1.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/matplotlib/!svn/ver/759/trunk/htdocs/examples/custom_ticker1.py
+END
+contourf_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/contourf_demo.py
+END
+dashpointlabel.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/matplotlib/!svn/ver/4812/trunk/htdocs/examples/dashpointlabel.py
+END
+pstest.py
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/matplotlib/!svn/ver/1418/trunk/htdocs/examples/pstest.py
+END
+table_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/matplotlib/!svn/ver/759/trunk/htdocs/examples/table_demo.py
+END
+embedding_in_wx.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/embedding_in_wx.py
+END
+printing_in_wx.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/printing_in_wx.py
+END
+alignment_test.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/matplotlib/!svn/ver/759/trunk/htdocs/examples/alignment_test.py
+END
+fonts_demo_kw.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/fonts_demo_kw.py
+END
+figimage_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/matplotlib/!svn/ver/4812/trunk/htdocs/examples/figimage_demo.py
+END
+finance_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/matplotlib/!svn/ver/3311/trunk/htdocs/examples/finance_demo.py
+END
+contour_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/contour_demo.py
+END
+scatter_profile.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/scatter_profile.py
+END
+embedding_in_gtk3.py
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/embedding_in_gtk3.py
+END
+axhspan_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/matplotlib/!svn/ver/2807/trunk/htdocs/examples/axhspan_demo.py
+END
+unicode_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/unicode_demo.py
+END
+font_table_ttf.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/font_table_ttf.py
+END
+color_by_yvalue.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/color_by_yvalue.py
+END
+date_demo_rrule.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/matplotlib/!svn/ver/2807/trunk/htdocs/examples/date_demo_rrule.py
+END
+interactive.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/interactive.py
+END
+anscombe.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/anscombe.py
+END
+legend_demo2.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/legend_demo2.py
+END
+dynamic_image_wxagg.py
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/dynamic_image_wxagg.py
+END
+glyph_to_path.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/glyph_to_path.py
+END
+backend_driver.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/backend_driver.py
+END
+agg_test.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/agg_test.py
+END
+pcolor_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/pcolor_demo.py
+END
+csd_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/csd_demo.py
+END
+simple_plot.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/matplotlib/!svn/ver/3311/trunk/htdocs/examples/simple_plot.py
+END
+gtk_spreadsheet.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/gtk_spreadsheet.py
+END
+embedding_in_tk2.py
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/embedding_in_tk2.py
+END
+fonts_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/fonts_demo.py
+END
+date_demo1.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/date_demo1.py
+END
+mpl_with_glade.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/mpl_with_glade.py
+END
+errorbar_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/errorbar_demo.py
+END
+stem_plot.py
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/stem_plot.py
+END
+legend_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/matplotlib/!svn/ver/2807/trunk/htdocs/examples/legend_demo.py
+END
+agg_resize.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/agg_resize.py
+END
+figlegend_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/matplotlib/!svn/ver/759/trunk/htdocs/examples/figlegend_demo.py
+END
+zorder_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/matplotlib/!svn/ver/2807/trunk/htdocs/examples/zorder_demo.py
+END
+stock_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/matplotlib/!svn/ver/2807/trunk/htdocs/examples/stock_demo.py
+END
+mri_with_eeg.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/mri_with_eeg.py
+END
+to_numeric.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/to_numeric.py
+END
+dynamic_image_gtkagg.py
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svnroot/matplotlib/!svn/ver/3041/trunk/htdocs/examples/dynamic_image_gtkagg.py
+END
+layer_images.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/layer_images.py
+END
+coords_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/matplotlib/!svn/ver/1122/trunk/htdocs/examples/coords_demo.py
+END
+subplot_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/matplotlib/!svn/ver/1418/trunk/htdocs/examples/subplot_demo.py
+END
+embedding_in_wx4.py
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/embedding_in_wx4.py
+END
+major_minor_demo1.py
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/major_minor_demo1.py
+END
+axes_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/axes_demo.py
+END
+polar_scatter.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/polar_scatter.py
+END
+dynamic_demo_wx.py
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/dynamic_demo_wx.py
+END
+ftface_props.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/ftface_props.py
+END
+bar_stacked.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/matplotlib/!svn/ver/759/trunk/htdocs/examples/bar_stacked.py
+END
+tex_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/tex_demo.py
+END
+text_handles.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/matplotlib/!svn/ver/1418/trunk/htdocs/examples/text_handles.py
+END
+dynamic_image_wxagg2.py
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/dynamic_image_wxagg2.py
+END
+poormans_contour.py
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/matplotlib/!svn/ver/2807/trunk/htdocs/examples/poormans_contour.py
+END
+boxplot_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/matplotlib/!svn/ver/2937/trunk/htdocs/examples/boxplot_demo.py
+END
+fill_demo2.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/fill_demo2.py
+END
+movie_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/matplotlib/!svn/ver/759/trunk/htdocs/examples/movie_demo.py
+END
+figtext.py
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svnroot/matplotlib/!svn/ver/759/trunk/htdocs/examples/figtext.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/matplotlib/!svn/ver/384/trunk/htdocs/examples/__init__.py
+END
+log_test.py
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svnroot/matplotlib/!svn/ver/759/trunk/htdocs/examples/log_test.py
+END
+multiline.py
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/multiline.py
+END
+customize_rc.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/matplotlib/!svn/ver/2807/trunk/htdocs/examples/customize_rc.py
+END
+mathtext_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/mathtext_demo.py
+END
+fill_between.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/fill_between.py
+END
+image_origin.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/matplotlib/!svn/ver/2941/trunk/htdocs/examples/image_origin.py
+END
+shared_axis_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/matplotlib/!svn/ver/1418/trunk/htdocs/examples/shared_axis_demo.py
+END
+polar_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/polar_demo.py
+END
+dynamic_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svnroot/matplotlib/!svn/ver/3041/trunk/htdocs/examples/dynamic_demo.py
+END
+data_helper.py
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svnroot/matplotlib/!svn/ver/4812/trunk/htdocs/examples/data_helper.py
+END
+font_indexing.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/font_indexing.py
+END
+log_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svnroot/matplotlib/!svn/ver/1418/trunk/htdocs/examples/log_demo.py
+END
+keypress_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/keypress_demo.py
+END

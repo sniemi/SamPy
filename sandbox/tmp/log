@@ -1,0 +1,606 @@
+#log# Automatic Logger file. *** THIS MUST BE THE FIRST LINE ***
+#log# DO NOT CHANGE THIS LINE OR THE TWO BELOW
+#log# opts = Struct({'__allownew': True, 'logfile': 'log'})
+#log# args = []
+#log# It is safe to make manual edits below here.
+#log#-----------------------------------------------------------------------
+import pymc
+pymc.test()
+_ip.system("clear")
+help(pymc.Matplot)
+from pymc import DiscreteUniform, Exponential, deterministic, Poisson, Uniform
+import numpy as np
+disasters_array =   np.array([ 4, 5, 4, 0, 1, 4, 3, 4, 0, 6, 3, 3, 4, 0, 2, 6,
+                   3, 3, 5, 4, 5, 3, 1, 4, 4, 1, 5, 5, 3, 4, 2, 5,
+                   2, 2, 3, 4, 2, 1, 3, 2, 2, 1, 1, 1, 1, 3, 0, 0,
+                   1, 0, 1, 1, 0, 0, 3, 1, 0, 3, 2, 2, 0, 1, 1, 1,
+                   0, 1, 0, 1, 0, 0, 0, 2, 1, 0, 0, 0, 1, 1, 0, 2,
+                   3, 3, 1, 1, 2, 1, 1, 1, 1, 2, 4, 2, 0, 0, 1, 4,
+                   0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1])
+
+print(disasters_array)
+P.plot(disasters_array)
+s = DiscreteUniform('s', lower=0, upper=110, doc='Switchpoint[year]')
+print(s)
+e = Exponential('e', beta=1)
+l = Exponential('l', beta=1)
+@deterministic(plot=False)
+def r(s=s, e=e, l=l):
+ """ Concatenate Poisson means """
+    out = np.empty(len(disasters_array))
+    out[:s] = e
+    out[s:] = l
+    return out
+=l):
+@deterministic(plot=False)
+def r(s=s, e=e, l=l):
+out = np.empty(len(disasters_array))
+    out[:s] = e
+    out[s:] = l
+
+
+
+
+
+
+@deterministic(plot=False)
+def r(s=s, e=e, l=l):
+ out = np.empty(len(disasters_array))
+     out[:s] = e
+_ip.system("clear")
+def r(s=s, e=e, l=l):
+ """ Concatenate Poisson means """
+    out = np.empty(len(disasters_array))
+    out[:s] = e
+    out[s:] = l
+    return out
+
+_ip.system("clear")
+print(disasters_array)
+_ip.system("ls -F ")
+_ip.system("mkdir tmp")
+_ip.magic("cd tmp")
+_ip.magic("edit func.py")
+_ip.magic("edit func.py")
+_ip.magic("run func.py")
+@deterministic(plot=False)
+_ip.system("clear")
+_ip.magic("edit func.py")
+_ip.magic("whos ")
+_ip.magic("edit func.py")
+D = Poisson('D', mu=r, value=disasters_array, observed=True)
+print(D)
+D
+D.stats 
+_ip.magic("logstart log")
+
+_ip.system("ls -F ")
+s.parent
+s.parents
+s.parent_names
+D.parents
+r.children
+D.value
+s.value
+r.value
+e.value
+l.value
+s.logp
+D.logp
+e.logp
+l.logp
+from pymc import MCMC
+M = MCMC(log)
+import log
+_ip.system("ls -F ")
+_ip.magic("edit func.py")
+import func
+M = MCMC(func)
+print(m)
+print(M)
+M
+M.s
+M.s.value
+M.isample(iter=10000, burn=1000, thin=10)
+M.trace('s')[:]
+M
+help(M)
+dir(M)
+M.trace('s')[:]
+from pylab import hist, show
+hist(M.trace('l')[:])
+from pymc.Matplot import plot
+plot(M)
+M.stats 
+M.stats()
+x = numpy.array([ 4, 5, 4, 0, 1, 4, 3, 4, 0, 6, 3, 3, 4, 0, 2, 6,
+3, 3, 5, 4, 5, 3, 1, 4, 4, 1, 5, 5, 3, 4, 2, 5,
+2, 2, 3, 4, 2, 1, 3, -999, 2, 1, 1, 1, 1, 3, 0, 0,
+1, 0, 1, 1, 0, 0, 3, 1, 0, 3, 2, 2, 0, 1, 1, 1,
+0, 1, 0, 1, 0, 0, 0, 2, 1, 0, 0, 0, 1, 1, 0, 2,
+3, 3, 1, -999, 2, 1, 1, 1, 1, 2, 4, 2, 0, 0, 1, 4,
+0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1])
+x = np.array([ 4, 5, 4, 0, 1, 4, 3, 4, 0, 6, 3, 3, 4, 0, 2, 6,
+3, 3, 5, 4, 5, 3, 1, 4, 4, 1, 5, 5, 3, 4, 2, 5,
+2, 2, 3, 4, 2, 1, 3, -999, 2, 1, 1, 1, 1, 3, 0, 0,
+1, 0, 1, 1, 0, 0, 3, 1, 0, 3, 2, 2, 0, 1, 1, 1,
+0, 1, 0, 1, 0, 0, 0, 2, 1, 0, 0, 0, 1, 1, 0, 2,
+3, 3, 1, -999, 2, 1, 1, 1, 1, 2, 4, 2, 0, 0, 1, 4,
+0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1])
+x
+plot(M)
+masked_data = N.ma.masked_equal(x, value=-999)
+print(masked_data)
+masked_data
+ D = ImputeMissing('D', Poisson, masked_data, mu=r)
+from pymc import ImputeMissing
+D = ImputeMissing('D', Poisson, masked_data, mu=r)
+D
+s = DiscreteUniform('s', lower=0, upper=110)
+e = Exponential('e', beta=1)
+l = Exponential('l', beta=1)
+masked_data = np.ma.masked_array(disasters_array, disasters_mask)
+D = ImputeMissing('D', Poisson, masked_data, mu=r)
+D
+_ip.system("ls -F ")
+_ip.magic("edit func.py")
+_ip.magic("edit func.py")
+_ip.magic("edit func.py")
+_ip.magic("edit func.py")
+import funct
+import func
+D
+MA = MCMC(func)
+MA.isample(iter=10000, burn=1000, thin=10)
+plot(MA)
+sa = DiscreteUniform('s', 1851, 1962, value=1900)
+sa.value
+sa
+import pymc
+chsqr = pymc.distributions.chi2_like(4, 2)
+print(chsqr)
+chsqr = pymc.distributions.chi2_like(4, 250)
+print(chsqr)
+chsqr = pymc.distributions.chi2_like(4000, 250)
+print(chsqr)
+plot(MA)
+plot(M)
+_ip.magic("whos ")
+P.errorbar([1], [2], yerr = [1,])
+P.errorbar([1], [2], yerr = [0.2,])
+P.errorbar([2], [2], yerr = [0.2,])
+P.errorbar([1.5], [2], yerr = [0.0,])
+P.errorbar([1.5], [2], yerr = [0.1,])
+P.errorbar([1.5], [2], yerr = [0.1,], marker = 'o')
+P.errorbar([1.5], [2], yerr = [0.1,], marker = 'bo')
+P.errorbar([1.5], [2], yerr = [0.1,], marker = 'o')
+P.errorbar([1.6], [2], yerr = [0.1,], marker = 'o')
+P.errorbar([1.4], [2], yerr = [0.0,], marker = 'o')
+P.close()
+_ip.system("clear")
+_ip.magic("whos ")
+LSQBivariateSplinefitpack2.interpolate.SciPy.
+import scipy
+LSQBivariateSplinefitpack2.interpolate.SciPy.
+import scipy.interpolate.fitpack2 as F
+help(F.LSQBivariateSpline)
+x = [1,2,3,4,5,6,7,8]
+y = [1,0.5,-0.2,0.8,0.5,-0.2,0.2,0.8]
+P.plot(x,y,'bo')
+w = [1,1,1,1,1,1,1,1]
+import scipy.interpolate.fitpack as F
+F.splrep(
+)
+F.splrep(
+)
+x
+y
+w
+rep = F.splrep(x,y, w= w)
+print(rep)
+y2 = F.splev(x, rep)
+print(y)
+print(y2)
+P.plot(x,y2, 'r-')
+P.close()
+x
+y
+t5 = F.splrep(x, y, k=5)
+s_fit5 = interpolate.splev(x,t5)
+s_fit5 = F.splev(x,t5)
+P.plot(x,y, 'bo')
+p.plot(x, s_fit5, 'r-' )
+P.plot(x, s_fit5, 'r-' )
+x
+y
+s_fit5
+_ip.system("clear")
+import scipy.signal as SS
+x = N.ones((10,10))*math.sin(123)
+import math
+x = N.ones((10,10))*math.sin(123)
+print(x)
+x = N.ones((10,10)) + math.sin(123)
+x
+x = N.arange(100)*math.sin(123).reshape((10,10))
+x = N.arange(100)*math.sin(123)
+tmp = N.reshape(x, (10,10))
+tmp
+P.imshow(tmp, order='lower', interpolation=None)
+P.imshow(tmp, origin='lower', interpolation=None)
+tmp2 = SS.medfilt(tmp, 11)
+print(tmp)
+print(tmp2)
+tmp2 = SS.medfilt(tmp, 3)
+print(tmp)
+print(tmp2)
+tmp2 = SS.medfilt(tmp2, 11)
+tmp2 = SS.medfilt(tmp, 3)
+P.imshow(tmp2, origin='lower', interpolation=None)
+P.imshow(tmp, origin='lower', interpolation=None)
+P.imshow(tmp2, origin='lower', interpolation=None)
+P.imshow(tmp, origin='lower', interpolation=None)
+P.imshow(tmp2, origin='lower', interpolation=None)
+tmp2
+tmp
+n.shape(tmp)
+N.shape(tmp)
+N.shape(tmp2)
+tmp
+tmp2
+P.imshow(tmp, origin='lower', interpolation=None)
+P.xlim(0,10)
+P.ylim(0,10)
+P.imshow(tmp2, origin='lower', interpolation=None)
+P.xlim(0,10)
+P.ylim(0,10)
+help(SS.medilt)
+help(SS.medfilt)
+tmp2 = SS.medfilt(tmp, (3,3))
+tmp
+tmp2
+P.imshow(tmp2, origin='lower', interpolation=None)
+tmp2 = SS.medfilt(tmp)
+P.imshow(tmp2, origin='lower', interpolation=None)
+tmp2
+tmp2 = SS.medfilt(tmp, 9)
+P.imshow(tmp2, origin='lower', interpolation=None)
+tmp2
+_ip.system("clear")
+293./10352.*100.
+gal = 1726277 + 1644843 + 1766363 + 1665025 + 1527804
+print(gal)
+gal / 155604.*100.
+1./(gal / 155604.)*100.
+32793./1726277.*100.
+2.9*0.0035
+293/gal
+293./gal*100.
+print('%e' % 293./gal*100.)
+print('%e' % (293./gal*100.))
+print('%e' % ((293.+155604)/gal*100.))
+293./24752.*100.
+293./10350.*100.
+303./10350.*100.
+10353./gal*100.
+0.0025/2.9
+0.0035/2.9
+0.0035/2.9*1000.
+10353./gal*1000.
+10350./gal*1000.
+_ip.system("clear")
+10350./gal*1000.
+0.0035/2.9*1000.
+_ip.system("clear")
+10350./gal
+0.0035/2.9
+155600./gal*100.
+293./24750.*100.
+293./24750.*100.
+293./gal*100.
+293./24750.*100.
+293./24750.*100.
+293./10348.*100.
+0.0035/1.2
+0.0035/1.1838
+0.0035/1.1838*100.
+0.35/2.9
+24750./gal*100.
+0.0035/1.1838383
+0.0035/1.1838383*100.
+293./gal*100.
+0.0035/2.9
+0.0035/2.9*100.
+24750./gal*100.
+24750./gal*100.
+0.0035/1.18*100.
+from scipy.optimize import curve_fit
+def func(x, a, b, c):
+return a*np.exp(-b*x) + c
+def func(x, a, b, c):
+   return a*np.exp(-b*x) + c
+x = N.linspace(0,4,50)
+y = func(x, 2.5, 1.3, 0.5)
+yn = y + 0.2*N.random.normal(size=len(x))
+popt, pcov = curve_fit(func, x, yn)
+P.plot(x, y)
+P.plot(x, yn, 'o')
+P.plot(x, popt, 'r-')
+popt
+r
+x
+pcov
+yfit(x, popt[0], popt[1], popt[2])
+yfit = func(x, popt[0], popt[1], popt[2])
+P.plot(x, yfit, 'r-')
+def func(x, a, b, c, d):
+   return a*N.exp(-b*x) + c*N.log(d*x**2)
+x = M.linspace(0,20,500)
+x = N.linspace(0,20,500)
+y = func(x, 2.5, 1.3, 0.5, 20)
+yn = y + 0.2*N.random.normal(size=len(x))
+popt, pcov = curve_fit(func, x, yn)
+yn
+x = N.linspace(1,20,500)
+y = func(x, 2.5, 1.3, 0.5, 20)
+yn = y + 0.2*N.random.normal(size=len(x))
+popt, pcov = curve_fit(func, x, yn)
+P.plot(x, yn)
+x = N.linspace(1,20,50)
+y = func(x, 2.5, 1.3, 0.5, 20)
+yn = y + 0.2*N.random.normal(size=len(x))
+popt, pcov = curve_fit(func, x, yn)
+P.plot(x, yn, 'bo')
+P.plot(x, func(x, popt[0], popt[1], popt[2], popt[3]), 'r-')
+x = N.linspace(1,1024,1000)
+y = func(x, 2.5, 1.3, 0.5, 10)
+yn = y + 0.2*N.random.normal(size=len(x))
+P.plot(x, yn)
+import scipy.signal as SS
+mfilt == SS.medfilt(yn, 11)
+mfilt = SS.medfilt(yn, 11)
+P.plot(x, mfilt, 'g-')
+nodes = N.arange(0, len(x), 10)
+ynods = mfilt[nodes]
+P.plot(nodes, ynodes, 'bo')
+P.plot(nodes, ynods, 'bo')
+P.plot(nodes, ynods, 'yo')
+nodes = N.arange(0, len(x), 30)
+ynods = mfilt[nodes]
+P.plot(nodes, ynods, 'bo')
+P.plot(nodes, ynods, 'go')
+import scipy.interpolate as I
+tck = I.splrep(nodes, ynods)
+spliney = I.splev(x, tck)
+P.plot(x, spliney, 'r-')
+def fitf(x, prop):
+   return I.splev(x, I.splrep(prop[1], prop[2]))
+ysfit = fitf(x, [nodes, ynods])
+ def fitf(x, prop):
+   return I.splev(x, I.splrep(prop[0], prop[1]))
+ysfit = fitf(x, [nodes, ynods])
+def fitf(x, prop):
+   return I.splev(x, I.splrep(prop[0], prop[1]))
+ysfit = fitf(x, [nodes, ynods])
+popt, pcov = curve_fit(fitf, x, yn)
+def fitf(x, a, b):
+   return I.splev(x, I.splrep(a, b)
+)
+ ysfit = fitf(x, nodes, ynods)
+popt, pcov = curve_fit(fitf, x, yn)
+ def fitf(x, a, b):
+   return I.splev(x, I.splrep(a, b))
+P.close()
+P.plot(x, yn, 'b-')
+P.plot(nodes, ynods, 'go')
+sp = fitf(x, nodes, ynods)
+P.plot(x, sp, 'm-')
+ popt, pcov = curve_fit(fitf, x, yn)
+def fitf(x, a, b):
+   return I.splev(x, I.splrep(a, b, k = 3))
+popt, pcov = curve_fit(fitf, x, yn)
+import scipy.optmize as O
+import scipy.optimize as O
+a = O.leastsq(fitf, x, args=(nodes, ynods))
+print(a)
+P.plot(x, a, 'r-')
+P.plot(x, a[0], 'r-')
+len(nodes)
+P.close()
+P.plot(x, yn)
+nodes = [0, 100,200,300,400,500,600,700,800,900,1000,1024]
+ynods = yn[nodes]
+x[-1]
+len(yn)
+yn = y + 0.2*N.random.normal(size=len(x))
+len(yn)
+ynods = yn[nodes[:-1]]
+ynods = yn[nodes[:-2]]
+ynods.append(7.8)
+a = O.leastsq(fitf, x, args=(nodes, ynods), full_output=1, ,factor=0.1, maxfev=1000)
+a = O.leastsq(fitf, x, args=(nodes, ynods), full_output=1,factor=0.1, maxfev=1000)
+a = O.leastsq(fitf, x, args=(nodes[:-2], ynods), full_output=1,factor=0.1, maxfev=1000)
+a
+a = O.leastsq(fitf, yn, args=(nodes[:-2], ynods), full_output=1,factor=0.1, maxfev=1000)
+a
+P.plot(x, a[0], 'r-')
+a = O.leastsq(fitf, yn, args=(nodes[:-2], ynods), maxfev=1000)
+P.plot(x, a[0], 'r-')
+P.close()
+P.plot(x, yn)
+popt, pcov = curve_fit(fitf, x, yn, p0 = (nodes[:-2], ynods))
+popt, pcov = curve_fit(fitf, x, yn, p0 = ynods)
+popt, pcov = curve_fit(fitf, x, yn)
+a = O.leastsq(fitf, ynods, args=(x, yn), maxfev=10000)
+print(a)
+ynods
+x
+yn
+len(x)
+len(yn)
+fitfunc = lambda p, x: I.splev(x, I.splrep(p[0], p[1], k = 3))
+errfunc = lambda p, x, y: fitfunc(p, x) - y
+p0 = [nodes[:-2], ynods]
+p1, success = O.leastsq(errfunc, p0[:], args=(x, yn))
+p1, success = O.leastsq(errfunc, p0, args=(x, yn))
+p1, success = O.leastsq(errfunc, nodes[:-2], args=(x, yn))
+fitfunc = lambda p, x: I.splev(x, I.splrep(p[0], p[1], k = 3))
+errfunc = lambda p, x, y: fitfunc(p, x) - y
+p0 = [nodes[:-2], ynods]
+ys = fitfunc(p, x)
+ys = fitfunc(p0, x)
+P.plot(x, ys, 'r-')
+p1, success = O.leastsq(errfunc, p0, args=(x, yn))
+p1, success = O.leastsq(errfunc, ynods, args=(x, yn))
+p1, success = O.leastsq(errfunc, p0, args=(x, yn))
+fitfunc = lambda p, x: I.splev(x, I.splrep(p[0], p[1], k = 3))
+errfunc = lambda p, x, y: fitfunc(p, x) - y
+ys = fitfunc(p0, x)
+p0
+def fitf(x, a, b, y):
+   return I.splev(x, I.splrep(a, b, k = 3)) - y
+p1, success = O.leastsq(fitf, p0, args=(x, yn))
+def fitf(x, a, b, y):
+ 
+def fitf(x, p, y):
+   return I.splev(x, I.splrep(p[0], p[1], k = 3)) - y
+p1, success = O.leastsq(fitf, p0, args=(x, yn))
+popt, pcov = curve_fit(fitf, x, yn)
+p1, success = O.leastsq(fitf, nodes, args=(x, yn))
+p1, success = O.leastsq(fitf, nodes[:-2], args=(x, yn))
+p1, success = O.leastsq(fitf, ynods, args=(x, yn))
+p1, success = O.leastsq(fitf, (nodes[:-2], ynods), args=(x, yn))
+fitfunc = lambda p, x: I.splev(x, I.splrep(p[0], p[1], k = 3))
+fitfunc = lambda p, x: I.splev(x, I.splrep(p[0], p[1], k = 3))
+errfunc = lambda p, x, y: fitfunc(p, x) - y
+fitfunc = lambda p, x: I.splev(x, I.splrep(p[0], p[1], k = 3), k=3)
+ys = fitfunc(p0, x)
+fitfunc = lambda p, x: I.splev(x, I.splrep(p[0], p[1], k = 3), der = 3)
+ys = fitfunc(p0, x)
+P.plot(nodes, ys, 'm--')
+P.plot(x, ys, 'm--')
+p0
+P.plot(P0)
+P.plot(p0)
+P.plot(p0[0], p[1])
+P.plot(p0[0], p0[1])
+P.close()
+P.plot(p0[0], p0[1])
+P.close()
+P.plot(p0[0], p0[1], 'go')
+P.plot(x, yn)
+P.plot(p0[0], p0[1], 'go')
+ys = fitfunc(p0, x)
+P.plot(x, ys)
+fitfunc = lambda p, x: I.splev(x, I.splrep(p[0], p[1], k = 3))
+ys = fitfunc(p0, x)
+P.plot(x, ys)
+p1, success = O.leastsq(fitfunc, p0, args=(x, yn))
+p1, success = O.leastsq(errfunc, p0, args=(x, yn))
+popt, pcov = curve_fit(fitfunc, x, yn)
+popt, pcov = curve_fit(fitfunc, x, yn)
+p1, success = O.leastsq(errfunc, p0, args=(x, yn))
+fitfunc = lambda p, x: I.splev(x, I.splrep(p[0], p[1], k = 3))
+errfunc = lambda p, x, y: fitfunc(p, x) - y
+p1, success = O.leastsq(errfunc, p0, args=(x, yn))
+ys = fitfunc(p0, x)
+P.plot(x, ys, 'm-')
+P.plot(x, yn)
+p1, success = O.leastsq(errfunc, p0[:], args=(x, yn))
+p0
+p0[:]
+fitfunc = lambda p, x: I.splev(x, I.splrep(nodes[:-2], p, k = 3))
+p = ynods
+errfunc = lambda p, x, y: fitfunc(p, x) - y
+p1, success = O.leastsq(errfunc, p, args=(x, yn))
+P.plot(x, fitfunc(x, p1), 'r-')
+P.plot(x, fitfunc(x, p1), 'r-')
+print(p1)
+print(success)
+print(p)
+P.close()
+P.plot(x, yn)
+P.plot(x, fitfunc(x, p), 'm-')
+fitfunc = lambda p, x: I.splev(x, I.splrep(nodes[:-2], p, k = 3))
+nodes[:-2]
+p
+fitfunc = lambda p, x: I.splev(x, I.splrep(nodes[:-2], p, k = 3))
+p0 = ynods
+p1, success = O.leastsq(errfunc, p0, args=(x, yn))
+P.plot(x, fitfunc(x, p0), 'm-')
+ys = fitfunc(x, p0)
+_ip.system("clear")
+P.close()
+xnods = [0,100,200,300,400,500,600,700,800,900,1000]
+ynods = yn[xnods]
+xnods = [0,100,200,300,400,500,600,700,800,900,999]
+ynods = yn[xnods]
+fitfunc = lambda p, x: I.splev(x, I.splrep(xnods, p, k = 3))
+errfunc = lambda p, x, y: fitfunc(p, x) - y
+p0 = ynods
+p1, success = O.leastsq(errfunc, p0, args=(x, yn))
+P.plot(x, yn, 'b-')
+ys = fitfunc(p0, x)
+ysfit = fitfunc(p1, x)
+P.plot(x, ys, 'r-')
+P.plot(x, ysfit, 'm-')
+tmp = N.arange(0, 1000, 100)
+print(tmp)
+xnods = N.arange(0, 1100, 100)
+print(xnods)
+rimpor
+155604./293.
+293./155604
+293./155604*100.
+0.0035/(293./155604*100.)
+0.0035/(293./155604*100.)*100.
+2*10-3+10**-2+10**-4
+2*10**-3+10**-2+10**-4
+_ip.system("clear")
+2.* (5.*10**-3) + 5*10**-2 + 5 * 10**-4
+_ip.system("clear")
+0.5*5*10**-2 + 2*0.5*5*10**-3 + 0.5*5*10**-4
+10**-3 / 0.5
+5*10**-3
+0.5*2*10**-2 + 2*0.5*2*10**-3 + 0.5*2*10**-4
+*2*10**-2 + 2*2*10**-3 + *2*10**-4
+2*10**-2 + 2*2*10**-3 + *2*10**-4
+2*10**-2 + 2*2*10**-3 + 2*10**-4
+(2*10**-2 + 2*2*10**-3 + 2*10**-4)/2.
+10**-6/0.25
+2*10**-7/(0.2/3.)
+5.5*10**-7/(10./6.)
+5.5*10**-8/(10./6.)
+10**-6/(6./10.)
+3*10**-6*0.35
+7*10**-5*0.35
+7*10**-5*0.25
+3*10**-5*0.25
+8*2.5*10**-6
+8*2.5*10**-6*0.25
+(9*2.5*10**-6 + )*0.25
+(9*2.5*10**-6)*0.25
+(9*3*10**-6)*0.25
+(9*4*10**-6)*0.25
+(8*3*10**-6)*0.25
+_ip.magic("whos ")
+_ip.system("clear")
+_ip.magic("whos ")
+xy = ((1,2),(2,3),(3,4),(4,5))
+x, y zip(*xy)
+x, y = zip(*xy)
+x, y = zip(xy)
+_ip.system("clear")
+xy = ((1,2),(2,3),(3,4),(4,5))
+x, y = zip(*xy)
+print(x)
+print(y)
+print(xy)
+a = [line[0] for line in xy]
+print(a)
+import appscript as A
+_ip.system("clear")
+_ip.magic("whos ")
+Clear
+_ip.system("clear")
+_ip.magic("whos ")

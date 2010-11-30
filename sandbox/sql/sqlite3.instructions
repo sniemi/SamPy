@@ -1,0 +1,10 @@
+* open console:
+sqlite3 database.name
+
+* look for tables:
+SELECT name FROM sqlite_master
+WHERE type='table'
+ORDER BY name;
+
+* show columns:
+PRAGMA table_info(table_name)

@@ -1,0 +1,149 @@
+#!/usr/bin/python
+
+import MySQLdb
+# connect
+db = MySQLdb.connect(host="eeva", user="select_user", passwd="select_pass", db="QC", )
+
+cursor = MySQLdb.cursors.Cursor(db)
+
+
+#cursor.execute("""SELECT telfocus,offsetfocus,telalt,xdist,ydist,dateobs,TempAtBoxDegC 
+cursor.execute("""SELECT telfocus,offsetfocus,telalt,xdist,ydist,dateobs,TempInAirDegC
+                  FROM FocusALFOSC 
+                  WHERE peak > 500
+                  AND xccd > 500
+                  AND xccd < 1500
+                  AND yccd > 500
+                  AND yccd < 1500
+                  AND exptime > 8.
+                  AND afltnm='Open'
+                  AND  peak < 50000""")
+# Post-process clean-up (PLEASE, DO IT ALWAYS)
+#cursor.close()
+
+from time import  *
+
+
+tf=[]
+tfd=[]
+off=[]
+alt=[]
+xdist=[]
+ydist=[]
+ti=[]
+ti2=[]
+temp=[]
+
+for x in cursor.fetchall():
+  tf.append(x[0])
+  off.append(x[1])
+  alt.append(x[2])
+  xdist.append(x[3])
+  ydist.append(x[4])
+  tfd.append(x[0]+x[1])
+  ti.append(x[5])
+  unixt=mktime(strptime(str(x[5]), "%Y-%m-%d %H:%M:%S"))
+#  ti2.append(int(mktime(strptime(str(x[5]), "%Y-%m-%d %H:%M:%S"))/(60*60*24)))
+#  ti2.append(mktime(strptime(str(x[5]), "%Y-%m-%d %H:%M:%S")))
+  ti2.append(int(unixt-1154386801.)/(24*60*60))
+  try:
+     temp.append(float(x[6]))
+  except TypeError:
+     temp.append(-99.)
+#print temp
+cursor.close()
+
+#import matplotlib.numerix.ma as M
+#y_val = M.array(temp)
+#temp2 = M.masked_where(y_val > -10., y_val)
+
+#print temp2
+from pylab import *
+
+#figure(1)
+#plot(xdist,ydist,'bo')
+#plot([10,70],[10,70])
+#lim=[10,70,10,70]
+##axis(lim)
+#title('ALFOSC foc-pyr test')
+#xlabel('xdist')
+#ylabel('ydist')
+
+#figure(2)
+#plot(xdist, off,'bo')
+#plot(ydist, off,'ko',alpha=10.1,mfc='w',)
+
+#scatter(xdist, off)#,'bo')
+#scatter(ydist, off,c='w',alpha=0.2)#,fc='w',)
+
+print len(off)
+
+#figure(3)
+
+#tfd= tf+off
+#plot(tfd,'bo')
+
+#print tf[:10]
+#print off[:10]
+
+print mktime(strptime("2006-08-01 00:00:01","%Y-%m-%d %H:%M:%S")),'2006-08-01'
+
+#print tf[-10:]
+print temp[-10:]
+
+print ti[1]
+print mktime(strptime(str(ti[1]), "%Y-%m-%d %H:%M:%S"))
+print
+print str(ti[-1])
+print mktime(strptime(str(ti[-1]), "%Y-%m-%d %H:%M:%S"))
+y2007= mktime(strptime("2007-01-01 00:00:01","%Y-%m-%d %H:%M:%S"))-1154386801.
+y2008= mktime(strptime("2008-01-01 00:00:01","%Y-%m-%d %H:%M:%S"))-1154386801.
+y2007=y2007/(24*60*60)
+y2008=y2008/(24*60*60)
+#print aa
+figure(1)
+subplot(211)
+
+title('ALFOSC focus pyramid data')
+plot(ti2, tfd,'bo')
+#plot_date(ti2, tfd, fmt='%Y-%m-%d', tz=None, xdate=True, ydate=False)
+
+axhline(23300)
+axhline(23390)
+axvline(y2007)
+axvline(y2008)
+#limits=[1156348000.,1208499555.,23200,23600]
+limits=[20.,650.,23200,23600]
+axis(limits)
+text(90,23225,'2006')
+text(300,23225,'2007')
+text(550,23225,'2008')
+ylabel('telescope focus+foc-pyr')
+
+subplot(212)
+plot(ti2, temp,'bo')
+#plot_date(ti2, temp, fmt='%Y-%m-%d', tz=None, xdate=True, ydate=False)
+
+#axhline(23300)
+axhline(2.)
+axvline(y2007)
+axvline(y2008)
+#limits=[1156348000.,1208499555.,-8.,22]
+limits=[20.,640.,-8.,22]
+axis(limits)
+ylabel('TempInAirDegC')
+xlabel('day since 01-01-2006')
+savefig('foc-pyr_time.png')
+
+figure(2)
+
+plot(temp,tfd,'bo')
+axhline(23325)
+axhline(23400)
+limits=[-3,17,23200,23600]
+axis(limits)
+xlabel('TempInAirDegC')
+ylabel('telescope focus+foc-pyr  ')
+savefig('foc-temp.png')
+
+show() 

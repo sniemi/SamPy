@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/units
+END
+artist_tests.py
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svnroot/matplotlib/!svn/ver/3311/trunk/htdocs/examples/units/artist_tests.py
+END
+date_support.py
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/units/date_support.py
+END
+evans_test.py
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svnroot/matplotlib/!svn/ver/3311/trunk/htdocs/examples/units/evans_test.py
+END
+evans_test2.py
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/matplotlib/!svn/ver/3311/trunk/htdocs/examples/units/evans_test2.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svnroot/matplotlib/!svn/ver/3311/trunk/htdocs/examples/units/__init__.py
+END
+radian_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/matplotlib/!svn/ver/3311/trunk/htdocs/examples/units/radian_demo.py
+END
+basic_units.py
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/units/basic_units.py
+END
+units_sample.py
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/units/units_sample.py
+END
+date_converter.py
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svnroot/matplotlib/!svn/ver/3311/trunk/htdocs/examples/units/date_converter.py
+END
+bar_unit_demo.py
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/matplotlib/!svn/ver/4503/trunk/htdocs/examples/units/bar_unit_demo.py
+END
+units_scatter.py
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/svnroot/matplotlib/!svn/ver/3311/trunk/htdocs/examples/units/units_scatter.py
+END

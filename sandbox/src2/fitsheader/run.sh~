@@ -1,0 +1,13 @@
+#!/bin/tcsh
+set bindir = '/home/postprocess/fitsheader/src'
+cd /raid1/data/stancam/ 
+foreach d ( * )
+  if ( -d $d ) then
+    pushd $d
+      echo "working in $d ..."
+      foreach f (*.fits)
+        $bindir/fits.py $f
+      end
+    popd
+  endif
+end

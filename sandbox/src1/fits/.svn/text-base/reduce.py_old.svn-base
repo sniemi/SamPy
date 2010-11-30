@@ -1,0 +1,33 @@
+import pyfits
+import sys
+import numpy
+
+#This is for ALFOSC
+#Overscan might change if used for another instrument
+
+filelist = open(sys.argv[1]).readlines()
+bias = pyfits.getdata(sys.argv[2])
+flat = pyfits.getdata(sys.argv[3])
+
+print "This script reduces your science images..."
+
+filedata = [pyfits.getdata(x) for x in filelist]
+
+if len(set(x.shape for x in filedata))  > 1:
+   print "Images are not of same size!"
+   print "Program will exit..."
+   sys.exit(1)
+
+#subtracts overscan and BIAS and divides by a flat
+i = 0
+for image in filedata:
+   overscan = image[0:2047,0:50].mean()
+   image = 1.*image - overscan - bias
+   print "Subtracted BIAS and overscan of %f" % overscan 
+   filedata[i] = image / flat
+   print "Divided by a flat-field image..."
+   i += 1
+
+#writes the master bias frame
+pyfits.writeto("SCIENCE.fits", filedata[0])
+print "SCIENCE.fits has been written..."

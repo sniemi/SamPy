@@ -1,0 +1,41 @@
+10
+
+dir
+21
+svn://localhost/c_testing/build
+svn://localhost
+
+
+
+2010-11-29T18:15:04.427990Z
+4
+niemi
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+7b075a7a-496e-4ced-af2e-094746820398
+
+
+
+
+
+
+0
+
+lib.macosx-10.3-i386-2.5
+dir
+
+temp.macosx-10.3-i386-2.5
+dir
+

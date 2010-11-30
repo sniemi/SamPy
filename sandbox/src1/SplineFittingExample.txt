@@ -1,0 +1,27 @@
+SMN In [340]: def func(x, a, b, c, d):
+       .....:    return a*N.exp(-b*x) + c*N.log(d*x**2)
+
+
+SMN In [368]: x = N.linspace(1,1024,1024)
+
+SMN In [369]: y = func(x, 2.5, 1.3, 0.5, 10)
+
+SMN In [370]: yn = y + 0.2*N.random.normal(size=len(x))
+
+SMN In [372]: import scipy.signal as SS
+
+SMN In [374]: mfilt = SS.medfilt(yn, 11)
+
+SMN In [385]: import scipy.interpolate as I
+
+SMN In [584]: xnods = [0,100,200,300,400,500,600,700,800,900,999]
+
+SMN In [585]: ynods = yn[xnods]
+
+SMN In [586]: fitfunc = lambda p, x: I.splev(x, I.splrep(xnods, p, k = 3))
+
+SMN In [587]: errfunc = lambda p, x, y: fitfunc(p, x) - y
+
+SMN In [588]: p0 = ynods
+
+SMN In [589]: p1, success = O.leastsq(errfunc, p0, args=(x, yn))

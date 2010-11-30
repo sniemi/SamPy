@@ -1,0 +1,433 @@
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
+#
+# ABOUT   : This script checks in which wheel and in which
+#           position a filter, a slit or a grism is located.
+#           It can also be used to move this wheel to the right
+#           position with an optional argument "-m". Filters
+#           are searched by their ID numbers, but slits and grisms
+#           are searched by a user defined string. With a single command
+#           as many as three wheels can be turned at the same time.
+#
+# USAGE   : alfosc.optics [-e] [-m] [-s] [-g] [-f] [-d] [-v] [-a] <search pattern>
+#           where:
+#           [-e] echo script on stdout, does not execute 
+#           [-m] moves the wheel(s)
+#           [-s] searches the aperture wheel for the string that follows 
+#           [-g] searches the grism wheel and the filter wheel for the string that follows
+#           [-f] searches the filter wheel, FASUa and FASUb for the filter ID number that follows 
+#           [-d] displays the content of the given (filter, fasua, fasub, grism, slit) wheel
+#           [-v] verbose mode, prints extra information for debugging
+#           [-a] prints the status of alignment tag in the output
+#           [-h] help
+#           <search pattern> must be given after the wheel parameter -s/-g/-f
+#
+# EXITSTA : 0: No errors
+#           1: A problem with command line arguments
+#           2: Search returned more than one solution
+#           3: Search returned a solution in at least two wheels
+#           4: Search did not return any solutions
+#           5: One or more of the .def files cannot be accessed
+#           6: Searched filter and grism are both located in filter wheel
+#
+# DEPENDS : alfoscinst.filter
+#           alfoscinst.fasua
+#           alfoscinst.fasub
+#           alfoscinst.grism
+#           alfoscinst.aperture
+#           WheelLoader (python module in fileloader)
+#          
+# PROVIDES: alfosc.optics
+#
+# TFUNCT  : If used for searching: << 0.1s
+#                   for turning wheels: up to 25.0s
+#
+# AUTHOR  : Sami-Matias Niemi
+#
+# HISTORY : 06/06/2008 Development version alpha 0.1 (SMN)
+#           09/06/2008 Release Candidate 1, version 0.2 (SMN)
+#           16/06/2008 Release Candidate 2, version 0.9 (SMN)
+#           23/06/2008 Release Candidate 2, version 1.0 (SMN)
+#           25/11/2008 Added alignment tag functionality, version 1.1 (SMN)
+#           28/11/2008 Fixed a small bug, version 1.11 (SMN):
+#                      (grisms in the filter wheel do not have alignment status, return "Maybe")
+
+__author__ = 'Sami-Matias Niemi'
+__version__ = '1.11'
+
+#Definition of the command line arguments:
+def process_args(just_print_help = False):
+    from optparse import OptionParser
+    parser = OptionParser()
+    parser.add_option("-g", "--grism", dest="grism",
+                      help="Searches the grism and the filter wheel", metavar="string")     
+    parser.add_option("-s", "--slit", dest="slit",
+                      help="Searches the aperture wheel", metavar="string")
+    parser.add_option("-f", "--filter", dest="filter",
+                      help="Searches the filter, FASUa and FASUb wheels", metavar='"ID number"')
+    parser.add_option("-m", "--move", action="store_true", dest="movement",
+                      help="Moves the wheel(s) in")
+    parser.add_option("-d", "--display", dest="display",
+                      help="Displays the content of the wheel, where string = filter/fasua/fasub/grism/slit", metavar="string")    
+    parser.add_option("-v", "--verbose", action="store_true", dest="verbose",
+                      help="Verbose mode on")
+    parser.add_option("-e", "--echo", action="store_true", dest="echo",
+                      help="Echoes the commands on stdout, does not execute the script")
+    parser.add_option("-a", "--alignment", action="store_true", dest="alignm",
+                      help = "Prints out the alignment tag (Y/N) in the output")
+    if just_print_help:
+        parser.print_help()
+    else:
+        return parser.parse_args()
+
+#Redefines subprocess.call -function
+def call(command, echo = False, wait = False):
+    import subprocess
+    if echo:
+        print command
+    else:
+        #return subprocess.call(arg.split())
+        #Shell = True --> no arg.split()
+        #return subprocess.call(command, shell=True)
+        #call will do Popen().wait() so it will wait to be ready!
+        if wait:
+            return subprocess.Popen(command, shell=True).wait()
+        else:
+            return subprocess.Popen(command, shell=True)
+
+if __name__ == '__main__':
+    import sys
+    import os.path
+    from StringIO import StringIO
+    from subprocess import Popen, PIPE
+    from fileloader import WheelLoader
+    
+    #Gets the command line arguments
+    (opts, args) = process_args()
+    
+    #Definition files:
+    deffilter = "/home/software/setupfiles/ALFOSC/filter.def"
+    deffasua = "/home/software/setupfiles/ALFOSC/fasua.def"
+    deffasub = "/home/software/setupfiles/ALFOSC/fasub.def"
+    defgrism = "/home/software/setupfiles/ALFOSC/grism.def"
+    defslit = "/home/software/setupfiles/ALFOSC/slit.def"
+    
+    
+    #Saves the debug boolean "echo"
+    if (opts.echo is True): echo = True
+    else: echo = False
+    
+    if opts.verbose is True: 
+        if (opts.grism is not None): print "\nYou chose to search the grism wheel!\n"
+        if (opts.slit is not None): print "\nYou chose to search the slit wheel!\n"
+        if (opts.filter is not None): print "\nYou chose to search a filter from filter, fasua and fasub wheeels!\n"
+        if (opts.echo is True): print "\nYou chose the echo -mode. Does not execute!\n"
+    
+    #Displays the wheel content
+    if (opts.display is not None):
+        if (opts.display == "filter"):
+            if(os.path.exists(deffilter)):
+                wl = WheelLoader(deffilter)
+                print ("%22s"*4) % ("Position", "Motor Value", "Filter Name", "Filter ID")
+                frmt = "%22s%22s%22s%22s"
+                for x in wl: 
+                    print frmt % (x[0], x[1], x[2], x[3])
+                sys.exit(0)
+            else:
+                print "%s file does not exist!" % deffilter
+                sys.exit(5)               
+        
+        if (opts.display == "fasua"):
+            if(os.path.exists(deffasua)):
+                wl = WheelLoader(deffasua)
+                print ("%22s"*3) % ("Position", "Filter Name", "Filter ID")
+                frmt = "%22s%22s%22s"
+                for x in wl: 
+                    print frmt % (x[0], x[1], x[2])
+                sys.exit(0)
+            else:
+                print "%s file does not exist!" % deffasua
+                sys.exit(5)
+        
+        if (opts.display == "fasub"):
+            if(os.path.exists(deffasub)):
+                wl = WheelLoader(deffasub)
+                print ("%22s"*3) % ("Position", "Filter Name", "Filter ID")
+                frmt = "%22s%22s%22s"
+                for x in wl: 
+                    print frmt % (x[0], x[1], x[2])
+                sys.exit(0)
+            else:
+                print "%s file does not exist!" % deffasub
+                sys.exit(5)
+        
+        if (opts.display == "slit"):
+            if(os.path.exists(defslit)):
+                wl = WheelLoader(defslit)
+                print ("%22s"*5) % ("Position", "Motor Value", "Aperture", "ID", "Alignment Tag")
+                frmt = "%22s%22s%22s%22s%22s"
+                for x in wl: 
+                    print frmt % (x[0], x[1], x[2], x[3], x[4])
+                sys.exit(0)
+            else:
+                print "%s file does not exist!" % defslit
+                sys.exit(5)
+                
+        if (opts.display == "grism"):
+            if(os.path.exists(defgrism)):
+                wl = WheelLoader(defgrism)
+                print ("%22s"*5) % ("Position", "Motor Value", "Grism", "ID", "Alignment Tag")
+                frmt = "%22s%22s%22s%22s%22s"
+                for x in wl: 
+                    print frmt % (x[0], x[1], x[2], x[3], x[4])
+                sys.exit(0)
+            else:
+                print "%s file does not exist!" % defgrism
+                sys.exit(5)
+        
+    #Checks if the user actually searched something    
+    if (opts.grism is None and opts.slit is None and opts.filter is None):
+        process_args(True)
+        sys.exit(1)
+    
+    #help variables
+    posnumber, posnumberfa, posnumberfb, numb = [0] * 4
+    filter, fasua, fasub, grism, slit = [False] * 5
+    
+    #Filters
+    if (opts.filter is not None):
+        #filter wheel
+        if(os.path.exists(deffilter)):
+            wl = WheelLoader(deffilter)
+            for line in wl:
+                try:
+                    dummy = int(opts.filter)
+                except:
+                    print "You did not give an integer as a search argument for filters!"
+                    print "Please try again with valid filter ID."
+                    sys.exit(1)
+                if (int(opts.filter) == int(line[3])):
+                    fposition = line[0]
+                    posnumber += 1
+                    filter = True
+                    filt = line[2]
+                    if (opts.verbose is True): print 'fi %i "%s"' % (int(fposition), filt)
+            if (posnumber > 1):
+                print "%i filters were returned from filter wheel!\nThis should NOT happen. Please inform staff!" % posnumber
+                sys.exit(2)
+            if (posnumber == 1 and opts.verbose is not True and opts.movement is not True):
+                print 'fi %i "%s"' % (int(fposition), filt)
+        else:
+            print "%s file does not exist!" % deffilter
+            sys.exit(5)
+        
+        #FASUa    
+        if(os.path.exists(deffasua)):
+            wl = WheelLoader(deffasua)
+            for line in wl:
+                if (int(opts.filter) == int(line[2])):
+                    positionfa = line[0]
+                    fa = line[1]
+                    posnumberfa += 1
+                    fasua = True
+                    if (opts.verbose is True): print 'fa %i "%s"' % (int(positionfa),fa)
+            if (posnumberfa > 1):
+                print "%i filters were returned from FASUa!\nThis should NOT happen. Please inform staff!" % posnumberfa
+                sys.exit(2)
+            if (posnumberfa == 1 and opts.verbose is not True and opts.movement is not True):
+                print 'fa %i "%s"' % (int(positionfa),fa)
+        else:
+            print "%s file does not exist!" % deffasua
+            sys.exit(5)
+    
+        #FASUb
+        if(os.path.exists(deffasub)):
+            wl = WheelLoader(deffasub)
+            for line in wl:
+                if (int(opts.filter) == int(line[2])):
+                    positionfb = line[0]
+                    fb = line[1]
+                    posnumberfb += 1
+                    fasub = True
+                    if (opts.verbose is True):  print 'fb %i "%s"' % (int(positionfb), fb)
+            if (posnumberfb > 1):
+                print "%i filters were returned from FASUb!\nThis should NOT happen. Please inform staff!" % posnumberfb
+                sys.exit(2)
+            if (posnumberfb == 1  and opts.verbose is not True and opts.movement is not True):
+                print 'fb %i "%s"' % (int(positionfb), fb)
+        else:
+            print "%s file does not exist!" % deffasub
+            sys.exit(5)
+        
+        numb = posnumber + posnumberfa + posnumberfb
+        if(numb == 0):
+            print "%i filters matched your search. This filter has not been mounted. Please change your search ID or consult staff!" % numb
+            sys.exit(4)
+        if(numb > 1):
+            print "At least two wheels matched to your search.\nThis should NOT happen! Please inform staff!"
+            sys.exit(3)
+                    
+    #Help Variable
+    gposnumber = 0
+    #Grisms
+    if (opts.grism is not None):
+        #first, the obvious location: grism wheel
+        if(os.path.exists(defgrism)):
+            wl = WheelLoader(defgrism)
+            for line in wl:           
+                if opts.grism in line[2]:
+                    gposnumber += 1
+                    gposition = line[0]
+                    grismnam = line[2]
+                    al = line[4]
+                    grism = True
+                    wheel = "grism"
+                    if opts.verbose is True:  print 'gr %i "%s"' % (int(gposition), grismnam)
+        else:
+            print "%s file does not exist!" % defgrism
+            sys.exit(5)
+        
+        #checks also the filter wheel for crossdispersion grisms *IF* grism was not found from grism wheel
+        if (gposnumber == 0):
+            if(os.path.exists(deffilter)):
+                wl = WheelLoader(deffilter)
+                for line in wl:
+                    if (opts.grism in line[2]):
+                        gposnumber += 1
+                        gposition = line[0]
+                        grismnam = line[2]
+                        al = "Maybe"
+                        grism = True
+                        wheel = "filter"
+                        if (opts.verbose is True):  print 'fi %i "%s"' % (int(gposition), grismnam)
+            else:
+                print "%s file does not exist!" % deffilter
+                sys.exit(5)
+            if (gposnumber == 0):
+                print "\n%i grisms were returned.\nPlease modify your search string!" % gposnumber
+                sys.exit(4)
+        if (gposnumber > 1):
+            print "\n%i grisms were returned.\nPlease modify your search string!" % gposnumber
+            sys.exit(2)
+        if (gposnumber == 1 and opts.verbose is not True and opts.movement is not True):
+            if opts.alignm:
+                print '%s %i %s "%s"' % (wheel[:2], int(gposition), al, grismnam)
+            else :
+                print '%s %i "%s"' % (wheel[:2], int(gposition), grismnam)
+                
+    #For slits
+    sposnumber = 0
+    if (opts.slit is not None):
+        if(os.path.exists(defslit)):
+            data = WheelLoader(defslit)
+            #data = open(deffile, 'r').readlines()
+            for line in data:
+                #poss, slitname, id = line.strip().split("'")
+                #pos, motor = poss.strip().split()              
+                #if (opts.slit in slitname):
+                if (opts.slit in line[2]):
+                    #sposition = pos
+                    sposition = line[0]
+                    sposnumber += 1
+                    #slitnam = slitname
+                    slitnam = line[2]
+                    sl = line[4]
+                    slit = True
+                    if (opts.verbose is True): print  'ap %i "%s"' % (int(sposition), slitnam)
+            if (sposnumber == 0):
+                print "\n%i slits were returned.\nPlease modify your search string!" % sposnumber
+                sys.exit(4)
+            if (sposnumber > 1):
+                print "\n%i slits were returned.\nPlease modify your search string!" % sposnumber
+                sys.exit(2)
+            if (sposnumber == 1 and opts.verbose is not True and opts.movement is not True):
+                if opts.alignm:
+                    print  'ap %i %s "%s"' % (int(sposition), sl, slitnam)
+                else:
+                    print  'ap %i "%s"' % (int(sposition), slitnam)
+        else:
+            print "%s file does not exist!" % defslit
+            sys.exit(5)
+    
+    #If user wanted wheel(s) to move, will write to Talker and start checking which wheel to move
+    if (opts.movement is True):
+        if (filter and grism and wheel == "filter"):
+            print "Your filter and grism are both located in filter wheel."
+            print "Please adjust your search as filter wheel cannot be in two different positions at the same time!"
+            sys.exit(6)
+        
+        #logstart = ["logger", "-p", "local0.debug", "-t", "\"alfosc.optics\"", "\"[NOTE]: Script started \""]
+        logstart = "logger -p local0.debug -t \"alfosc.optics\" \"[NOTE]: Script started\""
+        call(logstart, echo) 
+
+        if (slit):
+            cmd = "alfoscinst.aperture pos"
+            if(echo): 
+                print cmd
+                currentpos = 0
+            else: 
+                currentpos = Popen(cmd, shell=True, stdout=PIPE).stdout.readlines()[0].strip()
+            #command = ["alfoscinst.aperture", "%s" % sposition]
+            command = "alfoscinst.aperture %s" % sposition
+            #Test if the wheel is already in position!
+            if (int(currentpos) != int(sposition)):
+                call(command, echo)
+        
+        if (grism):
+            cmd = "alfoscinst.%s pos" % wheel
+            if (echo): 
+                print cmd
+                currentpos = 0
+            else: 
+                currentpos = Popen(cmd, shell=True, stdout=PIPE).stdout.readlines()[0].strip()
+            command = "alfoscinst.%s %s" % (wheel, gposition) 
+            if (int(currentpos) != int(gposition)):
+                call(command, echo)
+        
+        #Filters
+        if(numb == 1):
+            if (filter):
+                cmd = "alfoscinst.filter pos"
+                if (echo): 
+                    print cmd
+                    currentpos = 0
+                else: 
+                    currentpos = Popen(cmd, shell=True, stdout=PIPE).stdout.readlines()[0].strip()
+                #command = ["alfoscinst.filter", "%s" % fposition]
+                command = "alfoscinst.filter %s" % fposition
+                if (int(currentpos) != int(fposition)):
+                    call(command, echo)
+            if (fasua):
+                cmd = "alfoscinst.fasua pos"
+                if (echo): 
+                    print cmd
+                    currentpos = 0
+                else: 
+                    currentpos = Popen(cmd, shell=True, stdout=PIPE).stdout.readlines()[0].strip()
+                #command = ["alfoscinst.fasua", "%s" % positionfa]
+                command = "alfoscinst.fasua %s" % positionfa
+                if (int(currentpos) != int(positionfa)):
+                    call(command, echo)
+            if (fasub):
+                cmd = "alfoscinst.fasub pos"
+                if(echo): 
+                    print cmd
+                    currentpos = 0
+                else: 
+                    currentpos = Popen(cmd, shell=True, stdout=PIPE).stdout.readlines()[0].strip()
+                #command = ["alfoscinst.fasub", "%s" % positionfb]
+                command = "alfoscinst.fasub %s" % positionfb
+                if (int(currentpos) != int(positionfb)):
+                    call(command, echo)
+
+        #Waits alfosc to be ready
+        waitcommand = "alfoscinst.wait_alfosc_ready"
+        call(waitcommand, echo, wait = True)
+
+        #Writes to Talker when script has been finished.
+        #logstop = ["logger", "-p", "local0.debug", "-t", "\"alfosc.optics\"", "\"[NOTE]: Script ended successfully\""]
+        logstop = "logger -p local0.debug -t \"alfosc.optics\" \"[NOTE]: Script ended successfully\""
+        call(logstop, echo)
+    
+    #exits with no errors
+    sys.exit(0)
