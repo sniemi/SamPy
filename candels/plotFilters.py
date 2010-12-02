@@ -1,10 +1,11 @@
 import matplotlib 
 matplotlib.use('PDF')
-matplotlib.rc('xtick', labelsize=16) 
+#matplotlib.use('Agg')
+matplotlib.rc('xtick', labelsize=18) 
 matplotlib.rc('axes', linewidth=1.2)
 matplotlib.rc('lines', markeredgewidth=3.0)
-matplotlib.rcParams['lines.linewidth'] = 2.5
-matplotlib.rcParams['font.size'] = 16
+matplotlib.rcParams['lines.linewidth'] = 2.8
+matplotlib.rcParams['font.size'] = 18
 matplotlib.rcParams['xtick.major.size'] = 10
 matplotlib.rcParams['xtick.labelsize'] = 'large'
 matplotlib.rcParams['ytick.major.size'] = 10
@@ -193,9 +194,9 @@ def main(color):
 
         axs.legend(fancybox = True, shadow = True)
 
-    P.savefig('/Users/niemi/Desktop/CANDELS/CANDELS_FILTERS/CANDELSMockfilters.pdf')
+    P.savefig('/Users/niemi/Desktop/CANDELS/CANDELS_FILTERS/CANDELSMockfilters2.pdf')
 
-def main2(color):
+def main2(color, size = 'x-large'):
     #grouped data
     gr = {}
     #all filters
@@ -204,8 +205,7 @@ def main2(color):
     #collect data    
     for i, folder in enumerate(all_folders):
         camera = folder.split('/')[6]
-        print camera
-    
+
         files = g.glob(folder + '/*.dat')
         files += g.glob(folder + '/*.fil')
         files += g.glob(folder + '/*.filter')
@@ -217,51 +217,249 @@ def main2(color):
             if len(y[y > 1.]) > 1:
                 print 'Normalizing ', camera
                 y /= 100.
-            if not ('WFC2' in f or 'UVIS2' in f):
-                if gr.has_key(camera):
-                    gr[camera] += [[x, y, f]]
-                else:
-                    gr[camera] = [[x, y, f]]
+            if 'SuprimeCAM' in folder:
+                if '_subaru' in f:
+                    if gr.has_key(camera):
+                        gr[camera] += [[x, y, f]]
+                    else:
+                        gr[camera] = [[x, y, f]]
+            else:
+                if not ('UVIS2' in f or 'WFC2' in f):
+                    if gr.has_key(camera):
+                        gr[camera] += [[x, y, f]]
+                    else:
+                        gr[camera] = [[x, y, f]]            
   
     #make the figure
     fig = P.figure(figsize=(40,50))
     P.subplots_adjust(wspace = 0.0, hspace = 0.0)
     P.title('CANDELS Mock Catalogue Filter Transmittance Curves')
-    for i in range(1, 11):
-        axs = P.subplot(10, 1, i)
-
+    for i in range(1, 10):
+        axs = P.subplot(9, 1, i)
+        inst = []
+        j = 0
         for key in gr:
             for a, b, c in gr[key]:
                 axs.plot(a, b, 'k-', alpha = 0.1)
-                if ('WFC3' in key or 'ACS' == key or 'GALEX' in key) and i == 2:
-                    axs.plot(a, b)
-                if ('Hawk' in key) and i == 3:
-                    axs.plot(a, b)     
-               
-                    
+                if ('2MASS' in key or 'CFHT' in key) and i == 1:
+                    axs.plot(a, b, c = color[j])
+                    mask = b == N.max(b)
+                    tmp1 = c.split('/')
+                    tmp2 = tmp1[7]
+                    name = tmp2[:tmp2.rfind('.')]
+                    if tmp1[6] not in inst:
+                        inst.append(tmp1[6])
+                    if '2MASS' in key: name = name.replace('band', '')
+                    if 'ACS' in key: name = name.replace('.WFC1', '')
+                    if 'galex' in name: name = name.replace('galex_', '')
+                    if '2mass' in name: name = name.replace('_2mass', '')
+                    if 'Mega' in name: name = name.replace('Mega', '')
+                    if '_new' in name: name = name.replace('_new', '')
+                    if name in ['u', 'g', 'r', 'i2', 'z'] :
+                        multi = 1.15
+                    else:
+                        multi = 1.02
+                    axs.annotate(name, (a[mask][0], multi*b[mask][0]), color = color[j],
+                                 ha = 'center', size = size)
+                    j += 1
+                if ('GALEX' in key or 'ACS' in key) and i and ('PACS' not in key) and i == 2:
+                    axs.plot(a, b, c = color[j])
+                    mask = b == N.max(b)
+                    tmp1 = c.split('/')
+                    tmp2 = tmp1[7]
+                    name = tmp2[:tmp2.rfind('.')]
+                    if tmp1[6] not in inst:
+                        inst.append(tmp1[6])
+                    if '2MASS' in key: name = name.replace('band', '')
+                    if 'ACS' in key: name = name.replace('.WFC1', '')
+                    if 'galex' in name: name = name.replace('galex_', '')
+                    if '2mass' in name: name = name.replace('_2mass', '')
+                    if '814' in name:
+                        multi = 1.5
+                    elif '606' in name:
+                        multi = 1.25
+                    else:
+                        multi = 1.02
+                    axs.annotate(name, (a[mask][0], multi*b[mask][0]), color = color[j],
+                                 ha = 'center', size = size)
+                    j += 1
+                if ('WFC3' in key or 'Johnson' in key) and i == 3:
+                    axs.plot(a, b, c = color[j])
+                    mask = b == N.max(b)
+                    tmp1 = c.split('/')
+                    tmp2 = tmp1[7]
+                    name = tmp2[:tmp2.rfind('.')]
+                    if tmp1[6] not in inst:
+                        inst.append(tmp1[6])
+                    if 'Johnson' in name: name = name.replace('Johnson_', '')
+                    if 'filter' in name: name = name.replace('filter', '')
+                    if 'UVIS' in name: name = name.replace('.UVIS1', '')
+                    if 'IR' in name: name = name.replace('.IR', '')
+                    if '160' in name:
+                        multi = 1.35
+                    elif '098' in name:
+                        multi = 1.25
+                    elif '125' in name:
+                        multi = 1.2
+                    else:
+                        multi = 1.02
+                    axs.annotate(name, (a[mask][0], multi*b[mask][0]), color = color[j],
+                                 ha = 'center', size = size)
+                    j += 1
+                if ('DEEP' in key or 'LBC' in key) and i == 4:
+                    if not 'hawa' in c:
+                        axs.plot(a, b, c = color[j])
+                        mask = b == N.max(b)
+                        tmp1 = c.split('/')
+                        tmp2 = tmp1[7]
+                        name = tmp2[:tmp2.rfind('.')]
+                        m = 1.015
+                        if tmp1[6] not in inst:
+                            inst.append(tmp1[6])
+                        if 'deep' in name: name = name.replace('deep_', '')
+                        if 'LBC' in name:
+                            name = 'LBC/U'
+                            m = 1.1
+                        axs.annotate(name, (a[mask][0], m*b[mask][0]), color = color[j],
+                                     ha = 'center', size = size)
+                        j += 1
+                if ('MUSYC' in key) and i == 5:
+                    axs.plot(a, b, c = color[j])
+                    mask = b == N.max(b)
+                    tmp1 = c.split('/')
+                    tmp2 = tmp1[7]
+                    if tmp1[6] not in inst:
+                        inst.append(tmp1[6])
+                    name = tmp2[:tmp2.rfind('.')].replace('ecdfs.', '')
+                    name = name.replace('.filt', '') 
+                    if 'U' == name:
+                        m = 0.8
+                    else:
+                        m = 1
+                    axs.annotate(name, (m * a[mask][0], 1.05*b[mask][0]), color = color[j],
+                                 ha = 'center', size = size)
+                    j += 1
+                if ('NEWFIRM' in key or 'SDSS' in key) and i == 6:
+                    axs.plot(a, b, c = color[j])
+                    mask = b == N.max(b)
+                    tmp1 = c.split('/')
+                    tmp2 = tmp1[7]
+                    if tmp1[6] not in inst:
+                        inst.append(tmp1[6])
+                    name = tmp2[:tmp2.rfind('.')]
+                    multi = 1.05
+                    if 'sdss' in name:
+                        multi = 1.2
+                        name = name.replace('sdss_', '')
+
+                    axs.annotate(name, (a[mask][0], multi*b[mask][0]), color = color[j],
+                                 ha = 'center', size = size)
+                    j += 1
+                if ('PACS' in key or 'SPIRE' in key or 'IRAC' in key or 'MIPS' in key or 'Suprime' in key or 'UKIRT' in key) and i == 7:
+                    axs.plot(a, b, c = color[j])
+                    mask = b == N.max(b)
+                    tmp1 = c.split('/')
+                    tmp2 = tmp1[7]
+                    if tmp1[6] not in inst:
+                        inst.append(tmp1[6])
+                    name = tmp2[:tmp2.rfind('.')]
+                    if 'subaru' in name: name = name.replace('_subaru', '')
+                    if 'irac' in name: name = name.replace('irac_', '')
+                    if 'mips' in name: name = name.replace('mips_', '')
+                    if 'filter' in name: name = name.replace('_filter', '')
+                    if '200' in name: name = name.replace('_2004.2008', '')
+                    multi = 1.02
+                    m = 1.
+                    if 'UKIRT' in key:
+                        multi = 1.2
+                    if '5.8' in name:
+                        m = 1.1
+                    if '350' in name:
+                        multi = 1.35
+                    axs.annotate(name, (m*a[mask][0], multi*b[mask][0]), color = color[j],
+                                 ha = 'center', size = size)
+                    j += 1     
+                if ('VISTA' in key or 'VIMOS' in key) and i == 8:
+                    axs.plot(a, b, c = color[j])
+                    mask = b == N.max(b)
+                    tmp1 = c.split('/')
+                    tmp2 = tmp1[7]
+                    if tmp1[6] not in inst:
+                        inst.append(tmp1[6])
+                    name = tmp2[:tmp2.rfind('.')]
+                    if 'VISTA' in name: name = name.replace('VISTA_', '')
+                    if 'VISTA' in key: name = name.replace('band', '')
+                    if 'vimos' in name: name = name.replace('_vimos', '')
+                    axs.annotate(name, (a[mask][0], 1.05*b[mask][0]), color = color[j],
+                                 ha = 'center', size = size)
+                    j += 1
+                if ('MOSAIC' in key or 'Hawk' in key) and i == 9:
+                    axs.plot(a, b, c = color[j])
+                    axs.plot(a, b, c = color[j])
+                    mask = b == N.max(b)
+                    tmp1 = c.split('/')
+                    tmp2 = tmp1[7]
+                    if tmp1[6] not in inst:
+                        inst.append(tmp1[6])
+                    name =  tmp2[:tmp2.rfind('.')].replace('band', '')
+                    if 'Hawk' in name: name = name.replace('HawkI_', '')
+                    if 'mosaic' in name:
+                        name = name.replace('_mosaic_tot','')
+                    m = 1.05
+                    if 'kp' in name:
+                        m = 1.8
+                    if 'U' in name:
+                        name = name.upper().replace('_', '@')
+                    axs.annotate(name, (a[mask][0], m*b[mask][0]), color = color[j],
+                                 ha = 'center', size = size)
+                    j += 1
+            
+        if len(inst) > 0:
+            str = ''
+            inst.reverse()
+            if 'GALEX' in inst:
+                inst = ['GALEX', 'ACS']
+            if 'VIMOS' in inst:
+                inst = ['VIMOS', 'VISTA']
+            if 'MOSAIC' in inst:
+                inst = ['MOSAIC', 'Hawk-I']
+            if '2MASS' in inst:
+                inst = ['CFHTLS', '2MASS']
+            for x in inst:
+                str += x + ', '
+            if 'IRAC' in str:
+                str = 'SuprimeCAM, UKIRT, IRAC\nMIPS, PACS, SPIRE  '
+            axs.annotate(str[:-2], (0.02, 0.92), xycoords = 'axes fraction',
+                         size = 'large', va = 'top')
+             
         axs.set_xlim(1000, 10**7)
-        axs.set_ylim(0.01, 1.05)
+        axs.set_ylim(0.01, 1.1)
         axs.set_xscale('log')
         axs.set_ylabel('Normalized Transmission')
-        if i == 10: 
+        if i == 9: 
             axs.set_xlabel('Wavelength [Angstrom]')
         else:
             axs.set_xticklabels([])
+            
+    note = 'Note: there are two types of normalizations in the image.'\
+            +' Some curves show the filter transmission, while others' \
+            +' show the total system throughput. Please see the table for more information.'
+    P.annotate(note, (0.5, 0.05), xycoords = 'figure fraction',
+               size = 'large', ha = 'center')
 
-        axs.legend(fancybox = True, shadow = True)
-
-    P.savefig('/Users/niemi/Desktop/CANDELS/CANDELS_FILTERS/CANDELSMockfilters2.pdf')
+    P.savefig('/Users/niemi/Desktop/CANDELS/CANDELS_FILTERS/CANDELSMockfilters.pdf')
 
 if __name__ == '__main__':
     
     color = ['DarkOliveGreen', 'Indigo', 'MediumPurple',
-            'AntiqueWhite', 'DarkOrange', 'Red',
-            'Aqua', 'Khaki', 'RosyBrown', 'Salmon',
-            'AquaMarine', 'MediumSpringGreen',
-            'LavenderBlush', 'SaddleBrown', 'DarkSeaGreen',
-            'MediumVioletRed', 'DarkRed',
-            'Black', 'MintCream', 'Blue', 'Yellow', 'Green',
-            'Magenta']
+            'DarkOrange', 'Red', 'Magenta', 'Blue',
+            'Aqua', 'Khaki', 'RosyBrown', 'Salmon', 'Green',
+            'AquaMarine', 'SaddleBrown', 'DarkSeaGreen',  
+            'MediumVioletRed', 'DarkRed', 'MediumSpringGreen',
+            'Black', 'MintCream',  'Yellow',
+            'AntiqueWhite', 'LavenderBlush']
 
     #main(color)
     main2(color)
+    
+    print 'All done...'

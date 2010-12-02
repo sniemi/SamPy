@@ -11,11 +11,35 @@ Created on Sep 10, 2009
 
 @author: Sami-Matias Niemi
 '''
+
+import matplotlib
+matplotlib.rc('text', usetex = True)
+matplotlib.rc('xtick', labelsize=9) 
+matplotlib.rc('axes', linewidth=1.2)
+matplotlib.rc('lines', markeredgewidth=2.0)
+matplotlib.rcParams['lines.linewidth'] = 2.5
+matplotlib.rcParams['legend.fontsize'] = 10
+matplotlib.rcParams['font.size'] = 12
+matplotlib.rcParams['xtick.major.size'] = 5
+matplotlib.rcParams['ytick.major.size'] = 5
+matplotlib.rcParams['legend.shadow'] = True
+matplotlib.rcParams['legend.fancybox'] = True
+matplotlib.rcParams['legend.scatterpoints'] = 1
+matplotlib.rcParams['legend.numpoints'] = 1
+matplotlib.use('PDF')
+from matplotlib.ticker import MultipleLocator, FormatStrFormatter, NullFormatter
+import pylab as P
+import numpy as N
+import scipy as S
+
 import datetime as D
 import time
 import scipy
 import scipy.optimize
 import numpy.core.defchararray as npstr
+
+import dates.julians as j
+    
 
 # @todo
 # 1) change focus trend since mirror move to two x axis mode (one with date)
@@ -1384,27 +1408,8 @@ def confocality(type):
     P.savefig('Confocality' + type)
 
 if __name__ == '__main__':  
-    import matplotlib
-    matplotlib.rc('text', usetex = True)
-    matplotlib.rc('xtick', labelsize=9) 
-    matplotlib.rc('axes', linewidth=1.2)
-    matplotlib.rc('lines', markeredgewidth=2.0)
-    matplotlib.rcParams['lines.linewidth'] = 2.5
-    matplotlib.rcParams['legend.fontsize'] = 10
-    matplotlib.rcParams['font.size'] = 12
-    matplotlib.rcParams['xtick.major.size'] = 5
-    matplotlib.rcParams['ytick.major.size'] = 5
-    matplotlib.rcParams['legend.shadow'] = True
-#    matplotlib.use('PDF')
-    try:
-        matplotlib.rcParams['legend.fancybox'] = True
-        matplotlib.rcParams['legend.scatterpoints'] = 1
-        matplotlib.rcParams['legend.numpoints'] = 1
-    except: pass
-    from matplotlib.ticker import MultipleLocator, FormatStrFormatter, NullFormatter
-    import pylab as P
-    import numpy as N
-    import scipy as S
+
+    input_folder = '/Users/niemi/Desktop/Focus/plots'
     
     type = '.pdf'
 
