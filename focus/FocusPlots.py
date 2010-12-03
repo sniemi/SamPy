@@ -1,4 +1,3 @@
-#! /usr/bin/env python
 '''
 DESCRIPTION:
 Creates few different plots from the focus data.
@@ -8,6 +7,7 @@ python focusPlots.py
 
 HISTORY:
 Created on Sep 10, 2009
+Added to the repository on Dec 3, 2010
 
 @author: Sami-Matias Niemi
 
@@ -16,7 +16,6 @@ Created on Sep 10, 2009
 2) Create a new plot: all focus data since last mirror move, fit functions
 
 '''
-
 import matplotlib
 matplotlib.rc('text', usetex = True)
 matplotlib.rc('xtick', labelsize=9) 
@@ -29,21 +28,18 @@ matplotlib.rcParams['xtick.major.size'] = 5
 matplotlib.rcParams['ytick.major.size'] = 5
 matplotlib.rcParams['legend.shadow'] = True
 matplotlib.rcParams['legend.fancybox'] = True
-matplotlib.rcParams['legend.scatterpoints'] = 1
 matplotlib.rcParams['legend.numpoints'] = 1
-matplotlib.use('PDF')
+matplotlib.use('PS')
 from matplotlib.ticker import MultipleLocator, FormatStrFormatter, NullFormatter
 from matplotlib.dates import YearLocator, MonthLocator, DateFormatter 
 import pylab as P
 import numpy as N
 import scipy as S
-
 import datetime as D
 import time
 import scipy
 import scipy.optimize
 import numpy.core.defchararray as npstr
-
 #From Sami's repository
 import dates.julians as j
 import focus.HSTfocus as h
@@ -51,144 +47,7 @@ import fitting.fits as f
     
 
 __author__ = 'Sami-Matias Niemi'
-__version__ = '0.9'
-#
-#def toJulian(year, month, day, hour, minute, timezone = 'UTC') :
-#    '''
-#    @param: 
-#    year, month, day, hour, minute, and timezone 
-#    Uses time functions.
-#    @return: Julian Date
-#    '''
-#    dateString = str(year) + ' ' + str(month) + ' ' + str(day) + ' ' + str(hour) + ' '  + str(minute) + ' UTC'
-#    tup = time.strptime(dateString, '%Y %m %d %H %M %Z')
-#    sec = time.mktime(tup)
-#    days = (sec-time.timezone)/86400.0
-#    jday = days + 40587 # Julian date of Jan 1 1900
-#    return jday
-#
-#def toJulian2(date) :
-#    '''
-#    Converts date and time to Modified Julian Date.
-#    Uses time functions. Note that date has to be in Python time format.
-#    '''
-#    sec = time.mktime(date)
-#    days = (sec-time.timezone)/86400.0
-#    jday = days + 40587 # Julian date of Jan 1 1900
-#    return jday
-#
-#def fromJulian(j):
-#    '''
-#    Converts Modified Julian days to human readable format
-#    @return: human readable date and time
-#    '''
-#    days = j - 40587 # From Jan 1 1900
-#    sec = days*86400.0
-#    return time.gmtime(sec)
-#
-#def fromHSTDeployment(julian):
-#    '''
-#    @return: number of days since HST was deployed (24 Apr 1990)
-#    '''
-#    julian0 = 48005.0
-#    return julian - julian0
-
-#def HSTdayToRealDate(hstday):
-#    return fromJulian(hstday + 48005.0)
-
-#def FitExponent(xcorr, ycorr, initials):
-#    '''
-#    Fits an exponential to data.
-#    '''
-#    fitfunc = lambda p, x: p[0] + p[1]*scipy.exp(-x*p[2])
-#    errfunc = lambda p, x, y: fitfunc(p,x) - y
-#    
-#    # fit
-#    p1, success = scipy.optimize.leastsq(errfunc, initials, args=(xcorr, ycorr))
-#
-#    # compute the best fit function from the best fit parameters
-#    corrfit = fitfunc(p1, xcorr)
-#    return corrfit, p1
-#
-#def doubleExponent(x, p, yshift):
-#    return yshift + p[0] + p[1]*scipy.exp(-x/p[2]) + p[3]*scipy.exp(-x/p[4])
-#
-#def singleExponent(x, p, yshift):
-#    return yshift  + p[0] + p[1]*scipy.exp(-x*p[2])
-#
-#def FitDoubleExponent(xcorr, ycorr, initials):
-#    '''
-#    Fits a double exponential to data.
-#    @return: corrfit
-#    '''
-#    fitfunc = lambda p, x: p[0] + p[1]*scipy.exp(-x/p[2]) + p[3]*scipy.exp(-x/p[4])
-#    errfunc = lambda p, x, y: fitfunc(p,x) - y
-#    
-#    # fit
-#    p1, success = scipy.optimize.leastsq(errfunc, initials, args=(xcorr, ycorr))
-#
-#    print 'Double exponent fit:'
-#    print 'p[0] + p[1]*scipy.exp(-x/p[2]) + p[3]*scipy.exp(-x/p[4])'
-#    print p1
-#    if success != 1: print success
-#    print 
-#
-#    # compute the best fit function from the best fit parameters
-#    corrfit = fitfunc(p1, xcorr)
-#    return corrfit, p1
-#
-#def FindZeroDoubleExp(p, x0, yshift = 0.0):
-#    roots = scipy.optimize.fsolve(doubleExponent, x0, args = (p, yshift))
-#    return roots
-#
-#def FindZeroSingleExp(p, x0, yshift = 0.0):
-#    roots = scipy.optimize.fsolve(singleExponent, x0, args = (p, yshift))
-#    return roots
-#
-#def PolyFit(x, y, order = 1):
-#    '''
-#    Fits a polynomial to the data.
-#    @return: 
-#    fitted y values, error of the fit
-#    '''
-#    (ar,br) = N.polyfit(y, x, order)
-#    yr = N.polyval([ar,br], y)
-#    err = N.sqrt(sum((yr - y)**2.)/len(yr))   
-#    return yr, err
-
-#def MirrorMoves():
-#    '''
-#    HST Secondary mirror moves and amounts.
-#    '''
-#    tmp = {'29 Jun 1994    17:36 UTC':    +5.0,
-#           '15 Jan 1995    23:40 UTC':    +5.0,
-#           '28 Aug 1995    15:16 UTC':    +6.5,
-#           '14 Mar 1996    18:47 UTC':    +6.0,
-#           '30 Oct 1996    17:40 UTC':    +5.0,
-#           '18 Mar 1997    22:55 UTC':    -2.4,
-#           '12 Jan 1998    01:15 UTC':    +21.0,
-#           '01 Feb 1998    16:40 UTC':    -18.6,
-#           '04 Jun 1998    01:01 UTC':    +16.6,
-#           '28 Jun 1998    17:26 UTC':    -15.2,
-#           '15 Sep 1999    15:40 UTC':    +3.0,
-#           '09 Jan 2000    17:42 UTC':    +4.2,
-#           '15 Jun 2000    19:38 UTC':    +3.6,
-#           '02 Dec 2002    20:50 UTC':    +3.6,
-#           '22 Dec 2004    23:12 UTC':    +4.16,
-#           '31 Jul 2006    14:35 UTC':    +5.34,
-#           '20 Jul 2009    09:35 UTC':    +2.97}
-#    return tmp
-#
-#def MirrorMovesInHSTTime():
-#    '''
-#    '''
-#    x = MirrorMoves()
-#    tmp = []
-#    for key in x:
-#        julian = j.toJulian2(time.strptime(key.replace(':', ' '), "%d %b %Y %H %M %Z"))
-#        hstTime = j.fromHSTDeployment(julian)
-#        tmp.append([hstTime, x[key]])
-#    return tmp
+__version__ = '1.9'
 
 def findMaxAndPair(data):
     maxa = data[0][0]
@@ -199,7 +58,9 @@ def findMaxAndPair(data):
             corb = b
     return maxa, corb
 
-def FocusTrendNoBreathing(xmin, xmax, title, type, output = 'FocusTrend'):
+def FocusTrendNoBreathing(xmin, xmax, title, type, 
+                          input_folder, output_folder,
+                          output = 'FocusTrend'):
     '''
     Plots Focus trend since given minimum J-L date (mxin).
     Uses data that has not been breathing corrected.
@@ -267,34 +128,42 @@ def FocusTrendNoBreathing(xmin, xmax, title, type, output = 'FocusTrend'):
     ax.axhline(y = 0, ls='--', lw = 1., c = 'k')
 
     #mirror moves
-    mirrorM = MirrorMovesInHSTTime()
+    mirrorM = h.MirrorMovesInHSTTime()
     for time, movement in mirrorM:
         ax.axvline(x = time, ymin = -10, ymax = 3, lw = 1.1, ls=':', c = 'k')
-        ax.annotate(s = str(movement) + '$\mu m$', xy= (time+40, min(y)-1.5), rotation = 90,
-                    horizontalalignment='center', verticalalignment='center', size = 'small')  
-    ax.axvline(x = mirrorM[-1][0], ymin = -10, ymax = 3, lw = 1.1, ls=':', c = 'k', label='Mirror Movement')
+        ax.annotate(s = str(movement) + '$\mu m$', xy= (time+40, min(y)-1.5),
+                    rotation = 90, horizontalalignment='center',
+                    verticalalignment='center', size = 'small')  
+    ax.axvline(x = mirrorM[-1][0], ymin = -10, ymax = 3, lw = 1.1, ls=':',
+               c = 'k', label='Mirror Movement')
     
     #plot data
-    ax.errorbar(shiftdate, cfocus, yerr = err, marker = 'o', color = 'blue', ms = 4, ls = 'None',
-                ecolor = None, mew = 0.4, label='No Breathing correction', capsize = 2, elinewidth = 0.8, zorder = 10)
+    ax.errorbar(shiftdate, cfocus, yerr = err, marker = 'o', color = 'blue',
+                ms = 4, ls = 'None', ecolor = None, mew = 0.4,
+                label='No Breathing correction (other SIs)',
+                capsize = 2, elinewidth = 0.8, zorder = 10)
     tmp1 = [a for a, b in zip(shiftdate, data['Obs']) if b.startswith('i')]
     tmp2 = [a for a, b in zip(cfocus, data['Obs']) if b.startswith('i')]
     tmp3 = [a for a, b in zip(err, data['Obs']) if b.startswith('i')]
-    ax.errorbar(tmp1, tmp2, yerr = tmp3, marker = 'D', color = 'magenta', ms = 4.1, ls = 'None',
-                ecolor = None, mew = 0.4, label='No Breathing correction (WFC3)', capsize = 2, elinewidth = 0.8, zorder = 10)
+    ax.errorbar(tmp1, tmp2, yerr = tmp3, marker = 'D', color = 'magenta',
+                ms = 4.1, ls = 'None', ecolor = None, mew = 0.4,
+                label='No Breathing correction (WFC3 UVIS)',
+                capsize = 2, elinewidth = 0.8, zorder = 10)
     
     # plot fits
     a = (fitted[2] - fitted[1]) / (x[2] - x[1])
     k = N.arange(xmin, maxvalue)*a
     interp = fitted[-1] - x[-1]*a
     ax.plot(N.arange(xmin, maxvalue)[(N.arange(xmin, maxvalue) <= lastdate)], 
-            k[N.arange(xmin, maxvalue) <= lastdate] + interp, lw = 1, label='Linear Regression', c = 'g')
+            k[N.arange(xmin, maxvalue) <= lastdate] + interp, lw = 1,
+            label='Linear Regression', c = 'g')
     #ax.plot(shiftdate, params[0] + params[1]*S.exp(-shiftdate*params[2]), lw = 1, label='Exponent Fit', c = 'r')
     
     #discontinued xrange
     newxrange = 1 + lastdate + N.arange(maxvalue - lastdate + 150)
     ax.plot(x, expo, lw = 2, label='Exponent Fit', c = 'r')
-    ax.plot(newxrange, 2.97 + params[0] + params[1]*S.exp(-newxrange*params[2]), 'r--', lw = 2, label='Exponent Fit Cont.', zorder = 11)
+    ax.plot(newxrange, 2.97 + params[0] + params[1]*S.exp(-newxrange*params[2]),
+            'r--', lw = 2, label='Exponent Fit Cont.', zorder = 11)
 
     ax.set_xlabel('Days since HST deployment')
     ax.set_ylabel('Accumulated Defocus $[SM \mu m]$')  
@@ -326,10 +195,12 @@ def FocusTrendNoBreathing(xmin, xmax, title, type, output = 'FocusTrend'):
     except:
         P.legend()
     
-    P.savefig(output + type)
+    P.savefig(output_folder + output + type)
     P.close()
 
-def FocusTrend(xmin, xmax, title, type, output = 'FocusTrend'):
+def FocusTrend(xmin, xmax, title, type, 
+               input_folder, output_folder,
+               output = 'FocusTrend'):
     '''
     Plots Focus trend since given minimum J-L date (mxin).
     xmax is used to limit the fit.
@@ -372,16 +243,24 @@ def FocusTrend(xmin, xmax, title, type, output = 'FocusTrend'):
     mirrorM = h.MirrorMovesInHSTTime()
     for time, movement in mirrorM:
         ax.axvline(x = time, ymin = -10, ymax = 3, lw = 1.1, ls=':', c = 'k')
-        ax.annotate(s = str(movement) + '$\mu$m', xy= (time+40, min(y)-1.5), rotation = 90,
-                    horizontalalignment='center', verticalalignment='center', size = 'small')  
-    ax.axvline(x = mirrorM[-1][0], ymin = -10, ymax = 3, lw = 1.1, ls=':', c = 'k', label='Mirror Movement')
+        ax.annotate(s = str(movement) + '$\mu$m', xy= (time+40, min(y)-1.5),
+                    rotation = 90,
+                    horizontalalignment='center', verticalalignment='center',
+                    size = 'small')  
+    ax.axvline(x = mirrorM[-1][0], ymin = -10, ymax = 3, lw = 1.1, ls=':',
+               c = 'k', label='Mirror Movement')
     
     #plot data
-    ax.errorbar(data['J-L'], data['Focus'], yerr = data['Error'], marker = 'o', color = 'blue', ms = 4, ls = 'None',
-                ecolor = None, mew = 0.4, label='Breathing corrected', capsize = 2, elinewidth = 0.8, zorder = 10)
-    ax.errorbar(data['J-L'][data['Camera'] == 'WFC3'], data['Focus'][data['Camera'] == 'WFC3'], 
-                yerr = data['Error'][data['Camera'] == 'WFC3'], marker = 'D', color = 'magenta', ms = 4, ls = 'None',
-                ecolor = None, mew = 0.4, label='Breathing corrected  (WFC3)', capsize = 2.1, elinewidth = 0.8, zorder = 10)
+    ax.errorbar(data['J-L'], data['Focus'], yerr = data['Error'], marker = 'o',
+                color = 'blue', ms = 4, ls = 'None',
+                ecolor = None, mew = 0.4, label='Breathing corrected (other SIs)',
+                capsize = 2, elinewidth = 0.8, zorder = 10)
+    ax.errorbar(data['J-L'][data['Camera'] == 'WFC3'],
+                data['Focus'][data['Camera'] == 'WFC3'], 
+                yerr = data['Error'][data['Camera'] == 'WFC3'],
+                marker = 'D', color = 'magenta', ms = 4, ls = 'None',
+                ecolor = None, mew = 0.4, label='Breathing corrected  (WFC3 UVIS)',
+                capsize = 2.1, elinewidth = 0.8, zorder = 10)
     # plot fits
     a = (fitted[2] - fitted[1]) / (x[2] - x[1])
     k = N.arange(xmin, maxvalue)*a
@@ -394,7 +273,8 @@ def FocusTrend(xmin, xmax, title, type, output = 'FocusTrend'):
     #ax.plot(sorted['J-L'], params[0] + params[1]*S.exp(-sorted['J-L']*params[2]), lw = 1, label='Exponent Fit', c = 'r')
     ax.plot(x, fitted, lw = 1, label='Linear Regression', c = 'g')
     ax.plot(limited['J-L'], expo, lw = 2, label='Exponent Fit', c = 'r')
-    ax.plot(newxrange, 2.97 + params[0] + params[1]*S.exp(-newxrange*params[2]), 'r--', lw = 2, label='Exponent Fit Cont.')
+    ax.plot(newxrange, 2.97 + params[0] + params[1]*S.exp(-newxrange*params[2]),
+            'r--', lw = 2, label='Exponent Fit Cont.')
 
     ax.set_xlabel('Days since HST deployment')
     ax.set_ylabel('Accumulated defocus in SM microns')  
@@ -426,10 +306,12 @@ def FocusTrend(xmin, xmax, title, type, output = 'FocusTrend'):
     except:
         P.legend()
     
-    P.savefig(output + type)
+    P.savefig(output_folder + output + type)
     P.close()
 
-def FocusTrendRemoveLatestMovement(xmin, xmax, title, type, output = 'FocusTrendUptoDate'):
+def FocusTrendRemoveLatestMovement(xmin, xmax, title, type,
+                                   input_folder, output_folder,
+                                   output = 'FocusTrendUptoDate'):
     '''
     @param xmin: minimum Modified Julian Date to be plotted
     @param xmax: maximum Modified Julian Date to be used for the fits
@@ -467,6 +349,7 @@ def FocusTrendRemoveLatestMovement(xmin, xmax, title, type, output = 'FocusTrend
     x = limited['J-L']
     y = limited['Focus']
     err = limited['Error']
+    
     #add the last mirror move to the trailing focus values
     y1 = [b + add for a, b in zip(x, y) if a < last]
     x1 = [a for a, b in zip(x, y) if a < last]
@@ -484,15 +367,16 @@ def FocusTrendRemoveLatestMovement(xmin, xmax, title, type, output = 'FocusTrend
     print params
 
     #calculate the zero focus day
-    day = 7206 # Jan 15th, 2010
-    daydate = D.datetime(*HSTdayToRealDate(day)[0:6]).strftime('%B-%d-%Y')
-    force = 1.3
-    sh = force - (params[0] + params[1]*N.exp(-day*params[2]))
-    zf =  D.datetime(*HSTdayToRealDate(FindZeroSingleExp(params, 7600))[0:6]).strftime('%A %d, %B, %Y (at %H:%M%Z)')
-    zfshift =  D.datetime(*HSTdayToRealDate(FindZeroSingleExp(params, 7600, sh))[0:6]).strftime('%A %d, %B, %Y (at %H:%M%Z)')
-    print 'The predicted zero focus date from breathing corrected focus data that have been derived since Dec 2002 using single exponent fit is:'
+#    day = 7206 # Jan 15th, 2010
+#    daydate = D.datetime(*j.HSTdayToRealDate(day)[0:6]).strftime('%B-%d-%Y')
+#    force = 0.5
+#    sh = force - (params[0] + params[1]*N.exp(-day*params[2]))
+    sh = - 0.5
+    zf =  D.datetime(*j.HSTdayToRealDate(f.FindZeroSingleExp(params, 7600))[0:6]).strftime('%A %d, %B, %Y (at %H:%M%Z)')
+    zfshift =  D.datetime(*j.HSTdayToRealDate(f.FindZeroSingleExp(params, 7600, sh))[0:6]).strftime('%A %d, %B, %Y (at %H:%M%Z)')
+    print 'The predicted zero focus date from breathing corrected focus data that have been derived since Dec 2002 in ACS WFC frame using single exponent fit is:'
     print zf
-#    print 'and with %3.2f microns shift [forced: (date, focus) = (%s, %3.2f)]:\n%s' % (sh, daydate, force, zfshift)
+    print 'and in WFC3 frame (%3.2f microns shift) :\n%s' % (sh, zfshift)
 
     #create the figure
     ax = P.subplot(111)
@@ -517,16 +401,18 @@ def FocusTrendRemoveLatestMovement(xmin, xmax, title, type, output = 'FocusTrend
     ax.axvline(x = mirrorM[-1][0], ymin = -10, ymax = 1, lw = 1.0, ls=':', c = 'k', label='Mirror Movement')
     
     #plots
-    ax.errorbar(allx, ally, yerr = alle, marker = 'o', color = 'blue', ms = 4, ls = 'None',
-                ecolor = None, mew = 0.4, label='Breathing corrected', capsize = 2, elinewidth = 0.8)
+    ax.errorbar(allx, ally, yerr = alle, marker = 'o', color = 'blue',
+                ms = 4, ls = 'None', ecolor = None, mew = 0.4,
+                label='Breathing corrected (other SIs)', capsize = 2, elinewidth = 0.8)
     ax.errorbar(axx, ayy, yerr = aee, marker = 'o', color = 'blue', ms = 4, ls = 'None',
                 ecolor = None, mew = 0.4, capsize = 2, elinewidth = 0.8)
     #WFC3 with magenta
     ayyW = N.array([b for a, b, c in zip(sorted['J-L'], sorted['Focus'], sorted['Camera']) if a > last and c == 'WFC3'])
     axxW = N.array([a for a, b, c in zip(sorted['J-L'], sorted['Focus'], sorted['Camera']) if a > last and c == 'WFC3'])   
     aeeW = N.array([b for a, b, c in zip(sorted['J-L'], sorted['Error'], sorted['Camera']) if a > last and c == 'WFC3'])
-    ax.errorbar(axxW, ayyW, yerr = aeeW, marker = 'D', color = 'magenta', ms = 4, ls = 'None',
-                ecolor = None, mew = 0.4, capsize = 2, elinewidth = 0.8, label='Breathing corrected (WFC3)')   
+    ax.errorbar(axxW, ayyW, yerr = aeeW, marker = 'D', color = 'magenta',
+                ms = 4, ls = 'None', ecolor = None, mew = 0.4, capsize = 2,
+                elinewidth = 0.8, label='Breathing corrected (WFC3 UVIS)')   
     
     #plot fits
     ax.plot(x, fitted, lw = 1, label='Linear Regression', c = 'g')
@@ -561,11 +447,12 @@ def FocusTrendRemoveLatestMovement(xmin, xmax, title, type, output = 'FocusTrend
     except:
         P.legend()
     
-    P.savefig(output + type)
+    P.savefig(output_folder + output + type)
     P.close()
 
 
 def FocusTrendRemoveLatestMovementOffset(xmin, xmax, title, type,
+                                         input_folder, output_folder,
                                          output = 'FocusTrendUptoDateOffset',
                                          WFC3offset = 0.5):
     '''
@@ -629,15 +516,16 @@ def FocusTrendRemoveLatestMovementOffset(xmin, xmax, title, type,
     print params
 
     #calculate the zero focus day
-    day = 7206 # Jan 15th, 2010
-    daydate = D.datetime(*HSTdayToRealDate(day)[0:6]).strftime('%B-%d-%Y')
-    force = 1.3
-    sh = force - (params[0] + params[1]*N.exp(-day*params[2]))
-    zf =  D.datetime(*HSTdayToRealDate(FindZeroSingleExp(params, 7600))[0:6]).strftime('%A %d, %B, %Y (at %H:%M%Z)')
-    zfshift =  D.datetime(*HSTdayToRealDate(FindZeroSingleExp(params, 7600, sh))[0:6]).strftime('%A %d, %B, %Y (at %H:%M%Z)')
+#    day = 7206 # Jan 15th, 2010
+#    daydate = D.datetime(*j.HSTdayToRealDate(day)[0:6]).strftime('%B-%d-%Y')
+#    force = 1.3
+#    sh = force - (params[0] + params[1]*N.exp(-day*params[2]))
+    sh = -0.5
+    zf =  D.datetime(*j.HSTdayToRealDate(f.FindZeroSingleExp(params, 7600))[0:6]).strftime('%A %d, %B, %Y (at %H:%M%Z)')
+    zfshift =  D.datetime(*j.HSTdayToRealDate(f.FindZeroSingleExp(params, 7600, sh))[0:6]).strftime('%A %d, %B, %Y (at %H:%M%Z)')
     print 'The predicted zero focus date from breathing corrected focus data that have been derived since Dec 2002 using single exponent fit is:'
     print zf
-#    print 'and with %3.2f microns shift [forced: (date, focus) = (%s, %3.2f)]:\n%s' % (sh, daydate, force, zfshift)
+    print 'and in WFC3 frame (%3.2f microns shift):\n%s' % (sh, zfshift)
 
     #create the figure
     ax = P.subplot(111)
@@ -656,22 +544,27 @@ def FocusTrendRemoveLatestMovementOffset(xmin, xmax, title, type,
     #plot mirror moves
     for time, movement in mirrorM:
         ax.axvline(x = time, ymin = -10, ymax = 1, lw = 1.0, ls=':', c = 'k')
-        ax.annotate(s = str(movement) + '$\mu$m', xy= (time+40, min(y)-3), rotation = 90,
-                    horizontalalignment='center', verticalalignment='center', size = 'small')   
+        ax.annotate(s = str(movement) + '$\mu$m', xy= (time+40, min(y)-3),
+                    rotation = 90, horizontalalignment='center',
+                    verticalalignment='center', size = 'small')   
     #last one with label
-    ax.axvline(x = mirrorM[-1][0], ymin = -10, ymax = 1, lw = 1.0, ls=':', c = 'k', label='Mirror Movement')
+    ax.axvline(x = mirrorM[-1][0], ymin = -10, ymax = 1, lw = 1.0,
+               ls=':', c = 'k', label='Mirror Movement')
     
     #plots
-    ax.errorbar(allx, ally, yerr = alle, marker = 'o', color = 'blue', ms = 4, ls = 'None',
-                ecolor = None, mew = 0.4, label='Breathing corrected', capsize = 2, elinewidth = 0.8)
+    ax.errorbar(allx, ally, yerr = alle, marker = 'o', color = 'blue',
+                ms = 4, ls = 'None', ecolor = None, mew = 0.4,
+                label='Breathing corrected (other SIs)',
+                capsize = 2, elinewidth = 0.8)
     ax.errorbar(axx, ayy, yerr = aee, marker = 'o', color = 'blue', ms = 4, ls = 'None',
                 ecolor = None, mew = 0.4, capsize = 2, elinewidth = 0.8)
     #WFC3 with magenta
     ayyW = N.array([b for a, b, c in zip(sorted['J-L'], sorted['Focus'], sorted['Camera']) if a > last and c == 'WFC3'])
     axxW = N.array([a for a, b, c in zip(sorted['J-L'], sorted['Focus'], sorted['Camera']) if a > last and c == 'WFC3'])   
     aeeW = N.array([b for a, b, c in zip(sorted['J-L'], sorted['Error'], sorted['Camera']) if a > last and c == 'WFC3'])
-    ax.errorbar(axxW, ayyW, yerr = aeeW, marker = 'D', color = 'magenta', ms = 4, ls = 'None',
-                ecolor = None, mew = 0.4, capsize = 2, elinewidth = 0.8, label='Breathing corrected (WFC3)')   
+    ax.errorbar(axxW, ayyW, yerr = aeeW, marker = 'D', color = 'magenta',
+                ms = 4, ls = 'None', ecolor = None, mew = 0.4, capsize = 2,
+                elinewidth = 0.8, label='Breathing corrected (WFC3 UVIS)')   
     
     #plot fits
     ax.plot(x, fitted, lw = 1, label='Linear Regression', c = 'g')
@@ -706,10 +599,13 @@ def FocusTrendRemoveLatestMovementOffset(xmin, xmax, title, type,
     except:
         P.legend()
     
-    P.savefig(output + type)
+    P.savefig(output_folder + output + type)
     P.close()
 
-def FocusTrendRemoveLatestMovementNoBreathing(xmin, xmax, title, type, output = 'FocusTrendUptoDateNoBreathing'):
+def FocusTrendRemoveLatestMovementNoBreathing(xmin, xmax,
+                                              title, type,
+                                              input_folder, output_folder,
+                                              output = 'FocusTrendUptoDateNoBreathing'):
     '''
     @param xmin: minimum Modified Julian Date to be plotted
     @param xmax: maximum Modified Julian Date to be used for the fits
@@ -721,18 +617,18 @@ def FocusTrendRemoveLatestMovementNoBreathing(xmin, xmax, title, type, output = 
     Straight line and an exponential are fitted to the all data since xmin.
     '''
 
-    data = N.loadtxt('AllData.txt', skiprows=1,
+    data = N.loadtxt(input_folder + 'AllData.txt', skiprows=1,
 				    dtype={'names': ('Obs', 'Date', 'Julian', 'Focus', 'Error'),
 					   'formats':('S12','S12','i4','f4','f4')})
 
     #take a away from Julian the J-L
-    data['Julian'] =  fromHSTDeployment(data['Julian'])
+    data['Julian'] =  j.fromHSTDeployment(data['Julian'])
 
     #latest date
     maxvalue = N.max(data['Julian'])
 
     #latest mirror movement
-    mirrorM = MirrorMovesInHSTTime()
+    mirrorM = h.MirrorMovesInHSTTime()
     last, add = findMaxAndPair(mirrorM)
 
     #this whole thing is very stupidly written, and should be fixed
@@ -782,15 +678,16 @@ def FocusTrendRemoveLatestMovementNoBreathing(xmin, xmax, title, type, output = 
     print params
 
     #calculate the zero focus day
-    day = 7206 # Jan 15th, 2010
-    daydate = D.datetime(*HSTdayToRealDate(day)[0:6]).strftime('%B-%d-%Y')
-    force = 1.3
-    sh = force - (params[0] + params[1]*N.exp(-day*params[2]))
-    zf =  D.datetime(*HSTdayToRealDate(FindZeroSingleExp(params, 7600))[0:6]).strftime('%A %d, %B, %Y (at %H:%M%Z)')
-    zfshift =  D.datetime(*HSTdayToRealDate(FindZeroSingleExp(params, 7600, sh))[0:6]).strftime('%A %d, %B, %Y (at %H:%M%Z)')
+#    day = 7206 # Jan 15th, 2010
+#    daydate = D.datetime(*j.HSTdayToRealDate(day)[0:6]).strftime('%B-%d-%Y')
+#    force = 1.3
+#    sh = force - (params[0] + params[1]*N.exp(-day*params[2]))
+    sh = -0.5
+    zf =  D.datetime(*j.HSTdayToRealDate(f.FindZeroSingleExp(params, 7600))[0:6]).strftime('%A %d, %B, %Y (at %H:%M%Z)')
+    zfshift =  D.datetime(*j.HSTdayToRealDate(f.FindZeroSingleExp(params, 7600, sh))[0:6]).strftime('%A %d, %B, %Y (at %H:%M%Z)')
     print 'The predicted zero focus date from focus data (no breathing correction) that have been derived since Dec 2002 using single exponent fit is:'
     print zf
-#    print 'and with %3.2f microns shift [forced: (date, focus) = (%s, %3.2f)]:\n%s' % (sh, daydate, force, zfshift)
+    print 'and in WFC3 frame (%3.2f microns shift):\n%s' % (sh, zfshift)
 
     #create the figure
     ax = P.subplot(111)
@@ -809,22 +706,26 @@ def FocusTrendRemoveLatestMovementNoBreathing(xmin, xmax, title, type, output = 
     #plot mirror moves
     for time, movement in mirrorM:
         ax.axvline(x = time, ymin = -10, ymax = 1, lw = 1.0, ls=':', c = 'k')
-        ax.annotate(s = str(movement) + '$\mu$m', xy= (time+40, min(y)-3), rotation = 90,
-                    horizontalalignment='center', verticalalignment='center', size = 'small')   
+        ax.annotate(s = str(movement) + '$\mu$m', xy= (time+40, min(y)-3),
+                    rotation = 90, horizontalalignment='center',
+                    verticalalignment='center', size = 'small')   
     #last one with label
     ax.axvline(x = mirrorM[-1][0], ymin = -10, ymax = 1, lw = 1.0, ls=':', c = 'k', label='Mirror Movement')
     
     #plots
-    ax.errorbar(allx, ally, yerr = alle, marker = 'o', color = 'blue', ms = 4, ls = 'None',
-                ecolor = None, mew = 0.4, label='No Breathing Correction', capsize = 2, elinewidth = 0.8)
+    ax.errorbar(allx, ally, yerr = alle, marker = 'o', color = 'blue',
+                ms = 4, ls = 'None', ecolor = None, mew = 0.4,
+                label='No Breathing Correction (other SIs)', capsize = 2,
+                elinewidth = 0.8)
     ax.errorbar(axx, ayy, yerr = aee, marker = 'o', color = 'blue', ms = 4, ls = 'None',
                 ecolor = None, mew = 0.4, capsize = 2, elinewidth = 0.8)
     #WFC3 with magenta
     ayyW = N.array([b for a, b, c in zip(sorted['Julian'], sorted['Focus'], sorted['Obs']) if a > last and c.startswith('i')])
     axxW = N.array([a for a, b, c in zip(sorted['Julian'], sorted['Focus'], sorted['Obs']) if a > last and c.startswith('i')])   
     aeeW = N.array([b for a, b, c in zip(sorted['Julian'], sorted['Error'], sorted['Obs']) if a > last and c.startswith('i')])
-    ax.errorbar(axxW, ayyW, yerr = aeeW, marker = 'D', color = 'magenta', ms = 4, ls = 'None',
-                ecolor = None, mew = 0.4, capsize = 2, elinewidth = 0.8, label='No Breathing Correction (WFC3)')   
+    ax.errorbar(axxW, ayyW, yerr = aeeW, marker = 'D', color = 'magenta',
+                ms = 4, ls = 'None', ecolor = None, mew = 0.4, capsize = 2,
+                elinewidth = 0.8, label='No Breathing Correction (WFC3 UVIS)')   
     
     #plot fits
     ax.plot(x, fitted, lw = 1, label='Linear Regression', c = 'g')
@@ -859,10 +760,13 @@ def FocusTrendRemoveLatestMovementNoBreathing(xmin, xmax, title, type, output = 
     except:
         P.legend()
     
-    P.savefig(output + type)
+    P.savefig(output_folder + output + type)
     P.close()
 
-def FocusTrendRemoveLatestMovementNoBreathingOffset(xmin, xmax, title, type, output = 'FocusTrendUptoDateNoBreathingOffset'):
+def FocusTrendRemoveLatestMovementNoBreathingOffset(xmin, xmax,
+                                                    title, type,
+                                                    input_folder, output_folder,
+                                                    output = 'FocusTrendUptoDateNoBreathingOffset'):
     '''
     @param xmin: minimum Modified Julian Date to be plotted
     @param xmax: maximum Modified Julian Date to be used for the fits
@@ -875,12 +779,12 @@ def FocusTrendRemoveLatestMovementNoBreathingOffset(xmin, xmax, title, type, out
     '''
     WFC3offset = 0.5
 
-    data = N.loadtxt('AllData.txt', skiprows=1,
+    data = N.loadtxt(input_folder + 'AllData.txt', skiprows=1,
                     dtype={'names': ('Obs', 'Date', 'Julian', 'Focus', 'Error'),
                        'formats':('S12','S12','i4','f4','f4')})
 
     #take a away from Julian the J-L
-    data['Julian'] =  fromHSTDeployment(data['Julian'])
+    data['Julian'] =  j.fromHSTDeployment(data['Julian'])
 
     #offsetting
     #numpy.core.defchararray.startswith(a, prefix, start=0, end=None)
@@ -895,7 +799,7 @@ def FocusTrendRemoveLatestMovementNoBreathingOffset(xmin, xmax, title, type, out
     maxvalue = N.max(data['Julian'])
 
     #latest mirror movement
-    mirrorM = MirrorMovesInHSTTime()
+    mirrorM = h.MirrorMovesInHSTTime()
     last, add = findMaxAndPair(mirrorM)
 
     #this whole thing is very stupidly written, and should be fixed
@@ -946,11 +850,11 @@ def FocusTrendRemoveLatestMovementNoBreathingOffset(xmin, xmax, title, type, out
 
     #calculate the zero focus day
     day = 7206 # Jan 15th, 2010
-    daydate = D.datetime(*HSTdayToRealDate(day)[0:6]).strftime('%B-%d-%Y')
+    daydate = D.datetime(*j.HSTdayToRealDate(day)[0:6]).strftime('%B-%d-%Y')
     force = 1.3
     sh = force - (params[0] + params[1]*N.exp(-day*params[2]))
-    zf =  D.datetime(*HSTdayToRealDate(FindZeroSingleExp(params, 7600))[0:6]).strftime('%A %d, %B, %Y (at %H:%M%Z)')
-    zfshift =  D.datetime(*HSTdayToRealDate(FindZeroSingleExp(params, 7600, sh))[0:6]).strftime('%A %d, %B, %Y (at %H:%M%Z)')
+    zf =  D.datetime(*j.HSTdayToRealDate(f.FindZeroSingleExp(params, 7600))[0:6]).strftime('%A %d, %B, %Y (at %H:%M%Z)')
+    zfshift =  D.datetime(*j.HSTdayToRealDate(f.FindZeroSingleExp(params, 7600, sh))[0:6]).strftime('%A %d, %B, %Y (at %H:%M%Z)')
     print 'The predicted zero focus date from focus data (no breathing correction) that have been derived since Dec 2002 using single exponent fit is:'
     print zf
 #    print 'and with %3.2f microns shift [forced: (date, focus) = (%s, %3.2f)]:\n%s' % (sh, daydate, force, zfshift)
@@ -972,22 +876,27 @@ def FocusTrendRemoveLatestMovementNoBreathingOffset(xmin, xmax, title, type, out
     #plot mirror moves
     for time, movement in mirrorM:
         ax.axvline(x = time, ymin = -10, ymax = 1, lw = 1.0, ls=':', c = 'k')
-        ax.annotate(s = str(movement) + '$\mu$m', xy= (time+40, min(y)-3), rotation = 90,
-                    horizontalalignment='center', verticalalignment='center', size = 'small')   
+        ax.annotate(s = str(movement) + '$\mu$m', xy= (time+40, min(y)-3),
+                    rotation = 90, horizontalalignment='center',
+                    verticalalignment='center', size = 'small')   
     #last one with label
     ax.axvline(x = mirrorM[-1][0], ymin = -10, ymax = 1, lw = 1.0, ls=':', c = 'k', label='Mirror Movement')
     
     #plots
-    ax.errorbar(allx, ally, yerr = alle, marker = 'o', color = 'blue', ms = 4, ls = 'None',
-                ecolor = None, mew = 0.4, label='No Breathing Correction', capsize = 2, elinewidth = 0.8)
-    ax.errorbar(axx, ayy, yerr = aee, marker = 'o', color = 'blue', ms = 4, ls = 'None',
-                ecolor = None, mew = 0.4, capsize = 2, elinewidth = 0.8)
+    ax.errorbar(allx, ally, yerr = alle, marker = 'o', color = 'blue',
+                ms = 4, ls = 'None', ecolor = None, mew = 0.4,
+                label='No Breathing Correction (other SIs)', capsize = 2,
+                elinewidth = 0.8)
+    ax.errorbar(axx, ayy, yerr = aee, marker = 'o', color = 'blue',
+                ms = 4, ls = 'None', ecolor = None, mew = 0.4, capsize = 2,
+                elinewidth = 0.8)
     #WFC3 with magenta
     ayyW = N.array([b for a, b, c in zip(sorted['Julian'], sorted['Focus'], sorted['Obs']) if a > last and c.startswith('i')])
     axxW = N.array([a for a, b, c in zip(sorted['Julian'], sorted['Focus'], sorted['Obs']) if a > last and c.startswith('i')])   
     aeeW = N.array([b for a, b, c in zip(sorted['Julian'], sorted['Error'], sorted['Obs']) if a > last and c.startswith('i')])
-    ax.errorbar(axxW, ayyW, yerr = aeeW, marker = 'D', color = 'magenta', ms = 4, ls = 'None',
-                ecolor = None, mew = 0.4, capsize = 2, elinewidth = 0.8, label='No Breathing Correction (WFC3)')   
+    ax.errorbar(axxW, ayyW, yerr = aeeW, marker = 'D', color = 'magenta',
+                ms = 4, ls = 'None', ecolor = None, mew = 0.4, capsize = 2,
+                elinewidth = 0.8, label='No Breathing Correction (WFC3 UVIS)')   
     
     #plot fits
     ax.plot(x, fitted, lw = 1, label='Linear Regression', c = 'g')
@@ -1022,11 +931,11 @@ def FocusTrendRemoveLatestMovementNoBreathingOffset(xmin, xmax, title, type, out
     except:
         P.legend()
     
-    P.savefig(output + type)
+    P.savefig(output_folder + output + type)
     P.close()
 
-def FocusTrendSinceDayZero(title, output, input_folder,
-                           output_folder, 
+def FocusTrendSinceDayZero(title, output,
+                           input_folder, output_folder,
                            stepFunction = False,
                            filename = 'AllData.txt',
                            endday = 8100):
@@ -1108,8 +1017,8 @@ def FocusTrendSinceDayZero(title, output, input_folder,
     P.savefig(output_folder + output)
     P.close()    
 
-def FocusTrendSinceDayZeroDates(title, output, input_folder, 
-                                output_folder,
+def FocusTrendSinceDayZeroDates(title, output,
+                                input_folder, output_folder,
                                 stepFunction = False,
                                 filename = 'AllData.txt'):
     '''
@@ -1186,8 +1095,9 @@ def FocusTrendSinceDayZeroDates(title, output, input_folder,
     P.close()
 
 
-def FocusTrendSinceDayZeroDates2(output, input_folder, output_folder,
-                                filename = 'AllData.txt'):    
+def FocusTrendSinceDayZeroDates2(output,
+                                 input_folder, output_folder,
+                                 filename = 'AllData.txt'):    
     '''
     Plots the overall focus trend since the HST launch. Will not plot errors as they
     are smaller or similar size to the markers.
@@ -1197,7 +1107,7 @@ def FocusTrendSinceDayZeroDates2(output, input_folder, output_folder,
                             'formats':('S12','S12','i4','f4','f4')})
 
     #mirror movements
-    mirrorM = MirrorMovesInHSTTime()
+    mirrorM = h.MirrorMovesInHSTTime()
 
     #manipulatges the date
     shiftdate = data['MJDate'] - 48005.0
@@ -1211,19 +1121,20 @@ def FocusTrendSinceDayZeroDates2(output, input_folder, output_folder,
 
     #double exponential fitting
     p = [-6.05, 56.0, 365., 100., 2240.]
-    expo, params = FitDoubleExponent(shiftdate, cfocus, p)
+    expo, params = f.FitDoubleExponent(shiftdate, cfocus, p)
 
     #calculate the zero focus day
-    day = 7206 # Jan 15th, 2010
-    daydate = D.datetime(*HSTdayToRealDate(day)[0:6]).strftime('%B-%d-%Y')
-    force = 1.3
-    sh = force - (params[0] + params[1]*N.exp(-day/params[2]) + params[3]*N.exp(-day/params[4]))
-    zf =  D.datetime(*HSTdayToRealDate(FindZeroDoubleExp(params, 7600))[0:6]).strftime('%A %d, %B, %Y (at %H:%M%Z)')
-    zfshift =  D.datetime(*HSTdayToRealDate(FindZeroDoubleExp(params, 7600, sh))[0:6]).strftime('%A %d, %B, %Y (at %H:%M%Z)')
+#    day = 7206 # Jan 15th, 2010
+#    daydate = D.datetime(*j.HSTdayToRealDate(day)[0:6]).strftime('%B-%d-%Y')
+#    force = 1.3
+#    sh = force - (params[0] + params[1]*N.exp(-day/params[2]) + params[3]*N.exp(-day/params[4]))
+    sh = -0.5
+    zf =  D.datetime(*j.HSTdayToRealDate(f.FindZeroDoubleExp(params, 7600))[0:6]).strftime('%A %d, %B, %Y (at %H:%M%Z)')
+    zfshift =  D.datetime(*j.HSTdayToRealDate(f.FindZeroDoubleExp(params, 7600, sh))[0:6]).strftime('%A %d, %B, %Y (at %H:%M%Z)')
 
     print 'The predicted zero focus date from all focus data using double exponent fit (No Breathing Correction) is:'
     print zf 
-#    print 'and with %3.2f microns shift [forced: (date, focus) = (%s, %3.2f)]:\n%s' % (sh, daydate, force, zfshift)
+    print 'and in WFC3 frame (%3.2f microns shift):\n%s' % (sh, zfshift)
     
     #create the figure
     fig = P.figure()
@@ -1239,8 +1150,8 @@ def FocusTrendSinceDayZeroDates2(output, input_folder, output_folder,
         ax.plot(xdel, params[0] + params[1]*N.exp(-xdel/params[2]) + params[3]*N.exp(-xdel/params[4]), c = 'r', lw = 1.1)
         #ax.plot(xdel, sh + params[0] + params[1]*N.exp(-xdel/params[2]) + params[3]*N.exp(-xdel/params[4]), c = 'g', lw = 1.1)
 
-    ax.plot(shiftdate, expo, c = 'r', label = 'Double Exponent Fit', lw = 1.2)
-    ax.scatter(shiftdate, cfocus, c = 'b', s = 7, label = 'No breathing correction')
+    pl = ax.plot(shiftdate, expo, c = 'r', label = 'Double Exponent Fit', lw = 1.2)
+    sc = ax.scatter(shiftdate, cfocus, c = 'b', s = 7, label = 'No breathing correction')
     #ax.errorbar(shiftdate, cfocus, yerr = data['Error'], marker = 'o', color = 'blue', ms = 2.2, ls = 'None',
     #            ecolor = None, mew = 0.4, label='No breathing corrected', capsize = 1.4, elinewidth = 0.9)
 
@@ -1281,7 +1192,7 @@ def FocusTrendSinceDayZeroDates2(output, input_folder, output_folder,
     ax.set_xticks(range(0,int(max(shiftdate))+125, 450))
     times = []
     for m in ax.get_xticks():
-        x = D.datetime(*fromJulian(m + 48005.0)[0:6]).strftime('%d\n%b\n%Y')
+        x = D.datetime(*j.fromJulian(m + 48005.0)[0:6]).strftime('%d\n%b\n%Y')
         times.append(x)
     ax.set_xticklabels(times)
 
@@ -1293,21 +1204,19 @@ def FocusTrendSinceDayZeroDates2(output, input_folder, output_folder,
         ax.set_xticks(range(0,weirdtop + 125, 600))
         times = []
         for m in ax.get_xticks():
-            x = D.datetime(*fromJulian(m + 48005.0)[0:6]).strftime('%d\n%b\n%Y')
+            x = D.datetime(*j.fromJulian(m + 48005.0)[0:6]).strftime('%d\n%b\n%Y')
             times.append(x)
         ax.set_xticklabels(times)
 
-    try:
-        ax.legend(scatterpoints = 1, numpoints = 1)
-    except:
-        ax.legend()
+    ax.legend([pl, sc], ['Double Exponent Fit', 'No Breathing Correction (all SIs)'],
+              scatterpoints = 1)
     
-    P.savefig(otuput_folder + output)
+    P.savefig(output_folder + output)
     P.close()
 
 def FocusTrendSinceDayZeroOLD(title, output,
-                              filename = 'comp2009allfocus.txt',
-                              output_folder = '/Users/niemi/Desktop/Focus/plots/'):
+                              input_folder, output_folder,
+                              filename = 'comp2009allfocus.txt'):
     '''
     @deprecated: This function is no longer used. Please see the other two functions.
     '''
@@ -1337,9 +1246,12 @@ def FocusTrendSinceDayZeroOLD(title, output,
     ax = P.subplot(111)
     P.title(title)
 
-    ax.scatter(shiftdate, corrfocus, s = 6, label = 'No breathing correction')
-    ax.plot(desorpdays, SMdesorp, lw = 1.3, c = 'r', label = 'Double Exponent RvdM')
-    ax.plot(desorpdays, SMdesorp2, lw = 1.3, c = 'g', ls='--', label = 'Double Exponent CC')
+    ax.scatter(shiftdate, corrfocus, s = 6,
+               label = 'No breathing correction')
+    ax.plot(desorpdays, SMdesorp, lw = 1.3, c = 'r',
+            label = 'Double Exponent RvdM')
+    ax.plot(desorpdays, SMdesorp2, lw = 1.3, c = 'g', ls='--',
+            label = 'Double Exponent CC')
 
     ax.set_xlim(0, max(shiftdate)+100)
     ax.set_ylim(-20, 150)
@@ -1370,7 +1282,7 @@ def FocusTrendSinceDayZeroOLD(title, output,
     P.savefig(output_folder+output)
     P.close()
     
-def confocality(type, input_folder, output_folder = '/Users/niemi/Desktop/Focus/plots/'):
+def confocality(type, input_folder, output_folder):
     '''
     Creates a plot where WFC3 UVIS focus is compared to ACS WFC.
     '''
@@ -1386,23 +1298,30 @@ def confocality(type, input_folder, output_folder = '/Users/niemi/Desktop/Focus/
     
     delta = acsdata['Focus'] - wfcdata['Focus']
     
+    #add errors in quadrature
+    errs = N.sqrt(acsdata['Error']**2 + wfcdata['Error']**2)
+    
     print '\nACS-WFC3 focus, mean \pm error, and std', delta.mean(), delta.std()/N.sqrt(len(delta)), delta.std()
 
     fig = P.figure()
     ax = fig.add_subplot(111)
-    ax.plot(wfcdata['J-L'], delta, 'bo', label ='Confocality')
-    ax.axhline(0)
-    ax.annotate('Mean: %.3f\nStdev: %.3f' % (delta.mean(), delta.std()),
-                xy = (N.max(wfcdata['J-L']) - 50, 0.0), 
-                horizontalalignment='center',
+    ax.errorbar(wfcdata['J-L'], delta, yerr=errs, fmt = 'bo', label ='Confocality')
+    ax.axhline(0, color = 'g', lw = 1.0)
+    ax.axhline(N.mean(delta), color = 'r', ls = '--', label = 'Mean')
+    ax.axhline(N.median(delta), color = 'magenta', ls = '-.', label = 'Median')
+    
+    str = 'Mean: %.3f\n$\sigma$: %.3f\nMedian: %.3f' % (N.mean(delta), N.std(delta), N.median(delta))
+    ax.annotate(str, xy = (0.8, 0.2),
+                xycoords = 'axes fraction',
                 verticalalignment='center')
 
     times = []
     for m in ax.get_xticks():
-        x = D.datetime(*fromJulian(m + 48005.0)[0:6]).strftime('%d\n%b\n%Y')
+        x = D.datetime(*j.fromJulian(m + 48005.0)[0:6]).strftime('%d\n%b\n%Y')
         times.append(x)
     ax.set_xticklabels(times) 
     ax.set_ylabel('$\Delta$Focus (ACS - WFC3) [$\mu$m]')
+    ax.set_ylim(-3, 3)
     P.legend(scatterpoints = 1, numpoints = 1)
     P.savefig(output_folder + 'Confocality' + type)
 
@@ -1411,27 +1330,42 @@ if __name__ == '__main__':
     input_folder = '/Users/niemi/Desktop/Focus/plots/'
     output_folder = '/Users/niemi/Desktop/Focus/plots/'
     #type of the output files
-    type = '.pdf'
-
+    type = '.ps'
+    
     #creates plots
-    FocusTrend(4600, 7040, 'Focus Trend Since Dec 2002 Mirror Move', type, 'FocusTrend')
-    FocusTrendNoBreathing(4600, 7040, 'Focus Trend Since Dec 2002 Mirror Move', type, 'FocusTrendNoBreathing')
-    FocusTrend(5300, 7040, 'Focus Trend Since Dec 2004 Mirror Move', type, 'FocusTrend2')
-    print '\nFocus Trend Since Dec 2002 Mirror Move (Breathing Correction):'
-    FocusTrendRemoveLatestMovement(4700, 8500, 'Focus Trend Since Dec 2002 Mirror Move', type)  
-    print '\nFocus Trend Since Dec 2002 Mirror Move (No Breathing Correction):'
-    FocusTrendRemoveLatestMovementNoBreathing(4700, 8500, 'Focus Trend Since Dec 2002 Mirror Move', type)      
-    print '\nFocus Trend Since Launch (No Breathing Correction):'
-    FocusTrendSinceDayZeroDates2(output = 'TotalFocusDates' + type)
+    FocusTrend(4600, 7040, 'Focus Trend Since Dec 2002 Mirror Move', type,
+               input_folder, output_folder)
+    FocusTrendNoBreathing(4600, 7040, 'Focus Trend Since Dec 2002 Mirror Move',
+                          type, input_folder, output_folder,
+                          output = 'FocusTrendNoBreathing')
+    FocusTrend(5300, 7040, 'Focus Trend Since Dec 2004 Mirror Move',
+               type, input_folder, output_folder,
+               output = 'FocusTrend2')
+    print '\n\nFocus Trend Since Dec 2002 Mirror Move (Breathing Correction):'
+    FocusTrendRemoveLatestMovement(4700, 8500, 'Focus Trend Since Dec 2002 Mirror Move',
+                                   type, input_folder, output_folder)  
+    print '\n\nFocus Trend Since Dec 2002 Mirror Move (No Breathing Correction):'
+    FocusTrendRemoveLatestMovementNoBreathing(4700, 8500,
+                                              'Focus Trend Since Dec 2002 Mirror Move',
+                                              type, input_folder, output_folder)      
+    print '\n\nFocus Trend Since Launch (No Breathing Correction):'
+    FocusTrendSinceDayZeroDates2('TotalFocusDates' + type,
+                                 input_folder, output_folder)
 
-    print '\nFocus Trend Since Dec 2002 Mirror Move (Breathing Correction):'
-    FocusTrendRemoveLatestMovementOffset(4700, 8500, 'Focus Trend Since Dec 2002 Mirror Move', type)  
+    print '\n\nFocus Trend Since Dec 2002 Mirror Move (Breathing Correction):'
+    FocusTrendRemoveLatestMovementOffset(4700, 8500,
+                                         'Focus Trend Since Dec 2002 Mirror Move',
+                                         type,
+                                         input_folder, output_folder)  
 
     print '\nFocus Trend Since Dec 2002 Mirror Move (No Breathing Correction, but Offset applied):'
-    FocusTrendRemoveLatestMovementNoBreathingOffset(4700, 8500, 'Focus Trend Since Dec 2002 Mirror Move', type)      
+    FocusTrendRemoveLatestMovementNoBreathingOffset(4700, 8500,
+                                                    'Focus Trend Since Dec 2002 Mirror Move',
+                                                    type,
+                                                    input_folder, output_folder)      
 
 
-    confocality(type)
+    confocality(type, input_folder, output_folder)
 
     #old and obsolete plots
     #FocusTrendSinceDayZero(title = 'HST Focus Measurements (PC \& HRC)', output = 'TotalFocusStep.pdf', stepFunction = True)

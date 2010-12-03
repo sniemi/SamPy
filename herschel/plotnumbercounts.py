@@ -11,7 +11,7 @@ matplotlib.rcParams['xtick.major.size'] = 5
 matplotlib.rcParams['ytick.major.size'] = 5
 #matplotlib.use('PDF')
 #matplotlib.use('Agg')
-#matplotlib.use('PS')
+matplotlib.use('PS')
 
 import numpy as N
 import pylab as P
@@ -248,14 +248,13 @@ where FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, band, band)
 
     #legend
     if 'pacs100' in band or 'pacs160' in band:
-        #NOTE: hardcoded sigma limits because legend does not support % !!!
-        p = P.Rectangle((0, 0), 1, 1, fc='blue', alpha = 0.2)
+        p = P.Rectangle((0, 0), 1, 1, fc='#728FCE', alpha = 0.2)
         sline = '%i$\sigma$ errors' % sigma
         P.legend((z0, p, b0[0], a0), 
                  ('Our Model', sline, 'Berta et al. 2010', 'Altieri et al. 2010'), 
                   'lower left')
     if 'spire' in band:
-        p = P.Rectangle((0, 0), 1, 1, fc='blue', alpha = 0.2)
+        p = P.Rectangle((0, 0), 1, 1, fc='#728FCE', alpha = 0.2)
         sline = '%i$\sigma$ errors' % sigma
         P.legend((z0, p, g0[0], c0), 
                  ('Our Model', sline, 'Glenn et al. 2010', 'Clements et al. 2010'), 

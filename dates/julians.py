@@ -45,5 +45,3 @@ def fromHSTDeployment(julian):
 
 def HSTdayToRealDate(hstday):
     return fromJulian(hstday + 48005.0)
-
-
