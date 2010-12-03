@@ -10,6 +10,11 @@ HISTORY:
 Created on Sep 10, 2009
 
 @author: Sami-Matias Niemi
+
+@todo:
+1) change focus trend since mirror move to two x axis mode (one with date)
+2) Create a new plot: all focus data since last mirror move, fit functions
+
 '''
 
 import matplotlib
@@ -28,6 +33,7 @@ matplotlib.rcParams['legend.scatterpoints'] = 1
 matplotlib.rcParams['legend.numpoints'] = 1
 matplotlib.use('PDF')
 from matplotlib.ticker import MultipleLocator, FormatStrFormatter, NullFormatter
+from matplotlib.dates import YearLocator, MonthLocator, DateFormatter 
 import pylab as P
 import numpy as N
 import scipy as S
@@ -38,152 +44,151 @@ import scipy
 import scipy.optimize
 import numpy.core.defchararray as npstr
 
+#From Sami's repository
 import dates.julians as j
+import focus.HSTfocus as h
+import fitting.fits as f
     
-
-# @todo
-# 1) change focus trend since mirror move to two x axis mode (one with date)
-# 2) Create a new plot: all focus data since last mirror move, fit functions
 
 __author__ = 'Sami-Matias Niemi'
 __version__ = '0.9'
+#
+#def toJulian(year, month, day, hour, minute, timezone = 'UTC') :
+#    '''
+#    @param: 
+#    year, month, day, hour, minute, and timezone 
+#    Uses time functions.
+#    @return: Julian Date
+#    '''
+#    dateString = str(year) + ' ' + str(month) + ' ' + str(day) + ' ' + str(hour) + ' '  + str(minute) + ' UTC'
+#    tup = time.strptime(dateString, '%Y %m %d %H %M %Z')
+#    sec = time.mktime(tup)
+#    days = (sec-time.timezone)/86400.0
+#    jday = days + 40587 # Julian date of Jan 1 1900
+#    return jday
+#
+#def toJulian2(date) :
+#    '''
+#    Converts date and time to Modified Julian Date.
+#    Uses time functions. Note that date has to be in Python time format.
+#    '''
+#    sec = time.mktime(date)
+#    days = (sec-time.timezone)/86400.0
+#    jday = days + 40587 # Julian date of Jan 1 1900
+#    return jday
+#
+#def fromJulian(j):
+#    '''
+#    Converts Modified Julian days to human readable format
+#    @return: human readable date and time
+#    '''
+#    days = j - 40587 # From Jan 1 1900
+#    sec = days*86400.0
+#    return time.gmtime(sec)
+#
+#def fromHSTDeployment(julian):
+#    '''
+#    @return: number of days since HST was deployed (24 Apr 1990)
+#    '''
+#    julian0 = 48005.0
+#    return julian - julian0
 
-def toJulian(year, month, day, hour, minute, timezone = 'UTC') :
-    '''
-    @param: 
-    year, month, day, hour, minute, and timezone 
-    Uses time functions.
-    @return: Julian Date
-    '''
-    dateString = str(year) + ' ' + str(month) + ' ' + str(day) + ' ' + str(hour) + ' '  + str(minute) + ' UTC'
-    tup = time.strptime(dateString, '%Y %m %d %H %M %Z')
-    sec = time.mktime(tup)
-    days = (sec-time.timezone)/86400.0
-    jday = days + 40587 # Julian date of Jan 1 1900
-    return jday
+#def HSTdayToRealDate(hstday):
+#    return fromJulian(hstday + 48005.0)
 
-def toJulian2(date) :
-    '''
-    Converts date and time to Modified Julian Date.
-    Uses time functions. Note that date has to be in Python time format.
-    '''
-    sec = time.mktime(date)
-    days = (sec-time.timezone)/86400.0
-    jday = days + 40587 # Julian date of Jan 1 1900
-    return jday
+#def FitExponent(xcorr, ycorr, initials):
+#    '''
+#    Fits an exponential to data.
+#    '''
+#    fitfunc = lambda p, x: p[0] + p[1]*scipy.exp(-x*p[2])
+#    errfunc = lambda p, x, y: fitfunc(p,x) - y
+#    
+#    # fit
+#    p1, success = scipy.optimize.leastsq(errfunc, initials, args=(xcorr, ycorr))
+#
+#    # compute the best fit function from the best fit parameters
+#    corrfit = fitfunc(p1, xcorr)
+#    return corrfit, p1
+#
+#def doubleExponent(x, p, yshift):
+#    return yshift + p[0] + p[1]*scipy.exp(-x/p[2]) + p[3]*scipy.exp(-x/p[4])
+#
+#def singleExponent(x, p, yshift):
+#    return yshift  + p[0] + p[1]*scipy.exp(-x*p[2])
+#
+#def FitDoubleExponent(xcorr, ycorr, initials):
+#    '''
+#    Fits a double exponential to data.
+#    @return: corrfit
+#    '''
+#    fitfunc = lambda p, x: p[0] + p[1]*scipy.exp(-x/p[2]) + p[3]*scipy.exp(-x/p[4])
+#    errfunc = lambda p, x, y: fitfunc(p,x) - y
+#    
+#    # fit
+#    p1, success = scipy.optimize.leastsq(errfunc, initials, args=(xcorr, ycorr))
+#
+#    print 'Double exponent fit:'
+#    print 'p[0] + p[1]*scipy.exp(-x/p[2]) + p[3]*scipy.exp(-x/p[4])'
+#    print p1
+#    if success != 1: print success
+#    print 
+#
+#    # compute the best fit function from the best fit parameters
+#    corrfit = fitfunc(p1, xcorr)
+#    return corrfit, p1
+#
+#def FindZeroDoubleExp(p, x0, yshift = 0.0):
+#    roots = scipy.optimize.fsolve(doubleExponent, x0, args = (p, yshift))
+#    return roots
+#
+#def FindZeroSingleExp(p, x0, yshift = 0.0):
+#    roots = scipy.optimize.fsolve(singleExponent, x0, args = (p, yshift))
+#    return roots
+#
+#def PolyFit(x, y, order = 1):
+#    '''
+#    Fits a polynomial to the data.
+#    @return: 
+#    fitted y values, error of the fit
+#    '''
+#    (ar,br) = N.polyfit(y, x, order)
+#    yr = N.polyval([ar,br], y)
+#    err = N.sqrt(sum((yr - y)**2.)/len(yr))   
+#    return yr, err
 
-def fromJulian(j):
-    '''
-    Converts Modified Julian days to human readable format
-    @return: human readable date and time
-    '''
-    days = j - 40587 # From Jan 1 1900
-    sec = days*86400.0
-    return time.gmtime(sec)
-
-def fromHSTDeployment(julian):
-    '''
-    @return: number of days since HST was deployed (24 Apr 1990)
-    '''
-    julian0 = 48005.0
-    return julian - julian0
-
-def HSTdayToRealDate(hstday):
-    return fromJulian(hstday + 48005.0)
-
-def FitExponent(xcorr, ycorr, initials):
-    '''
-    Fits an exponential to data.
-    '''
-    fitfunc = lambda p, x: p[0] + p[1]*scipy.exp(-x*p[2])
-    errfunc = lambda p, x, y: fitfunc(p,x) - y
-    
-    # fit
-    p1, success = scipy.optimize.leastsq(errfunc, initials, args=(xcorr, ycorr))
-
-    # compute the best fit function from the best fit parameters
-    corrfit = fitfunc(p1, xcorr)
-    return corrfit, p1
-
-def doubleExponent(x, p, yshift):
-    return yshift + p[0] + p[1]*scipy.exp(-x/p[2]) + p[3]*scipy.exp(-x/p[4])
-
-def singleExponent(x, p, yshift):
-    return yshift  + p[0] + p[1]*scipy.exp(-x*p[2])
-
-def FitDoubleExponent(xcorr, ycorr, initials):
-    '''
-    Fits a double exponential to data.
-    @return: corrfit
-    '''
-    fitfunc = lambda p, x: p[0] + p[1]*scipy.exp(-x/p[2]) + p[3]*scipy.exp(-x/p[4])
-    errfunc = lambda p, x, y: fitfunc(p,x) - y
-    
-    # fit
-    p1, success = scipy.optimize.leastsq(errfunc, initials, args=(xcorr, ycorr))
-
-    print 'Double exponent fit:'
-    print 'p[0] + p[1]*scipy.exp(-x/p[2]) + p[3]*scipy.exp(-x/p[4])'
-    print p1
-    if success != 1: print success
-    print 
-
-    # compute the best fit function from the best fit parameters
-    corrfit = fitfunc(p1, xcorr)
-    return corrfit, p1
-
-def FindZeroDoubleExp(p, x0, yshift = 0.0):
-    roots = scipy.optimize.fsolve(doubleExponent, x0, args = (p, yshift))
-    return roots
-
-def FindZeroSingleExp(p, x0, yshift = 0.0):
-    roots = scipy.optimize.fsolve(singleExponent, x0, args = (p, yshift))
-    return roots
-
-def PolyFit(x, y, order = 1):
-    '''
-    Fits a polynomial to the data.
-    @return: 
-    fitted y values, error of the fit
-    '''
-    (ar,br) = N.polyfit(y, x, order)
-    yr = N.polyval([ar,br], y)
-    err = N.sqrt(sum((yr - y)**2.)/len(yr))   
-    return yr, err
-
-def MirrorMoves():
-    '''
-    HST Secondary mirror moves and amounts.
-    '''
-    tmp = {'29 Jun 1994    17:36 UTC':    +5.0,
-           '15 Jan 1995    23:40 UTC':    +5.0,
-           '28 Aug 1995    15:16 UTC':    +6.5,
-           '14 Mar 1996    18:47 UTC':    +6.0,
-           '30 Oct 1996    17:40 UTC':    +5.0,
-           '18 Mar 1997    22:55 UTC':    -2.4,
-           '12 Jan 1998    01:15 UTC':    +21.0,
-           '01 Feb 1998    16:40 UTC':    -18.6,
-           '04 Jun 1998    01:01 UTC':    +16.6,
-           '28 Jun 1998    17:26 UTC':    -15.2,
-           '15 Sep 1999    15:40 UTC':    +3.0,
-           '09 Jan 2000    17:42 UTC':    +4.2,
-           '15 Jun 2000    19:38 UTC':    +3.6,
-           '02 Dec 2002    20:50 UTC':    +3.6,
-           '22 Dec 2004    23:12 UTC':    +4.16,
-           '31 Jul 2006    14:35 UTC':    +5.34,
-           '20 Jul 2009    09:35 UTC':    +2.97}
-    return tmp
-
-def MirrorMovesInHSTTime():
-    '''
-    '''
-    x = MirrorMoves()
-    tmp = []
-    for key in x:
-        julian = toJulian2(time.strptime(key.replace(':', ' '), "%d %b %Y %H %M %Z"))
-        hstTime = fromHSTDeployment(julian)
-        tmp.append([hstTime, x[key]])
-    return tmp
+#def MirrorMoves():
+#    '''
+#    HST Secondary mirror moves and amounts.
+#    '''
+#    tmp = {'29 Jun 1994    17:36 UTC':    +5.0,
+#           '15 Jan 1995    23:40 UTC':    +5.0,
+#           '28 Aug 1995    15:16 UTC':    +6.5,
+#           '14 Mar 1996    18:47 UTC':    +6.0,
+#           '30 Oct 1996    17:40 UTC':    +5.0,
+#           '18 Mar 1997    22:55 UTC':    -2.4,
+#           '12 Jan 1998    01:15 UTC':    +21.0,
+#           '01 Feb 1998    16:40 UTC':    -18.6,
+#           '04 Jun 1998    01:01 UTC':    +16.6,
+#           '28 Jun 1998    17:26 UTC':    -15.2,
+#           '15 Sep 1999    15:40 UTC':    +3.0,
+#           '09 Jan 2000    17:42 UTC':    +4.2,
+#           '15 Jun 2000    19:38 UTC':    +3.6,
+#           '02 Dec 2002    20:50 UTC':    +3.6,
+#           '22 Dec 2004    23:12 UTC':    +4.16,
+#           '31 Jul 2006    14:35 UTC':    +5.34,
+#           '20 Jul 2009    09:35 UTC':    +2.97}
+#    return tmp
+#
+#def MirrorMovesInHSTTime():
+#    '''
+#    '''
+#    x = MirrorMoves()
+#    tmp = []
+#    for key in x:
+#        julian = j.toJulian2(time.strptime(key.replace(':', ' '), "%d %b %Y %H %M %Z"))
+#        hstTime = j.fromHSTDeployment(julian)
+#        tmp.append([hstTime, x[key]])
+#    return tmp
 
 def findMaxAndPair(data):
     maxa = data[0][0]
@@ -200,12 +205,12 @@ def FocusTrendNoBreathing(xmin, xmax, title, type, output = 'FocusTrend'):
     Uses data that has not been breathing corrected.
     xmax is used to limit the fit.
     '''
-    data = N.loadtxt('AllData.txt', skiprows=1,
+    data = N.loadtxt(input_folder + 'AllData.txt', skiprows=1,
                      dtype={'names': ('Obs', 'Date', 'MJDate', 'Focus', 'Error'),
                             'formats':('S12','S12','i4','f4','f4')})
 
     #mirror movements
-    mirrorM = MirrorMovesInHSTTime()
+    mirrorM = h.MirrorMovesInHSTTime()
 
     #manipulatges the date
     shiftdate = data['MJDate'] - 48005.0
@@ -240,11 +245,11 @@ def FocusTrendNoBreathing(xmin, xmax, title, type, output = 'FocusTrend'):
     maxvalue = int(N.max(shiftdate))
     
     #fit line
-    fitted, error = PolyFit(y, x)
+    fitted, error = f.PolyFit(y, x)
     
     #fit exponential fitexp = -6.16 + 201.64*exp(-days*0.000570)
     p = [-6.16, 201.64, 0.000570]
-    expo, params = FitExponent(x, y, p)
+    expo, params = f.FitExponent(x, y, p)
 
     #calculate the zero crossing
     #WFCnom = 1.3
@@ -331,8 +336,9 @@ def FocusTrend(xmin, xmax, title, type, output = 'FocusTrend'):
     '''
     file = 'BreathingCorrectedData.txt'
     
-    data = N.loadtxt(file, skiprows=1, dtype={'names': ('Julian', 'J-L', 'Focus', 'Error', 'Camera'),
-                                              'formats':('i4','i4','f4','f4','S8')})    
+    data = N.loadtxt(input_folder + file, skiprows=1,
+                     dtype={'names': ('Julian', 'J-L', 'Focus', 'Error', 'Camera'),
+                            'formats':('i4','i4','f4','f4','S8')})    
     sorted = N.sort(data, order=['J-L', 'Focus'])
 
     limited = sorted[(sorted['J-L'] > xmin) & (sorted['J-L'] < xmax)]
@@ -342,11 +348,11 @@ def FocusTrend(xmin, xmax, title, type, output = 'FocusTrend'):
     maxvalue = N.max(data['J-L'])
     
     #fit line
-    fitted, error = PolyFit(y, x)
+    fitted, error = f.PolyFit(y, x)
     
     #fit exponential fitexp = -6.16 + 201.64*exp(-days*0.000570)
     p = [-6.16, 201.64, 0.000570]
-    expo, params = FitExponent(x, y, p)
+    expo, params = f.FitExponent(x, y, p)
 #    print 'Breathing corrected signle exponent of form (y = A + B*exp(-days*C):'
 #    print params
 
@@ -363,7 +369,7 @@ def FocusTrend(xmin, xmax, title, type, output = 'FocusTrend'):
     ax.axhline(y = 0, ls='--', lw = 1., c = 'k')
 
     #mirror moves
-    mirrorM = MirrorMovesInHSTTime()
+    mirrorM = h.MirrorMovesInHSTTime()
     for time, movement in mirrorM:
         ax.axvline(x = time, ymin = -10, ymax = 3, lw = 1.1, ls=':', c = 'k')
         ax.annotate(s = str(movement) + '$\mu$m', xy= (time+40, min(y)-1.5), rotation = 90,
@@ -434,17 +440,17 @@ def FocusTrendRemoveLatestMovement(xmin, xmax, title, type, output = 'FocusTrend
     The latest mirror move is subtracted from all the previous data.
     Straight line and an exponential are fitted to the all data since xmin.
     '''
-
     file = 'BreathingCorrectedData.txt'    
-    data = N.loadtxt(file, skiprows=1, dtype={'names': ('Julian', 'J-L', 'Focus', 'Error', 'Camera'),
-                                              'formats':('i4','i4','f4', 'f4', 'S6')})    
+    data = N.loadtxt(input_folder + file, skiprows=1,
+                     dtype={'names': ('Julian', 'J-L', 'Focus', 'Error', 'Camera'),
+                            'formats':('i4','i4','f4', 'f4', 'S6')})    
     sorted = N.sort(data, order=['J-L', 'Focus'])
 
     #latest date
     maxvalue = N.max(data['J-L'])
 
     #latest mirror movement
-    mirrorM = MirrorMovesInHSTTime()
+    mirrorM = h.MirrorMovesInHSTTime()
     last, add = findMaxAndPair(mirrorM)
    
     #all data that is older than the latest mirror move
@@ -469,11 +475,11 @@ def FocusTrendRemoveLatestMovement(xmin, xmax, title, type, output = 'FocusTrend
     y = N.array(y1 + addy)
     x = N.array(x1 + addx)
     #fit polynomial
-    fitted, error = PolyFit(y, x)
+    fitted, error = f.PolyFit(y, x)
     
     #fit exponential: fitexp = -6.16 + 201.64*exp(-days*0.000570)
     p = [-6.16, 201.64, 0.000570]
-    expo, params = FitExponent(x, y, p)
+    expo, params = f.FitExponent(x, y, p)
     print 'Single exponential (y = A + B*exp(-days*C)) fit between %i and %i days since HST launch (Breathing Corrected):' % (xmin, xmax)
     print params
 
@@ -559,7 +565,9 @@ def FocusTrendRemoveLatestMovement(xmin, xmax, title, type, output = 'FocusTrend
     P.close()
 
 
-def FocusTrendRemoveLatestMovementOffset(xmin, xmax, title, type, output = 'FocusTrendUptoDateOffset'):
+def FocusTrendRemoveLatestMovementOffset(xmin, xmax, title, type,
+                                         output = 'FocusTrendUptoDateOffset',
+                                         WFC3offset = 0.5):
     '''
     @param xmin: minimum Modified Julian Date to be plotted
     @param xmax: maximum Modified Julian Date to be used for the fits
@@ -570,11 +578,10 @@ def FocusTrendRemoveLatestMovementOffset(xmin, xmax, title, type, output = 'Focu
     The latest mirror move is subtracted from all the previous data.
     Straight line and an exponential are fitted to the all data since xmin.
     '''
-    WFC3offset = 0.5
-
     file = 'BreathingCorrectedData.txt'    
-    data = N.loadtxt(file, skiprows=1, dtype={'names': ('Julian', 'J-L', 'Focus', 'Error', 'Camera'),
-                                              'formats':('i4','i4','f4', 'f4', 'S6')})    
+    data = N.loadtxt(input_folder + file, skiprows=1,
+                     dtype={'names': ('Julian', 'J-L', 'Focus', 'Error', 'Camera'),
+                            'formats':('i4','i4','f4', 'f4', 'S6')})    
     
     mask = (data['Camera'] == 'WFC3')
     print data[mask]['Focus']
@@ -584,12 +591,11 @@ def FocusTrendRemoveLatestMovementOffset(xmin, xmax, title, type, output = 'Focu
     print 'WFC3offset of %f applied' % WFC3offset   
     sorted = N.sort(data, order=['J-L', 'Focus'])
 
-
     #latest date
     maxvalue = N.max(data['J-L'])
 
     #latest mirror movement
-    mirrorM = MirrorMovesInHSTTime()
+    mirrorM = h.MirrorMovesInHSTTime()
     last, add = findMaxAndPair(mirrorM)
    
     #all data that is older than the latest mirror move
@@ -614,11 +620,11 @@ def FocusTrendRemoveLatestMovementOffset(xmin, xmax, title, type, output = 'Focu
     y = N.array(y1 + addy)
     x = N.array(x1 + addx)
     #fit polynomial
-    fitted, error = PolyFit(y, x)
+    fitted, error = f.PolyFit(y, x)
     
     #fit exponential: fitexp = -6.16 + 201.64*exp(-days*0.000570)
     p = [-6.16, 201.64, 0.000570]
-    expo, params = FitExponent(x, y, p)
+    expo, params = f.FitExponent(x, y, p)
     print 'Single exponential (y = A + B*exp(-days*C)) fit between %i and %i days since HST launch (Breathing Corrected):' % (xmin, xmax)
     print params
 
@@ -767,11 +773,11 @@ def FocusTrendRemoveLatestMovementNoBreathing(xmin, xmax, title, type, output = 
     y = N.array(y1 + addy)
     x = N.array(x1 + addx)
     #fit polynomial
-    fitted, error = PolyFit(y, x)
+    fitted, error = f.PolyFit(y, x)
     
     #fit exponential: fitexp = -6.16 + 201.64*exp(-days*0.000570)
     p = [-6.16, 201.64, 0.000570]
-    expo, params = FitExponent(x, y, p)
+    expo, params = f.FitExponent(x, y, p)
     print 'Single exponential (y = A + B*exp(-days*C)) fit between %i and %i days since HST launch for (No Breathing Correction):' % (xmin, xmax)
     print params
 
@@ -930,11 +936,11 @@ def FocusTrendRemoveLatestMovementNoBreathingOffset(xmin, xmax, title, type, out
     y = N.array(y1 + addy)
     x = N.array(x1 + addx)
     #fit polynomial
-    fitted, error = PolyFit(y, x)
+    fitted, error = f.PolyFit(y, x)
     
     #fit exponential: fitexp = -6.16 + 201.64*exp(-days*0.000570)
     p = [-6.16, 201.64, 0.000570]
-    expo, params = FitExponent(x, y, p)
+    expo, params = f.FitExponent(x, y, p)
     print 'Single exponential (y = A + B*exp(-days*C)) fit between %i and %i days since HST launch for (No Breathing Correction):' % (xmin, xmax)
     print params
 
@@ -1019,11 +1025,15 @@ def FocusTrendRemoveLatestMovementNoBreathingOffset(xmin, xmax, title, type, out
     P.savefig(output + type)
     P.close()
 
-def FocusTrendSinceDayZero(title, output, stepFunction = False, filename = 'AllData.txt', endday = 8100):
+def FocusTrendSinceDayZero(title, output, input_folder,
+                           output_folder, 
+                           stepFunction = False,
+                           filename = 'AllData.txt',
+                           endday = 8100):
     '''
     '''
     
-    data = N.loadtxt(filename, skiprows=1,
+    data = N.loadtxt(input_folder+ filename, skiprows=1,
                      dtype={'names': ('Obs', 'Date', 'MJDate', 'Focus', 'Error'),
                             'formats':('S12','S12','i4','f4','f4')})
 
@@ -1094,25 +1104,23 @@ def FocusTrendSinceDayZero(title, output, stepFunction = False, filename = 'AllD
     ax.yaxis.set_minor_locator(yminorLocator)
     ax.yaxis.set_minor_formatter(yminorFormattor)
 
-    try:
-        P.legend(scatterpoints = 1, numpoints = 1)
-    except:
-        P.legend()
-    
-    P.savefig(output)
+    P.legend(scatterpoints = 1, numpoints = 1)
+    P.savefig(output_folder + output)
     P.close()    
 
-def FocusTrendSinceDayZeroDates(title, output, stepFunction = False, filename = 'AllData.txt'):
+def FocusTrendSinceDayZeroDates(title, output, input_folder, 
+                                output_folder,
+                                stepFunction = False,
+                                filename = 'AllData.txt'):
     '''
     '''
-    from matplotlib.dates import YearLocator, MonthLocator, DateFormatter
-    
+   
     #mondays = WeekdayLocator(MONDAY)
     months = MonthLocator(range(1,13,4), bymonthday=1)
     year = YearLocator(1, month=1, day=1)
     monthsFmt = DateFormatter("%d\n%b\n%Y")
     
-    data = N.loadtxt(filename, skiprows=1,
+    data = N.loadtxt(input_folder + filename, skiprows=1,
                      dtype={'names': ('Obs', 'Date', 'MJDate', 'Focus', 'Error'),
                             'formats':('S12','S12','i4','f4','f4')})
 
@@ -1159,7 +1167,6 @@ def FocusTrendSinceDayZeroDates(title, output, stepFunction = False, filename = 
     ax.xaxis.set_major_locator(year)
     ax.xaxis.set_major_formatter(monthsFmt)
     ax.xaxis.set_minor_locator(months)
-    
     #minor ticks
     ymajorLocator = MultipleLocator(50)
     yminorLocator = MultipleLocator(10)
@@ -1174,21 +1181,18 @@ def FocusTrendSinceDayZeroDates(title, output, stepFunction = False, filename = 
         tl.set_fontsize(8)
         #tl.set_rotation(40)
 
-    try:
-        ax.legend(scatterpoints = 1, numpoints = 1)
-    except:
-        ax.legend()
-        
-    P.savefig(output)
+    ax.legend()  
+    P.savefig(output_folder + output)
     P.close()
 
 
-def FocusTrendSinceDayZeroDates2(output, filename = 'AllData.txt'):    
+def FocusTrendSinceDayZeroDates2(output, input_folder, output_folder,
+                                filename = 'AllData.txt'):    
     '''
     Plots the overall focus trend since the HST launch. Will not plot errors as they
     are smaller or similar size to the markers.
     '''
-    data = N.loadtxt(filename, skiprows=1,
+    data = N.loadtxt(input_folder + filename, skiprows=1,
                      dtype={'names': ('Obs', 'Date', 'MJDate', 'Focus', 'Error'),
                             'formats':('S12','S12','i4','f4','f4')})
 
@@ -1298,10 +1302,12 @@ def FocusTrendSinceDayZeroDates2(output, filename = 'AllData.txt'):
     except:
         ax.legend()
     
-    P.savefig(output)
+    P.savefig(otuput_folder + output)
     P.close()
 
-def FocusTrendSinceDayZeroOLD(title, output, filename = 'comp2009allfocus.txt'):
+def FocusTrendSinceDayZeroOLD(title, output,
+                              filename = 'comp2009allfocus.txt',
+                              output_folder = '/Users/niemi/Desktop/Focus/plots/'):
     '''
     @deprecated: This function is no longer used. Please see the other two functions.
     '''
@@ -1360,18 +1366,16 @@ def FocusTrendSinceDayZeroOLD(title, output, filename = 'comp2009allfocus.txt'):
     ax.yaxis.set_minor_locator(yminorLocator)
     ax.yaxis.set_minor_formatter(yminorFormattor)
 
-    try:
-        P.legend(scatterpoints = 1, numpoints = 1)
-    except:
-        P.legend()
-    
-    P.savefig(output)
+    P.legend()
+    P.savefig(output_folder+output)
     P.close()
     
-def confocality(type):
-    
+def confocality(type, input_folder, output_folder = '/Users/niemi/Desktop/Focus/plots/'):
+    '''
+    Creates a plot where WFC3 UVIS focus is compared to ACS WFC.
+    '''
     file = 'BreathingCorrectedData.txt'    
-    data = N.loadtxt(file, skiprows=1,
+    data = N.loadtxt(input_folder + file, skiprows=1,
                      dtype={'names': ('Julian', 'J-L', 'Focus', 'Error', 'Camera'),
                             'formats':('i4','i4','f4', 'f4', 'S6')})    
     
@@ -1386,10 +1390,8 @@ def confocality(type):
 
     fig = P.figure()
     ax = fig.add_subplot(111)
-    
     ax.plot(wfcdata['J-L'], delta, 'bo', label ='Confocality')
     ax.axhline(0)
-    
     ax.annotate('Mean: %.3f\nStdev: %.3f' % (delta.mean(), delta.std()),
                 xy = (N.max(wfcdata['J-L']) - 50, 0.0), 
                 horizontalalignment='center',
@@ -1399,18 +1401,16 @@ def confocality(type):
     for m in ax.get_xticks():
         x = D.datetime(*fromJulian(m + 48005.0)[0:6]).strftime('%d\n%b\n%Y')
         times.append(x)
-    ax.set_xticklabels(times)
-    
+    ax.set_xticklabels(times) 
     ax.set_ylabel('$\Delta$Focus (ACS - WFC3) [$\mu$m]')
-    
     P.legend(scatterpoints = 1, numpoints = 1)
-    
-    P.savefig('Confocality' + type)
+    P.savefig(output_folder + 'Confocality' + type)
 
 if __name__ == '__main__':  
-
-    input_folder = '/Users/niemi/Desktop/Focus/plots'
-    
+    #input data
+    input_folder = '/Users/niemi/Desktop/Focus/plots/'
+    output_folder = '/Users/niemi/Desktop/Focus/plots/'
+    #type of the output files
     type = '.pdf'
 
     #creates plots
