@@ -10,7 +10,8 @@ matplotlib.rcParams['font.size'] = 12
 matplotlib.rcParams['xtick.major.size'] = 5
 matplotlib.rcParams['ytick.major.size'] = 5
 #matplotlib.use('PDF')
-matplotlib.use('Agg')
+#matplotlib.use('Agg')
+#matplotlib.use('PS')
 
 import numpy as N
 import pylab as P
@@ -86,7 +87,8 @@ def plot_number_counts(path, database, band, redshifts,
                        area = 2.25,
                        ymin = 10**3, ymax = 2*10**6,
                        xmin = 0.5, xmax = 100,
-                       nbins = 15, sigma = 3.0):
+                       nbins = 15, sigma = 3.0,
+                       write_out = False):
     '''
     160 (arcminutes squared) = 0.0444444444 square degrees
     Simulation was 10 times the GOODS realization, so
@@ -147,7 +149,17 @@ where FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, band, band)
     up = y[mask] + err
     lw = y[mask] - err
     lw[lw < ymin] = ymin
-    s0 = ax.fill_between(x[mask], up, lw, alpha = 0.2)
+#    s0 = ax.fill_between(x[mask], up, lw, alpha = 0.2)
+    s0 = ax.fill_between(x[mask], up, lw, color = '#728FCE')
+    
+    #write to the file if needed, using appending so might get long...
+    if write_out:
+        fh = open(out_folder + 'outputTotal.txt', 'a')
+        fh.write('#'+band+'\n')
+        fh.write('#S[mjy]     dN/dSxS**2.5[deg**-2 mJy**1.5] high low\n')
+        for aa, bb, cc, dd in zip(x[mask], y[mask], up ,lw):
+            fh.write('%e %e %e %e\n' % (aa, bb, cc, dd))
+        fh.close()
 
     #add annotation
     ax.annotate('Total', (0.5, 0.9), xycoords='axes fraction',
@@ -290,7 +302,18 @@ where %s and FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, red, band, band)
         up = y[mask] + err
         lw = y[mask] - err
         lw[lw < ymin] = ymin
-        axs.fill_between(x[mask], up, lw, alpha = 0.2)
+#        axs.fill_between(x[mask], up, lw, alpha = 0.2)
+        axs.fill_between(x[mask], up, lw, color = '#728FCE')
+
+        
+        #write to output
+        if write_out:
+            fh = open(out_folder + 'outputredshiftbin%i.txt' % i, 'a')
+            fh.write('#'+band+ ': ' + rtitle+'\n')
+            fh.write('#S[mjy] dN/dS xS**2.5 [deg**-2 mJy**1.5] high low\n')
+            for aa, bb, cc, dd in zip(x[mask], y[mask], up, lw):
+                fh.write('%e %e %e %e\n' % (aa, bb, cc, dd))
+            fh.close()
 
         #add annotation
         axs.annotate(rtitle, (0.5, 0.9), xycoords='axes fraction',
@@ -388,18 +411,20 @@ where %s and FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, red, band, band)
         axs.set_xlim(xmin, xmax)
         axs.set_ylim(ymin, ymax)
 
-        #remove unecessary ticks and add units
+        #remove unnecessary ticks and add units
         if i % 2 == 0:
             axs.set_yticklabels([])
         if i == 2 or i == 3:
             axs.set_xlabel(r'$S(%s \mu m)$ [mJy]' % wave)
+            if i == 2:
+                axs.set_xticks(axs.get_xticks()[1:])
         else:
             axs.set_xticklabels([])
         if i == 1:
             axs.set_ylabel(r'$\frac{dN(S_{%s})}{dS_{%s}} \times S_{%s}^{2.5} \quad [$deg$^{-2}$ mJy$^{1.5}]$' % (wave, wave, wave))
             
     #save figure
-    P.savefig(out_folder+'numbercounts_%s.png' % band)
+    P.savefig(out_folder+'numbercounts_%s.ps' % band)
     P.close()
 
 if __name__ == '__main__':
@@ -450,13 +475,15 @@ if __name__ == '__main__':
                                out_folder, obs_data,
                                xmin = 0.1, xmax = 500,
                                ymin = 1.5*10**2, ymax = 6*10**5,
-                               nbins = 23, sigma = 5.0)
+                               nbins = 23, sigma = 5.0)#,
+                               #write_out = True)
         if 'spire' in bd:
             print 'plotting ', bd
             plot_number_counts(path, database, bd, redshifts,
                                out_folder, obs_data,
                                xmin = 0.1, xmax = 1600,
                                ymin = 10**2, ymax = 3*10**6,
-                               nbins = 16, sigma = 5.0)
+                               nbins = 16, sigma = 5.0)#,
+                               #write_out = True)
 
     print 'All done...'
