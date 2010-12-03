@@ -11,7 +11,7 @@ matplotlib.rcParams['xtick.major.size'] = 5
 matplotlib.rcParams['ytick.major.size'] = 5
 #matplotlib.use('PDF')
 #matplotlib.use('Agg')
-matplotlib.use('PS')
+#matplotlib.use('PS')
 
 import numpy as N
 import pylab as P
@@ -424,7 +424,7 @@ where %s and FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, red, band, band)
             axs.set_ylabel(r'$\frac{dN(S_{%s})}{dS_{%s}} \times S_{%s}^{2.5} \quad [$deg$^{-2}$ mJy$^{1.5}]$' % (wave, wave, wave))
             
     #save figure
-    P.savefig(out_folder+'numbercounts_%s.eps' % band)
+    P.savefig(out_folder+'numbercounts_%s.ps' % band)
     P.close()
 
 if __name__ == '__main__':
