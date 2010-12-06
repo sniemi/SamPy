@@ -109,6 +109,194 @@ def plot_stellarmass(path, db, reshifts, out_folder,
     P.legend(loc = 'lower right')
     P.savefig(out_folder + 'mstellar.ps')
 
+def plot_massratios(path, db, reshifts, out_folder,
+                    xmin = 0.0, xmax = 2.0, fluxlimit = 5):
+    '''
+    Plots 
+    '''
+    #figure
+    fig = P.figure()
+    ax = fig.add_subplot(111)
+
+    for i, reds in enumerate(redshifts):
+        query = '''select galprop.mcold - galprop.mstar, FIR.spire250_obs*1000
+                from FIR, galprop where
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id and
+                %s
+                ''' % reds
+        #tmp
+        tmp = reds.split()
+        zz = N.mean(N.array([float(tmp[2]), float(tmp[6])]))
+        
+        #get data
+        data = N.array(sq.get_data_sqlitePowerTen(path, db, query))
+    
+        #set 1
+        xd = N.log10(data[:,1])
+        yd = data[:,0]
+        
+        #percentiles
+        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd, yd, xmin, xmax,
+                                                         nxbins = 15)
+        msk = y50d > -10
+        add = eval('0.0%s' % str(i))
+        ax.errorbar(xbin_midd[msk] + add, y50d[msk],
+                    yerr = [y50d[msk]-y16d[msk], y84d[msk]-y50d[msk]],
+                    label = '$z = %.1f$' % zz)
+
+    ax.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
+  
+    ax.set_xlabel('$\log_{10}(S_{250} \ [$mJy$])$')
+    ax.set_ylabel(r'$\log_{10} \left ( \frac{M_{coldgas}}{M_{\star}} \right )$')
+
+    ax.set_xlim(xmin, xmax)
+    ax.set_ylim(-1.2, 1.0)
+
+    P.legend(loc = 'lower right')
+    P.savefig(out_folder + 'mratio.ps')
+
+def plot_metallicity(path, db, reshifts, out_folder,
+                     xmin = 0.0, xmax = 2.0, fluxlimit = 5):
+    '''
+    Plots 
+    '''
+    #figure
+    fig = P.figure()
+    ax = fig.add_subplot(111)
+
+    for i, reds in enumerate(redshifts):
+        query = '''select galprop.zstar, FIR.spire250_obs*1000
+                from FIR, galprop where
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id and
+                %s
+                ''' % reds
+        #tmp
+        tmp = reds.split()
+        zz = N.mean(N.array([float(tmp[2]), float(tmp[6])]))
+        
+        #get data
+        data = N.array(sq.get_data_sqlitePowerTen(path, db, query))
+    
+        #set 1
+        xd = N.log10(data[:,1])
+        yd = data[:,0]
+        
+        #percentiles
+        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd, yd, xmin, xmax,
+                                                         nxbins = 15)
+        msk = y50d > -10
+        add = eval('0.0%s' % str(i))
+        ax.errorbar(xbin_midd[msk] + add, y50d[msk],
+                    yerr = [y50d[msk]-y16d[msk], y84d[msk]-y50d[msk]],
+                    label = '$z = %.1f$' % zz)
+
+    ax.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
+  
+    ax.set_xlabel('$\log_{10}(S_{250} \ [$mJy$])$')
+    ax.set_ylabel('$Z_{\star}$')
+
+    ax.set_xlim(xmin, xmax)
+    ax.set_ylim(-0.1, 1.5)
+
+    P.legend(loc = 'lower right')
+    P.savefig(out_folder + 'metallicity.ps')
+
+def plot_starburst(path, db, reshifts, out_folder,
+                   xmin = 0.0, xmax = 2.0, fluxlimit = 5):
+    '''
+    Plots 
+    '''
+    #figure
+    fig = P.figure()
+    ax = fig.add_subplot(111)
+
+    for i, reds in enumerate(redshifts):
+        query = '''select galprop.mstar_burst - galprop.mstar, FIR.spire250_obs*1000
+                from FIR, galprop where
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id and
+                %s
+                ''' % reds
+        #tmp
+        tmp = reds.split()
+        zz = N.mean(N.array([float(tmp[2]), float(tmp[6])]))
+        
+        #get data
+        data = N.array(sq.get_data_sqlitePowerTen(path, db, query))
+    
+        #set 1
+        xd = N.log10(data[:,1])
+        yd = data[:,0]
+        
+        #percentiles
+        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd, yd, xmin, xmax,
+                                                         nxbins = 15)
+        msk = y50d > -10
+        add = eval('0.0%s' % str(i))
+        ax.errorbar(xbin_midd[msk] + add, y50d[msk],
+                    yerr = [y50d[msk]-y16d[msk], y84d[msk]-y50d[msk]],
+                    label = '$z = %.1f$' % zz)
+
+    ax.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
+  
+    ax.set_xlabel('$\log_{10}(S_{250} \ [$mJy$])$')
+    ax.set_ylabel(r'$\log_{10} \left ( \frac{M_{starbust}}{M_{\star}} \right )$')
+
+    ax.set_xlim(xmin, xmax)
+    ax.set_ylim(-3.0, -0.5)
+
+    P.legend(loc = 'lower right')
+    P.savefig(out_folder + 'mburstratio.ps')
+
+def plot_BHmass(path, db, reshifts, out_folder,
+                xmin = 0.0, xmax = 2.0, fluxlimit = 5):
+    '''
+    Plots 
+    '''
+    #figure
+    fig = P.figure()
+    ax = fig.add_subplot(111)
+
+    for i, reds in enumerate(redshifts):
+        query = '''select galprop.mBH, FIR.spire250_obs*1000
+                from FIR, galprop where
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id and
+                %s
+                ''' % reds
+        #tmp
+        tmp = reds.split()
+        zz = N.mean(N.array([float(tmp[2]), float(tmp[6])]))
+        
+        #get data
+        data = N.array(sq.get_data_sqlitePowerTen(path, db, query))
+    
+        #set 1
+        xd = N.log10(data[:,1])
+        yd = data[:,0]
+        
+        #percentiles
+        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd, yd, xmin, xmax,
+                                                         nxbins = 15)
+        msk = y50d > -10
+        add = eval('0.0%s' % str(i))
+        ax.errorbar(xbin_midd[msk] + add, y50d[msk],
+                    yerr = [y50d[msk]-y16d[msk], y84d[msk]-y50d[msk]],
+                    label = '$z = %.1f$' % zz)
+
+    ax.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
+  
+    ax.set_xlabel('$\log_{10}(S_{250} \ [$mJy$])$')
+    ax.set_ylabel('$\log_{10}(M_{BH} \ [M_{\odot}])$')
+
+    ax.set_xlim(xmin, xmax)
+    ax.set_ylim(4.0, 8.0)
+
+    P.legend(loc = 'lower right')
+    P.savefig(out_folder + 'BHmass.ps') 
+   
 if __name__ == '__main__':
     #find the home directory, because the output is to dropbox 
     #and my user name is not always the same, this hack is required.
@@ -125,5 +313,9 @@ if __name__ == '__main__':
                  'FIR.z > 2.9 and FIR.z < 3.1',
                  'FIR.z > 3.9 and FIR.z < 4.1']
 
-    plot_sfrs(path, db, redshifts, out_folder)
-    plot_stellarmass(path, db, redshifts, out_folder)
+    #plot_sfrs(path, db, redshifts, out_folder)
+    #plot_stellarmass(path, db, redshifts, out_folder)
+    plot_massratios(path, db, redshifts, out_folder)
+    plot_metallicity(path, db, redshifts, out_folder)
+    plot_starburst(path, db, redshifts, out_folder)
+    plot_BHmass(path, db, redshifts, out_folder)
