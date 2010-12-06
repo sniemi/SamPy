@@ -1,5 +1,6 @@
-#Thu Dec 02 15:03:53 EST 2010
+#Sat Dec 04 16:06:06 EST 2010
 eclipse.preferences.version=1
+encoding//db/MySQLdbSMN.py=utf-8
 encoding//fits/combine.py=utf-8
 encoding//fitting/SplineFitting2D.py=utf-8
 encoding//fitting/fits.py=utf-8

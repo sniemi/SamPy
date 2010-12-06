@@ -21,6 +21,27 @@ import glob as g
 import io.sextutils as su
 import numpy as N
 
+def toPowerTen(value):
+    '''
+    10**value
+    @note: This function can be passed on to slite3 connection
+    @param value: can either be a number or a numpy array 
+    '''
+    return N.power(10, value)
+
+def get_data_sqlitePowerTen(path, db, query):
+    '''
+    Run the SQL query.
+    '''
+    conn = sqlite3.connect(path + db)
+#    conn.create_function('janskyToMagnitude', 1, janskyToMagnitude)
+    conn.create_function('Pow10', 1, toPowerTen)
+    c = conn.cursor()
+    c.execute(query)
+    data = c.fetchall()
+    c.close()
+    return data
+
 def get_data_sqlite(path, db, query):
     '''
     This function can be used to pull out data
