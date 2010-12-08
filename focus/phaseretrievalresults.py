@@ -12,9 +12,11 @@ Created on Dec 17, 2009
 
 @author: Sami-Matias Niemi (niemi@stsci.edu)
 
-@version: 0.9
+@version: 0.91
 
 @todo: maybe introduce sigma clipping to the means?
+@todo: how the legend has been implemented is a dirty,
+        it should be done better.
 '''
 
 import matplotlib
@@ -32,7 +34,7 @@ from matplotlib import cm
 from matplotlib.patches import Circle
 
 __author__ = 'Sami-Matias Niemi'
-__version__ = '0.9'
+__version__ = '0.91'
 
 class PhaseRetResults():
 
@@ -223,9 +225,9 @@ class PhaseRetResults():
                 print 'WFC3      %f        %f' % (x, brW[x])
             
             print '\nBreathing corrected focus:'
-            print 'Julian     J-L      focus       error       camera'
-            print '%i %8i %10.2f %11.3f %10s' % (int(N.mean(acsJDs)),  (int(N.mean(acsJDs)) - 48005), N.mean(acsf), N.std(acsf)/N.sqrt(len(acsf)), 'ACS')
-            print '%i %8i %10.2f %11.3f %11s' % (int(N.mean(wfcJDs)),  (int(N.mean(wfcJDs)) - 48005), N.mean(wfcf), N.std(acsf)/N.sqrt(len(wfcf)), 'WFC3')
+            print 'Julian      J-L     focus     error  camera'
+            print '%i %9i %9.2f %9.3f %5s' % (int(N.mean(acsJDs)),  (int(N.mean(acsJDs)) - 48005), N.mean(acsf), N.std(acsf)/N.sqrt(len(acsf)), 'ACS')
+            print '%i %9i %9.2f %9.3f %6s' % (int(N.mean(wfcJDs)),  (int(N.mean(wfcJDs)) - 48005), N.mean(wfcf), N.std(acsf)/N.sqrt(len(wfcf)), 'WFC3')
             
         else:
             for line in chip1:
@@ -249,15 +251,15 @@ class PhaseRetResults():
                              ms = 5, mec='magenta', ls = 'None', mew = 1.3, ecolor = 'magenta', zorder = 50)
             
             print '\nWithout breathing correction:'
-            print 'OBS             date        JD        focus       error'
-            print '%6s %15s %8i %10.2f %11.3f' % (obsj, time.strftime(('%d/%m/%y'), avd),
-                                                 int(N.mean(acsJDs)),
-                                                 N.mean(acsf),
-                                                 N.std(acsf)/N.sqrt(len(acsf)))
-            print '%6s %15s %8i %10.2f %11.3f' % (obsi, time.strftime(('%d/%m/%y'), avd),
-                                                 int(N.mean(wfcJDs)),
-                                                 N.mean(wfcf),
-                                                 N.std(wfcf)/N.sqrt(len(wfcf)))
+            print 'OBS         date       JD    focus    error'
+            print '%6s %11s %7i %6.2f %8.3f' % (obsj, time.strftime(('%d/%m/%y'), avd),
+                                               int(N.mean(acsJDs)),
+                                               N.mean(acsf),
+                                               N.std(acsf)/N.sqrt(len(acsf)))
+            print '%6s %11s %7i %6.2f %8.3f' % (obsi, time.strftime(('%d/%m/%y'), avd),
+                                               int(N.mean(wfcJDs)),
+                                               N.mean(wfcf),
+                                               N.std(wfcf)/N.sqrt(len(wfcf)))
             
         times = []
         for m in ax.get_xticks():
@@ -272,10 +274,16 @@ class PhaseRetResults():
             P.title('Focus Measurement (No breathing correction)')                
         else:
             P.title('Focus Measurement (breathing corrected)')
-        
-        P.legend([ac, wf, ac2, wf2, eac[0], ewf[0]],
-                 ['ACS chip 1', 'WFC3 chip 1', 'ACS chip 2', 'WFC3 chip 2', 'ACS Mean', 'WFC3 Mean'],
-                 fancybox = True, shadow = True, numpoints  = 1)
+
+        try:     
+            P.legend((ac[0], wf[0], ac2[0], wf2[0], eac[0], ewf[0]),
+                     ['ACS chip 1', 'WFC3 chip 1', 'ACS chip 2', 'WFC3 chip 2', 'ACS Mean', 'WFC3 Mean'],
+                     fancybox = True, shadow = True, numpoints  = 1)
+        except:
+            P.legend((ac[0], ac2[0], wf2[0], eac[0], ewf[0]),
+                     ['ACS chip 1', 'ACS chip 2', 'WFC3 chip 2', 'ACS Mean', 'WFC3 Mean'],
+                     fancybox = True, shadow = True, numpoints  = 1)
+
         P.xlabel('%s' % time.strftime(('%d %b %Y'), avd))
         P.ylabel('Defocus [SM $\mu$m]')
         if noBreathing:

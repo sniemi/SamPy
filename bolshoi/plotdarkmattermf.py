@@ -1,77 +1,20 @@
+'''
+Plots a dark matter halo mass function at different
+redshifts. Input data are from the Bolshoi simulation.
+@author: Sami-Matias Niemi
+
+@todo: modify so that the plot shows residuals at the
+bottom of the actual image. Make two plots with different
+redshift bins.
+'''
 import matplotlib
 matplotlib.use('PDF')
 matplotlib.rc('text', usetex = True)
 import pylab as P
 import numpy as N
 import glob as g
-
-def mass_function(data, column = 0, log = False,
-                  wght = None, mmin = 9, mmax = 15.0, 
-                  nbins = 35, h = 0.7, volume = 250, nvols = 1,
-                  verbose = False):
-    '''
-    Calculates a mass function from data.
-    Returns differential mass function and bins:
-    dN / dlnM
-    @TODO: add calculating the cumulative mass function.
-    '''
-    #output
-    mf = []
-
-    #if log have been taken from the data or not
-    if not log:
-        if len(data.shape) > 1:
-            dat = N.log(data[:, column]) # * h)
-        else:
-            dat = N.log(data) #*h)
-    else:
-        if len(data.shape) > 1:
-            dat = data[:, column] #* h
-        else:
-            dat = data #*h
-    del data
-
-    #number of galaxies
-    ngal = len(dat)
-
-    #set weights if None given
-    if wght == None:
-        wght = N.zeros(ngal) + (1./(nvols*(float(volume)/h)**3))
-
-    #bins
-    mbin = N.linspace(mmin, mmax, nbins)
-    #on could alos use N.logspace()
-    dm = mbin[1] - mbin[0]
-
-    if verbose:
-        print 'Number of galaxies = %i' % ngal
-        print 'dlnM =', dm
-        print 'h =', h
-
-    #loop over the mass bins
-    for i, thismass in enumerate(mbin):
-        if i == 0 :
-            prev = thismass
-            continue
-        mask = (dat > prev) & (dat <= thismass)
-        mf.append(N.sum(wght[mask]))
-        prev = thismass
-
-    #swqp it to the middle of the bin and drop the last
-    mbin = mbin[:-1] + dm
-
-    mf = N.array(mf)
-    
-    if not log:
-        mbin = N.e**mbin
-        if verbose:
-            print '\nResults:', mbin, mf/dm
-        return mbin, mf/dm
-    else:
-        if verbose:
-            print '\nResults:', mbin, mf/dm
-        return mbin, mf/dm
-
+#Sami's repo
+import astronomy.differentialfunctions as df
 
 def read_file(filename, column, no_phantoms):
     out = []
@@ -100,8 +43,9 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
             dt[x] = N.loadtxt(data[0][x])
 
     #calculate the mass functions from the Bolshoi data
-    mbin0, mf0 = mass_function(dt['Bolshoi'], nbins = 50, h = 1., 
-                               mmin = 20, mmax = 35)
+    mbin0, mf0 = df.mass_function(dt['Bolshoi'],
+                                  nbins = 50, h = 1., 
+                                  mmin = 20, mmax = 35)
     del dt['Bolshoi']
 
     #make the plots
@@ -136,8 +80,8 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
 
     #from (dN / dM) * dM to dN / dlnM using the chain rule
     x = dt['Sheth-Tormen'][:,1]
-    #scaled h4 because on h in masses
-    swap = 1. / (N.log(x[1]) - N.log(x[0])) / h4 
+    #scaled with h3 and N.exp(h), because ln binning
+    swap = 1. / (N.log(x[1]) - N.log(x[0])) / h3 * N.exp(h)
     y = dt['Sheth-Tormen'][:,2] * swap
     sh = ax.plot(x, y, 'b-')
 
@@ -174,12 +118,14 @@ if __name__ == '__main__':
     #constants
     h = 0.7
 
+    wrkdir = '/Users/niemi/Desktop/Research/dm_halo_mf/'
+
     #find files
-    simus = g.glob('./simu/*.txt')
+    simus = g.glob(wrkdir + 'simu/*.txt')
     #note that these are in dN / DM
-    sheth = g.glob('./analytical/*sheth*.dat')
-    press = g.glob('./analytical/*press*.dat')
-    warren = g.glob('./analytical/*warren*.dat')
+    sheth = g.glob(wrkdir + 'analytical/*sheth*.dat')
+    press = g.glob(wrkdir + 'analytical/*press*.dat')
+    warren = g.glob(wrkdir + 'analytical/*warren*.dat')
 
     #make the individual plots
     for a, b, c, d in zip(simus, sheth, press, warren):
@@ -197,6 +143,6 @@ if __name__ == '__main__':
             plot_mass_function(redshift, h, True, data)
 #            plot_mass_function(redshift, h, False, data)
 
-    P.savefig('./out/DMmfzNoPhantoms.pdf')
-#    P.savefig('./out/DMmfz.pdf')
+    P.savefig(wrkdir + 'out/DMmfzNoPhantoms.pdf')
+#    P.savefig(wrkdir + 'out/DMmfz.pdf')
     P.close()

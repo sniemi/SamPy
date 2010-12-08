@@ -29,7 +29,7 @@ matplotlib.rcParams['ytick.major.size'] = 5
 matplotlib.rcParams['legend.shadow'] = True
 matplotlib.rcParams['legend.fancybox'] = True
 matplotlib.rcParams['legend.numpoints'] = 1
-matplotlib.use('PS')
+matplotlib.use('PDF')
 from matplotlib.ticker import MultipleLocator, FormatStrFormatter, NullFormatter
 from matplotlib.dates import YearLocator, MonthLocator, DateFormatter 
 import pylab as P
@@ -1330,7 +1330,7 @@ if __name__ == '__main__':
     input_folder = '/Users/niemi/Desktop/Focus/plots/'
     output_folder = '/Users/niemi/Desktop/Focus/plots/'
     #type of the output files
-    type = '.ps'
+    type = '.pdf'
     
     #creates plots
     FocusTrend(4600, 7040, 'Focus Trend Since Dec 2002 Mirror Move', type,
@@ -1363,7 +1363,6 @@ if __name__ == '__main__':
                                                     'Focus Trend Since Dec 2002 Mirror Move',
                                                     type,
                                                     input_folder, output_folder)      
-
 
     confocality(type, input_folder, output_folder)
 
