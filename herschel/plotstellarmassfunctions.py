@@ -1,3 +1,9 @@
+'''
+@todo: fix the comoving volume calculation.
+Take a look the luminosity function plotting...
+
+@author: Sami Niemi
+'''
 import matplotlib
 matplotlib.rc('text', usetex = True)
 matplotlib.rc('xtick', labelsize=12) 

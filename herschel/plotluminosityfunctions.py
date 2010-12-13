@@ -1,3 +1,9 @@
+'''
+Plots luminosity functions at different redshifts.
+Pulls data from an sqlite3 database.
+
+@author: Sami Niemi
+'''
 import matplotlib
 matplotlib.rc('text', usetex = True)
 matplotlib.rc('xtick', labelsize=12) 
@@ -17,23 +23,19 @@ from cosmocalc import cosmocalc
 #Sami's repo
 import db.sqlite
 import astronomy.differentialfunctions as df
+import astronomy.conversions as cv
 
 def plot_luminosityfunction(path, database, redshifts,
                             band, out_folder, obs_data,
-                            solid_angle = 1.077*10**-5,
+                            solid_angle = 10*160.,
                             ymin = 10**3, ymax = 2*10**6,
                             xmin = 0.5, xmax = 100,
                             nbins = 15, sigma = 5.0,
                             H0 = 70.0, WM=0.28,
                             zmax = 6.0):
     '''
-    160 square arcminutes in steradians =
-    1.354*10**-5 sr (steradians)
-    Simulation was 10 times the GOODS realization, so
-    the solid angle is 1.354*10**-4 sr, which corresponds
-    to 1.0774789647321315e-05 of the sphere.
-    (full sphere = 4Pi sr)
-    
+    @param solid_angle: area of the sky survey in arcmin**2
+                        GOODS = 160, hence 10*160
     @param sigma: sigma level of the errors to be plotted
     @param nbins: number of bins (for simulated data)
     '''
@@ -49,15 +51,15 @@ def plot_luminosityfunction(path, database, redshifts,
     total = db.sqlite.get_data_sqlite(path, database, query)
 
     #make the figure
-    fig = P.figure(figsize=(12,8))
+    fig = P.figure()
     P.subplots_adjust(wspace = 0.0, hspace = 0.0)
     ax = P.subplot(rows, columns, 1)
     
     #get the co-moving volume to the backend
-    vol = cosmocalc(zmax, H0, WM)['VCM_Gpc3']
+    comovingVol = cv.comovingVolume(solid_angle, 0, zmax, H0 = H0, WM = WM)
 
     #weight each galaxy
-    wghts = N.zeros(len(total)) + (1./(solid_angle*vol*1e9))
+    wghts = N.zeros(len(total)) + (1./comovingVol)
     #calculate the differential stellar mass function
     #with log binning
     b, n, nu = df.diff_function_log_binning(total,
@@ -68,7 +70,7 @@ def plot_luminosityfunction(path, database, redshifts,
                                             log = True)
     #calculate the poisson error
     mask = nu > 0
-    err = (1./(solid_angle*vol*1e9)) * N.sqrt(nu[mask]) * sigma
+    err = wghts[0] * N.sqrt(nu[mask]) * sigma
     up = n[mask] + err
     lw = n[mask] - err
     lw[lw < ymin] = ymin
@@ -106,14 +108,11 @@ def plot_luminosityfunction(path, database, redshifts,
         #rtitle = r'$z = %.0f$' % N.mean(N.array([float(tmp[2]), float(tmp[6])]))
         rtitle = r'$%s < z \leq %s$' % (tmp[2], tmp[6])
 
-        #get a comoving volume to the back end
-        volb = cosmocalc(float(tmp[6]), H0, WM)['VCM_Gpc3']
-        volf = cosmocalc(float(tmp[2]), H0, WM)['VCM_Gpc3']
+        #get a comoving volume
+        comovingVol = cv.comovingVolume(solid_angle, 0, zmax, H0 = H0, WM = WM)
 
         #weights
-        #volwg = (1./(solid_angle*(volb-volf)*1e9))
-        volwg = (1./(solid_angle*volb*1e9))
-        wghts = N.zeros(len(limited)) + volwg
+        wghts = N.zeros(len(limited)) + (1./comovingVol)
 
         #differential function
         bb, nn, nu =  df.diff_function_log_binning(limited,
@@ -127,7 +126,7 @@ def plot_luminosityfunction(path, database, redshifts,
 
         #calculate the poisson error
         mask = nu > 0
-        err = volwg * N.sqrt(nu[mask]) * sigma
+        err = wghts[0] * N.sqrt(nu[mask]) * sigma
         up = nn[mask] + err
         lw = nn[mask] - err
         lw[lw < ymin] = ymin
@@ -164,20 +163,15 @@ def plot_luminosityfunction(path, database, redshifts,
 
 def plot_luminosityfunction2(path, database, redshifts,
                              band, out_folder, obs_data,
-                             solid_angle = 1.077*10**-5,
+                             solid_angle = 10*160.,
                              ymin = 10**3, ymax = 2*10**6,
                              xmin = 0.5, xmax = 100,
                              nbins = 15, sigma = 5.0,
                              H0 = 70.0, WM=0.28,
                              zmax = 6.0):
     '''
-    160 square arcminutes in steradians =
-    1.354*10**-5 sr (steradians)
-    Simulation was 10 times the GOODS realization, so
-    the solid angle is 1.354*10**-4 sr, which corresponds
-    to 1.0774789647321315e-05 of the sphere.
-    (full sphere = 4Pi sr)
-    
+    @param solid_angle: area of the sky survey in arcmin**2
+                        GOODS = 160, hence 10*160
     @param sigma: sigma level of the errors to be plotted
     @param nbins: number of bins (for simulated data)
     '''
@@ -195,10 +189,10 @@ def plot_luminosityfunction2(path, database, redshifts,
     ax = P.subplot(111)
     
     #get the co-moving volume to the backend
-    vol = cosmocalc(zmax, H0, WM)['VCM_Gpc3']
+    comovingVol = cv.comovingVolume(solid_angle, 0, zmax, H0 = H0, WM = WM)
 
     #weight each galaxy
-    wghts = N.zeros(len(total)) + (1./(solid_angle*vol*1e9))
+    wghts = N.zeros(len(total)) + (1./comovingVol)
     #calculate the differential stellar mass function
     #with log binning
     b, n, nu = df.diff_function_log_binning(total,
@@ -209,7 +203,7 @@ def plot_luminosityfunction2(path, database, redshifts,
                                             log = True)
     #calculate the poisson error
     mask = nu > 0
-    err = (1./(solid_angle*vol*1e9)) * N.sqrt(nu[mask]) * sigma
+    err = wghts[0] * N.sqrt(nu[mask]) * sigma
     up = n[mask] + err
     lw = n[mask] - err
     lw[lw < ymin] = ymin
@@ -231,14 +225,11 @@ def plot_luminosityfunction2(path, database, redshifts,
         #rtitle = r'$z = %.0f$' % N.mean(N.array([float(tmp[2]), float(tmp[6])]))
         rtitle = r'$%s < z \leq %s$' % (tmp[2], tmp[6])
 
-        #get a comoving volume to the back end
-        volb = cosmocalc(float(tmp[6]), H0, WM)['VCM_Gpc3']
-        volf = cosmocalc(float(tmp[2]), H0, WM)['VCM_Gpc3']
+        #get a comoving volume
+        comovingVol = cv.comovingVolume(solid_angle, 0, zmax, H0 = H0, WM = WM)
 
         #weights
-        #volwg = (1./(solid_angle*(volb-volf)*1e9))
-        volwg = (1./(solid_angle*volb*1e9))
-        wghts = N.zeros(len(limited)) + volwg
+        wghts = N.zeros(len(limited)) + (1./comovingVol)
 
         #differential function
         bb, nn, nu =  df.diff_function_log_binning(limited,
@@ -250,7 +241,7 @@ def plot_luminosityfunction2(path, database, redshifts,
 
         #calculate the poisson error
         mask = nu > 0
-        err = volwg * N.sqrt(nu[mask]) * sigma
+        err = wghts[0] * N.sqrt(nu[mask]) * sigma
         up = nn[mask] + err
         lw = nn[mask] - err
         lw[lw < ymin] = ymin

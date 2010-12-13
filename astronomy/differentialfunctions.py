@@ -1,3 +1,15 @@
+'''
+Some functions to calculate differential functions. These
+can be used to calculate luminosity functions, stellar and
+dark matter halo functions etc.
+
+@requires: NumPy
+
+@version: 0.11
+
+@author: Sami Niemi
+@contact: niemi@stsci.edu
+'''
 import numpy as N
 
 def diff_function_log_binning(data, column = 0, log = False,
