@@ -1358,11 +1358,11 @@ if __name__ == '__main__':
                                          type,
                                          input_folder, output_folder)  
 
-    print '\nFocus Trend Since Dec 2002 Mirror Move (No Breathing Correction, but Offset applied):'
-    FocusTrendRemoveLatestMovementNoBreathingOffset(4700, 8500,
-                                                    'Focus Trend Since Dec 2002 Mirror Move',
-                                                    type,
-                                                    input_folder, output_folder)      
+#    print '\nFocus Trend Since Dec 2002 Mirror Move (No Breathing Correction, but Offset applied):'
+#    FocusTrendRemoveLatestMovementNoBreathingOffset(4700, 8500,
+#                                                    'Focus Trend Since Dec 2002 Mirror Move',
+#                                                    type,
+#                                                    input_folder, output_folder)      
 
     confocality(type, input_folder, output_folder)
 
