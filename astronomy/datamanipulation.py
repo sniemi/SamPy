@@ -11,18 +11,25 @@ import numpy as N
 import scipy.stats as ss
 
 def percentile_bins(xdata, ydata, xmin, xmax,
-                    nxbins = 15):
+                    nxbins = 15, log = False,
+                    limit = 6):
     '''
     Computes median and 16 and 84 percentiles of y-data in bins in x
     @param xdata: numpy array of xdata
     @param ydata: numpy arrya of ydata
     @param xmax: maximumx value of x that data are binned to
     @param xmin: minimum value of x that data are binned to
-    @param nxbins: number of bins in x     
+    @param nxbins: number of bins in x
+    @param log: if True, xbins are logarithmically spaced, else linearly
+    @param limit: the minimum number of values in a bin for which the
+                median and percentiles are returned for.
     @return: mid points of the bins, median, 16 per cent percentile, and
     84 per cent percentile.
     '''
-    xbin = N.linspace(xmin, xmax, nxbins)
+    if log:
+        xbin = N.logspace(xmin, xmax, nxbins)
+    else:
+        xbin = N.linspace(xmin, xmax, nxbins)
     nbin = len(xbin) - 1
     xbin_mid = N.zeros(nbin)
     y50 = N.zeros(nbin) - 99.
@@ -32,7 +39,7 @@ def percentile_bins(xdata, ydata, xmin, xmax,
     for i in range(nbin):
         xbin_mid[i] = xbin[i] + 0.5*(xbin[i+1] - xbin[i])
         mask = (xdata > xbin[i]) & (xdata <= xbin[i+1])
-        if len(ydata[mask]) >= 10:
+        if len(ydata[mask]) >= limit:
             y50[i] = ss.scoreatpercentile(ydata[mask], 50)
             y16[i] = ss.scoreatpercentile(ydata[mask], 16)
             y84[i] = ss.scoreatpercentile(ydata[mask], 84)
