@@ -4,7 +4,7 @@ matplotlib.rc('text', usetex = True)
 matplotlib.rcParams['font.size'] = 17
 matplotlib.rc('xtick', labelsize = 14) 
 matplotlib.rc('axes', linewidth = 1.2)
-matplotlib.rcParams['legend.fontsize'] = 14
+matplotlib.rcParams['legend.fontsize'] = 12
 matplotlib.rcParams['legend.handlelength'] = 5
 matplotlib.rcParams['xtick.major.size'] = 5
 matplotlib.rcParams['ytick.major.size'] = 5
@@ -249,6 +249,10 @@ def plot_size_paper(query1, query2, xlabel, ylabel, output, out_folder,
                                       ymin, ymax, ybin2,
                                       pmax = pmax, pmin = pmin)
     
+    #load obs data
+    file = os.getenv('HOME') + '/Dropbox/Research/Herschel/obs_data/CavaSizesValues.txt'
+    data = N.loadtxt(file, comments = '#', usecols = (0,1))
+    
     #figure
     fig = P.figure()
     #fig.suptitle('Late-type Galaxies')
@@ -268,7 +272,13 @@ def plot_size_paper(query1, query2, xlabel, ylabel, output, out_folder,
                      extent = [xmin2, xmax2, ymin, ymax],
                      aspect = 'auto', alpha = 1)
     
-    ax2.scatter(xd2, yd2, s = 4, marker = 'o', color = 'blue')
+    ax2.scatter(xd2, yd2, s = 7, marker = 'o', color = 'blue',
+                label = '$S_{250} > 5$ mJy')
+
+    ax1.scatter(data[:,0], data[:,1], s = 45, marker = 's',
+                color = 'green')    
+    ax2.scatter(data[:,0], data[:,1], s = 45, marker = 's',
+                color = 'green', label = 'Cava et al 2010')
 
     #percentiles
     xbin_midd1, y50d1, y16d1, y84d1 = dm.percentile_bins(xd1, yd1, xmin1, xmax1, nxbins = xbin1)
@@ -287,10 +297,10 @@ def plot_size_paper(query1, query2, xlabel, ylabel, output, out_folder,
            horizontalalignment='center',
            verticalalignment='center',
            transform = ax1.transAxes)
-    P.text(0.5, 0.95,'$S_{250} > 5$ mJy',
-           horizontalalignment='center',
-           verticalalignment='center',
-           transform = ax2.transAxes)
+#    P.text(0.5, 0.95,'$S_{250} > 5$ mJy',
+#           horizontalalignment='center',
+#           verticalalignment='center',
+#           transform = ax2.transAxes)
 
     #labels
     ax1.set_xlabel(xlabel)
@@ -356,9 +366,9 @@ if __name__ == '__main__':
                 '''
     plot_size_paper(query1, query2, r'$\log(M_{\star}/M_{\odot})$', 
                r'$R_{\textrm{disk}}$ \quad [kpc]', 'SizeStellarMass.ps',
-               out_folder, xmin1 = 8.2, xmax1 = 11.75,
+               out_folder, xmin1 = 8.2, xmax1 = 11.8,
                xmin2 = 10.1, xmax2 = 11.65,
-               pmin = 0.02, xbin1 = 13, ybin1 = 11,
+               pmin = 0.02, xbin1 = 12, ybin1 = 11,
                xbin2 = 8, ybin2 = 10)
     
 #    query1 = '''select galprop.mstar, galprop.r_disk, Pow10(galprop.mbulge - galprop.mstar)
