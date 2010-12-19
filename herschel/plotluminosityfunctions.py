@@ -19,7 +19,7 @@ matplotlib.use('PS')
 import numpy as N
 import pylab as P
 import re, os
-from cosmocalc import cosmocalc
+#from cosmocalc import cosmocalc
 #Sami's repo
 import db.sqlite
 import astronomy.differentialfunctions as df
@@ -47,7 +47,8 @@ def plot_luminosityfunction(path, database, redshifts,
     rows = 3 
 
     #get data
-    query = '''select %s from FIR where %s > 3 and FIR.spire250_obs < 1e6''' % (band, band)
+    query = '''select %s from FIR where %s > 3
+               and FIR.spire250_obs < 1e6''' % (band, band)
     total = db.sqlite.get_data_sqlite(path, database, query)
 
     #make the figure
@@ -56,7 +57,8 @@ def plot_luminosityfunction(path, database, redshifts,
     ax = P.subplot(rows, columns, 1)
     
     #get the co-moving volume to the backend
-    comovingVol = cv.comovingVolume(solid_angle, 0, zmax, H0 = H0, WM = WM)
+    comovingVol = cv.comovingVolume(solid_angle, 0, zmax,
+                                    H0 = H0, WM = WM)
 
     #weight each galaxy
     wghts = N.zeros(len(total)) + (1./comovingVol)
@@ -109,7 +111,8 @@ def plot_luminosityfunction(path, database, redshifts,
         rtitle = r'$%s < z \leq %s$' % (tmp[2], tmp[6])
 
         #get a comoving volume
-        comovingVol = cv.comovingVolume(solid_angle, 0, zmax, H0 = H0, WM = WM)
+        comovingVol = cv.comovingVolume(solid_angle, 0, zmax,
+                                        H0 = H0, WM = WM)
 
         #weights
         wghts = N.zeros(len(limited)) + (1./comovingVol)
@@ -133,10 +136,12 @@ def plot_luminosityfunction(path, database, redshifts,
         #plot the sigma area
         axs.fill_between(bb[mask], up, lw, color = '#728FCE')
         #plot the knots
-        axs.scatter(bb[mask], nn[mask], marker = 'o', s = 3, color = 'k')
+        axs.scatter(bb[mask], nn[mask], marker = 'o',
+                    s = 3, color = 'k')
 
         #add annotation
-        axs.annotate(rtitle, (0.5, 0.87), xycoords='axes fraction',
+        axs.annotate(rtitle, (0.5, 0.87),
+                     xycoords='axes fraction',
                      ha = 'center')
 
         #set scales
@@ -181,7 +186,8 @@ def plot_luminosityfunction2(path, database, redshifts,
     fudge = ymin
 
     #get data
-    query = '''select %s from FIR where %s > 3 and FIR.spire250_obs < 1e6''' % (band, band)
+    query = '''select %s from FIR where %s > 3
+               and FIR.spire250_obs < 1e6''' % (band, band)
     total = db.sqlite.get_data_sqlite(path, database, query)
 
     #make the figure
@@ -189,7 +195,8 @@ def plot_luminosityfunction2(path, database, redshifts,
     ax = P.subplot(111)
     
     #get the co-moving volume to the backend
-    comovingVol = cv.comovingVolume(solid_angle, 0, zmax, H0 = H0, WM = WM)
+    comovingVol = cv.comovingVolume(solid_angle, 0, zmax,
+                                    H0 = H0, WM = WM)
 
     #weight each galaxy
     wghts = N.zeros(len(total)) + (1./comovingVol)
@@ -226,7 +233,8 @@ def plot_luminosityfunction2(path, database, redshifts,
         rtitle = r'$%s < z \leq %s$' % (tmp[2], tmp[6])
 
         #get a comoving volume
-        comovingVol = cv.comovingVolume(solid_angle, 0, zmax, H0 = H0, WM = WM)
+        comovingVol = cv.comovingVolume(solid_angle, 0, zmax,
+                                        H0 = H0, WM = WM)
 
         #weights
         wghts = N.zeros(len(limited)) + (1./comovingVol)
@@ -309,13 +317,13 @@ if __name__ == '__main__':
                                 out_folder, obs_data,
                                 xmin = xmin, xmax = xmax,
                                 ymin = 10**-5, ymax = 3*10**-1,
-                                nbins = 16, sigma = 5.0)
+                                nbins = 12, sigma = 5.0)
 
         plot_luminosityfunction2(path, database, redshifts, b,
                                  out_folder, obs_data,
                                  xmin = xmin, xmax = xmax,
                                  ymin = 10**-6, ymax = 10**-1,
-                                 nbins = 18, sigma = 5.0)
+                                 nbins = 13, sigma = 5.0)
 
     redshifts = ['FIR.z >= 0.0 and FIR.z < 0.1',
                  'FIR.z > 0.1 and FIR.z < 0.2',
@@ -328,6 +336,6 @@ if __name__ == '__main__':
                             out_folder+'spec', obs_data,
                             xmin = 8.1, xmax = 11.3,
                             ymin = 10**-5, ymax = 3*10**-1,
-                            nbins = 12, sigma = 5.0)
+                            nbins = 10, sigma = 5.0)
 
     print 'All done...'

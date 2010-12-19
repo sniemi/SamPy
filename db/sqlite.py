@@ -40,7 +40,7 @@ def get_data_sqlitePowerTen(path, db, query):
     c.execute(query)
     data = c.fetchall()
     c.close()
-    return data
+    return N.array(data)
 
 def get_data_sqlite(path, db, query):
     '''
