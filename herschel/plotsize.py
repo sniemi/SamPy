@@ -238,6 +238,8 @@ def plot_size_paper(query1, query2, xlabel, ylabel, output, out_folder,
     yd2 = data[:,1][disks]
 
     print len(xd1), len(xd2)
+    print 'Mean size of all galaxies', N.mean(yd1)
+    print 'Mean size of SPIRE detected galaxies', N.mean(yd2)
 
     #hess
     sd1, sdmin1, sdmax1 = h.hess_plot(xd1, yd1, N.ones(len(xd1)), 

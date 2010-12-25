@@ -5,17 +5,16 @@ Pulls data from an sqlite3 database.
 @author: Sami Niemi
 '''
 import matplotlib
-matplotlib.rc('text', usetex = True)
-matplotlib.rc('xtick', labelsize=12) 
-matplotlib.rc('axes', linewidth=1.2)
-matplotlib.rc('lines', markeredgewidth=1.2)
-matplotlib.rcParams['lines.linewidth'] = 1.6
-matplotlib.rcParams['legend.fontsize'] = 9
-matplotlib.rcParams['legend.handlelength'] = 2
-matplotlib.rcParams['font.size'] = 11
-matplotlib.rcParams['xtick.major.size'] = 4
-matplotlib.rcParams['ytick.major.size'] = 4
 matplotlib.use('PS')
+matplotlib.rc('text', usetex = True)
+matplotlib.rcParams['font.size'] = 17
+matplotlib.rc('xtick', labelsize = 13) 
+matplotlib.rc('ytick', labelsize = 13) 
+matplotlib.rc('axes', linewidth = 1.2)
+matplotlib.rcParams['legend.fontsize'] = 12
+matplotlib.rcParams['legend.handlelength'] = 3
+matplotlib.rcParams['xtick.major.size'] = 5
+matplotlib.rcParams['ytick.major.size'] = 5
 import numpy as N
 import pylab as P
 import re, os
@@ -31,7 +30,7 @@ def plot_luminosityfunction(path, database, redshifts,
                             ymin = 10**3, ymax = 2*10**6,
                             xmin = 0.5, xmax = 100,
                             nbins = 15, sigma = 5.0,
-                            H0 = 70.0, WM=0.28,
+                            H0 = 70.0, WM = 0.28,
                             zmax = 6.0):
     '''
     @param solid_angle: area of the sky survey in arcmin**2
@@ -111,8 +110,11 @@ def plot_luminosityfunction(path, database, redshifts,
         rtitle = r'$%s < z \leq %s$' % (tmp[2], tmp[6])
 
         #get a comoving volume
-        comovingVol = cv.comovingVolume(solid_angle, 0, zmax,
-                                        H0 = H0, WM = WM)
+        comovingVol = cv.comovingVolume(solid_angle,
+                                        float(tmp[2]),
+                                        float(tmp[6]),
+                                        H0 = H0,
+                                        WM = WM)
 
         #weights
         wghts = N.zeros(len(limited)) + (1./comovingVol)
@@ -172,7 +174,7 @@ def plot_luminosityfunction2(path, database, redshifts,
                              ymin = 10**3, ymax = 2*10**6,
                              xmin = 0.5, xmax = 100,
                              nbins = 15, sigma = 5.0,
-                             H0 = 70.0, WM=0.28,
+                             H0 = 70.0, WM = 0.28,
                              zmax = 6.0):
     '''
     @param solid_angle: area of the sky survey in arcmin**2
@@ -180,7 +182,7 @@ def plot_luminosityfunction2(path, database, redshifts,
     @param sigma: sigma level of the errors to be plotted
     @param nbins: number of bins (for simulated data)
     '''
-    col = ['red', 'magenta', 'green', 'blue', 'brown']
+    col = ['black', 'red', 'magenta', 'green', 'blue', 'brown']
     
     #fudge factor to handle errors that are way large
     fudge = ymin
@@ -216,9 +218,9 @@ def plot_luminosityfunction2(path, database, redshifts,
     lw[lw < ymin] = ymin
     
     #plot the knots
-    mtot = ax.errorbar(b[mask], n[mask], yerr = [err, err],
-                       color = 'k', label = 'Total',
-                       marker = 'o', ms = 4)
+#    mtot = ax.errorbar(b[mask], n[mask], yerr = [err, err],
+#                       color = 'k', label = 'Total',
+#                       marker = 'None', ls = '-')
     
     #redshift limited plots
     for i, red in enumerate(redshifts):
@@ -233,8 +235,11 @@ def plot_luminosityfunction2(path, database, redshifts,
         rtitle = r'$%s < z \leq %s$' % (tmp[2], tmp[6])
 
         #get a comoving volume
-        comovingVol = cv.comovingVolume(solid_angle, 0, zmax,
-                                        H0 = H0, WM = WM)
+        comovingVol = cv.comovingVolume(solid_angle,
+                                        float(tmp[2]),
+                                        float(tmp[6]),
+                                        H0 = H0,
+                                        WM = WM)
 
         #weights
         wghts = N.zeros(len(limited)) + (1./comovingVol)
@@ -254,9 +259,13 @@ def plot_luminosityfunction2(path, database, redshifts,
         lw = nn[mask] - err
         lw[lw < ymin] = ymin
         #plot the knots
-        ax.errorbar(bb[mask], nn[mask], yerr = [err, err],
-                    label = rtitle, color = col[i],
-                    marker = 'o', ms = 4)
+
+#        ax.errorbar(bb[mask], nn[mask], yerr = [err, err],
+#                    label = rtitle, color = col[i],
+#                    marker = 'None', ls = '-')
+
+        ax.plot(bb[mask], nn[mask], color = col[i],
+                marker = 'None', ls = '-', label = rtitle)
 
     #set scales
     ax.set_yscale('log')
@@ -282,7 +291,8 @@ if __name__ == '__main__':
     out_folder = hm + '/Dropbox/Research/Herschel/plots/luminosity_functions/'
     obs_data = hm+'/Dropbox/Research/Herschel/obs_data/'
 
-    redshifts = ['FIR.z >= 0.9 and FIR.z <= 1.1',
+    redshifts = ['FIR.z >= 0.0 and FIR.z <= 0.5',
+                 'FIR.z >= 0.9 and FIR.z <= 1.1',
                  'FIR.z >= 1.9 and FIR.z <= 2.1',
                  'FIR.z >= 2.9 and FIR.z <= 3.1',
                  'FIR.z >= 3.9 and FIR.z <= 4.1',
@@ -296,20 +306,20 @@ if __name__ == '__main__':
     
     for b in bands:
         if '100' in b:
-            xmin = 7.9
+            xmin = 8.0
             xmax = 12.5
         if '160' in b:
-            xmin = 7.9
-            xmax = 12.2
+            xmin = 8.0
+            xmax = 12.0
         if '250' in b:
-            xmin = 7.9
-            xmax = 11.3
+            xmin = 8.0
+            xmax = 12.0
         if '350' in b:
-            xmin = 7.9
-            xmax = 10.9
+            xmin = 8.0
+            xmax = 12.0
         if '500' in b:
-            xmin = 7.8
-            xmax = 10.2
+            xmin = 8.0
+            xmax = 12.0
             
         print 'Plotting ', b
 
@@ -322,8 +332,8 @@ if __name__ == '__main__':
         plot_luminosityfunction2(path, database, redshifts, b,
                                  out_folder, obs_data,
                                  xmin = xmin, xmax = xmax,
-                                 ymin = 10**-6, ymax = 10**-1,
-                                 nbins = 13, sigma = 5.0)
+                                 ymin = 10**-5, ymax = 10**-1,
+                                 nbins = 12, sigma = 5.0)
 
     redshifts = ['FIR.z >= 0.0 and FIR.z < 0.1',
                  'FIR.z > 0.1 and FIR.z < 0.2',
