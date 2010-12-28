@@ -32,12 +32,12 @@ def plot_ssfr_paper(query1, query2, out_folder,
     ssfr2 = N.log10(data2[:,0] / (10**data2[:,1]))
     x2 = data2[:,1]
     #make hess data
-    s1, smin1, smax1 = h.hess_plot_fast(x1, ssfr1,
+    s1, smin1, smax1 = h.hess_plot(x1, ssfr1,
                                    N.ones(len(x1)), 
                                    xmin1, xmax1, xbin1, 
                                    ymin1, ymax1, ybin1,
                                    pmax, pmin)
-    s2, smin2, smax2 = h.hess_plot_fast(x2, ssfr2,
+    s2, smin2, smax2 = h.hess_plot(x2, ssfr2,
                                    N.ones(len(x2)), 
                                    xmin2, xmax2, xbin2, 
                                    ymin2, ymax2, ybin2,
@@ -45,10 +45,6 @@ def plot_ssfr_paper(query1, query2, out_folder,
     
     #make the figure
     fig = P.figure()
-    #fig.suptitle(title)
-#    fig.subplots_adjust(wspace = 0.0, hspace = 0.01,
-#                        left = 0.08, bottom = 0.07,
-#                        right = 0.97, top = 0.93)
     fig.subplots_adjust(wspace = 0.0, hspace = 0.01,
                         bottom = 0.07,
                         right = 0.97, top = 0.93)
@@ -106,7 +102,6 @@ def plot_ssfr_paper(query1, query2, out_folder,
            transform = ax2.transAxes)
 
     #yticks
-#    ax1.set_yticks(y1ticks)
     ax2.set_yticks(ax1.get_yticks()[1:-1])
 
     #make grid
