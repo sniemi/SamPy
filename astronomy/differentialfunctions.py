@@ -50,6 +50,7 @@ def diff_function_log_binning(data, column = 0, log = False,
     dm = (mmax - mmin) / float(nbins)
     mbin = (N.arange(nbins)+0.5)*dm + mmin
     #one could also use N.linspace(mmin, mmax, nbins)
+    #note however that one should then use + dm / 2. 
 
     if verbose:
         print '\nNumber of galaxies = %i' % ngal
@@ -88,6 +89,7 @@ def mass_function(data, column = 0, log = False,
     Returns differential mass function and bins:
     dN / dlnM
     @TODO: add calculating the cumulative mass function.
+    @TODO: the linspace might be wrong!
     '''
     #output
     mf = []
@@ -113,9 +115,9 @@ def mass_function(data, column = 0, log = False,
         wght = N.zeros(ngal) + (1./(nvols*(float(volume)/h)**3))
 
     #bins
-    mbin = N.linspace(mmin, mmax, nbins)
-    #on could alos use N.logspace()
+    mbin = N.linspace(mmin, mmax, nbins+1)
     dm = mbin[1] - mbin[0]
+    mbin = mbin[:-1] + dm/2.
 
     if verbose:
         print 'Number of galaxies = %i' % ngal
@@ -130,9 +132,6 @@ def mass_function(data, column = 0, log = False,
         mask = (dat > prev) & (dat <= thismass)
         mf.append(N.sum(wght[mask]))
         prev = thismass
-
-    #swqp it to the middle of the bin and drop the last
-    mbin = mbin[:-1] + dm
 
     mf = N.array(mf)
     

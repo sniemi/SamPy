@@ -14,9 +14,10 @@ from cosmocalc import cosmocalc
 
 def janskyToMagnitude(jansky):
     '''
-    Converts janskys to AB? magnitudes.
-    @param jansky: can either be a number of a numpy array
-    @return: either a float or numpy array
+    Converts Janskys to AB? magnitudes.
+    @note: Can be used with SQLite3 database.
+    @param jansky: can either be a number or a NumPy array
+    @return: either a float or NumPy array
     '''
     return 8.9 - 2.5*N.log10(jansky)
 

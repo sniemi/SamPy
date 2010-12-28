@@ -1,7 +1,7 @@
 '''
 A file containing SQLite3 related functions.
 
-@note: The following is the orinal note:
+@note: The following is the original note:
 This little script can be used to generate an
 SQLite3 database from Rachel's GF output.
 
@@ -15,7 +15,7 @@ output file, by default, is names as sams.db,
 however, this is easy to change as the name
 is stored to output variable.
 '''
-
+import astronomy.conversions as conv
 import sqlite3
 import glob as g
 import io.sextutils as su
@@ -31,16 +31,39 @@ def toPowerTen(value):
 
 def get_data_sqlitePowerTen(path, db, query):
     '''
-    Run the SQL query.
+    Run an SQL query to a database with a custom
+    made function "toPowerTen".
+    @param path: path to the SQLite3 database
+    @param db: name of the SQLite3 database
+    @param query: valid SQL query
+    @return: all data in a NumPy array   
     '''
     conn = sqlite3.connect(path + db)
-#    conn.create_function('janskyToMagnitude', 1, janskyToMagnitude)
     conn.create_function('Pow10', 1, toPowerTen)
     c = conn.cursor()
     c.execute(query)
     data = c.fetchall()
     c.close()
     return N.array(data)
+
+def get_data_sqliteSMNfunctions(path, db, query):
+    '''
+    Run an SQL query to a database with custom
+    made functions "toPowerTen" and "janskyToMagnitude".
+    @param path: path to the SQLite3 database
+    @param db: name of the SQLite3 database
+    @param query: valid SQL query
+    @return: all data in a NumPy array
+    '''
+    conn = sqlite3.connect(path + db)
+    conn.create_function('janskyToMagnitude', 1, conv.janskyToMagnitude)
+    conn.create_function('Pow10', 1, toPowerTen)
+    c = conn.cursor()
+    c.execute(query)
+    data = c.fetchall()
+    c.close()
+    return N.array(data)
+
 
 def get_data_sqlite(path, db, query):
     '''

@@ -379,6 +379,7 @@ if __name__ == '__main__':
 #                FIR.z < 4.0 and
 #                FIR.gal_id = galprop.gal_id and
 #                FIR.halo_id = galprop.halo_id and
+#                galprop.tmerge > 0.5 and
 #                FIR.spire250_obs > 1e-12 and
 #                FIR.spire250_obs < 1e6
 #                '''

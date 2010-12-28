@@ -37,7 +37,7 @@ def plot_sfrs(path, db, reshifts, out_folder,
         zz = N.mean(N.array([float(tmp[2]), float(tmp[6])]))
         
         #get data
-        data = N.array(sq.get_data_sqlitePowerTen(path, db, query))
+        data = sq.get_data_sqlitePowerTen(path, db, query)
     
         #set 1
         xd = N.log10(data[:,1])
@@ -296,6 +296,54 @@ def plot_BHmass(path, db, reshifts, out_folder,
 
     P.legend(loc = 'lower right')
     P.savefig(out_folder + 'BHmass.ps') 
+
+def plot_DMmass(path, db, reshifts, out_folder,
+                xmin = 0.0, xmax = 2.0, fluxlimit = 5):
+    '''
+    Plots 
+    '''
+    #figure
+    fig = P.figure()
+    ax = fig.add_subplot(111)
+
+    for i, reds in enumerate(redshifts):
+        query = '''select galprop.mhalo, FIR.spire250_obs*1000
+                from FIR, galprop where
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id and
+                %s
+                ''' % reds
+        #tmp
+        tmp = reds.split()
+        zz = N.mean(N.array([float(tmp[2]), float(tmp[6])]))
+        
+        #get data
+        data = N.array(sq.get_data_sqlitePowerTen(path, db, query))
+    
+        #set 1
+        xd = N.log10(data[:,1])
+        yd = data[:,0]
+        
+        #percentiles
+        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd, yd, xmin, xmax,
+                                                         nxbins = 15)
+        msk = y50d > -10
+        add = eval('0.0%s' % str(i))
+        ax.errorbar(xbin_midd[msk] + add, y50d[msk],
+                    yerr = [y50d[msk]-y16d[msk], y84d[msk]-y50d[msk]],
+                    label = '$z = %.1f$' % zz)
+
+    ax.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
+  
+    ax.set_xlabel('$\log_{10}(S_{250} \ [$mJy$])$')
+    ax.set_ylabel('$\log_{10}(M_{\mathrm{dm}} \ [M_{\odot}])$')
+
+    ax.set_xlim(xmin, xmax)
+    ax.set_ylim(11.0, 13.0)
+
+    P.legend(loc = 'lower right')
+    P.savefig(out_folder + 'DMmass.ps') 
+
    
 if __name__ == '__main__':
     #find the home directory, because the output is to dropbox 
@@ -313,9 +361,12 @@ if __name__ == '__main__':
                  'FIR.z > 2.9 and FIR.z < 3.1',
                  'FIR.z > 3.9 and FIR.z < 4.1']
 
+#    plot_massratios(path, db, redshifts, out_folder)
+#    plot_metallicity(path, db, redshifts, out_folder)
+#    plot_starburst(path, db, redshifts, out_folder)
+#    plot_BHmass(path, db, redshifts, out_folder)
+    plot_DMmass(path, db, redshifts, out_folder)
+    
+    
     #plot_sfrs(path, db, redshifts, out_folder)
     #plot_stellarmass(path, db, redshifts, out_folder)
-    plot_massratios(path, db, redshifts, out_folder)
-    plot_metallicity(path, db, redshifts, out_folder)
-    plot_starburst(path, db, redshifts, out_folder)
-    plot_BHmass(path, db, redshifts, out_folder)
