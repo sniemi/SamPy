@@ -29,7 +29,7 @@ def plot_size(query, xlabel, ylabel, output, out_folder,
     Plots size versus a given quantity.
     '''
     #get data
-    data = N.array(sq.get_data_sqlitePowerTen(path, db, query))
+    data = sq.get_data_sqlitePowerTen(path, db, query)
 
     #sphericals
     mask = data[:,2] > bulge
