@@ -1,3 +1,4 @@
+
 '''
 A file containing SQLite3 related functions.
 
@@ -23,11 +24,29 @@ import numpy as N
 
 def toPowerTen(value):
     '''
-    10**value
     @note: This function can be passed on to slite3 connection
-    @param value: can either be a number or a numpy array 
+    @param value: can either be a number or a NumPy array
+    @return: 10**value
     '''
     return N.power(10, value)
+
+def toLogTen(value):
+    '''
+    @note: This function can be passed on to slite3 connection
+    @param value: can either be a number or a NumPy array 
+    @return: Log_10(value)
+    '''
+    return N.Log10(value)
+
+def SSFR(mstardot, mstar):
+    '''
+    Log_10(value1 / 10**value2)
+    @note: This function can be passed on to slite3 connection
+    @param mstardot: star formation rate
+    @param mstar: stellar mass in log10(M_solar)
+    @return: specific star formation rate in Gyr**-1
+    '''
+    return N.log10(mstardot / 10**mstar)
 
 def get_data_sqlitePowerTen(path, db, query):
     '''
@@ -58,6 +77,8 @@ def get_data_sqliteSMNfunctions(path, db, query):
     conn = sqlite3.connect(path + db)
     conn.create_function('janskyToMagnitude', 1, conv.janskyToMagnitude)
     conn.create_function('Pow10', 1, toPowerTen)
+    conn.create_function('Log10', 1, toLogTen)    
+    conn.create_function('SSFR', 2, SSFR)  
     c = conn.cursor()
     c.execute(query)
     data = c.fetchall()
