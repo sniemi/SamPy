@@ -2,9 +2,6 @@ import os
 import numpy as N
 #Sami's repository
 import db.sqlite as sq
-import astronomy.hess_plot as h
-import astronomy.datamanipulation as dm
-
     
 if __name__ == '__main__':
     #find the home directory, because the output is to dropbox 
@@ -12,7 +9,6 @@ if __name__ == '__main__':
     hm = os.getenv('HOME')
     #constants
     path = hm + '/Dropbox/Research/Herschel/runs/reds_zero/'
-    out_folder = hm + '/Dropbox/Research/Herschel/plots/mergers/'
     db = 'sams.db'
 
     query2 = '''select galprop.mstar, galprop.tmerge
@@ -30,7 +26,6 @@ if __name__ == '__main__':
     yd2 = data[:,1]
 
     #the fraction of no mergers?
-    nm1 = len(yd1[yd1 < 0.0]) / float(len(yd1)) * 100.
     nm2 = len(yd2[yd2 < 0.0]) / float(len(yd2)) * 100.
 
     #print out some statistics
@@ -57,13 +52,12 @@ if __name__ == '__main__':
     yd2 = data[:,1]
 
     #the fraction of no mergers?
-    nm1 = len(yd1[yd1 < 0.0]) / float(len(yd1)) * 100.
     nm2 = len(yd2[yd2 < 0.0]) / float(len(yd2)) * 100.
 
     #print out some statistics
     print len(yd2)
-    print 'Mean tmerge of SPIRE detected galaxies', N.mean(yd2[yd2 > 0.0])
+    print 'Mean tmerge of PACS detected galaxies', N.mean(yd2[yd2 > 0.0])
     print
-    print 'Max tmerge of SPIRE detected galaxies', N.max(yd2[yd2 > 0.0])
+    print 'Max tmerge of PACS detected galaxies', N.max(yd2[yd2 > 0.0])
     print
-    print 'Fraction of SPIRE that have experienced a merger', 100.-nm2
+    print 'Fraction of PACS that have experienced a merger', 100.-nm2
