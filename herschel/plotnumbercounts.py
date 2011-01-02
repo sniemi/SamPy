@@ -1,18 +1,14 @@
 import matplotlib
-matplotlib.rc('text', usetex = False)
-matplotlib.rc('xtick', labelsize=12) 
-matplotlib.rc('axes', linewidth=1.2)
-matplotlib.rc('lines', markeredgewidth=2.0)
-matplotlib.rcParams['lines.linewidth'] = 1.8
-matplotlib.rcParams['legend.fontsize'] = 9
+matplotlib.use('PS')
+matplotlib.rc('text', usetex = True)
+matplotlib.rcParams['font.size'] = 17
+matplotlib.rc('xtick', labelsize = 14) 
+matplotlib.rc('axes', linewidth = 1.2)
+matplotlib.rcParams['legend.fontsize'] = 8
 matplotlib.rcParams['legend.handlelength'] = 2
-matplotlib.rcParams['font.size'] = 12
 matplotlib.rcParams['xtick.major.size'] = 5
 matplotlib.rcParams['ytick.major.size'] = 5
-#matplotlib.use('PDF')
-#matplotlib.use('Agg')
 matplotlib.use('PS')
-
 import numpy as N
 import pylab as P
 import re, os
@@ -120,8 +116,10 @@ where FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, band, band)
     wghts = N.zeros(len(fluxes)) + area
 
     #make the figure
-    fig = P.figure(figsize = (10, 10))
-    P.subplots_adjust(wspace = 0.0, hspace = 0.0)
+    fig = P.figure()
+    fig.subplots_adjust(wspace = 0.0, hspace = 0.0,
+                        left = 0.09, bottom = 0.03,
+                        right = 0.98, top = 0.99)
     ax = P.subplot(rows, columns, 1)
 
     #calculate the differential number density
@@ -264,7 +262,7 @@ where FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, band, band)
     for i, red in enumerate(redshifts):
         #get data and convert to mJy
         query = '''select FIR.%s from FIR 
-where %s and FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, red, band, band)
+        where %s and FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, red, band, band)
         fluxes = db.sqlite.get_data_sqlite(path, database, query)*10**3
 
         #modify redshift string
@@ -460,11 +458,6 @@ if __name__ == '__main__':
                  'FIR.z > 0.5 and FIR.z <= 1.0',
                  'FIR.z > 1.0 and FIR.z <= 2.0',
                  'FIR.z > 2.0 and FIR.z <= 5.0']
-
-#    redshifts = ['FIR.z >= 2.0 and FIR.z <= 3.0',
-#                 'FIR.z > 3.0 and FIR.z <= 3.5',
-#                 'FIR.z > 3.5 and FIR.z <= 4.5',
-#                 'FIR.z > 4.5 and FIR.z <= 6.0']
     
     #plot the number counts
     for bd in bands:

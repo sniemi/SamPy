@@ -8,6 +8,8 @@ matplotlib.rcParams['legend.fontsize'] = 14
 matplotlib.rcParams['legend.handlelength'] = 2
 matplotlib.rcParams['xtick.major.size'] = 5
 matplotlib.rcParams['ytick.major.size'] = 5
+matplotlib.rcParams['legend.fancybox'] = True
+matplotlib.rcParams['legend.shadow'] = True
 import pylab as P
 import os
 import numpy as N
@@ -409,13 +411,13 @@ if __name__ == '__main__':
                  'FIR.z > 2.9 and FIR.z < 3.1',
                  'FIR.z > 3.9 and FIR.z < 4.1']
 
-#    plot_massratios(path, db, redshifts, out_folder)
-#    plot_metallicity(path, db, redshifts, out_folder)
-#    plot_starburst(path, db, redshifts, out_folder)
-#    plot_BHmass(path, db, redshifts, out_folder)
-#    plot_DMmass(path, db, redshifts, out_folder)
+    plot_sfrs(path, db, redshifts, out_folder)
+    plot_stellarmass(path, db, redshifts, out_folder)
+
+    plot_massratios(path, db, redshifts, out_folder)
+    plot_metallicity(path, db, redshifts, out_folder)
+    plot_starburst(path, db, redshifts, out_folder)
+    plot_BHmass(path, db, redshifts, out_folder)
+    plot_DMmass(path, db, redshifts, out_folder)
     plot_Age(path, db, redshifts, out_folder)
     
-    
-    #plot_sfrs(path, db, redshifts, out_folder)
-    #plot_stellarmass(path, db, redshifts, out_folder)
