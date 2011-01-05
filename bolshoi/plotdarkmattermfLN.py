@@ -32,7 +32,8 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
             dt[x] = N.loadtxt(data[0][x])
 
     #calculate the mass functions from the Bolshoi data
-    mbin0, mf0 = df.mass_function(dt['Bolshoi'],#/h,
+    #is the Bolshoi masses in M_solar or M_solar / h
+    mbin0, mf0 = df.mass_function(dt['Bolshoi'],
                                   nbins = 40, h = 1., 
                                   mmin = 20, mmax = 35)
     del dt['Bolshoi']
@@ -58,21 +59,21 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
     xST = dt['Sheth-Tormen'][:,1]
     #from (dN / dM) * dM to dN / dlnM using the chain rule
     #scaled with N.exp(h), because ln binning
-    swap = 1. / (N.log(xST[1]) - N.log(xST[0])) * N.exp(h) 
-    yST = dt['Sheth-Tormen'][:,2] / h3 * swap * h
+    swap = 1. / (N.log(xST[4]) - N.log(xST[3])) * N.exp(h) 
+    yST = dt['Sheth-Tormen'][:,2] / h3 * swap
     sh = ax1.plot(xST, yST, 'b-', lw = 1.3)
     #PS
     xPS = dt['Press-Schecter'][:,1]
     #scaled with N.exp(h), because ln binning
     swap = 1. / (N.log(xPS[1]) - N.log(xPS[0])) * N.exp(h)
-    yPS = dt['Press-Schecter'][:,2] / h3 * swap * h
+    yPS = dt['Press-Schecter'][:,2] / h3 * swap
     ps = ax1.plot(xPS, yPS, 'g-', lw = 1.1)
     #Warren
     xW = dt['Warren'][:,1]
     #scaled with N.exp(h), because ln binning
     swap = 1. / (N.log(xW[1]) - N.log(xW[0])) * N.exp(h)
-    yW = dt['Warren'][:,2] / h3 * swap * h
-    wr = ax1.plot(xW, yW, 'y-', lw = 0.9)
+    yW = dt['Warren'][:,2] / h3 * swap
+    wr = ax1.plot(xW, yW, 'y--', lw = 0.8)
 
     #delete data to save memory, dt is not needed anylonger
     del dt

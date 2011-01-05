@@ -84,7 +84,7 @@ def diff_function_log_binning(data, column = 0, log = False,
 
 
 def mass_function(data, column = 0, log = False,
-                  wght = None, mmin = 9, mmax = 15.0, 
+                  wght = None, mmin = 9.0, mmax = 15.0, 
                   nbins = 35, h = 0.7, volume = 250,
                   nvols = 1, verbose = False):
     '''
@@ -111,7 +111,7 @@ def mass_function(data, column = 0, log = False,
     if wght == None:
         wght = N.zeros(ngal) + (1./(nvols*(float(volume)/h)**3))
 
-    #bins, one could also use N.linspace()...
+    #bins, one could also use N.linspace() or N.logscape()
     dm = (mmax - mmin) / float(nbins)
     #mid points
     mbin = (N.arange(nbins)+0.5)*dm + mmin
@@ -130,7 +130,6 @@ def mass_function(data, column = 0, log = False,
     #calculate the sum in each bin
     for i in range(nbins):
         mf[i] = N.sum(wght[ibin[mask] == i])
-
     mf = N.array(mf)
     
     if not log:
