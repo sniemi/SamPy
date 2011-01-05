@@ -57,3 +57,11 @@ def comovingVolume(arcmin2, zmin, zmax,
     back = cosmocalc(zmax, H0, WM)['VCM_Gpc3']
     volume = (back - front) * 1e9 * arcminSquaredToSolidAnge(arcmin2)
     return volume
+
+def Luminosity(abs_mag):
+    '''
+    Converts AB magnitudes to luminosities in L_sun
+    @param abs_mag: AB magnitude of the object
+    @return: luminosity 
+    '''
+    return 10.0**((4.85-abs_mag)/2.5)

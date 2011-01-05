@@ -1,12 +1,10 @@
 import matplotlib
 matplotlib.rc('text', usetex = True)
-matplotlib.rc('xtick', labelsize=12) 
-matplotlib.rc('axes', linewidth=1.2)
-matplotlib.rc('lines', markeredgewidth=2.0)
-matplotlib.rcParams['lines.linewidth'] = 1.8
-matplotlib.rcParams['legend.fontsize'] = 10
+matplotlib.rcParams['font.size'] = 17
+matplotlib.rc('xtick', labelsize = 14) 
+matplotlib.rc('axes', linewidth = 1.2)
+matplotlib.rcParams['legend.fontsize'] = 12
 matplotlib.rcParams['legend.handlelength'] = 5
-matplotlib.rcParams['font.size'] = 12
 matplotlib.rcParams['xtick.major.size'] = 5
 matplotlib.rcParams['ytick.major.size'] = 5
 matplotlib.use('PDF')

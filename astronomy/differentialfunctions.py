@@ -40,7 +40,10 @@ def diff_function_log_binning(data, column = 0, log = False,
 
     #if log have been taken from the data or not
     if not log:
-        d = N.log10(data[:,column])
+        if len(N.shape(data)) == 1:
+            d = N.log10(data)
+        else:
+            d = N.log10(data[:,column])
         mmin = N.log10(mmin)
         mmax = N.log10(mmax)
     else:
@@ -82,56 +85,51 @@ def diff_function_log_binning(data, column = 0, log = False,
 
 def mass_function(data, column = 0, log = False,
                   wght = None, mmin = 9, mmax = 15.0, 
-                  nbins = 35, h = 0.7, volume = 250, nvols = 1,
-                  verbose = False):
+                  nbins = 35, h = 0.7, volume = 250,
+                  nvols = 1, verbose = False):
     '''
     Calculates a mass function from data.
     Returns differential mass function and bins:
     dN / dlnM
     @TODO: add calculating the cumulative mass function.
-    @TODO: the linspace might be wrong!
     '''
-    #output
-    mf = []
-
     #if log have been taken from the data or not
     if not log:
         if len(data.shape) > 1:
-            dat = N.log(data[:, column]) # * h)
+            dat = N.log(data[:, column] * h)
         else:
-            dat = N.log(data) #*h)
+            dat = N.log(data * h)
     else:
         if len(data.shape) > 1:
-            dat = data[:, column] #* h
+            dat = data[:, column] * h
         else:
-            dat = data #*h
+            dat = data *h
     del data
-
     #number of galaxies
     ngal = len(dat)
-
     #set weights if None given
     if wght == None:
         wght = N.zeros(ngal) + (1./(nvols*(float(volume)/h)**3))
 
-    #bins
-    mbin = N.linspace(mmin, mmax, nbins+1)
-    dm = mbin[1] - mbin[0]
-    mbin = mbin[:-1] + dm/2.
+    #bins, one could also use N.linspace()...
+    dm = (mmax - mmin) / float(nbins)
+    #mid points
+    mbin = (N.arange(nbins)+0.5)*dm + mmin
 
+    #verbose output
     if verbose:
         print 'Number of galaxies = %i' % ngal
         print 'dlnM =', dm
         print 'h =', h
 
-    #loop over the mass bins
-    for i, thismass in enumerate(mbin):
-        if i == 0 :
-            prev = thismass
-            continue
-        mask = (dat > prev) & (dat <= thismass)
-        mf.append(N.sum(wght[mask]))
-        prev = thismass
+    mf = N.zeros(nbins)
+    #find out in which bins each data point belongs to
+    ibin = N.floor((dat - mmin)/dm)
+    #make a mask of suitable bins
+    mask = (ibin >= 0) & (ibin < nbins)
+    #calculate the sum in each bin
+    for i in range(nbins):
+        mf[i] = N.sum(wght[ibin[mask] == i])
 
     mf = N.array(mf)
     

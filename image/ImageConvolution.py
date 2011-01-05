@@ -1,4 +1,3 @@
-#! /usr/bin/env python
 '''
 Created on Jan 20, 2010
 

@@ -32,14 +32,10 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
             dt[x] = N.loadtxt(data[0][x])
 
     #calculate the mass functions from the Bolshoi data
-    mbin0, mf0, nu0 = df.diff_function_log_binning(dt['Bolshoi'],#*h,
-                                                   nbins = 40,
-                                                   h = 1., 
-                                                   mmin = 10**9.2,
-                                                   mmax = 10**15.0)
+    mbin0, mf0 = df.mass_function(dt['Bolshoi'],#/h,
+                                  nbins = 40, h = 1., 
+                                  mmin = 20, mmax = 35)
     del dt['Bolshoi']
-    mf0 /= (N.log(10)*mbin0)
-    mbin0 = 10**mbin0
     #title
     if no_phantoms:
         ax1.set_title('Bolshoi Dark Matter Mass Functions (no phantoms)')
@@ -60,12 +56,23 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
     #1st column: mass (Msolar/h)
     #2nd column: (dn/dM)*dM, per Mpc^3 (NOT h^3/Mpc^3)
     xST = dt['Sheth-Tormen'][:,1]
-    yST = dt['Sheth-Tormen'][:,2] / h3
+    #from (dN / dM) * dM to dN / dlnM using the chain rule
+    #scaled with N.exp(h), because ln binning
+    swap = 1. / (N.log(xST[1]) - N.log(xST[0])) * N.exp(h) 
+    yST = dt['Sheth-Tormen'][:,2] / h3 * swap * h
     sh = ax1.plot(xST, yST, 'b-', lw = 1.3)
     #PS
     xPS = dt['Press-Schecter'][:,1]
-    yPS = dt['Press-Schecter'][:,2] / h3 
+    #scaled with N.exp(h), because ln binning
+    swap = 1. / (N.log(xPS[1]) - N.log(xPS[0])) * N.exp(h)
+    yPS = dt['Press-Schecter'][:,2] / h3 * swap * h
     ps = ax1.plot(xPS, yPS, 'g-', lw = 1.1)
+    #Warren
+    xW = dt['Warren'][:,1]
+    #scaled with N.exp(h), because ln binning
+    swap = 1. / (N.log(xW[1]) - N.log(xW[0])) * N.exp(h)
+    yW = dt['Warren'][:,2] / h3 * swap * h
+    wr = ax1.plot(xW, yW, 'y-', lw = 0.9)
 
     #delete data to save memory, dt is not needed anylonger
     del dt
@@ -75,6 +82,7 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
         #interploate to right x scale
         yST = N.interp(mbin0, xST, yST)
         yPS = N.interp(mbin0, xPS, yPS)
+        yW = N.interp(mbin0, xW, yW)
         #make the plot
         ax2.annotate('$z \sim %.1f$' % redshift,
                      (1.5*10**9, 1.05), xycoords='data',
@@ -82,12 +90,13 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
         ax2.axhline(1.0, color = 'b')
         ax2.plot(mbin0, mf0 / yST, 'b-')
         ax2.plot(mbin0, mf0 / yPS, 'g-')
+        ax2.plot(mbin0, mf0 / yW, 'y-')
 
     ax1.set_xscale('log')
     ax2.set_xscale('log')
     ax1.set_yscale('log')
 
-    ax1.set_ylim(10**-7, 10**-1)
+    ax1.set_ylim(10**-6, 1)
     ax2.set_ylim(0.45, 1.55)
     ax1.set_xlim(10**9, 10**15)
     ax2.set_xlim(10**9, 10**15)
@@ -95,11 +104,11 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
     ax1.set_xticklabels([])
 
     ax2.set_xlabel(r'$M_{vir} \quad [h^{-1}M_{\odot}]$')
-    ax1.set_ylabel(r'$\mathrm{d}N / \mathrm{d}M_{vir} \quad [h^{3}\mathrm{Mpc}^{-3} \mathrm{dex}^{-1}]$')
+    ax1.set_ylabel(r'$\mathrm{d}N / \mathrm{d}ln(M_{vir}) \quad [h^{3}\mathrm{Mpc}^{-3} \mathrm{dex}^{-1}]$')
     ax2.set_ylabel(r'$\frac{\mathrm{Bolshoi}}{\mathrm{Model}}$')
 
-    ax1.legend((bolshoi, sh, ps),
-               ('Bolshoi', 'Sheth-Tormen', 'Press-Schecter'),
+    ax1.legend((bolshoi, sh, ps, wr),
+               ('Bolshoi', 'Sheth-Tormen', 'Press-Schecter', 'Warren'),
                shadow = True, fancybox = True,
                numpoints = 1)
 
@@ -135,7 +144,7 @@ if __name__ == '__main__':
             print 'Plotting redshift %.2f dark matter mass functions' % redshift
             print a, b, c, d
             plot_mass_function(redshift, h, True, data)
-    P.savefig(wrkdir + 'out/DMmfzNoPhantoms1.pdf')
+    P.savefig(wrkdir + 'out/DMmfzNoPhantomsLN1.pdf')
     P.close()
     
     #make the individual plots 2
@@ -155,7 +164,7 @@ if __name__ == '__main__':
             print 'Plotting redshift %.2f dark matter mass functions' % redshift
             print a, b, c, d
             plot_mass_function(redshift, h, False, data)
-    P.savefig(wrkdir + 'out/DMmfz1.pdf')
+    P.savefig(wrkdir + 'out/DMmfzLN1.pdf')
     P.close()
     
     #make the individual plots 3
@@ -173,7 +182,7 @@ if __name__ == '__main__':
             print 'Plotting redshift %.2f dark matter mass functions' % redshift
             print a, b, c, d
             plot_mass_function(redshift, h, True, data)
-    P.savefig(wrkdir + 'out/DMmfzNoPhantoms2.pdf')
+    P.savefig(wrkdir + 'out/DMmfzNoPhantomsLN2.pdf')
     P.close()
 
     #make the individual plots 4
@@ -191,5 +200,5 @@ if __name__ == '__main__':
             print 'Plotting redshift %.2f dark matter mass functions' % redshift
             print a, b, c, d
             plot_mass_function(redshift, h, False, data)
-    P.savefig(wrkdir + 'out/DMmfz2.pdf')
+    P.savefig(wrkdir + 'out/DMmfzLN2.pdf')
     P.close()

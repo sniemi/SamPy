@@ -9,7 +9,7 @@ PSFfile = pyfits.open("PSF.fits")
 cd = numpy.abs(PSFfile[0].header['CD1_1']*3600.0)
 psf = PSFfile[0].data
 
-xx,yy = numpy.indic es(psf.shape)
+xx,yy = numpy.indices(psf.shape)
 rr = numpy.sqrt((xx-psf.shape[0]/2.)**2+(yy-psf.shape[1]/2.)**2)
 
 # generate a normalized 2D gaussian for comparison
