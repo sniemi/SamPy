@@ -1,10 +1,10 @@
 import matplotlib
 matplotlib.rc('text', usetex = True)
-matplotlib.rcParams['font.size'] = 17
+matplotlib.rcParams['font.size'] = 15
 matplotlib.rc('xtick', labelsize = 14) 
 matplotlib.rc('axes', linewidth = 1.2)
-matplotlib.rcParams['legend.fontsize'] = 12
-matplotlib.rcParams['legend.handlelength'] = 5
+matplotlib.rcParams['legend.fontsize'] = 11
+matplotlib.rcParams['legend.handlelength'] = 2
 matplotlib.rcParams['xtick.major.size'] = 5
 matplotlib.rcParams['ytick.major.size'] = 5
 matplotlib.use('PDF')
@@ -14,84 +14,12 @@ import numpy as N
 import pylab as P
 import glob, shutil, os
 import re
+#Sami's Repo
 import db.sqlite
-
-def fstar_ben(mh, m1, f0, beta, gamma):
-  mstar = 2.0*f0*10.0**mh / ((10.0**mh/10.0**m1)**(-beta)+(10.0**mh/10.0**m1)**gamma)
-  fstar = mstar / 10.0**mh
-  return fstar
-
-def fstar_behroozi_data(file):
-    data = N.loadtxt(file)
-    return data[:,0], data[:,1]
-
-def mstar_Bell_H(file, h = 0.7):
-    '''
-    Stellar mass function at z=0 from bell et al.
-    Convert to H_0 = 70 and Chabrier IMF.
-    '''
-    data = N.loadtxt(file)
-    
-    m = data[:,0] - 2.0 * N.log10(h) - 0.15
-    phi = data[:,1]*h**3
-    phi_low = data[:,2]*h**3
-    phi_high = data[:,3]*h**3
-
-    return m, N.log10(phi), N.log10(phi_low), N.log10(phi_high)
-
-def mstar_bell(file, h = 0.7):
-    '''
-    Stellar mass function from bell et al. (H0=100).
-    Convert to Chabrier IMF.
-    '''
-    data = N.loadtxt(file)
-
-    m = data[:,0] - 0.1
-    phi = N.log10(data[:,1])
-    phi_low = N.log10(data[:,2])
-    phi_high = N.log10(data[:,3])
-    return m, phi, phi_low, phi_high
-
-def mstar_lin(file, h = 0.7):
-
-    data = N.loadtxt(file)
-
-    mbin = data[:,2] - 2.0*N.log10(h)
-    phi_low = N.log10((data[:,3] - data[:,4])*h**3)
-    phi_high = N.log10((data[:,3] + data[:,4])*h**3)
-    phi = N.log10(data[:,3]*h**3)
-
-    return mbing, phi, phi_low, phi_high
-
-def panter(file):
-    data = N.loadtxt(file, comments = ';')
-    
-    nlow = N.log10(data[:,1] - data[:,2])
-    nhigh = N.log10(data[:,1] + data[:,2])
-    n = N.log10(data[:,1])
-
-    return data[:,0], n, nlow, nhigh
-
-def mhi_bell(file, h = 0.7):
-    data = N.loadtxt(file)
-    m = data[:,0] - 2.*N.log10(h)
-    phi = N.log10(data[:,1]*h**3)
-    phi_low = N.log10(data[:,2]*h**3)
-    phi_high = N.log10(data[:,3]*h**3)
-    return m, phi, phi_low, phi_high
-
-def gallazzi(file, h = 0.7, comments = ';'):
-    '''
-    Scale stellar masses with h.
-    n.b. masses in file are for H0=70.
-    '''
-    data = N.loadtxt(file, comments = comments)
-    twologh = 2.0*N.log10(h)
-    return data[:,0]+twologh, data[:,1], data[:,2], data[:,3]
 
 def stellarmassfunc_plot(path, database, redshifts, mmax = 12.5, mmin = 5.0, 
                          nbins = 40, nvolumes = 8, h = 0.7,
-                         obs = '/Users/niemi/Desktop/Research/IDL/obs/',
+                         obs = '/Users/niemi/Dropbox/Research/Observations/',
                          output_folder = '/Users/niemi/Desktop/Research/stellar_mass_functions/'):
     '''
     Plots stellar mass functions as a function of redshift
@@ -105,10 +33,10 @@ def stellarmassfunc_plot(path, database, redshifts, mmax = 12.5, mmin = 5.0,
     ax = fig.add_subplot(111)
 
     #obs constrains
-    mg, phig, phi_lowg, phi_highg = mstar_Bell_H(obs + 'bell/sdss2mass_lf/gmf.out')
-    mk, phik, phi_lowk, phi_highk = mstar_Bell_H(obs + 'bell/sdss2mass_lf/kmf.out')
+#    mg, phig, phi_lowg, phi_highg = mstar_Bell_H(obs + 'bell/sdss2mass_lf/gmf.out')
+#    mk, phik, phi_lowk, phi_highk = mstar_Bell_H(obs + 'bell/sdss2mass_lf/kmf.out')
 #    m, n, nlow, nhigh = panter(obs + 'panter/panter.dat')
-    ax.errorbar(mg, phig, yerr = [phig - phi_highg, phi_lowg - phig], label = 'Bell et al. G (z=0)')
+#    ax.errorbar(mg, phig, yerr = [phig - phi_highg, phi_lowg - phig], label = 'Bell et al. G (z=0)')
 #    ax.errorbar(mk, phik, yerr = [phik - phi_highk, phi_lowk - phik], label = 'Bell et al. K (z=0)')
 #    ax.errorbar(m, n, yerr = [nlow - n, n - nhigh], label = 'Panter et al. K')
 
@@ -167,7 +95,7 @@ def stellarmassfunc_plot(path, database, redshifts, mmax = 12.5, mmin = 5.0,
     ax.set_xlim(8.0, 12.1)
     ax.set_ylim(-4.5, -1.0)
     ax.set_xlabel(r'$\log M_{\star} \quad [M_{\odot}]$')
-    ax.set_ylabel(r'$\log \left ( \frac{dN}{d\log M_{\star}} \right ) \quad [$Mpc$^{-3}$ dex$^{-1}]$')
+    ax.set_ylabel(r'$\log \left ( \frac{\mathrm{d}N}{\mathrm{d}\log M_{\star}} \right ) \quad [\mathrm{Mpc}^{-3}\ \mathrm{dex}^{-1}]$')
     #small ticks
     m = ax.get_yticks()[1] - ax.get_yticks()[0]
     yminorLocator = MultipleLocator(m/5)
