@@ -24,26 +24,42 @@ def panter():
     '''
     file = observation_path + 'panter/panter.dat'
     data = N.loadtxt(file, comments = ';')
-    
     nlow = N.log10(data[:,1] - data[:,2])
     nhigh = N.log10(data[:,1] + data[:,2])
     n = N.log10(data[:,1])
-
     return data[:,0], n, nlow, nhigh
 
-
 def fstar_ben(mh, m1, f0, beta, gamma):
-  mstar = 2.0*f0*10.0**mh / ((10.0**mh/10.0**m1)**(-beta)+(10.0**mh/10.0**m1)**gamma)
-  fstar = mstar / 10.0**mh
-  return fstar
-
-def fstar_behroozi_data(file):
     '''
     Stellar mass to halo mass ratio as a function of halo mass.
+    Fitting functioln from ???
+    '''
+    mstar = 2.0*f0*10.0**mh / ((10.0**mh/10.0**m1)**(-beta)+(10.0**mh/10.0**m1)**gamma)
+    fstar = mstar / 10.0**mh
+    return fstar
+
+def fstar_behroozi_data():
+    '''
+    Stellar mass to halo mass ratio as a function of halo mass.
+    Data from Behroozi et al. ???
     '''
     file = observation_path + 'behroozi/mhmstar.dat'
     data = N.loadtxt(file)
     return data[:,0], data[:,1]
+
+def mstar_lin(file, h = 0.7):
+    data = N.loadtxt(file)
+    mbin = data[:,2] - 2.0*N.log10(h)
+    phi_low = N.log10((data[:,3] - data[:,4])*h**3)
+    phi_high = N.log10((data[:,3] + data[:,4])*h**3)
+    phi = N.log10(data[:,3]*h**3)
+    return mbing, phi, phi_low, phi_high
+
+
+
+
+
+
 
 def mstar_Bell_H(file, h = 0.7):
     '''
@@ -71,17 +87,6 @@ def mstar_bell(file, h = 0.7):
     phi_low = N.log10(data[:,2])
     phi_high = N.log10(data[:,3])
     return m, phi, phi_low, phi_high
-
-def mstar_lin(file, h = 0.7):
-
-    data = N.loadtxt(file)
-
-    mbin = data[:,2] - 2.0*N.log10(h)
-    phi_low = N.log10((data[:,3] - data[:,4])*h**3)
-    phi_high = N.log10((data[:,3] + data[:,4])*h**3)
-    phi = N.log10(data[:,3]*h**3)
-
-    return mbing, phi, phi_low, phi_high
 
 def mhi_bell(file, h = 0.7):
     data = N.loadtxt(file)
