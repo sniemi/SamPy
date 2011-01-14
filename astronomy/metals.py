@@ -18,13 +18,14 @@ import numpy as N
 observation_path = os.getenv('HOME')+'/Dropbox/Research/Observations/'
 
 
-def gallazzi(h = 0.7, comments = ';'):
+def gallazzi(h = 0.7):
     '''
     Scale stellar masses with h.
     n.b. masses in file are for H0=70.
+    @param h: Hubble parameter to scale  
+    return:
     '''
     file = observation_ath + 'metals/gallazzi.dat'
-    data = N.loadtxt(file, comments = comments)
+    data = N.loadtxt(file, comments = ';')
     twologh = 2.0*N.log10(h)
     return data[:,0]+twologh, data[:,1], data[:,2], data[:,3]
-

@@ -46,8 +46,14 @@ def HIMassFunctionZwaan(mbin, H0 = 70.0):
 
 def HIMassFunctionBell(h = 0.7):
     '''
-    Observed HI mass function.
-    Bell et al.
+    HI mass function (predicted using default technique)
+    Schecter Function fit parameters
+    phi* M* Alpha j  (next line formal errors)
+    real errors are probably systematic: see Bell et al.\ 2003 for
+    guidance (the errors depend on passband and/or stellar mass)
+    0.0142750      9.67205     -1.42495  1.03937e+08
+    0.00612444     0.154853     0.205068  1.64674e+07
+    Then we present the V/V_max data points; x   phi  phi-1sig  phi+1sig
     '''
     file = observation_path + 'bell/sdss2mass_lf/himf.out'
     data = N.loadtxt(file)
@@ -59,8 +65,7 @@ def HIMassFunctionBell(h = 0.7):
 
 def H2MassFunctionBell(h = 0.7):
     '''
-    Observed H2 mass function.
-    Bell et al.
+    H2 mass function from Bell et al.
     '''
     file = observation_path + 'bell/sdss2mass_lf/h2mf.out'
     data = N.loadtxt(file)

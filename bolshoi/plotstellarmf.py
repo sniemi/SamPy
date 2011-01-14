@@ -9,7 +9,6 @@ matplotlib.rcParams['xtick.major.size'] = 5
 matplotlib.rcParams['ytick.major.size'] = 5
 matplotlib.use('PDF')
 from matplotlib.ticker import MultipleLocator, FormatStrFormatter, NullFormatter, LogLocator
-
 import numpy as N
 import pylab as P
 import os, logging
@@ -41,8 +40,8 @@ def stellarmassfunc_plot(path, database, redshifts,
     o = []
     o.append(['$z \sim 1$: Perez-Gonzalez et al. 2007', (obs.id == 1) & (obs.z_low > 0.99) & (obs.z_up < 1.4)])
 #    o.append(['$z \sim 1$: Drory et al. 2004', (obs.id == 5) & (obs.z_low > 1.) & (obs.z_up < 1.2)])
-#    o.append(['$z \sim 2$: Perez-Gonzalez et al. 2007', (obs.id == 1) & (obs.z_low > 1.99) & (obs.z_up < 2.6)])
-    o.append(['$z \sim 2$: Fontana et al. 2006', (obs.id == 6) & (obs.z_low > 1.99) & (obs.z_up < 3.01)])
+    o.append(['$z \sim 2$: Perez-Gonzalez et al. 2007', (obs.id == 1) & (obs.z_low > 1.99) & (obs.z_up < 2.6)])
+#    o.append(['$z \sim 2$: Fontana et al. 2006', (obs.id == 6) & (obs.z_low > 1.99) & (obs.z_up < 3.01)])
 #    o.append(['$z \sim 2$: Marchesini et al. 2008', (obs.id == 7) & (obs.z_low > 1.99) & (obs.z_up < 3.01)])
     o.append(['$z \sim 3$: Perez-Gonzalez et al. 2007', (obs.id == 1) & (obs.z_low > 2.99) & (obs.z_up < 3.6)])
     o.append(['$z \sim 4$: Perez-Gonzalez et al. 2007', (obs.id == 1) & (obs.z_low > 3.49) & (obs.z_up < 4.1)])

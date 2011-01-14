@@ -7,8 +7,6 @@ Differrent types of stellar mass functions.
 
 @author: Sami-Matias Niemi
 @contact: niemi@stsci.edu
-
-@todo: This is hardly finished...
 '''
 import os
 import numpy as N
@@ -40,6 +38,9 @@ def bellG(h = 0.7, chabrier = True):
     0.000512733    0.0154157    0.0239414  1.06609e+07
     Then we present the V/V_max data points; x   phi  phi-1sig  phi+1sig
     Convert to h (default = 0.7) and Chabrier IMF.
+    @param h: the Hubble parameter (default h = 0.7)
+    @param chabrier: whether or not to convert to Chabrier IMF (default = True)  
+    @return: log10(stellar mass), log10(phi), log10(phi_low), log10(phi_high)
     '''
     file = observation_path + 'bell/sdss2mass_lf/gmf.out'
     data = N.loadtxt(file)
@@ -62,6 +63,9 @@ def bellK(h = 0.7, chabrier = True):
     0.000586424    0.0144582    0.0422601  1.18873e+07
     Then we present the V/V_max data points; x   phi  phi-1sig  phi+1sig
     Convert to h (default = 0.7) and Chabrier IMF.
+    @param h: the Hubble parameter (default h = 0.7)
+    @param chabrier: whether or not to convert to Chabrier IMF (default = True)  
+    @return: log10(stellar mass), log10(phi), log10(phi_low), log10(phi_high)
     '''
     file = observation_path + 'bell/sdss2mass_lf/kmf.out'
     data = N.loadtxt(file)
@@ -105,25 +109,22 @@ def fstar_behroozi_data():
     data = N.loadtxt(file)
     return data[:,0], data[:,1]
 
-def mstar_bell(h = 0.7):
+###############################################################################
+def mstar_bell(h = 0.7, chabrier = True):
     '''
+    @warning: Data are missing??
     Stellar mass function from bell et al. (H0=100).
     Convert to Chabrier IMF.
     '''
-    file = observation_path + 'behroozi/mhmstar.dat'
-    
+    file = observation_path + ''
     data = N.loadtxt(file)
-
-    m = data[:,0] - 0.1
+    m = data[:,0]
+    if chabrier:
+        m -= 0.1
     phi = N.log10(data[:,1])
     phi_low = N.log10(data[:,2])
     phi_high = N.log10(data[:,3])
     return m, phi, phi_low, phi_high
-
-
-
-
-
 
 def mstar_lin(h = 0.7):
     '''
@@ -137,6 +138,7 @@ def mstar_lin(h = 0.7):
     phi = N.log10(data[:,3]*h**3)
     return mbing, phi, phi_low, phi_high
 
+###############################################################################
 def _getIDs(tmp):
     '''
     A little helper function to parse header information

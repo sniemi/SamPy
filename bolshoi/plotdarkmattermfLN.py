@@ -16,6 +16,7 @@ matplotlib.use('PDF')
 import pylab as P
 import numpy as N
 import glob as g
+import logging, os
 #From Sami's repo
 import astronomy.differentialfunctions as df
 import io.read as io
@@ -59,20 +60,20 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
     xST = dt['Sheth-Tormen'][:,1]
     #from (dN / dM) * dM to dN / dlnM using the chain rule
     #scaled with N.exp(h), because ln binning
-    swap = 1. / (N.log(xST[4]) - N.log(xST[3])) * N.exp(h) 
-    yST = dt['Sheth-Tormen'][:,2] / h3 * swap
+    swap = 1. / (N.log(xST[4]) - N.log(xST[3])) * 10**(-2*N.log10(h))
+    yST = dt['Sheth-Tormen'][:,2] / h3 * swap / N.exp(-2*N.log10(h))
     sh = ax1.plot(xST, yST, 'b-', lw = 1.3)
     #PS
     xPS = dt['Press-Schecter'][:,1]
     #scaled with N.exp(h), because ln binning
-    swap = 1. / (N.log(xPS[1]) - N.log(xPS[0])) * N.exp(h)
-    yPS = dt['Press-Schecter'][:,2] / h3 * swap
+    swap = 1. / (N.log(xPS[1]) - N.log(xPS[0])) * 10**(-2*N.log10(h))
+    yPS = dt['Press-Schecter'][:,2] / h3 * swap / N.exp(-2*N.log10(h))
     ps = ax1.plot(xPS, yPS, 'g-', lw = 1.1)
     #Warren
     xW = dt['Warren'][:,1]
     #scaled with N.exp(h), because ln binning
     swap = 1. / (N.log(xW[1]) - N.log(xW[0])) * N.exp(h)
-    yW = dt['Warren'][:,2] / h3 * swap
+    yW = dt['Warren'][:,2] / h3 * swap / N.exp(-2*N.log(h))
     wr = ax1.plot(xW, yW, 'y--', lw = 0.8)
 
     #delete data to save memory, dt is not needed anylonger
@@ -98,7 +99,7 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
     ax1.set_yscale('log')
 
     ax1.set_ylim(10**-6, 1)
-    ax2.set_ylim(0.45, 1.55)
+    ax2.set_ylim(0.45, 1.25)
     ax1.set_xlim(10**9, 10**15)
     ax2.set_xlim(10**9, 10**15)
     
@@ -114,10 +115,12 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
                numpoints = 1)
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
     #Hubble constant
     h = 0.7
     #output directory
-    wrkdir = '/Users/niemi/Desktop/Research/dm_halo_mf/'
+    wrkdir = os.getenv('HOME') + '/Dropbox/Research/Bolshoi/dm_halo_mf/'
+    outdir = wrkdir + 'plots/'
     #find files
     simus = g.glob(wrkdir + 'simu/*.txt')
     #Note that these are in (dN / dM) * dM; per Mpc^3 (NOT h^3/Mpc^3)
@@ -142,10 +145,10 @@ if __name__ == '__main__':
         if b.find('_1_01') > -1 or b.find('_6_56') > -1 or b.find('_3_06') > -1 or b.find('_5_16') > -1:
             continue
         else:
-            print 'Plotting redshift %.2f dark matter mass functions' % redshift
+            logging.debug('Plotting redshift %.2f dark matter mass functions' % redshift)
             print a, b, c, d
             plot_mass_function(redshift, h, True, data)
-    P.savefig(wrkdir + 'out/DMmfzNoPhantomsLN1.pdf')
+    P.savefig(outdir + 'DMmfzNoPhantoms1.pdf')
     P.close()
     
     #make the individual plots 2
@@ -162,10 +165,10 @@ if __name__ == '__main__':
         if b.find('_1_01') > -1 or b.find('_6_56') > -1 or b.find('_3_06') > -1 or b.find('_5_16') > -1:
             continue
         else:
-            print 'Plotting redshift %.2f dark matter mass functions' % redshift
+            logging.debug('Plotting redshift %.2f dark matter mass functions' % redshift)
             print a, b, c, d
             plot_mass_function(redshift, h, False, data)
-    P.savefig(wrkdir + 'out/DMmfzLN1.pdf')
+    P.savefig(outdir + 'DMmfz1.pdf')
     P.close()
     
     #make the individual plots 3
@@ -183,7 +186,7 @@ if __name__ == '__main__':
             print 'Plotting redshift %.2f dark matter mass functions' % redshift
             print a, b, c, d
             plot_mass_function(redshift, h, True, data)
-    P.savefig(wrkdir + 'out/DMmfzNoPhantomsLN2.pdf')
+    P.savefig(outdir + 'DMmfzNoPhantoms2.pdf')
     P.close()
 
     #make the individual plots 4
@@ -198,8 +201,8 @@ if __name__ == '__main__':
                 'Warren' : d}
 
         if b.find('_1_01') > -1 or b.find('_6_56') > -1 or b.find('_3_06') > -1 or b.find('_5_16') > -1:
-            print 'Plotting redshift %.2f dark matter mass functions' % redshift
+            logging.debug('Plotting redshift %.2f dark matter mass functions' % redshift)
             print a, b, c, d
             plot_mass_function(redshift, h, False, data)
-    P.savefig(wrkdir + 'out/DMmfzLN2.pdf')
+    P.savefig(outdir + 'DMmfz2.pdf')
     P.close()
