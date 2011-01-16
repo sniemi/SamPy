@@ -120,10 +120,10 @@ def plot_flux_dist(table, zmin, zmax, depths, colname,
             ax.set_xticklabels([])
         
         if i == 6:
-            ax.set_xlabel(r'$S_{250}$ [mJy]')
+            ax.set_xlabel(r'$S_{250} \quad [\mathrm{mJy}]$')
 
         if i == 2:
-            ax.set_ylabel(r'$\frac{dN}{dS}$ [Mpc$^{-3}$  dex$^{-1}$]')
+            ax.set_ylabel(r'$\frac{\mathrm{d}N(S_{250})}{\mathrm{d}S_{250}} \quad [\mathrm{Mpc}^{-3} \  \mathrm{dex}^{-1}]$')
 
         zm = zmax
 
@@ -137,7 +137,7 @@ if __name__ == '__main__':
     #and my user name is not always the same, this hack is required.
     hm = os.getenv('HOME')
     #constants
-    path = hm + '/Dropbox/Research/Herschel/runs/reds_zero/'
+    path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
     database = 'sams.db'
     out_folder = hm + '/Dropbox/Research/Herschel/plots/flux_dist/'
     #5sigma limits derived by Kuang

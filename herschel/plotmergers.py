@@ -263,7 +263,7 @@ if __name__ == '__main__':
     #and my user name is not always the same, this hack is required.
     hm = os.getenv('HOME')
     #constants
-    path = hm + '/Dropbox/Research/Herschel/runs/reds_zero/'
+    path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
     out_folder = hm + '/Dropbox/Research/Herschel/plots/mergers/'
     db = 'sams.db'
 
@@ -294,35 +294,35 @@ if __name__ == '__main__':
 #                xbin2 = 10, ybin2 = 10)
 #    
 ###############################
-#    query1 = '''select galprop.mcold - galprop.mstar, galprop.tmerge
-#                from FIR, galprop where
-#                FIR.z >= 2.0 and
-#                FIR.z < 4.0 and
-#                FIR.gal_id = galprop.gal_id and
-#                FIR.halo_id = galprop.halo_id and
-#                FIR.spire250_obs > 1e-18 and
-#                FIR.spire250_obs < 1e6
-#                '''
-#    query2 = '''select galprop.mcold - galprop.mstar, galprop.tmerge
-#                from FIR, galprop where
-#                FIR.z >= 2.0 and
-#                FIR.z < 4.0 and
-#                FIR.gal_id = galprop.gal_id and
-#                FIR.halo_id = galprop.halo_id and
-#                FIR.spire250_obs > 5e-3 and
-#                FIR.spire250_obs < 1e6
-#                '''
-#                
-#    xlab = r'$\log_{10} \left( \frac{M_{\star}}{M_{\mathrm{coldgas}}} \right )$'
-#    plot_tmerge(query1, query2, xlab, 
-#               '$T_{\mathrm{merge}}$ \quad [Gyr]', 'TmergeMassFraction.ps',
-#                out_folder,
-#                xmin1 = -6, xmax1 = 1.9,
-#                xmin2 = -0.9, xmax2 = .8,
-#                pmin = 0.05,
-#                xbin1 = 11, ybin1 = 10,
-#                xbin2 = 9, ybin2 = 9)
-#    
+    query1 = '''select galprop.mcold - galprop.mstar, galprop.tmerge
+                from FIR, galprop where
+                FIR.z >= 2.0 and
+                FIR.z < 4.0 and
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id and
+                FIR.spire250_obs > 1e-18 and
+                FIR.spire250_obs < 1e6
+                '''
+    query2 = '''select galprop.mcold - galprop.mstar, galprop.tmerge
+                from FIR, galprop where
+                FIR.z >= 2.0 and
+                FIR.z < 4.0 and
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id and
+                FIR.spire250_obs > 5e-3 and
+                FIR.spire250_obs < 1e6
+                '''
+                
+    xlab = r'$\log_{10} \left( \frac{M_{\star}}{M_{\mathrm{coldgas}}} \right )$'
+    plot_tmerge(query1, query2, xlab, 
+               '$T_{\mathrm{merge}} \quad [\mathrm{Gyr}]$', 'TmergeMassFraction.ps',
+                out_folder,
+                xmin1 = -6, xmax1 = 1.9,
+                xmin2 = -0.9, xmax2 = .8,
+                pmin = 0.05,
+                xbin1 = 11, ybin1 = 10,
+                xbin2 = 9, ybin2 = 9)
+    
 ###############################
 #    query1 = '''select galprop.mstardot, galprop.tmerge
 #                from FIR, galprop where
@@ -528,7 +528,7 @@ if __name__ == '__main__':
                 
     xlab = r'$\log_{10} \left( \frac{M_{\star}}{M_{\mathrm{coldgas}}} \right )$'
     plot_tmerge_bluest(query1, query2, xlab,
-                       '$T_{\mathrm{merge}}$ \quad [Gyr]',
+                       '$T_{\mathrm{merge}} \quad [\mathrm{Gyr}]$',
                        'TmergeBlueestMassFraction.ps',
                         out_folder,
                         xmin1 = -6, xmax1 = 1.5,

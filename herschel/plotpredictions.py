@@ -46,8 +46,14 @@ def plot_sfrs(path, db, reshifts, out_folder,
         yd = N.log10(data[:,0])
         
         #percentiles
-        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd, yd, xmin, xmax,
-                                                         nxbins = 18)
+        xmaxb = N.max(xd)
+        nxbins = int(12*(xmaxb - xmin))
+        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd,
+                                                         yd,
+                                                         xmin,
+                                                         xmaxb,
+                                                         nxbins = nxbins)
+
         msk = y50d > -10
         ax.errorbar(xbin_midd[msk], y50d[msk], yerr = [y50d[msk]-y16d[msk], y84d[msk]-y50d[msk]],
                     label = '$z = %.1f$' % zz)
@@ -55,8 +61,8 @@ def plot_sfrs(path, db, reshifts, out_folder,
     ax.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
                #label = '$S_{250} =$ %.1f mJy' % fluxlimit)
   
-    ax.set_xlabel('$\log_{10}(S_{250} \ [$mJy$])$')
-    ax.set_ylabel('$\log_{10}(\dot{M}_{\star} \ [M_{\odot}yr^{-1}])$')
+    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    ax.set_ylabel('$\log_{10}(\dot{M}_{\star} \ [M_{\odot}\mathrm{yr}^{-1}])$')
 
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(-1.2, 3)
@@ -92,8 +98,13 @@ def plot_stellarmass(path, db, reshifts, out_folder,
         yd = data[:,0]
         
         #percentiles
-        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd, yd, xmin, xmax,
-                                                         nxbins = 15)
+        xmaxb = N.max(xd)
+        nxbins = int(12*(xmaxb - xmin))
+        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd,
+                                                         yd,
+                                                         xmin,
+                                                         xmaxb,
+                                                         nxbins = nxbins)
         msk = y50d > -10
         add = eval('0.0%s' % str(i))
         ax.errorbar(xbin_midd[msk] + add, y50d[msk],
@@ -102,7 +113,7 @@ def plot_stellarmass(path, db, reshifts, out_folder,
 
     ax.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
   
-    ax.set_xlabel('$\log_{10}(S_{250} \ [$mJy$])$')
+    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
     ax.set_ylabel('$\log_{10}(M_{\star} \ [M_{\odot}])$')
 
     ax.set_xlim(xmin, xmax)
@@ -110,6 +121,58 @@ def plot_stellarmass(path, db, reshifts, out_folder,
 
     P.legend(loc = 'lower right')
     P.savefig(out_folder + 'mstellar.ps')
+
+def plot_coldgas(path, db, reshifts, out_folder,
+                xmin = 0.0, xmax = 2.0, fluxlimit = 5):
+    '''
+    Plots 
+    '''
+    #figure
+    fig = P.figure()
+    ax = fig.add_subplot(111)
+
+    for i, reds in enumerate(redshifts):
+        query = '''select galprop.mcold, FIR.spire250_obs*1000
+                from FIR, galprop where
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id and
+                %s
+                ''' % reds
+        #tmp
+        tmp = reds.split()
+        zz = N.mean(N.array([float(tmp[2]), float(tmp[6])]))
+        
+        #get data
+        data = N.array(sq.get_data_sqlitePowerTen(path, db, query))
+    
+        #set 1
+        xd = N.log10(data[:,1])
+        yd = data[:,0]
+        
+        #percentiles
+        xmaxb = N.max(xd)
+        nxbins = int(11*(xmaxb - xmin))
+        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd,
+                                                         yd,
+                                                         xmin,
+                                                         xmaxb,
+                                                         nxbins = nxbins)
+        msk = y50d > -10
+        add = eval('0.0%s' % str(i))
+        ax.errorbar(xbin_midd[msk] + add, y50d[msk],
+                    yerr = [y50d[msk]-y16d[msk], y84d[msk]-y50d[msk]],
+                    label = '$z = %.1f$' % zz)
+
+    ax.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
+  
+    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    ax.set_ylabel('$\log_{10}(M_{\mathrm{coldgas}} \ [M_{\odot}])$')
+
+    ax.set_xlim(xmin, xmax)
+    ax.set_ylim(8.8, 11.2)
+
+    P.legend(loc = 'lower right')
+    P.savefig(out_folder + 'mcold.ps')
 
 def plot_massratios(path, db, reshifts, out_folder,
                     xmin = 0.0, xmax = 2.0, fluxlimit = 5):
@@ -139,8 +202,13 @@ def plot_massratios(path, db, reshifts, out_folder,
         yd = data[:,0]
         
         #percentiles
-        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd, yd, xmin, xmax,
-                                                         nxbins = 15)
+        xmaxb = N.max(xd)
+        nxbins = int(12*(xmaxb - xmin))
+        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd,
+                                                         yd,
+                                                         xmin,
+                                                         xmaxb,
+                                                         nxbins = nxbins)
         msk = y50d > -10
         add = eval('0.0%s' % str(i))
         ax.errorbar(xbin_midd[msk] + add, y50d[msk],
@@ -149,8 +217,8 @@ def plot_massratios(path, db, reshifts, out_folder,
 
     ax.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
   
-    ax.set_xlabel('$\log_{10}(S_{250} \ [$mJy$])$')
-    ax.set_ylabel(r'$\log_{10} \left ( \frac{M_{coldgas}}{M_{\star}} \right )$')
+    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    ax.set_ylabel(r'$\log_{10} \left ( \frac{M_{\mathrm{coldgas}}}{M_{\star}} \right )$')
 
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(-1.2, 1.0)
@@ -186,8 +254,13 @@ def plot_metallicity(path, db, reshifts, out_folder,
         yd = data[:,0]
         
         #percentiles
-        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd, yd, xmin, xmax,
-                                                         nxbins = 15)
+        xmaxb = N.max(xd)
+        nxbins = int(12*(xmaxb - xmin))
+        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd,
+                                                         yd,
+                                                         xmin,
+                                                         xmaxb,
+                                                         nxbins = nxbins)
         msk = y50d > -10
         add = eval('0.0%s' % str(i))
         ax.errorbar(xbin_midd[msk] + add, y50d[msk],
@@ -196,7 +269,7 @@ def plot_metallicity(path, db, reshifts, out_folder,
 
     ax.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
   
-    ax.set_xlabel('$\log_{10}(S_{250} \ [$mJy$])$')
+    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
     ax.set_ylabel('$Z_{\star}$')
 
     ax.set_xlim(xmin, xmax)
@@ -233,8 +306,13 @@ def plot_starburst(path, db, reshifts, out_folder,
         yd = data[:,0]
         
         #percentiles
-        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd, yd, xmin, xmax,
-                                                         nxbins = 15)
+        xmaxb = N.max(xd)
+        nxbins = int(12*(xmaxb - xmin))
+        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd,
+                                                         yd,
+                                                         xmin,
+                                                         xmaxb,
+                                                         nxbins = nxbins)
         msk = y50d > -10
         add = eval('0.0%s' % str(i))
         ax.errorbar(xbin_midd[msk] + add, y50d[msk],
@@ -243,7 +321,7 @@ def plot_starburst(path, db, reshifts, out_folder,
 
     ax.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
   
-    ax.set_xlabel('$\log_{10}(S_{250} \ [$mJy$])$')
+    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
     ax.set_ylabel(r'$\log_{10} \left ( \frac{M_{starbust}}{M_{\star}} \right )$')
 
     ax.set_xlim(xmin, xmax)
@@ -280,8 +358,13 @@ def plot_BHmass(path, db, reshifts, out_folder,
         yd = data[:,0]
         
         #percentiles
-        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd, yd, xmin, xmax,
-                                                         nxbins = 15)
+        xmaxb = N.max(xd)
+        nxbins = int(12*(xmaxb - xmin))
+        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd,
+                                                         yd,
+                                                         xmin,
+                                                         xmaxb,
+                                                         nxbins = nxbins)
         msk = y50d > -10
         add = eval('0.0%s' % str(i))
         ax.errorbar(xbin_midd[msk] + add, y50d[msk],
@@ -290,7 +373,7 @@ def plot_BHmass(path, db, reshifts, out_folder,
 
     ax.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
   
-    ax.set_xlabel('$\log_{10}(S_{250} \ [$mJy$])$')
+    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
     ax.set_ylabel('$\log_{10}(M_{BH} \ [M_{\odot}])$')
 
     ax.set_xlim(xmin, xmax)
@@ -327,8 +410,13 @@ def plot_DMmass(path, db, reshifts, out_folder,
         yd = data[:,0]
         
         #percentiles
-        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd, yd, xmin, xmax,
-                                                         nxbins = 15)
+        xmaxb = N.max(xd)
+        nxbins = int(12*(xmaxb - xmin))
+        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd,
+                                                         yd,
+                                                         xmin,
+                                                         xmaxb,
+                                                         nxbins = nxbins)
         msk = y50d > -10
         add = eval('0.0%s' % str(i))
         ax.errorbar(xbin_midd[msk] + add, y50d[msk],
@@ -337,7 +425,7 @@ def plot_DMmass(path, db, reshifts, out_folder,
 
     ax.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
   
-    ax.set_xlabel('$\log_{10}(S_{250} \ [$mJy$])$')
+    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
     ax.set_ylabel('$\log_{10}(M_{\mathrm{dm}} \ [M_{\odot}])$')
 
     ax.set_xlim(xmin, xmax)
@@ -374,9 +462,13 @@ def plot_Age(path, db, reshifts, out_folder,
         yd = data[:,0]
         
         #percentiles
-        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd, yd,
-                                                         xmin, xmax,
-                                                         nxbins = 15)
+        xmaxb = N.max(xd)
+        nxbins = int(12*(xmaxb - xmin))
+        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd,
+                                                         yd,
+                                                         xmin,
+                                                         xmaxb,
+                                                         nxbins = nxbins)
         msk = y50d > -10
         add = eval('0.0%s' % str(i))
         ax.errorbar(xbin_midd[msk] + add, y50d[msk],
@@ -385,7 +477,7 @@ def plot_Age(path, db, reshifts, out_folder,
 
     ax.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
   
-    ax.set_xlabel('$\log_{10}(S_{250} \ [$mJy$])$')
+    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
     ax.set_ylabel('Mean Age [Gyr]')
 
     ax.set_xlim(xmin, xmax)
@@ -400,8 +492,8 @@ if __name__ == '__main__':
     #and my user name is not always the same, this hack is required.
     hm = os.getenv('HOME')
     #constants
-    path = hm + '/Dropbox/Research/Herschel/runs/reds_zero/'
-    out_folder = hm + '/Dropbox/Research/Herschel/plots/sfrs/'
+    path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
+    out_folder = hm + '/Dropbox/Research/Herschel/plots/predictions/'
     db = 'sams.db'
 
     redshifts = ['FIR.z > 0.1 and FIR.z < 0.3',
@@ -413,11 +505,10 @@ if __name__ == '__main__':
 
     plot_sfrs(path, db, redshifts, out_folder)
     plot_stellarmass(path, db, redshifts, out_folder)
-
     plot_massratios(path, db, redshifts, out_folder)
     plot_metallicity(path, db, redshifts, out_folder)
     plot_starburst(path, db, redshifts, out_folder)
     plot_BHmass(path, db, redshifts, out_folder)
     plot_DMmass(path, db, redshifts, out_folder)
     plot_Age(path, db, redshifts, out_folder)
-    
+    plot_coldgas(path, db, redshifts, out_folder)

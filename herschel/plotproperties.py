@@ -1,5 +1,5 @@
 import matplotlib
-matplotlib.use('PSs')
+matplotlib.use('PS')
 matplotlib.rc('text', usetex = True)
 matplotlib.rcParams['font.size'] = 17
 matplotlib.rc('xtick', labelsize = 14) 
@@ -57,7 +57,8 @@ def plot_properties(query, xlabel, ylabel, output, out_folder,
     
     #figure
 #    f, (ax1, ax2) = P.subplots(1, 2, sharey=True) 
-    f, (ax1, ax2) = P.subplots(1, 2, figsize=(10,10)) 
+#    f, (ax1, ax2) = P.subplots(1, 2, figsize=(10,10))
+    f, (ax1, ax2) = P.subplots(1, 2)  
     f.subplots_adjust(wspace = 0.0, hspace = 0.01, left = 0.08, bottom = 0.07,
                       right = 0.97, top = 0.93)
 
@@ -132,8 +133,7 @@ if __name__ == '__main__':
     #and my user name is not always the same, this hack is required.
     hm = os.getenv('HOME')
     #constants
-#    path = hm + '/Dropbox/Research/Herschel/runs/test3/'
-    path = hm + '/Dropbox/Research/Herschel/runs/reds_zero/'
+    path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
     out_folder = hm + '/Dropbox/Research/Herschel/plots/props/'
     db = 'sams.db'
 
@@ -144,8 +144,8 @@ if __name__ == '__main__':
                 FIR.spire250_obs < 1e5 and
                 FIR.z >= 2 and FIR.z < 4
                 '''
-    plot_properties(query, r'$\log_{10}(M_{\star} / M_{\odot})$', 
-                    r'$S_{250} \quad [$mJy$]$', 'mstar.ps',
+    plot_properties(query, r'$\log_{10}(M_{\star} \ [M_{\odot}])$', 
+                    r'$S_{250} \quad [\mathrm{mJy}]$', 'mstar.ps',
                     out_folder, pmin = 0.05,
                     xmin = 8.7, xmax = 11.7,
                     ymin = 0.01, ymax = 45)
@@ -158,8 +158,8 @@ if __name__ == '__main__':
                 FIR.spire250_obs < 1e5 and
                 FIR.z >= 2 and FIR.z < 4
                 '''
-    plot_properties(query, r'$\log_{10}(M_{coldgas} / M_{\odot})$', 
-                    r'$S_{250} \quad [$mJy$]$', 'gasmass.ps',
+    plot_properties(query, r'$\log_{10}(M_{\mathrm{coldgas}} \ [M_{\odot}])$', 
+                    r'$S_{250} \quad [\mathrm{mJy}]$', 'gasmass.ps',
                     out_folder, pmin = 0.05,
                     xmin = 8.5, xmax = 11.8,
                     ymin = 0.001, ymax = 40)
@@ -172,8 +172,8 @@ if __name__ == '__main__':
                 FIR.spire250_obs < 1e5 and
                 FIR.z >= 2 and FIR.z < 4
                 '''
-    plot_properties(query, r'$\log_{10} \left ( \frac{M_{coldgas} / M_{\odot}}{M_{\star} / M_{\odot}} \right )$', 
-                    r'$S_{250} \quad [$mJy$]$', 'massratio.ps',
+    plot_properties(query, r'$\log_{10} \left ( \frac{M_{\mathrm{coldgas}}}{M_{\star}} \right )$', 
+                    r'$S_{250} \quad [\mathrm{mJy}]$', 'massratio.ps',
                     out_folder, pmin = 0.05,
                     xmin = -1.5, xmax = 1.5,
                     ymin = 0.001, ymax = 45)
@@ -187,7 +187,7 @@ if __name__ == '__main__':
                 FIR.z >= 2 and FIR.z < 4
                 '''
     plot_properties(query, r'$\dot{M_{\star}} \quad [\frac{M_{\odot}}{yr}]$', 
-                    r'$S_{250} \quad [$mJy$]$', 'sfr.ps',
+                    r'$S_{250} \quad [\mathrm{mJy}]$', 'sfr.ps',
                     out_folder, pmin = 0.05,
                     xmin = 0, xmax = 380, xbin = 12,
                     ymin = 0.001, ymax = 45)
@@ -201,79 +201,79 @@ if __name__ == '__main__':
                 FIR.z >= 2 and FIR.z < 4
                 '''
     plot_properties(query, r'$\dot{M}_{burst} \quad [\frac{M_{\odot}}{yr}]$', 
-                    r'$S_{250} \quad [$mJy$]$', 'sfrburst.ps',
+                    r'$S_{250} \quad [\mathrm{mJy}]$', 'sfrburst.ps',
                     out_folder, pmin = 0.05,
                     xmin = 0, xmax = 260,
                     ymin = 0.001, ymax = 45)
     print query 
 
-#PACS 160
+#PACS 100
 
-    query = '''select galprop.mstar, FIR.pacs160_obs*1000
+    query = '''select galprop.mstar, FIR.pacs100_obs*1000
                 from FIR, galprop where
                 FIR.gal_id = galprop.gal_id and
                 FIR.halo_id = galprop.halo_id and
-                FIR.pacs160_obs < 1e5 and
+                FIR.pacs100_obs < 1e5 and
                 FIR.z >= 2 and FIR.z < 4
                 '''
     plot_properties(query, r'$\log_{10}(M_{\star} / M_{\odot})$', 
-                    r'$S_{160} \quad [$mJy$]$', 'mstar2.ps',
+                    r'$S_{100} \quad [\mathrm{mJy}]$', 'mstar2.ps',
                     out_folder, pmin = 0.05,
                     xmin = 9.6, xmax = 11.8,
                     ymin = 0.001, ymax = 45, flux = 4.5)
     print query
 
-    query = '''select galprop.mcold, FIR.pacs160_obs*1000
+    query = '''select galprop.mcold, FIR.pacs100_obs*1000
                 from FIR, galprop where
                 FIR.gal_id = galprop.gal_id and
                 FIR.halo_id = galprop.halo_id and
-                FIR.pacs160_obs < 1e5 and
+                FIR.pacs100_obs < 1e5 and
                 FIR.z >= 2 and FIR.z < 4
                 '''
-    plot_properties(query, r'$\log_{10}(M_{coldgas} / M_{\odot})$', 
-                    r'$S_{160} \quad [$mJy$]$', 'gasmass2.ps',
+    plot_properties(query, r'$\log_{10}(M_{\mathrm{coldgas}} \ [M_{\odot}])$', 
+                    r'$S_{100} \quad [\mathrm{mJy}]$', 'gasmass2.ps',
                     out_folder, pmin = 0.05,
                     xmin = 8.3, xmax = 11.8,
                     ymin = 0.001, ymax = 45, flux = 4.5)
     print query
 
-    query = '''select galprop.mcold - galprop.mstar, FIR.pacs160_obs*1000
+    query = '''select galprop.mcold - galprop.mstar, FIR.pacs100_obs*1000
                 from FIR, galprop where
                 FIR.gal_id = galprop.gal_id and
                 FIR.halo_id = galprop.halo_id and
-                FIR.pacs160_obs < 1e5 and
+                FIR.pacs100_obs < 1e5 and
                 FIR.z >= 2 and FIR.z < 4
                 '''
-    plot_properties(query, r'$\log_{10} \left ( \frac{M_{coldgas} / M_{\odot}}{M_{\star} / M_{\odot}} \right )$', 
-                    r'$S_{160} \quad [$mJy$]$', 'massratio2.ps',
+    plot_properties(query, r'$\log_{10} \left ( \frac{M_{\mathrm{coldgas}}}{M_{\star}} \right )$', 
+                    r'$S_{100} \quad [\mathrm{mJy}]$', 'massratio2.ps',
                     out_folder, pmin = 0.05,
                     xmin = -5, xmax = 1,
                     ymin = 0.001, ymax = 45, flux = 4.5)
     print query
 
-    query = '''select galprop.mstardot, FIR.pacs160_obs*1000
+    query = '''select galprop.mstardot, FIR.pacs100_obs*1000
                 from FIR, galprop where
                 FIR.gal_id = galprop.gal_id and
                 FIR.halo_id = galprop.halo_id and
-                FIR.pacs160_obs < 1e5 and
+                FIR.pacs100_obs < 1e5 and
                 FIR.z >= 2 and FIR.z < 4
                 '''
     plot_properties(query, r'$\dot{M_{\star}} \quad [\frac{M_{\odot}}{yr}]$', 
-                    r'$S_{160} \quad [$mJy$]$', 'sfr2.ps',
+                    r'$S_{100} \quad [\mathrm{mJy}]$', 'sfr2.ps',
                     out_folder, pmin = 0.05,
                     xmin = 0, xmax = 380, xbin = 10,
                     ymin = 0.001, ymax = 45, flux = 4.5)
     print query    
 
-    query = '''select galprop.sfr_burst, FIR.pacs160_obs*1000
+    query = '''select galprop.sfr_burst, FIR.pacs100_obs*1000
                 from FIR, galprop where
                 FIR.gal_id = galprop.gal_id and
                 FIR.halo_id = galprop.halo_id and
-                FIR.pacs160_obs < 1e5 and
+                FIR.pacs100_obs < 1e5 and
                 FIR.z >= 2 and FIR.z < 4
                 '''
     plot_properties(query, r'$\dot{M}_{burst} \quad [\frac{M_{\odot}}{yr}]$', 
-                    r'$S_{250} \quad [$mJy$]$', 'sfrburst.ps',
+                    r'$S_{100} \quad [\mathrm{mJy}]$', 'sfrburst2.ps',
                     out_folder, pmin = 0.05,
                     xmin = 0, xmax = 260,
                     ymin = 0.001, ymax = 45, flux = 5.0)

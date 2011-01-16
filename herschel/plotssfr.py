@@ -81,9 +81,9 @@ def plot_ssfr_paper(query1, query2, out_folder,
     ax2.plot(xbin_mide[me], y84e[me], 'r--')
 
     #labels
-    ax1.set_xlabel(r'$\log(M_{\star} / M_{\odot})$')
-    ax2.set_xlabel(r'$\log(M_{\star} / M_{\odot})$')
-    ax1.set_ylabel(r'$\log \left (\frac{\dot{M}_{\star}}{M_{\star}} [yr^{-1}] \right )$')
+    ax1.set_xlabel(r'$\log_{10}(M_{\star} \ [M_{\odot}])$')
+    ax2.set_xlabel(r'$\log_{10}(M_{\star} \ [M_{\odot}])$')
+    ax1.set_ylabel(r'$\log_{10} \left (\frac{\dot{M}_{\star}}{M_{\star}} \ [\mathrm{yr}^{-1}] \right )$')
 
     #limits
     ax1.set_ylim(ymin1, ymax1)
@@ -116,7 +116,7 @@ if __name__ == '__main__':
     #and my user name is not always the same, this hack is required.
     hm = os.getenv('HOME')
     #constants
-    path = hm + '/Dropbox/Research/Herschel/runs/reds_zero/'
+    path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
     out_folder = hm + '/Dropbox/Research/Herschel/plots/spire_detected/ssfr/'
     db = 'sams.db'
 

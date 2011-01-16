@@ -341,8 +341,7 @@ if __name__ == '__main__':
     #and my user name is not always the same, this hack is required.
     hm = os.getenv('HOME')
     #constants
-#    path = hm + '/Dropbox/Research/Herschel/runs/test3/'
-    path = hm + '/Dropbox/Research/Herschel/runs/reds_zero/'
+    path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
     out_folder = hm + '/Dropbox/Research/Herschel/plots/size/'
     db = 'sams.db'
 
@@ -366,9 +365,10 @@ if __name__ == '__main__':
                 FIR.spire250_obs > 5e-3 and
                 FIR.spire250_obs < 1e6
                 '''
-    plot_size_paper(query1, query2, r'$\log(M_{\star}/M_{\odot})$', 
-               r'$R_{\textrm{disk}}$ \quad [kpc]', 'SizeStellarMass.ps',
-               out_folder, xmin1 = 8.2, xmax1 = 11.8,
+    plot_size_paper(query1, query2, r'$\log_{10}(M_{\star}/M_{\odot})$', 
+               r'$R_{\mathrm{disk}} \quad [\mathrm{kpc}]$',
+               'SizeStellarMass.ps', out_folder,
+               xmin1 = 8.2, xmax1 = 11.8,
                xmin2 = 10.1, xmax2 = 11.65,
                pmin = 0.02, xbin1 = 12, ybin1 = 11,
                xbin2 = 8, ybin2 = 10)

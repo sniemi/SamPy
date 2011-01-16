@@ -7,12 +7,12 @@ Pulls data from an sqlite3 database.
 import matplotlib
 matplotlib.use('PS')
 matplotlib.rc('text', usetex = True)
-matplotlib.rcParams['font.size'] = 17
+matplotlib.rcParams['font.size'] = 16
 matplotlib.rc('xtick', labelsize = 13) 
 matplotlib.rc('ytick', labelsize = 13) 
 matplotlib.rc('axes', linewidth = 1.2)
 matplotlib.rcParams['legend.fontsize'] = 12
-matplotlib.rcParams['legend.handlelength'] = 3
+matplotlib.rcParams['legend.handlelength'] = 2
 matplotlib.rcParams['xtick.major.size'] = 5
 matplotlib.rcParams['ytick.major.size'] = 5
 import numpy as N
@@ -183,10 +183,6 @@ def plot_luminosityfunction2(path, database, redshifts,
     @param nbins: number of bins (for simulated data)
     '''
     col = ['black', 'red', 'magenta', 'green', 'blue', 'brown']
-    
-    #fudge factor to handle errors that are way large
-    fudge = ymin
-
     #get data
     query = '''select %s from FIR where %s > 3
                and FIR.spire250_obs < 1e6''' % (band, band)
@@ -254,24 +250,22 @@ def plot_luminosityfunction2(path, database, redshifts,
 
         #calculate the poisson error
         mask = nu > 0
-        err = wghts[0] * N.sqrt(nu[mask]) * sigma
-        up = nn[mask] + err
-        lw = nn[mask] - err
-        lw[lw < ymin] = ymin
-        #plot the knots
-
-#        ax.errorbar(bb[mask], nn[mask], yerr = [err, err],
-#                    label = rtitle, color = col[i],
-#                    marker = 'None', ls = '-')
-
-        ax.plot(bb[mask], nn[mask], color = col[i],
-                marker = 'None', ls = '-', label = rtitle)
+#        err = wghts[0] * N.sqrt(nu[mask]) * sigma
+#        up = nn[mask] + err
+#        lw = nn[mask] - err
+#        lw[lw < ymin] = ymin
+        x = bb[mask]
+        y = nn[mask]
+        #to make sure that the plots go below the area plotted
+        x = N.append(x, N.max(x)*1.01)
+        y = N.append(y, 1e-10)
+        ax.plot(x, y, color = col[i], marker = 'None', ls = '-', label = rtitle)
 
     #set scales
     ax.set_yscale('log')
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(ymin, ymax)
-    ax.set_ylabel(r'$\phi \ [Mpc^{-3} \ dex^{-1}]$')
+    ax.set_ylabel(r'$\phi \ [\mathrm{Mpc}^{-3} \ \mathrm{dex}^{-1}]$')
     ax.set_xlabel(r'$\log_{10}(L_{%s} \ [L_{\odot}])$' % re.search('\d\d\d', band).group())
 
     P.legend(scatterpoints = 1, fancybox = True, shadow = True)
@@ -286,7 +280,7 @@ if __name__ == '__main__':
     #and my user name is not always the same, this hack is required.
     hm = os.getenv('HOME')
     #constants
-    path = hm + '/Dropbox/Research/Herschel/runs/reds_zero/'
+    path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
     database = 'sams.db'
     out_folder = hm + '/Dropbox/Research/Herschel/plots/luminosity_functions/'
     obs_data = hm+'/Dropbox/Research/Herschel/obs_data/'
@@ -295,6 +289,11 @@ if __name__ == '__main__':
                  'FIR.z >= 0.9 and FIR.z <= 1.1',
                  'FIR.z >= 1.9 and FIR.z <= 2.1',
                  'FIR.z >= 2.9 and FIR.z <= 3.1',
+                 'FIR.z >= 3.9 and FIR.z <= 4.1',
+                 'FIR.z >= 4.9 and FIR.z <= 5.1']
+
+    redshifts = ['FIR.z >= 0.0 and FIR.z <= 0.5',
+                 'FIR.z >= 1.9 and FIR.z <= 2.1',
                  'FIR.z >= 3.9 and FIR.z <= 4.1',
                  'FIR.z >= 4.9 and FIR.z <= 5.1']
     
@@ -306,46 +305,51 @@ if __name__ == '__main__':
     
     for b in bands:
         if '100' in b:
-            xmin = 8.0
-            xmax = 12.5
+            xmin = 8.5
+            xmax = 12.3
+            nb = 14
         if '160' in b:
-            xmin = 8.0
+            xmin = 8.5
             xmax = 12.0
+            nb = 13
         if '250' in b:
-            xmin = 8.0
-            xmax = 12.0
+            xmin = 8.5
+            xmax = 11.5
+            nb = 11
         if '350' in b:
-            xmin = 8.0
-            xmax = 12.0
+            xmin = 8.5
+            xmax = 11.5
+            nb = 10
         if '500' in b:
-            xmin = 8.0
-            xmax = 12.0
+            xmin = 8.5
+            xmax = 11.5
+            nb = 10
             
         print 'Plotting ', b
 
-        plot_luminosityfunction(path, database, redshifts, b,
-                                out_folder, obs_data,
-                                xmin = xmin, xmax = xmax,
-                                ymin = 10**-5, ymax = 3*10**-1,
-                                nbins = 12, sigma = 5.0)
+#        plot_luminosityfunction(path, database, redshifts, b,
+#                                out_folder, obs_data,
+#                                xmin = xmin, xmax = xmax,
+#                                ymin = 10**-5, ymax = 8*10**-2,
+#                                nbins = 18, sigma = 5.0)
 
         plot_luminosityfunction2(path, database, redshifts, b,
                                  out_folder, obs_data,
                                  xmin = xmin, xmax = xmax,
-                                 ymin = 10**-5, ymax = 10**-1,
-                                 nbins = 12, sigma = 5.0)
+                                 ymin = 10**-5, ymax = 5*10**-2,
+                                 nbins = nb, sigma = 5.0)
 
-    redshifts = ['FIR.z >= 0.0 and FIR.z < 0.1',
-                 'FIR.z > 0.1 and FIR.z < 0.2',
-                 'FIR.z > 0.2 and FIR.z < 0.3',
-                 'FIR.z > 0.3 and FIR.z < 0.4',
-                 'FIR.z > 0.4 and FIR.z < 0.5']
-
-    print 'Plotting the extra plot...'
-    plot_luminosityfunction(path, database, redshifts, 'FIR.spire250',
-                            out_folder+'spec', obs_data,
-                            xmin = 8.1, xmax = 11.3,
-                            ymin = 10**-5, ymax = 3*10**-1,
-                            nbins = 10, sigma = 5.0)
+#    redshifts = ['FIR.z >= 0.0 and FIR.z < 0.1',
+#                 'FIR.z > 0.1 and FIR.z < 0.2',
+#                 'FIR.z > 0.2 and FIR.z < 0.3',
+#                 'FIR.z > 0.3 and FIR.z < 0.4',
+#                 'FIR.z > 0.4 and FIR.z < 0.5']
+#
+#    print 'Plotting the extra plot...'
+#    plot_luminosityfunction(path, database, redshifts, 'FIR.spire250',
+#                            out_folder+'spec', obs_data,
+#                            xmin = 8.1, xmax = 11.3,
+#                            ymin = 10**-5, ymax = 3*10**-1,
+#                            nbins = 10, sigma = 5.0)
 
     print 'All done...'
