@@ -87,3 +87,82 @@ def binned_average(xdata, ydata, xbins, step):
         std.append(N.std(ydata[mask]))
         del mask
     return x, y, yerr, std
+
+def binAndReturnMergerFractions(mstar,
+                                nomerge,
+                                mergers,
+                                majors,
+                                mstarmin = 9,
+                                mstarmax = 11.5,
+                                mbins = 10,
+                                logscale = False):
+    out = []
+    #bins
+    if logscale:
+        mb = N.logspace(N.log10(mstarmin), N.log10(mstarmax), mbins)
+        mids = rollingAverage(mb)
+    else:
+        mb = N.linspace(mstarmin, mstarmax, mbins)
+        mids = mb[:-1] + (mb[1]-mb[0])/2.
+    #check the mergers
+    for i, low in enumerate(mb):
+        if i < mbins-1:
+            msk = (mstar >= low) & (mstar < mb[i+1])
+            tmp1 = len(mstar[msk])
+            tmp2 = len(mstar[msk & nomerge])
+            tmp3 = len(mstar[msk & mergers])
+            tmp4 = len(mstar[msk & majors])
+            out.append([tmp1, tmp2, tmp3, tmp4])
+    return mids, out
+
+def binAndReturnFractions(x,
+                          y1,
+                          y2,
+                          xmin = 9,
+                          xmax = 11.5,
+                          xbins = 10,
+                          logscale = False):
+    out = []
+    #bins
+    if logscale:
+        mb = N.logspace(N.log10(xmin), N.log10(xmax), xbins)
+        mids = rollingAverage(mb)
+    else:
+        mb = N.linspace(xmin, xmax, xbins)
+        mids = mb[:-1] + (mb[1]-mb[0])/2.
+    #check the mergers
+    for i, low in enumerate(mb):
+        if i < xbins-1:
+            msk = (x >= low) & (x < mb[i+1])
+            tmp = float(len(y1[msk])) / len(y2[msk])
+            out.append(tmp)
+    return mids, out
+
+def rollingAverage(x):
+    '''
+    Returns the average between the cells of 
+    a list.
+    @param x: a Python list of values
+    @return: a NumPy array of averages 
+    '''
+    out = []
+    for i, a in enumerate(x):
+        if i < len(x)-1:
+            tmp = (float(a)+x[i+1])/2.
+            out.append(tmp)
+    return N.array(out)
+
+def movingAverage(x, n, type='simple'):
+    '''
+    compute an n period moving average.
+    type is 'simple' | 'exponential'
+    '''
+    x = N.asarray(x)
+    if type=='simple':
+        weights = N.ones(n)
+    else:
+        weights = N.exp(N.linspace(-1., 0., n))
+    weights /= weights.sum()
+    a =  N.convolve(x, weights, mode='full')[:len(x)]
+    a[:n] = a[n]
+    return a

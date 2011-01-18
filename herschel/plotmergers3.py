@@ -1,0 +1,311 @@
+import matplotlib
+#matplotlib.use('PS')
+matplotlib.use('Agg')
+matplotlib.rc('text', usetex = True)
+matplotlib.rcParams['font.size'] = 17
+matplotlib.rc('xtick', labelsize = 14) 
+matplotlib.rc('axes', linewidth = 1.1)
+matplotlib.rcParams['legend.fontsize'] = 12
+matplotlib.rcParams['legend.handlelength'] = 3
+matplotlib.rcParams['xtick.major.size'] = 5
+matplotlib.rcParams['ytick.major.size'] = 5
+import pylab as P
+import os
+import numpy as N
+from matplotlib import cm
+#Sami's repository
+import db.sqlite as sq
+import astronomy.hess_plot as h
+import astronomy.datamanipulation as dm
+
+def plotMergerFractions(query,
+                        xlabel, ylabel,
+                        output, out_folder,
+                        mergetimelimit = 0.25,
+                        mstarmin = 8.0,
+                        mstarmax = 11.5,
+                        mbins = 15,
+                        ymin = -0.01,
+                        ymax = 1.01,
+                        logscale = False):
+    #get data, all galaxies
+    data = sq.get_data_sqliteSMNfunctions(path, db, query)
+    mstar = data[:,0]
+    tmerge = data[:,1]
+    tmajor = data[:,2]
+    #masks
+    nomergeMask = tmerge < -99
+    mergersMask = (tmerge >= 0.0) & (tmerge < mergetimelimit)
+    majorsMask = (tmajor >= 0.0) & (tmajor < mergetimelimit)
+    mergersMask2 = (tmerge >= 0.0) & (tmerge < mergetimelimit*2.)
+    majorsMask2 = (tmajor >= 0.0) & (tmajor < mergetimelimit*2.)
+    #bin the data
+    mids, numbs = dm.binAndReturnMergerFractions(mstar,
+                                                 nomergeMask,
+                                                 mergersMask,
+                                                 majorsMask,
+                                                 mstarmin,
+                                                 mstarmax,
+                                                 mbins,
+                                                 logscale)
+    mids2, numbs2 = dm.binAndReturnMergerFractions(mstar,
+                                                    nomergeMask,
+                                                    mergersMask2,
+                                                    majorsMask2,
+                                                    mstarmin,
+                                                    mstarmax,
+                                                    mbins,
+                                                    logscale)
+    #the fraction of mergers
+    noMergerFraction = [float(x[1]) / x[0] for x in numbs]
+    mergerFraction = [float(x[2]-x[3]) / x[0] for x in numbs]
+    majorMergerFraction = [float(x[3]) / x[0] for x in numbs]
+    mergerFraction2 = [float(x[2]-x[3]) / x[0] for x in numbs2]
+    majorMergerFraction2 = [float(x[3]) / x[0] for x in numbs2]
+
+    #make the figure
+#    fig = P.figure()
+    fig = P.figure(figsize= (10,10))
+    fig.subplots_adjust(left = 0.08, bottom = 0.07,
+                        right = 0.97, top = 0.93)
+    ax1 = fig.add_subplot(111)
+    #draw lines
+    ax1.plot(mids, noMergerFraction, 'k-', lw = 2.6,
+             label = 'Never Merged')
+    ax1.plot(mids, mergerFraction, ls = '--', lw = 2.6,
+             label = 'Minor Merger: $T < 250$ Myr')
+    ax1.plot(mids2, mergerFraction2, ls = '-.', lw = 2.6,
+             label = 'Minor Merger: $T < 500$ Myr')
+    ax1.plot(mids, majorMergerFraction, ls = '--', lw = 2.6,
+             label = 'Major Merger: $T < 250$ Myr')
+    ax1.plot(mids2, majorMergerFraction2, ls = '-.', lw = 2.6,
+             label = 'Major Merger: $T < 500$ Myr')
+    #labels
+    ax1.set_xlabel(xlabel)
+    ax1.set_ylabel(ylabel)
+    #limits
+    ax1.set_ylim(ymin, ymax)
+    #add annotate
+    P.text(0.5, 0.93,'All galaxies\n$2 \leq z < 4$',
+           horizontalalignment='center',
+           verticalalignment='center',
+           transform = ax1.transAxes)
+    #make grid
+    ax1.grid()
+    #legend and save
+    P.legend(loc = 'upper right')
+    P.savefig(out_folder + output)
+
+def plotMergerFractions2(query,
+                         xlabel, ylabel,
+                         output, out_folder,
+                         mergetimelimit = 0.25,
+                         mstarmin = 8.0,
+                         mstarmax = 11.5,
+                         mbins = 15,
+                         ymin = 0.0,
+                         ymax = 1.0,
+                         logscale = False):
+    #get data, all galaxies
+    data = sq.get_data_sqliteSMNfunctions(path, db, query)
+    mstar = data[:,0]
+    tmerge = data[:,1]
+    tmajor = data[:,2]
+    #masks
+    nomergeMask = tmerge < 0.0
+    mergersMask = (tmerge >= 0.0) & (tmerge <= mergetimelimit)
+    majorsMask = (tmajor >= 0.0) & (tmajor <= mergetimelimit)
+    mergersMask2 = (tmerge >= 0.0) & (tmerge > mergetimelimit)
+    majorsMask2 = (tmajor >= 0.0) & (tmajor > mergetimelimit)
+    #bin the data
+    mids, numbs = dm.binAndReturnMergerFractions(mstar,
+                                                 nomergeMask,
+                                                 mergersMask,
+                                                 majorsMask,
+                                                 mstarmin,
+                                                 mstarmax,
+                                                 mbins,
+                                                 logscale)
+    mids2, numbs2 = dm.binAndReturnMergerFractions(mstar,
+                                                    nomergeMask,
+                                                    mergersMask2,
+                                                    majorsMask2,
+                                                    mstarmin,
+                                                    mstarmax,
+                                                    mbins,
+                                                    logscale)
+    #the fraction of mergers
+    noMergerFraction = N.array([float(x[1]) / x[0] for x in numbs])
+    mergerFraction = N.array([float(x[2]-x[3]) / x[0] for x in numbs])
+    majorMergerFraction = N.array([float(x[3]) / x[0] for x in numbs])
+    mergerFraction2 = N.array([float(x[2]-x[3]) / x[0] for x in numbs2])
+    majorMergerFraction2 = N.array([float(x[3]) / x[0] for x in numbs2])
+
+    #make the figure
+#    fig = P.figure()
+    fig = P.figure(figsize= (10,10))
+    fig.subplots_adjust(left = 0.08, bottom = 0.07,
+                        right = 0.97, top = 0.93)
+    ax1 = fig.add_subplot(111)
+    #calculate widths
+    if logscale:
+        x = N.logspace(N.log10(mstarmin), N.log10(mstarmax), mbins)
+        wd = (x[1:]-x[:-1])
+    else:
+        wd = (mids[1] - mids[0])* 1.0
+    #draw bars
+    ax1.bar(mids, noMergerFraction,
+            label = 'Never Merged', align = 'center',
+            color = 'grey', width = wd, hatch = '.')
+    ax1.bar(mids, mergerFraction,
+            bottom = noMergerFraction, align = 'center',
+            label = 'Minor Merger: $T \leq %.0f$ Myr' % (mergetimelimit*1000.),
+            color = 'red', width = wd, hatch = '/')
+    ax1.bar(mids, mergerFraction2, align = 'center',
+            bottom = noMergerFraction+mergerFraction,
+            label = 'Minor Merger: $T > %.0f$ Myr' % (mergetimelimit*1000.),
+            color = 'blue', width = wd, hatch = '|')
+    ax1.bar(mids, majorMergerFraction, align = 'center',
+            bottom = noMergerFraction+mergerFraction+mergerFraction2,
+            label = 'Major Merger: $T \leq %.0f$ Myr' % (mergetimelimit*1000.),
+            color = 'magenta', width = wd, hatch = 'x')
+    ax1.bar(mids, majorMergerFraction2, align = 'center',
+            bottom = noMergerFraction+mergerFraction+mergerFraction2+majorMergerFraction,
+            label = 'Major Merger: $T > %.0f$ Myr' % (mergetimelimit*1000.),
+            color = 'green', width = wd, hatch = '-')
+    #labels
+    ax1.set_xlabel(xlabel)
+    ax1.set_ylabel(ylabel)
+    ax1.set_ylim(ymin, ymax)
+    if logscale:
+        ax1.set_xlim(mids[0] - wd[0]/2., mids[-1] +  wd[-1]/2.)
+    else:
+        ax1.set_xlim(mids[0] - wd/2., mids[-1] +  wd/2.)
+    #add annotate
+    P.text(0.5, 1.05,'All galaxies in $2 \leq z < 4$',
+           horizontalalignment='center',
+           verticalalignment='center',
+           transform = ax1.transAxes)
+    #legend and save
+    P.legend(loc = 'upper center')
+    P.savefig(out_folder + output)
+
+if __name__ == '__main__':
+    #find the home directory, because the output is to dropbox 
+    #and my user name is not always the same, this hack is required.
+    hm = os.getenv('HOME')
+    #constants
+    path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
+    out_folder = hm + '/Dropbox/Research/Herschel/plots/mergers/'
+    db = 'sams.db'
+
+    ylab = r'$\mathrm{Fraction \ of \ Sample}$'
+    type = '.png'
+
+################################################################################
+#    query = '''select FIR.spire250_obs / FIR.irac_ch1_obs, galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.spire250_obs < 1e6
+#                '''
+#    xlab = r'$\frac{S_{250}}{S_{3.4}}$'
+#    plotMergerFractions(query, xlab, ylab,'FractionMergerSPIRE250IRAC1'+type,
+#                        out_folder, mstarmin = 0.0, mstarmax = 2500, mbins = 12,
+#                        logscale = False, ymax = 0.5)
+################################################################################
+#    query = '''select FIR.spire250_obs / FIR.irac_ch2_obs, galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.spire250_obs < 1e6
+#                '''
+#    xlab = r'$\frac{S_{250}}{S_{4.5}}$'
+#    plotMergerFractions(query, xlab, ylab,'FractionMergerSPIRE250IRAC2'+type,
+#                        out_folder, mstarmin = 0.0, mstarmax = 1500, mbins = 12,
+#                        logscale = False, ymax = 0.5)
+################################################################################
+#    query = '''select FIR.spire250_obs / FIR.irac_ch3_obs, galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.spire250_obs < 1e6
+#                '''
+#    xlab = r'$\frac{S_{250}}{S_{5.8}}$'
+#    plotMergerFractions(query, xlab, ylab,'FractionMergerSPIRE250IRAC3'+type,
+#                        out_folder, mstarmin = 0.0, mstarmax = 1600, mbins = 12,
+#                        logscale = False, ymax = 1.01)
+################################################################################
+#    query = '''select FIR.spire250_obs / FIR.irac_ch4_obs, galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.spire250_obs < 1e6
+#                '''
+#    xlab = r'$\frac{S_{250}}{S_{8}}$'
+#    plotMergerFractions(query, xlab, ylab,'FractionMergerSPIRE250IRAC4'+type,
+#                        out_folder, mstarmin = 0.0, mstarmax = 1400, mbins = 10,
+#                        logscale = False, ymax = 1.01)
+##############################################################################
+    #2nd generation of plots
+##############################################################################
+###############################################################################
+    query = '''select FIR.spire250_obs / FIR.irac_ch1_obs, galprop.tmerge, galprop.tmajmerge
+                from FIR, galprop where
+                FIR.z >= 2.0 and
+                FIR.z < 4.0 and
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id and
+                FIR.spire250_obs < 1e6
+                '''
+    xlab = r'$\frac{S_{250}}{S_{3.4}}$'
+    plotMergerFractions2(query, xlab, ylab,'FractionMergerSPIRE250IRAC12'+type,
+                        out_folder, mstarmin = 0.0, mstarmax = 2500, mbins = 14,
+                        logscale = False)
+###############################################################################
+    query = '''select FIR.spire250_obs / FIR.irac_ch2_obs, galprop.tmerge, galprop.tmajmerge
+                from FIR, galprop where
+                FIR.z >= 2.0 and
+                FIR.z < 4.0 and
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id and
+                FIR.spire250_obs < 1e6
+                '''
+    xlab = r'$\frac{S_{250}}{S_{4.5}}$'
+    plotMergerFractions2(query, xlab, ylab,'FractionMergerSPIRE250IRAC22'+type,
+                        out_folder, mstarmin = 0.0, mstarmax = 2500, mbins = 13,
+                        logscale = False)
+###############################################################################
+    query = '''select FIR.spire250_obs / FIR.irac_ch3_obs, galprop.tmerge, galprop.tmajmerge
+                from FIR, galprop where
+                FIR.z >= 2.0 and
+                FIR.z < 4.0 and
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id and
+                FIR.spire250_obs < 1e6
+                '''
+    xlab = r'$\frac{S_{250}}{S_{5.8}}$'
+    plotMergerFractions2(query, xlab, ylab,'FractionMergerSPIRE250IRAC32'+type,
+                        out_folder, mstarmin = 0.0, mstarmax = 2500, mbins = 13,
+                        logscale = False)
+###############################################################################
+    query = '''select FIR.spire250_obs / FIR.irac_ch4_obs, galprop.tmerge, galprop.tmajmerge
+                from FIR, galprop where
+                FIR.z >= 2.0 and
+                FIR.z < 4.0 and
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id and
+                FIR.spire250_obs < 1e6
+                '''
+    xlab = r'$\frac{S_{250}}{S_{8}}$'
+    plotMergerFractions2(query, xlab, ylab,'FractionMergerSPIRE250IRAC42'+type,
+                        out_folder, mstarmin = 0.0, mstarmax = 2500, mbins = 13,
+                        logscale = False)
