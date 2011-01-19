@@ -226,6 +226,59 @@ def plot_massratios(path, db, reshifts, out_folder,
     P.legend(loc = 'lower right')
     P.savefig(out_folder + 'mratio.ps')
 
+def plot_burstmass(path, db, reshifts, out_folder,
+                   xmin = 0.0, xmax = 2.0, fluxlimit = 5):
+    '''
+    Plots 
+    '''
+    #figure
+    fig = P.figure()
+    ax = fig.add_subplot(111)
+
+    for i, reds in enumerate(redshifts):
+        query = '''select galprop.mstar_burst, FIR.spire250_obs*1000
+                from FIR, galprop where
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id and
+                galprop.mstar_burst > 0.0 and
+                %s
+                ''' % reds
+        #tmp
+        tmp = reds.split()
+        zz = N.mean(N.array([float(tmp[2]), float(tmp[6])]))
+        
+        #get data
+        data = N.array(sq.get_data_sqlitePowerTen(path, db, query))
+    
+        #set 1
+        xd = N.log10(data[:,1])
+        yd = data[:,0]
+        
+        #percentiles
+        xmaxb = N.max(xd)
+        nxbins = int(10*(xmaxb - xmin))
+        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd,
+                                                         yd,
+                                                         xmin,
+                                                         xmaxb,
+                                                         nxbins = nxbins)
+        msk = y50d > -10
+        add = eval('0.0%s' % str(i))
+        ax.errorbar(xbin_midd[msk] + add, y50d[msk],
+                    yerr = [y50d[msk]-y16d[msk], y84d[msk]-y50d[msk]],
+                    label = '$z = %.1f$' % zz)
+
+    ax.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
+  
+    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    ax.set_ylabel(r'$\log_{10} ( M_{\mathrm{starburst}})$')
+
+    ax.set_xlim(xmin, xmax)
+    ax.set_ylim(7.3, 10.3)
+
+    P.legend(loc = 'lower right')
+    P.savefig(out_folder + 'mburst.ps')
+
 def plot_metallicity(path, db, reshifts, out_folder,
                      xmin = 0.0, xmax = 2.0, fluxlimit = 5):
     '''
@@ -502,13 +555,14 @@ if __name__ == '__main__':
                  'FIR.z > 1.9 and FIR.z < 2.1',
                  'FIR.z > 2.9 and FIR.z < 3.1',
                  'FIR.z > 3.9 and FIR.z < 4.1']
-
-    plot_sfrs(path, db, redshifts, out_folder)
-    plot_stellarmass(path, db, redshifts, out_folder)
-    plot_massratios(path, db, redshifts, out_folder)
-    plot_metallicity(path, db, redshifts, out_folder)
-    plot_starburst(path, db, redshifts, out_folder)
-    plot_BHmass(path, db, redshifts, out_folder)
-    plot_DMmass(path, db, redshifts, out_folder)
-    plot_Age(path, db, redshifts, out_folder)
-    plot_coldgas(path, db, redshifts, out_folder)
+#
+#    plot_sfrs(path, db, redshifts, out_folder)
+#    plot_stellarmass(path, db, redshifts, out_folder)
+#    plot_massratios(path, db, redshifts, out_folder)
+#    plot_metallicity(path, db, redshifts, out_folder)
+#    plot_starburst(path, db, redshifts, out_folder)
+#    plot_BHmass(path, db, redshifts, out_folder)
+#    plot_DMmass(path, db, redshifts, out_folder)
+#    plot_Age(path, db, redshifts, out_folder)
+#    plot_coldgas(path, db, redshifts, out_folder)
+    plot_burstmass(path, db, redshifts, out_folder)
