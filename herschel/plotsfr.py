@@ -19,14 +19,20 @@ import db.sqlite as sq
 import astronomy.datamanipulation as dm
 import sandbox.MyTools as M
 
-def plotFIRLbolvsSFR(query, path, database, output, out_folder):
+def plotFIRLbolvsSFR(query, path, database,
+                     output, out_folder,
+                     xbins = 90, ybins = 90):
+    '''
+    Plots star formation rate as a function of total IR luminosity.
+    Uses KDE to plot contours using the probability density function. 
+    '''
     #get data
     data = sq.get_data_sqlite(path, database, query)
     print len(data[:,0])
     #KDE
     x = M.AnaKDE([data[:,0], N.log10(data[:,1])])
-    x_vec, y_vec, zm, lvls, d0, d1 = x.contour(N.linspace(7.0, 13.0, 90),
-                                               N.linspace(-5, 2.5, 90),
+    x_vec, y_vec, zm, lvls, d0, d1 = x.contour(N.linspace(7.0, 13.0, xbins),
+                                               N.linspace(-5, 2.5, ybins),
                                                return_data = True)
     #check the highest value and that the KDE integrates to 1
    #print N.max(zm), abs(x.kde.integrate_box([6.5,-5],[13.5,3]))
@@ -49,8 +55,8 @@ def plotFIRLbolvsSFR(query, path, database, output, out_folder):
 #                     alpha = 0.95, vmin = 0.1, vmax = 1.1,
 #                     interpolate=None)
     #labels
-    ax1.set_xlabel('$L_{\mathrm{IR}} \ [M_{\odot}]$')
-    ax1.set_ylabel('$\log _{10}(\dot{M}_{\star} \ [M_{\odot} \ \mathrm{yr}^{-1}])$')
+    ax1.set_xlabel('$\log_{10}(L_{\mathrm{IR}} \ [M_{\odot}])$')
+    ax1.set_ylabel('$\log_{10}(\dot{M}_{\star} \ [M_{\odot} \ \mathrm{yr}^{-1}])$')
     #scale
     ax1.set_ylim(-5, 2.5)
     ax1.set_xlim(7.0, 13.0)
@@ -138,11 +144,13 @@ if __name__ == '__main__':
     where FIR.z >= 1.9 and FIR.z <= 2.1 and FIR.spire250_obs < 1e6 and
     galprop.halo_id = FIR.halo_id and galprop.gal_id = FIR.gal_id and
     FIR.L_bol < 100 and galprop.mstardot > 1e-5 and FIR.L_bol > 7'''
-    plotFIRLbolvsSFR(query, path, database,'LIRSFRz2'+type, out_folder)
+    plotFIRLbolvsSFR(query, path, database,'LIRSFRz2'+type, out_folder,
+                     xbins = 90, ybins = 90)
 ###############################################################################        
     query = '''select FIR.L_bol, galprop.mstardot from FIR, galprop
     where FIR.z >= 2.0 and FIR.z < 4.0 and FIR.spire250_obs < 1e6 and
     galprop.halo_id = FIR.halo_id and galprop.gal_id = FIR.gal_id and
     FIR.L_bol < 100 and galprop.mstardot > 1e-5 and FIR.L_bol > 7'''
-    plotFIRLbolvsSFR(query, path, database,'LIRSFR'+type, out_folder)
+    plotFIRLbolvsSFR(query, path, database,'LIRSFR'+type, out_folder,
+                     xbins = 60, ybins = 60)
 ###############################################################################
