@@ -180,7 +180,8 @@ def plotMergerFractions2(query,
     if logscale:
         ax1.set_xlim(mids[0] - wd[0]/2., mids[-1] +  wd[-1]/2.)
     else:
-        ax1.set_xlim(mids[0] - wd/2., mids[-1] +  wd/2.)
+        ax1.set_xscale('log')
+        #ax1.set_xlim(mids[0] - wd/2., mids[-1] +  wd/2.)
     #add annotate
     P.text(0.5, 1.05,'All galaxies in $2 \leq z < 4$',
            horizontalalignment='center',
@@ -269,7 +270,7 @@ if __name__ == '__main__':
     xlab = r'$\frac{S_{250}}{S_{3.4}}$'
     plotMergerFractions2(query, xlab, ylab,'FractionMergerSPIRE250IRAC12'+type,
                         out_folder, mstarmin = 0.0, mstarmax = 2500, mbins = 14,
-                        logscale = False)
+                        logscale = True)
 ###############################################################################
     query = '''select FIR.spire250_obs / FIR.irac_ch2_obs, galprop.tmerge, galprop.tmajmerge
                 from FIR, galprop where
@@ -282,7 +283,7 @@ if __name__ == '__main__':
     xlab = r'$\frac{S_{250}}{S_{4.5}}$'
     plotMergerFractions2(query, xlab, ylab,'FractionMergerSPIRE250IRAC22'+type,
                         out_folder, mstarmin = 0.0, mstarmax = 2500, mbins = 13,
-                        logscale = False)
+                        logscale = True)
 ###############################################################################
     query = '''select FIR.spire250_obs / FIR.irac_ch3_obs, galprop.tmerge, galprop.tmajmerge
                 from FIR, galprop where
@@ -295,7 +296,7 @@ if __name__ == '__main__':
     xlab = r'$\frac{S_{250}}{S_{5.8}}$'
     plotMergerFractions2(query, xlab, ylab,'FractionMergerSPIRE250IRAC32'+type,
                         out_folder, mstarmin = 0.0, mstarmax = 2500, mbins = 13,
-                        logscale = False)
+                        logscale = True)
 ###############################################################################
     query = '''select FIR.spire250_obs / FIR.irac_ch4_obs, galprop.tmerge, galprop.tmajmerge
                 from FIR, galprop where
@@ -308,4 +309,4 @@ if __name__ == '__main__':
     xlab = r'$\frac{S_{250}}{S_{8}}$'
     plotMergerFractions2(query, xlab, ylab,'FractionMergerSPIRE250IRAC42'+type,
                         out_folder, mstarmin = 0.0, mstarmax = 2500, mbins = 13,
-                        logscale = False)
+                        logscale = True)

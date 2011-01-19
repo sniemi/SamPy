@@ -103,8 +103,9 @@ def append_to_FocusModel(inputfile, outputfile, path):
             fh.write(inputdata[x])
     fh.close()
 
-if __name__ == '__main__':  
-    input_folder = '/grp/hst/OTA/focus/Data/prop11877/'
+if __name__ == '__main__':
+    #note that the input directory is hardcoded and should be changed every year!
+    input_folder = '/grp/hst/OTA/focus/Data/prop12398/'
     output_folder = '/grp/hst/OTA/focus/source/FocusModel/'
     #find all results
     filesC1 = sorted(G.glob(input_folder + '*/resultsChip1.txt'))
