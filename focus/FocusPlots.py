@@ -1322,7 +1322,7 @@ def confocality(type, input_folder, output_folder):
     ax.set_xticklabels(times) 
     ax.set_ylabel('$\Delta$Focus (ACS - WFC3) [$\mu$m]')
     ax.set_ylim(-3, 3)
-    P.legend(scatterpoints = 1, numpoints = 1)
+    P.legend(scatterpoints = 1, numpoints = 1, loc = 'upper left')
     P.savefig(output_folder + 'Confocality' + type)
 
 if __name__ == '__main__':  
