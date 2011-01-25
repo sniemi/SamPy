@@ -79,13 +79,13 @@ def plotMergerFractions(query,
     ax1.plot(mids, noMergerFraction, 'k-', lw = 2.6,
              label = 'Never Merged')
     ax1.plot(mids, mergerFraction, ls = '--', lw = 2.6,
-             label = 'Minor Merger: $T < 250$ Myr')
+             label = 'Minor Merger: $T \leq 250$ Myr')
     ax1.plot(mids, mergerFraction2, ls = '-.', lw = 2.6,
-             label = 'Minor Merger: $T < 500$ Myr')
+             label = 'Minor Merger: $T > 250$ Myr')
     ax1.plot(mids, majorMergerFraction, ls = '--', lw = 2.6,
-             label = 'Major Merger: $T < 250$ Myr')
+             label = 'Major Merger: $T \leq 250$ Myr')
     ax1.plot(mids, majorMergerFraction2, ls = '-.', lw = 2.6,
-             label = 'Major Merger: $T < 500$ Myr')
+             label = 'Major Merger: $T > 250$ Myr')
     #labels
     ax1.set_xlabel(xlabel)
     ax1.set_ylabel(ylabel)
@@ -209,6 +209,7 @@ def plotMergerFractions3(query,
     #get data, all galaxies
     data = sq.get_data_sqliteSMNfunctions(path, db, query)
     tmp = data[:,1]
+    mstar = data[:,0]
     mstar = N.log10(mstar / 10**tmp)
     print N.min(mstar), N.max(mstar)
     tmerge = data[:,2]
@@ -300,6 +301,7 @@ if __name__ == '__main__':
     type = '.png'
 
     #plots start
+    print '1st generation of plots'
 ################################################################################
     query = '''select galprop.mstar, galprop.tmerge, galprop.tmajmerge
                 from FIR, galprop where
@@ -311,7 +313,7 @@ if __name__ == '__main__':
                 '''
     xlab = r'$\log_{10}(M_{\star} \ [M_{\odot}])$'
     plotMergerFractions(query, xlab, ylab,'FractionMergerSM'+type, out_folder,
-                        ymax = 0.5)
+                        ymax = 0.8)
 ###############################################################################
     query = '''select galprop.mhalo, galprop.tmerge, galprop.tmajmerge
                 from FIR, galprop where
@@ -323,8 +325,8 @@ if __name__ == '__main__':
                 '''
     xlab = r'$\log_{10}(M_{\mathrm{DM}} \ [M_{\odot}])$'
     plotMergerFractions(query, xlab, ylab,'FractionMergerDM'+type, out_folder,
-                        mstarmin = 9.4, mstarmax = 12.9, mbins = 14,
-                        ymax = 0.6)
+                        mstarmin = 9.5, mstarmax = 13.5, mbins = 14,
+                        ymax = 0.8)
 ##############################################################################
     query = '''select galprop.mcold, galprop.tmerge, galprop.tmajmerge
                 from FIR, galprop where
@@ -332,11 +334,12 @@ if __name__ == '__main__':
                 FIR.z < 4.0 and
                 FIR.gal_id = galprop.gal_id and
                 FIR.halo_id = galprop.halo_id and
-                FIR.spire250_obs < 1e6
+                FIR.spire250_obs < 1e6 and
+                galprop.mcold > 5
                 '''
     xlab = r'$\log_{10}(M_{\mathrm{coldgas}} \ [M_{\odot}])$'
     plotMergerFractions(query, xlab, ylab,'FractionMergerMcold'+type, out_folder,
-                        mstarmin = 7.0, mstarmax = 11.5, mbins = 15,
+                        mstarmin = 7.0, mstarmax = 11.6, mbins = 15,
                         ymax = 0.8)
 ###############################################################################
     query = '''select FIR.spire250_obs*1000, galprop.tmerge, galprop.tmajmerge
@@ -345,12 +348,13 @@ if __name__ == '__main__':
                 FIR.z < 4.0 and
                 FIR.gal_id = galprop.gal_id and
                 FIR.halo_id = galprop.halo_id and
-                FIR.spire250_obs < 1e6
+                FIR.spire250_obs < 1e6 and
+                FIR.spire250_obs > 1e-14
                 '''
     xlab = r'$S_{250} \ [\mathrm{mJy}]$'
     plotMergerFractions(query, xlab, ylab,'FractionMergerSPIRE250'+type, out_folder,
-                        mstarmin = 1, mstarmax = 40, mbins = 10, logscale = True,
-                        ymax = 0.7)
+                        mstarmin = -2, mstarmax = 2.15, mbins = 9, logscale = True,
+                        ymax = 0.8)
 #############################################################################
 #    query = '''select FIR.pacs100_obs*1000, galprop.tmerge, galprop.tmajmerge
 #                from FIR, galprop where
@@ -369,15 +373,17 @@ if __name__ == '__main__':
                 FIR.z < 4.0 and
                 FIR.gal_id = galprop.gal_id and
                 FIR.halo_id = galprop.halo_id and
-                FIR.spire250_obs < 1e6
+                FIR.spire250_obs < 1e6 and
+                galprop.mstardot > 1e-5
                 '''
     xlab = r'$\log_{10}(\dot{M}_{\star} \ [M_{\odot} \ \mathrm{yr}^{-1}])$'
     plotMergerFractions(query, xlab, ylab,'FractionMergerSFR'+type, out_folder,
-                        mstarmin = 1, mstarmax = 1000, mbins = 10, logscale = True,
+                        mstarmin = -1, mstarmax = 3.45, mbins = 11, logscale = True,
                         ymax = 1.01)
 #############################################################################
 #   2nd generation of plots start
 #############################################################################
+    print '2nd generation of plots'
     query = '''select galprop.mstar, galprop.tmerge, galprop.tmajmerge
                 from FIR, galprop where
                 FIR.z >= 2.0 and
@@ -407,7 +413,8 @@ if __name__ == '__main__':
                 FIR.z < 4.0 and
                 FIR.gal_id = galprop.gal_id and
                 FIR.halo_id = galprop.halo_id and
-                FIR.spire250_obs < 1e6
+                FIR.spire250_obs < 1e6 and
+                galprop.mcold > 3
                 '''
     xlab = r'$\log_{10}(M_{\mathrm{coldgas}} \ [M_{\odot}])$'
     plotMergerFractions2(query, xlab, ylab,'FractionMergerMcold2'+type, out_folder,
@@ -424,7 +431,7 @@ if __name__ == '__main__':
                 '''
     xlab = r'$\log_{10}(S_{250} \ [\mathrm{mJy}])$'
     plotMergerFractions2(query, xlab, ylab,'FractionMergerSPIRE2502'+type, out_folder,
-                         mstarmin = -2, mstarmax = 2.2, mbins = 13, logscale = True)
+                         mstarmin = -2, mstarmax = 2.2, mbins = 11, logscale = True)
 ##############################################################################
 #    query = '''select FIR.pacs100_obs*1000, galprop.tmerge, galprop.tmajmerge
 #                from FIR, galprop where
@@ -449,8 +456,10 @@ if __name__ == '__main__':
                 '''
     xlab = r'$\log_{10}(\dot{M}_{\star} \ [M_{\odot} \ \mathrm{yr}^{-1}])$'
     plotMergerFractions2(query, xlab, ylab,'FractionMergerSFR2'+type, out_folder,
-                         mstarmin =  -2, mstarmax = 2.2, mbins = 16, logscale = True)
+                         mstarmin =  -2, mstarmax = 3.5, mbins = 12, logscale = True)
 ##############################################################################
+    print '3rd generation of plots'
+##############################################################################    
     query = '''select galprop.mstardot, galprop.mstar, galprop.tmerge, galprop.tmajmerge
                 from FIR, galprop where
                 FIR.z >= 2.0 and
@@ -463,7 +472,7 @@ if __name__ == '__main__':
                 '''
     xlab = r'$\log_{10}\left(\frac{\dot{M}_{\star}}{M_{\star}}\left[\frac{1}{\mathrm{yr}}\right]\right)$'
     plotMergerFractions3(query, xlab, ylab,'FractionMergerSFRSM2'+type, out_folder,
-                         mstarmin = -12, mstarmax = -7.5, mbins = 16)
+                         mstarmin = -12, mstarmax = -7.5, mbins = 15)
 ##############################################################################
     query = '''select galprop.mstardot, galprop.mhalo, galprop.tmerge, galprop.tmajmerge
                 from FIR, galprop where
@@ -477,5 +486,5 @@ if __name__ == '__main__':
                 '''
     xlab = r'$\log_{10}\left(\frac{\dot{M}_{\star}}{M_{\mathrm{DM}}}\left[\frac{1}{\mathrm{yr}}\right]\right)$'
     plotMergerFractions3(query, xlab, ylab,'FractionMergerSFRDM2'+type, out_folder,
-                         mstarmin =  -15, mstarmax = -9.5, mbins = 16)
+                         mstarmin =  -15, mstarmax = -9.5, mbins = 15)
             
