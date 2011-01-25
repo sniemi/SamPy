@@ -115,6 +115,38 @@ def binAndReturnMergerFractions(mstar,
             out.append([tmp1, tmp2, tmp3, tmp4])
     return mids, out
 
+def binAndReturnMergerFractions2(mstar,
+                                 nomerge,
+                                 mergers,
+                                 majors,
+                                 mergers2,
+                                 majors2,
+                                 mstarmin = 9,
+                                 mstarmax = 11.5,
+                                 mbins = 10,
+                                 logscale = False):
+    out = []
+    #bins
+    if logscale:
+        mb = N.logspace(N.log10(mstarmin), N.log10(mstarmax), mbins)
+        mids = rollingAverage(mb)
+    else:
+        mb = N.linspace(mstarmin, mstarmax, mbins)
+        mids = mb[:-1] + (mb[1]-mb[0])/2.
+    #check the mergers
+    for i, low in enumerate(mb):
+        if i < mbins-1:
+            msk = (mstar >= low) & (mstar < mb[i+1])
+            tmp1 = len(mstar[msk])
+            tmp2 = len(mstar[msk & nomerge])
+            tmp3 = len(mstar[msk & mergers])
+            tmp4 = len(mstar[msk & majors])
+            tmp5 = len(mstar[msk & mergers2])
+            tmp6 = len(mstar[msk & majors2])
+            out.append([tmp1, tmp2, tmp3, tmp4, tmp5, tmp6])
+    return mids, out
+
+
 def binAndReturnFractions(x,
                           y1,
                           y2,
