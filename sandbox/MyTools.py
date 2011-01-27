@@ -26,7 +26,7 @@ class AnaKDE():
     
     If data is input, InData needs to be set to True.
     
-    If KDE is inupt, InData needs to be set to False.
+    If KDE is input, InData needs to be set to False.
     @param InData: Defining Data Input Type (see input)
     @param CFill: If True, filled contours will be plotted.
     
