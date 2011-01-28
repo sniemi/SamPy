@@ -53,7 +53,7 @@ def plotMergerFractions(query,
                         right = 0.92, top = 0.94)
     ax1 = fig.add_subplot(111)
     #make contours
-    cont = ax1.contour(x_vec, y_vec, zm, lw = 1.3,
+    cont = ax1.contour(x_vec, y_vec, zm, linewidths = 1.3,
                        colors = 'black',
                        levels = N.linspace(0.2, N.max(zm), 5))
     #plot scatters
@@ -61,13 +61,15 @@ def plotMergerFractions(query,
                 s=1, c='k', marker='s',
                 label = 'Never merged')
     s2 = ax1.scatter(N.log10(x[mergersMask]), uvcolor[mergersMask],
-                     s=35, c=1000.*tmerge[mergersMask], marker='^',
+                     s=28, c=1000.*tmerge[mergersMask], marker='^',
                      cmap = cm.get_cmap('jet'), edgecolor = 'none',
-                     label = 'Minor Merger: $T \leq %.0f$ Myr' % (mergetimelimit*1000.))
+                     label = 'Minor Merger: $T \leq %.0f$ Myr' % (mergetimelimit*1000.),
+                     alpha = 0.5)
     s1 = ax1.scatter(N.log10(x[majorsMask]), uvcolor[majorsMask],
                      s=35, c=1000.*tmajor[majorsMask], marker='o',
                      cmap = cm.get_cmap('jet'), edgecolor = 'none',
-                     label = 'Major Merger: $T \leq %.0f$ Myr' % (mergetimelimit*1000.))
+                     label = 'Major Merger: $T \leq %.0f$ Myr' % (mergetimelimit*1000.),
+                     alpha = 0.5)
     c1 = fig.colorbar(s1, shrink = 0.8, fraction = 0.03)
     c1.set_label('Time since merger [Myr]')
     #labels
@@ -93,7 +95,8 @@ def plotMergerFractionsMultiplot(query,
                                  mergetimelimit = 0.25,
                                  ymin = -0.2, ymax = 0.65,
                                  xmin = -9, xmax = 4.1,
-                                 xbins = 50, ybins = 50):
+                                 xbins = 50, ybins = 50,
+                                 title = ''):
     #get data, all galaxies
     data = sq.get_data_sqliteSMNfunctions(path, db, query)
     x = data[:,0]
@@ -120,31 +123,33 @@ def plotMergerFractionsMultiplot(query,
 #    fig = P.figure()
     fig = P.figure(figsize= (10,10))
     fig.subplots_adjust(left = 0.09, bottom = 0.08,
-                        right = 0.93, top = 0.98,
+                        right = 0.93, top = 0.95,
                         wspace = 0.0, hspace = 0.0)
     ax1 = fig.add_subplot(221)
     ax2 = fig.add_subplot(222)
     ax3 = fig.add_subplot(223)
     ax4 = fig.add_subplot(224)
     #make contours
-    lv = N.linspace(0.2, N.max(zm), 6)
-    cont = ax1.contour(x_vec, y_vec, zm, lw  = 1,
+    lv = N.linspace(0.2, N.max(zm), 4)
+    cont = ax1.contour(x_vec, y_vec, zm, linewidths  = 0.9,
                        levels = lv, colors = 'black')
-    cont = ax2.contour(x_vec, y_vec, zm, lw  = 1,
+    cont = ax2.contour(x_vec, y_vec, zm, linewidths  = 0.9,
                        levels = lv, colors = 'black')
-    cont = ax3.contour(x_vec, y_vec, zm, lw  = 1,
+    cont = ax3.contour(x_vec, y_vec, zm, linewidths  = 0.9,
                        levels = lv, colors = 'black')
-    cont = ax4.contour(x_vec, y_vec, zm, lw  = 1,
+    cont = ax4.contour(x_vec, y_vec, zm, linewidths  = 0.9,
                        levels = lv, colors = 'black')
     #plot scatters
     s1 = ax1.scatter(N.log10(x[majorsMask]), uvcolor[majorsMask],
-                     s=20, c=1000.*tmajor[majorsMask], marker='o',
+                     s=14, c=1000.*tmajor[majorsMask], marker='o',
                      cmap = cm.get_cmap('jet'), edgecolor = 'none',
-                     label = 'Major Merger: $T \leq %.0f$ Myr' % (mergetimelimit*1000.))
+                     label = 'Major Merger: $T \leq %.0f$ Myr' % (mergetimelimit*1000.),
+                     alpha = 0.4)
     s2 = ax2.scatter(N.log10(x[mergersMask]), uvcolor[mergersMask],
-                     s=23, c=1000.*tmerge[mergersMask], marker='^',
+                     s=18, c=1000.*tmerge[mergersMask], marker='^',
                      cmap = cm.get_cmap('jet'), edgecolor = 'none',
-                     label = 'Minor Merger: $T \leq %.0f$ Myr' % (mergetimelimit*1000.))
+                     label = 'Minor Merger: $T \leq %.0f$ Myr' % (mergetimelimit*1000.),
+                     alpha = 0.4)
     #masks
     mergetimelimit *= 2.
     majorsMask = (tmajor > 0.0) & (tmajor <= mergetimelimit)
@@ -152,18 +157,25 @@ def plotMergerFractionsMultiplot(query,
     mergersMask = (tmerge > 0.0) & (tmerge <= mergetimelimit) & \
                   (majorsMask == False) & (majorsMask2 == False)
     s3 = ax3.scatter(N.log10(x[majorsMask]), uvcolor[majorsMask],
-                     s=20, c=1000.*tmajor[majorsMask], marker='o',
+                     s=14, c=1000.*tmajor[majorsMask], marker='o',
                      cmap = cm.get_cmap('jet'), edgecolor = 'none',
-                     label = 'Major Merger: $T \leq %.0f$ Myr' % (mergetimelimit*1000.))
+                     label = 'Major Merger: $T \leq %.0f$ Myr' % (mergetimelimit*1000.),
+                     alpha = 0.4)
     s4 = ax4.scatter(N.log10(x[mergersMask]), uvcolor[mergersMask],
-                     s=23, c=1000.*tmerge[mergersMask], marker='^',
+                     s=18, c=1000.*tmerge[mergersMask], marker='^',
                      cmap = cm.get_cmap('jet'), edgecolor = 'none',
-                     label = 'Minor Merger: $T \leq %.0f$ Myr' % (mergetimelimit*1000.))
+                     label = 'Minor Merger: $T \leq %.0f$ Myr' % (mergetimelimit*1000.),
+                     alpha = 0.4)
 
     c1 = fig.colorbar(s2, ax = ax2, shrink = 0.7, fraction = 0.05)
     c2 = fig.colorbar(s4, ax = ax4, shrink = 0.7, fraction = 0.05)
     c1.set_label('Time since merger [Myr]')
     c2.set_label('Time since merger [Myr]')
+    #add annotate
+    P.text(1.0, 1.04,title,
+           horizontalalignment='center',
+           verticalalignment='center',
+           transform = ax1.transAxes)
     #labels
     ax3.set_xlabel(xlabel)
     ax4.set_xlabel(xlabel)
@@ -457,7 +469,7 @@ if __name__ == '__main__':
     ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
     plotMergerFractionsMultiplot(query, xlab, ylab,'ColorColorIRAC3Multi'+type,
                                  out_folder)
-###############################################################################
+##############################################################################
     query = '''select FIR.spire250_obs / FIR.irac_ch4_obs,
                 galphot.f775w, galphot.f850lp,
                 galprop.tmerge, galprop.tmajmerge
@@ -479,5 +491,148 @@ if __name__ == '__main__':
     ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
     plotMergerFractionsMultiplot(query, xlab, ylab,'ColorColorIRAC4Multi'+type,
                                  out_folder)
+###############################################################################
+###############################################################################
+#    query = '''select FIR.spire250_obs / FIR.irac_ch4_obs,
+#                galphot.f775w, galphot.f850lp,
+#                galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop, galphot where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.gal_id = galphot.gal_id and
+#                FIR.halo_id = galphot.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                galphot.f775w < 33 and
+#                galphot.f850lp < 33 and
+#                FIR.spire250_obs > 1e-15 and
+#                FIR.irac_ch4_obs > 1e-15 and
+#                galprop.mhalo > 11.5
+#
+#                '''
+#    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{8.0}} \right )$'
+#    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
+#    plotMergerFractionsMultiplot(query, xlab, ylab,
+#                                 'ColorColorIRAC4MultiLDM'+type,
+#                                 out_folder,
+#                                 title = '$\log_{10}(M_{\mathrm{DM}}) > 11.5$',
+#                                 xmin = 0.5, xmax = 4.)
+################################################################################
+#    query = '''select FIR.spire250_obs / FIR.irac_ch4_obs,
+#                galphot.f775w, galphot.f850lp,
+#                galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop, galphot where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.gal_id = galphot.gal_id and
+#                FIR.halo_id = galphot.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                galphot.f775w < 33 and
+#                galphot.f850lp < 33 and
+#                FIR.spire250_obs > 5e-6 and
+#                FIR.irac_ch4_obs > 1e-15
+#                '''
+#    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{8.0}} \right )$'
+#    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
+#    plotMergerFractionsMultiplot(query, xlab, ylab,
+#                                 'ColorColorIRAC4MultiLSPIRE'+type,
+#                                 out_folder,
+#                                 title = '$S_{250} > 5\ \mathrm{mJy}$',
+#                                 xmin = 0.5, xmax = 4.0)
+################################################################################
+#    query = '''select FIR.spire250_obs / FIR.irac_ch4_obs,
+#                galphot.f775w, galphot.f850lp,
+#                galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop, galphot where
+#                FIR.z >= 2.0 and
+#                FIR.z < 2.5 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.gal_id = galphot.gal_id and
+#                FIR.halo_id = galphot.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                galphot.f775w < 33 and
+#                galphot.f850lp < 33 and
+#                FIR.spire250_obs > 1e-15 and
+#                FIR.irac_ch4_obs > 1e-15
+#                '''
+#    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{8.0}} \right )$'
+#    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
+#    plotMergerFractionsMultiplot(query, xlab, ylab,
+#                                 'ColorColorIRAC4MultiLz2'+type,
+#                                 out_folder,
+#                                 title = '$2.0 \leq z < 2.5$')
+################################################################################
+#    query = '''select FIR.spire250_obs / FIR.irac_ch4_obs,
+#                galphot.f775w, galphot.f850lp,
+#                galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop, galphot where
+#                FIR.z >= 2.5 and
+#                FIR.z < 3.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.gal_id = galphot.gal_id and
+#                FIR.halo_id = galphot.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                galphot.f775w < 33 and
+#                galphot.f850lp < 33 and
+#                FIR.spire250_obs > 1e-15 and
+#                FIR.irac_ch4_obs > 1e-15
+#                '''
+#    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{8.0}} \right )$'
+#    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
+#    plotMergerFractionsMultiplot(query, xlab, ylab,
+#                                 'ColorColorIRAC4MultiLz25'+type,
+#                                 out_folder,
+#                                 title = '$2.5 \leq z < 3.0$')
+################################################################################
+#    query = '''select FIR.spire250_obs / FIR.irac_ch4_obs,
+#                galphot.f775w, galphot.f850lp,
+#                galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop, galphot where
+#                FIR.z >= 3.0 and
+#                FIR.z < 3.5 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.gal_id = galphot.gal_id and
+#                FIR.halo_id = galphot.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                galphot.f775w < 33 and
+#                galphot.f850lp < 33 and
+#                FIR.spire250_obs > 1e-15 and
+#                FIR.irac_ch4_obs > 1e-15
+#                '''
+#    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{8.0}} \right )$'
+#    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
+#    plotMergerFractionsMultiplot(query, xlab, ylab,
+#                                 'ColorColorIRAC4MultiLz3'+type,
+#                                 out_folder,
+#                                 title = '$3.0 \leq z < 3.5$')
+################################################################################
+#    query = '''select FIR.spire250_obs / FIR.irac_ch4_obs,
+#                galphot.f775w, galphot.f850lp,
+#                galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop, galphot where
+#                FIR.z >= 3.5 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.gal_id = galphot.gal_id and
+#                FIR.halo_id = galphot.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                galphot.f775w < 33 and
+#                galphot.f850lp < 33 and
+#                FIR.spire250_obs > 1e-15 and
+#                FIR.irac_ch4_obs > 1e-15
+#                '''
+#    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{8.0}} \right )$'
+#    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
+#    plotMergerFractionsMultiplot(query, xlab, ylab,
+#                                 'ColorColorIRAC4MultiLz35'+type,
+#                                 out_folder,
+#                                 title = '$3.5 \leq z < 4.0$')
 ###############################################################################
     print 'All done'

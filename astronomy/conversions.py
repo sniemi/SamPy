@@ -14,12 +14,21 @@ from cosmocalc import cosmocalc
 
 def janskyToMagnitude(jansky):
     '''
-    Converts Janskys to AB? magnitudes.
+    Converts Janskys to AB magnitudes.
     @note: Can be used with SQLite3 database.
     @param jansky: can either be a number or a NumPy array
     @return: either a float or NumPy array
     '''
     return 8.9 - 2.5*N.log10(jansky)
+
+def ABMagnitudeToJansky(ABmagnitude):
+    '''
+    Converts AB magnitudes to Janskys.
+    @note: Can be used with SQLite3 database.
+    @param ABmagnitude: can be either a number or a NumPy array
+    @return: either a float or NumPy array 
+    '''
+    return 10**((23.9 - ABmagnitude)/2.5)/1e6
 
 def arcminSquaredToSteradians(arcmin2):
     '''
