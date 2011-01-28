@@ -123,120 +123,120 @@ if __name__ == '__main__':
     type = '.png'
 
     print 'Begin plotting'
-#################################################################################
-#    query = '''select FIR.spire250_obs, galphot.f775w, FIR.spire250_obs,
-#                FIR.z
-#                from FIR, galphot where
-#                FIR.z >= 2.0 and
-#                FIR.z < 4.0 and
-#                FIR.gal_id = galphot.gal_id and
-#                FIR.halo_id = galphot.halo_id and
-#                FIR.spire250_obs < 1e6 and
-#                galphot.f775w < 60 and
-#                FIR.spire250_obs > 1e-19
-#                '''
-#    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
-#    ylab = r'$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$'
-#    plotColourProperties(query, xlab, ylab,'ColorSPIRE'+type,  out_folder)
 ################################################################################
-#    query = '''select FIR.spire250_obs, galphot.f775w, FIR.spire250_obs,
-#                FIR.z
-#                from FIR, galphot where
-#                FIR.z >= 2.0 and
-#                FIR.z < 4.0 and
-#                FIR.gal_id = galphot.gal_id and
-#                FIR.halo_id = galphot.halo_id and
-#                FIR.spire250_obs < 1e6 and
-#                galphot.f775w < 33 and
-#                FIR.spire250_obs > 1e-7
-#                '''
-#    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
-#    ylab = r'$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$'
-#    plotColourProperties(query, xlab, ylab,'ColorSPIRE2'+type, out_folder,
-#                         xmin = 0.0, xmax = 3.5, ymin = -4.0, ymax = 1.2,
-#                         title = '$S_{250} > 10^{-7}\ \mathrm{mJy} \ \mathrm{and} \ \mathrm{F775W} < 33$')
-################################################################################
-#    query = '''select FIR.spire250_obs, galphot.f775w, FIR.spire250_obs,
-#                FIR.z
-#                from FIR, galphot where
-#                FIR.gal_id = galphot.gal_id and
-#                FIR.halo_id = galphot.halo_id and
-#                FIR.spire250_obs < 1e6 and
-#                galphot.f775w < 33 and
-#                FIR.spire250_obs > 1e-7
-#                '''
-#    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
-#    ylab = r'$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$'
-#    plotColourProperties(query, xlab, ylab,'ColorSPIRE3'+type, out_folder,
-#                         xmin = 0.0, xmax = 3.5, ymin = -4.0, ymax = 1.2,
-#                         title = '$S_{250} > 10^{-7}\ \mathrm{mJy} \ \mathrm{and} \ \mathrm{F775W} < 33$')
-################################################################################
-#    print 'Plotting physical properties'
-################################################################################
-#    query = '''select FIR.spire250_obs, galphot.f850lp, galprop.mstar,
-#                FIR.z
-#                from FIR, galprop, galphot where
-#                FIR.z >= 2.0 and
-#                FIR.z < 4.0 and
-#                FIR.gal_id = galprop.gal_id and
-#                FIR.halo_id = galprop.halo_id and
-#                FIR.gal_id = galphot.gal_id and
-#                FIR.halo_id = galphot.halo_id and
-#                FIR.spire250_obs < 1e6 and
-#                FIR.spire250_obs > 1e-19
-#                '''
-#    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
-#    ylab = r'$\log_{10}(M_{\star} \ [M_{\odot}])$'
-#    plotColourProperties2(query, xlab, ylab,'ColorMstellar'+type, out_folder,
-#                          xmin = -1.4, xmax = 3.1, ymin = 7.0, ymax = 11.5)
-################################################################################
-#    query = '''select FIR.spire250_obs, galphot.f850lp, galprop.mstar,
-#                FIR.z
-#                from FIR, galprop, galphot where
-#                FIR.gal_id = galprop.gal_id and
-#                FIR.halo_id = galprop.halo_id and
-#                FIR.gal_id = galphot.gal_id and
-#                FIR.halo_id = galphot.halo_id and
-#                FIR.spire250_obs < 1e6 and
-#                FIR.spire250_obs > 1e-19
-#                '''
-#    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
-#    ylab = r'$\log_{10}(M_{\star} \ [M_{\odot}])$'
-#    plotColourProperties2(query, xlab, ylab,'ColorMstellar2'+type, out_folder,
-#                          xmin = -1.4, xmax = 3.1, ymin = 7.0, ymax = 11.5)
-################################################################################
-#    query = '''select FIR.spire250_obs, galphot.f850lp, galprop.mhalo,
-#                FIR.z
-#                from FIR, galprop, galphot where
-#                FIR.z >= 2.0 and
-#                FIR.z < 4.0 and
-#                FIR.gal_id = galprop.gal_id and
-#                FIR.halo_id = galprop.halo_id and
-#                FIR.gal_id = galphot.gal_id and
-#                FIR.halo_id = galphot.halo_id and
-#                FIR.spire250_obs < 1e6 and
-#                FIR.spire250_obs > 1e-19
-#                '''
-#    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
-#    ylab = r'$\log_{10}(M_{\mathrm{DM}} \ [M_{\odot}])$'
-#    plotColourProperties2(query, xlab, ylab,'ColorMhalo'+type, out_folder,
-#                          xmin = -1.4, xmax = 3.1, ymin = 9.5, ymax = 13.5)
-################################################################################
-#    query = '''select FIR.spire250_obs, galphot.f850lp, galprop.mhalo,
-#                FIR.z
-#                from FIR, galprop, galphot where
-#                FIR.gal_id = galprop.gal_id and
-#                FIR.halo_id = galprop.halo_id and
-#                FIR.gal_id = galphot.gal_id and
-#                FIR.halo_id = galphot.halo_id and
-#                FIR.spire250_obs < 1e6 and
-#                FIR.spire250_obs > 1e-19
-#                '''
-#    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
-#    ylab = r'$\log_{10}(M_{\mathrm{DM}} \ [M_{\odot}])$'
-#    plotColourProperties2(query, xlab, ylab,'ColorMhalo2'+type, out_folder,
-#                          xmin = -1.4, xmax = 3.1, ymin = 9.5, ymax = 13.5)
+    query = '''select FIR.spire250_obs, galphot.f775w, FIR.spire250_obs,
+                FIR.z
+                from FIR, galphot where
+                FIR.z >= 2.0 and
+                FIR.z < 4.0 and
+                FIR.gal_id = galphot.gal_id and
+                FIR.halo_id = galphot.halo_id and
+                FIR.spire250_obs < 1e6 and
+                galphot.f775w < 60 and
+                FIR.spire250_obs > 1e-19
+                '''
+    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
+    ylab = r'$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$'
+    plotColourProperties(query, xlab, ylab,'ColorSPIRE'+type,  out_folder)
 ###############################################################################
+    query = '''select FIR.spire250_obs, galphot.f775w, FIR.spire250_obs,
+                FIR.z
+                from FIR, galphot where
+                FIR.z >= 2.0 and
+                FIR.z < 4.0 and
+                FIR.gal_id = galphot.gal_id and
+                FIR.halo_id = galphot.halo_id and
+                FIR.spire250_obs < 1e6 and
+                galphot.f775w < 33 and
+                FIR.spire250_obs > 1e-7
+                '''
+    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
+    ylab = r'$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$'
+    plotColourProperties(query, xlab, ylab,'ColorSPIRE2'+type, out_folder,
+                         xmin = 0.0, xmax = 3.5, ymin = -4.0, ymax = 1.2,
+                         title = '$S_{250} > 10^{-7}\ \mathrm{Jy} \ \mathrm{and} \ \mathrm{F775W} < 33$')
+###############################################################################
+    query = '''select FIR.spire250_obs, galphot.f775w, FIR.spire250_obs,
+                FIR.z
+                from FIR, galphot where
+                FIR.gal_id = galphot.gal_id and
+                FIR.halo_id = galphot.halo_id and
+                FIR.spire250_obs < 1e6 and
+                galphot.f775w < 33 and
+                FIR.spire250_obs > 1e-7
+                '''
+    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
+    ylab = r'$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$'
+    plotColourProperties(query, xlab, ylab,'ColorSPIRE3'+type, out_folder,
+                         xmin = 0.0, xmax = 3.5, ymin = -4.0, ymax = 1.2,
+                         title = '$S_{250} > 10^{-7}\ \mathrm{Jy} \ \mathrm{and} \ \mathrm{F775W} < 33$')
+###############################################################################
+    print 'Plotting physical properties'
+###############################################################################
+    query = '''select FIR.spire250_obs, galphot.f850lp, galprop.mstar,
+                FIR.z
+                from FIR, galprop, galphot where
+                FIR.z >= 2.0 and
+                FIR.z < 4.0 and
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id and
+                FIR.gal_id = galphot.gal_id and
+                FIR.halo_id = galphot.halo_id and
+                FIR.spire250_obs < 1e6 and
+                FIR.spire250_obs > 1e-19
+                '''
+    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
+    ylab = r'$\log_{10}(M_{\star} \ [M_{\odot}])$'
+    plotColourProperties2(query, xlab, ylab,'ColorMstellar'+type, out_folder,
+                          xmin = -1.4, xmax = 3.1, ymin = 7.0, ymax = 11.5)
+###############################################################################
+    query = '''select FIR.spire250_obs, galphot.f850lp, galprop.mstar,
+                FIR.z
+                from FIR, galprop, galphot where
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id and
+                FIR.gal_id = galphot.gal_id and
+                FIR.halo_id = galphot.halo_id and
+                FIR.spire250_obs < 1e6 and
+                FIR.spire250_obs > 1e-19
+                '''
+    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
+    ylab = r'$\log_{10}(M_{\star} \ [M_{\odot}])$'
+    plotColourProperties2(query, xlab, ylab,'ColorMstellar2'+type, out_folder,
+                          xmin = -1.4, xmax = 3.1, ymin = 7.0, ymax = 11.5)
+###############################################################################
+    query = '''select FIR.spire250_obs, galphot.f850lp, galprop.mhalo,
+                FIR.z
+                from FIR, galprop, galphot where
+                FIR.z >= 2.0 and
+                FIR.z < 4.0 and
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id and
+                FIR.gal_id = galphot.gal_id and
+                FIR.halo_id = galphot.halo_id and
+                FIR.spire250_obs < 1e6 and
+                FIR.spire250_obs > 1e-19
+                '''
+    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
+    ylab = r'$\log_{10}(M_{\mathrm{DM}} \ [M_{\odot}])$'
+    plotColourProperties2(query, xlab, ylab,'ColorMhalo'+type, out_folder,
+                          xmin = -1.4, xmax = 3.1, ymin = 9.5, ymax = 13.5)
+###############################################################################
+    query = '''select FIR.spire250_obs, galphot.f850lp, galprop.mhalo,
+                FIR.z
+                from FIR, galprop, galphot where
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id and
+                FIR.gal_id = galphot.gal_id and
+                FIR.halo_id = galphot.halo_id and
+                FIR.spire250_obs < 1e6 and
+                FIR.spire250_obs > 1e-19
+                '''
+    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
+    ylab = r'$\log_{10}(M_{\mathrm{DM}} \ [M_{\odot}])$'
+    plotColourProperties2(query, xlab, ylab,'ColorMhalo2'+type, out_folder,
+                          xmin = -1.4, xmax = 3.1, ymin = 9.5, ymax = 13.5)
+##############################################################################
     query = '''select FIR.spire250_obs, galphot.f850lp, galprop.mstardot,
                 FIR.z
                 from FIR, galprop, galphot where
