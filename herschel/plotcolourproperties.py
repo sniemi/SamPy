@@ -120,7 +120,7 @@ if __name__ == '__main__':
     type = '.png'
 
     print 'Begin plotting'
-###############################################################################
+################################################################################
     query = '''select FIR.spire250_obs, galphot.f775w, FIR.spire250_obs,
                 FIR.z
                 from FIR, galphot where
@@ -130,7 +130,7 @@ if __name__ == '__main__':
                 FIR.halo_id = galphot.halo_id and
                 FIR.spire250_obs < 1e6 and
                 galphot.f775w < 60 and
-                FIR.spire250_obs > 1e-16
+                FIR.spire250_obs > 1e-19
                 '''
     xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
     ylab = r'$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$'
@@ -180,7 +180,7 @@ if __name__ == '__main__':
                 FIR.gal_id = galphot.gal_id and
                 FIR.halo_id = galphot.halo_id and
                 FIR.spire250_obs < 1e6 and
-                FIR.spire250_obs > 1e-16
+                FIR.spire250_obs > 1e-19
                 '''
     xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
     ylab = r'$\log_{10}(M_{\star} \ [M_{\odot}])$'
@@ -195,7 +195,7 @@ if __name__ == '__main__':
                 FIR.gal_id = galphot.gal_id and
                 FIR.halo_id = galphot.halo_id and
                 FIR.spire250_obs < 1e6 and
-                FIR.spire250_obs > 1e-16
+                FIR.spire250_obs > 1e-19
                 '''
     xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
     ylab = r'$\log_{10}(M_{\star} \ [M_{\odot}])$'
@@ -212,12 +212,12 @@ if __name__ == '__main__':
                 FIR.gal_id = galphot.gal_id and
                 FIR.halo_id = galphot.halo_id and
                 FIR.spire250_obs < 1e6 and
-                FIR.spire250_obs > 1e-16
+                FIR.spire250_obs > 1e-19
                 '''
     xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
-    ylab = r'$\log_{10}(M_{{\mathrm{DM}} \ [M_{\odot}])$'
+    ylab = r'$\log_{10}(M_{\mathrm{DM}} \ [M_{\odot}])$'
     plotColourProperties2(query, xlab, ylab,'ColorMhalo'+type, out_folder,
-                          xmin = -1.4, xmax = 3.1, ymin = 8.0, ymax = 14.0)
+                          xmin = -1.4, xmax = 3.1, ymin = 9.5, ymax = 13.5)
 ###############################################################################
     query = '''select FIR.spire250_obs, galphot.f850lp, galprop.mhalo,
                 FIR.z
@@ -227,12 +227,12 @@ if __name__ == '__main__':
                 FIR.gal_id = galphot.gal_id and
                 FIR.halo_id = galphot.halo_id and
                 FIR.spire250_obs < 1e6 and
-                FIR.spire250_obs > 1e-16
+                FIR.spire250_obs > 1e-19
                 '''
     xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
     ylab = r'$\log_{10}(M_{\mathrm{DM}} \ [M_{\odot}])$'
     plotColourProperties2(query, xlab, ylab,'ColorMhalo2'+type, out_folder,
-                          xmin = -1.4, xmax = 3.1, ymin = 8.0, ymax = 14.0)
+                          xmin = -1.4, xmax = 3.1, ymin = 9.5, ymax = 13.5)
 ###############################################################################
     query = '''select FIR.spire250_obs, galphot.f850lp, galprop.mstardot,
                 FIR.z
@@ -244,12 +244,12 @@ if __name__ == '__main__':
                 FIR.gal_id = galphot.gal_id and
                 FIR.halo_id = galphot.halo_id and
                 FIR.spire250_obs < 1e6 and
-                FIR.spire250_obs > 1e-16
+                FIR.spire250_obs > 1e-19
                 '''
     xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
     ylab = r'$\log_{10}(\dot{M}_{\star} \ [M_{\odot}])$'
     plotColourProperties2(query, xlab, ylab,'ColorSFR'+type, out_folder,
-                          xmin = -1.4, xmax = 3.1, ymin = 0.0, ymax = 2000.0)
+                          xmin = -1.4, xmax = 3.1, ymin = 0.0, ymax = 300.0)
 ###############################################################################
     query = '''select FIR.spire250_obs, galphot.f850lp, galprop.mstardot,
                 FIR.z
@@ -259,11 +259,11 @@ if __name__ == '__main__':
                 FIR.gal_id = galphot.gal_id and
                 FIR.halo_id = galphot.halo_id and
                 FIR.spire250_obs < 1e6 and
-                FIR.spire250_obs > 1e-16
+                FIR.spire250_obs > 1e-19
                 '''
     xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
     ylab = r'$\log_{10}(\dot{M}_{\star} \ [M_{\odot}])$'
     plotColourProperties2(query, xlab, ylab,'ColorSFR2'+type, out_folder,
-                          xmin = -1.4, xmax = 3.1, ymin = 0.0, ymax = 2000.0)
+                          xmin = -1.4, xmax = 3.1, ymin = 0.0, ymax = 300.0)
 ###############################################################################
     print 'All done'
