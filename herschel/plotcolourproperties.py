@@ -252,7 +252,7 @@ if __name__ == '__main__':
     xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
     ylab = r'$\log_{10}(\dot{M}_{\star} \ [M_{\odot}])$'
     plotColourProperties2(query, xlab, ylab,'ColorSFR'+type, out_folder,
-                          xmin = -1.4, xmax = 3.1, ymin = -2, ymax = 3.0,
+                          xmin = -1.4, xmax = 3.1, ymin = -4, ymax = 3.0,
                           ylog = True)
 ###############################################################################
     query = '''select FIR.spire250_obs, galphot.f850lp, galprop.mstardot,
@@ -268,7 +268,7 @@ if __name__ == '__main__':
     xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
     ylab = r'$\log_{10}(\dot{M}_{\star} \ [M_{\odot}])$'
     plotColourProperties2(query, xlab, ylab,'ColorSFR2'+type, out_folder,
-                          xmin = -1.4, xmax = 3.1, ymin = -2, ymax = 3.0,
+                          xmin = -1.4, xmax = 3.1, ymin = -4, ymax = 3.0,
                           ylog = True)
 ###############################################################################
     print 'All done'
