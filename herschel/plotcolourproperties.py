@@ -2,7 +2,7 @@ import matplotlib
 #matplotlib.use('PS')
 matplotlib.use('Agg')
 matplotlib.rc('text', usetex = True)
-matplotlib.rcParams['font.size'] = 17
+matplotlib.rcParams['font.size'] = 15
 matplotlib.rc('xtick', labelsize = 14) 
 matplotlib.rc('axes', linewidth = 1.1)
 matplotlib.rcParams['legend.fontsize'] = 12
@@ -178,7 +178,7 @@ def plotColourProperties4(query, output, out_folder):
     #make the figure
 #    fig = P.figure()
     fig = P.figure(figsize= (10,10))
-    fig.subplots_adjust(left = 0.085, bottom = 0.07,
+    fig.subplots_adjust(left = 0.085, bottom = 0.08,
                         right = 0.99, top = 0.99,
                         wspace = 0.21, hspace = 0.0)
     ax1 = fig.add_subplot(221)
@@ -221,15 +221,15 @@ def plotColourProperties4(query, output, out_folder):
     cax1 = fig.add_axes([0.11, 0.93, 0.15, 0.15/12.])#[left, bottom, width, height]
     c1 = fig.colorbar(s1, cax = cax1, orientation = 'horizontal',
                       ticks=[2,2.6,3.4,4])
-    c1.set_label('$\mathrm{Redshift}$')
+    c1.set_label('$\mathrm{Redshift}$', size = 13)
     cax2 = fig.add_axes([0.6, 0.93, 0.15, 0.15/12.])
     c2 = fig.colorbar(s2, cax = cax2, orientation = 'horizontal',
                       ticks=[2,2.6,3.4,4])
-    c2.set_label('$\mathrm{Redshift}$')
-    cax3 = fig.add_axes([0.11, 0.47, 0.15, 0.15/12.])
+    c2.set_label('$\mathrm{Redshift}$', size = 13)
+    cax3 = fig.add_axes([0.11, 0.475, 0.15, 0.15/12.])
     c3 = fig.colorbar(s3, cax = cax3, orientation = 'horizontal',
                       ticks=[2,2.6,3.4,4])
-    c3.set_label('$\mathrm{Redshift}$')
+    c3.set_label('$\mathrm{Redshift}$', size = 13)
 
     #labels
     xlabel = r'$\log_{10} \left ( \frac{S_{250}}{S_{8.0}} \right )$'
@@ -247,7 +247,7 @@ def plotColourProperties4(query, output, out_folder):
     #limits
     xmin = -1.5 
     xmax = 3.3
-    ymin = -2.2
+    ymin = -3.8
     ymax = 3.2
     ax1.set_ylim(ymin, ymax)
     ax1.set_xlim(xmin, xmax)
