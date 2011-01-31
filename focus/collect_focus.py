@@ -1,4 +1,4 @@
-#! /usr/stsci/pyssgdev/Python-2.5.4/bin/python
+#! /usr/stsci/pyssg/Python-2.7/bin/python
 '''
 Collects focus measurement results and outputs them
 to files, one for each instrument and chip.
@@ -7,7 +7,13 @@ This is so horribly written that it should be redone
 completely from scratch. There are Python tuples, lists
 and NumPy arrays, and they are all badly mixed.
 
-Sami-Matias Niemi (niemi@stsci.edu)
+@note: Uses hardcoded path to python 2.7 of IRAF env.
+
+@author: Sami-Matias Niemi 
+@contact: niemi@stsci.edu
+@organization: Space Telescope Science Insitute
+
+@todo: improve documentation
 '''
 import numpy as N
 import glob as G
@@ -82,28 +88,52 @@ def writeOutput(data, outputfile, chip,
     fh.close()
 
 def append_to_FocusModel(inputfile, outputfile, path):
-    #data
+    '''
+    This function appends new measurements to existing data
+    files that are read by e.g. Colin's focustool.
+    @param inputfile: Name of the input data file that
+                      potentially contains new data.
+    @param outputfile: Name of the output dat file to which
+                       new data are appended to.
+    @param path: Path from where the outputfile can be found.
+    @return: Boolean indicating if new data were identified.
+    '''
+    #boolean to control whether new data have been found
+    #if True, then the new data will be appended to the
+    #outputfile
+    newData = False
+    #read in data
     inputdata = open(inputfile).readlines()
     outdata = open(path+outputfile).readlines()
-    #file handler
-    fh = open(path+outputfile, 'a')
-    #last lines in data
+    #last line in output data
     lastout = outdata[-1]
-    lastin = inputdata[-1]
-    #last MJDs
+    #last MJD in output file
     oMJD = float(lastout.split()[3])
-    iMJD = float(lastin.split()[3])
-
-    if oMJD < iMJD:
-        #update is required.
+    for line in inputdata:
+        if '#' not in line:
+            if float(line.split()[3]) > oMJD:
+                newData = True
+                break
+    #New data available, an update is required.
+    if newData:
+        #file handler
+        fh = open(path+outputfile, 'a')
         #find the line that is the same
-        ind = inputdata.index(lastout)
+        try:
+            ind = inputdata.index(lastout)
+        except:
+            #this except is required after year change
+            ind = 0
         for x in range(ind+1, len(inputdata)):
             print 'Adding line %s to %s' % (inputdata[x].strip(), outputfile)
             fh.write(inputdata[x])
-    fh.close()
+        fh.close()
+    return newData
 
-if __name__ == '__main__':
+def main():
+    '''
+    Driver of collect_focus.py
+    '''
     #note that the input directory is hardcoded and should be changed every year!
     input_folder = '/grp/hst/OTA/focus/Data/prop12398/'
     output_folder = '/grp/hst/OTA/focus/source/FocusModel/'
@@ -134,5 +164,9 @@ if __name__ == '__main__':
                          output_folder)
     append_to_FocusModel('FocusWFC3Chip2.txt', 'UVIS2FocusHistory.txt',
                          output_folder)
+
+if __name__ == '__main__':
+    #call the main function
+    main()
     #the end
     print '\nAll done...'
