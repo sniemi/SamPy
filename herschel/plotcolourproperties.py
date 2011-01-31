@@ -5,13 +5,15 @@ matplotlib.rc('text', usetex = True)
 matplotlib.rcParams['font.size'] = 17
 matplotlib.rc('xtick', labelsize = 14) 
 matplotlib.rc('axes', linewidth = 1.1)
-matplotlib.rcParams['legend.fontsize'] = 11
-matplotlib.rcParams['legend.handlelength'] = 3
+matplotlib.rcParams['legend.fontsize'] = 12
+matplotlib.rcParams['legend.handlelength'] = 2
 matplotlib.rcParams['xtick.major.size'] = 5
 matplotlib.rcParams['ytick.major.size'] = 5
 import pylab as P
 import os
 from matplotlib import cm
+from mpl_toolkits.axes_grid import make_axes_locatable 
+import  matplotlib.axes as maxes
 import numpy as N
 #Sami's repository
 import db.sqlite as sq
@@ -156,6 +158,118 @@ def plotColourProperties3(query,
     #P.legend(loc = 'upper left', scatterpoints = 1)
     P.savefig(out_folder + output)
 
+def plotColourProperties4(query, output, out_folder):
+    #get data, all galaxies
+    #FIR.spire250_obs, FIR.irac_ch4_obs, galprop.mstardot,
+    #galprop.sfr_burst, galprop.sfr_ave, FIR.z, galprop.tmerge
+    data = sq.get_data_sqliteSMNfunctions(path, db, query)
+    x1 = data[:,0]
+    x2 = data[:,1]
+    x = N.log10(x1 / x2)
+    sfr = data[:,2]
+    burst = data[:,3]
+    avera = data[:,4]
+    z = data[:,5]
+    tmerge = data[:,6]
+    #masks
+    noMerge = tmerge < 0.0
+    recent = (tmerge < 0.25) & (tmerge > 0.0)
+    mergers = tmerge > 0.0
+    #make the figure
+#    fig = P.figure()
+    fig = P.figure(figsize= (10,10))
+    fig.subplots_adjust(left = 0.085, bottom = 0.07,
+                        right = 0.99, top = 0.99,
+                        wspace = 0.21, hspace = 0.0)
+    ax1 = fig.add_subplot(221)
+    ax2 = fig.add_subplot(222)
+    ax3 = fig.add_subplot(223)
+    ax4 = fig.add_subplot(224)
+    #plot scatters
+    s1 = ax1.scatter(x[noMerge], N.log10(sfr[noMerge]), s = 3.5, marker = '<',
+                     c=z[noMerge], cmap = cm.get_cmap('jet'),
+                     alpha = 0.15, edgecolor = 'none',
+                     label = 'Never Merged')
+    s1 = ax1.scatter(x[noMerge], N.log10(sfr[noMerge]), s = 1.0, marker = '<',
+                     c=z[noMerge], cmap = cm.get_cmap('jet'), edgecolor = 'none',
+                     visible = False)
+    s2 = ax2.scatter(x[recent], N.log10(sfr[recent]), s = 3.5, marker = '>',
+                     c=z[recent], cmap = cm.get_cmap('jet'),
+                     alpha = 0.15, edgecolor = 'none',
+                     label = 'Recent Mergers $T_{\mathrm{merge}} < 250$ Myr')
+    s2 = ax2.scatter(x[recent], N.log10(sfr[recent]), s = 1.0, marker = '>',
+                     c=z[recent], cmap = cm.get_cmap('jet'), edgecolor = 'none',
+                     visible = False)
+    s3 = ax3.scatter(x[recent], N.log10(burst[recent]), s = 3.5, marker = '>',
+                     c=z[recent], cmap = cm.get_cmap('jet'),
+                     alpha = 0.15, edgecolor = 'none',
+                     label = 'Recent Mergers $T_{\mathrm{merge}} < 250$ Myr')
+    s3 = ax3.scatter(x[recent], N.log10(burst[recent]), s = 1.0, marker = '>',
+                     c=z[recent], cmap = cm.get_cmap('jet'), edgecolor = 'none',
+                    visible = False)
+    s6 = ax4.scatter(x[noMerge], N.log10(avera[noMerge]), s = 0.5, marker = 'o',
+                     c='red', alpha = 0.1, edgecolor = 'none',
+                     label = 'Never Merged')
+    s7 = ax4.scatter(x[recent], N.log10(avera[recent]), s = 0.5, marker = 's',
+                     c='blue', alpha = 0.1, edgecolor = 'none',
+                     label = 'Recent Mergers $T_{\mathrm{merge}} < 250$ Myr')    
+    s6 = ax4.scatter(x[noMerge], N.log10(avera[noMerge]), s = 2.0, marker = 'o',
+                     c='red', edgecolor = 'none', visible = False)
+    s7 = ax4.scatter(x[recent], N.log10(avera[recent]), s = 2.0, marker = 's',
+                     c='blue', edgecolor = 'none', visible = False)    
+    #colorbars
+    cax1 = fig.add_axes([0.11, 0.93, 0.15, 0.15/12.])#[left, bottom, width, height]
+    c1 = fig.colorbar(s1, cax = cax1, orientation = 'horizontal',
+                      ticks=[2,2.6,3.4,4])
+    c1.set_label('$\mathrm{Redshift}$')
+    cax2 = fig.add_axes([0.6, 0.93, 0.15, 0.15/12.])
+    c2 = fig.colorbar(s2, cax = cax2, orientation = 'horizontal',
+                      ticks=[2,2.6,3.4,4])
+    c2.set_label('$\mathrm{Redshift}$')
+    cax3 = fig.add_axes([0.11, 0.47, 0.15, 0.15/12.])
+    c3 = fig.colorbar(s3, cax = cax3, orientation = 'horizontal',
+                      ticks=[2,2.6,3.4,4])
+    c3.set_label('$\mathrm{Redshift}$')
+
+    #labels
+    xlabel = r'$\log_{10} \left ( \frac{S_{250}}{S_{8.0}} \right )$'
+    ylabel1 = r'$\log_{10}(\dot{M}_{\star} \ [M_{\odot} \ \mathrm{yr}^{-1}])$'
+    ylabel3 = r'$\log_{10}(\dot{M}_{\mathrm{BURST}} \ [M_{\odot} \ \mathrm{yr}^{-1}])$'
+    ylabel4 = r'$\log_{10}(< \dot{M}_{\star} > \ [M_{\odot} \ \mathrm{yr}^{-1}])$'
+    ax1.set_xticklabels([])
+    ax1.set_ylabel(ylabel1)
+    ax2.set_xticklabels([])
+    ax2.set_ylabel(ylabel1)
+    ax3.set_xlabel(xlabel)
+    ax3.set_ylabel(ylabel3)
+    ax4.set_xlabel(xlabel)
+    ax4.set_ylabel(ylabel4)
+    #limits
+    xmin = -1.5 
+    xmax = 3.3
+    ymin = -2.2
+    ymax = 3.2
+    ax1.set_ylim(ymin, ymax)
+    ax1.set_xlim(xmin, xmax)
+    ax2.set_ylim(ymin, ymax)
+    ax2.set_xlim(xmin, xmax)
+    ax3.set_ylim(ymin, ymax)
+    ax3.set_xlim(xmin, xmax)
+    ax4.set_ylim(ymin, ymax)
+    ax4.set_xlim(xmin, xmax)
+    #make grid
+    ax1.grid()
+    ax2.grid()
+    ax3.grid()
+    ax4.grid()
+    #legends and save
+    ax1.legend(loc = 'upper left', scatterpoints = 1, markerscale=7)
+    ax2.legend(loc = 'upper left', scatterpoints = 1, markerscale=7)
+    ax2.legend(loc = 'upper left', scatterpoints = 1, markerscale=7)
+    ax3.legend(loc = 'upper left', scatterpoints = 1, markerscale=7)
+    ax4.legend(loc = 'upper left', scatterpoints = 1, markerscale=18)
+    P.savefig(out_folder + output)
+
 
 if __name__ == '__main__':
     #find the home directory, because the output is to dropbox 
@@ -217,92 +331,92 @@ if __name__ == '__main__':
 #                         xmin = 0.0, xmax = 3.5, ymin = -4.0, ymax = 1.2,
 #                         title = '$S_{250} > 10^{-7}\ \mathrm{Jy} \ \mathrm{and} \ \mathrm{F775W} < 33$')
 ################################################################################
-    print 'plot no subhaloes'
+#    print 'plot no subhaloes'
+##################################################################################
+#    query = '''select FIR.spire250_obs, galphot.f775w, FIR.spire250_obs,
+#                FIR.z
+#                from FIR, galphot, galprop where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galphot.gal_id and
+#                FIR.halo_id = galphot.halo_id and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                galphot.f775w < 60 and
+#                FIR.spire250_obs > 1e-19 and
+#                galprop.t_sat > 99
+#                '''
+#    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
+#    ylab = r'$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$'
+#    plotColourProperties(query, xlab, ylab,'ColorSPIRENoSub'+type,  out_folder)
+################################################################################
+#    query = '''select FIR.spire250_obs, galphot.f775w, FIR.spire250_obs,
+#                FIR.z
+#                from FIR, galphot, galprop where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galphot.gal_id and
+#                FIR.halo_id = galphot.halo_id and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                galphot.f775w < 60 and
+#                FIR.spire250_obs > 1e-7 and
+#                galprop.t_sat > 99
+#                '''
+#    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
+#    ylab = r'$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$'
+#    plotColourProperties(query, xlab, ylab,'ColorSPIRE2NoSub'+type, out_folder,
+#                         xmin = 0.0, xmax = 3.5, ymin = -4.0, ymax = 1.2,
+#                         title = '$S_{250} > 10^{-7}\ \mathrm{Jy} \ \mathrm{and} \ \mathrm{F775W} < 33$')
+################################################################################
+#    query = '''select FIR.spire250_obs, galphot.f775w, FIR.spire250_obs,
+#                FIR.z
+#                from FIR, galphot, galprop where
+#                FIR.gal_id = galphot.gal_id and
+#                FIR.halo_id = galphot.halo_id and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                galprop.t_sat > 99 and 
+#                galphot.f775w < 33 and
+#                FIR.spire250_obs > 1e-7
+#                '''
+#    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
+#    ylab = r'$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$'
+#    plotColourProperties(query, xlab, ylab,'ColorSPIRE3NoSub'+type, out_folder,
+#                         xmin = 0.0, xmax = 3.5, ymin = -4.0, ymax = 1.2,
+#                         title = '$S_{250} > 10^{-7}\ \mathrm{Jy} \ \mathrm{and} \ \mathrm{F775W} < 33$')
 #################################################################################
-    query = '''select FIR.spire250_obs, galphot.f775w, FIR.spire250_obs,
-                FIR.z
-                from FIR, galphot, galprop where
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                FIR.gal_id = galphot.gal_id and
-                FIR.halo_id = galphot.halo_id and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                FIR.spire250_obs < 1e6 and
-                galphot.f775w < 60 and
-                FIR.spire250_obs > 1e-19 and
-                galprop.t_sat > 99
-                '''
-    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
-    ylab = r'$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$'
-    plotColourProperties(query, xlab, ylab,'ColorSPIRENoSub'+type,  out_folder)
-###############################################################################
-    query = '''select FIR.spire250_obs, galphot.f775w, FIR.spire250_obs,
-                FIR.z
-                from FIR, galphot, galprop where
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                FIR.gal_id = galphot.gal_id and
-                FIR.halo_id = galphot.halo_id and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                FIR.spire250_obs < 1e6 and
-                galphot.f775w < 60 and
-                FIR.spire250_obs > 1e-7 and
-                galprop.t_sat > 99
-                '''
-    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
-    ylab = r'$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$'
-    plotColourProperties(query, xlab, ylab,'ColorSPIRE2NoSub'+type, out_folder,
-                         xmin = 0.0, xmax = 3.5, ymin = -4.0, ymax = 1.2,
-                         title = '$S_{250} > 10^{-7}\ \mathrm{Jy} \ \mathrm{and} \ \mathrm{F775W} < 33$')
-###############################################################################
-    query = '''select FIR.spire250_obs, galphot.f775w, FIR.spire250_obs,
-                FIR.z
-                from FIR, galphot, galprop where
-                FIR.gal_id = galphot.gal_id and
-                FIR.halo_id = galphot.halo_id and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                FIR.spire250_obs < 1e6 and
-                galprop.t_sat > 99 and 
-                galphot.f775w < 33 and
-                FIR.spire250_obs > 1e-7
-                '''
-    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
-    ylab = r'$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$'
-    plotColourProperties(query, xlab, ylab,'ColorSPIRE3NoSub'+type, out_folder,
-                         xmin = 0.0, xmax = 3.5, ymin = -4.0, ymax = 1.2,
-                         title = '$S_{250} > 10^{-7}\ \mathrm{Jy} \ \mathrm{and} \ \mathrm{F775W} < 33$')
+#    print 'Plotting IRAC props'
+#################################################################################
+#    query = '''select FIR.spire250_obs, FIR.irac_ch4_obs, FIR.spire250_obs,
+#                FIR.z
+#                from FIR where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.spire250_obs < 1e7
+#                '''
+#    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{8.0}} \right )$'
+#    ylab = r'$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$'
+#    plotColourProperties3(query, xlab, ylab,'ColorIRACSPIRE'+type,  out_folder)
 ################################################################################
-    print 'Plotting IRAC props'
-################################################################################
-    query = '''select FIR.spire250_obs, FIR.irac_ch4_obs, FIR.spire250_obs,
-                FIR.z
-                from FIR where
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                FIR.spire250_obs < 1e7
-                '''
-    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{8.0}} \right )$'
-    ylab = r'$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$'
-    plotColourProperties3(query, xlab, ylab,'ColorIRACSPIRE'+type,  out_folder)
-###############################################################################
-    query = '''select FIR.spire250_obs, FIR.irac_ch4_obs, FIR.spire250_obs,
-                FIR.z
-                from FIR where
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                FIR.spire250_obs < 1e6 and
-                FIR.irac_ch4_obs > 1e-7 and
-                FIR.spire250_obs > 1e-7
-                '''
-    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{8.0}} \right )$'
-    ylab = r'$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$'
-    plotColourProperties3(query, xlab, ylab,'ColorIRACSPIRE2'+type, out_folder,
-                          xmin = 0.0, ymin = -4.0, ymax = 1.2,
-                          title = '$S_{250} > 10^{-7}\ \mathrm{Jy} \ \mathrm{and} \ S_{8.0} > 10^{-7}\ \mathrm{Jy}$')
-################################################################################
+#    query = '''select FIR.spire250_obs, FIR.irac_ch4_obs, FIR.spire250_obs,
+#                FIR.z
+#                from FIR where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.spire250_obs < 1e6 and
+#                FIR.irac_ch4_obs > 1e-7 and
+#                FIR.spire250_obs > 1e-7
+#                '''
+#    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{8.0}} \right )$'
+#    ylab = r'$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$'
+#    plotColourProperties3(query, xlab, ylab,'ColorIRACSPIRE2'+type, out_folder,
+#                          xmin = 0.0, ymin = -4.0, ymax = 1.2,
+#                          title = '$S_{250} > 10^{-7}\ \mathrm{Jy} \ \mathrm{and} \ S_{8.0} > 10^{-7}\ \mathrm{Jy}$')
+#################################################################################
 #    print 'Plotting physical properties'
 ################################################################################
 #    query = '''select FIR.spire250_obs, galphot.f850lp, galprop.mstar,
@@ -403,4 +517,20 @@ if __name__ == '__main__':
 #                          xmin = -1.4, xmax = 3.1, ymin = -4, ymax = 3.0,
 #                          ylog = True)
 ################################################################################
+    print 'plot SFRs'
+################################################################################
+    query = '''select FIR.spire250_obs, FIR.irac_ch4_obs, galprop.mstardot,
+                galprop.sfr_burst, galprop.sfr_ave, FIR.z, galprop.tmerge
+                from FIR, galprop where
+                FIR.z >= 2.0 and
+                FIR.z < 4.0 and
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id and
+                FIR.spire250_obs < 1e6 and
+                FIR.spire250_obs > 1e-19 and
+                galprop.mstardot > 0
+                '''
+    plotColourProperties4(query,'ColorSFRBurst'+type, out_folder)
+###############################################################################
+
     print 'All done'
