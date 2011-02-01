@@ -25,7 +25,8 @@ def plotColourProperties(query,
                          output, out_folder,
                          ymin = -12, ymax = 2,
                          xmin = -6, xmax = 3.2,
-                         title = ''):
+                         title = '',
+                         clabel = '$\mathrm{Redshift}$'):
     #get data, all galaxies
     data = sq.get_data_sqliteSMNfunctions(path, db, query)
     x1 = data[:,0]
@@ -46,8 +47,8 @@ def plotColourProperties(query,
     s1 = ax1.scatter(x, y, s = 0.1, marker = 'o',
                      c=z, cmap = cm.get_cmap('jet'),
                      edgecolor = 'none', visible = False)
-    c1 = fig.colorbar(s1, ax = ax1, shrink = 0.7, fraction = 0.05)
-    c1.set_label('$\mathrm{Redshift}$')
+    c1 = fig.colorbar(s1, ax = ax1, shrink = 0.7, fraction = 0.05, pad = 0.01)
+    c1.set_label(clabel)
     #labels
     ax1.set_xlabel(xlabel)
     ax1.set_ylabel(ylabel)
@@ -298,6 +299,59 @@ if __name__ == '__main__':
 #    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
 #    ylab = r'$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$'
 #    plotColourProperties(query, xlab, ylab,'ColorSPIRE'+type,  out_folder)
+#################################################################################
+#    query = '''select FIR.spire250_obs, galphot.f775w, FIR.spire250_obs,
+#                FIR.z
+#                from FIR, galphot where
+#                FIR.z >= 2.0 and
+#                FIR.z < 2.2 and
+#                FIR.gal_id = galphot.gal_id and
+#                FIR.halo_id = galphot.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                galphot.f775w < 60 and
+#                FIR.spire250_obs > 1e-19
+#                '''
+#    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
+#    ylab = r'$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$'
+#    plotColourProperties(query, xlab, ylab,'ColorSPIREz2'+type,  out_folder)
+################################################################################
+#    query = '''select FIR.spire250_obs, galphot.f775w, FIR.spire250_obs,
+#                FIR.z
+#                from FIR, galphot, galprop where
+#                FIR.z >= 3.0 and
+#                FIR.z < 3.3 and
+#                FIR.gal_id = galphot.gal_id and
+#                FIR.halo_id = galphot.halo_id and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                galphot.f775w < 60 and
+#                FIR.spire250_obs > 1e-19 and
+#                galprop.tmajmerge  > 0 and
+#                galprop.tmajmerge < 0.25
+#                '''
+#    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
+#    ylab = r'$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$'
+#    plotColourProperties(query, xlab, ylab,'ColorSPIREz3OnlyRecentMajorMergers'+type,  out_folder)
+################################################################################
+#    query = '''select FIR.spire250_obs, galphot.f160w, FIR.spire250_obs,
+#                galprop.mcold
+#                from FIR, galphot, galprop where
+#                FIR.z >= 3.0 and
+#                FIR.z < 3.3 and
+#                FIR.gal_id = galphot.gal_id and
+#                FIR.halo_id = galphot.halo_id and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                FIR.spire250_obs > 1e-19 and
+#                galprop.mcold > 6
+#                '''
+#    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F160W}} \right )$'
+#    ylab = r'$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$'
+#    clabel = 'mcold'
+#    plotColourProperties(query, xlab, ylab,'ColorSPIREz3Special16'+type, out_folder,
+#                         clabel=clabel)
 ################################################################################
 #    query = '''select FIR.spire250_obs, galphot.f775w, FIR.spire250_obs,
 #                FIR.z
@@ -435,6 +489,60 @@ if __name__ == '__main__':
 #    ylab = r'$\log_{10}(M_{\star} \ [M_{\odot}])$'
 #    plotColourProperties2(query, xlab, ylab,'ColorMstellar'+type, out_folder,
 #                          xmin = -1.4, xmax = 3.1, ymin = 7.0, ymax = 11.5)
+#################################################################################
+#    query = '''select FIR.spire250_obs, galphot.f850lp, galprop.Zstar,
+#                FIR.z
+#                from FIR, galprop, galphot where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.gal_id = galphot.gal_id and
+#                FIR.halo_id = galphot.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                FIR.spire250_obs > 1e-19
+#                '''
+#    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
+#    ylab = r'$\log_{10}(Z_{\star})$'
+#    plotColourProperties2(query, xlab, ylab,'ColorZstellar'+type, out_folder,
+#                          xmin = -1.4, xmax = 3.1, ymin = -1.8, ymax = 0.5,
+#                          ylog = True)
+################################################################################
+#    query = '''select FIR.spire250_obs, galphot.f850lp, galprop.Zstar,
+#                FIR.z
+#                from FIR, galprop, galphot where
+#                FIR.z >= 2.0 and
+#                FIR.z < 2.4 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.gal_id = galphot.gal_id and
+#                FIR.halo_id = galphot.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                FIR.spire250_obs > 1e-19
+#                '''
+#    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
+#    ylab = r'$\log_{10}(Z_{\star})$'
+#    plotColourProperties2(query, xlab, ylab,'ColorZstellarLowZ'+type, out_folder,
+#                          xmin = -1.4, xmax = 3.1, ymin = -1.8, ymax = 0.5,
+#                          ylog = True)
+#################################################################################
+#    query = '''select FIR.spire250_obs, galphot.f850lp, galprop.Zcold,
+#                FIR.z
+#                from FIR, galprop, galphot where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.gal_id = galphot.gal_id and
+#                FIR.halo_id = galphot.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                FIR.spire250_obs > 1e-19
+#                '''
+#    xlab = r'$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$'
+#    ylab = r'$\log_{10}(Z_{\mathrm{COLDGAS}})$'
+#    plotColourProperties2(query, xlab, ylab,'ColorZcoldgas'+type, out_folder,
+#                          xmin = -1.4, xmax = 3.1, ymin = -1.6, ymax = 0.5,
+#                          ylog = True)
 ################################################################################
 #    query = '''select FIR.spire250_obs, galphot.f850lp, galprop.mstar,
 #                FIR.z
@@ -516,21 +624,21 @@ if __name__ == '__main__':
 #    plotColourProperties2(query, xlab, ylab,'ColorSFR2'+type, out_folder,
 #                          xmin = -1.4, xmax = 3.1, ymin = -4, ymax = 3.0,
 #                          ylog = True)
-################################################################################
-    print 'plot SFRs'
-################################################################################
-    query = '''select FIR.spire250_obs, FIR.irac_ch4_obs, galprop.mstardot,
-                galprop.sfr_burst, galprop.sfr_ave, FIR.z, galprop.tmerge
-                from FIR, galprop where
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                FIR.spire250_obs < 1e6 and
-                FIR.spire250_obs > 1e-19 and
-                galprop.mstardot > 0
-                '''
-    plotColourProperties4(query,'ColorSFRBurst'+type, out_folder)
+#################################################################################
+#    print 'plot SFRs'
+#################################################################################
+#    query = '''select FIR.spire250_obs, FIR.irac_ch4_obs, galprop.mstardot,
+#                galprop.sfr_burst, galprop.sfr_ave, FIR.z, galprop.tmerge
+#                from FIR, galprop where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                FIR.spire250_obs > 1e-19 and
+#                galprop.mstardot > 0
+#                '''
+#    plotColourProperties4(query,'ColorSFRBurst'+type, out_folder)
 ###############################################################################
 
     print 'All done'
