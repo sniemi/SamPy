@@ -219,93 +219,93 @@ if __name__ == '__main__':
 
     print 'Begin plotting'
 ###############################################################################
-    query = '''select FIR.spire250_obs / FIR.irac_ch1_obs,
-                galphot.f775w, galphot.f850lp,
-                galprop.tmerge, galprop.tmajmerge
-                from FIR, galprop, galphot where
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                FIR.gal_id = galphot.gal_id and
-                FIR.halo_id = galphot.halo_id and
-                FIR.spire250_obs < 1e6 and
-                galphot.f775w < 33 and
-                galphot.f850lp < 33 and
-                FIR.spire250_obs > 1e-15 and
-                FIR.irac_ch1_obs > 1e-15
-
-                '''
-    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{3.4}} \right )$'
-    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
-    plotMergerFractions(query, xlab, ylab,'ColorColorIRAC1Merger'+type,
-                        out_folder)
-###############################################################################
-    query = '''select FIR.spire250_obs / FIR.irac_ch2_obs,
-                galphot.f775w, galphot.f850lp,
-                galprop.tmerge, galprop.tmajmerge
-                from FIR, galprop, galphot where
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                FIR.gal_id = galphot.gal_id and
-                FIR.halo_id = galphot.halo_id and
-                FIR.spire250_obs < 1e6 and
-                galphot.f775w < 33 and
-                galphot.f850lp < 33 and
-                FIR.spire250_obs > 1e-15 and
-                FIR.irac_ch2_obs > 1e-15
-
-                '''
-    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{4.5}} \right )$'
-    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
-    plotMergerFractions(query, xlab, ylab,'ColorColorIRAC2Merger'+type,
-                        out_folder)
-###############################################################################
-    query = '''select FIR.spire250_obs / FIR.irac_ch3_obs,
-                galphot.f775w, galphot.f850lp,
-                galprop.tmerge, galprop.tmajmerge
-                from FIR, galprop, galphot where
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                FIR.gal_id = galphot.gal_id and
-                FIR.halo_id = galphot.halo_id and
-                FIR.spire250_obs < 1e6 and
-                galphot.f775w < 33 and
-                galphot.f850lp < 33 and
-                FIR.spire250_obs > 1e-15 and
-                FIR.irac_ch3_obs > 1e-15
-
-                '''
-    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{5.8}} \right )$'
-    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
-    plotMergerFractions(query, xlab, ylab,'ColorColorIRAC3Merger'+type,
-                        out_folder)
-###############################################################################
-    query = '''select FIR.spire250_obs / FIR.irac_ch4_obs,
-                galphot.f775w, galphot.f850lp,
-                galprop.tmerge, galprop.tmajmerge
-                from FIR, galprop, galphot where
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                FIR.gal_id = galphot.gal_id and
-                FIR.halo_id = galphot.halo_id and
-                FIR.spire250_obs < 1e6 and
-                galphot.f775w < 33 and
-                galphot.f850lp < 33 and
-                FIR.spire250_obs > 1e-15 and
-                FIR.irac_ch4_obs > 1e-15
-
-                '''
-    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{8.0}} \right )$'
-    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
-    plotMergerFractions(query, xlab, ylab,'ColorColorIRAC4Merger'+type,
-                        out_folder)
+#    query = '''select FIR.spire250_obs / FIR.irac_ch1_obs,
+#                galphot.f775w, galphot.f850lp,
+#                galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop, galphot where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.gal_id = galphot.gal_id and
+#                FIR.halo_id = galphot.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                galphot.f775w < 33 and
+#                galphot.f850lp < 33 and
+#                FIR.spire250_obs > 1e-15 and
+#                FIR.irac_ch1_obs > 1e-15
+#
+#                '''
+#    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{3.4}} \right )$'
+#    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
+#    plotMergerFractions(query, xlab, ylab,'ColorColorIRAC1Merger'+type,
+#                        out_folder)
+################################################################################
+#    query = '''select FIR.spire250_obs / FIR.irac_ch2_obs,
+#                galphot.f775w, galphot.f850lp,
+#                galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop, galphot where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.gal_id = galphot.gal_id and
+#                FIR.halo_id = galphot.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                galphot.f775w < 33 and
+#                galphot.f850lp < 33 and
+#                FIR.spire250_obs > 1e-15 and
+#                FIR.irac_ch2_obs > 1e-15
+#
+#                '''
+#    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{4.5}} \right )$'
+#    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
+#    plotMergerFractions(query, xlab, ylab,'ColorColorIRAC2Merger'+type,
+#                        out_folder)
+################################################################################
+#    query = '''select FIR.spire250_obs / FIR.irac_ch3_obs,
+#                galphot.f775w, galphot.f850lp,
+#                galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop, galphot where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.gal_id = galphot.gal_id and
+#                FIR.halo_id = galphot.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                galphot.f775w < 33 and
+#                galphot.f850lp < 33 and
+#                FIR.spire250_obs > 1e-15 and
+#                FIR.irac_ch3_obs > 1e-15
+#
+#                '''
+#    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{5.8}} \right )$'
+#    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
+#    plotMergerFractions(query, xlab, ylab,'ColorColorIRAC3Merger'+type,
+#                        out_folder)
+################################################################################
+#    query = '''select FIR.spire250_obs / FIR.irac_ch4_obs,
+#                galphot.f775w, galphot.f850lp,
+#                galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop, galphot where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.gal_id = galphot.gal_id and
+#                FIR.halo_id = galphot.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                galphot.f775w < 33 and
+#                galphot.f850lp < 33 and
+#                FIR.spire250_obs > 1e-15 and
+#                FIR.irac_ch4_obs > 1e-15
+#
+#                '''
+#    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{8.0}} \right )$'
+#    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
+#    plotMergerFractions(query, xlab, ylab,'ColorColorIRAC4Merger'+type,
+#                        out_folder)
 ###############################################################################
     print 'IR bright galaxies only'
 ###############################################################################
@@ -322,7 +322,7 @@ if __name__ == '__main__':
                 FIR.spire250_obs < 1e6 and
                 galphot.f775w < 33 and
                 galphot.f850lp < 33 and
-                FIR.spire250_obs > 5e-6 and
+                FIR.spire250_obs > 5e-3 and
                 FIR.irac_ch1_obs > 1e-15
 
                 '''
@@ -345,7 +345,7 @@ if __name__ == '__main__':
                 FIR.spire250_obs < 1e6 and
                 galphot.f775w < 33 and
                 galphot.f850lp < 33 and
-                FIR.spire250_obs > 5e-6 and
+                FIR.spire250_obs > 5e-3 and
                 FIR.irac_ch2_obs > 1e-15
 
                 '''
@@ -368,7 +368,7 @@ if __name__ == '__main__':
                 FIR.spire250_obs < 1e6 and
                 galphot.f775w < 33 and
                 galphot.f850lp < 33 and
-                FIR.spire250_obs > 5e-6 and
+                FIR.spire250_obs > 5e-3 and
                 FIR.irac_ch3_obs > 1e-15
 
                 '''
@@ -391,7 +391,7 @@ if __name__ == '__main__':
                 FIR.spire250_obs < 1e6 and
                 galphot.f775w < 33 and
                 galphot.f850lp < 33 and
-                FIR.spire250_obs > 5e-6 and
+                FIR.spire250_obs > 5e-3 and
                 FIR.irac_ch4_obs > 1e-15
 
                 '''
@@ -403,94 +403,94 @@ if __name__ == '__main__':
 ##############################################################################
     # multiplots
     print 'Starting multiplots'
+################################################################################
+#    query = '''select FIR.spire250_obs / FIR.irac_ch1_obs,
+#                galphot.f775w, galphot.f850lp,
+#                galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop, galphot where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.gal_id = galphot.gal_id and
+#                FIR.halo_id = galphot.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                galphot.f775w < 33 and
+#                galphot.f850lp < 33 and
+#                FIR.spire250_obs > 1e-15 and
+#                FIR.irac_ch1_obs > 1e-15
+#
+#                '''
+#    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{3.4}} \right )$'
+#    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
+#    plotMergerFractionsMultiplot(query, xlab, ylab,'ColorColorIRAC1Multi'+type,
+#                                 out_folder)
+################################################################################
+#    query = '''select FIR.spire250_obs / FIR.irac_ch2_obs,
+#                galphot.f775w, galphot.f850lp,
+#                galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop, galphot where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.gal_id = galphot.gal_id and
+#                FIR.halo_id = galphot.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                galphot.f775w < 33 and
+#                galphot.f850lp < 33 and
+#                FIR.spire250_obs > 1e-15 and
+#                FIR.irac_ch2_obs > 1e-15
+#
+#                '''
+#    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{4.5}} \right )$'
+#    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
+#    plotMergerFractionsMultiplot(query, xlab, ylab,'ColorColorIRAC2Multi'+type,
+#                                 out_folder)
+################################################################################
+#    query = '''select FIR.spire250_obs / FIR.irac_ch3_obs,
+#                galphot.f775w, galphot.f850lp,
+#                galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop, galphot where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.gal_id = galphot.gal_id and
+#                FIR.halo_id = galphot.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                galphot.f775w < 33 and
+#                galphot.f850lp < 33 and
+#                FIR.spire250_obs > 1e-15 and
+#                FIR.irac_ch3_obs > 1e-15
+#
+#                '''
+#    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{5.8}} \right )$'
+#    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
+#    plotMergerFractionsMultiplot(query, xlab, ylab,'ColorColorIRAC3Multi'+type,
+#                                 out_folder)
 ###############################################################################
-    query = '''select FIR.spire250_obs / FIR.irac_ch1_obs,
-                galphot.f775w, galphot.f850lp,
-                galprop.tmerge, galprop.tmajmerge
-                from FIR, galprop, galphot where
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                FIR.gal_id = galphot.gal_id and
-                FIR.halo_id = galphot.halo_id and
-                FIR.spire250_obs < 1e6 and
-                galphot.f775w < 33 and
-                galphot.f850lp < 33 and
-                FIR.spire250_obs > 1e-15 and
-                FIR.irac_ch1_obs > 1e-15
-
-                '''
-    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{3.4}} \right )$'
-    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
-    plotMergerFractionsMultiplot(query, xlab, ylab,'ColorColorIRAC1Multi'+type,
-                                 out_folder)
-###############################################################################
-    query = '''select FIR.spire250_obs / FIR.irac_ch2_obs,
-                galphot.f775w, galphot.f850lp,
-                galprop.tmerge, galprop.tmajmerge
-                from FIR, galprop, galphot where
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                FIR.gal_id = galphot.gal_id and
-                FIR.halo_id = galphot.halo_id and
-                FIR.spire250_obs < 1e6 and
-                galphot.f775w < 33 and
-                galphot.f850lp < 33 and
-                FIR.spire250_obs > 1e-15 and
-                FIR.irac_ch2_obs > 1e-15
-
-                '''
-    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{4.5}} \right )$'
-    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
-    plotMergerFractionsMultiplot(query, xlab, ylab,'ColorColorIRAC2Multi'+type,
-                                 out_folder)
-###############################################################################
-    query = '''select FIR.spire250_obs / FIR.irac_ch3_obs,
-                galphot.f775w, galphot.f850lp,
-                galprop.tmerge, galprop.tmajmerge
-                from FIR, galprop, galphot where
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                FIR.gal_id = galphot.gal_id and
-                FIR.halo_id = galphot.halo_id and
-                FIR.spire250_obs < 1e6 and
-                galphot.f775w < 33 and
-                galphot.f850lp < 33 and
-                FIR.spire250_obs > 1e-15 and
-                FIR.irac_ch3_obs > 1e-15
-
-                '''
-    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{5.8}} \right )$'
-    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
-    plotMergerFractionsMultiplot(query, xlab, ylab,'ColorColorIRAC3Multi'+type,
-                                 out_folder)
-##############################################################################
-    query = '''select FIR.spire250_obs / FIR.irac_ch4_obs,
-                galphot.f775w, galphot.f850lp,
-                galprop.tmerge, galprop.tmajmerge
-                from FIR, galprop, galphot where
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                FIR.gal_id = galphot.gal_id and
-                FIR.halo_id = galphot.halo_id and
-                FIR.spire250_obs < 1e6 and
-                galphot.f775w < 33 and
-                galphot.f850lp < 33 and
-                FIR.spire250_obs > 1e-15 and
-                FIR.irac_ch4_obs > 1e-15
-
-                '''
-    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{8.0}} \right )$'
-    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
-    plotMergerFractionsMultiplot(query, xlab, ylab,'ColorColorIRAC4Multi'+type,
-                                 out_folder)
+#    query = '''select FIR.spire250_obs / FIR.irac_ch4_obs,
+#                galphot.f775w, galphot.f850lp,
+#                galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop, galphot where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.gal_id = galphot.gal_id and
+#                FIR.halo_id = galphot.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                galphot.f775w < 33 and
+#                galphot.f850lp < 33 and
+#                FIR.spire250_obs > 1e-15 and
+#                FIR.irac_ch4_obs > 1e-15
+#
+#                '''
+#    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{8.0}} \right )$'
+#    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
+#    plotMergerFractionsMultiplot(query, xlab, ylab,'ColorColorIRAC4Multi'+type,
+#                                 out_folder)
 ###############################################################################
 ###############################################################################
 #    query = '''select FIR.spire250_obs / FIR.irac_ch4_obs,
@@ -519,29 +519,29 @@ if __name__ == '__main__':
 #                                 title = '$\log_{10}(M_{\mathrm{DM}}) > 11.5$',
 #                                 xmin = 0.5, xmax = 4.)
 ################################################################################
-#    query = '''select FIR.spire250_obs / FIR.irac_ch4_obs,
-#                galphot.f775w, galphot.f850lp,
-#                galprop.tmerge, galprop.tmajmerge
-#                from FIR, galprop, galphot where
-#                FIR.z >= 2.0 and
-#                FIR.z < 4.0 and
-#                FIR.gal_id = galprop.gal_id and
-#                FIR.halo_id = galprop.halo_id and
-#                FIR.gal_id = galphot.gal_id and
-#                FIR.halo_id = galphot.halo_id and
-#                FIR.spire250_obs < 1e6 and
-#                galphot.f775w < 33 and
-#                galphot.f850lp < 33 and
-#                FIR.spire250_obs > 5e-6 and
-#                FIR.irac_ch4_obs > 1e-15
-#                '''
-#    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{8.0}} \right )$'
-#    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
-#    plotMergerFractionsMultiplot(query, xlab, ylab,
-#                                 'ColorColorIRAC4MultiLSPIRE'+type,
-#                                 out_folder,
-#                                 title = '$S_{250} > 5\ \mathrm{mJy}$',
-#                                 xmin = 0.5, xmax = 4.0)
+    query = '''select FIR.spire250_obs / FIR.irac_ch4_obs,
+                galphot.f775w, galphot.f850lp,
+                galprop.tmerge, galprop.tmajmerge
+                from FIR, galprop, galphot where
+                FIR.z >= 2.0 and
+                FIR.z < 4.0 and
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id and
+                FIR.gal_id = galphot.gal_id and
+                FIR.halo_id = galphot.halo_id and
+                FIR.spire250_obs < 1e6 and
+                galphot.f775w < 33 and
+                galphot.f850lp < 33 and
+                FIR.spire250_obs > 5e-3 and
+                FIR.irac_ch4_obs > 1e-15
+                '''
+    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{8.0}} \right )$'
+    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
+    plotMergerFractionsMultiplot(query, xlab, ylab,
+                                 'ColorColorIRAC4MultiLSPIRE'+type,
+                                 out_folder,
+                                 title = '$S_{250} > 5\ \mathrm{mJy}$',
+                                 xmin = 0.5, xmax = 4.0)
 ################################################################################
 #    query = '''select FIR.spire250_obs / FIR.irac_ch4_obs,
 #                galphot.f775w, galphot.f850lp,
