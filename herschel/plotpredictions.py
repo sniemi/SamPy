@@ -539,6 +539,123 @@ def plot_Age(path, db, reshifts, out_folder,
     P.legend(loc = 'lower right')
     P.savefig(out_folder + 'Age.ps') 
 
+def plot_mergerfraction(path, db, reshifts, out_folder,
+                        xmin = 0.0, xmax = 2.1, fluxlimit = 5):
+    '''
+    Plots 
+    '''
+    #figure
+    #fig = P.figure(figsize= (10,10))
+    fig = P.figure()
+    fig.subplots_adjust(left = 0.09, bottom = 0.08,
+                        right = 0.93, top = 0.95,
+                        wspace = 0.0, hspace = 0.0)
+    ax1 = fig.add_subplot(221)
+    ax2 = fig.add_subplot(222)
+    ax3 = fig.add_subplot(223)
+    ax4 = fig.add_subplot(224)
+
+    mergetimelimit = 0.25
+
+    for i, reds in enumerate(redshifts):
+        query = '''select FIR.spire250_obs*1000, galprop.tmerge, galprop.tmajmerge
+                from FIR, galprop where
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id and
+                FIR.spire250_obs < 1e6 and
+                FIR.spire250_obs > 1e-15 and
+                %s
+                ''' % reds
+        #tmp
+        tmp = reds.split()
+        zz = N.mean(N.array([float(tmp[2]), float(tmp[6])]))
+        
+        data = sq.get_data_sqliteSMNfunctions(path, db, query)
+        x = N.log10(data[:,0])
+        tmerge = data[:,1]
+        tmajor = data[:,2]
+        print N.min(x), N.max(x)
+        #masks
+        nomergeMask = tmerge < 0.0
+        majorsMask = (tmajor > 0.0) & (tmajor <= mergetimelimit)
+        majorsMask2 = (tmajor > mergetimelimit)
+        mergersMask = (tmerge > 0.0) & (tmerge <= mergetimelimit) & \
+                      (majorsMask == False) & (majorsMask2 == False)
+        mergersMask2 = (nomergeMask == False) & (majorsMask == False) & \
+                       (mergersMask == False) & (majorsMask2 == False)
+        #bin the data
+        mids, numbs = dm.binAndReturnMergerFractions2(x,
+                                                      nomergeMask,
+                                                      mergersMask,
+                                                      majorsMask,
+                                                      mergersMask2,
+                                                      majorsMask2,
+                                                      N.min(x),
+                                                      N.max(x),
+                                                      25,
+                                                      False)
+        #the fraction of mergers
+        noMergerFraction = [float(x[1]) / x[0] for x in numbs]
+        mergerFraction = [float(x[2]) / x[0] for x in numbs]
+        majorMergerFraction = [float(x[3]) / x[0] for x in numbs]
+        mergerFraction2 = [float(x[4]) / x[0] for x in numbs]
+        majorMergerFraction2 = [float(x[5]) / x[0] for x in numbs]
+        
+        #sanity check
+        for a, b, c, d, e in zip(noMergerFraction,mergerFraction,majorMergerFraction,
+                                 mergerFraction2,majorMergerFraction2):
+            print a+b+c+d+e 
+
+#        ax.plot(mids, noMergerFraction, 'k-', lw = 2.6,
+#                 label = 'Never Merged')
+#        ax.plot(mids, mergerFraction, ls = '--', lw = 2.6,
+#                 label = 'Minor Merger: $T \leq 250$ Myr')
+#        ax.plot(mids, mergerFraction2, ls = '-.', lw = 2.6,
+#                 label = 'Minor Merger: $T > 500$ Myr')
+#        ax.plot(mids, majorMergerFraction, ls = '--', lw = 2.6,
+#                 label = 'Major Merger: $T \leq 250$ Myr')
+#        ax.plot(mids, majorMergerFraction2, ls = '-.', lw = 2.6,
+#                 label = 'Major Merger: $T > 500$ Myr')
+
+        #ax.plot(mids, 1 - N.array(noMergerFraction), label = '$z = %.1f$' % zz)
+        ax1.plot(mids, majorMergerFraction, label = '$z = %.1f$' % zz)
+        ax2.plot(mids, majorMergerFraction2, label = '$z = %.1f$' % zz)
+        ax3.plot(mids, mergerFraction, label = '$z = %.1f$' % zz)
+        ax4.plot(mids, mergerFraction2, label = '$z = %.1f$' % zz)
+
+
+    ax1.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
+    ax2.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
+    ax3.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
+    ax4.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
+  
+    ax3.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    ax4.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    ax1.set_ylabel('Major Merger Fraction')
+    ax3.set_ylabel('Minor Merger Fraction')
+    ax2.set_yticklabels([])
+    ax4.set_yticklabels([])
+    ax1.set_xticklabels([])
+    ax2.set_xticklabels([])
+    
+    #make grid
+#    ax1.grid()
+#    ax2.grid()
+#    ax3.grid()
+#    ax4.grid()
+
+    ax1.set_xlim(xmin, xmax)
+    ax1.set_ylim(0.0, 0.9)
+    ax2.set_xlim(xmin, xmax)
+    ax2.set_ylim(0.0, 0.9)
+    ax3.set_xlim(xmin, xmax)
+    ax3.set_ylim(0.0, 0.9)
+    ax4.set_xlim(xmin, xmax)
+    ax4.set_ylim(0.0, 0.9)
+
+    P.legend(loc = 'lower right')
+    P.savefig(out_folder + 'Merge.ps') 
+
    
 if __name__ == '__main__':
     #find the home directory, because the output is to dropbox 
@@ -565,4 +682,5 @@ if __name__ == '__main__':
 #    plot_DMmass(path, db, redshifts, out_folder)
 #    plot_Age(path, db, redshifts, out_folder)
 #    plot_coldgas(path, db, redshifts, out_folder)
-    plot_burstmass(path, db, redshifts, out_folder)
+#    plot_burstmass(path, db, redshifts, out_folder)
+    plot_mergerfraction(path, db, redshifts, out_folder)

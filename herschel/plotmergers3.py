@@ -33,6 +33,7 @@ def plotMergerFractions(query,
     mstar = data[:,0]
     tmerge = data[:,1]
     tmajor = data[:,2]
+    print N.min(mstar), N.max(mstar)
     #masks
     nomergeMask = tmerge < 0.0
     majorsMask = (tmajor > 0.0) & (tmajor <= mergetimelimit)
@@ -349,6 +350,21 @@ if __name__ == '__main__':
 #    plotMergerFractions(query, xlab, ylab,'FractionMergerSPIRE250IRAC4'+type,
 #                        out_folder, mstarmin = 0.0, mstarmax = 1400, mbins = 10,
 #                        logscale = False, ymax = 1.01)
+################################################################################
+#    query = '''select galphotdust.f775w - galphotdust.f850lp, galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop, galphotdust where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.gal_id = galphotdust.gal_id and
+#                FIR.halo_id = galphotdust.halo_id and
+#                FIR.spire250_obs < 1e6
+#                '''
+#    xlab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
+#    plotMergerFractions(query, xlab, ylab,'FractionMergerUVColour'+type,
+#                        out_folder, mstarmin = -.2, mstarmax = 5, mbins = 10,
+#                        logscale = False, ymax = 0.5)
 ###############################################################################
 #    #2nd generation of plots
 ###############################################################################
@@ -416,62 +432,62 @@ if __name__ == '__main__':
     #3rd generation of plots
 ##############################################################################
 ###############################################################################
-    query = '''select FIR.spire250_obs / FIR.irac_ch1_obs, galprop.tmerge, galprop.tmajmerge
-                from FIR, galprop where
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                FIR.spire250_obs < 1e6 and
-                FIR.spire250_obs > 1e-20 and
-                FIR.irac_ch1_obs > 1e-20
-                '''
-    xlab = r'$\log_{10}\left(\frac{S_{250}}{S_{3.4}}\right)$'
-    plotMergerFractions3(query, xlab, ylab,'FractionMergerSPIRE250IRAC13'+type,
-                        out_folder, mstarmin = -2., mstarmax = 4.,
-                        mbins = 12, logscale = True)
-###############################################################################
-    query = '''select FIR.spire250_obs / FIR.irac_ch2_obs, galprop.tmerge, galprop.tmajmerge
-                from FIR, galprop where
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                FIR.spire250_obs < 1e6 and
-                FIR.spire250_obs > 1e-20 and
-                FIR.irac_ch2_obs > 1e-20
-                '''
-    xlab = r'$\log_{10}\left(\frac{S_{250}}{S_{4.5}}\right)$'
-    plotMergerFractions3(query, xlab, ylab,'FractionMergerSPIRE250IRAC23'+type,
-                        out_folder, mstarmin = -2, mstarmax = 4.,
-                        mbins = 12, logscale = True)
-###############################################################################
-    query = '''select FIR.spire250_obs / FIR.irac_ch3_obs, galprop.tmerge, galprop.tmajmerge
-                from FIR, galprop where
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                FIR.spire250_obs < 1e6 and
-                FIR.spire250_obs > 1e-20 and
-                FIR.irac_ch3_obs > 1e-20
-                '''
-    xlab = r'$\log_{10}\left(\frac{S_{250}}{S_{5.8}}\right)$'
-    plotMergerFractions3(query, xlab, ylab,'FractionMergerSPIRE250IRAC33'+type,
-                        out_folder, mstarmin = -2, mstarmax = 4.,
-                        mbins = 12, logscale = True)
-###############################################################################
-    query = '''select FIR.spire250_obs / FIR.irac_ch4_obs, galprop.tmerge, galprop.tmajmerge
-                from FIR, galprop where
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                FIR.spire250_obs < 1e6 and
-                FIR.spire250_obs > 1e-20 and
-                FIR.irac_ch4_obs > 1e-20
-                '''
-    xlab = r'$\log_{10}\left(\frac{S_{250}}{S_{8}}\right)$'
-    plotMergerFractions3(query, xlab, ylab,'FractionMergerSPIRE250IRAC43'+type,
-                        out_folder, mstarmin = -2, mstarmax = 3.5,
-                        mbins = 12, logscale = True)
+#    query = '''select FIR.spire250_obs / FIR.irac_ch1_obs, galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                FIR.spire250_obs > 1e-20 and
+#                FIR.irac_ch1_obs > 1e-20
+#                '''
+#    xlab = r'$\log_{10}\left(\frac{S_{250}}{S_{3.4}}\right)$'
+#    plotMergerFractions3(query, xlab, ylab,'FractionMergerSPIRE250IRAC13'+type,
+#                        out_folder, mstarmin = -2, mstarmax = 4.,
+#                        mbins = 12, logscale = True)
+################################################################################
+#    query = '''select FIR.spire250_obs / FIR.irac_ch2_obs, galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                FIR.spire250_obs > 1e-20 and
+#                FIR.irac_ch2_obs > 1e-20
+#                '''
+#    xlab = r'$\log_{10}\left(\frac{S_{250}}{S_{4.5}}\right)$'
+#    plotMergerFractions3(query, xlab, ylab,'FractionMergerSPIRE250IRAC23'+type,
+#                        out_folder, mstarmin = -2, mstarmax = 4.,
+#                        mbins = 12, logscale = True)
+################################################################################
+#    query = '''select FIR.spire250_obs / FIR.irac_ch3_obs, galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                FIR.spire250_obs > 1e-20 and
+#                FIR.irac_ch3_obs > 1e-20
+#                '''
+#    xlab = r'$\log_{10}\left(\frac{S_{250}}{S_{5.8}}\right)$'
+#    plotMergerFractions3(query, xlab, ylab,'FractionMergerSPIRE250IRAC33'+type,
+#                        out_folder, mstarmin = -2, mstarmax = 4.,
+#                        mbins = 12, logscale = True)
+################################################################################
+#    query = '''select FIR.spire250_obs / FIR.irac_ch4_obs, galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                FIR.spire250_obs > 1e-20 and
+#                FIR.irac_ch4_obs > 1e-20
+#                '''
+#    xlab = r'$\log_{10}\left(\frac{S_{250}}{S_{8}}\right)$'
+#    plotMergerFractions3(query, xlab, ylab,'FractionMergerSPIRE250IRAC43'+type,
+#                        out_folder, mstarmin = -2, mstarmax = 3.5,
+#                        mbins = 12, logscale = True)
