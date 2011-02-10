@@ -1,11 +1,12 @@
 import matplotlib
-matplotlib.use('PS')
+#matplotlib.use('PS')
+matplotlib.use('Agg')
 matplotlib.rc('text', usetex = True)
-matplotlib.rcParams['font.size'] = 17
+matplotlib.rcParams['font.size'] = 16
 matplotlib.rc('xtick', labelsize = 14) 
 matplotlib.rc('axes', linewidth = 1.2)
-matplotlib.rcParams['legend.fontsize'] = 14
-matplotlib.rcParams['legend.handlelength'] = 2
+matplotlib.rcParams['legend.fontsize'] = 12
+matplotlib.rcParams['legend.handlelength'] = 1
 matplotlib.rcParams['xtick.major.size'] = 5
 matplotlib.rcParams['ytick.major.size'] = 5
 matplotlib.rcParams['legend.fancybox'] = True
@@ -540,13 +541,19 @@ def plot_Age(path, db, reshifts, out_folder,
     P.savefig(out_folder + 'Age.ps') 
 
 def plot_mergerfraction(path, db, reshifts, out_folder,
-                        xmin = 0.0, xmax = 2.1, fluxlimit = 5):
+                        xmin = -0.5, xmax = 2.35, fluxlimit = 5,
+                        png = True, mergetimelimit = 0.5,
+                        xbin = 9):
     '''
     Plots 
     '''
     #figure
-    #fig = P.figure(figsize= (10,10))
-    fig = P.figure()
+    if png:
+        fig = P.figure(figsize= (10,10))
+        type = '.png'
+    else:
+        fig = P.figure()
+        type = '.ps'
     fig.subplots_adjust(left = 0.09, bottom = 0.08,
                         right = 0.93, top = 0.95,
                         wspace = 0.0, hspace = 0.0)
@@ -555,15 +562,13 @@ def plot_mergerfraction(path, db, reshifts, out_folder,
     ax3 = fig.add_subplot(223)
     ax4 = fig.add_subplot(224)
 
-    mergetimelimit = 0.25
-
     for i, reds in enumerate(redshifts):
         query = '''select FIR.spire250_obs*1000, galprop.tmerge, galprop.tmajmerge
                 from FIR, galprop where
                 FIR.gal_id = galprop.gal_id and
                 FIR.halo_id = galprop.halo_id and
                 FIR.spire250_obs < 1e6 and
-                FIR.spire250_obs > 1e-15 and
+                FIR.spire250_obs > 5e-5 and
                 %s
                 ''' % reds
         #tmp
@@ -583,7 +588,10 @@ def plot_mergerfraction(path, db, reshifts, out_folder,
                       (majorsMask == False) & (majorsMask2 == False)
         mergersMask2 = (nomergeMask == False) & (majorsMask == False) & \
                        (mergersMask == False) & (majorsMask2 == False)
-        #bin the data
+        
+        #xbin =  int(N.max(x)*4.)
+        if i > 0: xbin -= i - 2
+        if i > 2: xbin = 6
         mids, numbs = dm.binAndReturnMergerFractions2(x,
                                                       nomergeMask,
                                                       mergersMask,
@@ -592,7 +600,7 @@ def plot_mergerfraction(path, db, reshifts, out_folder,
                                                       majorsMask2,
                                                       N.min(x),
                                                       N.max(x),
-                                                      25,
+                                                      xbin,
                                                       False)
         #the fraction of mergers
         noMergerFraction = [float(x[1]) / x[0] for x in numbs]
@@ -605,56 +613,63 @@ def plot_mergerfraction(path, db, reshifts, out_folder,
         for a, b, c, d, e in zip(noMergerFraction,mergerFraction,majorMergerFraction,
                                  mergerFraction2,majorMergerFraction2):
             print a+b+c+d+e 
-
-#        ax.plot(mids, noMergerFraction, 'k-', lw = 2.6,
-#                 label = 'Never Merged')
-#        ax.plot(mids, mergerFraction, ls = '--', lw = 2.6,
-#                 label = 'Minor Merger: $T \leq 250$ Myr')
-#        ax.plot(mids, mergerFraction2, ls = '-.', lw = 2.6,
-#                 label = 'Minor Merger: $T > 500$ Myr')
-#        ax.plot(mids, majorMergerFraction, ls = '--', lw = 2.6,
-#                 label = 'Major Merger: $T \leq 250$ Myr')
-#        ax.plot(mids, majorMergerFraction2, ls = '-.', lw = 2.6,
-#                 label = 'Major Merger: $T > 500$ Myr')
-
-        #ax.plot(mids, 1 - N.array(noMergerFraction), label = '$z = %.1f$' % zz)
+        
+        #plots
         ax1.plot(mids, majorMergerFraction, label = '$z = %.1f$' % zz)
         ax2.plot(mids, majorMergerFraction2, label = '$z = %.1f$' % zz)
         ax3.plot(mids, mergerFraction, label = '$z = %.1f$' % zz)
         ax4.plot(mids, mergerFraction2, label = '$z = %.1f$' % zz)
+        #ax4.plot(mids, noMergerFraction, label = '$z = %.1f$' % zz)
 
-
+    #set obs limit
     ax1.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
     ax2.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
     ax3.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
     ax4.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
   
+    #labels
     ax3.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
     ax4.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
-    ax1.set_ylabel('Major Merger Fraction')
-    ax3.set_ylabel('Minor Merger Fraction')
+    ax1.set_ylabel('Merger Fraction')
+    ax3.set_ylabel('Merger Fraction')
     ax2.set_yticklabels([])
     ax4.set_yticklabels([])
     ax1.set_xticklabels([])
     ax2.set_xticklabels([])
     
-    #make grid
-#    ax1.grid()
-#    ax2.grid()
-#    ax3.grid()
-#    ax4.grid()
+    #texts
+    P.text(0.5, 0.94,'Major mergers: $T_{\mathrm{merge}} \leq %i$' % (mergetimelimit * 1000.),
+           horizontalalignment='center',
+           verticalalignment='center',
+           transform = ax1.transAxes)
+    P.text(0.5, 0.94,'Major mergers: $T_{\mathrm{merge}} > %i$' % (mergetimelimit * 1000.),
+           horizontalalignment='center',
+           verticalalignment='center',
+           transform = ax2.transAxes)
+    P.text(0.5, 0.94,'Minor mergers: $T_{\mathrm{merge}} \leq %i$' % (mergetimelimit * 1000.),
+           horizontalalignment='center',
+           verticalalignment='center',
+           transform = ax3.transAxes)
+    P.text(0.5, 0.94,'Minor mergers: $T_{\mathrm{merge}} > %i$' % (mergetimelimit * 1000.),
+           horizontalalignment='center',
+           verticalalignment='center',
+           transform = ax4.transAxes)
+#    P.text(0.5, 0.94,'Never Merged',
+#           horizontalalignment='center',
+#           verticalalignment='center',
+#           transform = ax4.transAxes)
 
     ax1.set_xlim(xmin, xmax)
-    ax1.set_ylim(0.0, 0.9)
+    ax1.set_ylim(-0.01, 0.95)
     ax2.set_xlim(xmin, xmax)
-    ax2.set_ylim(0.0, 0.9)
+    ax2.set_ylim(-0.01, 0.95)
     ax3.set_xlim(xmin, xmax)
-    ax3.set_ylim(0.0, 0.9)
+    ax3.set_ylim(-0.01, 0.95)
     ax4.set_xlim(xmin, xmax)
-    ax4.set_ylim(0.0, 0.9)
+    ax4.set_ylim(-0.01, 0.95)
 
-    P.legend(loc = 'lower right')
-    P.savefig(out_folder + 'Merge.ps') 
+    ax3.legend(loc = 'center right')
+    P.savefig(out_folder + 'Merge' + type) 
 
    
 if __name__ == '__main__':
