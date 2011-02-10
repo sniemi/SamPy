@@ -16,7 +16,6 @@ DEPENDS:
 Python 2.5 or later (not 3.x compatible however)
 NumPy
 PyFITS
-PyRAF
 SciPy
 matplotlib
 
@@ -25,7 +24,6 @@ Python 2.5.4
 NumPy 1.4.0.dev7576
 SciPy
 PyFITS 2.2.2
-PyRAF
 matplotlib 1.0.svn
 
 HISTORY:
@@ -37,15 +35,15 @@ VERSION HISTORY:
 0.3: first full working version (SMN)
 0.4: modified FITS output to comply with CDBS rules (SMN)
 0.5: improved documentation (SMN)
+0.6: fixed and imporved _badspot function (SMN)
 
 @author: Sami-Matias Niemi
-@version: 0.5
+@version: 0.6
 @organization: STScI
 @contact: niemi@stsci.edu
 @requires: NumPy
 @requires: SciPy
 @requires: PyFITS
-@requires: PyRAF
 @requires: matplotlib
 @todo: For improved median filter, one could use scipy.ndimage.filters.median_filter
 '''
@@ -338,7 +336,7 @@ class MakeFlat:
         '''
         Loads SMNdust.stis file that holds information about dust speck
         locations and sizes. It will return a mask where all dust motes
-        haves been marked. The function can be used for both L and M-modes
+        have been marked. The function can be used for both L and M-modes
         as M-modes are shifted 2 pixels to left and their radius is set 
         to 16, except for the first two dust specks which are smaller.
         @summary: Adds dust motes to bad pixel mask. 
@@ -346,22 +344,18 @@ class MakeFlat:
         areas such as dust motes that should not be used for fitting.
         @param opt_elem: optical element that was used; L or M -mode
         @return: updated mask, x_centre, y_centre, radius of dust specks
-        @todo: Rewrite; adapted from an IDL routine, thus, looks horrible
         '''
-        s = N.shape(mask)
-        nx = s[1] - 1
-        ny = s[0] - 1        # max x & y pixel
-        
-        #read dust file       
+        # mask indices
+        y, x = N.indices(mask.shape)
+
+        #read the dust file       
         dust = N.loadtxt('SMNdust.stis', comments='#')
-        
+        xcen = dust[:,0]
+        ycen = dust[:,1]
+
         #first 2 spots on spectrum & are small. cut size
         rad = N.zeros(N.shape(dust)[0]) + 12
         rad[0:2] -= 4
-        
-        xcen = dust[:,0]
-        ycen = dust[:,1]
-        
         #; 99jun10 - shift stis medium disp spots left 
         if 'M' in opt_elem:
             #shifting badspots to left
@@ -370,29 +364,15 @@ class MakeFlat:
             rad = rad*0 + 16
             rad[0:2] -= 4     # 1st 2 spots on spectrum & are small. cut size
         
-        radsq = rad**2.
+        #update the mask
+        for xc, yc, rd in zip(xcen, ycen, rad):
+            xm = x - xc
+            ym = y - yc
+            radius = N.sqrt(xm**2 + ym**2)
+            msk = radius < rd
+            mask[msk] = 0
 
-        #this shuold be rewritten...
-        for i, a in enumerate(xcen):
-            for j, b in enumerate(rad):
-                #; 2*rad+1 lines total get some flags
-                dist = int(math.sqrt(radsq[i] - j**2.) + 0.5)
-                xmn = xcen[i] - dist
-                if xmn < 0: xmn = 0
-
-                xmx = xcen[i] + dist
-                if xmx > nx: xmx = nx
-
-                yrow = ycen[i] - j
-                if yrow < 0: yrow = 0
-                mask[yrow, xmn:xmx] = 0
-
-                yrow = ycen[i] + j
-                if yrow > ny: yrow = ny
-                mask[yrow, xmn:xmx] = 0
-
-        return mask, xcen, ycen, rad
-    
+        return mask, xcen, ycen, rad    
 
     def _fitfunc(self, x, ynodes):
         '''
@@ -1210,15 +1190,15 @@ def process_args(just_print_help = False):
     from optparse import OptionParser
     
     usage = 'usage: %prog [options]'
-    desc = 'This script can be used to generate STIS CCD spectroscopic pixel-to-pixel flat field.'
+    desc = 'This script can be used to generates STIS CCD spectroscopic flat field images.'
     
     parser = OptionParser(usage = usage, version='%prog ' + __version__, description = desc)
          
     parser.add_option('-o', '--output', dest='output', 
-                      help='Output directory. If not given, will use ./obs/', 
+                      help='Output directory. If not given, will use ./out/', 
                       metavar='string')
     parser.add_option('-i', '--input', dest='input', 
-                      help='Input directory. If not given, will use ./out/', 
+                      help='Input directory. If not given, will use ./obs/', 
                       metavar='string')
     parser.add_option('-f', '--filelists', action='store_true', dest='filelist',
                       help='Will list each suitable crj file in a file list.')
@@ -1324,7 +1304,7 @@ if __name__ == '__main__':
             if val < 0:
                 F.writeToASCIIFile(poss[val], 'g430m_52x2m%i_crj.txt' % -val)
             elif val == 0:
-                F.writeToASCIIFile(poss[val], 'g430m_52x2_crj.txt')
+               F.writeToASCIIFile(poss[val], 'g430m_52x2_crj.txt')
             else:
                 F.writeToASCIIFile(poss[val], 'g430m_52x2p%i_crj.txt' % val)
 

@@ -74,3 +74,40 @@ def Luminosity(abs_mag):
     @return: luminosity 
     '''
     return 10.0**((4.85-abs_mag)/2.5)
+
+def get_flat_flambda_dmag(plambda, plambda_ref):
+    '''                                                                                                             
+    Compute the differential AB-mag for an object flat in f_lambda                                                   
+    '''
+    # compute mag_AB for an object at the desired wavelength                                                         
+    mag1 = get_magAB_from_flambda(1.0e-17, plambda)
+
+    # compute mag_AB for an object at the reference wavelength                                                       
+    mag2 = get_magAB_from_flambda(1.0e-17, plambda_ref)
+
+    # return the mag difference                                                                                      
+    return (mag1 - mag2)
+
+def get_magAB_from_flambda(flambda, wlength):
+    '''                                                                                                             
+    Converts a mag_AB value at a wavelength to f_lambda                                                              
+                                                                                                                     
+    @param flambda: mag_AB value                                                                                     
+    @type flambda: float                                                                                             
+    @param wlength: wavelength value [nm]                                                                            
+    @type wlength: float                                                                                             
+                                                                                                                     
+    @return: the mag_AB value                                                                                        
+    @rtype: float                                                                                                    
+    '''
+    import math
+
+    # transform from flambda to fnue                                                                                 
+    fnu = (wlength*wlength) / 2.99792458e+16 * flambda
+
+    # compute mag_AB                                                                                                 
+    mag_AB = -2.5 * math.log10(fnu) - 48.6
+
+    # return the mag_AB                                                                                              
+    return mag_AB
+
