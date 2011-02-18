@@ -565,10 +565,10 @@ def plot_mergerfraction(path, db, reshifts, out_folder,
     for i, reds in enumerate(redshifts):
         query = '''select FIR.spire250_obs*1000, galprop.tmerge, galprop.tmajmerge
                 from FIR, galprop where
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
                 FIR.spire250_obs < 1e6 and
                 FIR.spire250_obs > 5e-5 and
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id and
                 %s
                 ''' % reds
         #tmp
@@ -677,8 +677,9 @@ if __name__ == '__main__':
     #and my user name is not always the same, this hack is required.
     hm = os.getenv('HOME')
     #constants
-    path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
-    out_folder = hm + '/Dropbox/Research/Herschel/plots/predictions/'
+    #path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
+    path = hm +  '/Research/Herschel/runs/big_volume/'
+    out_folder = hm + '/Dropbox/Research/Herschel/plots/predictions/big/'
     db = 'sams.db'
 
     redshifts = ['FIR.z > 0.1 and FIR.z < 0.3',
@@ -687,6 +688,10 @@ if __name__ == '__main__':
                  'FIR.z > 1.9 and FIR.z < 2.1',
                  'FIR.z > 2.9 and FIR.z < 3.1',
                  'FIR.z > 3.9 and FIR.z < 4.1']
+    
+    print 'Begin plotting'
+    print 'Input DB: ', path + db
+    print 'Output folder: ', out_folder
 #
 #    plot_sfrs(path, db, redshifts, out_folder)
 #    plot_stellarmass(path, db, redshifts, out_folder)

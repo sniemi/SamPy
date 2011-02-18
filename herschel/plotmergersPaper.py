@@ -1,6 +1,6 @@
 import matplotlib
 #matplotlib.use('Cairo')
-#matplotlib.use('Agg')
+matplotlib.use('Agg')
 matplotlib.rc('text', usetex = True)
 matplotlib.rcParams['font.size'] = 17
 matplotlib.rc('xtick', labelsize = 14) 
@@ -54,8 +54,8 @@ def plotMergerFractionsMultiplot(query, xlabel, ylabel,
                                                 N.linspace(ymin, ymax, ybins),
                                                 return_data = True)
     #make the figure
-    fig = P.figure()
-    #fig = P.figure(figsize= (10,10))
+    #fig = P.figure()
+    fig = P.figure(figsize= (10,10))
     fig.subplots_adjust(left = 0.09, bottom = 0.08,
                         right = 0.93, top = 0.95,
                         wspace = 0.0, hspace = 0.0)
@@ -157,14 +157,17 @@ if __name__ == '__main__':
     #and my user name is not always the same, this hack is required.
     hm = os.getenv('HOME')
     #constants
-    path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
-    out_folder = hm + '/Dropbox/Research/Herschel/plots/mergers/'
+    #path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
+    path = hm +  '/Research/Herschel/runs/big_volume/'
+    out_folder = hm + '/Dropbox/Research/Herschel/plots/mergers/big/'
     db = 'sams.db'
     obs = hm + '/Dropbox/Research/Herschel/obs_data/goodsh_goodsn_allbands_z2-4.cat'
 
-    type = '.ps'
+    type = '.png'
 
     print 'Begin plotting'
+    print 'Input DB: ', path + db
+    print 'Output folder: ', out_folder
 ###############################################################################
 #    query = '''select FIR.spire250_obs / FIR.irac_ch1_obs,
 #                galphotdust.f775w, galphotdust.f850lp,
@@ -233,27 +236,27 @@ if __name__ == '__main__':
 #                                 mergetimelimit = 0.5, alpha = 0.5)
 ###############################################################################
 ###############################################################################
-    query = '''select FIR.spire250_obs / FIR.irac_ch2_obs,
-                galphotdust.f775w, galphotdust.f850lp,
-                galprop.tmerge, galprop.tmajmerge
-                from FIR, galprop, galphotdust where
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                FIR.gal_id = galphotdust.gal_id and
-                FIR.halo_id = galphotdust.halo_id and
-                FIR.spire250_obs < 1e6 and
-                galphotdust.f775w < 50 and
-                galphotdust.f850lp < 50 and
-                FIR.spire250_obs > 1e-15 and
-                FIR.irac_ch2_obs > 1e-15
-                '''
-    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{4.5}} \right )$'
-    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
-    plotMergerFractionsMultiplot(query, xlab, ylab,'ColorMergerPaper4'+type,
-                                 out_folder, obs, ch = 2,
-                                 title = 'All Simulated Galaxies')
+#    query = '''select FIR.spire250_obs / FIR.irac_ch2_obs,
+#                galphotdust.f775w, galphotdust.f850lp,
+#                galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop, galphotdust where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.gal_id = galphotdust.gal_id and
+#                FIR.halo_id = galphotdust.halo_id and
+#                FIR.spire250_obs < 1e6 and
+#                galphotdust.f775w < 50 and
+#                galphotdust.f850lp < 50 and
+#                FIR.spire250_obs > 1e-15 and
+#                FIR.irac_ch2_obs > 1e-15
+#                '''
+#    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{4.5}} \right )$'
+#    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
+#    plotMergerFractionsMultiplot(query, xlab, ylab,'ColorMergerPaper4'+type,
+#                                 out_folder, obs, ch = 2,
+#                                 title = 'All Simulated Galaxies')
 ##############################################################################
     query = '''select FIR.spire250_obs / FIR.irac_ch2_obs,
                 galphotdust.f775w, galphotdust.f850lp,
@@ -261,14 +264,14 @@ if __name__ == '__main__':
                 from FIR, galprop, galphotdust where
                 FIR.z >= 2.0 and
                 FIR.z < 4.0 and
+                FIR.spire250_obs < 1e6 and
+                galphotdust.f775w_obs < 50 and
+                galphotdust.f850lp_obs < 50 and
+                FIR.spire250_obs > 1e-4 and
                 FIR.gal_id = galprop.gal_id and
                 FIR.halo_id = galprop.halo_id and
                 FIR.gal_id = galphotdust.gal_id and
-                FIR.halo_id = galphotdust.halo_id and
-                FIR.spire250_obs < 1e6 and
-                galphotdust.f775w < 50 and
-                galphotdust.f850lp < 50 and
-                FIR.spire250_obs > 1e-4
+                FIR.halo_id = galphotdust.halo_id
                 '''
     xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{4.5}} \right )$'
     ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
@@ -283,14 +286,14 @@ if __name__ == '__main__':
                 from FIR, galprop, galphotdust where
                 FIR.z >= 2.0 and
                 FIR.z < 4.0 and
+                FIR.spire250_obs < 1e6 and
+                galphotdust.f775w_obs < 50 and
+                galphotdust.f850lp_obs < 50 and
+                FIR.spire250_obs > 5e-3 and
                 FIR.gal_id = galprop.gal_id and
                 FIR.halo_id = galprop.halo_id and
                 FIR.gal_id = galphotdust.gal_id and
-                FIR.halo_id = galphotdust.halo_id and
-                FIR.spire250_obs < 1e6 and
-                galphotdust.f775w < 50 and
-                galphotdust.f850lp < 50 and
-                FIR.spire250_obs > 5e-3
+                FIR.halo_id = galphotdust.halo_id
                 '''
     xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{4.5}} \right )$'
     ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
