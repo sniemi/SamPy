@@ -109,7 +109,7 @@ def plot_number_counts(path, database, band, redshifts,
 
     #get data and convert to mJy
     query = '''select FIR.%s from FIR
-where FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, band, band)
+               where FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, band, band)
     fluxes = db.sqlite.get_data_sqlite(path, database, query)*10**3
 
     #weight each galaxy
@@ -262,7 +262,7 @@ where FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, band, band)
     for i, red in enumerate(redshifts):
         #get data and convert to mJy
         query = '''select FIR.%s from FIR 
-        where %s and FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, red, band, band)
+                   where %s and FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, red, band, band)
         fluxes = db.sqlite.get_data_sqlite(path, database, query)*10**3
 
         #modify redshift string
@@ -454,7 +454,7 @@ def plot_number_counts2(path, database, band, redshifts,
 
     #get data and convert to mJy
     query = '''select FIR.%s from FIR
-where FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, band, band)
+               where FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, band, band)
     fluxes = db.sqlite.get_data_sqlite(path, database, query)*10**3
 
     #weight each galaxy
@@ -588,7 +588,6 @@ where FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, band, band)
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(ymin, ymax)
     ax.set_xticklabels([])
-
     #legend
     if 'pacs100' in band or 'pacs160' in band:
         p = P.Rectangle((0, 0), 1, 1, fc='#728FCE', alpha = 0.2)
@@ -607,19 +606,15 @@ where FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, band, band)
     for i, red in enumerate(redshifts):
         #get data and convert to mJy
         query = '''select FIR.%s from FIR 
-        where %s and FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, red, band, band)
+                   where %s and FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, red, band, band)
         fluxes = db.sqlite.get_data_sqlite(path, database, query)*10**3
-
         #modify redshift string
         tmp = red.split()
         rtitle = r'$%s < z \leq %s$' % (tmp[2], tmp[6])
-
         #weights
         wghts = N.zeros(len(fluxes)) + area
-
         #make a subplot
         axs = P.subplot(rows, columns, i+2)
-
         #make a histogram
         b, n, nu =  diff_function(fluxes,
                                   wgth = wghts, 
@@ -647,7 +642,6 @@ where FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, band, band)
 #        axs.fill_between(x[mask], up, lw, alpha = 0.2)
         axs.fill_between(x[mask], up, lw, color = '#728FCE')
 
-        
         #write to output
         if write_out:
             fh = open(out_folder + 'outputredshiftbin%i.txt' % i, 'a')
@@ -656,7 +650,6 @@ where FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, band, band)
             for aa, bb, cc, dd in zip(x[mask], y[mask], up, lw):
                 fh.write('%e %e %e %e\n' % (aa, bb, cc, dd))
             fh.close()
-
         #add annotation
         axs.annotate(rtitle, (0.5, 0.9), xycoords='axes fraction',
                      ha = 'center')
@@ -746,13 +739,11 @@ where FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, band, band)
                 lw = y*data[:,2]
                 axs.errorbar(x, y, yerr=[lw, up], ls = 'None',
                              marker = '*', mec = 'r', c='red')
-        
         #set scales
         axs.set_xscale('log')
         axs.set_yscale('log')
         axs.set_xlim(xmin, xmax)
         axs.set_ylim(ymin, ymax)
-
         #remove unnecessary ticks and add units
         if i == 0 or i == 2:
             axs.set_yticklabels([])
@@ -763,8 +754,7 @@ where FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, band, band)
             axs.set_xticklabels([])
         if i == 1:
             axs.set_ylabel(r'$\frac{\mathrm{d}N(S_{%s})}{\mathrm{d}S_{%s}} \times S_{%s}^{2.5} \quad [\mathrm{deg}^{-2} \ \mathrm{mJy}^{1.5}]$' % (wave, wave, wave))
-            axs.yaxis.set_label_coords(-0.11, 1.0)
-                
+            axs.yaxis.set_label_coords(-0.11, 1.0)       
     #save figure
     P.savefig(out_folder+'numbercounts_%s.ps' % band)
     P.close()
@@ -775,10 +765,12 @@ if __name__ == '__main__':
     #and my user name is not always the same, this hack is required.
     hm = os.getenv('HOME')
     #constants
-    path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
+#    path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
+    path = hm + '/Research/Herschel/runs/big_volume/'
     database = 'sams.db'
-    out_folder = hm + '/Dropbox/Research/Herschel/plots/number_counts/'
-    obs_data = hm+'/Dropbox/Research/Herschel/obs_data/'
+#    out_folder = hm + '/Dropbox/Research/Herschel/plots/number_counts/'
+    out_folder = hm + '/Dropbox/Research/Herschel/plots/number_counts/big/'
+    obs_data = hm + '/Dropbox/Research/Herschel/obs_data/'
 
     #5sigma limits derived by Kuang
     depths = {'pacs100_obs': 1.7,
@@ -809,6 +801,9 @@ if __name__ == '__main__':
                   'FIR.z > 1.0 and FIR.z <= 2.0',
                   'FIR.z > 2.0 and FIR.z <= 4.0']
 
+    print 'Begin plotting'
+    print 'Input DB: ', path + database
+    print 'Output folder: ', out_folder
     
     #plot the number counts
     for bd in bands:
@@ -818,7 +813,7 @@ if __name__ == '__main__':
                                out_folder, obs_data,
                                xmin = 0.1, xmax = 500,
                                ymin = 1.5*10**2, ymax = 6*10**5,
-                               nbins = 23, sigma = 5.0)#,
+                               nbins = 23, sigma = 5.0, area = 0.225)#,
                                #write_out = True)
         if 'spire' in bd:
             print 'plotting ', bd
@@ -826,7 +821,7 @@ if __name__ == '__main__':
                                 out_folder, obs_data,
                                 xmin = 0.1, xmax = 1600,
                                 ymin = 10**2, ymax = 3*10**6,
-                                nbins = 16, sigma = 5.0)#,
+                                nbins = 16, sigma = 5.0, area = 0.225)#,
                                 #write_out = True)
 
     print 'All done...'

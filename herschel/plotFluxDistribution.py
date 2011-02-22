@@ -12,6 +12,7 @@ matplotlib.rcParams['ytick.major.size'] = 5
 import numpy as N
 import pylab as P
 import os
+import matplotlib.ticker as ticker
 #Sami's repo
 import db.sqlite
 import astronomy.conversions as cv
@@ -20,7 +21,7 @@ def plot_flux_dist(table, zmin, zmax, depths, colname,
                    path, database, out_folder,
                    solid_angle = 10*160.,
                    fluxbins = 22,
-                   ymin = 1e-7, ymax = 1,
+                   ymin = 1e-7, ymax = 1e-1,
                    bins = 8, H0 = 70.0, WM=0.28):
     
     query = '''select %s from %s where %s.z >= %.4f and %s.z < %.4f
@@ -69,8 +70,7 @@ def plot_flux_dist(table, zmin, zmax, depths, colname,
     ax.set_ylim(ymin, ymax)
     
     ax.set_xticklabels([])
-    ax.set_yticks(ax.get_yticks()[:-1])
-    
+    #ax.set_yticks(ax.get_yticks()[:-1:2])
     
     #redshift limited plots
     zm = zmin
@@ -89,7 +89,7 @@ def plot_flux_dist(table, zmin, zmax, depths, colname,
         #weight each galaxy
         wghts = (N.zeros(len(fluxes)) + (1./comovingVol)) / df
     
-
+        #add a subplot
         ax = fig.add_subplot(int(bins/rows)-1, rows+1, i+2)
           
         ax.hist(fluxes, bins = fbins,
@@ -106,11 +106,9 @@ def plot_flux_dist(table, zmin, zmax, depths, colname,
                transform = ax.transAxes,
                fontsize = 12)
 
-        ax.set_xlim(xmin, xmax)
-        ax.set_ylim(ymin, ymax)
-
         if i == 2 or i == 5:
             ax.set_yticks(ax.get_yticks()[:-1])
+            #ax.yaxis.set_major_locator(ticker.MaxNLocator(prune = 'upper'))
         else:
             ax.set_yticklabels([])
 
@@ -125,6 +123,9 @@ def plot_flux_dist(table, zmin, zmax, depths, colname,
         if i == 2:
             ax.set_ylabel(r'$\frac{\mathrm{d}N(S_{250})}{\mathrm{d}S_{250}} \quad [\mathrm{Mpc}^{-3} \  \mathrm{dex}^{-1}]$')
 
+        ax.set_xlim(xmin, xmax)
+        ax.set_ylim(ymin, ymax)
+
         zm = zmax
 
     #save figure
@@ -137,9 +138,10 @@ if __name__ == '__main__':
     #and my user name is not always the same, this hack is required.
     hm = os.getenv('HOME')
     #constants
-    path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
+    #path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
+    path = hm + '/Research/Herschel/runs/big_volume/'
     database = 'sams.db'
-    out_folder = hm + '/Dropbox/Research/Herschel/plots/flux_dist/'
+    out_folder = hm + '/Dropbox/Research/Herschel/plots/flux_dist/big/'
     #5sigma limits derived by Kuang
     depths = {'pacs100_obs': 1.7,
               'pacs160_obs': 4.5,
@@ -160,4 +162,5 @@ if __name__ == '__main__':
     for band in bands:
         plot_flux_dist('FIR', 0.0, 4.0, depths,
                        band, path, database,
-                       out_folder)
+                       out_folder, solid_angle = 100*160.,
+                       ymin = 1e-8, ymax = 7e-2)

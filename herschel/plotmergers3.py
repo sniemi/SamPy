@@ -1,6 +1,6 @@
 import matplotlib
-#matplotlib.use('PS')
-matplotlib.use('Agg')
+matplotlib.use('PS')
+#matplotlib.use('Agg')
 matplotlib.rc('text', usetex = True)
 matplotlib.rcParams['font.size'] = 17
 matplotlib.rc('xtick', labelsize = 14) 
@@ -25,7 +25,7 @@ def plotMergerFractions(query,
                         mstarmin = 8.0,
                         mstarmax = 11.5,
                         mbins = 15,
-                        ymin = -0.01,
+                        ymin = -0.001,
                         ymax = 1.01,
                         logscale = False):
     #get data, all galaxies
@@ -66,8 +66,10 @@ def plotMergerFractions(query,
         print a+b+c+d+e 
 
     #make the figure
-#    fig = P.figure()
-    fig = P.figure(figsize= (10,10))
+    if 'ps' in output:
+        fig = P.figure()
+    else:
+        fig = P.figure(figsize=(10,10))
     fig.subplots_adjust(left = 0.08, bottom = 0.07,
                         right = 0.97, top = 0.93)
     ax1 = fig.add_subplot(111)
@@ -95,7 +97,7 @@ def plotMergerFractions(query,
     #make grid
     ax1.grid()
     #legend and save
-    P.legend(loc = 'upper right')
+    P.legend(loc = 'upper left')
     P.savefig(out_folder + output)
 
 def plotMergerFractions2(query,
@@ -291,13 +293,17 @@ if __name__ == '__main__':
     #and my user name is not always the same, this hack is required.
     hm = os.getenv('HOME')
     #constants
-    path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
-    out_folder = hm + '/Dropbox/Research/Herschel/plots/mergers/'
+    #path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
+    path = hm +  '/Research/Herschel/runs/big_volume/'
+    out_folder = hm + '/Dropbox/Research/Herschel/plots/mergers/big/'
     db = 'sams.db'
 
     ylab = r'$\mathrm{Fraction \ of \ Sample}$'
-    type = '.png'
+    type = '.ps'
 
+    print 'Begin plotting'
+    print 'Input DB: ', path + db
+    print 'Output folder: ', out_folder
 ################################################################################
 #    query = '''select FIR.spire250_obs / FIR.irac_ch1_obs, galprop.tmerge, galprop.tmajmerge
 #                from FIR, galprop where
@@ -316,9 +322,10 @@ if __name__ == '__main__':
 #                from FIR, galprop where
 #                FIR.z >= 2.0 and
 #                FIR.z < 4.0 and
+#                FIR.spire250_obs > 1e-8 and
+#                FIR.spire250_obs < 1e6 and
 #                FIR.gal_id = galprop.gal_id and
-#                FIR.halo_id = galprop.halo_id and
-#                FIR.spire250_obs < 1e6
+#                FIR.halo_id = galprop.halo_id
 #                '''
 #    xlab = r'$\frac{S_{250}}{S_{4.5}}$'
 #    plotMergerFractions(query, xlab, ylab,'FractionMergerSPIRE250IRAC2'+type,
@@ -338,18 +345,20 @@ if __name__ == '__main__':
 #                        out_folder, mstarmin = 0.0, mstarmax = 1600, mbins = 12,
 #                        logscale = False, ymax = 1.01)
 ################################################################################
-#    query = '''select FIR.spire250_obs / FIR.irac_ch4_obs, galprop.tmerge, galprop.tmajmerge
-#                from FIR, galprop where
-#                FIR.z >= 2.0 and
-#                FIR.z < 4.0 and
-#                FIR.gal_id = galprop.gal_id and
-#                FIR.halo_id = galprop.halo_id and
-#                FIR.spire250_obs < 1e6
-#                '''
-#    xlab = r'$\frac{S_{250}}{S_{8}}$'
-#    plotMergerFractions(query, xlab, ylab,'FractionMergerSPIRE250IRAC4'+type,
-#                        out_folder, mstarmin = 0.0, mstarmax = 1400, mbins = 10,
-#                        logscale = False, ymax = 1.01)
+    query = '''select FIR.spire250_obs / FIR.irac_ch4_obs, galprop.tmerge, galprop.tmajmerge
+                from FIR, galprop where
+                FIR.z >= 2.0 and
+                FIR.z < 4.0 and
+                FIR.spire250_obs > 1e-9 and
+                FIR.irac_ch4_obs > 1e-9 and
+                FIR.spire250_obs < 1e6 and
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id
+                '''
+    xlab = r'$\frac{S_{250}}{S_{8}}$'
+    plotMergerFractions(query, xlab, ylab,'FractionMergerSPIRE250IRAC4'+type,
+                        out_folder, mstarmin = 0.0, mstarmax = 2000, mbins = 14,
+                        logscale = False, ymax = 1.0)
 ################################################################################
 #    query = '''select galphotdust.f775w - galphotdust.f850lp, galprop.tmerge, galprop.tmajmerge
 #                from FIR, galprop, galphotdust where

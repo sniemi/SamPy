@@ -8,56 +8,115 @@ if __name__ == '__main__':
     #and my user name is not always the same, this hack is required.
     hm = os.getenv('HOME')
     #constants
-    path = hm + '/Dropbox/Research/Herschel/runs/reds_zero/'
+    #path = hm + '/Dropbox/Research/Herschel/runs/reds_zero/'
+    path = hm + '/Research/Herschel/runs/big_volume/'
     db = 'sams.db'
 
-    query2 = '''select galprop.mstar, galprop.tmerge
+    mergetimelimit = 0.25
+
+    print 'Calculating merger statistics from:'
+    print path + db
+    print 'with mergetimelimit =', mergetimelimit
+    
+    query2 = '''select galprop.tmerge, galprop.tmajmerge
                 from FIR, galprop where
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
                 FIR.spire250_obs > 20e-3 and
-                FIR.spire250_obs < 1e6
-                '''
-    #get data, S_250 > 5 mJy
-    data = sq.get_data_sqliteSMNfunctions(path, db, query2)
-    xd2 = data[:,0]
-    yd2 = data[:,1]
-
-    #the fraction of no mergers?
-    nm2 = len(yd2[yd2 < 0.0]) / float(len(yd2)) * 100.
-
-    #print out some statistics
-    print len(yd2)
-    print 'Mean tmerge of SPIRE detected galaxies', N.mean(yd2[yd2 > 0.0])
-    print
-    print 'Max tmerge of SPIRE detected galaxies', N.max(yd2[yd2 > 0.0])
-    print
-    print 'Fraction of SPIRE that have experienced a merger', 100.-nm2
-
-######################
-    query2 = '''select galprop.mstar, galprop.tmerge
-                from FIR, galprop where
                 FIR.z >= 2.0 and
                 FIR.z < 4.0 and
+                FIR.spire250_obs < 1e6 and
                 FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                FIR.pacs160_obs > 10e-3 and
-                FIR.spire250_obs < 1e6
+                FIR.halo_id = galprop.halo_id
+                '''
+    #get data, S_250 > 20 mJy
+    data = sq.get_data_sqliteSMNfunctions(path, db, query2)
+    tmerge = data[:,0]
+    tmajor = data[:,1]
+    #masks
+    nomergeMask = tmerge < 0.0
+    majorsMask = (tmajor > 0.0) & (tmajor <= mergetimelimit)
+    majorsMask2 = (tmajor > mergetimelimit)
+    mergersMask = (tmerge > 0.0) & (tmerge <= mergetimelimit) & \
+                  (majorsMask == False) & (majorsMask2 == False)
+    mergersMask2 = (nomergeMask == False) & (majorsMask == False) & \
+                   (mergersMask == False) & (majorsMask2 == False)
+    #the fraction of no mergers?
+    nm2 = len(tmerge[tmerge < 0.0]) / float(len(tmerge)) * 100.
+    nm3 = len(tmajor[tmajor < 0.0]) / float(len(tmajor)) * 100.
+    nm4 = len(tmajor[majorsMask]) / float(len(tmajor)) * 100.
+    #print out some statistics
+    print 'Number of galaxies and Poisson error:', len(tmerge), N.sqrt(len(tmerge))
+    print 'Mean tmerge of S_250 > 20 mJy galaxies', N.mean(tmerge[tmerge > 0.0])
+    print 'Max tmerge of S_250 > 20 mJy galaxies', N.max(tmerge[tmerge > 0.0])
+    print 'Fraction of S_250 > 20 mJy have experienced a merger', 100.-nm2
+    print 'Fraction of S_250 > 20 mJy have experienced a major merger', 100.-nm3
+    print 'Fraction of S_250 > 20 mJy who have experienced their major merger within mergetimlimit', nm4
+    print
+
+###############################################################################
+    query2 = '''select galprop.tmerge, galprop.tmajmerge
+                from FIR, galprop where
+                FIR.spire250_obs > 5e-3 and
+                FIR.z >= 2.0 and
+                FIR.z < 4.0 and
+                FIR.spire250_obs < 1e6 and
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id
                 '''
     #get data, S_250 > 5 mJy
     data = sq.get_data_sqliteSMNfunctions(path, db, query2)
-    xd2 = data[:,0]
-    yd2 = data[:,1]
-
+    tmerge = data[:,0]
+    tmajor = data[:,1]
+    #masks
+    nomergeMask = tmerge < 0.0
+    majorsMask = (tmajor > 0.0) & (tmajor <= mergetimelimit)
+    majorsMask2 = (tmajor > mergetimelimit)
+    mergersMask = (tmerge > 0.0) & (tmerge <= mergetimelimit) & \
+                  (majorsMask == False) & (majorsMask2 == False)
+    mergersMask2 = (nomergeMask == False) & (majorsMask == False) & \
+                   (mergersMask == False) & (majorsMask2 == False)
     #the fraction of no mergers?
-    nm2 = len(yd2[yd2 < 0.0]) / float(len(yd2)) * 100.
-
+    nm2 = len(tmerge[tmerge < 0.0]) / float(len(tmerge)) * 100.
+    nm3 = len(tmajor[tmajor < 0.0]) / float(len(tmajor)) * 100.
+    nm4 = len(tmajor[majorsMask]) / float(len(tmajor)) * 100.
     #print out some statistics
-    print len(yd2)
-    print 'Mean tmerge of PACS detected galaxies', N.mean(yd2[yd2 > 0.0])
+    print 'Number of galaxies and Poisson error:', len(tmerge), N.sqrt(len(tmerge))
+    print 'Mean tmerge of S_250 > 5 mJy galaxies', N.mean(tmerge[tmerge > 0.0])
+    print 'Max tmerge of S_250 > 5 mJy galaxies', N.max(tmerge[tmerge > 0.0])
+    print 'Fraction of S_250 > 5 mJy have experienced a merger', 100.-nm2
+    print 'Fraction of S_250 > 5 mJy have experienced a major merger', 100.-nm3
+    print 'Fraction of S_250 > 5 mJy who have experienced their major merger within mergetimlimit', nm4
     print
-    print 'Max tmerge of PACS detected galaxies', N.max(yd2[yd2 > 0.0])
-    print
-    print 'Fraction of PACS that have experienced a merger', 100.-nm2
+
+###############################################################################
+    query2 = '''select galprop.tmerge, galprop.tmajmerge
+                from FIR, galprop where
+                FIR.pacs160_obs > 10e-3 and
+                FIR.z >= 2.0 and
+                FIR.z < 4.0 and
+                FIR.spire250_obs < 1e6 and
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id
+                '''
+    #get data
+    data = sq.get_data_sqliteSMNfunctions(path, db, query2)
+    tmerge = data[:,0]
+    tmajor = data[:,1]
+    #masks
+    nomergeMask = tmerge < 0.0
+    majorsMask = (tmajor > 0.0) & (tmajor <= mergetimelimit)
+    majorsMask2 = (tmajor > mergetimelimit)
+    mergersMask = (tmerge > 0.0) & (tmerge <= mergetimelimit) & \
+                  (majorsMask == False) & (majorsMask2 == False)
+    mergersMask2 = (nomergeMask == False) & (majorsMask == False) & \
+                   (mergersMask == False) & (majorsMask2 == False)
+    #the fraction of no mergers?
+    nm2 = len(tmerge[tmerge < 0.0]) / float(len(tmerge)) * 100.
+    nm3 = len(tmajor[tmajor < 0.0]) / float(len(tmajor)) * 100.
+    nm4 = len(tmajor[majorsMask]) / float(len(tmajor)) * 100.
+    #print out some statistics
+    print 'Number of galaxies and Poisson error:', len(tmerge), N.sqrt(len(tmerge))
+    print 'Mean tmerge of PACS S_160 > 10 mJy galaxies', N.mean(tmerge[tmerge > 0.0])
+    print 'Max tmerge of PACS S_160 > 10 mJy galaxies', N.max(tmerge[tmerge > 0.0])
+    print 'Fraction of PACS S_160 > 10 mJy have experienced a merger', 100.-nm2
+    print 'Fraction of PACS S_160 > 10 mJy have experienced a major merger', 100.-nm3
+    print 'Fraction of PACS S_160 > 10 mJy who have experienced their major merger within mergetimlimit', nm4

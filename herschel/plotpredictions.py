@@ -1,11 +1,11 @@
 import matplotlib
-#matplotlib.use('PS')
-matplotlib.use('Agg')
+matplotlib.use('PS')
+#matplotlib.use('Agg')
 matplotlib.rc('text', usetex = True)
 matplotlib.rcParams['font.size'] = 16
 matplotlib.rc('xtick', labelsize = 14) 
 matplotlib.rc('axes', linewidth = 1.2)
-matplotlib.rcParams['legend.fontsize'] = 12
+matplotlib.rcParams['legend.fontsize'] = 13
 matplotlib.rcParams['legend.handlelength'] = 1
 matplotlib.rcParams['xtick.major.size'] = 5
 matplotlib.rcParams['ytick.major.size'] = 5
@@ -20,9 +20,9 @@ import db.sqlite as sq
 import astronomy.datamanipulation as dm
 
 def plot_sfrs(path, db, reshifts, out_folder,
-              xmin = 0.0, xmax = 2.0, fluxlimit = 5):
+              xmin = 0.0, xmax = 2.3, fluxlimit = 5):
     '''
-    Plots 
+    Plots SFR
     '''
     #figure
     fig = P.figure()
@@ -31,9 +31,9 @@ def plot_sfrs(path, db, reshifts, out_folder,
     for reds in redshifts:
         query = '''select galprop.mstardot, FIR.spire250_obs*1000
                 from FIR, galprop where
+                %s and
                 FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                %s
+                FIR.halo_id = galprop.halo_id
                 ''' % reds
         #tmp
         tmp = reds.split()
@@ -48,7 +48,7 @@ def plot_sfrs(path, db, reshifts, out_folder,
         
         #percentiles
         xmaxb = N.max(xd)
-        nxbins = int(12*(xmaxb - xmin))
+        nxbins = int(11*(xmaxb - xmin))
         xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd,
                                                          yd,
                                                          xmin,
@@ -56,7 +56,8 @@ def plot_sfrs(path, db, reshifts, out_folder,
                                                          nxbins = nxbins)
 
         msk = y50d > -10
-        ax.errorbar(xbin_midd[msk], y50d[msk], yerr = [y50d[msk]-y16d[msk], y84d[msk]-y50d[msk]],
+        ax.errorbar(xbin_midd[msk], y50d[msk],
+                    yerr = [y50d[msk]-y16d[msk], y84d[msk]-y50d[msk]],
                     label = '$z = %.1f$' % zz)
 
     ax.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
@@ -68,11 +69,64 @@ def plot_sfrs(path, db, reshifts, out_folder,
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(-1.2, 3)
 
-    P.legend()
+    P.legend(loc = 'lower right')
     P.savefig(out_folder + 'sfr.ps')
+
+def plot_ssfr(path, db, reshifts, out_folder,
+              xmin = 0.0, xmax = 2.3, fluxlimit = 5):
+    '''
+    Plots SSFR. 
+    '''
+    #figure
+    fig = P.figure()
+    ax = fig.add_subplot(111)
+
+    for reds in redshifts:
+        query = '''select galprop.mstardot, galprop.mstar, FIR.spire250_obs
+                from FIR, galprop where
+                %s and
+                FIR.gal_id = galprop.gal_id and
+                FIR.halo_id = galprop.halo_id
+                ''' % reds
+        #tmp
+        tmp = reds.split()
+        zz = N.mean(N.array([float(tmp[2]), float(tmp[6])]))
+        
+        #get data
+        data = sq.get_data_sqlitePowerTen(path, db, query)
     
+        #set 1
+        xd = N.log10(data[:,2]*1e3)
+        yd = N.log10(data[:,0]/10**data[:,1])
+        
+        #percentiles
+        xmaxb = N.max(xd)
+        nxbins = int(9*(xmaxb - xmin))
+        xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd,
+                                                         yd,
+                                                         xmin,
+                                                         xmaxb,
+                                                         nxbins = nxbins)
+
+        msk = y50d > -20
+        ax.errorbar(xbin_midd[msk], y50d[msk],
+                    yerr = [y50d[msk]-y16d[msk], y84d[msk]-y50d[msk]],
+                    label = '$z = %.1f$' % zz)
+
+    ax.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
+               #label = '$S_{250} =$ %.1f mJy' % fluxlimit)
+  
+    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    ax.set_ylabel(r'$\log_{10} \left (\frac{\dot{M}_{\star}}{M_{\star}} \ [\mathrm{yr}^{-1}] \right )$')
+
+    ax.set_xlim(xmin, xmax)
+    ax.set_ylim(-11.1, -7.8)
+
+    P.legend()#loc = 'lower right')
+    P.savefig(out_folder + 'ssfr.ps')
+
 def plot_stellarmass(path, db, reshifts, out_folder,
-                     xmin = 0.0, xmax = 2.0, fluxlimit = 5):
+                     xmin = 0.0, xmax = 2.3, fluxlimit = 5):
     '''
     Plots 
     '''
@@ -83,9 +137,9 @@ def plot_stellarmass(path, db, reshifts, out_folder,
     for i, reds in enumerate(redshifts):
         query = '''select galprop.mstar, FIR.spire250_obs*1000
                 from FIR, galprop where
+                %s and
                 FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                %s
+                FIR.halo_id = galprop.halo_id
                 ''' % reds
         #tmp
         tmp = reds.split()
@@ -100,7 +154,7 @@ def plot_stellarmass(path, db, reshifts, out_folder,
         
         #percentiles
         xmaxb = N.max(xd)
-        nxbins = int(12*(xmaxb - xmin))
+        nxbins = int(13*(xmaxb - xmin))
         xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd,
                                                          yd,
                                                          xmin,
@@ -118,13 +172,13 @@ def plot_stellarmass(path, db, reshifts, out_folder,
     ax.set_ylabel('$\log_{10}(M_{\star} \ [M_{\odot}])$')
 
     ax.set_xlim(xmin, xmax)
-    ax.set_ylim(8.9, 11.5)
+    ax.set_ylim(8.9, 11.8)
 
     P.legend(loc = 'lower right')
     P.savefig(out_folder + 'mstellar.ps')
 
 def plot_coldgas(path, db, reshifts, out_folder,
-                xmin = 0.0, xmax = 2.0, fluxlimit = 5):
+                xmin = 0.0, xmax = 2.3, fluxlimit = 5):
     '''
     Plots 
     '''
@@ -135,9 +189,9 @@ def plot_coldgas(path, db, reshifts, out_folder,
     for i, reds in enumerate(redshifts):
         query = '''select galprop.mcold, FIR.spire250_obs*1000
                 from FIR, galprop where
+                %s and
                 FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                %s
+                FIR.halo_id = galprop.halo_id
                 ''' % reds
         #tmp
         tmp = reds.split()
@@ -152,7 +206,7 @@ def plot_coldgas(path, db, reshifts, out_folder,
         
         #percentiles
         xmaxb = N.max(xd)
-        nxbins = int(11*(xmaxb - xmin))
+        nxbins = int(13*(xmaxb - xmin))
         xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd,
                                                          yd,
                                                          xmin,
@@ -170,7 +224,7 @@ def plot_coldgas(path, db, reshifts, out_folder,
     ax.set_ylabel('$\log_{10}(M_{\mathrm{coldgas}} \ [M_{\odot}])$')
 
     ax.set_xlim(xmin, xmax)
-    ax.set_ylim(8.8, 11.2)
+    ax.set_ylim(8.8, 11.5)
 
     P.legend(loc = 'lower right')
     P.savefig(out_folder + 'mcold.ps')
@@ -187,9 +241,9 @@ def plot_massratios(path, db, reshifts, out_folder,
     for i, reds in enumerate(redshifts):
         query = '''select galprop.mcold - galprop.mstar, FIR.spire250_obs*1000
                 from FIR, galprop where
+                %s and
                 FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                %s
+                FIR.halo_id = galprop.halo_id
                 ''' % reds
         #tmp
         tmp = reds.split()
@@ -239,10 +293,10 @@ def plot_burstmass(path, db, reshifts, out_folder,
     for i, reds in enumerate(redshifts):
         query = '''select galprop.mstar_burst, FIR.spire250_obs*1000
                 from FIR, galprop where
+                %s and
                 FIR.gal_id = galprop.gal_id and
                 FIR.halo_id = galprop.halo_id and
-                galprop.mstar_burst > 0.0 and
-                %s
+                galprop.mstar_burst > 0.0
                 ''' % reds
         #tmp
         tmp = reds.split()
@@ -292,9 +346,9 @@ def plot_metallicity(path, db, reshifts, out_folder,
     for i, reds in enumerate(redshifts):
         query = '''select galprop.zstar, FIR.spire250_obs*1000
                 from FIR, galprop where
+                %s and
                 FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                %s
+                FIR.halo_id = galprop.halo_id
                 ''' % reds
         #tmp
         tmp = reds.split()
@@ -344,9 +398,9 @@ def plot_starburst(path, db, reshifts, out_folder,
     for i, reds in enumerate(redshifts):
         query = '''select galprop.mstar_burst - galprop.mstar, FIR.spire250_obs*1000
                 from FIR, galprop where
+                %s and
                 FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                %s
+                FIR.halo_id = galprop.halo_id
                 ''' % reds
         #tmp
         tmp = reds.split()
@@ -396,9 +450,9 @@ def plot_BHmass(path, db, reshifts, out_folder,
     for i, reds in enumerate(redshifts):
         query = '''select galprop.mBH, FIR.spire250_obs*1000
                 from FIR, galprop where
+                %s and
                 FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                %s
+                FIR.halo_id = galprop.halo_id
                 ''' % reds
         #tmp
         tmp = reds.split()
@@ -448,9 +502,9 @@ def plot_DMmass(path, db, reshifts, out_folder,
     for i, reds in enumerate(redshifts):
         query = '''select galprop.mhalo, FIR.spire250_obs*1000
                 from FIR, galprop where
+                %s and
                 FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                %s
+                FIR.halo_id = galprop.halo_id
                 ''' % reds
         #tmp
         tmp = reds.split()
@@ -500,9 +554,9 @@ def plot_Age(path, db, reshifts, out_folder,
     for i, reds in enumerate(redshifts):
         query = '''select galprop.meanage, FIR.spire250_obs*1000
                 from FIR, galprop where
+                %s and
                 FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                %s
+                FIR.halo_id = galprop.halo_id
                 ''' % reds
         #tmp
         tmp = reds.split()
@@ -540,10 +594,11 @@ def plot_Age(path, db, reshifts, out_folder,
     P.legend(loc = 'lower right')
     P.savefig(out_folder + 'Age.ps') 
 
-def plot_mergerfraction(path, db, reshifts, out_folder,
-                        xmin = -0.5, xmax = 2.35, fluxlimit = 5,
-                        png = True, mergetimelimit = 0.5,
-                        xbin = 9):
+def plot_mergerfraction(path, db, reshifts, out_folder, outname,
+                        xmin = -0.01, xmax = 2.3, fluxlimit = 5,
+                        png = True, mergetimelimit = 0.25,
+                        xbin = [10,8,9,7,7,5],
+                        neverMerged = False, obs = True):
     '''
     Plots 
     '''
@@ -561,22 +616,35 @@ def plot_mergerfraction(path, db, reshifts, out_folder,
     ax2 = fig.add_subplot(222)
     ax3 = fig.add_subplot(223)
     ax4 = fig.add_subplot(224)
-
+    #loop over all the redshifts
     for i, reds in enumerate(redshifts):
-        query = '''select FIR.spire250_obs*1000, galprop.tmerge, galprop.tmajmerge
-                from FIR, galprop where
-                FIR.spire250_obs < 1e6 and
-                FIR.spire250_obs > 5e-5 and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                %s
-                ''' % reds
+        if obs:
+            query = '''select FIR.spire250_obs, galprop.tmerge, galprop.tmajmerge
+                    from FIR, galprop where
+                    %s and
+                    FIR.spire250_obs > 5e-4 and
+                    FIR.spire250_obs < 1e6 and
+                    FIR.gal_id = galprop.gal_id and
+                    FIR.halo_id = galprop.halo_id
+                    ''' % reds
+        else:
+            query = '''select FIR.spire250, galprop.tmerge, galprop.tmajmerge
+                    from FIR, galprop where
+                    %s and
+                    FIR.spire250 > 8.8 and
+                    FIR.spire250 < 13.0 and
+                    FIR.gal_id = galprop.gal_id and
+                    FIR.halo_id = galprop.halo_id
+                    ''' % reds
         #tmp
         tmp = reds.split()
         zz = N.mean(N.array([float(tmp[2]), float(tmp[6])]))
-        
+        #get data
         data = sq.get_data_sqliteSMNfunctions(path, db, query)
-        x = N.log10(data[:,0])
+        if obs:
+            x = N.log10(data[:,0]*1000.)
+        else:
+            x = data[:,0]
         tmerge = data[:,1]
         tmajor = data[:,2]
         print N.min(x), N.max(x)
@@ -589,9 +657,7 @@ def plot_mergerfraction(path, db, reshifts, out_folder,
         mergersMask2 = (nomergeMask == False) & (majorsMask == False) & \
                        (mergersMask == False) & (majorsMask2 == False)
         
-        #xbin =  int(N.max(x)*4.)
-        if i > 0: xbin -= i - 2
-        if i > 2: xbin = 6
+        print xbin[i]
         mids, numbs = dm.binAndReturnMergerFractions2(x,
                                                       nomergeMask,
                                                       mergersMask,
@@ -600,7 +666,7 @@ def plot_mergerfraction(path, db, reshifts, out_folder,
                                                       majorsMask2,
                                                       N.min(x),
                                                       N.max(x),
-                                                      xbin,
+                                                      xbin[i],
                                                       False)
         #the fraction of mergers
         noMergerFraction = [float(x[1]) / x[0] for x in numbs]
@@ -608,7 +674,6 @@ def plot_mergerfraction(path, db, reshifts, out_folder,
         majorMergerFraction = [float(x[3]) / x[0] for x in numbs]
         mergerFraction2 = [float(x[4]) / x[0] for x in numbs]
         majorMergerFraction2 = [float(x[5]) / x[0] for x in numbs]
-        
         #sanity check
         for a, b, c, d, e in zip(noMergerFraction,mergerFraction,majorMergerFraction,
                                  mergerFraction2,majorMergerFraction2):
@@ -618,47 +683,54 @@ def plot_mergerfraction(path, db, reshifts, out_folder,
         ax1.plot(mids, majorMergerFraction, label = '$z = %.1f$' % zz)
         ax2.plot(mids, majorMergerFraction2, label = '$z = %.1f$' % zz)
         ax3.plot(mids, mergerFraction, label = '$z = %.1f$' % zz)
-        ax4.plot(mids, mergerFraction2, label = '$z = %.1f$' % zz)
-        #ax4.plot(mids, noMergerFraction, label = '$z = %.1f$' % zz)
+        if neverMerged:
+            ax4.plot(mids, noMergerFraction, label = '$z = %.1f$' % zz)        
+        else:
+            ax4.plot(mids, mergerFraction2, label = '$z = %.1f$' % zz)
 
     #set obs limit
-    ax1.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
-    ax2.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
-    ax3.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
-    ax4.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
-  
+    if obs:
+        ax1.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
+        ax2.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
+        ax3.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
+        ax4.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
     #labels
-    ax3.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
-    ax4.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
-    ax1.set_ylabel('Merger Fraction')
-    ax3.set_ylabel('Merger Fraction')
+    if obs:
+        ax3.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+        ax4.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    else:
+        ax3.set_xlabel('$\log_{10}(L_{250} \ [L_{\odot}])$')
+        ax4.set_xlabel('$\log_{10}(L_{250} \ [L_{\odot}])$')
+    ax1.set_ylabel('$\mathrm{Merger\ Fraction}$')
+    ax3.set_ylabel('$\mathrm{Merger\ Fraction}$')
     ax2.set_yticklabels([])
     ax4.set_yticklabels([])
     ax1.set_xticklabels([])
     ax2.set_xticklabels([])
-    
     #texts
-    P.text(0.5, 0.94,'Major mergers: $T_{\mathrm{merge}} \leq %i$' % (mergetimelimit * 1000.),
+    P.text(0.5, 0.94,'$\mathrm{Major\ mergers:}\ T_{\mathrm{merge}} \leq %i \ \mathrm{Myr}$' % (mergetimelimit * 1000.),
            horizontalalignment='center',
            verticalalignment='center',
            transform = ax1.transAxes)
-    P.text(0.5, 0.94,'Major mergers: $T_{\mathrm{merge}} > %i$' % (mergetimelimit * 1000.),
+    P.text(0.5, 0.94,'$\mathrm{Major\ mergers:}\ T_{\mathrm{merge}} > %i \ \mathrm{Myr}$' % (mergetimelimit * 1000.),
            horizontalalignment='center',
            verticalalignment='center',
            transform = ax2.transAxes)
-    P.text(0.5, 0.94,'Minor mergers: $T_{\mathrm{merge}} \leq %i$' % (mergetimelimit * 1000.),
+    P.text(0.5, 0.94,'$\mathrm{Minor\ mergers:}\ T_{\mathrm{merge}} \leq %i \ \mathrm{Myr}$' % (mergetimelimit * 1000.),
            horizontalalignment='center',
            verticalalignment='center',
            transform = ax3.transAxes)
-    P.text(0.5, 0.94,'Minor mergers: $T_{\mathrm{merge}} > %i$' % (mergetimelimit * 1000.),
-           horizontalalignment='center',
-           verticalalignment='center',
-           transform = ax4.transAxes)
-#    P.text(0.5, 0.94,'Never Merged',
-#           horizontalalignment='center',
-#           verticalalignment='center',
-#           transform = ax4.transAxes)
-
+    if neverMerged:
+        P.text(0.5, 0.94,'$\mathrm{Never\ Merged}$',
+               horizontalalignment='center',
+               verticalalignment='center',
+               transform = ax4.transAxes)
+    else:
+        P.text(0.5, 0.94,'$\mathrm{Minor\ mergers:}\ T_{\mathrm{merge}} > %i \ \mathrm{Myr}$' % (mergetimelimit * 1000.),
+               horizontalalignment='center',
+               verticalalignment='center',
+               transform = ax4.transAxes)
+    #set limits
     ax1.set_xlim(xmin, xmax)
     ax1.set_ylim(-0.01, 0.95)
     ax2.set_xlim(xmin, xmax)
@@ -667,9 +739,9 @@ def plot_mergerfraction(path, db, reshifts, out_folder,
     ax3.set_ylim(-0.01, 0.95)
     ax4.set_xlim(xmin, xmax)
     ax4.set_ylim(-0.01, 0.95)
-
-    ax3.legend(loc = 'center right')
-    P.savefig(out_folder + 'Merge' + type) 
+    #make legend and save the figure
+    ax3.legend(loc = 'center left')
+    P.savefig(out_folder + outname + type) 
 
    
 if __name__ == '__main__':
@@ -692,15 +764,21 @@ if __name__ == '__main__':
     print 'Begin plotting'
     print 'Input DB: ', path + db
     print 'Output folder: ', out_folder
-#
-#    plot_sfrs(path, db, redshifts, out_folder)
-#    plot_stellarmass(path, db, redshifts, out_folder)
+
+#    plot_ssfr(path, db, redshifts, out_folder)#in paper
+#    plot_sfrs(path, db, redshifts, out_folder)#in paper
+    plot_stellarmass(path, db, redshifts, out_folder)#in paper
+    plot_coldgas(path, db, redshifts, out_folder) #in paper
+#    plot_mergerfraction(path, db, redshifts, out_folder, 'MergeFractions',
+#                        xbin = [10,8,9,7,5,5], png = False) #in paper
 #    plot_massratios(path, db, redshifts, out_folder)
 #    plot_metallicity(path, db, redshifts, out_folder)
 #    plot_starburst(path, db, redshifts, out_folder)
 #    plot_BHmass(path, db, redshifts, out_folder)
 #    plot_DMmass(path, db, redshifts, out_folder)
 #    plot_Age(path, db, redshifts, out_folder)
-#    plot_coldgas(path, db, redshifts, out_folder)
 #    plot_burstmass(path, db, redshifts, out_folder)
-    plot_mergerfraction(path, db, redshifts, out_folder)
+#    plot_mergerfraction(path, db, redshifts, out_folder, 'Merge')
+#    plot_mergerfraction(path, db, redshifts, out_folder, 'Merge3',
+#                        xbin = [8,8,8,8,8,8], xmin = 9, xmax = 11.85,
+#                        obs = False)

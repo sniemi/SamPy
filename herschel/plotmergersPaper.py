@@ -109,6 +109,15 @@ def plotMergerFractionsMultiplot(query, xlabel, ylabel,
     c2 = fig.colorbar(s4, ax = ax4, shrink = 0.7, fraction = 0.05)
     c1.set_label('Time since latest merger [Myr]')
     c2.set_label('Time since latest merger [Myr]')
+    #plot dividing line
+    # y = x - 2.5
+    x = N.array([2.0, 2.5, 3.0, 4.0])
+    y = x - 2.7
+    ax1.plot(x, y, 'g--')
+    ax2.plot(x, y, 'g--')
+    ax3.plot(x, y, 'g--')
+    ax4.plot(x, y, 'g--')
+    
     #add annotate
     P.text(0.5, 1.04, title,
            horizontalalignment='center',
