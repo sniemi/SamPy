@@ -84,7 +84,8 @@ class PhaseRetResults():
             try:
                 out.append([cam, int(x), int(y), tmp[self.str['file']],
                             float(tmp[self.str['mjd']]), float(tmp[self.str['focus']])])
-            except: pass
+            except:
+                pass
         return out
     
     def findFiles(self, data):
