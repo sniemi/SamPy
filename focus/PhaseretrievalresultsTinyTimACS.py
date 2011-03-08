@@ -33,7 +33,7 @@ class TinyTimResults(ph.PhaseRetResults):
                 fcs = float(line.split('|')[1].split()[0].strip())
         return fcs
 
-    def plotFocusDifference(self, input, title, abs = False):
+    def plotFocusDifference(self, input, title):
         fig = P.figure()
         ax = fig.add_subplot(111)
         
@@ -43,33 +43,20 @@ class TinyTimResults(ph.PhaseRetResults):
         tmp4 = []
         for key in input:
             data = input[key]
-            if abs:
-                tmp1.append(N.abs(data[1][0]-data[0]))
-                tmp2.append(N.abs(data[1][1]-data[0]))
-                tmp3.append(N.abs(data[1][2]-data[0]))
-                tmp4.append(N.abs(data[1][3]-data[0]))
-                x1 = ax.plot(N.abs(data[1][0]), N.abs(data[0]), 'bo')
-                x2 = ax.plot(N.abs(data[1][1]), N.abs(data[0]), 'rs')
-                x3 = ax.plot(N.abs(data[1][2]), N.abs(data[0]), 'mD')
-                x4 = ax.plot(N.abs(data[1][2]), N.abs(data[0]), 'g*')
-            else:
-                tmp1.append(data[1][0]-data[0])
-                tmp2.append(data[1][1]-data[0])
-                tmp3.append(data[1][2]-data[0])
-                tmp4.append(data[1][3]-data[0])
-                x1 = ax.plot(data[1][0], data[0], 'bo')
-                x2 = ax.plot(data[1][1], data[0], 'rs')
-                x3 = ax.plot(data[1][2], data[0], 'mD')
-                x4 = ax.plot(data[1][2], data[0], 'g*')
+            tmp1.append(data[1][0]-data[0])
+            tmp2.append(data[1][1]-data[0])
+            tmp3.append(data[1][2]-data[0])
+            tmp4.append(data[1][3]-data[0])
 
-        
+            x1 = ax.plot(data[1][0], data[0], 'bo')
+            x2 = ax.plot(data[1][1], data[0], 'rs')
+            x3 = ax.plot(data[1][2], data[0], 'kD')
+            x4 = ax.plot(data[1][3], data[0], 'mo')
+
+
         ax.plot([-15,15],[-15,15], 'k:')
-        if abs:
-            ax.set_xlim(0, 7.5)
-            ax.set_ylim(0, 7.5)
-        else:
-            ax.set_xlim(-7.5, 7.5)
-            ax.set_ylim(-7.5, 7.5)
+        ax.set_xlim(-7.5, 7.5)
+        ax.set_ylim(-7.5, 7.5)
         
         P.text(0.5, 1.05, title,
            horizontalalignment='center',
@@ -80,15 +67,11 @@ class TinyTimResults(ph.PhaseRetResults):
         ax.set_ylabel('TinyTim Focus Offset [Secondary mirror despace]')
 
         ax.legend([x1, x2, x3, x4],
-                  ['Nominal setup', 'Fixed Blur Kernel', 'Spherical = 0, fixed', 'sph = 0, fixed Blur'],
+                  ['Nominal setup', 'Fitting Sph', 'Sph = 0, fixed', 'Sph = 0, blur fixed'],
                   shadow = True, fancybox = True, numpoints  = 1,
                   loc = 'best')
+        P.savefig('Focus.pdf')
 
-        if abs:
-            P.savefig('FocusAbsolute.pdf')
-        else:
-            P.savefig('Focus.pdf')
-        
         #print out statistics
         tmp1 = N.array(tmp1)
         tmp2 = N.array(tmp2)
@@ -97,14 +80,15 @@ class TinyTimResults(ph.PhaseRetResults):
         print 'Average offset (PR - TT) for nominal method is %.2f' % N.mean(tmp1)
         print 'while STD is %.3f' % N.std(tmp1)
         print
-        print 'Average offset (PR - TT) for fixed blur kernel is %.2f' % N.mean(tmp2)
+        print 'Average offset (PR - TT) for fitted spherical is %.2f' % N.mean(tmp2)
         print 'while STD is %.3f' % N.std(tmp2)
         print
         print 'Average offset (PR - TT) for fixed spherical = 0 is %.2f' % N.mean(tmp3)
         print 'while STD is %.3f' % N.std(tmp3)
         print
-        print 'Average offset (PR - TT) for fixed blur and sph = 0 is %.2f' % N.mean(tmp4)
-        print 'while STD is %.3f' % N.std(tmp4)    
+        print 'Average offset (PR - TT) for fixed sph=0 and blur is %.2f' % N.mean(tmp4)
+        print 'while STD is %.3f' % N.std(tmp4)
+
     
     def plotFocusFieldPosition(self, input, title):
         fig = P.figure()
@@ -145,10 +129,10 @@ if __name__ == '__main__':
            'time': 3,
            'focus':5}
 
-    cameras = ['WFC3'] 
+    cameras = ['ACS'] 
 
-    t1 = 'UVIS1, PSF diameter = 3.0 arcsec, Filter F410M, G5V star, variable field positions'
-    t2 = 'UVIS1, PSF diameter = 3.0 arcsec, Filter F410M, G5V star'
+    t1 = 'ACS/WFC1, PSF diameter = 3.0 arcsec, Filter F502N, variable field positions'
+    t2 = 'ACS/WFC1, PSF diameter = 3.0 arcsec, Filter F502N'
 
     PR = TinyTimResults(cameras, str)
 
@@ -173,6 +157,5 @@ if __name__ == '__main__':
     
     #generate a plot
     PR.plotFocusDifference(out, t1)
-    PR.plotFocusDifference(out, t1, abs = True)
     PR.plotFocusFieldPosition(out2, t2)
     
