@@ -18,6 +18,7 @@ from matplotlib import cm
 #Sami's repository
 import db.sqlite as sq
 import astronomy.datamanipulation as dm
+import fitting.fits as fit
 
 def plot_sfrs(path, db, reshifts, out_folder,
               xmin = 0.0, xmax = 2.3, fluxlimit = 5):
@@ -59,6 +60,13 @@ def plot_sfrs(path, db, reshifts, out_folder,
         ax.errorbar(xbin_midd[msk], y50d[msk],
                     yerr = [y50d[msk]-y16d[msk], y84d[msk]-y50d[msk]],
                     label = '$z = %.1f$' % zz)
+        
+        print '\nStraight line fit for z = %.1f' % zz
+        tmp = fit.linearregression(xbin_midd[msk], y50d[msk],
+                                   report = True)
+        #tmp = fit.linearregression(xd, yd, 
+        #                           report = True)
+
 
     ax.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
                #label = '$S_{250} =$ %.1f mJy' % fluxlimit)
@@ -766,9 +774,10 @@ if __name__ == '__main__':
     print 'Output folder: ', out_folder
 
 #    plot_ssfr(path, db, redshifts, out_folder)#in paper
-#    plot_sfrs(path, db, redshifts, out_folder)#in paper
-    plot_stellarmass(path, db, redshifts, out_folder)#in paper
-    plot_coldgas(path, db, redshifts, out_folder) #in paper
+    plot_sfrs(path, db, redshifts, out_folder)#in paper
+#    plot_stellarmass(path, db, redshifts, out_folder)#in paper
+#    plot_coldgas(path, db, redshifts, out_folder) #in paper
+
 #    plot_mergerfraction(path, db, redshifts, out_folder, 'MergeFractions',
 #                        xbin = [10,8,9,7,5,5], png = False) #in paper
 #    plot_massratios(path, db, redshifts, out_folder)

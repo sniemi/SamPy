@@ -747,7 +747,7 @@ def plot_number_counts2(path, database, band, redshifts,
         #remove unnecessary ticks and add units
         if i == 0 or i == 2:
             axs.set_yticklabels([])
-            axs.set_xticks(axs.get_xticks()[1:])
+            #axs.set_xticks(axs.get_xticks()[1:])
         if i == 1 or i == 2:
             axs.set_xlabel(r'$S_{%s} \ [\mathrm{mJy}]$' % wave)
         else:
@@ -808,6 +808,7 @@ if __name__ == '__main__':
     #plot the number counts
     for bd in bands:
         if 'pacs' in bd:
+            continue
             print 'plotting ', bd
             plot_number_counts(path, database, bd, redshifts,
                                out_folder, obs_data,
@@ -819,9 +820,9 @@ if __name__ == '__main__':
             print 'plotting ', bd
             plot_number_counts2(path, database, bd, redshifts2,
                                 out_folder, obs_data,
-                                xmin = 0.1, xmax = 1600,
+                                xmin = 0.11, xmax = 1800,
                                 ymin = 10**2, ymax = 3*10**6,
-                                nbins = 16, sigma = 5.0, area = 0.225)#,
+                                nbins = 15, sigma = 5.0, area = 0.225)#,
                                 #write_out = True)
 
     print 'All done...'
