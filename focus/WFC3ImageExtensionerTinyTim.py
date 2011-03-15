@@ -43,7 +43,7 @@ template = '/grp/hst/OTA/focus/Data/prop11877/visit09-jan2010/ibcy09usq_flt.fits
 try:
     tempdata = PF.open(template)[1].data
     yorg, xorg = tempdata.shape
-    tempdata = N.zeros(tempdata.shape, dtype=N.float32)
+    tempdata = N.zeros(tempdata.shape, dtype=N.float64)
 except:
     print 'Cannot open template file %s' % template
     import sys
@@ -89,16 +89,16 @@ xstart = int(round(xstart))
 ystart = int(round(ystart))
 
 #assign the data to the temp array to a right place
-tempdata[-ystart: y - ystart, -xstart: x - xstart] = data
+tempdata[-ystart: y - ystart, -xstart: x - xstart] = 1e5*data
 
 #check which chip was used
 if 'UVIS1' in apert:
     #is in extension 4!
     #this is so horrible solution... arggggggh
     hdu = PF.PrimaryHDU(header = hd0)
-    hdu1 = PF.ImageHDU(data = N.zeros((1,1), dtype = N.int16), header = hd0, name='SCI')
-    hdu2 = PF.ImageHDU(data = N.zeros((1,1), dtype = N.int16), header = hd0, name='SCI')
-    hdu3 = PF.ImageHDU(data = N.zeros((1,1), dtype = N.int16), header = hd0, name='SCI')
+    hdu1 = PF.ImageHDU(data = N.zeros((1,1), dtype = N.float64), header = hd0, name='SCI')
+    hdu2 = PF.ImageHDU(data = N.zeros((1,1), dtype = N.float64), header = hd0, name='SCI')
+    hdu3 = PF.ImageHDU(data = N.zeros((1,1), dtype = N.float64), header = hd0, name='SCI')
     hdu4 = PF.ImageHDU(data = tempdata, header = hd0, name='SCI')
     thdulist = PF.HDUList([hdu, hdu1, hdu2, hdu3, hdu4])
 elif 'UVIS2' in apert:
