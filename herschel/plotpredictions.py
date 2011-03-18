@@ -21,7 +21,8 @@ import astronomy.datamanipulation as dm
 import fitting.fits as fit
 
 def plot_sfrs(path, db, reshifts, out_folder,
-              xmin = 0.0, xmax = 2.3, fluxlimit = 5):
+              xmin = 0.0, xmax = 2.3, fluxlimit = 5,
+              obs = True):
     '''
     Plots SFR
     '''
@@ -71,6 +72,20 @@ def plot_sfrs(path, db, reshifts, out_folder,
     ax.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
                #label = '$S_{250} =$ %.1f mJy' % fluxlimit)
   
+    if obs:
+        data = N.loadtxt('/Users/sammy/Dropbox/Research/Herschel/LaceySFRs.txt')
+        data[:,2] = N.log10(2*10**data[:,2] / (1./(1./0.7)))
+        msk1 = data[:,0] < 15
+        msk2 = (data[:,0] > 15) & (data[:,0] < 35)
+        msk3 = (data[:,0] > 35) & (data[:,0] < 55)
+        msk4 = (data[:,0] > 55) & (data[:,0] < 70)
+        msk5 = (data[:,0] > 70) & (data[:,0] < 80)
+        ax.plot(data[msk1][:,1], data[msk1][:,2], 'b--', label = 'Lacey z = 0.25')
+        ax.plot(data[msk2][:,1], data[msk2][:,2], 'r--', label = 'Lacey z = 1.0')
+        ax.plot(data[msk3][:,1], data[msk3][:,2], 'c--', label = 'Lacey z = 2.0')
+        ax.plot(data[msk4][:,1], data[msk4][:,2], 'm--', label = 'Lacey z = 3.0')
+        ax.plot(data[msk5][:,1], data[msk5][:,2], 'y--', label = 'Lacey z = 4.0')
+  
     ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
     ax.set_ylabel('$\log_{10}(\dot{M}_{\star} \ [M_{\odot}\mathrm{yr}^{-1}])$')
 
@@ -78,7 +93,10 @@ def plot_sfrs(path, db, reshifts, out_folder,
     ax.set_ylim(-1.2, 3)
 
     P.legend(loc = 'lower right')
-    P.savefig(out_folder + 'sfr.ps')
+    if obs:
+        P.savefig(out_folder + 'sfrOBS.ps')
+    else:
+        P.savefig(out_folder + 'sfr.ps')
 
 def plot_ssfr(path, db, reshifts, out_folder,
               xmin = 0.0, xmax = 2.3, fluxlimit = 5):
@@ -124,6 +142,7 @@ def plot_ssfr(path, db, reshifts, out_folder,
     ax.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
                #label = '$S_{250} =$ %.1f mJy' % fluxlimit)
   
+
     ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
     ax.set_ylabel(r'$\log_{10} \left (\frac{\dot{M}_{\star}}{M_{\star}} \ [\mathrm{yr}^{-1}] \right )$')
 
@@ -774,10 +793,11 @@ if __name__ == '__main__':
     print 'Output folder: ', out_folder
 
 #    plot_ssfr(path, db, redshifts, out_folder)#in paper
-    plot_sfrs(path, db, redshifts, out_folder)#in paper
+#    plot_sfrs(path, db, redshifts, out_folder)#in paper
 #    plot_stellarmass(path, db, redshifts, out_folder)#in paper
 #    plot_coldgas(path, db, redshifts, out_folder) #in paper
 
+    plot_sfrs(path, db, redshifts, out_folder, obs = True)
 #    plot_mergerfraction(path, db, redshifts, out_folder, 'MergeFractions',
 #                        xbin = [10,8,9,7,5,5], png = False) #in paper
 #    plot_massratios(path, db, redshifts, out_folder)

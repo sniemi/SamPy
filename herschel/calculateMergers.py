@@ -193,6 +193,7 @@ if __name__ == '__main__':
 #    print 'Fraction of PACS S_160 > 10 mJy have experienced a major merger', 100.-nm3
 #    print 'Fraction of PACS S_160 > 10 mJy who have experienced their major merger within mergetimlimit', nm4
 
+    mergetimelimit = 0.5
     query2 = '''select galprop.tmerge, galprop.tmajmerge
                 from FIR, galprop, galphotdust where
                 galphotdust.f775w - galphotdust.f850lp < 0.2 and
