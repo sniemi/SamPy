@@ -20,11 +20,9 @@ def diff_function_log_binning(data, column = 0, log = False,
     Calculates a differential function from data.
     @todo: rewrite this, it's not very well done...
     '''
-    #number of galaxies
-    one = False
+    #get the number of items in data
     if len(N.shape(data)) == 1:
         ngal = len(data)
-        one = True
     else:
         ngal = len(data[:,column])
     
@@ -32,7 +30,8 @@ def diff_function_log_binning(data, column = 0, log = False,
     if not physical_units:
         h = 1.0
     
-    #if wgth is None then make weights based on the volume etc.
+    #if wgth is None then make weights based on 
+    #the volume and the number of volumes
     if wgth == None:
         weight = N.zeros(ngal) + (1./(nvols*(float(volume)/h)**3))
     else:

@@ -33,13 +33,18 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
             dt[x] = N.loadtxt(data[0][x])
 
     #calculate the mass functions from the Bolshoi data
+    #are Bolshoi data in M_sun??? then one should divide the data with h!!
     mbin0, mf0, nu0 = df.diff_function_log_binning(dt['Bolshoi'],
                                                    nbins = 40,
                                                    h = 1., 
                                                    mmin = 10**9.2,
                                                    mmax = 10**15.0)
     del dt['Bolshoi']
-    mf0 /= (N.log(10)*mbin0)
+#    mf0 *= 1. / (mbin0 * N.log(10))   
+    mf0 *= (mbin0[1] - mbin0[0]) / (N.log(10)*10**(mbin0[1] - mbin0[0]))   
+#    mf0 *= mbin0 / (N.log(10)*10**(mbin0[1] - mbin0[0]))   
+    print (mbin0[1] - mbin0[0]) /(N.log(10)*10**(mbin0[1] - mbin0[0]))
+
     mbin0 = 10**mbin0
     #title
     if no_phantoms:
@@ -47,12 +52,9 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
     else:
         ax1.set_title('Bolshoi Dark Matter Mass Functions')
 
-    #MF from Bolshoi
-    bolshoi = ax1.plot(mbin0, mf0, 'ro:', ms = 4) 
-
     #mark redshift
     for a, b in zip(mbin0[::-1], mf0[::-1]):
-        if b > 10**-5:
+        if b > 10**-6:
             break
     ax1.annotate('$z \sim %.1f$' % redshift,
                 (0.98*a, 3*10**-6), size = 'x-small')
@@ -60,13 +62,16 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
     #Analytical MFs
     #1st column: mass (Msolar/h)
     #2nd column: (dn/dM)*dM, per Mpc^3 (NOT h^3/Mpc^3)
-    xST = dt['Sheth-Tormen'][:,1]
-    yST = dt['Sheth-Tormen'][:,2] / h3 
+    xST = dt['Sheth-Tormen'][:,1] / h
+    yST = dt['Sheth-Tormen'][:,2] / h3 / h / h
     sh = ax1.plot(xST, yST, 'b-', lw = 1.3)
     #PS
-    xPS = dt['Press-Schecter'][:,1]
-    yPS = dt['Press-Schecter'][:,2] / h3
-    ps = ax1.plot(xPS, yPS, 'g-', lw = 1.1)
+    xPS = dt['Press-Schecter'][:,1] / h 
+    yPS = dt['Press-Schecter'][:,2] / h3 / h / h
+    ps = ax1.plot(xPS, yPS, 'g--', lw = 1.1)
+
+    #MF from Bolshoi
+    bolshoi = ax1.plot(mbin0, mf0, 'ro:', ms = 5) 
 
     #delete data to save memory, dt is not needed any longer
     del dt
@@ -95,8 +100,8 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
     
     ax1.set_xticklabels([])
 
-    ax2.set_xlabel(r'$M_{vir} \quad [h^{-1}M_{\odot}]$')
-    ax1.set_ylabel(r'$\mathrm{d}N / \mathrm{d}M_{vir} \quad [h^{3}\mathrm{Mpc}^{-3} \mathrm{dex}^{-1}]$')
+    ax2.set_xlabel(r'$M_{\mathrm{vir}} \quad [h^{-1}M_{\odot}]$')
+    ax1.set_ylabel(r'$\mathrm{d}N / \mathrm{d}M_{\mathrm{vir}} \quad [h^{3}\mathrm{Mpc}^{-3} \mathrm{dex}^{-1}]$')
     ax2.set_ylabel(r'$\frac{\mathrm{Bolshoi}}{\mathrm{Model}}$')
 
     ax1.legend((bolshoi, sh, ps),
