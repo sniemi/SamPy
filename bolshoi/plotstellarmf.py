@@ -116,7 +116,7 @@ def stellarmassfunc_plot(path, database, redshifts,
 
     ax.set_xlim(8.0, 12.1)
     ax.set_ylim(lowlim, -1.0)
-    ax.set_xlabel(r'$\log_{10} M_{\star} \quad [M_{\odot}]$')
+    ax.set_xlabel(r'$\log_{10} \left ( M_{\star} \ [\mathrm{M}_{\odot}] \right )$')
     ax.set_ylabel(r'$\log_{10} \left ( \frac{\mathrm{d}N}{\mathrm{d}\log_{10} M_{\star}} \right ) \quad [\mathrm{Mpc}^{-3}\ \mathrm{dex}^{-1}]$')
     #small ticks
     m = ax.get_yticks()[1] - ax.get_yticks()[0]
@@ -147,7 +147,7 @@ if __name__ == '__main__':
     #find the home directory, because the output is to dropbox 
     #and my user name is not always the same, this hack is required.
     hm = os.getenv('HOME')
-    path = '/Users/niemi/Desktop/Research/run/trial1/'
+    path = hm + '/Desktop/Research/run/trial1/'
     database = 'sams.db'
     outpath = hm + '/Dropbox/Research/Bolshoi/stellarMFs/'
 
@@ -163,7 +163,8 @@ if __name__ == '__main__':
     main(redshifts, path, database, outpath, 'stellarmf')
 
     logging.debug('Making the second plot')
-    redshifts = ['galpropz.zgal >= 0.9 and galpropz.zgal <= 1.3',
+    redshifts = ['galpropz.zgal >= 0.0 and galpropz.zgal <= 0.2',
+                 'galpropz.zgal >= 0.9 and galpropz.zgal <= 1.3',
                  'galpropz.zgal >= 1.9 and galpropz.zgal <= 2.5',
                  'galpropz.zgal >= 2.9 and galpropz.zgal <= 3.5',
                  'galpropz.zgal >= 3.5 and galpropz.zgal <= 4.1']

@@ -33,7 +33,6 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
             dt[x] = N.loadtxt(data[0][x])
 
     #calculate the mass functions from the Bolshoi data
-    #are Bolshoi data in M_sun??? then one should divide the data with h!!
     mbin0, mf0, nu0 = df.diff_function_log_binning(dt['Bolshoi'],
                                                    nbins = 40,
                                                    h = 1., 
