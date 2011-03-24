@@ -140,3 +140,84 @@ def mass_function(data, column = 0, log = False,
         if verbose:
             print '\nResults:', mbin, mf/dm
         return mbin, mf/dm
+    
+def stellarMassFunction(data,
+                        wght = None, mmin = None, mmax = None, 
+                        nbins = 40, h = 0.7, volume = 50,
+                        nvols = 8, verbose = False,
+                        early_type_galaxies = 0.4,
+                        central_galaxy_id = 1):
+    '''
+    Calculates a stellar mass function from data. Calculates
+    stellar mass functions for all galaxies, early- and late-types
+    and central galaxies seprately.
+    :params data (dictionary): data should be in format:
+    data['stellar_mass'] = []
+    data['bulge_mass'] = []
+    data['galaxy_id'] = []
+    :return output (dictionary): 
+    '''
+    #get number of galaxies
+    ngal = len(data['stellar_mass'])
+
+    #set weights if None given
+    if wght == None:
+        wght = N.zeros(ngal) + (1./(nvols*(float(volume)/h)**3))
+
+    #set minimum and maximum mass if None given
+    if mmin == None:
+        mmin = N.min(data['stellar_mass'])
+    if mmax == None:
+        mmax = N.max(data['stellar_mass'])
+
+    #calculate the stepsize
+    dm = (mmax - mmin) / float(nbins)
+    #mid points
+    mbin = (N.arange(nbins) + 0.5)*dm + mmin
+
+    #verbose output
+    if verbose:
+        print 'Number of galaxies = %i' % ngal
+        print 'The least massive galaxy stellar mass', mmin
+        print 'The most massive galaxy stellar mass ', mmax
+        print 'dM =', dm
+        print 'h =', h
+
+    #mass functions
+    mf_star = N.zeros(nbins)
+    mf_star_central = N.zeros(nbins)
+    mf_early = N.zeros(nbins)
+    mf_late = N.zeros(nbins)
+    mf_bulge = N.zeros(nbins)
+
+    #adapted from IDL, could be done without looping
+    btt = 10.0**(data['bulge_mass'] - data['stellar_mass'])
+    for i in range(ngal):
+        ibin = int(N.floor((data['stellar_mass'][i] - mmin)/dm))
+        if ibin >= 0 and ibin < nbins:
+            mf_star[ibin] += wght[i]
+            #stellar mass, by type
+            if btt[i] >= early_type_galaxies:
+                mf_early[ibin] += wght[i]
+            else:
+                mf_late[ibin] += wght[i]
+            #stellar mass, centrals galaxies only
+            if data['galaxy_id'][i] == central_galaxy_id:
+                mf_star_central[ibin] += wght[i]
+
+    #Get the log of the mass fuction and divide with dex
+    mf_star =  N.log10(mf_star/dm)
+    mf_early = N.log10(mf_early/dm)
+    mf_late = N.log10(mf_late/dm)
+    mf_star_central = N.log10(mf_star_central/dm)
+
+    out = {}
+    out['mf_stellar_mass'] = mf_star
+    out['mf_early_types'] = mf_early
+    out['mf_late_types'] = mf_late
+    out['mf_central_galaxies'] = mf_star_central
+    out['mass_bins'] = mbin
+    out['dm'] = dm
+    return out
+    
+    

@@ -2,9 +2,13 @@ from yt.mods import *
 import yt.analysis_modules.halo_mass_function.api as HMF
 
 def calculate_analytical_dm_mfs(redshift,
-                                h_100 = 0.7, Omega_0 = 0.27,
-                                Omega_b = 0.02265/(0.7*0.7), lambdaL = 0.73,
-                                n = 0.95, sigma8 = 0.82):
+                                h_100 = 0.7,
+                                Omega_0 = 0.27,
+                                #Omega_b = 0.02265/(0.7*0.7),
+                                Omega_b = 0.02265,
+                                lambdaL = 0.73,
+                                n = 0.95,
+                                sigma8 = 0.82):
     
     hmfPS = HMF.HaloMassFcn(None, omega_matter0=Omega_0, omega_lambda0=lambdaL,
                             omega_baryon0=Omega_b, hubble0=h_100, this_redshift=z, 

@@ -3,7 +3,7 @@ Differrent types of stellar mass functions.
 
 @requires: NumPy
 
-@version: 0.1
+@version: 0.2
 
 @author: Sami-Matias Niemi
 @contact: niemi@stsci.edu
@@ -26,6 +26,25 @@ def stellarMfs():
     file = observation_path + 'stellarmf/sami.dat'
     tmp = su.se_catalog(file)
     return tmp, _getIDs(tmp)
+
+def highRedshiftMFs():
+    '''
+    Stellar mass functions from Valentino et al. arXiv:1008.3901v2
+    These values probably use the Salpeter IMF.
+    If so then subtract 0.25 dex from log(m*) to get to Chabrier.
+    Table 1
+                        log10 (dN/dlog10 (M/M_sun)/Mpc3 )
+    log10(M/M_sun)     #z = 3.8    #5.0    #5.9    #6.8
+    '''
+    out = {}
+    file = observation_path + 'stellarmf/HighRedshift.dat'
+    tmp = N.loadtxt(file)
+    out['stellar_mass'] = tmp[:,0] #- 0.25
+    out['z = 3.8'] = tmp[:,1]
+    out['z = 5.0'] = tmp[:,2]
+    out['z = 5.9'] = tmp[:,3]
+    out['z = 6.8'] = tmp[:,4]
+    return out
 
 def bellG(h = 0.7, chabrier = True):
     '''
