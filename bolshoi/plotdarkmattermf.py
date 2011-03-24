@@ -159,19 +159,19 @@ def plotDMMFfromGalpropz(redshift, h, *data):
     for a, b in zip(mbin0[::-1], mf0[::-1]):
         if b > 10**-6:
             break
-    ax1.annotate('$z \sim %.1f$' % redshift,
-                (0.98*a, 3*10**-6), size = 'x-small')
+    ax1.annotate('$z \sim %.0f$' % redshift,
+                (0.98*a, 3*10**-7), size = 'x-small')
 
     #Analytical MFs
     #0th column: log10 of mass (Msolar, NOT Msolar/h)
     #1st column: mass (Msolar/h)
     #2nd column: (dn/dM)*dM, per Mpc^3 (NOT h^3/Mpc^3)
     xST = 10**dt['Sheth-Tormen'][:,0]
-    yST = dt['Sheth-Tormen'][:,2] * h
+    yST = dt['Sheth-Tormen'][:,2]
     sh = ax1.plot(xST, yST, 'b-', lw = 1.3)
     #PS
     xPS = 10**dt['Press-Schecter'][:,0]
-    yPS = dt['Press-Schecter'][:,2] * h
+    yPS = dt['Press-Schecter'][:,2]
     ps = ax1.plot(xPS, yPS, 'g--', lw = 1.1)
 
     #MF from Bolshoi
@@ -183,15 +183,15 @@ def plotDMMFfromGalpropz(redshift, h, *data):
     #plot the residuals
     if round(float(redshift), 1) < 1.5:
         #interploate to right x scale
-        yST = N.interp(mbin0, xST, yST)
-        yPS = N.interp(mbin0, xPS, yPS)
+        ySTint = N.interp(mbin0, xST, yST)
+        yPSint = N.interp(mbin0, xPS, yPS)
         #make the plot
-        ax2.annotate('$z \sim %.1f$' % redshift,
+        ax2.annotate('$z \sim %.0f$' % redshift,
                      (1.5*10**9, 1.05), xycoords='data',
                      size = 10)
         ax2.axhline(1.0, color = 'b')
-        ax2.plot(mbin0, mf0 / yST, 'b-')
-        ax2.plot(mbin0, mf0 / yPS, 'g-')
+        ax2.plot(mbin0, mf0 / ySTint, 'b-')
+        ax2.plot(mbin0, mf0 / yPSint, 'g-')
 
     ax1.set_xscale('log')
     ax2.set_xscale('log')
@@ -252,28 +252,25 @@ def plotDMMFfromGalpropzAnalytical2(redshift, h, *data):
                                                    nvols = 8,
                                                    physical_units = True)
     del dt['Bolshoi']
-    #use chain rule to get dN / dM
-    #dN/dM = dN/dlog10(M) * dlog10(M)/dM
-    #d/dM (log10(M)) = 1 / (M*ln(10)) 
-    #mf0 *= 1. / (mbin0 * N.log(10))   
+
     mbin0 = 10**mbin0
     #title
     ax1.set_title('Dark Matter Halo Mass Functions (galpropz.dat)')
 
     #mark redshift
     for a, b in zip(mbin0[::-1], mf0[::-1]):
-        if b > 10**-6:
+        if b > 10**-5:
             break
-    ax1.annotate('$z \sim %.1f$' % redshift,
+    ax1.annotate('$z \sim %.0f$' % redshift,
                 (0.98*a, 3*10**-6), size = 'x-small')
 
     #Analytical MFs
-    xST = dt['Sheth-Tormen'][0]
-    yST = dt['Sheth-Tormen'][1]
+    xST = dt['Sheth-Tormen'][0] 
+    yST = dt['Sheth-Tormen'][1] * h * h
     sh = ax1.plot(xST, yST, 'b-', lw = 1.3)
     #PS
-    xPS = dt['Press-Schecter'][0]
-    yPS = dt['Press-Schecter'][1]
+    xPS = dt['Press-Schecter'][0] 
+    yPS = dt['Press-Schecter'][1] * h * h
     ps = ax1.plot(xPS, yPS, 'g--', lw = 1.1)
 
     #MF from Bolshoi
@@ -283,17 +280,18 @@ def plotDMMFfromGalpropzAnalytical2(redshift, h, *data):
     del dt
 
     #plot the residuals
-    if round(float(redshift), 1) < 1.5:
+    if redshift < 1.5:
         #interploate to right x scale
-        yST = N.interp(mbin0, xST, yST)
-        yPS = N.interp(mbin0, xPS, yPS)
+        ySTint = N.interp(mbin0, xST, yST)
+        yPSint = N.interp(mbin0, xPS, yPS)
+        print mbin0, xST, yST
         #make the plot
-        ax2.annotate('$z \sim %.1f$' % redshift,
+        ax2.annotate('$z \sim %.0f$' % redshift,
                      (1.5*10**9, 1.05), xycoords='data',
                      size = 10)
         ax2.axhline(1.0, color = 'b')
-        ax2.plot(mbin0, mf0 / yST, 'b-')
-        ax2.plot(mbin0, mf0 / yPS, 'g-')
+        ax2.plot(mbin0, mf0 / ySTint, 'b-')
+        ax2.plot(mbin0, mf0 / yPSint, 'g-')
 
     ax1.set_xscale('log')
     ax2.set_xscale('log')
@@ -422,7 +420,7 @@ if __name__ == '__main__':
                 'Press-Schecter': c,
                 'Warren' : d}
 
-        if b.find('_2_03') > -1 or b.find('_6_56') > -1 or b.find('_3_06') > -1 or b.find('_5_16') > -1 or b.find('_0_01') > -1:
+        if b.find('_2_0') > -1 or b.find('_6_0') > -1 or b.find('_3_0') > -1 or b.find('_5_0') > -1 or b.find('_0_0') > -1:
             continue
         else:
             logging.debug('Plotting redshift %.2f dark matter mass functions' % redshift)
@@ -439,7 +437,7 @@ if __name__ == '__main__':
         redshift = float(a.split('z')[1].split('.')[0].replace('_', '.'))
         data = {'Bolshoi' : a,
                 'Analytical': b}
-        if redshift in [1.01, 4.04, 8.23]: #3.06, 6.56]:
+        if round(redshift,1) in [1.0, 4.0, 8.2]:
             logging.debug('Plotting redshift %.2f dark matter mass functions (Analytical 2)' % redshift)
             print a, b
             plotDMMFfromGalpropzAnalytical2(redshift, h, data)
