@@ -10,7 +10,7 @@ Differrent types of stellar mass functions.
 '''
 import os
 import numpy as N
-import io.sextutils as su
+import smnIO.sextutils as su
 
 #This should be global, as all observational data are in the same place
 #Note however that because the data is in Dropbox the absolute path
@@ -39,7 +39,7 @@ def highRedshiftMFs():
     out = {}
     file = observation_path + 'stellarmf/HighRedshift.dat'
     tmp = N.loadtxt(file)
-    out['stellar_mass'] = tmp[:,0] #- 0.25
+    out['stellar_mass'] = tmp[:,0] - 0.25
     out['z = 3.8'] = tmp[:,1]
     out['z = 5.0'] = tmp[:,2]
     out['z = 5.9'] = tmp[:,3]

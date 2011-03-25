@@ -1,67 +1,27 @@
-'''
-This little script can be used to generate an
-SQLite3 database from Rachel's GF output.
-
-The script will make a table out from each ascii 
-output file. The halo_id and gal_id columns of
-each table are indexed for faster table joining.
-Each index is names as table_id, albeit there
-should be no need to know the name of the index.
-
-output file, by default, is names as sams.db, 
-however, this is easy to change as the name
-is stored to output variable.
-'''
-
 import sqlite3
 import glob as g
-import sextutils as su
+#Sami's repo
+import smnIO.sextutils as su
+import log.Logger as lg
+import db.sqlite
 
-def parse_column_names(filename, commentchar = '#', colnumber = 2):
+def generateSQLiteDBfromSAMTables(output = 'sams.db',
+                                  fileidentifier = '*.dat'):
     '''
-    Parse column names from a text file that follows
-    SExtractor format, i.e., columns are specified in
-    the beginning of the file. Each column are specified
-    in a single line that starts with a comment charachter.
-    The line assumed to follow the following format:
-    # number name
-    For example:
-    # 1 the_first_column.
-    In the case of the example, the function would return
-    a list ['the_first_column',].
-    '''
-    cols = []
-    next = True
-    fh = open(filename)
-    while next:
-        line = fh.next()
-        if not line.startswith(commentchar):
-            next = False
-        else:
-            tmp = line.split()
-            cols.append(tmp[colnumber])
-    return cols
+    This little function can be used to generate an
+    SQLite3 database from Rachel's GF output.
+    
+    The script will make a table out from each ascii 
+    output file. The halo_id and gal_id columns of
+    each table are indexed for faster table joining.
+    Each index is names as table_id, albeit there
+    should be no need to know the name of the index.
 
-def make_sql_string(columns, format, start):
+    @param output: name of the output file
+    @param fileidentifier: string how to identify input data  
     '''
-    Generates an SQL string from two vectors that
-    describe the name of the column and the format.
-    Can be used to assist when generating a string
-    to create a new table.
-    '''
-    start += '('
-    for a, b in zip(columns, format):
-        start += '%s %s, ' % (a, b)
-        
-    start = start[:-2] + ')'
-    return start
-
-if __name__ == '__main__':
-    #name of the output database
-    output = 'sams.db'
-
     #find all files
-    files = g.glob('*.dat')
+    files = g.glob(fileidentifier)
 
     #create a Connection object that represents the database
     #to a file
@@ -70,8 +30,8 @@ if __name__ == '__main__':
     #conn = sqlite3.connect(':memory:')
 
     for file in files:
-        print 'Processing file %s' % file
-        columns = parse_column_names(file)
+        log.info('Processing file %s', file)
+        columns = db.sqlite.parseColumnNamesSAMTables(file)
         formats = []
         for col in columns:
             if 'halo_id' in col:
@@ -119,15 +79,27 @@ if __name__ == '__main__':
             for x in range(len(formats)):
                 ins += '?,'
             ins = ins[:-1] + ')'
-            
-        sql_create_string = make_sql_string(columns, formats, start)
-
+        if 'galpropz.dat' in file:
+            start = 'create table galpropz '
+            ins = 'insert into galpropz values ('
+            for x in range(len(formats)):
+                ins += '?,'
+            ins = ins[:-1] + ')'
+     
+        #generate an SQL table creation string
+        sql_create_string = db.sqlite.generateSQLString(columns,
+                                                        formats,
+                                                        start)
+        
+        #create a cursor instance
         c = conn.cursor()
 
         #Create table
         c.execute(sql_create_string)
 
-        #insert data
+        log.info('Created table, will start inserting data')
+
+        #insert data, line-by-line to save memory
         fh = open(file, 'r')
         while True:
             try:
@@ -136,17 +108,35 @@ if __name__ == '__main__':
                 break
             if not line.startswith('#'):
                 c.execute(ins, line.split())
+
+        log.info('Finished inserting data')
         
         #create index to make searching faster
-        if 'halos.dat' in file:
-            c.execute('''CREATE UNIQUE INDEX %s_ids on %s (halo_id)''' % (file[:-4], file[:-4]))
+        if file in 'halos.dat':
+            indexString = 'CREATE UNIQUE INDEX %s_ids on %s (halo_id)' % (file[:-4], file[:-4]) 
+        elif file in ['galphot.dat', 'galphotdust.dat']: 
+            indexString = 'CREATE UNIQUE INDEX %s_ids on %s (halo_id, gal_id, z)' % (file[:-4], file[:-4])
+        elif file in 'galpropz.dat':
+            indexString = 'CREATE UNIQUE INDEX %s_ids on %s (halo_id, gal_id, zgal)' % (file[:-4], file[:-4])
+        elif 'totals.dat' in file:
+            indexString = 'CREATE UNIQUE INDEX %s_ids on %s (z)' % (file[:-4], file[:-4])
         else:
-            c.execute('''CREATE UNIQUE INDEX %s_ids on %s (halo_id, gal_id)''' % (file[:-4], file[:-4]))
+            indexString = 'CREATE UNIQUE INDEX %s_ids on %s (halo_id, gal_id)' % (file[:-4], file[:-4])
+
+        c.execute(indexString)
+        log.info('%s', indexString)
 
         # Save (commit) the changes
         conn.commit()
         # We can also close the cursor if we are done with it
         c.close()
         
+    log.info('All done, DB file is %s', output)
 
-    print 'All done, DB file is %s' % output
+
+if __name__ == '__main__':
+    log_filename = 'insertSAMTablesToSQLite.log' 
+    log = lg.setUpLogger(log_filename)
+
+    generateSQLiteDBfromSAMTables()
+

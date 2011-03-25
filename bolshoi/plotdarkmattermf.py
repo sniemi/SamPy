@@ -1,6 +1,7 @@
 '''
 Plots a dark matter halo mass function at different
 redshifts. Input data are from the Bolshoi simulation.
+
 @author: Sami-Matias Niemi
 '''
 import matplotlib
@@ -16,16 +17,22 @@ matplotlib.use('PDF')
 import pylab as P
 import numpy as N
 import glob as g
-import logging, os
+import os
 #From Sami's repo
 import astronomy.differentialfunctions as df
-import io.read as io
+import smnIO.read as io
 import db.sqlite
+import log.Logger as lg
 
 def plot_mass_function(redshift, h, no_phantoms, *data):
-    #Hubble constants
-    h3 = h**3
-    #read data
+    #fudge factor
+    fudge = 2.0
+    #http://adsabs.harvard.edu/abs/2001MNRAS.321..372J
+    #Jenkins et al. paper has sqrt(2./pi) while
+    #Rachel's code has 1/(sqrt(2*pi))
+    #ratio of these two is the fudge factor    
+
+    #read data to dictionary
     dt = {}
     for x in data[0]:
         if 'Bolshoi' in x:
@@ -34,17 +41,19 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
             dt[x] = N.loadtxt(data[0][x])
 
     #calculate the mass functions from the Bolshoi data
-    mbin0, mf0, nu0 = df.diff_function_log_binning(dt['Bolshoi'],
-                                                   nbins = 40,
-                                                   h = 1., 
-                                                   mmin = 10**9.2,
-                                                   mmax = 10**15.0)
+    mbin0, mf0 = df.diffFunctionLogBinning(dt['Bolshoi']/h,
+                                           nbins = 35,
+                                           h = 0.7, 
+                                           mmin = 10**9.0,
+                                           mmax = 10**15.0,
+                                           physical_units = True)    
+ 
     del dt['Bolshoi']
-#    mf0 *= 1. / (mbin0 * N.log(10))   
-    mf0 *= (mbin0[1] - mbin0[0]) / (N.log(10)*10**(mbin0[1] - mbin0[0]))   
-#    mf0 *= mbin0 / (N.log(10)*10**(mbin0[1] - mbin0[0]))   
-    print (mbin0[1] - mbin0[0]) /(N.log(10)*10**(mbin0[1] - mbin0[0]))
-
+    #use chain rule to get dN / dM
+    #dN/dM = dN/dlog10(M) * dlog10(M)/dM
+    #d/dM (log10(M)) = 1 / (M*ln(10)) 
+    mf0 *= 1. / (mbin0 * N.log(10))
+    #put mass back to power
     mbin0 = 10**mbin0
     #title
     if no_phantoms:
@@ -60,14 +69,15 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
                 (0.98*a, 3*10**-6), size = 'x-small')
 
     #Analytical MFs
+    #0th column: log10 of mass (Msolar, NOT Msolar/h)
     #1st column: mass (Msolar/h)
     #2nd column: (dn/dM)*dM, per Mpc^3 (NOT h^3/Mpc^3)
-    xST = dt['Sheth-Tormen'][:,1] / h
-    yST = dt['Sheth-Tormen'][:,2] / h3 / h / h
+    xST = 10**dt['Sheth-Tormen'][:,0]
+    yST = dt['Sheth-Tormen'][:,2] * fudge
     sh = ax1.plot(xST, yST, 'b-', lw = 1.3)
     #PS
-    xPS = dt['Press-Schecter'][:,1] / h 
-    yPS = dt['Press-Schecter'][:,2] / h3 / h / h
+    xPS = 10**dt['Press-Schecter'][:,0]
+    yPS = dt['Press-Schecter'][:,2] * fudge
     ps = ax1.plot(xPS, yPS, 'g--', lw = 1.1)
 
     #MF from Bolshoi
@@ -100,8 +110,104 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
     
     ax1.set_xticklabels([])
 
-    ax2.set_xlabel(r'$M_{\mathrm{vir}} \quad [h^{-1}M_{\odot}]$')
-    ax1.set_ylabel(r'$\mathrm{d}N / \mathrm{d}M_{\mathrm{vir}} \quad [h^{3}\mathrm{Mpc}^{-3} \mathrm{dex}^{-1}]$')
+    ax2.set_xlabel(r'$M_{\mathrm{vir}} \quad [M_{\odot}]$')
+    ax1.set_ylabel(r'$\mathrm{d}N / \mathrm{d}M_{\mathrm{vir}} \quad [\mathrm{Mpc}^{-3} \mathrm{dex}^{-1}]$')
+    ax2.set_ylabel(r'$\frac{\mathrm{Bolshoi}}{\mathrm{Model}}$')
+
+    ax1.legend((bolshoi, sh, ps),
+               ('Bolshoi', 'Sheth-Tormen', 'Press-Schecter'),
+               shadow = True, fancybox = True,
+               numpoints = 1)
+
+def plot_mass_functionAnalytical2(redshift, h, no_phantoms, *data):
+    #fudge factor
+    fudge = 1.
+    #http://adsabs.harvard.edu/abs/2001MNRAS.321..372J
+    #Jenkins et al. paper has sqrt(2./pi) while
+    #Rachel's code has 1/(sqrt(2*pi))
+    #ratio of these two is the fudge factor  
+    
+    #read data
+    dt = {}
+    for x in data[0]:
+        if 'Bolshoi' in x:
+            dt[x] = io.readBolshoiDMfile(data[0][x], 0, no_phantoms)
+        else:
+            #M dN/dM dNcorr/dM dN/dlog10(M) dN/dlog10(Mcorr)
+            d = N.loadtxt(data[0][x])
+            dt['Press-Schecter'] = N.array([d[:,0], d[:,3]])
+            dt['Sheth-Tormen'] = N.array([d[:,0], d[:,4]])
+
+
+    #calculate the mass functions from the Bolshoi data
+    mbin0, mf0 = df.diffFunctionLogBinning(dt['Bolshoi']/h,
+                                           nbins = 35,
+                                           h = 0.7, 
+                                           mmin = 10**9.0,
+                                           mmax = 10**15.0,
+                                           physical_units = True)    
+    del dt['Bolshoi']
+
+    mbin0 = 10**mbin0
+    #title
+    if no_phantoms:
+        ax1.set_title('Bolshoi Dark Matter Mass Functions (no phantoms)')
+    else:
+        ax1.set_title('Bolshoi Dark Matter Mass Functions')
+
+    #mark redshift
+    for a, b in zip(mbin0[::-1], mf0[::-1]):
+        if b > 10**-6:
+            break
+    ax1.annotate('$z \sim %.1f$' % redshift,
+                (0.98*a, 3*10**-6), size = 'x-small')
+
+    #Analytical MFs
+    xST = dt['Sheth-Tormen'][0] 
+    yST = dt['Sheth-Tormen'][1] * fudge
+    print xST[1000], yST[1000]
+    sh = ax1.plot(xST, yST, 'b-', lw = 1.3)
+    #PS
+    xPS = dt['Press-Schecter'][0]
+    yPS = dt['Press-Schecter'][1] * fudge
+    ps = ax1.plot(xPS, yPS, 'g--', lw = 1.1)
+
+    #MF from Bolshoi
+    bolshoi = ax1.plot(mbin0, mf0, 'ro:', ms = 5) 
+
+    #delete data to save memory, dt is not needed any longer
+    del dt
+
+    #plot the residuals
+    if round(float(redshift), 1) < 1.5:
+        #interploate to right x scale
+        mfintST = N.interp(xST, mbin0, mf0)
+        mfintPS = N.interp(xPS, mbin0, mf0)
+        #yST = N.interp(mbin0, xST, yST)
+        #yPS = N.interp(mbin0, xPS, yPS)
+        #make the plot
+        ax2.annotate('$z \sim %.0f$' % redshift,
+                     (1.5*10**9, 1.05), xycoords='data',
+                     size = 10)
+        ax2.axhline(1.0, color = 'b')
+        ax2.plot(xST, mfintST / yST, 'b-')
+        ax2.plot(xPS, mfintPS / yPS, 'g-')
+        #ax2.plot(mbin0, mf0 / yST, 'b-')
+        #ax2.plot(mbin0, mf0 / yPS, 'g-')
+
+    ax1.set_xscale('log')
+    ax2.set_xscale('log')
+    ax1.set_yscale('log')
+
+    ax1.set_ylim(3*10**-7, 10**0)
+    ax2.set_ylim(0.45, 1.55)
+    ax1.set_xlim(10**9, 10**15)
+    ax2.set_xlim(10**9, 10**15)
+    
+    ax1.set_xticklabels([])
+
+    ax2.set_xlabel(r'$M_{\mathrm{vir}} \quad [M_{\odot}]$')
+    ax1.set_ylabel(r'$\mathrm{d}N / \mathrm{d}\log_{10}(M_{\mathrm{vir}}) \quad [\mathrm{Mpc}^{-3} \mathrm{dex}^{-1}]$')
     ax2.set_ylabel(r'$\frac{\mathrm{Bolshoi}}{\mathrm{Model}}$')
 
     ax1.legend((bolshoi, sh, ps),
@@ -110,13 +216,20 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
                numpoints = 1)
     
 def plotDMMFfromGalpropz(redshift, h, *data):
+    #fudge factor
+    fudge = 2.0
+    #http://adsabs.harvard.edu/abs/2001MNRAS.321..372J
+    #Jenkins et al. paper has sqrt(2./pi) while
+    #Rachel's code has 1/(sqrt(2*pi))
+    #ratio of these two is the fudge factor
+    
     #find the home directory, because the output is to dropbox 
     #and my user name is not always the same, this hack is required.
     hm = os.getenv('HOME')
-    path = hm + '/Desktop/Research/run/trial1/'
+    path = hm + '/Dropbox/Research/Bolshoi/run/trial2/'
     database = 'sams.db'
     
-    rlow = redshift - 0.4
+    rlow = redshift - 0.1
     rhigh = redshift + 0.1
     
     query = '''select mhalo from galpropz where
@@ -126,30 +239,26 @@ def plotDMMFfromGalpropz(redshift, h, *data):
     
     print query
     
-    #Hubble constants
-    h3 = h**3
     #read data
     dt = {}
     for x in data[0]:
-        if 'Bolshoi' in x:
-            dt[x] = db.sqlite.get_data_sqlite(path, database, query)*1e9
-        else:
-            dt[x] = N.loadtxt(data[0][x])
+        dt[x] = N.loadtxt(data[0][x])
+
+    dt['Bolshoi'] = db.sqlite.get_data_sqlite(path, database, query)*1e9
 
     #calculate the mass functions from the Bolshoi data
-    mbin0, mf0, nu0 = df.diff_function_log_binning(dt['Bolshoi'],
-                                                   nbins = 30,
-                                                   h = 0.7, 
-                                                   mmin = 10**9.2,
-                                                   mmax = 10**15.0,
-                                                   volume = 50,
-                                                   nvols = 8,
-                                                   physical_units = True)
+    mbin0, mf0 = df.diffFunctionLogBinning(dt['Bolshoi']/h,
+                                           nbins = 35,
+                                           h = 0.7, 
+                                           mmin = 10**9.0,
+                                           mmax = 10**15.0,
+                                           volume = 50,
+                                           nvols = 26,
+                                           physical_units = True)
     del dt['Bolshoi']
     #use chain rule to get dN / dM
     #dN/dM = dN/dlog10(M) * dlog10(M)/dM
     #d/dM (log10(M)) = 1 / (M*ln(10)) 
-    #mf0 *= 1. / (mbin0 * N.log(10))
     mf0 *= 1. / (mbin0 * N.log(10))   
     mbin0 = 10**mbin0
     #title
@@ -167,11 +276,11 @@ def plotDMMFfromGalpropz(redshift, h, *data):
     #1st column: mass (Msolar/h)
     #2nd column: (dn/dM)*dM, per Mpc^3 (NOT h^3/Mpc^3)
     xST = 10**dt['Sheth-Tormen'][:,0]
-    yST = dt['Sheth-Tormen'][:,2]
+    yST = dt['Sheth-Tormen'][:,2] * fudge
     sh = ax1.plot(xST, yST, 'b-', lw = 1.3)
     #PS
     xPS = 10**dt['Press-Schecter'][:,0]
-    yPS = dt['Press-Schecter'][:,2]
+    yPS = dt['Press-Schecter'][:,2] * fudge
     ps = ax1.plot(xPS, yPS, 'g--', lw = 1.1)
 
     #MF from Bolshoi
@@ -214,13 +323,20 @@ def plotDMMFfromGalpropz(redshift, h, *data):
                numpoints = 1)
 
 def plotDMMFfromGalpropzAnalytical2(redshift, h, *data):
+    #fudge factor
+    fudge = 1.
+    #http://adsabs.harvard.edu/abs/2001MNRAS.321..372J
+    #Jenkins et al. paper has sqrt(2./pi) while
+    #Rachel's code has 1/(sqrt(2*pi))
+    #ratio of these two is the fudge factor    
+
     #find the home directory, because the output is to dropbox 
     #and my user name is not always the same, this hack is required.
     hm = os.getenv('HOME')
-    path = hm + '/Desktop/Research/run/trial1/'
+    path = hm + '/Dropbox/Research/Bolshoi/run/trial2/'
     database = 'sams.db'
     
-    rlow = redshift - 0.6
+    rlow = redshift - 0.1
     rhigh = redshift + 0.1
     
     query = '''select mhalo from galpropz where
@@ -233,24 +349,23 @@ def plotDMMFfromGalpropzAnalytical2(redshift, h, *data):
     #read data
     dt = {}
     for x in data[0]:
-        if 'Bolshoi' in x:
-            dt[x] = db.sqlite.get_data_sqlite(path, database, query)*1e9
-            print len(dt[x])
-        else:
-            #M dN/dM dNcorr/dM dN/dlog10(M) dN/dlog10(Mcorr)
-            d = N.loadtxt(data[0][x])
-            dt['Press-Schecter'] = N.array([d[:,0], d[:,3]])
-            dt['Sheth-Tormen'] = N.array([d[:,0], d[:,4]])
+        #M dN/dM dNcorr/dM dN/dlog10(M) dN/dlog10(Mcorr)
+        d = N.loadtxt(data[0][x])
+        dt['Press-Schecter'] = N.array([d[:,0], d[:,3]])
+        dt['Sheth-Tormen'] = N.array([d[:,0], d[:,4]])
+
+    dt['Bolshoi'] = db.sqlite.get_data_sqlite(path, database, query)*1e9
+    print len(dt['Bolshoi'])
 
     #calculate the mass functions from the Bolshoi data
-    mbin0, mf0, nu0 = df.diff_function_log_binning(dt['Bolshoi'],
-                                                   nbins = 30,
-                                                   h = 0.7, 
-                                                   mmin = 10**9.2,
-                                                   mmax = 10**15.0,
-                                                   volume = 50,
-                                                   nvols = 8,
-                                                   physical_units = True)
+    mbin0, mf0 = df.diffFunctionLogBinning(dt['Bolshoi']/h,
+                                           nbins = 35,
+                                           h = 0.7, 
+                                           mmin = 10**9.0,
+                                           mmax = 10**15.0,
+                                           volume = 50,
+                                           nvols = 26,
+                                           physical_units = True)
     del dt['Bolshoi']
 
     mbin0 = 10**mbin0
@@ -266,11 +381,11 @@ def plotDMMFfromGalpropzAnalytical2(redshift, h, *data):
 
     #Analytical MFs
     xST = dt['Sheth-Tormen'][0] 
-    yST = dt['Sheth-Tormen'][1] * h * h
+    yST = dt['Sheth-Tormen'][1] * fudge
     sh = ax1.plot(xST, yST, 'b-', lw = 1.3)
     #PS
     xPS = dt['Press-Schecter'][0] 
-    yPS = dt['Press-Schecter'][1] * h * h
+    yPS = dt['Press-Schecter'][1] * fudge
     ps = ax1.plot(xPS, yPS, 'g--', lw = 1.1)
 
     #MF from Bolshoi
@@ -282,16 +397,20 @@ def plotDMMFfromGalpropzAnalytical2(redshift, h, *data):
     #plot the residuals
     if redshift < 1.5:
         #interploate to right x scale
-        ySTint = N.interp(mbin0, xST, yST)
-        yPSint = N.interp(mbin0, xPS, yPS)
-        print mbin0, xST, yST
+        mfintST = N.interp(xST, mbin0, mf0)
+        mfintPS = N.interp(xPS, mbin0, mf0)
+        #yST = N.interp(mbin0, xST, yST)
+        #yPS = N.interp(mbin0, xPS, yPS)
         #make the plot
         ax2.annotate('$z \sim %.0f$' % redshift,
                      (1.5*10**9, 1.05), xycoords='data',
                      size = 10)
         ax2.axhline(1.0, color = 'b')
-        ax2.plot(mbin0, mf0 / ySTint, 'b-')
-        ax2.plot(mbin0, mf0 / yPSint, 'g-')
+        ax2.plot(xST, mfintST / yST, 'b-')
+        ax2.plot(xPS, mfintPS / yPS, 'g-')
+        #ax2.plot(mbin0, mf0 / yST, 'b-')
+        #ax2.plot(mbin0, mf0 / yPS, 'g-')
+
 
     ax1.set_xscale('log')
     ax2.set_xscale('log')
@@ -314,29 +433,32 @@ def plotDMMFfromGalpropzAnalytical2(redshift, h, *data):
                numpoints = 1)
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
     #Hubble constant
     h = 0.7
     #output directory
     wrkdir = os.getenv('HOME') + '/Dropbox/Research/Bolshoi/dm_halo_mf/'
     outdir = wrkdir + 'plots/'
+    #logging
+    log_filename = 'plotDarkMatterMassFunction.log' 
+    logging = lg.setUpLogger(outdir+ log_filename)  
     #find files
     simus = g.glob(wrkdir + 'simu/*.txt')
-    #Note that these are in (dN / dM) * dM; per Mpc^3 (NOT h^3/Mpc^3)
-    sheth = g.glob(wrkdir + 'analytical/*sheth*.dat')
-    press = g.glob(wrkdir + 'analytical/*press*.dat')
-    warren = g.glob(wrkdir + 'analytical/*warren*.dat')
+    sheth = g.glob(wrkdir + 'analytical/*sheth*_?_??-fit.dat')
+    press = g.glob(wrkdir + 'analytical/*press*_?_??-fit.dat')
+    warren = g.glob(wrkdir + 'analytical/*warren*_?_??-fit.dat')
     #analytical 2, Rachel's code
     analytical = g.glob(os.getenv('HOME') +'/Dropbox/Research/Bolshoi/var/z*')
 
-
-    #make the individual plots
-    fig = P.figure()
+    #figure definitions
     left, width = 0.1, 0.8
     rect1 = [left, 0.1, width, 0.2]
     rect2 = [left, 0.3, width, 0.65]
-    ax1 = fig.add_axes(rect2)  #left, bottom, width, height
-    ax2 = fig.add_axes(rect1)
+
+
+#    #make the individual plots
+#    fig = P.figure()
+#    ax1 = fig.add_axes(rect2)  #left, bottom, width, height
+#    ax2 = fig.add_axes(rect1)
 #    for a, b, c, d in zip(simus, sheth, press, warren):
 #        redshift = float(a.split('z')[1].split('.')[0].replace('_', '.'))
 #        data = {'Bolshoi' : a,
@@ -347,7 +469,7 @@ if __name__ == '__main__':
 #        if b.find('_1_01') > -1 or b.find('_6_56') > -1 or b.find('_3_06') > -1 or b.find('_5_16') > -1:
 #            continue
 #        else:
-#            logging.debug('Plotting redshift %.2f dark matter mass functions' % redshift)
+#            logging.debug('Plotting redshift %.2f dark matter mass functions', redshift)
 #            print a, b, c, d
 #            plot_mass_function(redshift, h, True, data)
 #    P.savefig(outdir + 'DMmfzNoPhantoms1.pdf')
@@ -367,7 +489,7 @@ if __name__ == '__main__':
 #        if b.find('_1_01') > -1 or b.find('_6_56') > -1 or b.find('_3_06') > -1 or b.find('_5_16') > -1:
 #            continue
 #        else:
-#            logging.debug('Plotting redshift %.2f dark matter mass functions' % redshift)
+#            logging.debug('Plotting redshift %.2f dark matter mass functions', redshift)
 #            print a, b, c, d
 #            plot_mass_function(redshift, h, False, data)
 #    P.savefig(outdir + 'DMmfz1.pdf')
@@ -385,7 +507,7 @@ if __name__ == '__main__':
 #                'Warren' : d}
 #
 #        if b.find('_1_01') > -1 or b.find('_6_56') > -1 or b.find('_3_06') > -1 or b.find('_5_16') > -1:
-#            print 'Plotting redshift %.2f dark matter mass functions' % redshift
+#            logging.debug('Plotting redshift %.2f dark matter mass functions', redshift)
 #            print a, b, c, d
 #            plot_mass_function(redshift, h, True, data)
 #    P.savefig(outdir + 'DMmfzNoPhantoms2.pdf')
@@ -403,28 +525,100 @@ if __name__ == '__main__':
 #                'Warren' : d}
 #
 #        if b.find('_1_01') > -1 or b.find('_6_56') > -1 or b.find('_3_06') > -1 or b.find('_5_16') > -1:
-#            logging.debug('Plotting redshift %.2f dark matter mass functions' % redshift)
+#            logging.debug('Plotting redshift %.2f dark matter mass functions', redshift)
 #            print a, b, c, d
 #            plot_mass_function(redshift, h, False, data)
 #    P.savefig(outdir + 'DMmfz2.pdf')
 #    P.close()
 #    
+##############################
+#    #With Rachel's analytical 
+#    #make the individual plots
+#    fig = P.figure()
+#    ax1 = fig.add_axes(rect2)  #left, bottom, width, height
+#    ax2 = fig.add_axes(rect1)
+#    for a, b in zip(simus, analytical):
+#        redshift = float(a.split('z')[1].split('.')[0].replace('_', '.'))
+#        data = {'Bolshoi' : a,
+#                'Analytical': b}
+#
+#        if round(redshift,1) not in [1.0, 2.0, 4.0, 8.2]:
+#            logging.debug('Plotting redshift %.2f dark matter mass functions' % redshift)
+#            print a, b
+#            plot_mass_functionAnalytical2(redshift, h, True, data)
+#    P.savefig(outdir + 'DMmfzNoPhantoms1RAnalytical.pdf')
+#    P.close()
+#    
+#    #make the individual plots 2
+#    fig = P.figure()
+#    ax1 = fig.add_axes(rect2) 
+#    ax2 = fig.add_axes(rect1)
+#    for a, b in zip(simus, analytical):
+#        redshift = float(a.split('z')[1].split('.')[0].replace('_', '.'))
+#        data = {'Bolshoi' : a,
+#                'Analytical': b}
+#        
+#        if round(redshift,1) not in [1.0, 2.0, 4.0, 5.2]:
+#            logging.debug('Plotting redshift %.2f dark matter mass functions' % redshift)
+#            print a, b
+#            plot_mass_functionAnalytical2(redshift, h, False, data)
+#    P.savefig(outdir + 'DMmfz1RAnalytical.pdf')
+#    P.close()
+#    
+#    #make the individual plots 3
+#    fig = P.figure()
+#    ax1 = fig.add_axes(rect2) 
+#    ax2 = fig.add_axes(rect1)
+#    for a, b in zip(simus, analytical):
+#        redshift = float(a.split('z')[1].split('.')[0].replace('_', '.'))
+#        data = {'Bolshoi' : a,
+#                'Analytical': b}
+#        
+#        if round(redshift,1) in [1.0, 4.0, 6.6]:
+#            logging.debug('Plotting redshift %.2f dark matter mass functions', redshift)
+#            print a, b
+#            plot_mass_functionAnalytical2(redshift, h, True, data)
+#    P.savefig(outdir + 'DMmfzNoPhantoms2RAnalytical.pdf')
+#    P.close()
+#
+#    #make the individual plots 4
+#    fig = P.figure()
+#    ax1 = fig.add_axes(rect2) 
+#    ax2 = fig.add_axes(rect1)
+#    for a, b in zip(simus, analytical):
+#        redshift = float(a.split('z')[1].split('.')[0].replace('_', '.'))
+#        data = {'Bolshoi' : a,
+#                'Analytical': b}
+#
+#        if round(redshift,1) in [1.0, 4.0, 6.6]:
+#            logging.debug('Plotting redshift %.2f dark matter mass functions' % redshift)
+#            print a, b
+#            plot_mass_functionAnalytical2(redshift, h, False, data)
+#    P.savefig(outdir + 'DMmfz2RAnalytical.pdf')
+#    P.close()    
+#    
+#################################
+    #Haloes from galpropz.dat
+    
+    sheth = g.glob(wrkdir + 'analytical/*sheth*_?_?-fit.dat')
+    press = g.glob(wrkdir + 'analytical/*press*_?_?-fit.dat')
+    warren = g.glob(wrkdir + 'analytical/*warren*_?_?-fit.dat')
+
     #make the individual plots 2
     fig = P.figure()
     ax1 = fig.add_axes(rect2) 
     ax2 = fig.add_axes(rect1)
-    for a, b, c, d in zip(simus, sheth, press, warren):
-        redshift = float(a.split('z')[1].split('.')[0].replace('_', '.'))
-        data = {'Bolshoi' : a,
-                'Sheth-Tormen': b,
+    for a, c, d in zip(sheth, press, warren):
+        redshift = float(a.split('tormen_')[1].split('-fit')[0].replace('_', '.'))
+        data = {'Sheth-Tormen': a,
                 'Press-Schecter': c,
                 'Warren' : d}
 
-        if b.find('_2_0') > -1 or b.find('_6_0') > -1 or b.find('_3_0') > -1 or b.find('_5_0') > -1 or b.find('_0_0') > -1:
+        if a.find('_2_0') > -1 or a.find('_6_0') > -1 or a.find('_3_0') > -1 or a.find('_5_0') > -1 or a.find('_0_0') > -1:
             continue
         else:
             logging.debug('Plotting redshift %.2f dark matter mass functions' % redshift)
-            print a, b, c, d
+            print a, c, d
             plotDMMFfromGalpropz(redshift, h, data)
     P.savefig(outdir + 'DMmfz1GalpropZ.pdf')
     P.close()
@@ -433,13 +627,12 @@ if __name__ == '__main__':
     fig = P.figure()
     ax1 = fig.add_axes(rect2) 
     ax2 = fig.add_axes(rect1)
-    for a, b in zip(simus, analytical):
+    for a in analytical:
         redshift = float(a.split('z')[1].split('.')[0].replace('_', '.'))
-        data = {'Bolshoi' : a,
-                'Analytical': b}
-        if round(redshift,1) in [1.0, 4.0, 8.2]:
+        data = {'Analytical': a}
+        if round(redshift,1) in [1.0, 4.0, 8.0]:
             logging.debug('Plotting redshift %.2f dark matter mass functions (Analytical 2)' % redshift)
-            print a, b
+            print a
             plotDMMFfromGalpropzAnalytical2(redshift, h, data)
     P.savefig(outdir + 'DMmfz1GalpropZAnalytical2.pdf')
     P.close()

@@ -13,7 +13,7 @@ Differrent luminosity functions.
 '''
 import os
 import numpy as N
-import io.sextutils as su
+import smnIO.sextutils as su
 
 #This should be global, as all observational data are in the same place
 #Note however that because the data is in Dropbox the absolute path

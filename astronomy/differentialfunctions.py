@@ -5,12 +5,64 @@ dark matter halo functions etc.
 
 @requires: NumPy
 
-@version: 0.11
+@version: 0.15
 
 @author: Sami Niemi
 @contact: niemi@stsci.edu
 '''
 import numpy as N
+
+def diffFunctionLogBinning(data, column = 0, log = False,
+                           wgth = None, mmax = 15.5, mmin = 9.0,
+                           nbins = 35, h = 0.7, volume = 250, nvols = 1,
+                           physical_units = False, verbose = False):
+    '''
+    Calculates a differential function from data.
+    Uses NumPy to calculate a histogram and then divides.
+    each bin value with the length of the bin.
+    '''
+    #get the number of items in data
+    if len(N.shape(data)) == 1:
+        ngal = len(data)
+    else:
+        ngal = len(data[:,column])
+    
+    #if data are in physical units or not, use h
+    if not physical_units:
+        h = 1.0
+    
+    #if wgth is None then make weights based on 
+    #the volume and the number of volumes
+    if wgth == None:
+        weight = N.zeros(ngal) + (1./(nvols*(float(volume)/h)**3))
+    else:
+        weight = wgth
+
+    #if log have been taken from the data or not
+    if not log:
+        if len(N.shape(data)) == 1:
+            d = N.log10(data)
+        else:
+            d = N.log10(data[:,column])
+        mmin = N.log10(mmin)
+        mmax = N.log10(mmax)
+    else:
+        d = data[:,column]   
+
+    #get msas functions
+    mf, edges = N.histogram(d, nbins, range = (mmin, mmax), weights = weight)
+    mbin = (edges[1:] + edges[:-1])/2.
+    dm = edges[1] - edges[0]
+    
+    if verbose:
+        print '\nNumber of galaxies = %i' % ngal
+        print 'min = %f, max = %f' % (mmin, mmax)
+        print 'df =', dm
+        print 'h =', h
+        print 'Results:\n', mbin
+        print mf / dm
+    return mbin, mf / dm
+
 
 def diff_function_log_binning(data, column = 0, log = False,
                               wgth = None, mmax = 15.5, mmin = 9.0,
@@ -18,7 +70,10 @@ def diff_function_log_binning(data, column = 0, log = False,
                               physical_units = False, verbose = False):
     '''
     Calculates a differential function from data.
-    @todo: rewrite this, it's not very well done...
+    @warning: One should not use this, unless the number of
+    systems for each bin is used. One should use diffFunctionLogBinning
+    instead, which is probably faster as it uses NumPy.histogram
+    rathrer than my own algorithm.
     '''
     #get the number of items in data
     if len(N.shape(data)) == 1:
@@ -50,7 +105,7 @@ def diff_function_log_binning(data, column = 0, log = False,
 
     #bins 
     dm = (mmax - mmin) / float(nbins)
-    mbin = (N.arange(nbins)+0.5)*dm + mmin
+    mbin = (N.arange(nbins) + 0.5)*dm + mmin
     #one could also use N.linspace(mmin, mmax, nbins)
     #note however that one should then use + dm / 2. 
 
@@ -80,7 +135,6 @@ def diff_function_log_binning(data, column = 0, log = False,
         print mf / dm
         print nu
     return mbin, mf / dm, nu
-
 
 def mass_function(data, column = 0, log = False,
                   wght = None, mmin = 9.0, mmax = 15.0, 

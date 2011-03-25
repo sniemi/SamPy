@@ -16,7 +16,7 @@ from matplotlib import cm
 #Sami's repository
 import db.sqlite as sq
 import sandbox.MyTools as M
-import io.sextutils as sex
+import smnIO.sextutils as sex
 import astronomy.conversions as cv
 
 def plotMergerFractionsMultiplot(query, xlabel, ylabel,

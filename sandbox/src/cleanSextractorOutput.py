@@ -11,7 +11,7 @@
 import sys
 mydir = '/Users/niemi/Desktop/Python/STScI/'
 sys.path.append(mydir)
-import IO
+import smnIO
 
 __author__ = 'Sami-Matias Niemi'
 __version__ = "1.0"

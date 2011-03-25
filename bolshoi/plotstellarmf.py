@@ -21,7 +21,7 @@ import plot.tools as pt
 def stellarmassfunc_plot(path, database, redshifts,
                          output_folder, outfile,
                          mmax = 12.5, mmin = 8.0, 
-                         nbins = 30, nvolumes = 8,
+                         nbins = 30, nvolumes = 26,
                          single_volume = 50.0,
                          h = 0.7, lowlim = -4.9):
     '''
@@ -107,6 +107,7 @@ def stellarmassfunc_plot(path, database, redshifts,
         mfs = df.stellarMassFunction(data,
                                      mmin = mmin-0.2,
                                      #mmax = mmax,
+                                     nvols = nvolumes,
                                      nbins = nbins-2*rd,
                                      verbose = True)
         
@@ -155,7 +156,7 @@ if __name__ == '__main__':
     #find the home directory, because the output is to dropbox 
     #and my user name is not always the same, this hack is required.
     hm = os.getenv('HOME')
-    path = hm + '/Desktop/Research/run/trial1/'
+    path = hm + '/Dropbox/Research/Bolshoi/run/trial2/'
     database = 'sams.db'
     outpath = hm + '/Dropbox/Research/Bolshoi/stellarMFs/'
 
