@@ -472,10 +472,10 @@ def plot_luminosityfunctionPaper(path, database, redshifts,
            verticalalignment='center',
            transform = ax4.transAxes)
     #make grid
-    ax1.grid()
-    ax2.grid()
-    ax3.grid()
-    ax4.grid()
+    #ax1.grid()
+    #ax2.grid()
+    #ax3.grid()
+    #ax4.grid()
     #legend
     ax4.legend(scatterpoints = 1, fancybox = True, shadow = True,
                loc = 'center right')

@@ -37,11 +37,11 @@ def plotMergerFractions(query,
     #masks
     nomergeMask = tmerge < 0.0
     majorsMask = (tmajor > 0.0) & (tmajor <= mergetimelimit)
-    majorsMask2 = (tmajor > mergetimelimit)
+    majorsMask2 = (tmajor > mergetimelimit) & (tmajor <= 0.5)
     mergersMask = (tmerge > 0.0) & (tmerge <= mergetimelimit) & \
                   (majorsMask == False) & (majorsMask2 == False)
-    mergersMask2 = (nomergeMask == False) & (majorsMask == False) & \
-                   (mergersMask == False) & (majorsMask2 == False)
+    mergersMask2 = (tmerge > mergetimelimit) & (tmerge <= 0.5) & \
+                   (majorsMask2 == False)
     #bin the data
     mids, numbs = dm.binAndReturnMergerFractions2(mstar,
                                                   nomergeMask,
@@ -79,11 +79,11 @@ def plotMergerFractions(query,
     ax1.plot(mids, mergerFraction, ls = '--', lw = 2.6,
              label = 'Minor Merger: $T \leq 250$ Myr')
     ax1.plot(mids, mergerFraction2, ls = '-.', lw = 2.6,
-             label = 'Minor Merger: $T > 500$ Myr')
+             label = 'Minor Merger: $250 < T \leq 500$ Myr')
     ax1.plot(mids, majorMergerFraction, ls = '--', lw = 2.6,
              label = 'Major Merger: $T \leq 250$ Myr')
     ax1.plot(mids, majorMergerFraction2, ls = '-.', lw = 2.6,
-             label = 'Major Merger: $T > 500$ Myr')
+             label = 'Major Merger: $250 < T \leq 500$ Myr')
     #labels
     ax1.set_xlabel(xlabel)
     ax1.set_ylabel(ylabel)
@@ -95,9 +95,9 @@ def plotMergerFractions(query,
            verticalalignment='center',
            transform = ax1.transAxes)
     #make grid
-    ax1.grid()
+    #ax1.grid()
     #legend and save
-    P.legend(loc = 'upper left')
+    P.legend(loc = 'center left')
     P.savefig(out_folder + output)
 
 def plotMergerFractions2(query,

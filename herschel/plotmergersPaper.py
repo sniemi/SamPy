@@ -64,23 +64,15 @@ def plotMergerFractionsMultiplot(query, xlabel, ylabel,
     ax3 = fig.add_subplot(223)
     ax4 = fig.add_subplot(224)
     #make contours
-    #lv = N.linspace(0.01, N.max(zm), 4)
-#    cont = ax1.contour(x_vec, y_vec, zm, linewidths  = 0.9,
-#                       levels = lv, colors = 'black')
-#    cont = ax2.contour(x_vec, y_vec, zm, linewidths  = 0.9,
-#                       levels = lv, colors = 'black')
-#    cont = ax3.contour(x_vec, y_vec, zm, linewidths  = 0.9,
-#                       levels = lv, colors = 'black')
-#    cont = ax4.contour(x_vec, y_vec, zm, linewidths  = 0.9,
-#                       levels = lv, colors = 'black')
+    lv = N.linspace(0.015, 0.95*N.max(zm), 5)
     cont = ax1.contour(x_vec, y_vec, zm, linewidths  = 0.9,
-                       colors = 'black', linestyles = 'dashed')
+                       levels = lv, colors = 'black')
     cont = ax2.contour(x_vec, y_vec, zm, linewidths  = 0.9,
-                       colors = 'black', linestyles = 'dashed')
+                       levels = lv, colors = 'black')
     cont = ax3.contour(x_vec, y_vec, zm, linewidths  = 0.9,
-                       colors = 'black', linestyles = 'dashed')
+                       levels = lv, colors = 'black')
     cont = ax4.contour(x_vec, y_vec, zm, linewidths  = 0.9,
-                       colors = 'black', linestyles = 'dashed')
+                       levels = lv, colors = 'black')
 
     #plot scatters
     s2 = ax2.scatter(N.log10(x[majorsMask]), uvcolor[majorsMask],
@@ -102,8 +94,12 @@ def plotMergerFractionsMultiplot(query, xlabel, ylabel,
                      cmap = cm.get_cmap('jet'), edgecolor = 'none',
                      visible = False)
     #Observed
-    s1 = ax1.scatter(N.log10(xobs), yobs, marker='o', s=20, alpha = 0.45, label = 'Observations')
-    s3 = ax3.scatter(N.log10(xobs), yobs, marker='o', s=20, alpha = 0.45, label = 'Observations')
+    s1 = ax1.scatter(N.log10(xobs), yobs, marker='s', s = 30,
+                     alpha = 0.45, color = 'black',
+                     label = 'Observations')
+    s3 = ax3.scatter(N.log10(xobs), yobs, marker='s', s = 30,
+                     alpha = 0.45, color = 'black',
+                     label = 'Observations')
     #color bars
     c1 = fig.colorbar(s2, ax = ax2, shrink = 0.7, fraction = 0.05)
     c2 = fig.colorbar(s4, ax = ax4, shrink = 0.7, fraction = 0.05)
@@ -146,10 +142,10 @@ def plotMergerFractionsMultiplot(query, xlabel, ylabel,
     ax4.set_ylim(ymin, ymax)
     ax4.set_xlim(xmin, xmax)
     #make grid
-    ax1.grid()
-    ax2.grid()
-    ax3.grid()
-    ax4.grid()
+    #ax1.grid()
+    #ax2.grid()
+    #ax3.grid()
+    #ax4.grid()
     #legend and save
     ax1.legend(loc = 'upper left', scatterpoints = 1,
                shadow = True, fancybox = True, markerscale=1.5)
@@ -267,38 +263,38 @@ if __name__ == '__main__':
 #                                 out_folder, obs, ch = 2,
 #                                 title = 'All Simulated Galaxies')
 ##############################################################################
-    query = '''select FIR.spire250_obs / FIR.irac_ch2_obs,
-                galphotdust.f775w, galphotdust.f850lp,
-                galprop.tmerge, galprop.tmajmerge
-                from FIR, galprop, galphotdust where
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                FIR.spire250_obs < 1e6 and
-                galphotdust.f775w_obs < 50 and
-                galphotdust.f850lp_obs < 50 and
-                FIR.spire250_obs > 1e-4 and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                FIR.gal_id = galphotdust.gal_id and
-                FIR.halo_id = galphotdust.halo_id
-                '''
-    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{4.5}} \right )$'
-    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
-    plotMergerFractionsMultiplot(query, xlab, ylab,'ColorMergerPaper5'+type,
-                                 out_folder, obs, xmin = 1.5, size = 20, xmax = 3.8,
-                                 mergetimelimit = 0.25, alpha = 0.4, ch = 2,
-                                 title = '$S_{250} > 10^{-4} \ \mathrm{Jy}$')
+#    query = '''select FIR.spire250_obs / FIR.irac_ch2_obs,
+#                galphotdust.f775w, galphotdust.f850lp,
+#                galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop, galphotdust where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.spire250_obs < 1e6 and
+#                galphotdust.f775w_obs < 50 and
+#                galphotdust.f850lp_obs < 50 and
+#                FIR.spire250_obs > 1e-4 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.gal_id = galphotdust.gal_id and
+#                FIR.halo_id = galphotdust.halo_id
+#                '''
+#    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{4.5}} \right )$'
+#    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
+#    plotMergerFractionsMultiplot(query, xlab, ylab,'ColorMergerPaper5'+type,
+#                                 out_folder, obs, xmin = 1.5, size = 20, xmax = 3.8,
+#                                 mergetimelimit = 0.25, alpha = 0.4, ch = 2,
+#                                 title = '$S_{250} > 10^{-4} \ \mathrm{Jy}$')
 ###############################################################################
     query = '''select FIR.spire250_obs / FIR.irac_ch2_obs,
                 galphotdust.f775w, galphotdust.f850lp,
                 galprop.tmerge, galprop.tmajmerge
                 from FIR, galprop, galphotdust where
                 FIR.z >= 2.0 and
+                FIR.spire250_obs > 5e-3 and
                 FIR.z < 4.0 and
                 FIR.spire250_obs < 1e6 and
                 galphotdust.f775w_obs < 50 and
                 galphotdust.f850lp_obs < 50 and
-                FIR.spire250_obs > 5e-3 and
                 FIR.gal_id = galprop.gal_id and
                 FIR.halo_id = galprop.halo_id and
                 FIR.gal_id = galphotdust.gal_id and

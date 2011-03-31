@@ -132,8 +132,8 @@ def plot_tmerge(query1, query2,
     ax2.set_yticks(y2ticks)
 
     #make grid
-    ax1.grid()
-    ax2.grid()
+    #ax1.grid()
+    #ax2.grid()
 
     P.savefig(out_folder + output)
 
@@ -507,72 +507,72 @@ if __name__ == '__main__':
 ##############################
 #bluest galaxies
 ##############################
-    print '\nMoving on to bluest galaxies\n'
-    query1 = '''select galprop.mcold - galprop.mstar, galprop.tmerge
-                from FIR, galprop where
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                FIR.spire250_obs > 1e-18 and
-                FIR.spire250_obs < 1e6 and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id
-                '''
-    query2 = '''select galprop.mcold - galprop.mstar, galprop.tmerge
-                from FIR, galprop, galphotdust where
-                FIR.spire250_obs > 5e-3 and
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                FIR.spire250_obs < 1e6 and
-                galphotdust.f775w - galphotdust.f850lp < 0.2 and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                FIR.gal_id = galphotdust.gal_id and
-                FIR.halo_id = galphotdust.halo_id
-                '''
-                
-    xlab = r'$\log_{10} \left( \frac{M_{\mathrm{coldgas}}}{M_{\star}} \right )$'
-    plot_tmerge_bluest(query1, query2, xlab,
-                       '$T_{\mathrm{merge}} \quad [\mathrm{Gyr}]$',
-                       'TmergeBlueestMassFraction.ps',
-                        out_folder,
-                        xmin1 = -6, xmax1 = 1.5,
-                        xmin2 = -0.6, xmax2 = .7,
-                        pmin = 0.05,
-                        xbin1 = 10, ybin1 = 10,
-                        xbin2 = 8, ybin2 = 7)
-##############################
-    query1 = '''select galprop.mcold - galprop.mstar, galprop.tmajmerge
-                from FIR, galprop where
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                FIR.spire250_obs > 1e-18 and
-                FIR.spire250_obs < 1e6 and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id
-                '''
-    query2 = '''select galprop.mcold - galprop.mstar, galprop.tmajmerge
-                from FIR, galprop, galphotdust where
-                FIR.spire250_obs > 5e-3 and
-                FIR.spire250_obs < 1e6 and
-                FIR.z >= 2.0 and
-                FIR.z < 4.0 and
-                galphotdust.f775w - galphotdust.f850lp < 0.2 and
-                FIR.gal_id = galprop.gal_id and
-                FIR.halo_id = galprop.halo_id and
-                FIR.gal_id = galphotdust.gal_id and
-                FIR.halo_id = galphotdust.halo_id
-                '''
-                
-    xlab = r'$\log_{10} \left( \frac{M_{\mathrm{coldgas}}}{M_{\star}} \right )$'
-    plot_tmerge_bluest(query1, query2, xlab,
-                       '$T_{\mathrm{majormerge}}$ \quad [Gyr]',
-                       'TmergeBlueestMassFractionMajor.ps',
-                        out_folder,
-                        xmin1 = -6, xmax1 = 1.5,
-                        xmin2 = -0.6, xmax2 = .7,
-                        pmin = 0.05,
-                        xbin1 = 10, ybin1 = 10,
-                        xbin2 = 8, ybin2 = 7)
+#    print '\nMoving on to bluest galaxies\n'
+#    query1 = '''select galprop.mcold - galprop.mstar, galprop.tmerge
+#                from FIR, galprop where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.spire250_obs > 1e-18 and
+#                FIR.spire250_obs < 1e6 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id
+#                '''
+#    query2 = '''select galprop.mcold - galprop.mstar, galprop.tmerge
+#                from FIR, galprop, galphotdust where
+#                FIR.spire250_obs > 5e-3 and
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.spire250_obs < 1e6 and
+#                galphotdust.f775w - galphotdust.f850lp < 0.2 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.gal_id = galphotdust.gal_id and
+#                FIR.halo_id = galphotdust.halo_id
+#                '''
+#                
+#    xlab = r'$\log_{10} \left( \frac{M_{\mathrm{coldgas}}}{M_{\star}} \right )$'
+#    plot_tmerge_bluest(query1, query2, xlab,
+#                       '$T_{\mathrm{merge}} \quad [\mathrm{Gyr}]$',
+#                       'TmergeBlueestMassFraction.ps',
+#                        out_folder,
+#                        xmin1 = -6, xmax1 = 1.5,
+#                        xmin2 = -0.6, xmax2 = .7,
+#                        pmin = 0.05,
+#                        xbin1 = 10, ybin1 = 10,
+#                        xbin2 = 8, ybin2 = 7)
+###############################
+#    query1 = '''select galprop.mcold - galprop.mstar, galprop.tmajmerge
+#                from FIR, galprop where
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                FIR.spire250_obs > 1e-18 and
+#                FIR.spire250_obs < 1e6 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id
+#                '''
+#    query2 = '''select galprop.mcold - galprop.mstar, galprop.tmajmerge
+#                from FIR, galprop, galphotdust where
+#                FIR.spire250_obs > 5e-3 and
+#                FIR.spire250_obs < 1e6 and
+#                FIR.z >= 2.0 and
+#                FIR.z < 4.0 and
+#                galphotdust.f775w - galphotdust.f850lp < 0.2 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.gal_id = galphotdust.gal_id and
+#                FIR.halo_id = galphotdust.halo_id
+#                '''
+#                
+#    xlab = r'$\log_{10} \left( \frac{M_{\mathrm{coldgas}}}{M_{\star}} \right )$'
+#    plot_tmerge_bluest(query1, query2, xlab,
+#                       '$T_{\mathrm{majormerge}}$ \quad [Gyr]',
+#                       'TmergeBlueestMassFractionMajor.ps',
+#                        out_folder,
+#                        xmin1 = -6, xmax1 = 1.5,
+#                        xmin2 = -0.6, xmax2 = .7,
+#                        pmin = 0.05,
+#                        xbin1 = 10, ybin1 = 10,
+#                        xbin2 = 8, ybin2 = 7)
 ##############################
 #    query1 = '''select galprop.mcold - galprop.mstar, galprop.tmerge
 #                from FIR, galprop where

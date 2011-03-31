@@ -136,8 +136,8 @@ def plot_size(query, xlabel, ylabel, output, out_folder,
     ax2.set_yticks(y2ticks)
 
     #make grid
-    ax1.grid()
-    ax2.grid()
+    #ax1.grid()
+    #ax2.grid()
     
     #write a legend
     ax1.legend(shadow = True, fancybox = True, 
@@ -207,7 +207,7 @@ def plot_size2(query, xlabel, ylabel, output, out_folder,
     #ax1.set_yticks(y1ticks)
 
     #make grid
-    ax1.grid()
+    #ax1.grid()
     
     #write a legend
     ax1.legend(shadow = True, fancybox = True, 
@@ -312,8 +312,8 @@ def plot_size_paper(xd1, xd2, yd1, yd2,
     ax1.set_xlim(xmin1, xmax1)
     ax2.set_xlim(xmin2, xmax2)
     #make grid
-    ax1.grid()
-    ax2.grid()
+    #ax1.grid()
+    #ax2.grid()
     #write a legend
     #ax1.legend(shadow = True, fancybox = True, 
     #           numpoints = 1, loc = 'upper left',
@@ -416,8 +416,8 @@ def plot_size_paperKDE(xd1, xd2, yd1, yd2,
     ax1.set_xlim(xmin1, xmax1)
     ax2.set_xlim(xmin2, xmax2)
     #make grid
-    ax1.grid()
-    ax2.grid()
+    #ax1.grid()
+    #ax2.grid()
     #write a legend
     ax2.legend(shadow = True, fancybox = True, 
                numpoints = 1, loc = 'upper left',
@@ -483,15 +483,15 @@ if __name__ == '__main__':
     print 'Input DB: ', path + db
     print 'Output folder: ', out_folder
 
-#    plot_size_paper(xd1, xd2, yd1, yd2,
-#                    r'$\log_{10}(M_{\star}/M_{\odot})$', 
-#                    r'$R_{\mathrm{disk}} \quad [\mathrm{kpc}]$',
-#                    'SizeStellarMass.ps', out_folder,
-#                    xmin1 = 8.5, xmax1 = 12.0,
-#                    xmin2 = 10.1, xmax2 = 11.7,
-#                    pmin = 0.02, xbin1 = 25, ybin1 = 25,
-#                    xbin2 = 20, ybin2 = 20)
-#
+    plot_size_paper(xd1, xd2, yd1, yd2,
+                    r'$\log_{10}(M_{\star}/M_{\odot})$', 
+                    r'$R_{\mathrm{disk}} \quad [\mathrm{kpc}]$',
+                    'SizeStellarMass.ps', out_folder,
+                    xmin1 = 8.5, xmax1 = 12.0,
+                    xmin2 = 10.1, xmax2 = 11.7,
+                    pmin = 0.02, xbin1 = 25, ybin1 = 25,
+                    xbin2 = 20, ybin2 = 20)
+
 #    plot_size_paper(xd1, xd2, yd1, yd2,
 #                    r'$\log_{10}(M_{\star}/M_{\odot})$', 
 #                    r'$R_{\mathrm{disk}} \quad [\mathrm{kpc}]$',
@@ -501,53 +501,53 @@ if __name__ == '__main__':
 #                    pmin = 0.02, xbin1 = 20, ybin1 = 20,
 #                    xbin2 = 15, ybin2 = 15)
 
-    plot_size_paperKDE(xd1[::2], xd2, yd1[::2], yd2,
-                       r'$\log_{10}(M_{\star}/M_{\odot})$', 
-                       r'$R_{\mathrm{disk}} \quad [\mathrm{kpc}]$',
-                       'SizeStellarMass3.ps', out_folder,
-                       xmin1 = 9.2, xmax1 = 12.0,
-                       xmin2 = 10.1, xmax2 = 11.7,
-                       xbin1 = 40, ybin1 = 40,
-                       xbin2 = 40, ybin2 = 40)
-
-    plot_size_paperKDE(xd1[::2], xd2, yd1[::2], yd2,
-                       r'$\log_{10}(M_{\star}/M_{\odot})$', 
-                       r'$R_{\mathrm{disk}} \quad [\mathrm{kpc}]$',
-                       'SizeStellarMass4.ps', out_folder,
-                       xmin1 = 9.2, xmax1 = 12.0,
-                       xmin2 = 10.1, xmax2 = 11.7,
-                       xbin1 = 80, ybin1 = 80,
-                       xbin2 = 80, ybin2 = 80)
-
-    plot_size_paperKDE(xd1[::2], xd2, yd1[::2], yd2,
-                       r'$\log_{10}(M_{\star}/M_{\odot})$', 
-                       r'$R_{\mathrm{disk}} \quad [\mathrm{kpc}]$',
-                       'SizeStellarMass5.ps', out_folder,
-                       xmin1 = 9.2, xmax1 = 12.0,
-                       xmin2 = 10.1, xmax2 = 11.7,
-                       xbin1 = 80, ybin1 = 80,
-                       xbin2 = 80, ybin2 = 80,
-                       lvls = N.linspace(0, 2, 10))
-    
-    plot_size_paperKDE(xd1[::2], xd2, yd1[::2], yd2,
-                       r'$\log_{10}(M_{\star}/M_{\odot})$', 
-                       r'$R_{\mathrm{disk}} \quad [\mathrm{kpc}]$',
-                       'SizeStellarMass6.ps', out_folder,
-                       xmin1 = 9.2, xmax1 = 12.0,
-                       xmin2 = 10.1, xmax2 = 11.7,
-                       xbin1 = 80, ybin1 = 80,
-                       xbin2 = 80, ybin2 = 80,
-                       lvls = N.logspace(0, 2, 10))
-
-    plot_size_paperKDE(xd1[::2], xd2, yd1[::2], yd2,
-                       r'$\log_{10}(M_{\star}/M_{\odot})$', 
-                       r'$R_{\mathrm{disk}} \quad [\mathrm{kpc}]$',
-                       'SizeStellarMass7.ps', out_folder,
-                       xmin1 = 9.2, xmax1 = 12.0,
-                       xmin2 = 10.1, xmax2 = 11.7,
-                       xbin1 = 80, ybin1 = 80,
-                       xbin2 = 80, ybin2 = 80,
-                       lvls = [0.01, 0.05, 0.1, 0.3, 0.5, 0.7, 0.9])
+#    plot_size_paperKDE(xd1[::2], xd2, yd1[::2], yd2,
+#                       r'$\log_{10}(M_{\star}/M_{\odot})$', 
+#                       r'$R_{\mathrm{disk}} \quad [\mathrm{kpc}]$',
+#                       'SizeStellarMass3.ps', out_folder,
+#                       xmin1 = 9.2, xmax1 = 12.0,
+#                       xmin2 = 10.1, xmax2 = 11.7,
+#                       xbin1 = 40, ybin1 = 40,
+#                       xbin2 = 40, ybin2 = 40)
+#
+#    plot_size_paperKDE(xd1[::2], xd2, yd1[::2], yd2,
+#                       r'$\log_{10}(M_{\star}/M_{\odot})$', 
+#                       r'$R_{\mathrm{disk}} \quad [\mathrm{kpc}]$',
+#                       'SizeStellarMass4.ps', out_folder,
+#                       xmin1 = 9.2, xmax1 = 12.0,
+#                       xmin2 = 10.1, xmax2 = 11.7,
+#                       xbin1 = 80, ybin1 = 80,
+#                       xbin2 = 80, ybin2 = 80)
+#
+#    plot_size_paperKDE(xd1[::2], xd2, yd1[::2], yd2,
+#                       r'$\log_{10}(M_{\star}/M_{\odot})$', 
+#                       r'$R_{\mathrm{disk}} \quad [\mathrm{kpc}]$',
+#                       'SizeStellarMass5.ps', out_folder,
+#                       xmin1 = 9.2, xmax1 = 12.0,
+#                       xmin2 = 10.1, xmax2 = 11.7,
+#                       xbin1 = 80, ybin1 = 80,
+#                       xbin2 = 80, ybin2 = 80,
+#                       lvls = N.linspace(0, 2, 10))
+#    
+#    plot_size_paperKDE(xd1[::2], xd2, yd1[::2], yd2,
+#                       r'$\log_{10}(M_{\star}/M_{\odot})$', 
+#                       r'$R_{\mathrm{disk}} \quad [\mathrm{kpc}]$',
+#                       'SizeStellarMass6.ps', out_folder,
+#                       xmin1 = 9.2, xmax1 = 12.0,
+#                       xmin2 = 10.1, xmax2 = 11.7,
+#                       xbin1 = 80, ybin1 = 80,
+#                       xbin2 = 80, ybin2 = 80,
+#                       lvls = N.logspace(0, 2, 10))
+#
+#    plot_size_paperKDE(xd1[::2], xd2, yd1[::2], yd2,
+#                       r'$\log_{10}(M_{\star}/M_{\odot})$', 
+#                       r'$R_{\mathrm{disk}} \quad [\mathrm{kpc}]$',
+#                       'SizeStellarMass7.ps', out_folder,
+#                       xmin1 = 9.2, xmax1 = 12.0,
+#                       xmin2 = 10.1, xmax2 = 11.7,
+#                       xbin1 = 80, ybin1 = 80,
+#                       xbin2 = 80, ybin2 = 80,
+#                       lvls = [0.01, 0.05, 0.1, 0.3, 0.5, 0.7, 0.9])
 
     
 #    query1 = '''select galprop.mstar, galprop.r_disk, Pow10(galprop.mbulge - galprop.mstar)
