@@ -1260,7 +1260,7 @@ def plotTemplateComparison(database, band, redshifts, out_folder,
         y = n*swap*(x**2.5)
         
         #plot the knots
-        #z0 = ax.plot(x, y, 'ko')
+        z0 = ax.plot(x, y, color = color, ls = 'None', marker = 'o')
     
         #poisson error
         mask = nu > 0
@@ -1394,7 +1394,7 @@ def plotTemplateComparison(database, band, redshifts, out_folder,
             y = n*swap*(x**2.5)
             
             #plot the knots
-            #axs.plot(x, y, 'ko')
+            axs.plot(x, y, color = color, ls = 'None', marker = 'o')
             
             #poisson error
             mask = nu > 0
@@ -1716,11 +1716,10 @@ if __name__ == '__main__':
 #                                xmin = 0.1, xmax = 500,
 #                                ymin = 1.5*10**2, ymax = 6*10**5,
 #                                nbins = 23, sigma = 5.0, area = area)
-#            plotTemplateComparison(database, bd, redshifts, out_folder,
-#                                   xmin = 0.5, xmax = 500,
-#                                   ymin = 2e2, ymax = 6*10**5,
-#                                   nbins = 19, sigma = 5.0)
-            continue
+            plotTemplateComparison(database, bd, redshifts, out_folder,
+                                   xmin = 0.5, xmax = 500,
+                                   ymin = 2e2, ymax = 6*10**5,
+                                   nbins = 19, sigma = 5.0)
         if 'spire' in bd:
             print 'plotting ', bd
 #            plot_number_counts2(path, database, bd, redshifts2,
