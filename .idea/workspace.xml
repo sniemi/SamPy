@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="14f4c525-fa7f-4157-b5ce-7bfcb54f397f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Python.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -40,10 +41,27 @@
       <list>
         <option value="$PROJECT_DIR$/sandbox/MyTools.py" />
         <option value="$PROJECT_DIR$/herschel/plotmergers4.py" />
+        <option value="$PROJECT_DIR$/herschel/plotnumbercounts.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectLevelVcsManager">
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id>Inspections</id>
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>Python</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
     <OptionsSetting value="true" id="Checkout" />
@@ -64,17 +82,17 @@
       <showLibraryContents />
       <hideEmptyPackages />
       <abbreviatePackageNames />
-      <autoscrollToSource />
+      <autoscrollToSource ProjectPane="true" />
       <autoscrollFromSource />
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Favorites">
-        <subPane subId="Python">
+      <pane id="Scope">
+        <subPane subId="Project Files">
           <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" />
-              <option name="myItemType" value="com.intellij.ide.favoritesTreeView.FavoritesTreeNodeDescriptor" />
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -93,18 +111,18 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="SamiPython" />
+              <option name="myItemId" value="Python" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope">
-        <subPane subId="Project Files">
+      <pane id="Favorites">
+        <subPane subId="Python">
           <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
+            <PATH_ELEMENT>
+              <option name="myItemId" />
+              <option name="myItemType" value="com.intellij.ide.favoritesTreeView.FavoritesTreeNodeDescriptor" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -114,8 +132,9 @@
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="options.lastSelected" value="reference.settingsdialog.IDE.editor.colors.Font" />
+    <property name="options.lastSelected" value="preferences.updates" />
     <property name="recentsLimit" value="5" />
+    <property name="last_opened_file_path" value="$USER_HOME$/workspace/herschelpaper" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
   </component>
@@ -150,8 +169,9 @@
       <option name="CLASS_NAME" value="" />
       <option name="METHOD_NAME" value="" />
       <option name="FOLDER_NAME" value="" />
-      <option name="PATTERN" value="" />
       <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="PUREUNITTEST" value="false" />
       <method />
     </configuration>
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
@@ -180,8 +200,8 @@
       <option name="CLASS_NAME" value="" />
       <option name="METHOD_NAME" value="" />
       <option name="FOLDER_NAME" value="" />
-      <option name="PATTERN" value="" />
       <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
       <method />
     </configuration>
     <list size="1">
@@ -195,8 +215,9 @@
   <component name="SvnConfiguration" maxAnnotateRevisions="500">
     <option name="USER" value="" />
     <option name="PASSWORD" value="" />
+    <option name="mySSHConnectionTimeout" value="30000" />
+    <option name="mySSHReadTimeout" value="30000" />
     <option name="LAST_MERGED_REVISION" />
-    <option name="UPDATE_RUN_STATUS" value="false" />
     <option name="MERGE_DRY_RUN" value="false" />
     <option name="MERGE_DIFF_USE_ANCESTRY" value="true" />
     <option name="UPDATE_LOCK_ON_DEMAND" value="false" />
@@ -205,6 +226,7 @@
     <option name="CHECK_NESTED_FOR_QUICK_MERGE" value="false" />
     <option name="IGNORE_SPACES_IN_ANNOTATE" value="true" />
     <option name="SHOW_MERGE_SOURCES_IN_ANNOTATE" value="true" />
+    <option name="FORCE_UPDATE" value="false" />
     <configuration useDefault="true">$USER_HOME$/.subversion_IDEA</configuration>
     <myIsUseDefaultProxy>false</myIsUseDefaultProxy>
   </component>
@@ -237,21 +259,21 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="474" y="22" width="1684" height="1479" extended-state="0" />
+    <frame x="203" y="22" width="2203" height="1341" extended-state="0" />
     <editor active="false" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297785" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19254279" sideWeight="0.6004922" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Structure" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27078238" sideWeight="0.37306842" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32841933" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2900232" sideWeight="0.34398034" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2900232" sideWeight="0.64946765" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27078238" sideWeight="0.6210449" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20185615" sideWeight="0.6715807" order="0" side_tool="false" content_ui="tabs" x="1087" y="82" width="435" height="1221" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3995078" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2559475" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25552824" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297785" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -270,6 +292,7 @@
     <option name="ENABLE_BACKGROUND_PROCESSES" value="false" />
     <option name="CHANGED_ON_SERVER_INTERVAL" value="60" />
     <option name="SHOW_ONLY_CHANGED_IN_SELECTION_DIFF" value="true" />
+    <option name="CHECK_COMMIT_MESSAGE_SPELLING" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="LAST_COMMIT_MESSAGE" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="true" />
@@ -289,36 +312,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/herschel/plotmergers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="525" column="53" selection-start="21068" selection-end="21105" vertical-scroll-proportion="7.5" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/herschel/plotnumbercounts.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/sandbox/MyTools.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="28" column="18" selection-start="721" selection-end="721" vertical-scroll-proportion="0.3322005" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/herschel/plotproperties.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-3.130841" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/herschel/plotstellarmassfunctions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.25714287" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/herschel/plotluminosityfunctions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="277" column="4" selection-start="10170" selection-end="10170" vertical-scroll-proportion="-1.3571428" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/herschel/plotFluxDistribution.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
@@ -346,35 +339,69 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/herschel/plotmergers4.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="394" column="40" selection-start="17206" selection-end="17206" vertical-scroll-proportion="3.5548873">
-          <folding />
-        </state>
+        <state line="394" column="40" selection-start="17206" selection-end="17206" vertical-scroll-proportion="3.5548873" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/focus/collect_focus.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="26" selection-start="839" selection-end="839" vertical-scroll-proportion="0.31278196">
-          <folding />
-        </state>
+        <state line="27" column="26" selection-start="839" selection-end="839" vertical-scroll-proportion="0.31278196" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/stis/STISCCDSpectroscopyFlat.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-11.577828">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-11.577828" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/db/MSdata.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="33" column="8" selection-start="1237" selection-end="1237" vertical-scroll-proportion="0.33333334">
+        <state line="33" column="8" selection-start="1237" selection-end="1237" vertical-scroll-proportion="0.33333334" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sandbox/src1/fileloader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="14" selection-start="696" selection-end="696" vertical-scroll-proportion="0.3137584">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/db/sqlite.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="5" selection-start="1226" selection-end="1226" vertical-scroll-proportion="0.060744114">
+        <state line="80" column="4" selection-start="2199" selection-end="2199" vertical-scroll-proportion="0.33305368">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///Library/Frameworks/EPD64.framework/Versions/7.0/lib/python2.7/re.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="138" column="4" selection-start="6632" selection-end="6632" vertical-scroll-proportion="0.33305368">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/herschel/plotnumbercounts.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="188" column="18" selection-start="6173" selection-end="6173" vertical-scroll-proportion="0.44698897">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/astronomy/differentialfunctions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-3.021812">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bolshoi/plotdarkmattermf.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="28" selection-start="625" selection-end="625" vertical-scroll-proportion="0.302799">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/log/Logger.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="10" selection-start="10" selection-end="10" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
