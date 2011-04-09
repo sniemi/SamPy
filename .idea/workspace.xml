@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="14f4c525-fa7f-4157-b5ce-7bfcb54f397f" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/herschel/plotFluxRedshiftDistribution.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/plot/basic.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/astronomy/differentialfunctions.py" afterPath="$PROJECT_DIR$/astronomy/differentialfunctions.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bolshoi/plotdarkmattermf.py" afterPath="$PROJECT_DIR$/bolshoi/plotdarkmattermf.py" />
     </list>
     <ignored path="Python.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -27,10 +27,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="plotdarkmattermf.py" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/bolshoi/plotdarkmattermf.py">
+      <file leaf-file-name="plotFluxRedshiftDistribution.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/herschel/plotFluxRedshiftDistribution.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="508" column="61" selection-start="17232" selection-end="17232" vertical-scroll-proportion="0.37489396">
+            <state line="189" column="5" selection-start="5518" selection-end="5518" vertical-scroll-proportion="1.7065309">
               <folding />
             </state>
           </provider>
@@ -55,6 +55,9 @@
         <option value="$PROJECT_DIR$/herschel/plotnumbercounts.py" />
         <option value="$PROJECT_DIR$/astronomy/differentialfunctions.py" />
         <option value="$PROJECT_DIR$/bolshoi/plotdarkmattermf.py" />
+        <option value="$PROJECT_DIR$/herschel/plotFluxDistribution.py" />
+        <option value="$PROJECT_DIR$/plot/basic.py" />
+        <option value="$PROJECT_DIR$/herschel/plotFluxRedshiftDistribution.py" />
       </list>
     </option>
   </component>
@@ -100,6 +103,16 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -116,16 +129,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="Python" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -151,7 +154,7 @@
     <property name="options.searchVisible" value="true" />
     <property name="options.splitter.details.proportions" value="0.2" />
   </component>
-  <component name="RunManager" selected="Python.plotdarkmattermf">
+  <component name="RunManager" selected="Python.plotFluxRedshiftDistribution">
     <configuration default="false" name="plotmergers4" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -181,6 +184,22 @@
       <option name="IS_MODULE_SDK" value="true" />
       <module name="Python" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/bolshoi/plotdarkmattermf.py" />
+      <option name="PARAMETERS" value="" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="plotFluxRedshiftDistribution" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/herschel" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <module name="Python" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/herschel/plotFluxRedshiftDistribution.py" />
       <option name="PARAMETERS" value="" />
       <RunnerSettings RunnerId="PythonRunner" />
       <ConfigurationWrapper RunnerId="PythonRunner" />
@@ -233,9 +252,10 @@
       <option name="PATTERN" value="" />
       <method />
     </configuration>
-    <list size="2">
+    <list size="3">
       <item index="0" class="java.lang.String" itemvalue="Python.plotmergers4" />
       <item index="1" class="java.lang.String" itemvalue="Python.plotdarkmattermf" />
+      <item index="2" class="java.lang.String" itemvalue="Python.plotFluxRedshiftDistribution" />
     </list>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
@@ -289,14 +309,14 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="203" y="22" width="2203" height="1341" extended-state="0" />
+    <frame x="233" y="22" width="2203" height="1341" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32841933" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3299304" sideWeight="0.43570843" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3299304" sideWeight="0.55773956" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3299304" sideWeight="0.45536447" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3299304" sideWeight="0.53808355" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.23016241" sideWeight="0.67076164" order="0" side_tool="false" content_ui="tabs" x="1087" y="82" width="435" height="1221" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24408352" sideWeight="0.74529076" order="0" side_tool="false" content_ui="tabs" x="1087" y="82" width="435" height="1221" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3995078" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25470924" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297785" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -342,36 +362,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/herschel/plotsfr.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="32" selection-start="1291" selection-end="1291" vertical-scroll-proportion="0.4857143" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/herschel/plotmergers3.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="186" column="37" selection-start="7909" selection-end="7947" vertical-scroll-proportion="0.7884452" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/herschel/plotage.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="56" column="49" selection-start="1848" selection-end="1875" vertical-scroll-proportion="-1.0428572" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/herschel/plotsize.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="124" column="4" selection-start="4429" selection-end="4447" vertical-scroll-proportion="0.4477485" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/herschel/plotmergers4.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="394" column="40" selection-start="17206" selection-end="17206" vertical-scroll-proportion="3.5548873" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/focus/collect_focus.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="26" selection-start="839" selection-end="839" vertical-scroll-proportion="0.31278196" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/stis/STISCCDSpectroscopyFlat.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-11.577828" />
@@ -419,7 +409,37 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/bolshoi/plotdarkmattermf.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="508" column="61" selection-start="17232" selection-end="17232" vertical-scroll-proportion="0.37489396">
+        <state line="527" column="23" selection-start="18205" selection-end="18205" vertical-scroll-proportion="0.28838" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plot/basic.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="0" selection-start="80" selection-end="175" vertical-scroll-proportion="0.071308725" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/herschel/plotFluxDistribution.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="115" column="12" selection-start="3681" selection-end="3716" vertical-scroll-proportion="0.63443595" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plot/COSIHB/plotting.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="0" selection-start="984" selection-end="1077" vertical-scroll-proportion="0.43256998" />
+      </provider>
+    </entry>
+    <entry file="file:///Library/Frameworks/EPD64.framework/Versions/7.0/lib/python2.7/site-packages/matplotlib/axes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3246" column="8" selection-start="110775" selection-end="110775" vertical-scroll-proportion="-0.012722646" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/astronomy/conversions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="50" column="0" selection-start="1342" selection-end="1342" vertical-scroll-proportion="0.31891432" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/herschel/plotFluxRedshiftDistribution.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="189" column="5" selection-start="5518" selection-end="5518" vertical-scroll-proportion="1.7065309">
           <folding />
         </state>
       </provider>
