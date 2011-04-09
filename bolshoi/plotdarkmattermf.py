@@ -6,7 +6,7 @@ redshifts. Input data are from the Bolshoi simulation.
 '''
 import matplotlib
 matplotlib.rc('text', usetex = True)
-matplotlib.rcParams['font.size'] = 15
+matplotlib.rcParams['font.size'] = 14
 matplotlib.rc('xtick', labelsize = 14) 
 matplotlib.rc('axes', linewidth = 1.2)
 matplotlib.rcParams['legend.fontsize'] = 12
@@ -432,6 +432,169 @@ def plotDMMFfromGalpropzAnalytical2(redshift, h, *data):
                shadow = True, fancybox = True,
                numpoints = 1)
 
+def compareGalpropzToBolshoiTrees(analyticalData,
+                                  BolshoiTrees,
+                                  redshifts,
+                                  h,
+                                  outputdir,
+                                  no_phantoms=True,
+                                  galid=True):
+    '''
+    '''
+    #data storage
+    data = {}
+
+    #figure definitions
+    left, width = 0.1, 0.8
+    rect1 = [left, 0.1, width, 0.2]
+    rect2 = [left, 0.3, width, 0.65]
+
+    #note that this is only available on tuonela.stsci.edu
+    simuPath = '/Users/niemi/Desktop/Research/run/trial3/'
+    simuDB = 'sams.db'
+
+    #star the figure
+    fig = P.figure()
+    ax1 = fig.add_axes(rect2)  #left, bottom, width, height
+    ax2 = fig.add_axes(rect1)
+
+    #set title
+    if galid:
+        ax1.set_title('Dark Matter Halo Mass Functions (gal\_id = 1; 26 volumes)')
+    else:
+        ax1.set_title('Dark Matter Halo Mass Functions (galpropz: 26 volumes)')
+
+
+    #loop over the data and redshift range
+    for redsh, BolshoiTree, anaData in zip(sorted(redshifts.itervalues()),
+                                           BolshoiTrees,
+                                           analyticalData):
+
+        #skip some redshifts
+        if redsh < 1.0 or redsh == 2.0276 or redsh == 5.1614 \
+           or redsh == 6.5586 or redsh == 3.0584:
+            continue
+        #if redsh == 1.0064 or redsh == 3.0584 or redsh == 4.0429 or \
+        #   redsh == 8.2251:
+        #    continue
+
+        #change this to logging afterwords
+        logging.debug(redsh)
+        logging.debug(BolshoiTree)
+        logging.debug(anaData)
+
+        rlow = redsh - 0.02
+        rhigh = redsh + 0.02
+
+        if galid:
+            query = '''select mhalo from galpropz where
+                       galpropz.zgal > {0:f} and galpropz.zgal < {1:f} and
+                       galpropz.gal_id = 1'''.format(rlow, rhigh)
+        else:
+            query = '''select mhalo from galpropz where
+                       galpropz.zgal > {0:f} and
+                       galpropz.zgal < {1:f}'''.format(rlow, rhigh)
+
+        logging.debug(query)
+
+        data['SAM'] = db.sqlite.get_data_sqlite(simuPath, simuDB, query)*1e9
+
+        #calculate the mass functions from the SAM data, only 26 volumes
+        mbin0SAM, mf0SAM = df.diffFunctionLogBinning(data['SAM'],
+                                                     nbins=30,
+                                                     h=h,
+                                                     mmin=1e9,
+                                                     mmax=1e15,
+                                                     volume=50.0,
+                                                     nvols=26,
+                                                     physical_units=True)
+        mbin0SAM = 10**mbin0SAM
+        #mf0SAM = mf0SAM * 1.7
+
+        #read the Bolshoi merger trees
+        data['Bolshoi'] = io.readBolshoiDMfile(BolshoiTree, 0, no_phantoms)
+
+        #calculate the mass functions from the full Bolshoi data
+        mbin0Bolshoi, mf0Bolshoi = df.diffFunctionLogBinning(data['Bolshoi']/h,
+                                                             nbins=30,
+                                                             h=h,
+                                                             mmin=1e9,
+                                                             mmax=1e15,
+                                                             volume=50.0,
+                                                             nvols=125,
+                                                             physical_units=True)
+        mbin0Bolshoi = 10**mbin0Bolshoi
+
+        #Analytical MFs
+        #get Rachel's analytical curves
+        #M dN/dM dNcorr/dM dN/dlog10(M) dN/dlog10(Mcorr)
+        d = N.loadtxt(anaData)
+        data['Press-Schecter'] = N.array([d[:,0], d[:,3]])
+        data['Sheth-Tormen'] = N.array([d[:,0], d[:,4]])
+        #ST
+        sh = ax1.plot(data['Sheth-Tormen'][0],
+                      data['Sheth-Tormen'][1],
+                      'k-', lw = 0.9)
+        #PS
+        #ps = ax1.plot(data['Press-Schecter'][0],
+        #              data['Press-Schecter'][1],
+        #              'g--', lw = 1.1)
+
+        #MF from Bolshoi
+        bolshoiax = ax1.plot(mbin0Bolshoi,
+                             mf0Bolshoi,
+                             'ro--', ms = 4)
+
+        #MF from the SAM run
+        samax = ax1.plot(mbin0SAM,
+                         mf0SAM,
+                         'gs--', ms = 4)
+
+        #mark redshift
+        for a, b in zip(mbin0Bolshoi[::-1], mf0Bolshoi[::-1]):
+            if b > 10**-5:
+                break
+        ax1.annotate('$z \sim {0:.2f}$'.format(redsh),
+                    (0.6*a, 3*10**-6), size = 'x-small')
+
+        #plot the residuals
+        if redsh < 1.5:
+            #make the plot
+            ax2.annotate('$z \sim {0:.2f}$'.format(redsh),
+                         (1.5*10**9, 1.05), xycoords='data',
+                         size = 10)
+            ax2.axhline(1.0, color = 'k')
+            msk = mf0SAM/mf0Bolshoi > 0
+            ax2.plot(mbin0SAM[msk],
+                     mf0SAM[msk]/mf0Bolshoi[msk],
+                     'r-')
+
+    ax1.set_xscale('log')
+    ax2.set_xscale('log')
+    ax1.set_yscale('log')
+
+    ax1.set_ylim(1e-6, 10**-0)
+    ax2.set_ylim(0.45, 1.55)
+    ax1.set_xlim(2e9, 4e14)
+    ax2.set_xlim(2e9, 4e14)
+
+    ax1.set_xticklabels([])
+
+    ax2.set_xlabel(r'$M_{\mathrm{vir}} \quad [M_{\odot}]$')
+    ax1.set_ylabel(r'$\mathrm{d}N / \mathrm{d}\log_{10}(M_{\mathrm{vir}}) \quad [\mathrm{Mpc}^{-3} \mathrm{dex}^{-1}]$')
+    ax2.set_ylabel(r'$\frac{\mathrm{galpropz.dat}}{\mathrm{IsoTree}}$')
+
+    ax1.legend((sh, bolshoiax, samax),
+               ('Sheth-Tormen', 'Bolshoi', 'galpropz'),
+               shadow = True, fancybox = True,
+               numpoints = 1)
+
+    if galid:
+        P.savefig(outputdir + 'IsotreesVSgalpropzGalID.pdf')
+    else:
+        P.savefig(outputdir + 'IsotreesVSgalpropz.pdf')
+
+
 if __name__ == '__main__':
     #Hubble constant
     h = 0.7
@@ -598,41 +761,54 @@ if __name__ == '__main__':
 #    P.close()    
 #    
 #################################
-    #Haloes from galpropz.dat
-    
-    sheth = g.glob(wrkdir + 'analytical/*sheth*_?_?-fit.dat')
-    press = g.glob(wrkdir + 'analytical/*press*_?_?-fit.dat')
-    warren = g.glob(wrkdir + 'analytical/*warren*_?_?-fit.dat')
+#    #Haloes from galpropz.dat
+#
+#    sheth = g.glob(wrkdir + 'analytical/*sheth*_?_?-fit.dat')
+#    press = g.glob(wrkdir + 'analytical/*press*_?_?-fit.dat')
+#    warren = g.glob(wrkdir + 'analytical/*warren*_?_?-fit.dat')
+#
+#    #make the individual plots 2
+#    fig = P.figure()
+#    ax1 = fig.add_axes(rect2)
+#    ax2 = fig.add_axes(rect1)
+#    for a, c, d in zip(sheth, press, warren):
+#        redshift = float(a.split('tormen_')[1].split('-fit')[0].replace('_', '.'))
+#        data = {'Sheth-Tormen': a,
+#                'Press-Schecter': c,
+#                'Warren' : d}
+#
+#        if a.find('_2_0') > -1 or a.find('_6_0') > -1 or a.find('_3_0') > -1 or a.find('_5_0') > -1 or a.find('_0_0') > -1:
+#            continue
+#        else:
+#            logging.debug('Plotting redshift %.2f dark matter mass functions' % redshift)
+#            print a, c, d
+#            plotDMMFfromGalpropz(redshift, h, data)
+#    P.savefig(outdir + 'DMmfz1GalpropZ.pdf')
+#    P.close()
+#
+#    #a new plot
+#    fig = P.figure()
+#    ax1 = fig.add_axes(rect2)
+#    ax2 = fig.add_axes(rect1)
+#    for a in analytical:
+#        redshift = float(a.split('z')[1].split('.')[0].replace('_', '.'))
+#        data = {'Analytical': a}
+#        if round(redshift,1) in [1.0, 4.0, 8.0]:
+#            logging.debug('Plotting redshift %.2f dark matter mass functions (Analytical 2)' % redshift)
+#            print a
+#            plotDMMFfromGalpropzAnalytical2(redshift, h, data)
+#    P.savefig(outdir + 'DMmfz1GalpropZAnalytical2.pdf')
+#    P.close()
+########################################
+    #Compare dark matter halo mass functions of Rachel's SAM and Bolshoi trees
+    redshifts = {0.9943 : 0.0057,
+                 0.4984 : 1.0064,
+                 0.2464 : 3.0584,
+                 0.1983 : 4.0429,
+                 0.1323 : 6.5586,
+                 0.1084 : 8.2251,
+                 0.1623 : 5.1614,
+                 0.3303 : 2.0276}
 
-    #make the individual plots 2
-    fig = P.figure()
-    ax1 = fig.add_axes(rect2) 
-    ax2 = fig.add_axes(rect1)
-    for a, c, d in zip(sheth, press, warren):
-        redshift = float(a.split('tormen_')[1].split('-fit')[0].replace('_', '.'))
-        data = {'Sheth-Tormen': a,
-                'Press-Schecter': c,
-                'Warren' : d}
-
-        if a.find('_2_0') > -1 or a.find('_6_0') > -1 or a.find('_3_0') > -1 or a.find('_5_0') > -1 or a.find('_0_0') > -1:
-            continue
-        else:
-            logging.debug('Plotting redshift %.2f dark matter mass functions' % redshift)
-            print a, c, d
-            plotDMMFfromGalpropz(redshift, h, data)
-    P.savefig(outdir + 'DMmfz1GalpropZ.pdf')
-    P.close()
-
-    #a new plot
-    fig = P.figure()
-    ax1 = fig.add_axes(rect2) 
-    ax2 = fig.add_axes(rect1)
-    for a in analytical:
-        redshift = float(a.split('z')[1].split('.')[0].replace('_', '.'))
-        data = {'Analytical': a}
-        if round(redshift,1) in [1.0, 4.0, 8.0]:
-            logging.debug('Plotting redshift %.2f dark matter mass functions (Analytical 2)' % redshift)
-            print a
-            plotDMMFfromGalpropzAnalytical2(redshift, h, data)
-    P.savefig(outdir + 'DMmfz1GalpropZAnalytical2.pdf')
-    P.close()
+    compareGalpropzToBolshoiTrees(analytical, simus, redshifts, h, outdir)
+    #compareGalpropzToBolshoiTrees(analytical, simus, redshifts, h, outdir, galid=False)
