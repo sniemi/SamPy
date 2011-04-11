@@ -143,10 +143,17 @@ def scatterHistograms(xdata,
     #axHisty.set_xticks(axHisty.get_xticks()[:-1])
 
     #set minor ticks
-    axScatter.xaxis.set_minor_locator(MultipleLocator(2/5.))
+    axScatter.xaxis.set_minor_locator(MultipleLocator(0.5/5.))
     axScatter.xaxis.set_minor_formatter(NullFormatter())
-    axScatter.yaxis.set_minor_locator(MultipleLocator(20/5.))
+    axScatter.yaxis.set_minor_locator(MultipleLocator(10/5.))
     axScatter.yaxis.set_minor_formatter(NullFormatter())
+    #xhist
+    axHistx.xaxis.set_minor_locator(MultipleLocator(0.5/5.))
+    axHistx.xaxis.set_minor_formatter(NullFormatter())
+    #yhist
+    axHisty.yaxis.set_minor_locator(MultipleLocator(10/5.))
+    axHisty.yaxis.set_minor_formatter(NullFormatter())
+
 
     plt.savefig(output)
 

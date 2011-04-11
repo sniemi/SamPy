@@ -5,7 +5,7 @@ matplotlib.rc('text', usetex = True)
 matplotlib.rcParams['font.size'] = 16
 matplotlib.rc('xtick', labelsize = 14) 
 matplotlib.rc('axes', linewidth = 1.2)
-matplotlib.rcParams['legend.fontsize'] = 13
+matplotlib.rcParams['legend.fontsize'] = 11
 matplotlib.rcParams['legend.handlelength'] = 1
 matplotlib.rcParams['xtick.major.size'] = 5
 matplotlib.rcParams['ytick.major.size'] = 5
@@ -669,7 +669,7 @@ def plot_mergerfraction(path, db, reshifts, out_folder, outname,
         #get data
         data = sq.get_data_sqliteSMNfunctions(path, db, query)
         if obs:
-            x = N.log10(data[:,0]*1000.)
+            x = N.log10(data[:,0]*1e3)
         else:
             x = data[:,0]
         tmerge = data[:,1]
@@ -770,6 +770,157 @@ def plot_mergerfraction(path, db, reshifts, out_folder, outname,
     ax3.legend(loc = 'center left')
     P.savefig(out_folder + outname + type) 
 
+def plot_mergerfraction2(path, db, reshifts, out_folder, outname,
+                         xmin = -0.01, xmax = 2.3, fluxlimit = 5,
+                         png = True, mergetimelimit = 0.25,
+                         xbin = [10,8,9,7,7,5],
+                         neverMerged = False, obs = True):
+    '''
+    Plots
+    '''
+    #figure
+    if png:
+        fig = P.figure(figsize= (10,10))
+        type = '.png'
+    else:
+        fig = P.figure()
+        type = '.ps'
+    fig.subplots_adjust(left = 0.09, bottom = 0.08,
+                        right = 0.93, top = 0.95,
+                        wspace = 0.0, hspace = 0.0)
+    ax1 = fig.add_subplot(221)
+    ax2 = fig.add_subplot(222)
+    ax3 = fig.add_subplot(223)
+    ax4 = fig.add_subplot(224)
+    #loop over all the redshifts
+    for i, reds in enumerate(redshifts):
+        if obs:
+            query = '''select FIR.spire250_obs, galprop.tmerge, galprop.tmajmerge
+                    from FIR, galprop where
+                    %s and
+                    FIR.spire250_obs > 5e-4 and
+                    FIR.spire250_obs < 1e6 and
+                    FIR.gal_id = galprop.gal_id and
+                    FIR.halo_id = galprop.halo_id
+                    ''' % reds
+        else:
+            query = '''select FIR.spire250, galprop.tmerge, galprop.tmajmerge
+                    from FIR, galprop where
+                    %s and
+                    FIR.spire250 > 8.8 and
+                    FIR.spire250 < 13.0 and
+                    FIR.gal_id = galprop.gal_id and
+                    FIR.halo_id = galprop.halo_id
+                    ''' % reds
+        #tmp
+        tmp = reds.split()
+        zz = N.mean(N.array([float(tmp[2]), float(tmp[6])]))
+        #get data
+        data = sq.get_data_sqliteSMNfunctions(path, db, query)
+        if obs:
+            x = N.log10(data[:,0]*1e3)
+        else:
+            x = data[:,0]
+        tmerge = data[:,1]
+        tmajor = data[:,2]
+        print N.min(x), N.max(x)
+        #masks
+        nomergeMask = tmerge < 0.0
+        majorsMask = (tmajor >= 0.0) & (tmajor <= mergetimelimit)
+        majorsMask2 = (tmerge >= 0.0) & (tmerge <= mergetimelimit*2.)
+        mergersMask = (tmerge >= 0.0) & (tmerge <= mergetimelimit) & \
+                      (majorsMask == False)
+        mergersMask2 = (nomergeMask == False) & (majorsMask == False) & \
+                       (mergersMask == False) & (majorsMask2 == False)
+        #mergersMask2 = (tmerge > mergetimelimit) & (tmerge <= 2*mergetimelimit) & \
+        #              (majorsMask == False) & (majorsMask2 == False)
+
+
+        print xbin[i]
+        mids, numbs = dm.binAndReturnMergerFractions2(x,
+                                                      nomergeMask,
+                                                      mergersMask,
+                                                      majorsMask,
+                                                      mergersMask2,
+                                                      majorsMask2,
+                                                      N.min(x),
+                                                      N.max(x),
+                                                      xbin[i],
+                                                      False)
+        #the fraction of mergers
+        noMergerFraction = [float(x[1]) / x[0] for x in numbs]
+        mergerFraction = [float(x[2]) / x[0] for x in numbs]
+        majorMergerFraction = [float(x[3]) / x[0] for x in numbs]
+        mergerFraction2 = [float(x[4]) / x[0] for x in numbs]
+        majorMergerFraction2 = [float(x[5]) / x[0] for x in numbs]
+        #sanity check
+        for a, b, c, d, e in zip(noMergerFraction,mergerFraction,majorMergerFraction,
+                                 mergerFraction2,majorMergerFraction2):
+            print a+b+c+d+e
+
+        #plots
+        ax1.plot(mids, majorMergerFraction, label = '$z = %.1f$' % zz)
+        ax2.plot(mids, majorMergerFraction2, label = '$z = %.1f$' % zz)
+        ax3.plot(mids, mergerFraction, label = '$z = %.1f$' % zz)
+        if neverMerged:
+            ax4.plot(mids, noMergerFraction, label = '$z = %.1f$' % zz)
+        else:
+            ax4.plot(mids, mergerFraction2, label = '$z = %.1f$' % zz)
+
+    #set obs limit
+    if obs:
+        ax1.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
+        ax2.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
+        ax3.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
+        ax4.axvline(N.log10(fluxlimit), ls = ':', color = 'green')
+    #labels
+    if obs:
+        ax3.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+        ax4.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    else:
+        ax3.set_xlabel('$\log_{10}(L_{250} \ [L_{\odot}])$')
+        ax4.set_xlabel('$\log_{10}(L_{250} \ [L_{\odot}])$')
+    ax1.set_ylabel('$\mathrm{Merger\ Fraction}$')
+    ax3.set_ylabel('$\mathrm{Merger\ Fraction}$')
+    ax2.set_yticklabels([])
+    ax4.set_yticklabels([])
+    ax1.set_xticklabels([])
+    ax2.set_xticklabels([])
+    #texts
+    P.text(0.5, 0.94,'$\mathrm{Major\ mergers:}\ T_{\mathrm{merge}} \leq %i \ \mathrm{Myr}$' % (mergetimelimit * 1000.),
+           horizontalalignment='center',
+           verticalalignment='center',
+           transform = ax1.transAxes)
+    P.text(0.5, 0.94,'$\mathrm{All\ mergers:}\ T_{\mathrm{merge}} \leq %i \ \mathrm{Myr}$' % (mergetimelimit*2e3),
+           horizontalalignment='center',
+           verticalalignment='center',
+           transform = ax2.transAxes)
+    P.text(0.5, 0.94,'$\mathrm{Minor\ mergers:}\ T_{\mathrm{merge}} \leq %i \ \mathrm{Myr}$' % (mergetimelimit * 1000.),
+           horizontalalignment='center',
+           verticalalignment='center',
+           transform = ax3.transAxes)
+    if neverMerged:
+        P.text(0.5, 0.94,'$\mathrm{Never\ Merged}$',
+               horizontalalignment='center',
+               verticalalignment='center',
+               transform = ax4.transAxes)
+    else:
+        P.text(0.5, 0.94,'$\mathrm{Minor\ mergers:}\ T_{\mathrm{merge}} \leq %i \ \mathrm{Myr}$' % (mergetimelimit*2e3),
+               horizontalalignment='center',
+               verticalalignment='center',
+               transform = ax4.transAxes)
+    #set limits
+    ax1.set_xlim(xmin, xmax)
+    ax1.set_ylim(-0.01, 0.95)
+    ax2.set_xlim(xmin, xmax)
+    ax2.set_ylim(-0.01, 0.95)
+    ax3.set_xlim(xmin, xmax)
+    ax3.set_ylim(-0.01, 0.95)
+    ax4.set_xlim(xmin, xmax)
+    ax4.set_ylim(-0.01, 0.95)
+    #make legend and save the figure
+    ax4.legend()#loc = 'center right')
+    P.savefig(out_folder + outname + type)
    
 if __name__ == '__main__':
     #find the home directory, because the output is to dropbox 
@@ -792,14 +943,16 @@ if __name__ == '__main__':
     print 'Input DB: ', path + db
     print 'Output folder: ', out_folder
 
+    plot_mergerfraction2(path, db, redshifts, out_folder, 'MergeFractions',
+                         xbin = [10,8,9,7,5,5], png = False, neverMerged = True) #in paper
 #    plot_ssfr(path, db, redshifts, out_folder)#in paper
 #    plot_sfrs(path, db, redshifts, out_folder)#in paper
 #    plot_stellarmass(path, db, redshifts, out_folder)#in paper
 #    plot_coldgas(path, db, redshifts, out_folder) #in paper
 
-    plot_sfrs(path, db, redshifts, out_folder, obs = True)
 #    plot_mergerfraction(path, db, redshifts, out_folder, 'MergeFractions',
-#                        xbin = [10,8,9,7,5,5], png = False) #in paper
+#                        xbin = [10,8,9,7,5,5], png = False)
+#    plot_sfrs(path, db, redshifts, out_folder, obs = True)
 #    plot_massratios(path, db, redshifts, out_folder)
 #    plot_metallicity(path, db, redshifts, out_folder)
 #    plot_starburst(path, db, redshifts, out_folder)
