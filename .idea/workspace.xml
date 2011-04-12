@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="14f4c525-fa7f-4157-b5ce-7bfcb54f397f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bolshoi/collecthalomasses.py" afterPath="$PROJECT_DIR$/bolshoi/collecthalomasses.py" />
     </list>
     <ignored path="Python.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,7 +25,17 @@
     <favorites_list name="Python" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="collecthalomasses.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/bolshoi/collecthalomasses.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="45" column="53" selection-start="1593" selection-end="1593" vertical-scroll-proportion="0.33433735">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -47,7 +58,7 @@
         <option value="$PROJECT_DIR$/plot/basic.py" />
         <option value="$PROJECT_DIR$/herschel/plotFluxRedshiftDistribution.py" />
         <option value="$PROJECT_DIR$/herschel/plotpredictions.py" />
-        <option value="$USER_HOME$/Dropbox/plotMassRatios.py" />
+        <option value="$PROJECT_DIR$/bolshoi/collecthalomasses.py" />
       </list>
     </option>
   </component>
@@ -74,7 +85,7 @@
     <OptionsSetting value="true" id="Update" />
     <OptionsSetting value="true" id="Status" />
     <OptionsSetting value="true" id="Edit" />
-    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="2" id="Add" />
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectReloadState">
@@ -103,16 +114,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -127,8 +128,32 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="Python" />
+              <option name="myItemId" value="SamiPython" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Python" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="SamiPython" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bolshoi" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -138,11 +163,16 @@
   <component name="PropertiesComponent">
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="options.lastSelected" value="reference.settingsdialog.IDE.editor.colors.Font" />
     <property name="recentsLimit" value="5" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Dropbox" />
-    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.lastSelected" value="project.propVCSSupport.Mappings" />
+    <property name="last_opened_file_path" value="$USER_HOME$/workspace/herschelpaper" />
     <property name="options.searchVisible" value="true" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/bolshoi" />
+    </key>
   </component>
   <component name="RunManager" selected="Python.plotFluxRedshiftDistribution">
     <configuration default="false" name="plotmergers4" type="PythonConfigurationType" factoryName="Python" temporary="true">
@@ -299,17 +329,17 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="22" width="2560" height="1348" extended-state="6" />
-    <editor active="false" />
+    <frame x="148" y="22" width="2238" height="1477" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32841933" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32961783" sideWeight="0.6661238" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32961783" sideWeight="0.32736155" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28264332" sideWeight="0.4568404" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28219178" sideWeight="0.6705969" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18312103" sideWeight="0.6710098" order="0" side_tool="false" content_ui="tabs" x="1087" y="82" width="435" height="1221" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1849315" sideWeight="0.6705969" order="0" side_tool="false" content_ui="tabs" x="1087" y="82" width="435" height="1221" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3995078" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25470924" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32899022" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3294031" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32923833" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -352,19 +382,9 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/plot/basic.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="0" selection-start="80" selection-end="175" vertical-scroll-proportion="0.071308725" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/plot/COSIHB/plotting.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="30" column="0" selection-start="984" selection-end="1077" vertical-scroll-proportion="0.43256998" />
-      </provider>
-    </entry>
-    <entry file="file:///Library/Frameworks/EPD64.framework/Versions/7.0/lib/python2.7/site-packages/matplotlib/axes.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3246" column="8" selection-start="110775" selection-end="110775" vertical-scroll-proportion="-0.012722646" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/astronomy/conversions.py">
@@ -422,14 +442,30 @@
         <state line="148" column="0" selection-start="5168" selection-end="5168" vertical-scroll-proportion="0.43286073" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/herschel/plotFluxDistribution.py">
+    <entry file="file:///usr/stsci/pyssgdev/Python-2.7/lib/python2.7/fileinput.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="50" column="4" selection-start="1617" selection-end="1662" vertical-scroll-proportion="0.19182652" />
+        <state line="90" column="4" selection-start="3827" selection-end="3827" vertical-scroll-proportion="0.33283132">
+          <folding />
+        </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Dropbox/plotMassRatios.py">
+    <entry file="file://$PROJECT_DIR$/sandbox/bolshoi/wrapper.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="248" column="19" selection-start="8696" selection-end="8696" vertical-scroll-proportion="0.014333895">
+        <state line="10" column="0" selection-start="189" selection-end="189" vertical-scroll-proportion="-0.9307985">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bolshoi/collecthalomassesThreading.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="0" selection-start="566" selection-end="747" vertical-scroll-proportion="0.2816265">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bolshoi/collecthalomasses.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="45" column="53" selection-start="1593" selection-end="1593" vertical-scroll-proportion="0.33433735">
           <folding />
         </state>
       </provider>

@@ -111,3 +111,14 @@ def get_magAB_from_flambda(flambda, wlength):
     # return the mag_AB                                                                                              
     return mag_AB
 
+def redshiftFromScale(scale):
+    '''
+    Converts a scale factor to redshift.
+    '''
+    return 1./scale - 1.
+
+def scaleFromRedshift(redshift):
+    '''
+    Converts a redshift to a scale factor.
+    '''
+    return 1. /(redshift + 1.)

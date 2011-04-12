@@ -12,6 +12,7 @@ from matplotlib.ticker import MultipleLocator, FormatStrFormatter, NullFormatter
 import numpy as N
 import pylab as P
 import os, logging
+import glob as g
 #From Sami's Repo
 import db.sqlite
 import astronomy.stellarMFs as SMF
@@ -156,23 +157,31 @@ if __name__ == '__main__':
     #find the home directory, because the output is to dropbox 
     #and my user name is not always the same, this hack is required.
     hm = os.getenv('HOME')
-    path = hm + '/Dropbox/Research/Bolshoi/run/trial2/'
+    path1 = hm + '/Dropbox/Research/Bolshoi/run/trial2/'
+    path2 = hm + '/Desktop/Research/run/trial3/'
     database = 'sams.db'
     outpath = hm + '/Dropbox/Research/Bolshoi/stellarMFs/'
 
-    logging.debug('Making the first plot')
-    redshifts = ['galpropz.zgal > 0.9 and galpropz.zgal <= 1.1',
+    #redshift bins
+    redshifts1 = ['galpropz.zgal > 0.9 and galpropz.zgal <= 1.1',
                  'galpropz.zgal > 1.9 and galpropz.zgal <= 2.1',
                  'galpropz.zgal > 2.9 and galpropz.zgal <= 3.1',
                  'galpropz.zgal > 3.9 and galpropz.zgal <= 4.1',
                  'galpropz.zgal > 4.9 and galpropz.zgal <= 5.1',
                  'galpropz.zgal > 5.9 and galpropz.zgal <= 6.1',
                  'galpropz.zgal > 6.9 and galpropz.zgal <= 7.1']
-    main(redshifts, path, database, outpath, 'stellarmf')
+    redshifts2 = ['galpropz.zgal > 1.0 and galpropz.zgal <= 1.1',
+                 'galpropz.zgal > 2.0 and galpropz.zgal <= 2.1',
+                 'galpropz.zgal > 3.0 and galpropz.zgal <= 3.1',
+                 'galpropz.zgal > 4.0 and galpropz.zgal <= 4.1',
+                 'galpropz.zgal > 5.1 and galpropz.zgal <= 5.2',
+                 'galpropz.zgal > 6.5 and galpropz.zgal <= 6.6',
+                 'galpropz.zgal > 8.1 and galpropz.zgal <= 8.3']
+    
+    logging.debug('Making the first plot')
+    main(redshifts1, path1, database, outpath, 'stellarmfTrial2')
 
-#    logging.debug('Making the second plot')
-#    redshifts = ['galpropz.zgal >= 0.9 and galpropz.zgal <= 1.3',
-#                 'galpropz.zgal >= 1.9 and galpropz.zgal <= 2.5',
-#                 'galpropz.zgal >= 2.9 and galpropz.zgal <= 3.5',
-#                 'galpropz.zgal >= 3.5 and galpropz.zgal <= 4.1']
-#    main(redshifts, path, database, outpath, 'stellarmf2')
+    logging.debug('Making the second plot')
+    main(redshifts2, path2, database, outpath, 'stellarmfTrial3')
+
+
