@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="14f4c525-fa7f-4157-b5ce-7bfcb54f397f" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/herschel/plotFluxRedshiftDistribution.py" afterPath="$PROJECT_DIR$/herschel/plotFluxRedshiftDistribution.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/herschel/plotpredictions.py" afterPath="$PROJECT_DIR$/herschel/plotpredictions.py" />
     </list>
     <ignored path="Python.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -49,6 +47,7 @@
         <option value="$PROJECT_DIR$/plot/basic.py" />
         <option value="$PROJECT_DIR$/herschel/plotFluxRedshiftDistribution.py" />
         <option value="$PROJECT_DIR$/herschel/plotpredictions.py" />
+        <option value="$USER_HOME$/Dropbox/plotMassRatios.py" />
       </list>
     </option>
   </component>
@@ -94,6 +93,16 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Favorites">
+        <subPane subId="Python">
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" />
+              <option name="myItemType" value="com.intellij.ide.favoritesTreeView.FavoritesTreeNodeDescriptor" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="Scope">
         <subPane subId="Project Files">
           <PATH>
@@ -124,16 +133,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Favorites">
-        <subPane subId="Python">
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" />
-              <option name="myItemType" value="com.intellij.ide.favoritesTreeView.FavoritesTreeNodeDescriptor" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -141,7 +140,7 @@
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="options.lastSelected" value="reference.settingsdialog.IDE.editor.colors.Font" />
     <property name="recentsLimit" value="5" />
-    <property name="last_opened_file_path" value="$USER_HOME$/workspace/herschelpaper" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Dropbox" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
   </component>
@@ -304,13 +303,13 @@
     <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32841933" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28264332" sideWeight="0.4568404" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28264332" sideWeight="0.53664494" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32961783" sideWeight="0.6661238" order="3" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32961783" sideWeight="0.32736155" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.13495223" sideWeight="0.0" order="0" side_tool="false" content_ui="tabs" x="1087" y="82" width="435" height="1221" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18312103" sideWeight="0.6710098" order="0" side_tool="false" content_ui="tabs" x="1087" y="82" width="435" height="1221" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3995078" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25470924" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3297785" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32899022" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32923833" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -353,19 +352,9 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/bolshoi/plotdarkmattermf.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="527" column="23" selection-start="18205" selection-end="18205" vertical-scroll-proportion="0.28838" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/plot/basic.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="5" column="0" selection-start="80" selection-end="175" vertical-scroll-proportion="0.071308725" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/herschel/plotFluxDistribution.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="115" column="12" selection-start="3681" selection-end="3716" vertical-scroll-proportion="0.63443595" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/plot/COSIHB/plotting.py">
@@ -425,14 +414,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/herschel/plotpredictions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="830" column="70" selection-start="29679" selection-end="29679" vertical-scroll-proportion="0.43953294">
-          <folding />
-        </state>
+        <state line="830" column="70" selection-start="29679" selection-end="29679" vertical-scroll-proportion="0.43953294" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/astronomy/datamanipulation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="148" column="0" selection-start="5168" selection-end="5168" vertical-scroll-proportion="0.43286073">
+        <state line="148" column="0" selection-start="5168" selection-end="5168" vertical-scroll-proportion="0.43286073" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/herschel/plotFluxDistribution.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="50" column="4" selection-start="1617" selection-end="1662" vertical-scroll-proportion="0.19182652" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/Dropbox/plotMassRatios.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="248" column="19" selection-start="8696" selection-end="8696" vertical-scroll-proportion="0.014333895">
           <folding />
         </state>
       </provider>
