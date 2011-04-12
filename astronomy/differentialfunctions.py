@@ -20,6 +20,7 @@ def diffFunctionLogBinning(data, column = 0, log = False,
     Calculates a differential function from data.
     Uses NumPy to calculate a histogram and then divides.
     each bin value with the length of the bin.
+    The log binning refers to 10 based log, i.e. log10(data)
     '''
     #get the number of items in data
     if len(N.shape(data)) == 1:
@@ -49,8 +50,11 @@ def diffFunctionLogBinning(data, column = 0, log = False,
     else:
         d = data[:,column]   
 
-    #get msas functions
-    mf, edges = N.histogram(d, nbins, range = (mmin, mmax), weights = weight)
+    #calculate mass functions
+    mf, edges = N.histogram(d,
+                            nbins,
+                            range=(mmin, mmax),
+                            weights=weight)
     mbin = (edges[1:] + edges[:-1])/2.
     dm = edges[1] - edges[0]
     
