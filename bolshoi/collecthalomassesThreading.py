@@ -1,3 +1,10 @@
+'''
+For some reason this script does not work.
+I am not sure what's wrong in it, but the finding
+part does not work, but randomly dies. It might
+be something to do with threads getting confused
+which file they are supposed to open or something...
+'''
 import glob as g
 import threading as t
 import Queue as Q

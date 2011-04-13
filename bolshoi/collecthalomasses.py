@@ -1,11 +1,12 @@
 '''
-This one uses multiprocessing rather than threading
+This one uses parallel python:
+http://www.parallelpython.com
 '''
-import fileinput as f
 import glob as g
-import multiprocessing as m
+import pp
+import smnIO.write as write
 
-def findDMhaloes(input):
+def findDMhaloes(file, times, columns):
     '''
     Find all dark matter haloes from a given file
     that are in self.times. Capture the data
@@ -14,12 +15,10 @@ def findDMhaloes(input):
     time. Each line of data is a string so it's easy
     to write out to a file.
     '''
-    file = input[0]
-    times = input[1]
-    columns = input[2]
     output = {}
     print 'Now processing file {0:>s}\n'.format(file)
-    for line in f.input(file):
+    fh = open(file, 'r')
+    for line in iter(fh):
         if not line.startswith('#'):
             tmp = line.split()
             for key in times:
@@ -34,7 +33,7 @@ def findDMhaloes(input):
                         output[key] += [string, ]
                     else:
                         output[key] = [string, ]
-    writeOutput(output, file, times)
+    return output
 
 def writeOutput(data, file, times):
     '''
@@ -43,18 +42,19 @@ def writeOutput(data, file, times):
     The filename will contain the output *redshift*
     '''
     print 'Outputting data from %s' % file
-    print 'File contains {0:d} timesteps'.format(len(d.keys()))
+    print 'File contains {0:d} timesteps'.format(len(data.keys()))
     for key in data:
-        filename = 'DMhaloz{0:>s}{1:>s}.txt'.format(str(times[key]), file)
+        tmp = file.split('/')[-1]
+        filename = 'DMhaloz{0:>s}{1:>s}'.format(str(times[key]), tmp)
         print 'Now outputting to {0:>s} '.format(filename)
         fh = open(filename, 'a')
-        for line in d[key]:
+        for line in data[key]:
             fh.write(line)
         fh.close()
 
 if __name__ == '__main__':
     #number of cores to use
-    cores = 6
+    ncpus = 6
     
     #inpute merger tree files
     inputs = g.glob('/Users/niemi/Desktop/Research/Bolshoi/bolshoi_isotrees/*.dat')
@@ -78,14 +78,28 @@ if __name__ == '__main__':
                'phantom': 8,
                'scale': 0}
 
+    #tuple of all parallel python servers to connect with
+    ppservers = ()
+    #creates a job server
+    jobServer = pp.Server(ncpus, ppservers=ppservers)
 
-    print 'Starts writing the outputs'
-    jobs = []
-    for i in range(cores):
-        p = multiprocessing.Process(target=findDMhaloes, args=[file])
-        jobs.append(p)
-        p.start()
+    print 'Processing with', jobServer.get_ncpus(), 'workers'
 
-    print 'Finished writing the outputs'
+    #submits jobs
+    jobs = [(input, jobServer.submit(findDMhaloes,(input, times, columns))) for input in inputs]
+
+    #write the output of each job
+    for input, job in jobs:
+        writeOutput(job(), input, times)
+
+    print 'Finished writing the individual outputs'
+
+    jobServer.print_stats()
+
+    print 'will write the combined output'
+    for key in times:
+        out = 'dmMFz%s.txt' % str(times[key])
+        print 'Will write', out
+        write.combineFiles(g.glob('*%s*.dat' % str(times[key])), out)
 
     print 'All done, check the output file(s)'
