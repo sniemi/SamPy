@@ -1,8 +1,3 @@
-'''
-NOTE: For some reason this does not seem to be threading
-safe!!!
-'''
-import fileinput as f
 import glob as g
 import threading as t
 import Queue as Q
@@ -29,7 +24,6 @@ class findDMhaloes(t.Thread):
                         'scale': 0}
         #which times to capture
         self.times = times
-        self.out = []
 
     def find(self, file):
         '''
@@ -43,7 +37,8 @@ class findDMhaloes(t.Thread):
         output = {}
         try:
             print '{0:>s} is processing file {1:>s}\n'.format(self.getName(), file)
-            for line in f.input(file):
+            fh = open(file, 'r')
+            for line in iter(fh):
                 if not line.startswith('#'):
                     tmp = line.split()
                     for key in self.times:
@@ -58,12 +53,10 @@ class findDMhaloes(t.Thread):
                                 output[key] += [string,]
                             else:
                                 output[key] = [string,]
-            self.out.append(output)
+            fh.close()
+            writeOutput(output, file, self.times)
         except:
             print 'Problem in {0:>s} is processing file {1:>s}\n'.format(self.getName(), file)
-
-    def returnResults(self):
-        return self.out
 
     def run(self):
         '''
@@ -96,29 +89,40 @@ def findDMDriver(input_files,
         queue.put(file)
     #wait on the queue until everything has been processed
     queue.join()
-    #return results
-    return th.returnResults()
 
-def writeOutput(data, times):
+def writeOutput(data, file, times):
     '''
     Writes the output data to ascii files.
     Each time step is recorded to a single file.
     The filename will contain the output *redshift*
     '''
-    print '{0:d} files were processed'.format(len(data))
-    for d in data:
-        print 'File contains {0:d} timesteps'.format(len(d.keys()))
-        for key in d:
-            filename = 'DMhaloz{0:>s}.txt'.format(str(times[key]))
-            print 'Now outputting to {0:>s} '.format(filename)
-            fh = open(filename, 'a')
-            for line in d[key]:
-                fh.write(line)
-            fh.close()
+    print 'File {0:>s} contains {1:d} timesteps'.format(file, len(d.keys()))
+    for key in data:
+        filename = 'DMhaloz{0:>s}{1:>s}.txt'.format(str(times[key]), file)
+        print 'Now outputting to {0:>s} '.format(filename)
+        fh = open(filename, 'a')
+        for line in d[key]:
+            fh.write(line)
+        fh.close()
+
+def combineFiles(files, outputfile):
+    '''
+    Combines the content of all files that are listed
+    in the files list to a single file named outputfile.
+    Iterates over the input files line-by-line to save
+    memory.
+    '''
+    fh = open(outputfile, 'w')
+    for file in files:
+        print 'Writing %s to %s' % (file, outputfile)
+        for line in iter(open(file, 'r')):
+            fh.write(line)
+    fh.close()
+
 
 if __name__ == '__main__':
     #number of cores to use
-    cores = 1
+    cores = 6
     
     #inpute merger tree files
     inputs = g.glob('/Users/niemi/Desktop/Research/Bolshoi/bolshoi_isotrees/*.dat')
@@ -138,12 +142,14 @@ if __name__ == '__main__':
              0.4984: 1.00642054575}
 
     #call the main function
-    out = findDMDriver(inputs,
-                       times,
-                       cores)
+    findDMDriver(inputs,
+                 times,
+                 cores)
 
-    print 'Starts writing the outputs'
-    writeOutput(out)
-    print 'Finished writing the outputs'
+    for key in times:
+        out = 'dmMFz%s.txt' % str(times[key])
+        print 'Will write', out
+        combineFiles(glob.glob('*%s*.txt' % str(times[key])),
+                     out)
 
     print 'All done, check the output file(s)'
