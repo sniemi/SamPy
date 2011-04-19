@@ -1,10 +1,11 @@
 import matplotlib
+
 matplotlib.use('Agg')
-matplotlib.rc('text', usetex = True)
+matplotlib.rc('text', usetex=True)
 matplotlib.rcParams['font.size'] = 17
-matplotlib.rc('xtick', labelsize = 13)
-matplotlib.rc('ytick', labelsize = 13)
-matplotlib.rc('axes', linewidth = 1.2)
+matplotlib.rc('xtick', labelsize=13)
+matplotlib.rc('ytick', labelsize=13)
+matplotlib.rc('axes', linewidth=1.2)
 matplotlib.rcParams['legend.fontsize'] = 12
 matplotlib.rcParams['legend.handlelength'] = 2
 matplotlib.rcParams['xtick.major.size'] = 5
@@ -13,10 +14,11 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator, NullFormatter
-
+from matplotlib import cm
 #Sami's repo
 import db.sqlite
 import astronomy.conversions as cv
+import sandbox.MyTools as M
 
 __author__ = 'Sami-Matias Niemi'
 __version__ = 0.1
@@ -34,9 +36,9 @@ def scatterHistograms(xdata,
     #constants
     xmin = 2.0
     xmax = 4.0
-    ymin = 1e-2
-    ymax = 80
-    solid_angle = 100*160.
+    ymin = -2.05
+    ymax = 2.5
+    solid_angle = 100 * 160.
     H0 = 70.0
     WM = 0.28
 
@@ -50,12 +52,12 @@ def scatterHistograms(xdata,
     comovingVol = cv.comovingVolume(solid_angle,
                                     xmin,
                                     xmax,
-                                    H0 = H0,
-                                    WM = WM)
+                                    H0=H0,
+                                    WM=WM)
 
     #weight each galaxy
-    wghtsx = (np.zeros(len(xdata)) + (1./comovingVol)) / dfx
-    wghtsy = (np.zeros(len(ydata)) + (1./comovingVol)) / dfy
+    wghtsx = (np.zeros(len(xdata)) + (1. / comovingVol)) / dfx
+    wghtsy = (np.zeros(len(ydata)) + (1. / comovingVol)) / dfy
 
     #no labels, null formatter
     nullfmt = NullFormatter()
@@ -63,14 +65,14 @@ def scatterHistograms(xdata,
     # definitions for the axes
     left, width = 0.1, 0.65
     bottom, height = 0.1, 0.65
-    bottom_h = left_h = left+width+0.02
+    bottom_h = left_h = left + width + 0.02
 
     rect_scatter = [left, bottom, width, height]
     rect_histx = [left, bottom_h, width, 0.2]
     rect_histy = [left_h, bottom, 0.2, height]
 
     #make a figure
-    fig = plt.figure(figsize=(12,12))
+    fig = plt.figure(figsize=(12, 12))
 
     axScatter = plt.axes(rect_scatter)
     axHistx = plt.axes(rect_histx)
@@ -83,14 +85,24 @@ def scatterHistograms(xdata,
     #the scatter plot
     axScatter.scatter(xdata, ydata,
                       marker='o',
-                      s = 2,
+                      s=0.5,
                       c='k')
 
+    #KDE
+    x = M.AnaKDE([xdata, ydata])
+    x_vec, y_vec, zm, lvls, d0, d1 = x.contour(np.linspace(xmin-0.1, xmax+0.1, 50),
+                                               np.linspace(ymin-0.1, ymax+0.1, 50),
+                                               return_data=True)
+    axScatter.contourf(x_vec, y_vec, zm,
+                       levels=np.linspace(0.002, 0.92*np.max(zm), 10),
+                       cmap=cm.get_cmap('gist_yarg'),
+                       alpha=0.8)
+
     #draw a line to the detection limit, 5mJy (at 250)
-    axScatter.axhline(5,
+    axScatter.axhline(np.log10(5),
                       color='green',
-                      ls = '--',
-                      lw = 1.8)
+                      ls='--',
+                      lw=1.8)
 
     #scatter labels
     axScatter.set_xlabel(xlabel)
@@ -106,9 +118,9 @@ def scatterHistograms(xdata,
                       weights=wghtsx,
                       log=True,
                       color='gray')
-    x2 = axHistx.hist(xdata[ydata > 5],
+    x2 = axHistx.hist(xdata[ydata > np.log10(5)],
                       bins=xbins,
-                      weights=wghtsx[ydata > 5],
+                      weights=wghtsx[ydata > np.log10(5)],
                       log=True,
                       color='gray',
                       hatch='x')
@@ -143,40 +155,39 @@ def scatterHistograms(xdata,
     #axHisty.set_xticks(axHisty.get_xticks()[:-1])
 
     #set minor ticks
-    axScatter.xaxis.set_minor_locator(MultipleLocator(0.5/5.))
+    axScatter.xaxis.set_minor_locator(MultipleLocator(0.5 / 5.))
     axScatter.xaxis.set_minor_formatter(NullFormatter())
-    axScatter.yaxis.set_minor_locator(MultipleLocator(10/5.))
+    axScatter.yaxis.set_minor_locator(MultipleLocator(1. / 5.))
     axScatter.yaxis.set_minor_formatter(NullFormatter())
     #xhist
-    axHistx.xaxis.set_minor_locator(MultipleLocator(0.5/5.))
+    axHistx.xaxis.set_minor_locator(MultipleLocator(0.5 / 5.))
     axHistx.xaxis.set_minor_formatter(NullFormatter())
     #yhist
-    axHisty.yaxis.set_minor_locator(MultipleLocator(10/5.))
+    axHisty.yaxis.set_minor_locator(MultipleLocator(1. / 5.))
     axHisty.yaxis.set_minor_formatter(NullFormatter())
 
-
     plt.savefig(output)
+
 
 def plotFluxRedshiftDistribution(path,
                                  database,
                                  out_folder):
-
     query = '''select FIR.spire250_obs, FIR.z
     from FIR where
     FIR.spire250_obs > 1e-6 and
-    FIR.z >= 2 and
-    FIR.z < 4.0 and
+    FIR.z >= 1.9 and
+    FIR.z < 4.1 and
     FIR.spire250_obs < 1e5
     '''
     #get data
     data = db.sqlite.get_data_sqlite(path, database, query)
     #convert fluxes to mJy
-    flux = data[:,0]*1e3 # in mJy
-    redshift = data[:,1]
+    flux = np.log10(data[:, 0] * 1e3) # log of mJy
+    redshift = data[:, 1]
 
     #xlabels
     xlabel = r'$z$'
-    ylabel = r'$S_{250} \quad [\mathrm{mJy}]$'
+    ylabel = r'$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$'
 
     #output folder and file name
     output = "{0:>s}FluxRedshiftDist.png".format(out_folder)

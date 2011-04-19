@@ -4,9 +4,9 @@ matplotlib.use('PS')
 matplotlib.rc('text', usetex = True)
 matplotlib.rcParams['font.size'] = 16
 matplotlib.rc('xtick', labelsize = 14) 
-matplotlib.rc('axes', linewidth = 1.2)
-matplotlib.rcParams['legend.fontsize'] = 11
-matplotlib.rcParams['legend.handlelength'] = 1
+matplotlib.rc('axes', linewidth = 1.5)
+matplotlib.rcParams['legend.fontsize'] = 10
+matplotlib.rcParams['legend.handlelength'] = 2
 matplotlib.rcParams['xtick.major.size'] = 5
 matplotlib.rcParams['ytick.major.size'] = 5
 matplotlib.rcParams['legend.fancybox'] = True
@@ -20,9 +20,9 @@ import db.sqlite as sq
 import astronomy.datamanipulation as dm
 import fitting.fits as fit
 
-def plot_sfrs(path, db, reshifts, out_folder,
-              xmin = 0.0, xmax = 2.3, fluxlimit = 5,
-              obs = True):
+def plot_sfrs(path, db, redshifts, out_folder,
+              xmin=0.0, xmax=2.3, fluxlimit=5,
+              obs=True):
     '''
     Plots SFR
     '''
@@ -50,12 +50,12 @@ def plot_sfrs(path, db, reshifts, out_folder,
         
         #percentiles
         xmaxb = N.max(xd)
-        nxbins = int(11*(xmaxb - xmin))
+        nxbins = int(11 * (xmaxb - xmin))
         xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd,
                                                          yd,
                                                          xmin,
                                                          xmaxb,
-                                                         nxbins = nxbins)
+                                                         nxbins=nxbins)
 
         msk = y50d > -10
         ax.errorbar(xbin_midd[msk], y50d[msk],
@@ -74,17 +74,22 @@ def plot_sfrs(path, db, reshifts, out_folder,
   
     if obs:
         data = N.loadtxt('/Users/sammy/Dropbox/Research/Herschel/LaceySFRs.txt')
-        data[:,2] = N.log10(2*10**data[:,2] / (1./(1./0.7)))
-        msk1 = data[:,0] < 15
-        msk2 = (data[:,0] > 15) & (data[:,0] < 35)
-        msk3 = (data[:,0] > 35) & (data[:,0] < 55)
-        msk4 = (data[:,0] > 55) & (data[:,0] < 70)
-        msk5 = (data[:,0] > 70) & (data[:,0] < 80)
-        ax.plot(data[msk1][:,1], data[msk1][:,2], 'b--', label = 'Lacey z = 0.25')
-        ax.plot(data[msk2][:,1], data[msk2][:,2], 'r--', label = 'Lacey z = 1.0')
-        ax.plot(data[msk3][:,1], data[msk3][:,2], 'c--', label = 'Lacey z = 2.0')
-        ax.plot(data[msk4][:,1], data[msk4][:,2], 'm--', label = 'Lacey z = 3.0')
-        ax.plot(data[msk5][:,1], data[msk5][:,2], 'y--', label = 'Lacey z = 4.0')
+        data[:, 2] = N.log10(10 ** data[:, 2] / (1. / (1. / 0.7)))
+        msk1 = data[:, 0] < 15
+        msk2 = (data[:, 0] > 15) & (data[:, 0] < 35)
+        msk3 = (data[:, 0] > 35) & (data[:, 0] < 55)
+        msk4 = (data[:, 0] > 55) & (data[:, 0] < 70)
+        msk5 = (data[:, 0] > 70) & (data[:, 0] < 80)
+        ax.plot(data[msk1][:, 1], data[msk1][:, 2],
+                'b--', label='$\mathrm{L10:}\ z = 0.25$')
+        ax.plot(data[msk2][:, 1], data[msk2][:, 2],
+                'r--', label='$\mathrm{L10:}\ z = 1.0$')
+        ax.plot(data[msk3][:, 1], data[msk3][:, 2],
+                'c--', label='$\mathrm{L10:}\ z = 2.0$')
+        ax.plot(data[msk4][:, 1], data[msk4][:, 2],
+                'm--', label='$\mathrm{L10:}\ z = 3.0$')
+        ax.plot(data[msk5][:, 1], data[msk5][:, 2],
+                'y--', label='$\mathrm{L10:}\ z = 4.0$')
   
     ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
     ax.set_ylabel('$\log_{10}(\dot{M}_{\star} \ [M_{\odot}\mathrm{yr}^{-1}])$')
@@ -98,7 +103,7 @@ def plot_sfrs(path, db, reshifts, out_folder,
     else:
         P.savefig(out_folder + 'sfr.ps')
 
-def plot_ssfr(path, db, reshifts, out_folder,
+def plot_ssfr(path, db, redshifts, out_folder,
               xmin = 0.0, xmax = 2.3, fluxlimit = 5):
     '''
     Plots SSFR. 
@@ -943,13 +948,21 @@ if __name__ == '__main__':
     print 'Input DB: ', path + db
     print 'Output folder: ', out_folder
 
-    plot_mergerfraction2(path, db, redshifts, out_folder, 'MergeFractions',
-                         xbin = [10,8,9,7,5,5], png = False, neverMerged = True) #in paper
-#    plot_ssfr(path, db, redshifts, out_folder)#in paper
-#    plot_sfrs(path, db, redshifts, out_folder)#in paper
-#    plot_stellarmass(path, db, redshifts, out_folder)#in paper
-#    plot_coldgas(path, db, redshifts, out_folder) #in paper
+    #These plots are in the paper
+    plot_sfrs(path, db, redshifts, out_folder)
 
+    #plot_mergerfraction2(path, db, redshifts, out_folder, 'MergeFractions',
+    #                     xbin = [10,8,9,7,5,5], png = False, neverMerged = True)
+#    plot_stellarmass(path, db, redshifts, out_folder)
+#    plot_coldgas(path, db, redshifts, out_folder)
+
+
+    #These plots were in the paper
+#    plot_ssfr(path, db, redshifts, out_folder)
+
+
+
+    #TEST plots
 #    plot_mergerfraction(path, db, redshifts, out_folder, 'MergeFractions',
 #                        xbin = [10,8,9,7,5,5], png = False)
 #    plot_sfrs(path, db, redshifts, out_folder, obs = True)

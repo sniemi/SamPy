@@ -61,8 +61,8 @@ def plotMergerFractions(query,
     majorMergerFraction2 = [float(x[5]) / x[0] for x in numbs]
 
     #sanity check
-    for a, b, c, d, e in zip(noMergerFraction,mergerFraction,majorMergerFraction,
-                             mergerFraction2,majorMergerFraction2):
+    for a, b, c, d, e in zip(noMergerFraction, mergerFraction, majorMergerFraction,
+                             mergerFraction2, majorMergerFraction2):
         print a+b+c+d+e 
 
     #make the figure
@@ -70,20 +70,28 @@ def plotMergerFractions(query,
         fig = P.figure()
     else:
         fig = P.figure(figsize=(10,10))
-    fig.subplots_adjust(left = 0.08, bottom = 0.07,
-                        right = 0.97, top = 0.93)
+    fig.subplots_adjust(left=0.08, bottom=0.07,
+                        right=0.97, top=0.93)
     ax1 = fig.add_subplot(111)
     #draw lines
     ax1.plot(mids, noMergerFraction, 'k-', lw = 2.6,
              label = 'Never Merged')
-    ax1.plot(mids, mergerFraction, ls = '--', lw = 2.6,
-             label = 'Minor Merger: $T \leq 250$ Myr')
-    ax1.plot(mids, mergerFraction2, ls = '-.', lw = 2.6,
-             label = 'Minor Merger: $250 < T \leq 500$ Myr')
-    ax1.plot(mids, majorMergerFraction, ls = '--', lw = 2.6,
-             label = 'Major Merger: $T \leq 250$ Myr')
-    ax1.plot(mids, majorMergerFraction2, ls = '-.', lw = 2.6,
-             label = 'Major Merger: $250 < T \leq 500$ Myr')
+#    ax1.plot(mids, mergerFraction, ls = '--', lw = 2.6,
+#             label = 'Minor Merger: $T \leq 250$ Myr')
+#    ax1.plot(mids, mergerFraction2, ls = '-.', lw = 2.6,
+#             label = 'Minor Merger: $250 < T \leq 500$ Myr')
+#    ax1.plot(mids, majorMergerFraction, ls = '--', lw = 2.6,
+#             label = 'Major Merger: $T \leq 250$ Myr')
+#    ax1.plot(mids, majorMergerFraction2, ls = '-.', lw = 2.6,
+#             label = 'Major Merger: $250 < T \leq 500$ Myr')
+    ax1.plot(mids, majorMergerFraction, ls='--', lw=2.6,
+             label='Young Major Merger')
+    ax1.plot(mids, mergerFraction, ls='--', lw=2.6,
+             label='Young Minor Merger')
+    ax1.plot(mids, majorMergerFraction2, ls='-.', lw=2.6,
+             label='Old Major Merger')
+    ax1.plot(mids, mergerFraction2, ls='-.', lw=2.6,
+             label='Old Minor Merger')
     #labels
     ax1.set_xlabel(xlabel)
     ax1.set_ylabel(ylabel)
@@ -97,7 +105,7 @@ def plotMergerFractions(query,
     #make grid
     #ax1.grid()
     #legend and save
-    P.legend(loc = 'center left')
+    P.legend(loc='upper left')
     P.savefig(out_folder + output)
 
 def plotMergerFractions2(query,
