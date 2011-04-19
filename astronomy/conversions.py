@@ -9,7 +9,7 @@ Some functions for astronomy related unit conversions.
 @author: Sami Niemi
 @contact: niemi@stsci.edu
 '''
-import numpy as N
+import numpy as np
 from cosmocalc import cosmocalc
 
 def janskyToMagnitude(jansky):
@@ -19,7 +19,7 @@ def janskyToMagnitude(jansky):
     @param jansky: can either be a number or a NumPy array
     @return: either a float or NumPy array
     '''
-    return 8.9 - 2.5*N.log10(jansky)
+    return 8.9 - 2.5*np.log10(jansky)
 
 def ABMagnitudeToJansky(ABmagnitude):
     '''
@@ -36,7 +36,7 @@ def arcminSquaredToSteradians(arcmin2):
     @param arcmin2: arcmin**2
     @return: steradians 
     '''
-    return arcmin2 / ((180/N.pi)**2 * 60 * 60)
+    return arcmin2 / ((180/np.pi)**2 * 60 * 60)
 
 def arcminSquaredToSolidAnge(arcmin2):
     '''
@@ -47,7 +47,7 @@ def arcminSquaredToSolidAnge(arcmin2):
     @param arcmin2: arcmin**2 
     @return: solid angle
     '''
-    return arcminSquaredToSteradians(arcmin2) / 4. / N.pi
+    return arcminSquaredToSteradians(arcmin2) / 4. / np.pi
 
 def comovingVolume(arcmin2, zmin, zmax,
                    H0 = 70, WM = 0.28):
@@ -122,3 +122,15 @@ def scaleFromRedshift(redshift):
     Converts a redshift to a scale factor.
     '''
     return 1. /(redshift + 1.)
+
+def convertSphericalToCartesian(r, theta, phi):
+    '''
+    Converts Spherical coordiantes to Cartesian.
+    Returns a dictionary.
+    '''
+    x = r * np.sin(phi) * np.cos(theta)
+    y = r * np.sin(phi) * np.sin(theta)
+    z = r * np.cos(phi)
+    return {'x' : x,
+            'y' : y,
+            'z' : z}
