@@ -1190,13 +1190,13 @@ def plotTemplateComparison(database, band, redshifts,
     #constants
     path = [hm + '/Dropbox/Research/Herschel/runs/ce01/',
             hm + '/Dropbox/Research/Herschel/runs/cp11/',
-            hm + '/Research/Herschel/runs/big_volume/']
-            #hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/',
+            #hm + '/Research/Herschel/runs/big_volume/']
+            hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/']
     out_folder = hm + '/Dropbox/Research/Herschel/plots/number_counts/'
     ar = [2.25, #10 times goods
           2.25, #10 times goods
-          0.225] #big volume
-          #2.25 #10 times goods
+          #0.225] #big volume
+          2.25] #10 times goods
     #obs data
     obs_data = hm + '/Dropbox/Research/Herschel/obs_data/'
     #GOODS observations, file given by Kuang
