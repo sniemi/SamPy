@@ -879,26 +879,26 @@ def plot_number_counts3(path, database, band, redshifts,
     if 'pacs100' in band:
         d = N.loadtxt(obs_data+'BertaResults', comments = '#', usecols = (0,1,2))
         b0 = ax.errorbar(d[:,0], d[:,1], yerr = d[:,1]*d[:,2], ls = 'None',
-                         marker = '*', mec = 'r', c = 'red')
+                         marker = '*', mec = 'c', c = 'c')
         a = N.loadtxt(obs_data+'Altieri100', comments = '#', usecols = (0,1,2,3))
         x = a[:,0]
         y = a[:,1]
         high = a[:,2] - y
         low = N.abs(a[:,3] - y)
         #yerr = [how much to take away from the y, how much to add to y]
-        a0 = ax.errorbar(x, y, yerr = [low, high], c='green', marker = 'D',
-                         ls = 'None', mec = 'green', lw = 1.3, ms = 3, mew = 1.3)            
+        a0 = ax.errorbar(x, y, yerr = [low, high], c='m', marker = 'D',
+                         ls = 'None', mec = 'm', lw = 1.3, ms = 3, mew = 1.3)
     if 'pacs160' in band:
         d = N.loadtxt(obs_data+'BertaResults', comments = '#', usecols = (0,3,4))
         b0 = ax.errorbar(d[:,0], d[:,1], yerr = d[:,1]*d[:,2], ls = 'None',
-                         marker = '*', mec = 'r', c = 'red')
+                         marker = '*', mec = 'c', c = 'c')
         a = N.loadtxt(obs_data+'Altieri160', comments = '#', usecols = (0,1,2,3))
         x = a[:,0]
         y = a[:,1]
         high = a[:,2] - y
         low = N.abs(a[:,3] - y)
-        a0 = ax.errorbar(x, y, yerr = [low, high], c='green', marker = 'D',
-                         ls = 'None', mec = 'green', lw = 1.3, ms = 3, mew = 1.3)
+        a0 = ax.errorbar(x, y, yerr = [low, high], c='m', marker = 'D',
+                         ls = 'None', mec = 'm', lw = 1.3, ms = 3, mew = 1.3)
     if 'spire250' in band:
         #Glenn et al results
         d = N.loadtxt(obs_data+'GlennResults250', comments = '#', usecols = (0,1,2,3))
@@ -907,7 +907,7 @@ def plot_number_counts3(path, database, band, redshifts,
         yp = 10**(d[:,2] + d[:,1]) * x**2.5 * 10**-3
         yl = 10**(d[:,1] - d[:,3]) * x**2.5 * 10**-3
         g0 = ax.errorbar(x, y, yerr = [y-yl, yp-y], ls = 'None',
-                         marker = '*', mec = 'r', c='red')    
+                         marker = '*', mec = 'c', c='c')
         #Clements et al results
         g = N.loadtxt(obs_data+'Clements250', comments = '#', usecols = (0, 5, 6))
         x = g[:,0]
@@ -923,7 +923,7 @@ def plot_number_counts3(path, database, band, redshifts,
         yp = 10**(d[:,2] + d[:,1]) * x**2.5 * 10**-3
         yl = 10**(d[:,1] - d[:,3]) * x**2.5 * 10**-3
         g0 = ax.errorbar(x, y, yerr = [y-yl, yp-y], ls = 'None',
-                         marker = '*', mec = 'r', c='red')
+                         marker = '*', mec = 'c', c='c')
         #Clements et al results
         g = N.loadtxt(obs_data+'Clements350', comments = '#', usecols = (0, 5, 6))
         x = g[:,0]
@@ -939,7 +939,7 @@ def plot_number_counts3(path, database, band, redshifts,
         yp = 10**(d[:,2] + d[:,1]) * x**2.5 * 10**-3
         yl = 10**(d[:,1] - d[:,3]) * x**2.5 * 10**-3
         g0 = ax.errorbar(x, y, yerr = [y-yl, yp-y], ls = 'None',
-                         marker = '*', mec = 'r', c='red')
+                         marker = '*', mec = 'c', c='c')
         #Clements et al results
         g = N.loadtxt(obs_data+'Clements500', comments = '#', usecols = (0, 5, 6))
         x = g[:,0]
@@ -1040,7 +1040,7 @@ def plot_number_counts3(path, database, band, redshifts,
                 data[:,2][msk] = 0.999
                 lw = y*data[:,2]
                 axs.errorbar(x, y, yerr=[lw, up], ls = 'None',
-                             marker = '*', mec = 'r', c='red')
+                             marker = '*', mec = 'c', c='c')
             if i == 1:
                 data = N.loadtxt(fl, usecols=(0, 4, 5, 6), comments = '#')
                 x = 10**data[:,0]
@@ -1050,7 +1050,7 @@ def plot_number_counts3(path, database, band, redshifts,
                 data[:,2][msk] = 0.999
                 lw = y*data[:,2]
                 axs.errorbar(x, y, yerr=[lw, up], ls = 'None',
-                             marker = '*', mec = 'r', c='red')
+                             marker = '*', mec = 'c', c='c')
             if i == 2:
                 data = N.loadtxt(fl, usecols=(0, 7, 8, 9), comments = '#')
                 x = 10**data[:,0]
@@ -1060,7 +1060,7 @@ def plot_number_counts3(path, database, band, redshifts,
                 data[:,2][msk] = 0.999
                 lw = y*data[:,2]
                 axs.errorbar(x, y, yerr=[lw, up], ls = 'None',
-                             marker = '*', mec = 'r', c='red')
+                             marker = '*', mec = 'c', c='c')
             if i == 3:
                 data = N.loadtxt(fl, usecols=(0, 10, 11, 12), comments = '#')
                 x = 10**data[:,0]
@@ -1070,30 +1070,30 @@ def plot_number_counts3(path, database, band, redshifts,
                 data[:,2][msk] = 0.999
                 lw = y*data[:,2]
                 axs.errorbar(x, y, yerr=[lw, up], ls = 'None',
-                             marker = '*', mec = 'r', c='red')
+                             marker = '*', mec = 'c', c='c')
                 
                 #get the GOODS results
-                obsGOODS = sex.se_catalog(goods)
-                msk = obsGOODS.f100_mjy > -1
-                print len(obsGOODS.f100_mjy[msk])
-                wghtsGOODS = N.zeros(len(obsGOODS.f100_mjy)) + 22.5
-                bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f100_mjy[msk],
-                                                         wgth = wghtsGOODS[msk], 
-                                                         mmax = 15,
-                                                         mmin = 1.1,
-                                                         nbins = 6)
-                xGOODS = 10**bGOODS
-                swp = 1. / (N.log(10)*xGOODS)
-                yGOODS = nGOODS*swp*(xGOODS**2.5)
-                msk = nuGOODS > 0
-                errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
-                upGOODS = yGOODS[msk] + errGOODS
-                lwGOODS = yGOODS[msk] - errGOODS
-                #plot GOODS
-                print xGOODS, yGOODS
-                gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
-                                   ls = 'None', mec = 'black',
-                                   c = 'black', marker = 'D')     
+#                obsGOODS = sex.se_catalog(goods)
+#                msk = obsGOODS.f100_mjy > -1
+#                print len(obsGOODS.f100_mjy[msk])
+#                wghtsGOODS = N.zeros(len(obsGOODS.f100_mjy)) + 22.5
+#                bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f100_mjy[msk],
+#                                                         wgth = wghtsGOODS[msk],
+#                                                         mmax = 15,
+#                                                         mmin = 1.1,
+#                                                         nbins = 6)
+#                xGOODS = 10**bGOODS
+#                swp = 1. / (N.log(10)*xGOODS)
+#                yGOODS = nGOODS*swp*(xGOODS**2.5)
+#                msk = nuGOODS > 0
+#                errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
+#                upGOODS = yGOODS[msk] + errGOODS
+#                lwGOODS = yGOODS[msk] - errGOODS
+#                #plot GOODS
+#                print xGOODS, yGOODS
+#                gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
+#                                   ls = 'None', mec = 'black',
+#                                   c = 'black', marker = 'D')
                 
                 
         if 'pacs160' in band:
@@ -1107,7 +1107,7 @@ def plot_number_counts3(path, database, band, redshifts,
                 data[:,2][msk] = 0.999
                 lw = y*data[:,2]
                 axs.errorbar(x, y, yerr=[lw, up], ls = 'None',
-                             marker = '*', mec = 'r', c='red')
+                             marker = '*', mec = 'c', c='c')
             if i == 1:
                 data = N.loadtxt(fl, usecols=(0, 4, 5, 6), comments = '#')
                 x = 10**data[:,0]
@@ -1117,7 +1117,7 @@ def plot_number_counts3(path, database, band, redshifts,
                 data[:,2][msk] = 0.999
                 lw = y*data[:,2]
                 axs.errorbar(x, y, yerr=[lw, up], ls = 'None',
-                            marker = '*', mec = 'r', c='red')
+                            marker = '*', mec = 'c', c='c')
             if i == 2:
                 data = N.loadtxt(fl, usecols=(0, 7, 8, 9), comments = '#')
                 x = 10**data[:,0]
@@ -1127,7 +1127,7 @@ def plot_number_counts3(path, database, band, redshifts,
                 data[:,2][msk] = 0.999
                 lw = y*data[:,2]
                 axs.errorbar(x, y, yerr=[lw, up], ls = 'None',
-                             marker = '*', mec = 'r', c='red')
+                             marker = '*', mec = 'c', c='c')
             if i == 3:
                 data = N.loadtxt(fl, usecols=(0, 10, 11, 12), comments = '#')
                 x = 10**data[:,0]
@@ -1137,29 +1137,29 @@ def plot_number_counts3(path, database, band, redshifts,
                 data[:,2][msk] = 0.999
                 lw = y*data[:,2]
                 axs.errorbar(x, y, yerr=[lw, up], ls = 'None',
-                             marker = '*', mec = 'r', c='red')
+                             marker = '*', mec = 'c', c='c')
                 #get the GOODS results
-                obsGOODS = sex.se_catalog(goods)
-                msk = obsGOODS.f160_mjy > -1
-                print len(obsGOODS.f160_mjy[msk])
-                wghtsGOODS = N.zeros(len(obsGOODS.f160_mjy)) + 22.5
-                bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f160_mjy[msk],
-                                                         wgth = wghtsGOODS[msk], 
-                                                         mmax = 30,
-                                                         mmin = 4,
-                                                         nbins = 6)
-                xGOODS = 10**bGOODS
-                swp = 1. / (N.log(10)*xGOODS)
-                yGOODS = nGOODS*swp*(xGOODS**2.5)
-                msk = nuGOODS > 0
-                errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
-                upGOODS = yGOODS[msk] + errGOODS
-                lwGOODS = yGOODS[msk] - errGOODS
-                #plot GOODS
-                print xGOODS, yGOODS
-                gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
-                                   ls = 'None', mec = 'black',
-                                   c = 'black', marker = 'D')  
+#                obsGOODS = sex.se_catalog(goods)
+#                msk = obsGOODS.f160_mjy > -1
+#                print len(obsGOODS.f160_mjy[msk])
+#                wghtsGOODS = N.zeros(len(obsGOODS.f160_mjy)) + 22.5
+#                bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f160_mjy[msk],
+#                                                         wgth = wghtsGOODS[msk],
+#                                                         mmax = 30,
+#                                                         mmin = 4,
+#                                                         nbins = 6)
+#                xGOODS = 10**bGOODS
+#                swp = 1. / (N.log(10)*xGOODS)
+#                yGOODS = nGOODS*swp*(xGOODS**2.5)
+#                msk = nuGOODS > 0
+#                errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
+#                upGOODS = yGOODS[msk] + errGOODS
+#                lwGOODS = yGOODS[msk] - errGOODS
+#                #plot GOODS
+#                print xGOODS, yGOODS
+#                gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
+#                                   ls = 'None', mec = 'black',
+#                                   c = 'black', marker = 'D')
         
         #set scales
         axs.set_xscale('log')
@@ -1182,21 +1182,21 @@ def plot_number_counts3(path, database, band, redshifts,
     P.savefig(out_folder+'numbercounts3_%s.ps' % band)
     P.close()
 
-def plotTemplateComparison(database, band, redshifts, out_folder,
+def plotTemplateComparison(database, band, redshifts,
                            ymin = 10**3, ymax = 2*10**6,
                            xmin = 0.5, xmax = 100,
                            nbins = 15, sigma = 3.0):
     hm = os.getenv('HOME')
     #constants
-    path = [#hm + '/Research/Herschel/runs/big_volume/',
-            hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/',
-            hm + '/Dropbox/Research/Herschel/runs/ce01/',
-            hm + '/Dropbox/Research/Herschel/runs/cp11/']
+    path = [hm + '/Dropbox/Research/Herschel/runs/ce01/',
+            hm + '/Dropbox/Research/Herschel/runs/cp11/',
+            hm + '/Research/Herschel/runs/big_volume/']
+            #hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/',
     out_folder = hm + '/Dropbox/Research/Herschel/plots/number_counts/'
-    ar = [#0.225, #big volume
+    ar = [2.25, #10 times goods
           2.25, #10 times goods
-          2.25, #10 times goods
-          2.25] #10 times goods
+          0.225] #big volume
+          #2.25 #10 times goods
     #obs data
     obs_data = hm + '/Dropbox/Research/Herschel/obs_data/'
     #GOODS observations, file given by Kuang
@@ -1220,14 +1220,14 @@ def plotTemplateComparison(database, band, redshifts, out_folder,
         wave = re.search('\d\d', band).group()
 
     #make the figure
-    fig = P.figure(figsize = (13,13))
+    fig = P.figure()#figsize = (13,13))
     fig.subplots_adjust(wspace = 0.0, hspace = 0.0,
                         left = 0.09, bottom = 0.1,
                         right = 0.98, top = 0.99)
     ax = P.subplot(rows, columns, 1)
     
     #add annotation
-    ax.annotate('Total', (0.5, 0.9), xycoords='axes fraction',
+    ax.annotate('Total', (0.25, 0.88), xycoords='axes fraction',
                 ha = 'center')
 
     ttle = []
@@ -1275,26 +1275,26 @@ def plotTemplateComparison(database, band, redshifts, out_folder,
         if 'pacs100' in band:
             d = N.loadtxt(obs_data+'BertaResults', comments = '#', usecols = (0,1,2))
             b0 = ax.errorbar(d[:,0], d[:,1], yerr = d[:,1]*d[:,2], ls = 'None',
-                             marker = '*', mec = 'r', c = 'red')
+                             marker = '*', mec = 'c', c = 'c')
             a = N.loadtxt(obs_data+'Altieri100', comments = '#', usecols = (0,1,2,3))
             x = a[:,0]
             y = a[:,1]
             high = a[:,2] - y
             low = N.abs(a[:,3] - y)
             #yerr = [how much to take away from the y, how much to add to y]
-            a0 = ax.errorbar(x, y, yerr = [low, high], c='green', marker = 'D',
-                             ls = 'None', mec = 'green', lw = 1.3, ms = 3, mew = 1.3)            
+            a0 = ax.errorbar(x, y, yerr = [low, high], c='m', marker = 'D',
+                             ls = 'None', mec = 'm', lw = 1.3, ms = 3, mew = 1.3)
         if 'pacs160' in band:
             d = N.loadtxt(obs_data+'BertaResults', comments = '#', usecols = (0,3,4))
             b0 = ax.errorbar(d[:,0], d[:,1], yerr = d[:,1]*d[:,2], ls = 'None',
-                             marker = '*', mec = 'r', c = 'red')
+                             marker = '*', mec = 'c', c = 'c')
             a = N.loadtxt(obs_data+'Altieri160', comments = '#', usecols = (0,1,2,3))
             x = a[:,0]
             y = a[:,1]
             high = a[:,2] - y
             low = N.abs(a[:,3] - y)
-            a0 = ax.errorbar(x, y, yerr = [low, high], c='green', marker = 'D',
-                             ls = 'None', mec = 'green', lw = 1.3, ms = 3, mew = 1.3)
+            a0 = ax.errorbar(x, y, yerr = [low, high], c='m', marker = 'D',
+                             ls = 'None', mec = 'm', lw = 1.3, ms = 3, mew = 1.3)
         if 'spire250' in band:
             #Glenn et al results
             d = N.loadtxt(obs_data+'GlennResults250', comments = '#', usecols = (0,1,2,3))
@@ -1303,7 +1303,7 @@ def plotTemplateComparison(database, band, redshifts, out_folder,
             yp = 10**(d[:,2] + d[:,1]) * x**2.5 * 10**-3
             yl = 10**(d[:,1] - d[:,3]) * x**2.5 * 10**-3
             g0 = ax.errorbar(x, y, yerr = [y-yl, yp-y], ls = 'None',
-                             marker = '*', mec = 'r', c='red')    
+                             marker = '*', mec = 'c', c='c')
             #Clements et al results
             g = N.loadtxt(obs_data+'Clements250', comments = '#', usecols = (0, 5, 6))
             x = g[:,0]
@@ -1319,7 +1319,7 @@ def plotTemplateComparison(database, band, redshifts, out_folder,
             yp = 10**(d[:,2] + d[:,1]) * x**2.5 * 10**-3
             yl = 10**(d[:,1] - d[:,3]) * x**2.5 * 10**-3
             g0 = ax.errorbar(x, y, yerr = [y-yl, yp-y], ls = 'None',
-                             marker = '*', mec = 'r', c='red')
+                             marker = '*', mec = 'c', c='c')
             #Clements et al results
             g = N.loadtxt(obs_data+'Clements350', comments = '#', usecols = (0, 5, 6))
             x = g[:,0]
@@ -1335,7 +1335,7 @@ def plotTemplateComparison(database, band, redshifts, out_folder,
             yp = 10**(d[:,2] + d[:,1]) * x**2.5 * 10**-3
             yl = 10**(d[:,1] - d[:,3]) * x**2.5 * 10**-3
             g0 = ax.errorbar(x, y, yerr = [y-yl, yp-y], ls = 'None',
-                             marker = '*', mec = 'r', c='red')
+                             marker = '*', mec = 'c', c='c')
             #Clements et al results
             g = N.loadtxt(obs_data+'Clements500', comments = '#', usecols = (0, 5, 6))
             x = g[:,0]
@@ -1359,7 +1359,7 @@ def plotTemplateComparison(database, band, redshifts, out_folder,
         elif 'cp11' in p:
             ttle.append('CP11')
         else:
-            ttle.append('Rieke+09')
+            ttle.append('R09')
                 
         #redshift limited plots
         for i, red in enumerate(redshifts):
@@ -1406,7 +1406,7 @@ def plotTemplateComparison(database, band, redshifts, out_folder,
                              color = color)
     
             #add annotation
-            axs.annotate(rtitle, (0.5, 0.9), xycoords='axes fraction',
+            axs.annotate(rtitle, (0.25, 0.88), xycoords='axes fraction',
                          ha = 'center')
     
             #add observational constrains
@@ -1421,7 +1421,7 @@ def plotTemplateComparison(database, band, redshifts, out_folder,
                     data[:,2][msk] = 0.999
                     lw = y*data[:,2]
                     axs.errorbar(x, y, yerr=[lw, up], ls = 'None',
-                                 marker = '*', mec = 'r', c='red')
+                                 marker = '*', mec = 'c', c='c')
                 if i == 1:
                     data = N.loadtxt(fl, usecols=(0, 4, 5, 6), comments = '#')
                     x = 10**data[:,0]
@@ -1431,7 +1431,7 @@ def plotTemplateComparison(database, band, redshifts, out_folder,
                     data[:,2][msk] = 0.999
                     lw = y*data[:,2]
                     axs.errorbar(x, y, yerr=[lw, up], ls = 'None',
-                                 marker = '*', mec = 'r', c='red')
+                                 marker = '*', mec = 'c', c='c')
                 if i == 2:
                     data = N.loadtxt(fl, usecols=(0, 7, 8, 9), comments = '#')
                     x = 10**data[:,0]
@@ -1441,7 +1441,7 @@ def plotTemplateComparison(database, band, redshifts, out_folder,
                     data[:,2][msk] = 0.999
                     lw = y*data[:,2]
                     axs.errorbar(x, y, yerr=[lw, up], ls = 'None',
-                                 marker = '*', mec = 'r', c='red')
+                                 marker = '*', mec = 'c', c='c')
                 if i == 3:
                     data = N.loadtxt(fl, usecols=(0, 10, 11, 12), comments = '#')
                     x = 10**data[:,0]
@@ -1451,30 +1451,30 @@ def plotTemplateComparison(database, band, redshifts, out_folder,
                     data[:,2][msk] = 0.999
                     lw = y*data[:,2]
                     axs.errorbar(x, y, yerr=[lw, up], ls = 'None',
-                                 marker = '*', mec = 'r', c='red')
+                                 marker = '*', mec = 'c', c='c')
                     
-                    #get the GOODS results
-                    obsGOODS = sex.se_catalog(goods)
-                    msk = obsGOODS.f100_mjy > -1
-                    #print len(obsGOODS.f100_mjy[msk])
-                    wghtsGOODS = N.zeros(len(obsGOODS.f100_mjy)) + 22.5
-                    bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f100_mjy[msk],
-                                                             wgth = wghtsGOODS[msk], 
-                                                             mmax = 15,
-                                                             mmin = 1.1,
-                                                             nbins = 6)
-                    xGOODS = 10**bGOODS
-                    swp = 1. / (N.log(10)*xGOODS)
-                    yGOODS = nGOODS*swp*(xGOODS**2.5)
-                    msk = nuGOODS > 0
-                    errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
-                    upGOODS = yGOODS[msk] + errGOODS
-                    lwGOODS = yGOODS[msk] - errGOODS
-                    #plot GOODS
-                    #print xGOODS, yGOODS
-                    gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
-                                       ls = 'None', mec = 'black',
-                                       c = 'black', marker = 'D')                  
+#                    #get the GOODS results
+#                    obsGOODS = sex.se_catalog(goods)
+#                    msk = obsGOODS.f100_mjy > -1
+#                    #print len(obsGOODS.f100_mjy[msk])
+#                    wghtsGOODS = N.zeros(len(obsGOODS.f100_mjy)) + 22.5
+#                    bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f100_mjy[msk],
+#                                                             wgth = wghtsGOODS[msk],
+#                                                             mmax = 15,
+#                                                             mmin = 1.1,
+#                                                             nbins = 6)
+#                    xGOODS = 10**bGOODS
+#                    swp = 1. / (N.log(10)*xGOODS)
+#                    yGOODS = nGOODS*swp*(xGOODS**2.5)
+#                    msk = nuGOODS > 0
+#                    errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
+#                    upGOODS = yGOODS[msk] + errGOODS
+#                    lwGOODS = yGOODS[msk] - errGOODS
+#                    #plot GOODS
+#                    #print xGOODS, yGOODS
+#                    gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
+#                                       ls = 'None', mec = 'black',
+#                                       c = 'black', marker = 'D')
                     
             if 'pacs160' in band:
                 fl = obs_data+'data_160um_4_Sami_Niemi_20101126.txt'
@@ -1487,7 +1487,7 @@ def plotTemplateComparison(database, band, redshifts, out_folder,
                     data[:,2][msk] = 0.999
                     lw = y*data[:,2]
                     axs.errorbar(x, y, yerr=[lw, up], ls = 'None',
-                                 marker = '*', mec = 'r', c='red')
+                                 marker = '*', mec = 'c', c='c')
                 if i == 1:
                     data = N.loadtxt(fl, usecols=(0, 4, 5, 6), comments = '#')
                     x = 10**data[:,0]
@@ -1497,7 +1497,7 @@ def plotTemplateComparison(database, band, redshifts, out_folder,
                     data[:,2][msk] = 0.999
                     lw = y*data[:,2]
                     axs.errorbar(x, y, yerr=[lw, up], ls = 'None',
-                                marker = '*', mec = 'r', c='red')
+                                marker = '*', mec = 'c', c='c')
                 if i == 2:
                     data = N.loadtxt(fl, usecols=(0, 7, 8, 9), comments = '#')
                     x = 10**data[:,0]
@@ -1507,7 +1507,7 @@ def plotTemplateComparison(database, band, redshifts, out_folder,
                     data[:,2][msk] = 0.999
                     lw = y*data[:,2]
                     axs.errorbar(x, y, yerr=[lw, up], ls = 'None',
-                                 marker = '*', mec = 'r', c='red')
+                                 marker = '*', mec = 'c', c='c')
                 if i == 3:
                     data = N.loadtxt(fl, usecols=(0, 10, 11, 12), comments = '#')
                     x = 10**data[:,0]
@@ -1517,90 +1517,90 @@ def plotTemplateComparison(database, band, redshifts, out_folder,
                     data[:,2][msk] = 0.999
                     lw = y*data[:,2]
                     axs.errorbar(x, y, yerr=[lw, up], ls = 'None',
-                                 marker = '*', mec = 'r', c='red')
-                    #get the GOODS results
-                    obsGOODS = sex.se_catalog(goods)
-                    msk = obsGOODS.f160_mjy > -1
-                    wghtsGOODS = N.zeros(len(obsGOODS.f160_mjy)) + 22.5
-                    bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f160_mjy[msk],
-                                                             wgth = wghtsGOODS[msk], 
-                                                             mmax = 30,
-                                                             mmin = 4,
-                                                             nbins = 6)
-                    xGOODS = 10**bGOODS
-                    swp = 1. / (N.log(10)*xGOODS)
-                    yGOODS = nGOODS*swp*(xGOODS**2.5)
-                    msk = nuGOODS > 0
-                    errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
-                    upGOODS = yGOODS[msk] + errGOODS
-                    lwGOODS = yGOODS[msk] - errGOODS
-                    #plot GOODS
-                    gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
-                                       ls = 'None', mec = 'black',
-                                       c = 'black', marker = 'D')
-            if 'spire250' in band and i == 2:
-                #get the GOODS results
-                obsGOODS = sex.se_catalog(goods)
-                msk = obsGOODS.f250_mjy > -1
-                wghtsGOODS = N.zeros(len(obsGOODS.f250_mjy)) + 22.5
-                bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f250_mjy[msk],
-                                                         wgth = wghtsGOODS[msk], 
-                                                         mmax = 40.0,
-                                                         mmin = 4.0,
-                                                         nbins = 5)
-                xGOODS = 10**bGOODS
-                swp = 1. / (N.log(10)*xGOODS)
-                yGOODS = nGOODS*swp*(xGOODS**2.5)
-                msk = nuGOODS > 0
-                errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
-                upGOODS = yGOODS[msk] + errGOODS
-                lwGOODS = yGOODS[msk] - errGOODS
-                #plot GOODS
-                gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
-                                   ls = 'None', mec = 'black',
-                                   c = 'black', marker = 'D')  
-            if 'spire350' in band and i == 2:
-                #get the GOODS results
-                obsGOODS = sex.se_catalog(goods)
-                msk = obsGOODS.f350_mjy > -1
-                wghtsGOODS = N.zeros(len(obsGOODS.f350_mjy)) + 22.5
-                bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f350_mjy[msk],
-                                                         wgth = wghtsGOODS[msk], 
-                                                         mmax = 66.0,
-                                                         mmin = 6.0,
-                                                         nbins = 4)
-                xGOODS = 10**bGOODS
-                swp = 1. / (N.log(10)*xGOODS)
-                yGOODS = nGOODS*swp*(xGOODS**2.5)
-                msk = nuGOODS > 0
-                errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
-                upGOODS = yGOODS[msk] + errGOODS
-                lwGOODS = yGOODS[msk] - errGOODS
-                #plot GOODS
-                gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
-                                   ls = 'None', mec = 'black',
-                                   c = 'black', marker = 'D')
-            if 'spire500' in band and i == 2:
-                #get the GOODS results
-                obsGOODS = sex.se_catalog(goods)
-                msk = obsGOODS.f500_mjy > -1
-                wghtsGOODS = N.zeros(len(obsGOODS.f500_mjy)) + 22.5
-                bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f500_mjy[msk],
-                                                         wgth = wghtsGOODS[msk], 
-                                                         mmax = 60.0,
-                                                         mmin = 5.0,
-                                                         nbins = 3)
-                xGOODS = 10**bGOODS
-                swp = 1. / (N.log(10)*xGOODS)
-                yGOODS = nGOODS*swp*(xGOODS**2.5)
-                msk = nuGOODS > 0
-                errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
-                upGOODS = yGOODS[msk] + errGOODS
-                lwGOODS = yGOODS[msk] - errGOODS
-                #plot GOODS
-                gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
-                                   ls = 'None', mec = 'black',
-                                   c = 'black', marker = 'D')  
+                                 marker = '*', mec = 'c', c='c')
+#                    #get the GOODS results
+#                    obsGOODS = sex.se_catalog(goods)
+#                    msk = obsGOODS.f160_mjy > -1
+#                    wghtsGOODS = N.zeros(len(obsGOODS.f160_mjy)) + 22.5
+#                    bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f160_mjy[msk],
+#                                                             wgth = wghtsGOODS[msk],
+#                                                             mmax = 30,
+#                                                             mmin = 4,
+#                                                             nbins = 6)
+#                    xGOODS = 10**bGOODS
+#                    swp = 1. / (N.log(10)*xGOODS)
+#                    yGOODS = nGOODS*swp*(xGOODS**2.5)
+#                    msk = nuGOODS > 0
+#                    errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
+#                    upGOODS = yGOODS[msk] + errGOODS
+#                    lwGOODS = yGOODS[msk] - errGOODS
+#                    #plot GOODS
+#                    gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
+#                                       ls = 'None', mec = 'black',
+#                                       c = 'black', marker = 'D')
+#            if 'spire250' in band and i == 2:
+#                #get the GOODS results
+#                obsGOODS = sex.se_catalog(goods)
+#                msk = obsGOODS.f250_mjy > -1
+#                wghtsGOODS = N.zeros(len(obsGOODS.f250_mjy)) + 22.5
+#                bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f250_mjy[msk],
+#                                                         wgth = wghtsGOODS[msk],
+#                                                         mmax = 40.0,
+#                                                         mmin = 4.0,
+#                                                         nbins = 5)
+#                xGOODS = 10**bGOODS
+#                swp = 1. / (N.log(10)*xGOODS)
+#                yGOODS = nGOODS*swp*(xGOODS**2.5)
+#                msk = nuGOODS > 0
+#                errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
+#                upGOODS = yGOODS[msk] + errGOODS
+#                lwGOODS = yGOODS[msk] - errGOODS
+#                #plot GOODS
+#                gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
+#                                   ls = 'None', mec = 'black',
+#                                   c = 'black', marker = 'D')
+#            if 'spire350' in band and i == 2:
+#                #get the GOODS results
+#                obsGOODS = sex.se_catalog(goods)
+#                msk = obsGOODS.f350_mjy > -1
+#                wghtsGOODS = N.zeros(len(obsGOODS.f350_mjy)) + 22.5
+#                bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f350_mjy[msk],
+#                                                         wgth = wghtsGOODS[msk],
+#                                                         mmax = 66.0,
+#                                                         mmin = 6.0,
+#                                                         nbins = 4)
+#                xGOODS = 10**bGOODS
+#                swp = 1. / (N.log(10)*xGOODS)
+#                yGOODS = nGOODS*swp*(xGOODS**2.5)
+#                msk = nuGOODS > 0
+#                errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
+#                upGOODS = yGOODS[msk] + errGOODS
+#                lwGOODS = yGOODS[msk] - errGOODS
+#                #plot GOODS
+#                gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
+#                                   ls = 'None', mec = 'black',
+#                                   c = 'black', marker = 'D')
+#            if 'spire500' in band and i == 2:
+#                #get the GOODS results
+#                obsGOODS = sex.se_catalog(goods)
+#                msk = obsGOODS.f500_mjy > -1
+#                wghtsGOODS = N.zeros(len(obsGOODS.f500_mjy)) + 22.5
+#                bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f500_mjy[msk],
+#                                                         wgth = wghtsGOODS[msk],
+#                                                         mmax = 60.0,
+#                                                         mmin = 5.0,
+#                                                         nbins = 3)
+#                xGOODS = 10**bGOODS
+#                swp = 1. / (N.log(10)*xGOODS)
+#                yGOODS = nGOODS*swp*(xGOODS**2.5)
+#                msk = nuGOODS > 0
+#                errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
+#                upGOODS = yGOODS[msk] + errGOODS
+#                lwGOODS = yGOODS[msk] - errGOODS
+#                #plot GOODS
+#                gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
+#                                   ls = 'None', mec = 'black',
+#                                   c = 'black', marker = 'D')
             
             #set scales
             axs.set_xscale('log')
@@ -1637,17 +1637,17 @@ def plotTemplateComparison(database, band, redshifts, out_folder,
         if p == path[-1]:
             if 'pacs100' in band or 'pacs160' in band:
                 sline = '%i$\sigma$ errors' % sigma
-                P.legend((sss[0], sss[1], sss[2], b0[0], a0[0], gds), 
-                         (ttle[0], ttle[1], ttle[2], 'Berta et al. 2010', 'Altieri et al. 2010', 'GOODS-N'), 
+                P.legend((sss[0], sss[1], sss[2], b0[0], a0[0]),#, gds),
+                         (ttle[0], ttle[1], ttle[2], 'Berta et al. 2010', 'Altieri et al. 2010'),#, 'GOODS-N'),
                           'upper right', shadow = True, fancybox = True, numpoints = 1)
             if 'spire' in band:
                 sline = '%i$\sigma$ errors' % sigma
-                P.legend((sss[0], sss[1], sss[2], g0[0], c0[0], gds),
-                         (ttle[0], ttle[1], ttle[2], 'Glenn et al. 2010', 'Clements et al. 2010', 'GOODS-N'), 
+                P.legend((sss[0], sss[1], sss[2], g0[0], c0[0]),#, gds),
+                         (ttle[0], ttle[1], ttle[2], 'Glenn et al. 2010', 'Clements et al. 2010'),#, 'GOODS-N'),
                           'upper right', shadow = True, fancybox = True, numpoints = 1)
             
     #save figure
-    P.savefig(out_folder+'numbercountComparison_%s.png' % band)
+    P.savefig(out_folder+'numbercountComparison_%s.ps' % band)
     P.close()
 
 if __name__ == '__main__':
@@ -1656,9 +1656,9 @@ if __name__ == '__main__':
     hm = os.getenv('HOME')
 
     #modify these as needed
-    #path = hm + '/Research/Herschel/runs/big_volume/'
+    path = hm + '/Research/Herschel/runs/big_volume/'
     #path = hm + '/Dropbox/Research/Herschel/runs/ce01/'
-    path = hm + '/Dropbox/Research/Herschel/runs/cp11/'
+    #path = hm + '/Dropbox/Research/Herschel/runs/cp11/'
     #out_folder = hm + '/Dropbox/Research/Herschel/plots/number_counts/big/'
     #out_folder = hm + '/Dropbox/Research/Herschel/plots/number_counts/ce01/'
     out_folder = hm + '/Dropbox/Research/Herschel/plots/number_counts/cp11/'
@@ -1716,10 +1716,10 @@ if __name__ == '__main__':
 #                                xmin = 0.1, xmax = 500,
 #                                ymin = 1.5*10**2, ymax = 6*10**5,
 #                                nbins = 23, sigma = 5.0, area = area)
-            plotTemplateComparison(database, bd, redshifts, out_folder,
+            plotTemplateComparison(database, bd, redshifts,
                                    xmin = 0.5, xmax = 500,
-                                   ymin = 2e2, ymax = 6*10**5,
-                                   nbins = 19, sigma = 5.0)
+                                   ymin = 2e2, ymax = 5*10**5,
+                                   nbins = 17, sigma = 1.0)
         if 'spire' in bd:
             print 'plotting ', bd
 #            plot_number_counts2(path, database, bd, redshifts2,
@@ -1728,8 +1728,8 @@ if __name__ == '__main__':
 #                                ymin = 10**2, ymax = 3*10**6,
 #                                nbins = 15, sigma = 5.0, area = area)#,
 #                                #write_out = True)
-            plotTemplateComparison(database, bd, redshifts2, out_folder,
+            plotTemplateComparison(database, bd, redshifts2,
                                    xmin = 0.5, xmax = 1800,
-                                   ymin = 7e2, ymax = 9e5,
-                                   nbins = 11, sigma = 5.0)
+                                   ymin = 7e2, ymax = 8e5,
+                                   nbins = 11, sigma = 1.0)
     print 'All done...'

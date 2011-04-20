@@ -41,16 +41,8 @@ class MySQLdbSMN():
         return result
 
 if __name__ == '__main__':
-    '''Just to test the module'''
-    import sys
-
-    SMNmods = '/Users/Sammy/Python/'
-    sys.path.append(SMNmods)
-    
-    import sami.MySQLdbSMN as DB
-    
     sql = 'select mvir, np from FieldEllipticals where type = 0 order by galaxyId'
-    db = DB.MySQLdbSMN(sql, 'FieldEllipticalStudy')
+    db = MySQLdbSMN(sql, 'FieldEllipticalStudy')
     dt = db.fetchdata()
     
     import numpy as N
