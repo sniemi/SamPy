@@ -23,7 +23,7 @@ __author__ = 'Sami-Matias Niemi'
 __version__ = 0.01
 
 
-def createAssociationDB(grismList, directDict,
+def createAssociationDB(grism, direct, match,
                         output ='ACSTEST.db'):
     '''
     Email from Martin Kuemmel:
@@ -88,13 +88,28 @@ def createAssociationDB(grismList, directDict,
     ('J6FL7YIDQ', 500.0, 0.97062910394576651),
     ('J6FL8YKRQ', 500.0, 1.011511942107943),
     ('J8WQ91E7Q', 500.0, 0.89063763040941479)]})'''
-    out = {}
-    tuple = (grismList,
-             directDict)
-    out['ACSTEST'] = tuple
-    print out
+    dc = {}
+    for i, key in enumerate(match):
+        nm = 'ACSTEST%i' %(i+1)
+        tmp = []
+        for value in match[key]:
+            tmp.append((value.split('_')[0].upper(),
+                        grism[value][0],
+                        key.split('_')[0].upper(),
+                        0.0))
+
+        dirdata = {}
+        #this next one fakes and puts the same file twice!
+        dirdata[direct[key][1]] = [(key.split('_')[0].upper(),
+                                   direct[key][0], 1.0),
+                                   (key.split('_')[0].upper(),
+                                   direct[key][0], 1.0)]
+
+        dc[nm] = (tmp, dirdata)
+
+    #pickle the stuff to a file
     fh = open(output, 'w')
-    cPickle.dump(out, fh)
+    cPickle.dump(dc, fh)
     fh.close()
 
 
@@ -215,10 +230,10 @@ if __name__ == '__main__':
     match = matchDirectImageToGrismImage(direct, grism)
 
     #make Direct Image dictionary
-    directDict = makeDirectImageDictionary(direct, match)
+    #directDict = makeDirectImageDictionary(direct, match)
 
     #make a list of grism images
-    grismList = makeGrismImageList(grism, match)
+    #grismList = makeGrismImageList(grism, match)
 
     #finally make the association DB
-    createAssociationDB(grismList, directDict)
+    createAssociationDB(grism, direct, match)
