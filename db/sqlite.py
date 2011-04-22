@@ -7,10 +7,8 @@ This file contains SQLite3 related functions.
 @version: 0.1
 '''
 import sqlite3
-import glob as g
 import numpy as N
-#Sami's repor
-import smnIO.sextutils as su
+#Sami's repository
 import astronomy.conversions as conv
 
 
@@ -53,9 +51,9 @@ def get_data_sqlitePowerTen(path, db, query):
     conn.create_function('Pow10', 1, toPowerTen)
     c = conn.cursor()
     c.execute(query)
-    data = c.fetchall()
+    data = N.array(c.fetchall())
     c.close()
-    return N.array(data)
+    return data
 
 def get_data_sqliteSMNfunctions(path, db, query):
     '''
@@ -73,9 +71,9 @@ def get_data_sqliteSMNfunctions(path, db, query):
     conn.create_function('SSFR', 2, SSFR)  
     c = conn.cursor()
     c.execute(query)
-    data = c.fetchall()
+    data = N.array(c.fetchall())
     c.close()
-    return N.array(data)
+    return data
 
 
 def get_data_sqlite(path, db, query):
@@ -91,9 +89,9 @@ def get_data_sqlite(path, db, query):
     conn = sqlite3.connect(path + db)
     c = conn.cursor()
     c.execute(query)
-    data = c.fetchall()
+    data = N.array(c.fetchall())
     c.close()
-    return N.array(data)
+    return data
 
 def parseColumnNamesSAMTables(filename,
                               commentchar = '#',
