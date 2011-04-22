@@ -1,8 +1,10 @@
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 import numpy as np
+from astLib import astCoords
+from cosmocalc import cosmocalc
 # from Sami's repo
-import astronomy.randomizers as rd
+import astronomy.randomizers as rand
 import astronomy.conversions as conv
 
 __author__ = 'Sami-Matias Niemi'
@@ -12,7 +14,7 @@ if __name__ == '__main__':
     #number of random points
     points = 1000
     # get the random values
-    rds = rd.randomUnitSphere(points)
+    rds = rand.randomUnitSphere(points)
     # convert them to Cartesian coord
     rd = conv.convertSphericalToCartesian(1,
                                           rds['theta'],
@@ -52,4 +54,67 @@ if __name__ == '__main__':
     ax.set_ylim3d(min, max)
     ax.set_zlim3d(min, max)
 
-    plt.show()
+    #plt.show()
+
+
+    #calculate a test case
+    conversion = 0.000277777778 # degree to arcsecond
+    #random distance between z = 0 and 5
+    z = np.random.rand() * 5.0
+    #random separation of the main galaxy and the subhalo
+    physical_distance = np.random.rand() * 1e3 #in kpc
+    #get the angular diameter distance to the galaxy
+    dd1 = cosmocalc(z, 71.0, 0.28)['PS_kpc'] #in kpc / arc seconds
+    dd = (physical_distance / dd1) * conversion # to degrees
+    # RA and DEC of the main galaxy, first one in GOODS south
+    ra_main = 52.904892 #in degrees
+    dec_main = -27.757082 #in degrees
+    # get the random position
+    rds = rand.randomUnitSphere(points=1)
+    # convert the position to Cartesian coord
+    # when dd is the radius of the sphere coordinates
+    # the dd is in units of degrees here so the results
+    # are also in degrees.
+    rd = conv.convertSphericalToCartesian(dd,
+                                          rds['theta'],
+                                          rds['phi'])
+
+    # Make the assumption that x is towards the observer
+    # z is north and y is west. Now if we assume that our z and y
+    # are Standard Coordinates, i.e., the projection of the RA and DEC
+    # of an object onto the tangent plane of the sky. We can now
+    # assume that the y coordinate is aligned with RA and the z coordinate
+    # is aligned with DEC. The origin of this system is at the tangent point
+    # in the dark matter halo.
+    # Poor man's solution to the problem would be:
+    new_ra = ra_main - (rd['y'][0]/np.cos(rd['z'][0]))
+    new_dec = dec_main - rd['z'][0]
+    # However, this only works if one is away from the pole.
+    # More general solution can be derived using spherical geometry:
+    data = {}
+    data['RA'] = ra_main
+    data['DEC'] = dec_main
+    data['X'] = rd['y'][0]
+    data['Y'] = rd['z'][0]
+    result = conv.RAandDECfromStandardCoordinates(data)
+
+
+    #print the output
+    print 'Redshift of the galaxy is %.3f while the subhaloes distance is %0.2f kpc'% (z, physical_distance)
+    print '\nCoordinates of the main halo galaxy are (RA and DEC):'
+    print '%.7f  %.7f' % (ra_main, dec_main)
+    print astCoords.decimal2hms(ra_main, ':'), astCoords.decimal2dms(dec_main, ':')
+    print '\nCoordinates for the subhalo galaxy are (RA and DEC):'
+    print '%.7f  %.7f' % (new_ra, new_dec)
+    print astCoords.decimal2hms(new_ra, ':'), astCoords.decimal2dms(new_dec, ':')
+    print 'or when using more accurate technique'
+    print astCoords.decimal2hms(result['RA'], ':'), astCoords.decimal2dms(result['DEC'], ':')
+    #print 'Shift in RA and DEC [degrees]:'
+    #print  rd['y'][0], (rd['z'][0]/np.cos(rd['z'][0]))
+    print '\nShift in RA and DEC [seconds]:'
+    print  rd['y'][0]/np.cos(rd['z'][0])/conversion, rd['z'][0]/conversion
+    print 'or again with the better method:'
+    print (ra_main - result['RA'])/conversion, (dec_main - result['DEC'])/conversion
+    print '\nDistance inferred from the coordinates vs the real distance vs x'
+    print np.sqrt((rd['y'][0]/conversion)**2 + ((rd['z'][0]/np.cos(rd['z'][0]))/conversion)**2) * dd1, \
+          physical_distance, rd['x'][0]

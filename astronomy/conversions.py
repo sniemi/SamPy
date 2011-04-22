@@ -134,3 +134,71 @@ def convertSphericalToCartesian(r, theta, phi):
     return {'x' : x,
             'y' : y,
             'z' : z}
+
+def RAandDECfromStandardCoordinates(data):
+    '''
+    Converts Standard Coordinates on tangent plane
+    to RA and DEC on the sky.
+    http://gtn.sonoma.edu/data_reduction/astrometry.php
+    '''
+    out = {}
+    xi = data['X']   #normally use CD matrix, this is cheating
+    eta = -data['Y'] #normally use CD matrix, this is cheating
+    xi = np.deg2rad(xi)
+    eta = np.deg2rad(eta)
+    ra0 = np.deg2rad(data['RA'])
+    dec0 = np.deg2rad(data['DEC'])
+
+    ra = np.arctan2(xi, np.cos(dec0) - eta*np.sin(dec0)) + ra0
+    dec = np.arctan2(eta*np.cos(dec0) + np.sin(dec0),
+                    np.sqrt((np.cos(dec0) - eta*np.sin(dec0))**2 + xi**2))
+
+    out['RA'] = np.rad2deg(ra)
+    out['DEC'] = np.rad2deg(dec)
+
+    return out
+
+def angularDiameterDistance(z,
+                            H0=70,
+                            WM=0.28):
+    '''
+    The angular diameter distance DA is defined as the ratio of
+    an object's physical transverse size to its angular size
+    (in radians). It is used to convert angular separations in
+    telescope images into proper separations at the source. It
+    is famous for not increasing indefinitely as z to inf; it turns
+    over at z about 1 and thereafter more distant objects actually
+    appear larger in angular size.
+    '''
+    return cosmocalc(z, H0, WM)['DA']
+
+def degTodms(ideg):
+    if (ideg < 0):
+       s = -1
+    else:
+       s = 1
+    ideg = abs(ideg)
+    deg = int(ideg)+0.
+    m = 60.*(ideg-deg)
+    minutes = int(m)+0.
+    seconds = 60.*(m-minutes)
+    if s < 0:
+       dms = "-%02d:%02d:%06.3f" % (deg,minutes,seconds)
+    else:
+       dms = "%02d:%02d:%06.3f" % (deg,minutes,seconds)
+    return dms
+
+def degTohms(ideg):
+    ihours = ideg/15.
+    hours = int(ihours)+0.
+    m = 60.*(ihours-hours)
+    minutes = int(m)+0.
+    seconds = 60.*(m-minutes)
+    hms = "%02d:%02d:%06.3f" % (hours,minutes,seconds)
+    return hms
+
+def cot(x):
+    return (1./np.tan(x))
+
+def arccot(x):
+    return (np.arctan(1./x))
