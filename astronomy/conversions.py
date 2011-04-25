@@ -139,11 +139,20 @@ def RAandDECfromStandardCoordinates(data):
     '''
     Converts Standard Coordinates on tangent plane
     to RA and DEC on the sky.
-    http://gtn.sonoma.edu/data_reduction/astrometry.php
+    data dictionary must also contain the CD matrix.
+    Full equations:
+    xi  = cdmatrix(0,0) * (x-crpix(0)) + cdmatrix(0,1)* (y - crpix(1))
+    eta = cdmatrix(1,0) * (x-crpix(0)) + cdmatrix(1,1)* (y - crpix(1))
+    then
+    ra = atan2(xi, cos(dec0)-eta*sin(dec0)) + ra0
+    dec = atan2(eta*cos(dec0)+sin(dec0),
+                sqrt((cos(dec0)-eta*sin(dec0))**2 + xi**2))
+    :param data (dictionary): should contain standard coordinates X, Y,
+    RA and DEC of the centre point, and the CD matrix.
     '''
     out = {}
-    xi = data['X']   #normally use CD matrix, this is cheating
-    eta = -data['Y'] #normally use CD matrix, this is cheating
+    xi = (data['CD'][0,0] * data['X']) + (data['CD'][0,1]* data['Y'])
+    eta = (data['CD'][1,0] * data['X']) + (data['CD'][1,1] * data['Y'])
     xi = np.deg2rad(xi)
     eta = np.deg2rad(eta)
     ra0 = np.deg2rad(data['RA'])
@@ -153,9 +162,10 @@ def RAandDECfromStandardCoordinates(data):
     dec = np.arctan2(eta*np.cos(dec0) + np.sin(dec0),
                     np.sqrt((np.cos(dec0) - eta*np.sin(dec0))**2 + xi**2))
 
-    out['RA'] = np.rad2deg(ra)
+    ra = np.rad2deg(ra)
+    ra = np.mod(ra, 360.0)
+    out['RA'] = ra
     out['DEC'] = np.rad2deg(dec)
-
     return out
 
 def angularDiameterDistance(z,

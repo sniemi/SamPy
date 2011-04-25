@@ -9,17 +9,17 @@ def randomUnitSphere(points=1):
     on a unit sphere. The number of random
     points returned can be controlled with
     the optional points keyword argument.
-    :param points
+    :param points (int): the number of points drawn
     '''
 
-    #get random variables
+    #get random values u and v
     u = np.random.rand(points)
     v = np.random.rand(points)
-    #to spherical coordinates
-    #cannot randomize theta and phi
+    #Convert to spherical coordinates
+    #Note that one cannot randomize theta and phi
     #directly because the values would
-    #be packed to poles otherwise because
-    #(the area element has sin(phi)!
+    #be packed on the poles due to the fact that
+    #the area element has sin(phi)!
     theta = 2. * np.pi * u
     phi = np.arccos(2. * v - 1)
 
