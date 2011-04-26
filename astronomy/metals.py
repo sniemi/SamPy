@@ -8,7 +8,7 @@ Observational constrains related to metallicities in galaxies.
 :author: Sami-Matias Niemi
 :contact: niemi@stsci.edu
 '''
-
+import os
 import numpy as N
 
 #This should be global, as all observational data are in the same place
@@ -23,7 +23,9 @@ def gallazzi(h=0.7):
     Scale stellar masses with h.
     n.b. masses in file are for H0=70 so no scaling is required
     if using Hubble constant 70.
+
     :param h: Hubble parameter to scale
+
     return:
     '''
     file = observation_ath + 'metals/gallazzi.dat'

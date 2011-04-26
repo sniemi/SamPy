@@ -9,6 +9,7 @@ def randomUnitSphere(points=1):
     on a unit sphere. The number of random
     points returned can be controlled with
     the optional points keyword argument.
+
     :param points (int): the number of points drawn
     '''
 

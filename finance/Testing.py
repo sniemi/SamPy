@@ -1,17 +1,7 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Jun 25 10:06:39 2010
-
-@author: -
-"""
-
-import datetime
 import numpy as np
-import sys
-import time
 import wx
 import matplotlib
-from matplotlib.figure import Figure 
+from matplotlib.figure import Figure
 import matplotlib.dates as mdates
 import matplotlib.ticker as mtickers
 from matplotlib.backends.backend_wxagg import FigureCanvasWxAgg as FigureCanvas
@@ -115,7 +105,9 @@ class MplCanvasFrame(wx.Frame):
         drag = DraggableRectangle(rectangle, master, xMinFloat, xMaxFloat - 92)
         drag.connect()
 
-app = wx.PySimpleApp() 
-frame = MplCanvasFrame()
-frame.Show(True) 
-app.MainLoop()
+if __name__ == '__main__':
+
+    app = wx.PySimpleApp()
+    frame = MplCanvasFrame()
+    frame.Show(True)
+    app.MainLoop()

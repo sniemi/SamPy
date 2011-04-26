@@ -1,4 +1,3 @@
-from yt.mods import *
 import yt.analysis_modules.halo_mass_function.api as HMF
 
 def calculate_analytical_dm_mfs(redshift,

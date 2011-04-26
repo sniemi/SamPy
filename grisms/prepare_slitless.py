@@ -86,139 +86,141 @@ def make_ds9_regions_file(inputfile, outputfile,
         out.write(circ)
     out.close()
 
-###############################################################
-#input parameters, should be read from a file
-#Change these if needed
+if __name__ == '__main__':
 
-#path to look files from
-input = './nov2010/'
+    ###############################################################
+    #input parameters, should be read from a file
+    #Change these if needed
 
-#output directory
-out =  './reduced/'
+    #path to look files from
+    input = './nov2010/'
 
-#AxE confs
-confs = '/Users/niemi/Desktop/Grisms/confs/'
+    #output directory
+    out =  './reduced/'
 
-#SourceExtractro confs
-sconfs = '/Users/niemi/Desktop/Grisms/sextractor_defaults/'
+    #AxE confs
+    confs = '/Users/niemi/Desktop/Grisms/confs/'
 
-#magnitude zero point, needed for SExtractor to calculate
-#auto magnitudes, all in AB mags, followed by pivot wavels
-filterInformation = {'F140W': [26.46, 'F1392'],
-                     'F160W': [25.96, 'F1537'],
-                     'F110W': [26.83, 'F1153'],
-                     'F125W': [26.25, 'F1249']}
+    #SourceExtractro confs
+    sconfs = '/Users/niemi/Desktop/Grisms/sextractor_defaults/'
 
-###############################################################
+    #magnitude zero point, needed for SExtractor to calculate
+    #auto magnitudes, all in AB mags, followed by pivot wavels
+    filterInformation = {'F140W': [26.46, 'F1392'],
+                         'F160W': [25.96, 'F1537'],
+                         'F110W': [26.83, 'F1153'],
+                         'F125W': [26.25, 'F1249']}
 
-#script starts
-if os.path.isdir(out):
-    print 'Output directory exists'
-else:
-    os.mkdir(out)
+    ###############################################################
 
-#find input files
-ins = g.glob(input + '*.fits')
-ins_headers = find_header_info(ins)
+    #script starts
+    if os.path.isdir(out):
+        print 'Output directory exists'
+    else:
+        os.mkdir(out)
 
-#print all the files
-print_files(ins_headers)
+    #find input files
+    ins = g.glob(input + '*.fits')
+    ins_headers = find_header_info(ins)
 
-#change the working directory
-os.chdir(out)
+    #print all the files
+    print_files(ins_headers)
 
-#create the AxE output structre
-aXeFolders = ['save', 'IMDRIZZLE', 'CONF',
-              'DATA', 'OUTPUT', 'DRIZZLE']
-for fold in aXeFolders:
-    if not os.path.isdir(fold):
-        os.mkdir(fold)
+    #change the working directory
+    os.chdir(out)
 
-#copy files to save
-for f in ins:
-    tmp = os.path.split(f)[1]
-    if not os.path.isfile('./save/'+tmp):
-        s.copy('../'+f, './save/')
+    #create the AxE output structre
+    aXeFolders = ['save', 'IMDRIZZLE', 'CONF',
+                  'DATA', 'OUTPUT', 'DRIZZLE']
+    for fold in aXeFolders:
+        if not os.path.isdir(fold):
+            os.mkdir(fold)
 
-#find direct image files
-directs = find_direct_images(ins_headers)
+    #copy files to save
+    for f in ins:
+        tmp = os.path.split(f)[1]
+        if not os.path.isfile('./save/'+tmp):
+            s.copy('../'+f, './save/')
 
-#copy config files to right place
-for f in g.glob(confs+'*'):
-    tmp = os.path.split(f)[1]
-    if not os.path.isfile('./CONF/'+tmp):
-        s.copy(f, './CONF/')
+    #find direct image files
+    directs = find_direct_images(ins_headers)
 
-#copy direct images to ../IMDRIZZLE
-for f in directs:
-    tmp = os.path.split(f)[1]    
-    if not os.path.isfile('./IMDRIZZLE/'+tmp):
-        s.copy('./save/'+f, './IMDRIZZLE/')
+    #copy config files to right place
+    for f in g.glob(confs+'*'):
+        tmp = os.path.split(f)[1]
+        if not os.path.isfile('./CONF/'+tmp):
+            s.copy(f, './CONF/')
 
-# find all filters
-filters =  set([ins_headers[x][0] for x in ins_headers])
+    #copy direct images to ../IMDRIZZLE
+    for f in directs:
+        tmp = os.path.split(f)[1]
+        if not os.path.isfile('./IMDRIZZLE/'+tmp):
+            s.copy('./save/'+f, './IMDRIZZLE/')
 
-#change directory to ../IMDRIZZLE
-os.chdir('./IMDRIZZLE')
+    # find all filters
+    filters =  set([ins_headers[x][0] for x in ins_headers])
 
-#run multidrizzle
-multiout = []
-for f in filters:
-    if f.startswith('F'):
-        print '\n\nWill next multidrizzle all %s images' % f
-        tmp = [x for x in ins_headers if ins_headers[x][0] == f]
-        if len(tmp) < 2:
-            print 'Not enough images'
-        else:
-            #unlearn multidrizzle
-            stsdas.multidrizzle.unlearn()
-            if os.path.isfile(f):
-                'print file %s exists, will not overwrite' % f
+    #change directory to ../IMDRIZZLE
+    os.chdir('./IMDRIZZLE')
+
+    #run multidrizzle
+    multiout = []
+    for f in filters:
+        if f.startswith('F'):
+            print '\n\nWill next multidrizzle all %s images' % f
+            tmp = [x for x in ins_headers if ins_headers[x][0] == f]
+            if len(tmp) < 2:
+                print 'Not enough images'
             else:
-                 #run to ins files
-                ins =''
-                for x in tmp:
-                    ins += x + ','
-                stsdas.multidrizzle(ins[:-1], output=f, final_rot = 'INDEF')
-                multiout.append(f)
+                #unlearn multidrizzle
+                stsdas.multidrizzle.unlearn()
+                if os.path.isfile(f):
+                    'print file %s exists, will not overwrite' % f
+                else:
+                     #run to ins files
+                    ins =''
+                    for x in tmp:
+                        ins += x + ','
+                    stsdas.multidrizzle(ins[:-1], output=f, final_rot = 'INDEF')
+                    multiout.append(f)
 
-#copy the source extractor confs
-for f in g.glob(sconfs+'*.*'):
-    s.copy(f, '.')
+    #copy the source extractor confs
+    for f in g.glob(sconfs+'*.*'):
+        s.copy(f, '.')
 
-#solate the science and weight extensions of the co-added images
-for f in multiout:
-    if os.path.isfile(f+'_drz_sci.fits'):
-        print 'Will copy old *drz_sci.fits to tmp'
-        s.move(f+'_drz_sci.fits', f+'_drz_sci_tmp.fits')
-    if os.path.isfile(f+'_drz_wht.fits'):
-        print 'Will copy old *drz_wht.fits to tmp'
-        s.move(f+'_drz_wht.fits', f+'_drz_wht_tmp.fits')
-    
-    iraf.imcopy(f+'_drz.fits[SCI]', f+'_drz_sci.fits')
-    iraf.imcopy(f+'_drz.fits[WHT]', f+'_drz_wht.fits')
+    #solate the science and weight extensions of the co-added images
+    for f in multiout:
+        if os.path.isfile(f+'_drz_sci.fits'):
+            print 'Will copy old *drz_sci.fits to tmp'
+            s.move(f+'_drz_sci.fits', f+'_drz_sci_tmp.fits')
+        if os.path.isfile(f+'_drz_wht.fits'):
+            print 'Will copy old *drz_wht.fits to tmp'
+            s.move(f+'_drz_wht.fits', f+'_drz_wht_tmp.fits')
 
-#run source xtractor
-for f in filters:
-    if f.startswith('F'):
-        mg = filterInformation[f][0]
-        cmd = 'sex -c default.sex -WEIGHTIMAGE '+f+'_drz.fits[WHT] '
-        cmd += '-MAG_ZEROPOINT ' + str(mg)
-        cmd += ' -CATALOG_NAME '+f+'.cat '
-        cmd += ' '+f+'_drz_sci.fits'
-        print cmd
-        os.system(cmd)
+        iraf.imcopy(f+'_drz.fits[SCI]', f+'_drz_sci.fits')
+        iraf.imcopy(f+'_drz.fits[WHT]', f+'_drz_wht.fits')
 
-#fix source extractor catalogue
-for f in filters:
-    if f.startswith('F'):
-        pv = filterInformation[f][1]
-        fixSourceExtractorCatalogue(f, pv)
+    #run source xtractor
+    for f in filters:
+        if f.startswith('F'):
+            mg = filterInformation[f][0]
+            cmd = 'sex -c default.sex -WEIGHTIMAGE '+f+'_drz.fits[WHT] '
+            cmd += '-MAG_ZEROPOINT ' + str(mg)
+            cmd += ' -CATALOG_NAME '+f+'.cat '
+            cmd += ' '+f+'_drz_sci.fits'
+            print cmd
+            os.system(cmd)
 
-#make ds9 region files
-for f in filters:
-    if f.startswith('F'):
-        make_ds9_regions_file(f, f+'.reg', size = 10)
+    #fix source extractor catalogue
+    for f in filters:
+        if f.startswith('F'):
+            pv = filterInformation[f][1]
+            fixSourceExtractorCatalogue(f, pv)
 
-#all done
-print 'Preparations done...'
+    #make ds9 region files
+    for f in filters:
+        if f.startswith('F'):
+            make_ds9_regions_file(f, f+'.reg', size = 10)
+
+    #all done
+    print 'Preparations done...'

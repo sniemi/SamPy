@@ -1,13 +1,13 @@
 '''
 Some functions for astronomy related unit conversions.
 
-@requires: NumPy
-@requires: cosmocalc (http://cxc.harvard.edu/contrib/cosmocalc/)
+:requires: NumPy
+:requires: cosmocalc (http://cxc.harvard.edu/contrib/cosmocalc/)
 
-@version: 0.11
+:version: 0.11
 
-@author: Sami Niemi
-@contact: niemi@stsci.edu
+:author: Sami Niemi
+:contact: niemi@stsci.edu
 '''
 import numpy as np
 from cosmocalc import cosmocalc
@@ -15,26 +15,34 @@ from cosmocalc import cosmocalc
 def janskyToMagnitude(jansky):
     '''
     Converts Janskys to AB magnitudes.
-    @note: Can be used with SQLite3 database.
-    @param jansky: can either be a number or a NumPy array
-    @return: either a float or NumPy array
+
+    :note: Can be used with SQLite3 database.
+
+    :param jansky: can either be a number or a NumPy array
+
+    :return: either a float or NumPy array
     '''
     return 8.9 - 2.5*np.log10(jansky)
 
 def ABMagnitudeToJansky(ABmagnitude):
     '''
     Converts AB magnitudes to Janskys.
-    @note: Can be used with SQLite3 database.
-    @param ABmagnitude: can be either a number or a NumPy array
-    @return: either a float or NumPy array 
+
+    :note: Can be used with SQLite3 database.
+
+    :param ABmagnitude: can be either a number or a NumPy array
+
+    :return: either a float or NumPy array
     '''
     return 10**((23.9 - ABmagnitude)/2.5)/1e6
 
 def arcminSquaredToSteradians(arcmin2):
     '''
     Converts arcmin**2 to steradians.
-    @param arcmin2: arcmin**2
-    @return: steradians 
+
+    :param arcmin2: arcmin**2
+
+    :return: steradians
     '''
     return arcmin2 / ((180/np.pi)**2 * 60 * 60)
 
@@ -44,8 +52,10 @@ def arcminSquaredToSolidAnge(arcmin2):
     Calls arcminSqauredToSteradians to
     convert arcmin**2 to steradians and
     then divides this with 4pi.
-    @param arcmin2: arcmin**2 
-    @return: solid angle
+
+    :param arcmin2: arcmin**2
+
+    :return: solid angle
     '''
     return arcminSquaredToSteradians(arcmin2) / 4. / np.pi
 
@@ -54,12 +64,14 @@ def comovingVolume(arcmin2, zmin, zmax,
     '''
     Calculates the comoving volume between two redshifts when
     the sky survey has covered arcmin**2 region.
-    @param arcmin2: area on the sky in arcmin**2
-    @param zmin: redshift of the front part of the volume
-    @param zmax: redshift of the back part of the volume
-    @param H0: Value of the Hubble constant
-    @param WM: Value of the mass density     
-    @return: comoving volume between zmin and zmax of arcmin2
+
+    :param arcmin2: area on the sky in arcmin**2
+    :param zmin: redshift of the front part of the volume
+    :param zmax: redshift of the back part of the volume
+    :param H0: Value of the Hubble constant
+    :param WM: Value of the mass density
+
+    :return: comoving volume between zmin and zmax of arcmin2
             solid angle in Mpc**3
     '''
     front = cosmocalc(zmin, H0, WM)['VCM_Gpc3']
@@ -70,8 +82,10 @@ def comovingVolume(arcmin2, zmin, zmax,
 def Luminosity(abs_mag):
     '''
     Converts AB magnitudes to luminosities in L_sun
-    @param abs_mag: AB magnitude of the object
-    @return: luminosity 
+
+    :param abs_mag: AB magnitude of the object
+
+    :return: luminosity
     '''
     return 10.0**((4.85-abs_mag)/2.5)
 
@@ -92,13 +106,13 @@ def get_magAB_from_flambda(flambda, wlength):
     '''                                                                                                             
     Converts a mag_AB value at a wavelength to f_lambda                                                              
                                                                                                                      
-    @param flambda: mag_AB value                                                                                     
-    @type flambda: float                                                                                             
-    @param wlength: wavelength value [nm]                                                                            
-    @type wlength: float                                                                                             
+    :param flambda: mag_AB value
+    :type flambda: float
+    :param wlength: wavelength value [nm]
+    :type wlength: float
                                                                                                                      
-    @return: the mag_AB value                                                                                        
-    @rtype: float                                                                                                    
+    :return: the mag_AB value
+    :rtype: float
     '''
     import math
 
@@ -147,6 +161,7 @@ def RAandDECfromStandardCoordinates(data):
     ra = atan2(xi, cos(dec0)-eta*sin(dec0)) + ra0
     dec = atan2(eta*cos(dec0)+sin(dec0),
                 sqrt((cos(dec0)-eta*sin(dec0))**2 + xi**2))
+
     :param data (dictionary): should contain standard coordinates X, Y,
     RA and DEC of the centre point, and the CD matrix.
     '''

@@ -1,19 +1,18 @@
 '''
-Differrent luminosity functions.
+Different luminosity functions.
 
-@requires: NumPy
+:requires: NumPy
 
-@version: 0.1
+:version: 0.1
 
-@author: Sami-Matias Niemi
-@contact: niemi@stsci.edu
+:author: Sami-Matias Niemi
+:contact: niemi@stsci.edu
 
-@warning: This has never been tested!
-@todo: add more LFs. There are for example several more from the Bell.
+:warning: This has never been tested!
+:todo: add more LFs. There are for example several more from the Bell.
 '''
 import os
 import numpy as N
-import smnIO.sextutils as su
 
 #This should be global, as all observational data are in the same place
 #Note however that because the data is in Dropbox the absolute path
@@ -31,7 +30,8 @@ def bellG():
     0.0172471     -19.7320     -1.02577  1.57122e+08
     0.000552186    0.0264740    0.0249926  2.29536e+06
     Then we present the V/V_max data points; x   phi  phi-1sig  phi+1sig
-    @return: absolute magnitude, phi, phi_lo, phi_high
+
+    :return: absolute magnitude, phi, phi_lo, phi_high
     '''
     file = observation_path + 'bell/sdss2mass_lf/glf.out'
     data = N.loadtxt(file)

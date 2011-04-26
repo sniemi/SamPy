@@ -27,7 +27,9 @@ from matplotlib import cm
 import numpy as N
 import pylab as P
 import scipy.stats as ss
-import glob, shutil, os
+import glob
+import shutil
+import os
 #Imports from Sami's repo
 import smnIO.read as read
 import astronomy.stellarMFs as stellarMFs

@@ -8,6 +8,7 @@ Observational constrains related to gas masses in galaxies.
 :author: Sami-Matias Niemi
 :contact: niemi@stsci.edu
 '''
+import os
 import numpy as N
 
 #This should be global, as all observational data are in the same place

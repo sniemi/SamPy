@@ -182,33 +182,35 @@ def check_if_click_is_on_an_existing_point(mouse_x_coord,mouse_y_coord):
             return point_to_be_deleted
 
 
-#######################################################################
-# This is the main part of the program, which calls the above functions 
-#######################################################################
-# First, initialise some of our variables to be empty
-coords_array = scipy.array([])
-point_handles_array = scipy.array([])
-handle_of_regression_line_plot = []
-### Set up an initial space to click inside
-axis_range = 10
-### Make the figure window
-pylab.figure()
-### Clear the figure window
-pylab.clf() # clf means "clear the figure"
-### In order to keep the boundaries of the figure fixed in place,
-### we will draw a white box around the region that we want.
-pylab.plot(axis_range*scipy.array([-1, 1, 1, -1]),
-           axis_range*scipy.array([-1, -1, 1, 1]),'w-')
-pylab.axis('equal')  # Make the tick-marks equally spaced on x- and y-axes
-pylab.axis(axis_range*scipy.array([-1, 1, -1, 1]))
-### Python issues a warning when we try to calculate
-### the correlation when there are just two points,
-### as the p-value is zero. This next line hides that warning
-scipy.seterr(invalid="ignore")
-### Tell Python to call a function every time
-### when the mouse is pressed in this figure
-pylab.connect('button_press_event', do_this_when_the_mouse_is_clicked)
 
-clear_the_figure_and_empty_points_list()
-pylab.show()    # This shows the figure window onscreen
-    
+if __name__ == '__main__':
+    #######################################################################
+    # This is the main part of the program, which calls the above functions
+    #######################################################################
+    # First, initialise some of our variables to be empty
+    coords_array = scipy.array([])
+    point_handles_array = scipy.array([])
+    handle_of_regression_line_plot = []
+    ### Set up an initial space to click inside
+    axis_range = 10
+    ### Make the figure window
+    pylab.figure()
+    ### Clear the figure window
+    pylab.clf() # clf means "clear the figure"
+    ### In order to keep the boundaries of the figure fixed in place,
+    ### we will draw a white box around the region that we want.
+    pylab.plot(axis_range*scipy.array([-1, 1, 1, -1]),
+               axis_range*scipy.array([-1, -1, 1, 1]),'w-')
+    pylab.axis('equal')  # Make the tick-marks equally spaced on x- and y-axes
+    pylab.axis(axis_range*scipy.array([-1, 1, -1, 1]))
+    ### Python issues a warning when we try to calculate
+    ### the correlation when there are just two points,
+    ### as the p-value is zero. This next line hides that warning
+    scipy.seterr(invalid="ignore")
+    ### Tell Python to call a function every time
+    ### when the mouse is pressed in this figure
+    pylab.connect('button_press_event', do_this_when_the_mouse_is_clicked)
+
+    clear_the_figure_and_empty_points_list()
+    pylab.show()    # This shows the figure window onscreen
+

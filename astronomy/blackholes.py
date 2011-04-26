@@ -9,6 +9,7 @@ masses in galaxies.
 :author: Sami-Matias Niemi
 :contact: niemi@stsci.edu
 '''
+import os
 import numpy as N
 
 #This should be global, as all observational data are in the same place
@@ -47,7 +48,7 @@ def MarconiMassFunction(const=0.362216):
           Log_{10}[Phi] given below
     (4)  log_{10}[+1sigma phi(M_bh)]
 
-    :param constant (float) : ?
+    :param constant (float): ?
     '''
     file = observation_path + 'phopkins/rachel_bhmf_data.dat'
     data = N.loadtxt(file, comments=';')

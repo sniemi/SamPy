@@ -2,8 +2,8 @@
 This module contains basic information of different
 subjects often needed in astronomy.
 
-:author : Sami-Matias Niemi
-:version : 0.01
+:author: Sami-Matias Niemi
+:version: 0.01
 '''
 
 __author__ = 'Sami-Matias Niemi'

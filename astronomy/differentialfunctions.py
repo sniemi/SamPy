@@ -3,12 +3,12 @@ Some functions to calculate differential functions. These
 can be used to calculate luminosity functions, stellar and
 dark matter halo functions etc.
 
-@requires: NumPy
+:requires: NumPy
 
-@version: 0.15
+:version: 0.15
 
-@author: Sami Niemi
-@contact: niemi@stsci.edu
+:author: Sami Niemi
+:contact: niemi@stsci.edu
 '''
 import numpy as N
 
@@ -74,7 +74,7 @@ def diff_function_log_binning(data, column = 0, log = False,
                               physical_units = False, verbose = False):
     '''
     Calculates a differential function from data.
-    @warning: One should not use this, unless the number of
+    :warning: One should not use this, unless the number of
     systems for each bin is used. One should use diffFunctionLogBinning
     instead, which is probably faster as it uses NumPy.histogram
     rathrer than my own algorithm.
@@ -148,7 +148,7 @@ def mass_function(data, column = 0, log = False,
     Calculates a mass function from data.
     Returns differential mass function and bins:
     dN / dlnM
-    @TODO: add calculating the cumulative mass function.
+    :TODO: add calculating the cumulative mass function.
     '''
     #if log have been taken from the data or not
     if not log:
@@ -209,11 +209,13 @@ def stellarMassFunction(data,
     Calculates a stellar mass function from data. Calculates
     stellar mass functions for all galaxies, early- and late-types
     and central galaxies seprately.
+
     :params data (dictionary): data should be in format:
     data['stellar_mass'] = []
     data['bulge_mass'] = []
     data['galaxy_id'] = []
-    :return output (dictionary): 
+
+    :return output (dictionary):
     '''
     #get number of galaxies
     ngal = len(data['stellar_mass'])

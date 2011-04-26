@@ -1,12 +1,12 @@
 '''
 Helper functions related to baryonic constrains such as mass functions.
 
-:requires : NumPy
+:requires: NumPy
 
-:version : 0.1
+:version: 0.1
 
-:author : Sami-Matias Niemi
-:contact : niemi@stsci.edu
+:author: Sami-Matias Niemi
+:contact: niemi@stsci.edu
 '''
 import os
 import numpy as N
@@ -28,8 +28,11 @@ def BellBaryonicMassFunction(h=0.7):
         0.0105038      10.7236     -1.22776  6.65221e+08
       0.000857033    0.0448084    0.0552834  1.45862e+07
     Then we present the V/V_max data points; x   phi  phi-1sig  phi+1sig
-    :param h (float) : Hubble parameter
-    :note : In Chabrier IMF.
+
+    :param h: Hubble parameter
+    :type h: float
+
+    :note: In Chabrier IMF.
     '''
     data = N.loadtxt(observation_path + 'bell/sdss2mass_lf/barymf1.out')
     m = data[:, 0] - 2.0 * N.log10(h) - 0.15

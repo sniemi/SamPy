@@ -268,37 +268,32 @@ def check_if_click_is_on_an_existing_point(mouse_x_coord,mouse_y_coord):
             return point_to_be_deleted
 
 
-#######################################################################
-# This is the main part of the program, which calls the above functions 
-#######################################################################
-# First, initialise some of our variables to be empty
-coords_array = scipy.array([])
-point_handles_array = scipy.array([])
-handle_of_group_A_conf_int = []
-handle_of_group_B_conf_int = []
-handle_of_group_A_mean = []
-handle_of_group_B_mean = []
-### Set up an initial space to click inside
-axis_x_range = 30
-axis_y_upper_lim = 20
-axis_y_lower_lim = -10
-### Make the figure window
-pylab.figure()
-### Clear the figure window
-pylab.clf() # clf means "clear the figure"
-### In order to keep the boundaries of the figure fixed in place,
-### we will draw a black box around the region that we want.
-pylab.plot(axis_x_range*scipy.array([-1, 1, 1, -1]),
-           scipy.array([axis_y_lower_lim,axis_y_lower_lim,axis_y_upper_lim,axis_y_upper_lim]),'k-')
-### Tell Python to call a function every time
-### when the mouse is pressed in this figure
-pylab.connect('button_press_event', do_this_when_the_mouse_is_clicked)
+if __name__ == '__main__':
+    #######################################################################
+    # This is the main part of the program, which calls the above functions
+    #######################################################################
+    # First, initialise some of our variables to be empty
+    coords_array = scipy.array([])
+    point_handles_array = scipy.array([])
+    handle_of_group_A_conf_int = []
+    handle_of_group_B_conf_int = []
+    handle_of_group_A_mean = []
+    handle_of_group_B_mean = []
+    ### Set up an initial space to click inside
+    axis_x_range = 30
+    axis_y_upper_lim = 20
+    axis_y_lower_lim = -10
+    ### Make the figure window
+    pylab.figure()
+    ### Clear the figure window
+    pylab.clf() # clf means "clear the figure"
+    ### In order to keep the boundaries of the figure fixed in place,
+    ### we will draw a black box around the region that we want.
+    pylab.plot(axis_x_range*scipy.array([-1, 1, 1, -1]),
+               scipy.array([axis_y_lower_lim,axis_y_lower_lim,axis_y_upper_lim,axis_y_upper_lim]),'k-')
+    ### Tell Python to call a function every time
+    ### when the mouse is pressed in this figure
+    pylab.connect('button_press_event', do_this_when_the_mouse_is_clicked)
 
-clear_the_figure_and_empty_points_list()
-pylab.show()    # This shows the figure window onscreen
-    
-
-
-
-
-
+    clear_the_figure_and_empty_points_list()
+    pylab.show()    # This shows the figure window onscreen

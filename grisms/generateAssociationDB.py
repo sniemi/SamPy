@@ -26,31 +26,31 @@ __version__ = 0.01
 def createAssociationDB(grism, direct, match,
                         output ='ACSTEST.db'):
     '''
-    Email from Martin Kuemmel:
-    Concerning the format:
-    - Each association (see listing below contains two main entries, the
-    first entry (a list)  containing information on the grism images and
-    the second a dictionary) containing direct imaging information.
+    Email from Martin Kuemmel concerning the format:
 
-    - The grism image information is a list, which each entry consisting of
-     a tuple with four items. The first item is the name of the grism
-     image, the second item is the exposure time of the grism image,
-     the third item is the name of the associated direct image and the
-     fourth item a real number measuring the 'distance' between the grism
-     image and the direct image. Very close pairs of grism image - direct
-     image have a distance of 0.0. I think there is a very complicated
-     formula that measures this distance, however the most important input
-     is the pointing on the sky. If a grism and a direct image have the
-     same pointing on the sky, they are very close. Also the time
-     difference between the direct image and the grism image has some
-     influence.
+    * Each association (see listing below contains two main entries, the
+      first entry (a list)  containing information on the grism images and
+      the second a dictionary) containing direct imaging information.
 
-    - The direct image information is a dictionary that contains the filter
-     names as keys. For each filter there is a list of tuples with three
-     items. The first item is the direct image name, the second item is
-     the exposure time and the third item is the overlap with the area covered
-     by the grism images of that association. For some reason (I have forgotten),
-     this overlap can be more than 1.
+    * The grism image information is a list, which each entry consisting of
+      a tuple with four items. The first item is the name of the grism
+      image, the second item is the exposure time of the grism image,
+      the third item is the name of the associated direct image and the
+      fourth item a real number measuring the 'distance' between the grism
+      image and the direct image. Very close pairs of grism image - direct
+      image have a distance of 0.0. I think there is a very complicated
+      formula that measures this distance, however the most important input
+      is the pointing on the sky. If a grism and a direct image have the
+      same pointing on the sky, they are very close. Also the time
+      difference between the direct image and the grism image has some
+      influence.
+
+    * The direct image information is a dictionary that contains the filter
+      names as keys. For each filter there is a list of tuples with three
+      items. The first item is the direct image name, the second item is
+      the exposure time and the third item is the overlap with the area covered
+      by the grism images of that association. For some reason (I have forgotten),
+      this overlap can be more than 1.
 
     So the two 'dir_min_overlap' that you quote are two different values,
     the first one measuring the distance between the grism image and the
@@ -87,7 +87,8 @@ def createAssociationDB(grism, direct, match,
     ('J8WQ91ECQ', 500.0, 0.89063763040941479),
     ('J6FL7YIDQ', 500.0, 0.97062910394576651),
     ('J6FL8YKRQ', 500.0, 1.011511942107943),
-    ('J8WQ91E7Q', 500.0, 0.89063763040941479)]})'''
+    ('J8WQ91E7Q', 500.0, 0.89063763040941479)]})
+    '''
     dc = {}
     for i, key in enumerate(match):
         nm = 'ACSTEST%i' %(i+1)

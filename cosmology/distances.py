@@ -1,19 +1,19 @@
-"""Plot some distance measures versus redshift and omega_M.
+'''
+Plot some distance measures versus redshift and omega_M.
 
-"""
+:requires: CosmoloPy
+'''
 import sys
-import getopt
-
 import numpy
 import matplotlib.pyplot as pylab
 import matplotlib.cm as cm
-
 import cosmolopy.distance as cd
 import cosmolopy.constants as cc
 
 def plot_DM(filename):
-    """The dimensionless proper motion distance DM/DH. 
-    """
+    '''
+    The dimensionless proper motion distance DM/DH.
+    '''
 
     # Set up an array of redshift values.
     dz = 0.1
@@ -40,8 +40,9 @@ def plot_DM(filename):
               filename)
 
 def plot_DA(filename):
-    """The dimensionless angular diameter distance DA/DH. 
-    """
+    '''
+    The dimensionless angular diameter distance DA/DH.
+    '''
 
     # Set up an array of redshift values.
     dz = 0.1
@@ -68,8 +69,9 @@ def plot_DA(filename):
                   filename)
 
 def plot_dist(z, dz, om, dom, dist, dh, name, mathname, filename=None):
-    """Make a 2-D plot of a distance versus redshift (x) and matter density (y).
-    """
+    '''
+    Make a 2-D plot of a distance versus redshift (x) and matter density (y).
+    '''
     # Grid of redshift and matter density values.
     x, y = numpy.meshgrid(z, om)
 #    pylab.figure(figsize=(5.5,4.5))    
@@ -99,9 +101,9 @@ def plot_dist(z, dz, om, dom, dist, dh, name, mathname, filename=None):
 
 
 def plot_dist_ony(z, dz, om, dom, dist, dh, name, mathname, filename=None):
-    """Make a 2-D plot of matter density versus redshift (x) and distance (y)
-    """
-
+    '''
+    Make a 2-D plot of matter density versus redshift (x) and distance (y)
+    '''
 
     dist = dist/dh
     z = z * numpy.ones(dist.shape)

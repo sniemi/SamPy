@@ -2,11 +2,11 @@
 Different stellar mass functions. Some are based on
 observational data while others are fitting functions.
 
-:requires : NumPy
+:requires: NumPy
 
-:version : 0.2
+:version: 0.2
 
-:author : Sami-Matias Niemi
+:author: Sami-Matias Niemi
 :contact : niemi@stsci.edu
 '''
 import os
@@ -60,8 +60,10 @@ def bellG(h=0.7, chabrier=True):
     0.000512733    0.0154157    0.0239414  1.06609e+07
     Then we present the V/V_max data points; x   phi  phi-1sig  phi+1sig
     Convert to h (default = 0.7) and Chabrier IMF.
+
     :param h: the Hubble parameter (default h = 0.7)
     :param chabrier: whether or not to convert to Chabrier IMF (default = True)
+
     :return: log10(stellar mass), log10(phi), log10(phi_low), log10(phi_high)
     '''
     file = observation_path + 'bell/sdss2mass_lf/gmf.out'
@@ -86,8 +88,10 @@ def bellK(h=0.7, chabrier=True):
     0.000586424    0.0144582    0.0422601  1.18873e+07
     Then we present the V/V_max data points; x   phi  phi-1sig  phi+1sig
     Convert to h (default = 0.7) and Chabrier IMF.
+
     :param h: the Hubble parameter (default h = 0.7)
     :param chabrier: whether or not to convert to Chabrier IMF (default = True)
+
     :return: log10(stellar mass), log10(phi), log10(phi_low), log10(phi_high)
     '''
     file = observation_path + 'bell/sdss2mass_lf/kmf.out'

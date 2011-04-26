@@ -1,29 +1,22 @@
 #! /usr/bin/env python
 '''
-DESCRIPTION:
 Pulls out data from the SMAKCED wiki page
 and parses it into an array that is simple
 to manipulate and output.
 
-DEPENDS:
-BeautifulSoup
+:requires: BeautifulSoup
 
-TESTED:
-Python 2.5.2
-
-USAGE:
-python getSmackedData.py
 
 HISTORY:
 Created on Mar 26, 2010 (version 0.1)
 Removed NumPy dependency April 2, 2010 (version 0.2)
 
-@version: 0.2
+:version: 0.2
 
-@author: Sami-Matias Niemi
+:author: Sami-Matias Niemi
 '''
 import urllib2, csv
-from BeautifulSoup import BeautifulSoup
+from parsing.BeautifulSoup import BeautifulSoup
 
 __author__ = 'Sami-Matias Niemi'
 __version__ = '0.2'
@@ -36,8 +29,8 @@ class Smakced():
         '''
         Constructor
 
-        @param url: url address of the page
-        @param table: name of the table  
+        :param url: url address of the page
+        :param table: name of the table
         '''
         self.url = url
         self.table = table
@@ -47,7 +40,7 @@ class Smakced():
         '''
         Retrieve data from the SMAKCED web page.
         
-        @return: retrieved raw data
+        :return: retrieved raw data
         '''
         hand = urllib2.urlopen(self.address)
         data = hand.readlines()
@@ -60,9 +53,10 @@ class Smakced():
         Note that table number has been hard coded.
         The SMAKCED wiki page returns several "tables".
         
-        @param data: data that has been retrieved with
+        :param data: data that has been retrieved with
         the getData method
-        @return: array containing table entries 
+
+        :return: array containing table entries
         '''
         tablenumber = 3
         result = []
@@ -91,11 +85,11 @@ class Smakced():
         in ascii format.
         Uses BeautifulSoup for parsing tables.
         
-        @note: This method is untested.
+        :note: This method is untested.
         
-        @param data: data that has been retrieved with
+        :param data: data that has been retrieved with
         the getData method
-        @param output: name of the output file 
+        :param output: name of the output file
         '''
         g = open(output,'w')
         soup = BeautifulSoup(''.join(data))

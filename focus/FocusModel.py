@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-
-
 '''User Interface for Focus Monitor'''
 import os, sys, glob
 import string, time, datetime
@@ -526,9 +523,11 @@ def graph():
     print 'Finished'
     #gui.statusBar.config(text = 'Finished')
     return
-    
-gui = FocusMenu()   # Creates an instance of FocusMenu
-gui.CreateForm()    # Builds the form
-gui.Show()          # Starts the loop
+
+if __name__ == '__main__':
+
+    gui = FocusMenu()   # Creates an instance of FocusMenu
+    gui.CreateForm()    # Builds the form
+    gui.Show()          # Starts the loop
 
         

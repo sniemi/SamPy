@@ -1,19 +1,18 @@
-#!/usr/bin/env python
-# -*- encoding: utf-8 -*-
-#
-# ABOUT    : This script is a quick way of combining fits files
-#
-# USAGE    : reduce.py [-n] [-m] [-a] [-f] <file list or name> [-o] <output file>
-#            where:
-#            [-m] median combine
-#            [-a] average combine
-#            [-f] combines given files
-#            [-o] name of the output file
-#            [-n] uses NumPy and PyFits rather than Pyraf
-#
-# AUTHOR   : Sami-Matias Niemi
-#
-# HISTORY  : 26/11/2008 Initial Release
+'''
+:about: This script is a quick way of combining fits files
+
+:usage: reduce.py [-n] [-m] [-a] [-f] <file list or name> [-o] <output file>
+        where:
+                [-m] median combine
+                [-a] average combine
+                [-f] combines given files
+                [-o] name of the output file
+                [-n] uses NumPy and PyFits rather than Pyraf
+
+:date: 26/11/2008 Initial Release
+:author: Sami-Matias Niemi
+:contact: niemi@stsci.edu
+'''
 
 __version__ = "0.1a"
 __author__ = "Sami-Matias Niemi"
@@ -22,9 +21,9 @@ def process_args(just_print_help = False):
     """
     Processes the command line arguments o FITSCombine.py data reduction script.
     
-    @param just_print_help: will print help
-    @type: boolean
-    @return: parsed commmand line options
+    :param just_print_help: will print help
+    :type just_print_help: boolean
+    :return: parsed commmand line options
     """
     from optparse import OptionParser
     parser = OptionParser()
@@ -64,13 +63,13 @@ def combine(filelist, median = False, verbose = False):
     """
     Combines given images.
     
-    @param filelist: list of files to be combined.
-    @type: list
-    @param median: Performs median combining, if False uses average values
-    @type: boolean
-    @param verbose: verbose mode.
-    @type: boolean
-    @return: The combined image (2d-array with pixel values)
+    :param filelist: list of files to be combined.
+    :type filelist: list
+    :param median: Performs median combining, if False uses average values
+    :type median: boolean
+    :param verbose: verbose mode.
+    :type verbose: boolean
+    :return: The combined image (2d-array with pixel values)
     """
     import pyfits
     import numpy

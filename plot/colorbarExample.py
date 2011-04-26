@@ -40,35 +40,37 @@ def make_axes(parent, **kw):
     cax.set_aspect(aspect, anchor=anchor, adjustable='box')
     return cax, kw
 
-import numpy as np
-import matplotlib.pyplot as plt
+if __name__ == '__main__':
 
-data = np.random.rand(50,50)
+    import numpy as np
+    import matplotlib.pyplot as plt
 
-fig = plt.figure()
+    data = np.random.rand(50,50)
 
-ax = fig.add_subplot(2, 2, 1)
-im = ax.pcolor(data)
-cax,kw = make_axes(ax, orientation='vertical', location=0.0)
-fig.colorbar(im, ax=ax, cax=cax, **kw)
-ax.set_title('Vertical, 0.0')
+    fig = plt.figure()
 
-ax = fig.add_subplot(2, 2, 2)
-im = ax.pcolor(data)
-cax,kw = make_axes(ax, orientation='vertical', location=1.0)
-fig.colorbar(im, ax=ax, cax=cax, **kw)
-ax.set_title('Vertical, 1.0')
+    ax = fig.add_subplot(2, 2, 1)
+    im = ax.pcolor(data)
+    cax,kw = make_axes(ax, orientation='vertical', location=0.0)
+    fig.colorbar(im, ax=ax, cax=cax, **kw)
+    ax.set_title('Vertical, 0.0')
 
-ax = fig.add_subplot(2, 2, 3)
-im = ax.pcolor(data)
-cax,kw = make_axes(ax, orientation='horizontal', location=0.0)
-fig.colorbar(im, ax=ax, cax=cax, **kw)
-ax.set_title('Horizontal, 0.0')
+    ax = fig.add_subplot(2, 2, 2)
+    im = ax.pcolor(data)
+    cax,kw = make_axes(ax, orientation='vertical', location=1.0)
+    fig.colorbar(im, ax=ax, cax=cax, **kw)
+    ax.set_title('Vertical, 1.0')
 
-ax = fig.add_subplot(2, 2, 4)
-im = ax.pcolor(data)
-cax,kw = make_axes(ax, orientation='horizontal', location=1.0)
-fig.colorbar(im, ax=ax, cax=cax, **kw)
-ax.set_title('Horizontal, 1.0')
+    ax = fig.add_subplot(2, 2, 3)
+    im = ax.pcolor(data)
+    cax,kw = make_axes(ax, orientation='horizontal', location=0.0)
+    fig.colorbar(im, ax=ax, cax=cax, **kw)
+    ax.set_title('Horizontal, 0.0')
 
-plt.show()
+    ax = fig.add_subplot(2, 2, 4)
+    im = ax.pcolor(data)
+    cax,kw = make_axes(ax, orientation='horizontal', location=1.0)
+    fig.colorbar(im, ax=ax, cax=cax, **kw)
+    ax.set_title('Horizontal, 1.0')
+
+    plt.show()

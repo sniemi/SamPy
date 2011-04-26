@@ -11,17 +11,19 @@ def hess_plot(xdata, ydata, weight,
     '''
     This function can be used to calculate a hess plot
     i.e. the conditional probability 2D histogram.
-    @param xdata: 1D NumPy array containing data in x dim.
-    @param ydata: 1D NumPy array containing data in y dim.
-    @param weight: 1D NumPy array containing weight for
+
+    :param xdata: 1D NumPy array containing data in x dim.
+    :param ydata: 1D NumPy array containing data in y dim.
+    :param weight: 1D NumPy array containing weight for
                    each data point
-    @param xmin: a minimum x value to be considered
-    @param xmax: a maximum x value to be considered
-    @param nxbins: the number of bins in x dim.
-    @param nybins: the number of bins in y dim.
-    @param pmax: 1.0
-    @param pmin: 0.1 
-    @return: 2D array, min, max
+    :param xmin: a minimum x value to be considered
+    :param xmax: a maximum x value to be considered
+    :param nxbins: the number of bins in x dim.
+    :param nybins: the number of bins in y dim.
+    :param pmax: 1.0
+    :param pmin: 0.1
+
+    :return: 2D array, min, max
     '''
     #xbins
     xbin = N.linspace(xmin, xmax, nxbins+1)
@@ -67,7 +69,7 @@ def hess_plot_old(xdata, ydata, weight,
                   ymin, ymax, nybins,
                   pmax = 1.0, pmin = 0.1):
     '''
-    @note: obsolete, do not use this version!
+    :note: obsolete, do not use this version!
     '''
     dx = (xmax - xmin) / float(nxbins)
     mbin = xmin + (N.arange(nxbins))*dx + dx/2.
