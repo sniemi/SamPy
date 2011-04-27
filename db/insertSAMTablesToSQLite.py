@@ -1,12 +1,18 @@
+'''
+This module contains a function that can be used to
+generate an SQLite3 database from ascii files.
+
+:author: Sami-Matias Niemi
+:contact: niemi@stsci.edu
+'''
 import sqlite3
 import glob as g
-#Sami's repo
-import smnIO.sextutils as su
+#From Sami's repo
 import log.Logger as lg
 import db.sqlite
 
-def generateSQLiteDBfromSAMTables(output = 'sams.db',
-                                  fileidentifier = '*.dat'):
+def generateSQLiteDBfromSAMTables(output='sams.db',
+                                  fileidentifier='*.dat'):
     '''
     This little function can be used to generate an
     SQLite3 database from Rachel's GF output.
@@ -17,12 +23,13 @@ def generateSQLiteDBfromSAMTables(output = 'sams.db',
     Each index is names as table_id, albeit there
     should be no need to know the name of the index.
 
-    @param output: name of the output file
-    @param fileidentifier: string how to identify input data  
+    :param output: name of the output file
+    :param fileidentifier: string how to identify input data
+    :type output: string
+    :type fileidentifier: string
     '''
     #find all files
     files = g.glob(fileidentifier)
-
     #create a Connection object that represents the database
     #to a file
     conn = sqlite3.connect(output)
@@ -42,7 +49,7 @@ def generateSQLiteDBfromSAMTables(output = 'sams.db',
                 formats.append('INTEGER')
             else:
                 formats.append('REAL')
-        
+
         if 'galprop.dat' in file:
             start = 'create table galprop '
             ins = 'insert into galprop values ('
@@ -85,12 +92,18 @@ def generateSQLiteDBfromSAMTables(output = 'sams.db',
             for x in range(len(formats)):
                 ins += '?,'
             ins = ins[:-1] + ')'
-     
+        if 'lightcone.dat' in file:
+            start = 'create table lightcone '
+            ins = 'insert into lightcone values ('
+            for x in range(len(formats)):
+                ins += '?,'
+            ins = ins[:-1] + ')'
+
         #generate an SQL table creation string
         sql_create_string = db.sqlite.generateSQLString(columns,
                                                         formats,
                                                         start)
-        
+
         #create a cursor instance
         c = conn.cursor()
 
@@ -110,16 +123,18 @@ def generateSQLiteDBfromSAMTables(output = 'sams.db',
                 c.execute(ins, line.split())
 
         log.info('Finished inserting data')
-        
+
         #create index to make searching faster
-        if file in 'halos.dat':
-            indexString = 'CREATE UNIQUE INDEX %s_ids on %s (halo_id)' % (file[:-4], file[:-4]) 
-        elif file in ['galphot.dat', 'galphotdust.dat']: 
+        if file in ['halos.dat']:
+            indexString = 'CREATE UNIQUE INDEX %s_ids on %s (halo_id)' % (file[:-4], file[:-4])
+        elif file in ['galphot.dat', 'galphotdust.dat']:
             indexString = 'CREATE UNIQUE INDEX %s_ids on %s (halo_id, gal_id, z)' % (file[:-4], file[:-4])
         elif file in 'galpropz.dat':
             indexString = 'CREATE UNIQUE INDEX %s_ids on %s (halo_id, gal_id, zgal)' % (file[:-4], file[:-4])
         elif 'totals.dat' in file:
             indexString = 'CREATE UNIQUE INDEX %s_ids on %s (z)' % (file[:-4], file[:-4])
+        elif 'lightcone.dat' in file:
+            indexString = 'CREATE INDEX %s_ids on %s (halo_id, gal_id)' % (file[:-4], file[:-4])
         else:
             indexString = 'CREATE UNIQUE INDEX %s_ids on %s (halo_id, gal_id)' % (file[:-4], file[:-4])
 
@@ -130,12 +145,12 @@ def generateSQLiteDBfromSAMTables(output = 'sams.db',
         conn.commit()
         # We can also close the cursor if we are done with it
         c.close()
-        
+
     log.info('All done, DB file is %s', output)
 
 
 if __name__ == '__main__':
-    log_filename = 'insertSAMTablesToSQLite.log' 
+    log_filename = 'insertSAMTablesToSQLite.log'
     log = lg.setUpLogger(log_filename)
 
     generateSQLiteDBfromSAMTables()

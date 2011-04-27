@@ -1,4 +1,3 @@
-#! /usr/bin/env python
 '''
 DESCRIPTION:
 Combines the Phase Retrieval software results, produces plots
@@ -10,12 +9,13 @@ python PhaseRetResults.py
 HISTORY:
 Created on Dec 17, 2009
 
-@author: Sami-Matias Niemi (niemi@stsci.edu)
+:author: Sami-Matias Niemi
+:contact: niemi@stsci.edu
 
-@version: 0.91
+:version: 0.91
 
-@todo: maybe introduce sigma clipping to the means?
-@todo: how the legend has been implemented is a dirty,
+:todo: maybe introduce sigma clipping to the means?
+:todo: how the legend has been implemented is a dirty,
         it should be done better.
 '''
 
@@ -26,7 +26,6 @@ matplotlib.rcParams['legend.fontsize'] = 9
 import pyfits as PF
 import pylab as P
 import numpy as N
-import datetime as D
 import scipy.interpolate as I
 import glob as G
 import time

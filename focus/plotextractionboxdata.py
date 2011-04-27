@@ -1,5 +1,5 @@
 '''
-@author: Sami-Matias Niemi
+:author: Sami-Matias Niemi
 '''
 import matplotlib
 matplotlib.rc('text', usetex = False)

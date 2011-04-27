@@ -1,5 +1,5 @@
 '''User Interface for Focus Monitor'''
-import os, sys, glob
+import glob
 import string, time, datetime
 from math import *
 from matplotlib import dates

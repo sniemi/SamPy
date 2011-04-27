@@ -1,9 +1,10 @@
-#! /usr/bin/env python
 '''
 Created on March 3, 2011
 
-:author : Sami-Matias Niemi (niemi@stsci.edu)
-:version : 0.1
+:author: Sami-Matias Niemi
+:contact: niemi@stsci.edu
+
+:version: 0.1
 '''
 import pyfits as PF
 import numpy as N

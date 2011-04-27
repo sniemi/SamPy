@@ -9,9 +9,9 @@ HISTORY:
 Created on Sep 10, 2009
 Added to the repository on Dec 3, 2010
 
-@author: Sami-Matias Niemi
+:author: Sami-Matias Niemi
 
-@todo:
+:todo:
 1) change focus trend since mirror move to two x axis mode (one with date)
 2) Create a new plot: all focus data since last mirror move, fit functions
 

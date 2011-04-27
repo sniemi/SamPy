@@ -1,4 +1,3 @@
-#! /usr/stsci/pyssg/Python-2.7/bin/python
 '''
 Collects focus measurement results and outputs them
 to files, one for each instrument and chip.
@@ -7,13 +6,13 @@ This is so horribly written that it should be redone
 completely from scratch. There are Python tuples, lists
 and NumPy arrays, and they are all badly mixed.
 
-@note: Uses hardcoded path to python 2.7 of IRAF env.
+:note: Uses hardcoded path to python 2.7 of IRAF env.
 
-@author: Sami-Matias Niemi 
-@contact: niemi@stsci.edu
-@organization: Space Telescope Science Insitute
+:author: Sami-Matias Niemi
+:contact: niemi@stsci.edu
+:organization: Space Telescope Science Insitute
 
-@todo: improve documentation
+:todo: improve documentation
 '''
 import numpy as N
 import glob as G

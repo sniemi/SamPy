@@ -1,11 +1,11 @@
-#! /usr/bin/env python
 '''
 HISTORY:
 Created on March 3, 2011
 
-@author: Sami-Matias Niemi (niemi@stsci.edu)
+:author: Sami-Matias Niemi
+:contact: niemi@stsci.edu
 
-@version: 0.1
+:version: 0.1
 '''
 import matplotlib
 matplotlib.use('PDF')
@@ -15,7 +15,7 @@ import numpy as N
 import os
 from matplotlib import cm
 #from my repo
-import SamiPython.focus.phaseretrievalresults as ph
+import focus.phaseretrievalresults as ph
 
 __author__ = 'Sami-Matias Niemi'
 __version__ = '0.1'
