@@ -23,6 +23,7 @@ def process_args(just_print_help = False):
     
     :param just_print_help: will print help
     :type just_print_help: boolean
+    
     :return: parsed commmand line options
     """
     from optparse import OptionParser
@@ -69,6 +70,7 @@ def combine(filelist, median = False, verbose = False):
     :type median: boolean
     :param verbose: verbose mode.
     :type verbose: boolean
+
     :return: The combined image (2d-array with pixel values)
     """
     import pyfits

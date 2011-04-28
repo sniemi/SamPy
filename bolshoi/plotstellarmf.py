@@ -12,7 +12,6 @@ from matplotlib.ticker import MultipleLocator, FormatStrFormatter, NullFormatter
 import numpy as N
 import pylab as P
 import os, logging
-import glob as g
 #From Sami's Repo
 import db.sqlite
 import astronomy.stellarMFs as SMF

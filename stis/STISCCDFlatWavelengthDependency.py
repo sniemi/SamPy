@@ -1,9 +1,13 @@
 '''
-Created on Dec 8, 2009
-
-@author: niemi
+:date: Created on Dec 8, 2009
+:author: Sami-Matias Niemi
 '''
+import numpy as N
+
 def RMS(data):
+    '''
+    Returns the root-mean-square of the given data.
+    '''
     return N.sqrt(N.mean(data)**2 + N.std(data)**2)
 
 def CombineFlat(self, filelist):

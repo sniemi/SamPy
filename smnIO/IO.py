@@ -2,9 +2,10 @@
 IO class for COS instrument handbook plotting.
 Can be used to read FITS image and tabular data.
 
-Created on Mar 18, 2009
+:date: Created on Mar 18, 2009
 
-@author: Sami-Matias Niemi (niemi@stsci.edu) for STScI
+:author: Sami-Matias Niemi
+:contact: niemi@stsci.edu
 '''
 
 import pyfits as PF
@@ -48,7 +49,7 @@ class COSHBIO():
     def FITSTable(self, file, extension = 1):
         '''
         Reads FITS table to an array...
-         Returns data as a numpy array
+        Returns data as a numpy array
         '''
         filename = self.path + file     
         try:

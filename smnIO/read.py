@@ -1,4 +1,7 @@
 '''
+Reading Data
+============
+
 This file contains some helper functions to
 parse different data files.
 
@@ -7,10 +10,12 @@ parse different data files.
 :version : 0.1
 
 :requires: NumPy
+:requires: astronomy.basics
+:requires: smnIO.sexutils
 '''
 import smnIO.sextutils as su
 import astronomy.basics
-import numpy as N
+import numpy as np
 
 __author__ = 'Sami-Matias Niemi'
 
@@ -19,10 +24,17 @@ def readBolshoiDMfile(filename, column, no_phantoms):
     This little helper function can be used to read
     dark matter halo masses from files produced from
     the merger trees of the Bolshoi simulation.
-    :param filename (string): name of the file
-    :param column (int): which column to grep
-    :param no_phantoms (boolean): wchich dark matter mass to read
-    :return: NumPy array of dark matter halo masses
+
+    :param filename: name of the file
+    :param column: which column to grep
+    :param no_phantoms: which dark matter mass to read
+
+    :type filename: string
+    :type column: int
+    :type no_phantoms: boolean
+
+    :return: dark matter halo masses
+    :rtype: NumPy array
     '''
     out = []
     fh = open(filename, 'r')
@@ -34,7 +46,7 @@ def readBolshoiDMfile(filename, column, no_phantoms):
         else:
             out.append(float(line.split()[column]))
         line = fh.readline()
-    return N.array(out)
+    return np.array(out)
 
 
 def GFBasicData(path, AB=True):
@@ -42,9 +54,17 @@ def GFBasicData(path, AB=True):
     Reads Rachel's SAMs output data.
     If AB = True then the function converts
     Johnson U, B, V, and K bands to Vega system.
-    :param path (string): path in which the files are located
-    :param AB (boolean): whether Johnson U, B, V, and K bands
-    are converted to Vega system or not.
+
+    :note: This is really ineffective way of reading in
+           data and should be used only when a rather
+           small simulation is being processed.
+
+    :param path: path in which the files are located
+    :param AB: whether Johnson U, B, V, and K bands are converted to Vega system or not.
+
+    :type path: string
+    :type AB: boolean
+
     '''
     AB = astronomy.basics.JohnsonToABmagnitudes()
 

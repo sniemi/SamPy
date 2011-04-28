@@ -1,13 +1,10 @@
-#! /usr/bin/env python
 '''
 ABOUT:
 Plots ratios between STIS CCD imaging flats.
 
-DEPENDS:
-Python 2.5 or later (no 3.x compatible)
-NumPy
-PyFITS
-matplotlib
+:requires: NumPy
+:requires: PyFITS
+:requires: matplotlib
 
 TESTED:
 Python 2.5.1
@@ -15,13 +12,11 @@ NumPy: 1.4.0.dev7576
 PyFITS: 2.2.2
 matplotlib 1.0.svn
 
-HISTORY:
-Created on November 18, 2009
+:date: Created on November 18, 2009
 
-VERSION:
-0.15: test release (SMN)
+:version: 0.15: test release (SMN)
 
-@author: Sami-Matias Niemi (niemi@stsci.edu)
+:author: Sami-Matias Niemi (niemi@stsci.edu)
 '''
 
 __author__ = 'Sami-Matias Niemi'
@@ -54,7 +49,8 @@ def ImStats(im1, im2, scale):
     '''
     Calculates some basic image statistics from 
     two images given.
-    @return: ratio, image1 mean, image1 std, ratio mean
+    
+    :return: ratio, image1 mean, image1 std, ratio mean
     '''
     ratio = (im1 * scale) / im2
     ratiosub = ratio[500:600,500:600]

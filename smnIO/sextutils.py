@@ -1,34 +1,36 @@
-# Utilities for parseing SExtractor files
-#
-# H. Ferguson - revised 4/23/03 to promote ints to floats if a value
-# with a decimal point appears somewhere in the column originally thought
-# to be integers
-# 
-# v2.1 - fails gracefully when the catalog has no sources
-# v3.0 - added gettypes to return column types
-#      - create new column names when they are not explictly in the header
-# v4.0 - added gettypes to return column types
-# v4.1 - uses numarray by default
-# v4.2 - delete attributed 'l' (input lines from catalog) before returning
-# v4.3 - 1/11/06Added less-offensive alias se_catalog() == sextractor()
-# v4.4hf-1/21/06 Fixed bug in creating extra column names when last is a vector
-# v4.4vl - V. Laidler added new methods:
-#           __len__ returns number of objects in catalog
-#           __iter__ returns the index of the next row in the catalog
-#           line(self,i) returns a constructed string containing the ith line 
-#           buildheader returns a constructed header from the hdict
-#        Added new attribute self.header: contains the header as read in
-#           from the catalog.
-#        Lines that start with '#' but are not followed by an integer are
-#           now assumed to be comment lines, which are added to the
-#           header but otherwise skipped.
-# v4.5 - V. Laidler removed Numeric dependence
-# v4.6 - V. Laidler converted to numpy
-# v5.0 - 7/5/07 Numpy conversion
-# v6.0 - V. Laidler: added rw_catalog class, reworked internals to avoid
-#           column name clashes
-# v7.0 - S.-M. Niemi: some modifications
-# v7.1 - S.-M. Niemi: now supports string columns
+'''
+Utilities for parseing SExtractor files
+
+H. Ferguson - revised 4/23/03 to promote ints to floats if a value
+with a decimal point appears somewhere in the column originally thought
+to be integers
+
+v2.1 - fails gracefully when the catalog has no sources
+v3.0 - added gettypes to return column types
+      - create new column names when they are not explictly in the header
+v4.0 - added gettypes to return column types
+v4.1 - uses numarray by default
+v4.2 - delete attributed 'l' (input lines from catalog) before returning
+v4.3 - 1/11/06Added less-offensive alias se_catalog() == sextractor()
+v4.4hf-1/21/06 Fixed bug in creating extra column names when last is a vector
+v4.4vl - V. Laidler added new methods:
+           __len__ returns number of objects in catalog
+           __iter__ returns the index of the next row in the catalog
+           line(self,i) returns a constructed string containing the ith line
+           buildheader returns a constructed header from the hdict
+        Added new attribute self.header: contains the header as read in
+           from the catalog.
+        Lines that start with '#' but are not followed by an integer are
+           now assumed to be comment lines, which are added to the
+           header but otherwise skipped.
+v4.5 - V. Laidler removed Numeric dependence
+v4.6 - V. Laidler converted to numpy
+v5.0 - 7/5/07 Numpy conversion
+v6.0 - V. Laidler: added rw_catalog class, reworked internals to avoid
+           column name clashes
+v7.0 - S.-M. Niemi: some modifications
+v7.1 - S.-M. Niemi: now supports string columns
+'''
 
 __version__ = '7.1'
 __author = 'Henry C. Ferguson, STScI'
@@ -146,7 +148,9 @@ class se_catalog(object):
         self._type = {}
         for k in self._d.keys():
             #this line may require changing
-            if len(self._l) > 10000:
+            if len(self._l) > 1000000:
+                every = 500
+            elif len(self._l) > 10000:
                 every = 20
             else:
                 every = 10
@@ -442,15 +446,15 @@ def getcols(d, l, *args):
 def writeheader(fh, colnames):
     """ Write an SExtractor-style header to an open file handle.
 
-    @param fh: file handle
-    @type fh: file
+    :param fh: file handle
+    :type fh: file
 
-    @param colnames: list of column names
-    @type colnames: list
+    :param colnames: list of column names
+    :type colnames: list
 
-    @todo: add space checking to colnames
-    @todo: permit passing a filename?
-    @todo: handle comments
+    :todo: add space checking to colnames
+    :todo: permit passing a filename?
+    :todo: handle comments
     """
     for i in range(len(colnames)):
         fh.write('#   %d   %s\n' % (i + 1, colnames[i]))

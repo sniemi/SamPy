@@ -25,10 +25,11 @@ def gallazzi(h=0.7):
     if using Hubble constant 70.
 
     :param h: Hubble parameter to scale
+    :type h: float
 
     return:
     '''
-    file = observation_ath + 'metals/gallazzi.dat'
+    file = observation_path + 'metals/gallazzi.dat'
     data = N.loadtxt(file, comments=';')
     twologh = 2.0 * N.log10(h)
     return data[:, 0] + twologh, data[:, 1], data[:, 2], data[:, 3]

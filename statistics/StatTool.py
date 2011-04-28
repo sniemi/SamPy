@@ -1,10 +1,14 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-#This is the ultimate statistical tool!
-#Calculates pretty much anything you can think of.
-#Dependency: Scipy & Numpy
-#2008, Sami-Matias Niemi
+'''
+This is the ultimate statistical tool!
+Calculates pretty much anything you can think of.
+This version uses two input files!
 
+:requires: Scipy
+:requires: Numpy
+
+:date: 2008
+:author: Sami-Matias Niemi
+'''
 def process_args():
     from optparse import OptionParser
     parser = OptionParser()

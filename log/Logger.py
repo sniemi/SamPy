@@ -8,9 +8,11 @@ __version__ = '0.3'
 def setUpLogger(log_filename, loggername = 'logger'):
     '''
     Sets up a logger.
-    @param log_filename: name of the file to save the log. 
-    @param loggername: name of the logger 
-    @return: logger instance
+
+    :param log_filename: name of the file to save the log.
+    :param loggername: name of the logger
+
+    :return: logger instance
     '''
     # create logger
     logger = logging.getLogger(loggername)

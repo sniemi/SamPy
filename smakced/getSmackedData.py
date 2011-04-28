@@ -53,8 +53,7 @@ class Smakced():
         Note that table number has been hard coded.
         The SMAKCED wiki page returns several "tables".
         
-        :param data: data that has been retrieved with
-        the getData method
+        :param data: data that has been retrieved with the getData method
 
         :return: array containing table entries
         '''

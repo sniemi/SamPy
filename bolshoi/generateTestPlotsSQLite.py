@@ -14,24 +14,21 @@ matplotlib.rc('lines', markeredgewidth=2.0)
 matplotlib.rcParams['lines.linewidth'] = 1.8
 matplotlib.rcParams['legend.fontsize'] = 10
 matplotlib.rcParams['legend.handlelength'] = 5
-matplotlib.rcParams['font.size'] = 12
+matplotlib.rcParams['font.size'] = 16
 matplotlib.rcParams['xtick.major.size'] = 5
 matplotlib.rcParams['ytick.major.size'] = 5
-#matplotlib.rcParams['xtick.labelsize'] = 'large'
-#matplotlib.rcParams['ytick.labelsize'] = 'large'
+matplotlib.rcParams['xtick.labelsize'] = 'large'
+matplotlib.rcParams['ytick.labelsize'] = 'large'
 matplotlib.rcParams['legend.fancybox'] = True
 matplotlib.rcParams['legend.shadow'] = True
-#matplotlib.use('PDF')
+matplotlib.use('Agg')
 from matplotlib.ticker import MultipleLocator, NullFormatter
 from matplotlib import cm
 import numpy as N
 import pylab as P
 import scipy.stats as ss
-import glob
-import shutil
-import os
 #Imports from Sami's repo
-import smnIO.read as read
+import db.sqlite as sq
 import astronomy.stellarMFs as stellarMFs
 import astronomy.metals as metallicity
 import astronomy.gasmasses as gas
@@ -60,33 +57,40 @@ def perc_bin(xbin, xdata, ydata):
     return xbin_mid, y50, y16, y84
 
 
-def fstar_plot(prop, output='fstar.png'):
+def fstar(path, db, output='fstar.png'):
     '''
     Stellar mass to halo mass ratio as a function of halo mass.
     This plot differs slightly from the one in the Somerville 2008:
     the plot in the paper is the fraction of baryons in stars. 
     '''
+    #get data
+    query = '''select mstar, mhalo, gal_id from galprop'''
+    data = sq.get_data_sqliteSMNfunctions(path, db, query)
+    mstar = data[:, 0]
+    mhalo = data[:, 1]
+    gal_id = data[:, 2]
+
     mfit = 10. + N.arange(50) * 0.1
     mbin = 10.7 + N.arange(25) * 0.2
 
     f8 = 8. - mfit
     #f9 = 9. - mfit
 
-    fs_halo = 10.0 ** (prop.mstar - prop.mhalo)
+    fs_halo = 10.0 ** (mstar - mhalo)
 
     #central and satellite galaxies
-    central = prop.gal_id == 1
-    sat = prop.gal_id != 1
+    central = gal_id == 1
+    sat = gal_id != 1
 
-    mbin_mid, fs_50, fs_10, fs_90 = perc_bin(mbin, prop.mhalo, fs_halo)
-    mbin_mid, fs_cen_50, fs_cen_10, fs_cen_90 = perc_bin(mbin, prop.mhalo[central], fs_halo[central])
-    mbin_mid, fs_sat_50, fs_sat_10, fs_sat_90 = perc_bin(mbin, prop.mhalo[sat], fs_halo[sat])
+    mbin_mid, fs_50, fs_10, fs_90 = perc_bin(mbin, mhalo, fs_halo)
+    mbin_mid, fs_cen_50, fs_cen_10, fs_cen_90 = perc_bin(mbin, mhalo[central], fs_halo[central])
+    mbin_mid, fs_sat_50, fs_sat_10, fs_sat_90 = perc_bin(mbin, mhalo[sat], fs_halo[sat])
 
     #begin figure
-    fig = P.figure(figsize=(12,12))
+    fig = P.figure(figsize=(10, 10))
     ax = fig.add_subplot(111)
-    #ax.plot(prop.mhalo, prop.mstar)
-    ax.scatter(prop.mhalo[central], N.log10(fs_halo[central]),
+
+    ax.scatter(mhalo[central], N.log10(fs_halo[central]),
                edgecolor='r', s=2, facecolor='r', label='Central galaxies')
 
     ax.plot(mbin_mid, N.log10(fs_50), 'ko', ms=10, label='Median, all galaxies')
@@ -109,7 +113,7 @@ def fstar_plot(prop, output='fstar.png'):
     ax.plot(mfit, f8, 'k--', c='0.25')
 
     #axis scales
-    ax.set_xlim(10.0, 15.0)
+    ax.set_xlim(9.8, 15.0)
     ax.set_ylim(-4.0, -0.75)
 
     #small ticks
@@ -127,29 +131,38 @@ def fstar_plot(prop, output='fstar.png'):
     ax.set_ylabel(r'$\log_{10} \left ( \frac{M_{star}}{f_{b}M_{halo}} \right )$')
     ax.set_xlabel(r'$\log_{10} \left ( \frac{M_{(sub)halo}}{M_{\odot}} \right )$')
 
-    P.legend()
+    P.legend(numpoints=1, scatterpoints=1)
     P.savefig(output)
     P.close()
 
 
-def massfunc_plot(halos, props, mmax=12.5, mmin=5.0, nbins=30, output='SMN',
+def massfunctions(path, db,
+                  mmax=12.5,
+                  mmin=5.0,
+                  nbins=30,
+                  output='SMN',
                   nvolumes=15):
     '''
     Plots stellar mass functions, cold gas mass functions, & BH MF
     '''
-    #files
-    path_BH = '/Users/niemi/Desktop/Research/IDL/obs/phopkins/'
-    #BH_file = path_BH + 'rachel_bhmf_data.dat'
+    #get data
+    query = '''select gal_id, halo_id, mbulge, mstar, mcold, mbh from galprop'''
+    data = sq.get_data_sqliteSMNfunctions(path, db, query)
+    gal_id = data[:, 0]
+    halo_id = data[:, 1]
+    mbulge = data[:, 2]
+    mstar = data[:, 3]
+    mcold = data[:, 4]
+    mbh = data[:, 5]
 
-    #overrides weight for a single Bolshoi sub-volume
-    #halos.weight = halos.weight * 0. + 1./(50.0/0.7)**3
-    halos.weight = halos.weight * 0. + 1. / (nvolumes * (50. / 0.7) ** 3)
-
-    ngal = len(props.gal_id)
+    ngal = len(gal_id)
     print '%i galaxies found' % ngal
 
+    #overrides weight for nvolumes Bolshoi sub-volumes
+    weight = N.zeros(ngal) + 1. / (nvolumes * (50. / 0.7) ** 3)
+
+    #mass bins
     dm = (mmax - mmin) / nbins
-    print dm
     mbin = mmin + (N.arange(nbins) + 0.5) * dm
 
     #mfit = mmin + N.arange(150) * 0.05
@@ -164,40 +177,40 @@ def massfunc_plot(halos, props, mmax=12.5, mmin=5.0, nbins=30, output='SMN',
     mf_late = N.zeros(nbins)
     mf_bulge = N.zeros(nbins)
 
-    #from IDL, should be done without looping
-    btt = 10.0 ** (props.mbulge - props.mstar)
+    #TODO from IDL, should be done without looping
+    btt = 10.0 ** (mbulge - mstar)
     for i in range(ngal):
-        ihalo = props.halo_id[i]
+        ihalo = halo_id[i]
         #cold gas
-        ibin = int(N.floor((props.mcold[i] - mmin) / dm))
+        ibin = int(N.floor((mcold[i] - mmin) / dm))
         if ibin >= 0 and ibin < nbins:
-            mf_cold[ibin] += halos.weight[ihalo]
+            mf_cold[ibin] += weight[ihalo]
             #stellar mass
-        ibin = int(N.floor((props.mstar[i] - mmin) / dm))
+        ibin = int(N.floor((mstar[i] - mmin) / dm))
         if ibin >= 0 and ibin < nbins:
-            mf_star[ibin] += halos.weight[ihalo]
+            mf_star[ibin] += weight[ihalo]
             #stellar mass, by type
             if btt[i] >= 0.4:
-                mf_early[ibin] += halos.weight[ihalo]
+                mf_early[ibin] += weight[ihalo]
             else:
-                mf_late[ibin] += halos.weight[ihalo]
+                mf_late[ibin] += weight[ihalo]
                 #stellar mass, centrals
-            if props.gal_id[i] == 1:
+            if gal_id[i] == 1:
                 if ibin >= 0 and ibin < nbins:
-                    mf_star_central[ibin] += halos.weight[ihalo]
-            #bulge mass
-        ibin = int(N.floor((props.mbulge[i] - mmin) / dm))
+                    mf_star_central[ibin] += weight[ihalo]
+                    #bulge mass
+        ibin = int(N.floor((mbulge[i] - mmin) / dm))
         if ibin >= 0 and ibin < nbins:
-            mf_bulge[ibin] += halos.weight[ihalo]
+            mf_bulge[ibin] += weight[ihalo]
             #baryonic mass
-        mbar = N.log10(10.0 ** props.mcold[i] + 10.0 ** props.mstar[i])
+        mbar = N.log10(10.0 ** mcold[i] + 10.0 ** mstar[i])
         ibin = int(N.floor((mbar - mmin) / dm))
         if ibin >= 0 and ibin < nbins:
-            mf_bar[ibin] += halos.weight[ihalo]
+            mf_bar[ibin] += weight[ihalo]
             #black hole
-        ibin = int(N.floor((props.mbh[i] - mmin) / dm))
+        ibin = int(N.floor((mbh[i] - mmin) / dm))
         if ibin >= 0 and ibin < nbins:
-            mf_bh[ibin] += halos.weight[ihalo]
+            mf_bh[ibin] += weight[ihalo]
 
     mf_cold = N.log10(mf_cold / dm)
     mf_star = N.log10(mf_star / dm)
@@ -218,14 +231,15 @@ def massfunc_plot(halos, props, mmax=12.5, mmin=5.0, nbins=30, output='SMN',
     fig = P.figure()
     ax = fig.add_subplot(111)
     ax.plot(mbin, mf_star, label='Stellar Mass Function')
-    ax.errorbar(mg, phig, yerr=[phig - phi_highg, phi_lowg - phig], label='Bell et al. G')
-    ax.errorbar(mk, phik, yerr=[phik - phi_highk, phi_lowk - phik], label='Bell et al. K')
+    ax.errorbar(mg, phig, yerr=[phig - phi_highg, phi_lowg - phig], label='$G$-band from Bell et al.')
+    ax.errorbar(mk, phik, yerr=[phik - phi_highk, phi_lowk - phik], label='$K$-band from Bell et al.')
     #ax.errorbar(ml, phil, yerr = [phi_lowl, phi_highl], label = 'Lin et al. K')
-    ax.errorbar(m, n, yerr=[nlow - n, n - nhigh], label='Panter et al. K')
+    ax.errorbar(m, n, yerr=[nlow - n, n - nhigh], label='$K$-band from Panter et al.')
     ax.set_xlim(8.0, 12.5)
-    ax.set_ylim(-6.0, -1.0)
-    ax.set_xlabel(r'$\log M_{star} \quad [M_{\odot}]$')
-    ax.set_ylabel(r'$\frac{\log \textrm{d}N}{\textrm{d}\log M_{star}} \quad [\textrm{Mpc}^{-3} \textrm{dex}^{-1}]$')
+    ax.set_ylim(-6.1, -1.0)
+    ax.set_xlabel(r'$\log_{10} \left ( M_{\star} \ [M_{\odot}] \right )$')
+    ax.set_ylabel(
+        r'$\frac{\log_{10} \mathrm{d}N}{\mathrm{d}\log_{10} M_{\star}} \quad [\mathrm{Mpc}^{-3} \mathrm{dex}^{-1}]$')
     #small ticks
     m = ax.get_yticks()[1] - ax.get_yticks()[0]
     yminorLocator = MultipleLocator(m / 5)
@@ -260,8 +274,8 @@ def massfunc_plot(halos, props, mmax=12.5, mmin=5.0, nbins=30, output='SMN',
     ax.plot(m_hi, N.log10(10.0 ** phi_hi + 10 ** phi_h2), 'r-', label='$H_{I} + H_{2}$')
     ax.set_xlim(8.0, 11.5)
     ax.set_ylim(-5.5, -0.8)
-    ax.set_xlabel(r'$\log_{10} M_{cold} \quad [M_{\odot}]$')
-    ax.set_ylabel(r'$\frac{\log_{10} \textrm{d}N}{\textrm{d}\log M} \quad [\textrm{Mpc}^{-3} \textrm{dex}^{-1}]$')
+    ax.set_xlabel(r'$\log_{10} \left ( M_{\mathrm{cold}} \ [M_{\odot}] \right )$')
+    ax.set_ylabel(r'$\frac{\log_{10} \mathrm{d}N}{\mathrm{d}\log_{10} M} \quad [\mathrm{Mpc}^{-3} \mathrm{dex}^{-1}]$')
     #small ticks
     m = ax.get_yticks()[1] - ax.get_yticks()[0]
     yminorLocator = MultipleLocator(m / 5)
@@ -287,9 +301,10 @@ def massfunc_plot(halos, props, mmax=12.5, mmin=5.0, nbins=30, output='SMN',
     ax.errorbar(m_bar, phi_bar, yerr=[phi_bar - phi_high_bar, phi_low_bar - phi_bar],
                 c='g', ls='-', label='Bell et al.')
     ax.set_xlim(8.0, 12.5)
-    ax.set_ylim(-5.0, -0.25)
-    ax.set_xlabel(r'$\log_{10} M_{baryons} \quad [M_{\odot}]$')
-    ax.set_ylabel(r'$\frac{\log_{10} \mathrm{d}N}{\mathrm{d}\log M_{baryons}} \quad [\mathrm{Mpc}^{-3} \mathrm{dex}^{-1}]$')
+    ax.set_ylim(-4.9, -0.25)
+    ax.set_xlabel(r'$\log_{10} \left ( M_{\mathrm{baryons}} \ [M_{\odot}] \right )$')
+    ax.set_ylabel(
+        r'$\frac{\log_{10} \mathrm{d}N}{\mathrm{d}\log_{10} M_{\mathrm{baryons}}} \quad [\mathrm{Mpc}^{-3} \mathrm{dex}^{-1}]$')
     #small ticks
     m = ax.get_yticks()[1] - ax.get_yticks()[0]
     yminorLocator = MultipleLocator(m / 5)
@@ -316,9 +331,9 @@ def massfunc_plot(halos, props, mmax=12.5, mmin=5.0, nbins=30, output='SMN',
     ax.plot(m_bh, phi_med_bh, 'g-', label='Marconi et al.')
     ax.plot(m_bh, phi_high_bh, 'g--')
     ax.set_xlim(6.0, 10.2)
-    ax.set_ylim(-7.0, -1.5)
-    ax.set_xlabel(r'$\log_{10} M_{BH} \quad [M_{\odot}]$')
-    ax.set_ylabel(r'$\frac{\log_{10} \mathrm{d}N}{\mathrm{d}\log M} \quad [\mathrm{Mpc}^{-3} \mathrm{dex}^{-1}]$')
+    ax.set_ylim(-6.9, -1.5)
+    ax.set_xlabel(r'$\log_{10} \left ( M_{BH} \ [M_{\odot}] \right )$')
+    ax.set_ylabel(r'$\frac{\log_{10} \mathrm{d}N}{\mathrm{d}\log_{10} M} \quad [\mathrm{Mpc}^{-3} \mathrm{dex}^{-1}]$')
     #small ticks
     m = ax.get_yticks()[1] - ax.get_yticks()[0]
     yminorLocator = MultipleLocator(m / 5)
@@ -335,14 +350,13 @@ def massfunc_plot(halos, props, mmax=12.5, mmin=5.0, nbins=30, output='SMN',
     P.close()
 
 
-def gasfrac_hess(mstar, fgas, weight, label, output,
-                 mmin=8.5, mmax=11.7, nmbins=16,
-                 fgasmin=0.0, fgasmax=1.0, nfbins=10,
-                 pmax=1.0, pmin=0.01):
+def gasfracHess(mstar, fgas, weight, label, output,
+                mmin=8.5, mmax=11.7, nmbins=16,
+                fgasmin=0.0, fgasmax=1.0, nfbins=10,
+                pmax=1.0, pmin=0.01):
     '''
     Plot _conditional_ distribution of gas fraction vs. stellar mass.
     Ported from an IDL code, should be cleaned.
-    Most likely N.zeros are not needed
     '''
     #n.b. mbin and fgasbin are the bin CENTERS
     dm = (mmax - mmin) / nmbins
@@ -351,8 +365,7 @@ def gasfrac_hess(mstar, fgas, weight, label, output,
     #fgasbin = fgasmin + (N.arange(nfbins)) * dfgas + dfgas / 2.0
 
     fgashist = N.zeros((nfbins, nmbins))
-    #fraction of galaxies with no gas
-    #nogas = N.zeros(nmbins)
+
     #without weight factor
     yhist_num = N.zeros((nfbins, nmbins))
     #number of halos in each bin
@@ -403,7 +416,7 @@ def gasfrac_hess(mstar, fgas, weight, label, output,
     ax.set_xlim(mmin, mmax)
     ax.set_ylim(pmin, pmax)
     ax.set_ylabel('Gas fraction')
-    ax.set_xlabel('$\log M_{star} \quad [M_{\odot}] $')
+    ax.set_xlabel(r'$\log_{10} \left ( M_{\star} \ [M_{\odot}] \right ) $')
     # cbar = fig.colorbar(ims, orientation='horizontal')
     # cbar = fig.colorbar(ims, ticks=[min, max/factor/2., max/factor], orientation='horizontal')
     # cbar.ax.set_xticklabels(['%3.2f' % min, '%3.2f' % (max/2.), '%3.2f' % (max)])
@@ -426,23 +439,34 @@ def gasfrac_hess(mstar, fgas, weight, label, output,
     P.savefig(output)
 
 
-def ssfr_plot(halos, prop, mask, output, typ='.pdf'):
+def ssfr(path, db, mask, output, typ='.pdf'):
     '''
-    Specific starformation rate plots.
+    Specific star formation rate plots.
     '''
+    #get data
+    query = '''select halo_id, mstar, sfr_ave from galprop'''
+    data = sq.get_data_sqliteSMNfunctions(path, db, query)
+    halo_id = data[:, 0].astype(N.int)
+    mstar = data[:, 1]
+    sfr_ave = data[:, 2]
+    #get the weights from another table
+    query = '''select weight from halos'''
+    d = sq.get_data_sqliteSMNfunctions(path, db, query)
+    weight = d[:, 0]
 
-    wgal = halos.weight[prop.halo_id]
+    #set weighting
+    wgal = weight[halo_id]
 
-    log_ssfr = N.log10(prop.sfr_ave / 10.0 ** prop.mstar)
+    log_ssfr = N.log10(sfr_ave / 10.0 ** mstar)
     log_ssfr[log_ssfr <= -14.0] = -13.8
 
-    ssfrhess_sam(prop.mstar[mask], log_ssfr[mask], wgal[mask], output + typ)
+    ssfrHess(mstar[mask], log_ssfr[mask], wgal[mask], output + typ)
 
 
-def ssfrhess_sam(mstar, ssfr, weight, output,
-                 mmin=9.027, dm=0.309, nmbins=11,
-                 ssfrmin=-13.0, ssfrmax=-8.5, nssfrbins=24,
-                 ssfr_cut=-11.1, pmax=0.5, pmin=1e-5):
+def ssfrHess(mstar, ssfr, weight, output,
+             mmin=9.027, dm=0.309, nmbins=11,
+             ssfrmin=-13.0, ssfrmax=-8.5, nssfrbins=24,
+             ssfr_cut=-11.1, pmax=0.5, pmin=1e-5):
     '''
     log ssfr in yr
     '''
@@ -512,7 +536,23 @@ def ssfrhess_sam(mstar, ssfr, weight, output,
 
     #image
     fig = P.figure()
+    fig.subplots_adjust(left=0.16, bottom=0.11,
+                        right=0.99, top=0.93,
+                        wspace=0.0, hspace=0.0)
     ax = fig.add_subplot(111)
+
+    #set title
+    if '_sph' in output:
+        ax.set_title('Spherical Galaxies')
+    elif '_sat' in output:
+        ax.set_title('Satellite Galaxies')
+    elif '_cent' in output:
+        ax.set_title('Central Galaxies')
+    elif '_disk' in output:
+        ax.set_title('Disk Galaxies')
+    else:
+        ax.set_title('All Galaxies')
+
     ims = ax.imshow(s, vmin=smin, vmax=smax,
                     origin='lower', cmap=cm.gray,
                     interpolation=None,
@@ -528,9 +568,9 @@ def ssfrhess_sam(mstar, ssfr, weight, output,
     P.clabel(cs, fontsize=5)
     ax.set_xlim(mmin, mmax)
     ax.set_ylim(ssfrmin, ssfrmax)
-    ax.set_ylabel(r'$\log \left( \frac{SFR}{M_{star}} \right)$')
-    ax.set_xlabel('$\log M_{star} \quad [M_{\odot}] $')
-    cbar = fig.colorbar(ims, orientation='horizontal')
+    ax.set_ylabel(r'$\log_{10} \left( \frac{\dot{M}_{\star}}{M_{\star}} \ [\mathrm{yr}^{-1}] \right)$')
+    ax.set_xlabel(r'$\log_{10} \left ( M_{\star} \ [M_{\odot}] \right ) $')
+
     #small ticks
     m = ax.get_yticks()[1] - ax.get_yticks()[0]
     yminorLocator = MultipleLocator(m / 5)
@@ -549,36 +589,61 @@ def ssfrhess_sam(mstar, ssfr, weight, output,
     P.savefig(output)
 
 
-def ssfr_wrapper(halos, prop, label):
-    #masks
-    all = prop.gal_id >= 0
-    c = prop.gal_id == 1
-    s = prop.gal_id != 1
+def ssfrWrapper(path, db):
+    #get data
+    query = '''select gal_id, mbulge, mstar from galprop'''
+    data = sq.get_data_sqliteSMNfunctions(path, db, query)
+    gal_id = data[:, 0]
+    mbulge = data[:, 1]
+    mstar = data[:, 2]
+
+    #make masks for all, central, and satellite galaxies
+    all = gal_id >= 0
+    c = gal_id == 1
+    s = gal_id != 1
+
     #early vs. late type galaxies
-    btt = 10.0 ** (prop.mbulge - prop.mstar)
+    btt = 10.0 ** (mbulge - mstar)
     early = btt >= 0.4
     late = btt < 0.4
 
-    label = 'ssfr_' + label
+    label = 'ssfrBolshoi'
 
-    ssfr_plot(halos, prop, all, label)
-    ssfr_plot(halos, prop, c, label + '_cent')
-    ssfr_plot(halos, prop, s, label + '_sat')
-    ssfr_plot(halos, prop, early, label + '_sph')
-    ssfr_plot(halos, prop, late, label + '_disk')
+    ssfr(path, db, all, label)
+    ssfr(path, db, c, label + '_cent')
+    ssfr(path, db, s, label + '_sat')
+    ssfr(path, db, early, label + '_sph')
+    ssfr(path, db, late, label + '_disk')
 
 
-def gasfrac_sam_cent(halos, prop,
-                     label='Bolshoi', output='fgascentral', tpy='.pdf'):
-    output = output + label + tpy
+def gasFraction(path, db,
+                label='Bolshoi',
+                output='fgascentral',
+                tpy='.pdf'):
+    #get data
+    query = '''select gal_id, halo_id, mbulge, mstar, mcold, mbh from galprop'''
+    data = sq.get_data_sqliteSMNfunctions(path, db, query)
+    gal_id = data[:, 0]
+    halo_id = data[:, 1].astype(N.int)
+    mbulge = data[:, 2]
+    mstar = data[:, 3]
+    mcold = data[:, 4]
+    #get the weights from another table
+    query = '''select weight from halos'''
+    d = sq.get_data_sqliteSMNfunctions(path, db, query)
+    weight = d[:, 0]
 
-    fgas = 10.0 ** prop.mcold / (10.0 ** prop.mcold + 10.0 ** prop.mstar)
-    wgal = halos.weight[prop.halo_id]
-    btt = 10.0 ** (prop.mbulge - prop.mstar)
+    fgas = 10.0 ** mcold / (10.0 ** mcold + 10.0 ** mstar)
+    wgal = weight[halo_id]
+    btt = 10.0 ** (mbulge - mstar)
+
     #masking
-    cdisk = (prop.gal_id == 1) & (btt < 0.4)
+    cdisk = (gal_id == 1) & (btt < 0.4)
 
-    gasfrac_hess(prop.mstar[cdisk], fgas[cdisk], wgal[cdisk], label, output)
+    #output file
+    output = output + label + tpy
+    #call the gas
+    gasfracHess(mstar[cdisk], fgas[cdisk], wgal[cdisk], label, output)
 
 
 def fix(x):
@@ -588,10 +653,10 @@ def fix(x):
     return int(N.floor(x))
 
 
-def massmet_hess(mstar, met, weight, obs_data, output,
-                 mmin=8.8, mmax=12.4, nmbins=18,
-                 Zmin=-1.5, Zmax=1.0, nzbins=20,
-                 pmax=1.0, pmin=1e-3):
+def massMetHess(mstar, met, weight, output,
+                mmin=8.8, mmax=12.0, nmbins=18,
+                Zmin=-1.5, Zmax=1.0, nzbins=20,
+                pmax=1.0, pmin=1e-3):
     #n.b. mbin and zbin are the bin CENTERS
     dm = (mmax - mmin) / nmbins
     mbin = mmin + (N.arange(nmbins)) * dm + dm / 2.0
@@ -634,6 +699,9 @@ def massmet_hess(mstar, met, weight, obs_data, output,
 
     #image
     fig = P.figure()
+    fig.subplots_adjust(left=0.14, bottom=0.11,
+                        right=0.97, top=0.97,
+                        wspace=0.0, hspace=0.0)
     ax = fig.add_subplot(111)
     ims = ax.imshow(s, vmin=smin, vmax=smax,
                     origin='lower', cmap=cm.gray,
@@ -650,8 +718,8 @@ def massmet_hess(mstar, met, weight, obs_data, output,
     ax.set_xlim(mmin, mmax)
     ax.set_ylim(Zmin, Zmax)
     ax.set_ylabel(r'$\log_{10} \left( \frac{Z}{Z_{\odot}} \right)$')
-    ax.set_xlabel('$\log_{10} M_{star} \quad [M_{\odot}] $')
-    cbar = fig.colorbar(ims, orientation='horizontal')
+    ax.set_xlabel(r'$\log_{10} \left ( M_{\star} \ [M_{\odot}] \right ) $')
+
     #small ticks
     m = ax.get_yticks()[1] - ax.get_yticks()[0]
     yminorLocator = MultipleLocator(m / 5)
@@ -670,20 +738,32 @@ def massmet_hess(mstar, met, weight, obs_data, output,
     P.savefig(output)
 
 
-def massmet_star(halos, g, p, obs_data, label, typ='.pdf'):
-    output = 'massmet_star_' + label + typ
-    mbar = (10.0 ** p.mcold + 10.0 ** p.mstar)
+def massMet(path, db, typ='.pdf'):
+    #get data
+    query = '''select halo_id, mstar, zstar from galprop where zstar > -50 and zstar < 50'''
+    data = sq.get_data_sqliteSMNfunctions(path, db, query)
+    halo_id = data[:, 0].astype(N.int)
+    mstar = data[:, 1]
+    zstar = N.log10(data[:, 2])
+
+    #get the weights from another table
+    query = '''select weight from halos'''
+    d = sq.get_data_sqliteSMNfunctions(path, db, query)
+    weight = d[:, 0]
+    wgal = weight[halo_id]
+
+    output = 'massMetStarBolshoi' + typ
+    #mbar = (10.0 ** mcold + 10.0 ** mstar)
     #fg = 10.0 ** p.mcold / mbar
 
-    wgal = halos.weight[p.halo_id]
     #massmet_hess
-    massmet_hess(p.mstar, N.log10(p.zstar), wgal, obs_data, output)
+    massMetHess(mstar, zstar, wgal, output)
 
 
-def mbh_hess(mbulge, mbh, weight, ymin, ymax, nybins,
-             mbin_fit, mbh_fit, output, obs,
-             mmin=8.0, mmax=12.0, nmbins=40,
-             pmax=1.0, pmin=1e-3):
+def mbhHess(mbulge, mbh, weight, ymin, ymax, nybins,
+            mbin_fit, mbh_fit, output,
+            mmin=8.0, mmax=12.0, nmbins=40,
+            pmax=1.0, pmin=1e-3):
     #n.b. mbin and fgasbin are the bin CENTERS
     dm = (mmax - mmin) / nmbins
     mbin = mmin + N.arange(nmbins) * dm + dm / 2.0
@@ -700,7 +780,7 @@ def mbh_hess(mbulge, mbh, weight, ymin, ymax, nybins,
             iy = fix((mbh[i] - ymin) / dy)
             if iy >= 0 and iy < nybins:
                 yhist[iy, imbin] += weight[i]
-        #conditional distributions in Mh bins
+                #conditional distributions in Mh bins
     for i in range(nmbins):
         pm = N.sum(yhist[:, i])
         if pm > 0:
@@ -721,13 +801,16 @@ def mbh_hess(mbulge, mbh, weight, ymin, ymax, nybins,
 
     #image
     fig = P.figure()
+    fig.subplots_adjust(left=0.1, bottom=0.11,
+                        right=0.97, top=0.97,
+                        wspace=0.0, hspace=0.0)
     ax = fig.add_subplot(111)
     ims = ax.imshow(s, vmin=smin, vmax=smax,
                     origin='lower', cmap=cm.gray,
                     interpolation=None,
                     extent=[mmin, mmax, ymin, ymax],
                     aspect='auto')
-    ax.plot(mbin_fit, mbh_fit, 'g-', lw=1.4, label='Fit?')
+    ax.plot(mbin_fit, mbh_fit, 'g-', lw=1.4, label='Fit')
     ax.plot(mbin_fit, mbh_fit + .3, 'g--', lw=1.3)
     ax.plot(mbin_fit, mbh_fit - .3, 'g--', lw=1.3)
     ax.plot(mbin[y50 != -99], y50[y50 != -99], 'c-', lw=1.4, label='Median Data')
@@ -738,9 +821,9 @@ def mbh_hess(mbulge, mbh, weight, ymin, ymax, nybins,
     ax.plot(m_bulge[S0], m_bh[S0], 'mD', lw=1.3, label='S0')
     ax.set_xlim(mmin, mmax)
     ax.set_ylim(ymin, ymax)
-    ax.set_ylabel(r'$\log_{10} M_{BH} \quad [M_{\odot}]$')
-    ax.set_xlabel('$\log_{10} M_{bulge} \quad [M_{\odot}] $')
-    #cbar = fig.colorbar(ims, orientation='horizontal')
+    ax.set_ylabel(r'$\log_{10} \left ( M_{\mathrm{BH}} \ [M_{\odot}] \right )$')
+    ax.set_xlabel(r'$\log_{10} \left ( M_{\mathrm{bulge}} \ [M_{\odot}] \right ) $')
+
     #small ticks
     m = ax.get_yticks()[1] - ax.get_yticks()[0]
     yminorLocator = MultipleLocator(m / 5)
@@ -760,77 +843,58 @@ def mbh_hess(mbulge, mbh, weight, ymin, ymax, nybins,
     P.savefig(output)
 
 
-def mhb(h, p, obs, label):
-    output = 'mbh_' + label + '.pdf'
+def mhb(path, db, type='.pdf'):
+    #get data
+    query = '''select halo_id, mstar, mbulge, mbh from galprop'''
+    data = sq.get_data_sqliteSMNfunctions(path, db, query)
+    halo_id = data[:, 0].astype(N.int)
+    mstar = data[:, 1]
+    mbulge = data[:, 2]
+    mbh = data[:, 3]
 
+    #get the weights from another table
+    query = '''select weight from halos'''
+    d = sq.get_data_sqliteSMNfunctions(path, db, query)
+    weight = d[:, 0]
+    wgal = weight[halo_id]
+
+    #fitting functions of ??
     mbin_fit = 8.0 + N.arange(40) * 0.1
     mbh_fit = 8.2 + 1.12 * (mbin_fit - 11.0)
 
     #central = p.gal_id == 1
-    btt = 10.0 ** (p.mbulge - p.mstar)
+    btt = 10.0 ** (mbulge - mstar)
 
     #These could be changed to 0.4 and 0.6...
     early = btt >= 0.5
     late = btt <= 0.5
-    print 'Number of galaxies %i, early types %i and late %i' % (len(p), len(p.mstar[early]), len(p.mstar[late]))
+    print 'Number of galaxies %i, early types %i and late %i' % (len(mstar), len(mstar[early]), len(mstar[late]))
 
     #mbin = 8.0 + ((11.8 - 8.0) / 19.0) * N.arange(19)
     #mbh_hr = 8.2 + 1.12 * (p.mbulge - 11.0)
+    output = 'mbhBolshoi' + type
 
-    wgal = h.weight[p.halo_id]
-
-    mbh_hess(p.mbulge, p.mbh, wgal, 5.0, 10.0, 40,
-             mbin_fit, mbh_fit, output, obs)
+    mbhHess(mbulge, mbh, wgal, 4.85, 10.0, 40,
+            mbin_fit, mbh_fit, output)
 
 
-def main(path, label):
+def main(path, db):
     '''
     Driver function, call this with a path to the data,
     and label you wish to use for the files.
     '''
-    #paths
-    obs_data = "{0:>s}/Dropbox/Research/Observations/".format(os.getenv('HOME'))
-
-    #read data from path
-    g, gdust, prop, h = read.GFBasicData(path)
-
-    #plots
-    fstar_plot(prop)
-    massfunc_plot(h, prop)
-    gasfrac_sam_cent(h, prop)
-    ssfr_wrapper(h, prop, label)
-    massmet_star(h, g, prop, obs_data, label)
-    mhb(h, prop, obs_data, label)
-
+    #call plotting functions
+    fstar(path, db)
+    massfunctions(path, db)
+    gasFraction(path, db)
+    ssfrWrapper(path, db)
+    massMet(path, db)
+    mhb(path, db)
 
 if __name__ == '__main__':
-    #Find all the folders to be plotted
-    fnd = '/Users/niemi/Desktop/Research/run/newtree*'
-
-    #should the files be overwritten or not?
-    overWrite = True
-
-    #labeling
-    label = 'Bolshoi'
-    paths = glob.glob(fnd)
-    #loop over the files found from the path
-    for path in paths:
-        last = path.split('/')[-1]
-        if overWrite:
-            print 'Plotting data from %s' % path
-            try:
-                os.mkdir(last)
-            except:
-                pass
-            main(path + '/', label)
-            for x in glob.glob('*.pdf'):
-                shutil.move(x, './' + last + '/')
-        else:
-            if not os.path.isdir(last):
-                print 'Plotting data from %s' % path
-                os.mkdir(last)
-                main(path + '/', label)
-                for x in glob.glob('*.pdf'):
-                    new_name = x[:-4] + '_' + last + '.pdf'
-                    os.rename(x, new_name)
-                    shutil.move(new_name, './' + last + '/')
+    #input data
+    path = '/Users/niemi/Desktop/Research/run/newtree1/'
+    db = 'sams.db'
+    
+    #call the driver
+    main(path, db)

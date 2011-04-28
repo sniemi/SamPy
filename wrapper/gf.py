@@ -1,10 +1,13 @@
 '''
-@summary: This little wrapper can be used to
-run GF (R. Somerville's SAMs program) using
-threading.
+:summary: This little wrapper can be used to run GF
+          (R. Somerville's SAMs program) using threading.
 
-@author: Sami-Matias Niemi
-@contact: niemi@stsci.edu
+:author: Sami-Matias Niemi
+:contact: niemi@stsci.edu
+
+:note: Threading is not really the best way to do this.
+       Instead, one should use multiprocessing to launch
+       several processes.
 '''
 import glob as g
 import os

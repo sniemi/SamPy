@@ -1,9 +1,9 @@
 '''
 A script to pull out information from ZEPPO for STIS MSM montly monitoring.
 
-Created on Mar 23, 2009
+:date: Created on Mar 23, 2009
 
-@author: Sami-Matias Niemi
+:author: Sami-Matias Niemi
 '''
 
 __author__ = 'Sami-Matias Niemi'

@@ -96,9 +96,10 @@ def plot_number_counts(path, database, band, redshifts,
     Simulation was 10 times the GOODS realization, so
     area = 0.44444444, thus, the weighting is 1/0.44444444
     i.e. 2.25.
-    @param sigma: sigma level of the errors to be plotted
-    @param nbins: number of bins (for simulated data)
-    @param area: actually 1 / area, used to weight galaxies
+
+    :param sigma: sigma level of the errors to be plotted
+    :param nbins: number of bins (for simulated data)
+    :param area: actually 1 / area, used to weight galaxies
     '''
     #fudge factor to handle errors that are way large
     fudge = ymin
@@ -441,9 +442,10 @@ def plot_number_counts2(path, database, band, redshifts,
     Simulation was 10 times the GOODS realization, so
     area = 0.44444444, thus, the weighting is 1/0.44444444
     i.e. 2.25.
-    @param sigma: sigma level of the errors to be plotted
-    @param nbins: number of bins (for simulated data)
-    @param area: actually 1 / area, used to weight galaxies
+
+    :param sigma: sigma level of the errors to be plotted
+    :param nbins: number of bins (for simulated data)
+    :param area: actually 1 / area, used to weight galaxies
     '''
     #fudge factor to handle errors that are way large
     fudge = ymin
@@ -802,9 +804,10 @@ def plot_number_counts3(path, database, band, redshifts,
     Simulation was 10 times the GOODS realization, so
     area = 0.44444444, thus, the weighting is 1/0.44444444
     i.e. 2.25.
-    @param sigma: sigma level of the errors to be plotted
-    @param nbins: number of bins (for simulated data)
-    @param area: actually 1 / area, used to weight galaxies
+
+    :param sigma: sigma level of the errors to be plotted
+    :param nbins: number of bins (for simulated data)
+    :param area: actually 1 / area, used to weight galaxies
     '''
     #fudge factor to handle errors that are way large
     fudge = ymin

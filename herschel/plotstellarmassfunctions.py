@@ -1,8 +1,8 @@
 '''
-@todo: fix the comoving volume calculation.
+:todo: fix the comoving volume calculation.
 Take a look the luminosity function plotting...
 
-@author: Sami Niemi
+:author: Sami Niemi
 '''
 import matplotlib
 matplotlib.rc('text', usetex = True)
@@ -38,9 +38,9 @@ def plot_stellarmasses(path, database, cut, redshifts,
     Simulation was 10 times the GOODS realization, so
     the solid angle is 1.354*10**-4
     
-    @param sigma: sigma level of the errors to be plotted
-    @param nbins: number of bins (for simulated data)
-    @param area: actually 1 / area, used to weight galaxies
+    :param sigma: sigma level of the errors to be plotted
+    :param nbins: number of bins (for simulated data)
+    :param area: actually 1 / area, used to weight galaxies
     '''
     #fudge factor to handle errors that are way large
     fudge = ymin

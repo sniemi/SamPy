@@ -1,4 +1,3 @@
-#! /sw/bin/python
 '''
 ABOUT:
          This script converts the day number to a human readable date.
@@ -19,9 +18,9 @@ EXITSTA:
 HISTORY:
          Sep 9 2009: Initial Version 0.1
 
-@author: Sami-Matias Niemi (niemi@stsci.edu) for STScI
+:author: Sami-Matias Niemi
+:contact: niemi@stsci.edu
 '''
-
 import datetime, sys
 
 __author__ = 'Sami-Matias Niemi'

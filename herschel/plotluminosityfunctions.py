@@ -2,7 +2,7 @@
 Plots luminosity functions at different redshifts.
 Pulls data from an sqlite3 database.
 
-@author: Sami Niemi
+:author: Sami Niemi
 '''
 import matplotlib
 matplotlib.use('PS')
@@ -34,10 +34,10 @@ def plot_luminosityfunction(path, database, redshifts,
                             H0 = 70.0, WM = 0.28,
                             zmax = 6.0):
     '''
-    @param solid_angle: area of the sky survey in arcmin**2
+    :param solid_angle: area of the sky survey in arcmin**2
                         GOODS = 160, hence 10*160
-    @param sigma: sigma level of the errors to be plotted
-    @param nbins: number of bins (for simulated data)
+    :param sigma: sigma level of the errors to be plotted
+    :param nbins: number of bins (for simulated data)
     '''
     #fudge factor to handle errors that are way large
     fudge = ymin
@@ -178,10 +178,10 @@ def plot_luminosityfunction2(path, database, redshifts,
                              H0 = 70.0, WM = 0.28,
                              zmax = 6.0):
     '''
-    @param solid_angle: area of the sky survey in arcmin**2
+    :param solid_angle: area of the sky survey in arcmin**2
                         GOODS = 160, hence 10*160
-    @param sigma: sigma level of the errors to be plotted
-    @param nbins: number of bins (for simulated data)
+    :param sigma: sigma level of the errors to be plotted
+    :param nbins: number of bins (for simulated data)
     '''
     col = ['black', 'red', 'magenta', 'green', 'blue', 'brown']
     #get data
@@ -284,10 +284,10 @@ def plot_luminosityfunctionKDE(path, database, redshifts,
                                H0 = 70.0, WM = 0.28,
                                zmax = 6.0):
     '''
-    @param solid_angle: area of the sky survey in arcmin**2
+    :param solid_angle: area of the sky survey in arcmin**2
                         GOODS = 160, hence 10*160
-    @param sigma: sigma level of the errors to be plotted
-    @param nbins: number of bins (for simulated data)
+    :param sigma: sigma level of the errors to be plotted
+    :param nbins: number of bins (for simulated data)
     '''
     col = ['black', 'red', 'magenta', 'green', 'blue', 'brown']
     #get data
@@ -359,7 +359,7 @@ def plot_luminosityfunctionPaper(path, database, redshifts,
                                  H0 = 70.0, WM = 0.28,
                                  zmax = 6.0):
     '''
-    @param solid_angle: area of the sky survey in arcmin**2
+    :param solid_angle: area of the sky survey in arcmin**2
                         GOODS = 160, hence 100*160
     '''
     col = ['black', 'red', 'magenta', 'green', 'blue', 'brown']

@@ -1,5 +1,4 @@
 import matplotlib
-
 matplotlib.use('Agg')
 matplotlib.rc('text', usetex=True)
 matplotlib.rcParams['font.size'] = 17
