@@ -32,7 +32,7 @@ import sandbox.MyTools as M
 
 def plot_luminosityfunction(path, database, redshifts,
                             band, out_folder,
-                            solid_angle=160.,
+                            solid_angle=1638.0,
                             ymin=10 ** 3, ymax=2 * 10 ** 6,
                             xmin=0.5, xmax=100,
                             nbins=10, sigma=5.0,
@@ -174,7 +174,7 @@ def plot_luminosityfunction(path, database, redshifts,
 
 def plot_luminosityfunctionPaper(path, database, redshifts,
                                  bands, out_folder,
-                                 solid_angle=160.,
+                                 solid_angle=1638.0,
                                  ymin=1e-5, ymax=5 * 10 ** -2,
                                  xmin=8.0, xmax=12.3,
                                  H0=70.0, WM=0.28):
@@ -341,7 +341,7 @@ def plotAllLuminosityFunctions(path, database, out_folder):
                                 xmin=xmin, xmax=xmax,
                                 ymin=10 ** -5, ymax=8 * 10 ** -2,
                                 nbins=10, sigma=1.0,
-                                solid_angle=160.)
+                                solid_angle=1638.0)
 
     redshifts = ['FIR.z >= 0.0 and FIR.z < 0.1',
                  'FIR.z > 0.1 and FIR.z < 0.2',
@@ -354,7 +354,7 @@ def plotAllLuminosityFunctions(path, database, out_folder):
                             out_folder + 'spec',
                             xmin=8.1, xmax=11.3,
                             ymin=10 ** -5, ymax=3 * 10 ** -1,
-                            nbins=10, sigma=5.0)
+                            nbins=10, sigma=1.0)
 
     print 'All done...'
 
@@ -364,7 +364,7 @@ def scatterHistograms(xdata,
                       xlabel,
                       ylabel,
                       output,
-                      solid_angle=160.):
+                      solid_angle=1638.0):
     '''
     This functions generates a scatter plot and
     projected histograms to both axes.
@@ -604,7 +604,7 @@ def diff_function(data, column=0, log=False,
 
 def plot_number_counts(path, database, band, redshifts,
                        out_folder, obs_data,
-                       area=22.5,
+                       area=2.1978021978021975,
                        ymin=10 ** 3, ymax=2 * 10 ** 6,
                        xmin=0.5, xmax=100,
                        nbins=15, sigma=3.0,
@@ -949,7 +949,7 @@ def plot_number_counts(path, database, band, redshifts,
 
 def plot_number_counts2(path, database, band, redshifts,
                         out_folder, obs_data, goods,
-                        area=22.5,
+                        area=2.1978021978021975,
                         ymin=10 ** 3, ymax=2 * 10 ** 6,
                         xmin=0.5, xmax=100,
                         nbins=15, sigma=3.0,
@@ -1316,14 +1316,14 @@ def plotTemplateComparison(band, redshifts,
     #constants
     path = [hm + '/Dropbox/Research/Herschel/runs/ce01/',
             hm + '/Dropbox/Research/Herschel/runs/cp11/',
-            hm + '/Desktop/CANDELS/lightConeRuns/goodsn/']
+            hm + '/Desktop/CANDELS/lightConeRuns/goodss/']
     dbs = ['sams.db',
            'sams.db',
-           'goodsn.db']
+           'goodss.db']
     out_folder = hm + '/Desktop/CANDELS/lightConeTesting/'
     ar = [2.25, #10 times goods
           2.25, #10 times goods
-          22.5] #goods
+          2.1978021978021975] #simu
 
     #obs data
     obs_data = hm + '/Dropbox/Research/Herschel/obs_data/'
@@ -1489,7 +1489,7 @@ def plotTemplateComparison(band, redshifts,
         for i, red in enumerate(redshifts):
             #get data and convert to mJy
             query = '''select FIR.%s from FIR
-                       where %s and FIR.%s < 1e4 and FIR.%s > 1e-15''' % (band, red, band, band)
+                       where %s and FIR.%s < 1e6 and FIR.%s > 1e-10''' % (band, red, band, band)
             fluxes = db.sqlite.get_data_sqlite(p, d, query) * 1e3
 
             #modify redshift string
@@ -1673,7 +1673,7 @@ def plotTemplateComparison(band, redshifts,
 
 
 def plotNumberCounts(path, database, out_folder):
-    area = 22.5 #goods
+    area = 1. / (39./60*42./60.) # area of the simulation
 
     obs_data = os.getenv('HOME') + '/Dropbox/Research/Herschel/obs_data/'
     goods = hm + '/Dropbox/Research/Herschel/obs_data/goodsh_goodsn_allbands_z2-4.cat'
@@ -1729,8 +1729,8 @@ if __name__ == '__main__':
     #find the home directory
     hm = os.getenv('HOME')
     #constants
-    path = hm + '/Desktop/CANDELS/lightConeRuns/goodsn/'
-    database = 'goodsn.db'
+    path = hm + '/Desktop/CANDELS/lightConeRuns/goodss/'
+    database = 'goodss.db'
     out_folder = hm + '/Desktop/CANDELS/lightConeTesting/'
 
     #call drivers

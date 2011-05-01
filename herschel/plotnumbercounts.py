@@ -1425,7 +1425,7 @@ def plotTemplateComparison(database, band, redshifts,
 
             #add observational constrains
             if 'mips24' in band:
-                ar = 1. / 0.0444444444 / 100. # area of GOODS
+                ar = 22.5 # area of the GOODS
                 mips = sex.se_catalog(mips24)
                 #first redshift bin
                 rlow = float(tmp[2])
