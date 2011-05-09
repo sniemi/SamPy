@@ -1,0 +1,261 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.smakced.getSmackedDataNoNumpy &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.smakced.getSmackedDataNoNumpy</h1><div class="highlight"><pre>
+<span class="c">#! /usr/bin/env python</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Pulls out data from the SMAKCED wiki page</span>
+<span class="sd">and parses it into an array that is simple</span>
+<span class="sd">to manipulate and output.</span>
+
+<span class="sd">:requires: BeautifulSoup</span>
+
+
+<span class="sd">HISTORY:</span>
+<span class="sd">Created on Mar 26, 2010 (version 0.1)</span>
+<span class="sd">Removed NumPy dependency April 2, 2010 (version 0.2)</span>
+
+<span class="sd">:version: 0.2</span>
+
+<span class="sd">:author: Sami-Matias Niemi</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">urllib2</span><span class="o">,</span> <span class="nn">csv</span>
+<span class="kn">from</span> <span class="nn">parsing.BeautifulSoup</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Sami-Matias Niemi&#39;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;0.2&#39;</span>
+
+<div class="viewcode-block" id="Smakced"><a class="viewcode-back" href="../../../SamPy.smakced.html#SamPy.smakced.getSmackedDataNoNumpy.Smakced">[docs]</a><span class="k">class</span> <span class="nc">Smakced</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    A Class related to SMAKCED collaboration wiki page.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">table</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Constructor</span>
+
+<span class="sd">        :param url: url address of the page</span>
+<span class="sd">        :param table: name of the table</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">table</span> <span class="o">=</span> <span class="n">table</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">address</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span>
+
+<div class="viewcode-block" id="Smakced.getData"><a class="viewcode-back" href="../../../SamPy.smakced.html#SamPy.smakced.getSmackedDataNoNumpy.Smakced.getData">[docs]</a>    <span class="k">def</span> <span class="nf">getData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Retrieve data from the SMAKCED web page.</span>
+<span class="sd">        </span>
+<span class="sd">        :return: retrieved raw data</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">hand</span> <span class="o">=</span> <span class="n">urllib2</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">address</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">hand</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="n">hand</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">data</span>
+</div>
+<div class="viewcode-block" id="Smakced.parseTable"><a class="viewcode-back" href="../../../SamPy.smakced.html#SamPy.smakced.getSmackedDataNoNumpy.Smakced.parseTable">[docs]</a>    <span class="k">def</span> <span class="nf">parseTable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Parses html table data using BeautifulSoup.</span>
+<span class="sd">        Note that table number has been hard coded.</span>
+<span class="sd">        The SMAKCED wiki page returns several &quot;tables&quot;.</span>
+<span class="sd">        </span>
+<span class="sd">        :param data: data that has been retrieved with</span>
+<span class="sd">        the getData method</span>
+
+<span class="sd">        :return: array containing table entries</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">tablenumber</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;table&#39;</span><span class="p">)</span>
+        <span class="n">table</span> <span class="o">=</span> <span class="n">t</span><span class="p">[</span><span class="n">tablenumber</span><span class="p">]</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;tr&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">cols</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;td&#39;</span><span class="p">)</span>
+            <span class="n">hdr</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;th&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">th</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">:</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">th</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="bp">True</span><span class="p">))</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;&amp;nbsp;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+                <span class="n">line</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>    
+            <span class="k">for</span> <span class="n">td</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">td</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="bp">True</span><span class="p">))</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">tmp</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;&amp;nbsp;&#39;</span><span class="p">,</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+                <span class="n">line</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>        
+    </div>
+<div class="viewcode-block" id="Smakced.writeToFile"><a class="viewcode-back" href="../../../SamPy.smakced.html#SamPy.smakced.getSmackedDataNoNumpy.Smakced.writeToFile">[docs]</a>    <span class="k">def</span> <span class="nf">writeToFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Writes an html page that contains tables to a file</span>
+<span class="sd">        in ascii format.</span>
+<span class="sd">        Uses BeautifulSoup for parsing tables.</span>
+<span class="sd">        </span>
+<span class="sd">        :note: This method is untested.</span>
+<span class="sd">        </span>
+<span class="sd">        :param data: data that has been retrieved with</span>
+<span class="sd">        the getData method</span>
+<span class="sd">        :param output: name of the output file</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">output</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;table&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="n">t</span><span class="p">:</span>
+            <span class="n">g</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">New Table:</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;tr&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">tr</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+                <span class="n">cols</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;td&#39;</span><span class="p">)</span>
+                <span class="n">hdr</span> <span class="o">=</span> <span class="n">tr</span><span class="o">.</span><span class="n">findAll</span><span class="p">(</span><span class="s">&#39;th&#39;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">th</span> <span class="ow">in</span> <span class="n">hdr</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">g</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">th</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="bp">True</span><span class="p">))</span>
+                        <span class="n">g</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+                    <span class="k">except</span><span class="p">:</span> <span class="k">pass</span>        
+                <span class="k">for</span> <span class="n">td</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">g</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">td</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="bp">True</span><span class="p">))</span>
+                        <span class="n">g</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+                    <span class="k">except</span><span class="p">:</span> <span class="k">pass</span>
+                <span class="n">g</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>        
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Run when the script is run from the command line.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c">#table address</span>
+    <span class="n">smackedurl</span> <span class="o">=</span> <span class="s">&#39;http://smakced.pbworks.com&#39;</span>
+    <span class="n">tableName1</span> <span class="o">=</span> <span class="s">&#39;/Virgo1&#39;</span>
+    
+    <span class="c">#class instance</span>
+    <span class="n">SM1</span> <span class="o">=</span> <span class="n">Smakced</span><span class="p">(</span><span class="n">smackedurl</span><span class="p">,</span> <span class="n">tableName1</span><span class="p">)</span>
+    <span class="c">#download data</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">SM1</span><span class="o">.</span><span class="n">getData</span><span class="p">()</span>
+    <span class="c">#parse table</span>
+    <span class="n">table</span> <span class="o">=</span> <span class="n">SM1</span><span class="o">.</span><span class="n">parseTable</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    
+    <span class="c">#data limitations, only objects that are marked</span>
+    <span class="c">#to be observed at NOT2010 i.e. SMN targets</span>
+    <span class="n">maskedData</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span> <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">table</span> <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;NOT2010&#39;</span><span class="p">]</span>
+    <span class="c">#if wish to have numerical criteria then something like</span>
+    <span class="c">#maskedData = [line for line in table if flaot(line[x]) &gt;= low_limit and float(line[x]) &lt;= high_limit]</span>
+    <span class="c">#should work</span>
+
+    <span class="c">#output my targets to a file</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;SMNTargets.txt&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">dump</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+    <span class="n">dump</span><span class="o">.</span><span class="n">writerow</span><span class="p">(</span><span class="n">table</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">dump</span><span class="o">.</span><span class="n">writerows</span><span class="p">(</span><span class="n">maskedData</span><span class="p">)</span>
+    <span class="n">output</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    
+    <span class="c">#make NOT TCS compatible object list file</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;NOTobjectlist.txt&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">maskedData</span><span class="p">:</span>
+        <span class="nb">str</span>  <span class="o">=</span> <span class="s">&#39;VCC&#39;</span> <span class="o">+</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">line</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">,</span> <span class="s">&#39;:&#39;</span><span class="p">)</span> 
+        <span class="nb">str</span> <span class="o">+=</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">line</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39; &#39;</span><span class="p">,</span> <span class="s">&#39;:&#39;</span><span class="p">)</span>
+        <span class="nb">str</span> <span class="o">+=</span> <span class="s">&#39; 2000 0 0 &#39;</span> <span class="o">+</span> <span class="n">line</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+    <span class="n">output</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>    
+    
+    <span class="c">#make a file that can be pasted to the visibility plot software</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;visibility_plot.txt&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">maskedData</span><span class="p">:</span>
+        <span class="nb">str</span>  <span class="o">=</span> <span class="s">&#39;VCC&#39;</span> <span class="o">+</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">line</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">line</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+    <span class="n">output</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    
+    <span class="k">print</span> <span class="s">&#39;All done...&#39;</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

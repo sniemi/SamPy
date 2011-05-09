@@ -1,0 +1,289 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.bolshoi.randomizeSubhaloPosition &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.bolshoi.randomizeSubhaloPosition</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">astLib</span> <span class="kn">import</span> <span class="n">astCoords</span>
+<span class="kn">from</span> <span class="nn">cosmocalc</span> <span class="kn">import</span> <span class="n">cosmocalc</span>
+<span class="c"># from Sami&#39;s repo</span>
+<span class="kn">import</span> <span class="nn">astronomy.randomizers</span> <span class="kn">as</span> <span class="nn">rand</span>
+<span class="kn">import</span> <span class="nn">astronomy.conversions</span> <span class="kn">as</span> <span class="nn">conv</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Sami-Matias Niemi&#39;</span>
+
+<div class="viewcode-block" id="plotRandomization"><a class="viewcode-back" href="../../../SamPy.bolshoi.html#SamPy.bolshoi.randomizeSubhaloPosition.plotRandomization">[docs]</a><span class="k">def</span> <span class="nf">plotRandomization</span><span class="p">():</span>
+    <span class="c">#number of random points</span>
+    <span class="n">points</span> <span class="o">=</span> <span class="mi">1000</span>
+    <span class="c"># get the random values</span>
+    <span class="n">rds</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="n">randomUnitSphere</span><span class="p">(</span><span class="n">points</span><span class="p">)</span>
+    <span class="c"># convert them to Cartesian coord</span>
+    <span class="n">rd</span> <span class="o">=</span> <span class="n">conv</span><span class="o">.</span><span class="n">convertSphericalToCartesian</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span>
+                                          <span class="n">rds</span><span class="p">[</span><span class="s">&#39;theta&#39;</span><span class="p">],</span>
+                                          <span class="n">rds</span><span class="p">[</span><span class="s">&#39;phi&#39;</span><span class="p">])</span>
+
+    <span class="c">#set figure limits</span>
+    <span class="nb">min</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.3</span>
+    <span class="nb">max</span> <span class="o">=</span> <span class="mf">1.3</span>
+
+    <span class="c">#make a figure</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s">&#39;3d&#39;</span><span class="p">)</span>
+
+    <span class="c">#generate a sphere</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">u</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+    <span class="c">#plot it as a wire frame</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot_wireframe</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span>
+                      <span class="n">rstride</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                      <span class="n">cstride</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                      <span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+
+    <span class="c">#plot the random points</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">rd</span><span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">],</span> <span class="n">rd</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">],</span> <span class="n">rd</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">],</span>
+               <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;red&#39;</span><span class="p">)</span>
+    <span class="c">#project them on the bottom</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">rd</span><span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">],</span> <span class="n">rd</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">],</span>
+               <span class="n">zs</span><span class="o">=</span><span class="nb">min</span><span class="p">,</span> <span class="n">zdir</span><span class="o">=</span><span class="s">&#39;z&#39;</span><span class="p">)</span>
+    <span class="c">#project them on the left</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">rd</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">],</span> <span class="n">rd</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">],</span>
+               <span class="nb">min</span><span class="p">,</span> <span class="n">zdir</span><span class="o">=</span><span class="s">&#39;x&#39;</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim3d</span><span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim3d</span><span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlim3d</span><span class="p">(</span><span class="nb">min</span><span class="p">,</span> <span class="nb">max</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="plotTestRandmizer"><a class="viewcode-back" href="../../../SamPy.bolshoi.html#SamPy.bolshoi.randomizeSubhaloPosition.plotTestRandmizer">[docs]</a><span class="k">def</span> <span class="nf">plotTestRandmizer</span><span class="p">(</span><span class="n">size</span><span class="p">,</span>
+                      <span class="n">rds</span><span class="p">,</span>
+                      <span class="n">fudge</span><span class="o">=</span><span class="mf">1.1</span><span class="p">):</span>
+
+    <span class="n">rd</span> <span class="o">=</span> <span class="n">conv</span><span class="o">.</span><span class="n">convertSphericalToCartesian</span><span class="p">(</span><span class="n">size</span><span class="p">,</span>
+                                          <span class="n">rds</span><span class="p">[</span><span class="s">&#39;theta&#39;</span><span class="p">],</span>
+                                          <span class="n">rds</span><span class="p">[</span><span class="s">&#39;phi&#39;</span><span class="p">])</span>
+    <span class="c">#make a figure</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s">&#39;3d&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="mi">22</span><span class="p">,</span> <span class="o">-</span><span class="mi">19</span><span class="p">)</span>
+
+    <span class="c">#generate a sphere</span>
+    <span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">size</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">size</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">u</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">size</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">u</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+    <span class="c">#plot it as a wire frame</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot_wireframe</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span>
+                      <span class="n">rstride</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                      <span class="n">cstride</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                      <span class="n">color</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+
+    <span class="c">#plot main galaxy</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">([</span><span class="mi">0</span><span class="p">,],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,],</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;magenta&#39;</span><span class="p">,</span>
+               <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Main Galaxy&#39;</span><span class="p">)</span>
+    <span class="c">#plot the random points</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">rd</span><span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">],</span> <span class="n">rd</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">],</span> <span class="n">rd</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">],</span>
+               <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;red&#39;</span><span class="p">,</span>
+               <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Subhalo Galaxy&#39;</span><span class="p">)</span>
+    <span class="c">#project them on the bottom</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">rd</span><span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">],</span> <span class="n">rd</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">],</span>
+               <span class="n">zs</span><span class="o">=-</span><span class="n">size</span><span class="o">*</span><span class="n">fudge</span><span class="p">,</span> <span class="n">zdir</span><span class="o">=</span><span class="s">&#39;z&#39;</span><span class="p">,</span>
+               <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Projection&#39;</span><span class="p">)</span>
+    <span class="c">#project them on the back</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">rd</span><span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">],</span> <span class="n">rd</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">],</span>
+               <span class="n">size</span><span class="o">*</span><span class="n">fudge</span><span class="p">,</span> <span class="n">zdir</span><span class="o">=</span><span class="s">&#39;y&#39;</span><span class="p">,</span>
+               <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Projection&#39;</span><span class="p">)</span>
+    <span class="c">#project them on the left</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">rd</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">],</span> <span class="n">rd</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">],</span>
+               <span class="o">-</span><span class="n">size</span><span class="o">*</span><span class="n">fudge</span><span class="p">,</span> <span class="n">zdir</span><span class="o">=</span><span class="s">&#39;x&#39;</span><span class="p">,</span>
+               <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Projection&#39;</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim3d</span><span class="p">(</span><span class="o">-</span><span class="n">size</span><span class="o">*</span><span class="n">fudge</span><span class="p">,</span> <span class="n">size</span><span class="o">*</span><span class="n">fudge</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim3d</span><span class="p">(</span><span class="o">-</span><span class="n">size</span><span class="o">*</span><span class="n">fudge</span><span class="p">,</span> <span class="n">size</span><span class="o">*</span><span class="n">fudge</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlim3d</span><span class="p">(</span><span class="o">-</span><span class="n">size</span><span class="o">*</span><span class="n">fudge</span><span class="p">,</span> <span class="n">size</span><span class="o">*</span><span class="n">fudge</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;x = line-of-sight [kpc]&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;y = X = -RA [kpc]&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s">&#39;z = Y = DEC [kpc]&#39;</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="testRandomizer"><a class="viewcode-back" href="../../../SamPy.bolshoi.html#SamPy.bolshoi.randomizeSubhaloPosition.testRandomizer">[docs]</a><span class="k">def</span> <span class="nf">testRandomizer</span><span class="p">():</span>
+
+    <span class="c">#calculate a test case</span>
+    <span class="n">conversion</span> <span class="o">=</span> <span class="mf">0.000277777778</span> <span class="c"># degree to arcsecond</span>
+    <span class="c">#random distance between z = 0 and 5</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">*</span> <span class="mf">5.0</span>
+    <span class="c">#random separation of the main galaxy and the subhalo</span>
+    <span class="n">physical_distance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">()</span> <span class="o">*</span> <span class="mf">1e3</span> <span class="c">#in kpc</span>
+    <span class="c">#get the angular diameter distance to the galaxy</span>
+    <span class="n">dd1</span> <span class="o">=</span> <span class="n">cosmocalc</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="mf">71.0</span><span class="p">,</span> <span class="mf">0.28</span><span class="p">)[</span><span class="s">&#39;PS_kpc&#39;</span><span class="p">]</span> <span class="c">#in kpc / arc seconds</span>
+    <span class="n">dd</span> <span class="o">=</span> <span class="p">(</span><span class="n">physical_distance</span> <span class="o">/</span> <span class="n">dd1</span><span class="p">)</span> <span class="o">*</span> <span class="n">conversion</span> <span class="c"># to degrees</span>
+    <span class="c"># RA and DEC of the main galaxy, first one in GOODS south</span>
+    <span class="n">ra_main</span> <span class="o">=</span> <span class="mf">52.904892</span> <span class="c">#in degrees</span>
+    <span class="n">dec_main</span> <span class="o">=</span> <span class="o">-</span><span class="mf">27.757082</span> <span class="c">#in degrees</span>
+    <span class="c"># get the random position</span>
+    <span class="n">rds</span> <span class="o">=</span> <span class="n">rand</span><span class="o">.</span><span class="n">randomUnitSphere</span><span class="p">(</span><span class="n">points</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="c"># convert the position to Cartesian coord</span>
+    <span class="c"># when dd is the radius of the sphere coordinates</span>
+    <span class="c"># the dd is in units of degrees here so the results</span>
+    <span class="c"># are also in degrees.</span>
+    <span class="n">rd</span> <span class="o">=</span> <span class="n">conv</span><span class="o">.</span><span class="n">convertSphericalToCartesian</span><span class="p">(</span><span class="n">dd</span><span class="p">,</span>
+                                          <span class="n">rds</span><span class="p">[</span><span class="s">&#39;theta&#39;</span><span class="p">],</span>
+                                          <span class="n">rds</span><span class="p">[</span><span class="s">&#39;phi&#39;</span><span class="p">])</span>
+
+
+    <span class="c"># Make the assumption that x is towards the observer</span>
+    <span class="c"># z is north and y is west. Now if we assume that our z and y</span>
+    <span class="c"># are Standard Coordinates, i.e., the projection of the RA and DEC</span>
+    <span class="c"># of an object onto the tangent plane of the sky. We can now</span>
+    <span class="c"># assume that the y coordinate is aligned with RA and the z coordinate</span>
+    <span class="c"># is aligned with DEC. The origin of this system is at the tangent point</span>
+    <span class="c"># in the dark matter halo.</span>
+    <span class="c"># Poor man&#39;s solution to the problem would be:</span>
+    <span class="n">new_ra</span> <span class="o">=</span> <span class="n">ra_main</span> <span class="o">-</span> <span class="p">(</span><span class="n">rd</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">rd</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">new_dec</span> <span class="o">=</span> <span class="n">dec_main</span> <span class="o">+</span> <span class="n">rd</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c"># However, this only works if one is away from the pole.</span>
+    <span class="c"># More general solution can be derived using spherical geometry:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;CD&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matrix</span><span class="p">(</span><span class="s">&#39;-1 0; 0 1&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;RA&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ra_main</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;DEC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dec_main</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;X&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rd</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">data</span><span class="p">[</span><span class="s">&#39;Y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rd</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">conv</span><span class="o">.</span><span class="n">RAandDECfromStandardCoordinates</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+
+    <span class="c">#print the output</span>
+    <span class="k">print</span> <span class="s">&#39;Redshift of the galaxy is </span><span class="si">%.3f</span><span class="s"> while the subhaloes distance is </span><span class="si">%0.2f</span><span class="s"> kpc&#39;</span><span class="o">%</span> <span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">physical_distance</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Coordinates of the main halo galaxy are (RA and DEC):&#39;</span>
+    <span class="k">print</span> <span class="s">&#39;</span><span class="si">%.7f</span><span class="s">  </span><span class="si">%.7f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">ra_main</span><span class="p">,</span> <span class="n">dec_main</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">astCoords</span><span class="o">.</span><span class="n">decimal2hms</span><span class="p">(</span><span class="n">ra_main</span><span class="p">,</span> <span class="s">&#39;:&#39;</span><span class="p">),</span> <span class="n">astCoords</span><span class="o">.</span><span class="n">decimal2dms</span><span class="p">(</span><span class="n">dec_main</span><span class="p">,</span> <span class="s">&#39;:&#39;</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Coordinates for the subhalo galaxy are (RA and DEC):&#39;</span>
+    <span class="k">print</span> <span class="s">&#39;</span><span class="si">%.7f</span><span class="s">  </span><span class="si">%.7f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">new_ra</span><span class="p">,</span> <span class="n">new_dec</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">astCoords</span><span class="o">.</span><span class="n">decimal2hms</span><span class="p">(</span><span class="n">new_ra</span><span class="p">,</span> <span class="s">&#39;:&#39;</span><span class="p">),</span> <span class="n">astCoords</span><span class="o">.</span><span class="n">decimal2dms</span><span class="p">(</span><span class="n">new_dec</span><span class="p">,</span> <span class="s">&#39;:&#39;</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&#39;or when using more accurate technique&#39;</span>
+    <span class="k">print</span> <span class="s">&#39;</span><span class="si">%.7f</span><span class="s">  </span><span class="si">%.7f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s">&#39;RA&#39;</span><span class="p">],</span> <span class="n">result</span><span class="p">[</span><span class="s">&#39;DEC&#39;</span><span class="p">])</span>
+    <span class="k">print</span> <span class="n">astCoords</span><span class="o">.</span><span class="n">decimal2hms</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s">&#39;RA&#39;</span><span class="p">],</span> <span class="s">&#39;:&#39;</span><span class="p">),</span> <span class="n">astCoords</span><span class="o">.</span><span class="n">decimal2dms</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s">&#39;DEC&#39;</span><span class="p">],</span> <span class="s">&#39;:&#39;</span><span class="p">)</span>
+    <span class="c">#print &#39;Shift in RA and DEC [degrees]:&#39;</span>
+    <span class="c">#print  rd[&#39;y&#39;][0], (rd[&#39;z&#39;][0]/np.cos(rd[&#39;z&#39;][0]))</span>
+    <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Shift in RA and DEC [seconds]:&#39;</span>
+    <span class="k">print</span>  <span class="o">-</span><span class="n">rd</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">rd</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="n">conversion</span><span class="p">,</span> <span class="n">rd</span><span class="p">[</span><span class="s">&#39;z&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">conversion</span>
+    <span class="k">print</span> <span class="s">&#39;or again with the better method:&#39;</span>
+    <span class="k">print</span> <span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s">&#39;RA&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">ra_main</span><span class="p">)</span><span class="o">/</span><span class="n">conversion</span><span class="p">,</span> <span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s">&#39;DEC&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">dec_main</span><span class="p">)</span><span class="o">/</span><span class="n">conversion</span>
+    <span class="c">#print &#39;\nDistance inferred from the coordinates vs the real distance vs x&#39;</span>
+    <span class="c">#print np.sqrt((rd[&#39;y&#39;][0]/conversion)**2 + ((rd[&#39;z&#39;][0]/np.cos(rd[&#39;z&#39;][0]))/conversion)**2) * dd1, \</span>
+    <span class="c">#      physical_distance, rd[&#39;x&#39;][0]</span>
+
+
+    <span class="n">plotTestRandmizer</span><span class="p">(</span><span class="n">physical_distance</span><span class="p">,</span> <span class="n">rds</span><span class="p">)</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="c">#plotRandomization()</span>
+
+    <span class="n">testRandomizer</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

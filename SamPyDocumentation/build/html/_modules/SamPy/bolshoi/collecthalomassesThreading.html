@@ -1,0 +1,262 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.bolshoi.collecthalomassesThreading &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.bolshoi.collecthalomassesThreading</h1><div class="highlight"><pre>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">For some reason this script does not work.</span>
+<span class="sd">I am not sure what&#39;s wrong in it, but the finding</span>
+<span class="sd">part does not work, but randomly dies. It might</span>
+<span class="sd">be something to do with threads getting confused</span>
+<span class="sd">which file they are supposed to open or something...</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">glob</span> <span class="kn">as</span> <span class="nn">g</span>
+<span class="kn">import</span> <span class="nn">threading</span> <span class="kn">as</span> <span class="nn">t</span>
+<span class="kn">import</span> <span class="nn">Queue</span> <span class="kn">as</span> <span class="nn">Q</span>
+
+<div class="viewcode-block" id="findDMhaloes"><a class="viewcode-back" href="../../../SamPy.bolshoi.html#SamPy.bolshoi.collecthalomassesThreading.findDMhaloes">[docs]</a><span class="k">class</span> <span class="nc">findDMhaloes</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">Thread</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Threaded way of finding dark matter haloes from</span>
+<span class="sd">    Bolshoi isotree files.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">queue</span><span class="p">,</span>
+                 <span class="n">times</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initialize the class instance.</span>
+<span class="sd">        :param queue</span>
+<span class="sd">        :param times</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">Thread</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">queue</span> <span class="o">=</span> <span class="n">queue</span>
+        <span class="c">#fixed column definitions for isotree files</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;mvir&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+                        <span class="s">&#39;orig_mvir&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+                        <span class="s">&#39;phantom&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+                        <span class="s">&#39;scale&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+        <span class="c">#which times to capture</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">times</span> <span class="o">=</span> <span class="n">times</span>
+
+<div class="viewcode-block" id="findDMhaloes.find"><a class="viewcode-back" href="../../../SamPy.bolshoi.html#SamPy.bolshoi.collecthalomassesThreading.findDMhaloes.find">[docs]</a>    <span class="k">def</span> <span class="nf">find</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">file</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Find all dark matter haloes from a given file</span>
+<span class="sd">        that are in self.times. Capture the data</span>
+<span class="sd">        that are specified in self.columns.</span>
+<span class="sd">        Returns a dictionary where each key is a single</span>
+<span class="sd">        time. Each line of data is a string so it&#39;s easy</span>
+<span class="sd">        to write out to a file.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;{0:&gt;s} is processing file {1:&gt;s}</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getName</span><span class="p">(),</span> <span class="nb">file</span><span class="p">)</span>
+            <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="n">fh</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;#&#39;</span><span class="p">):</span>
+                    <span class="n">tmp</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="s">&#39;scale&#39;</span><span class="p">]]),</span> <span class="mi">4</span><span class="p">)</span> <span class="o">==</span> <span class="nb">round</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
+                            <span class="n">a</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="s">&#39;mvir&#39;</span><span class="p">]])</span>
+                            <span class="n">b</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="s">&#39;orig_mvir&#39;</span><span class="p">]])</span>
+                            <span class="n">c</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="s">&#39;phantom&#39;</span><span class="p">]])</span>
+                            <span class="c">#make a string from out data</span>
+                            <span class="n">string</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%f</span><span class="s"> </span><span class="si">%f</span><span class="s"> </span><span class="si">%f</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+                            <span class="c">#save the string to dictionary</span>
+                            <span class="k">if</span> <span class="n">output</span><span class="o">.</span><span class="n">has_key</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+                                <span class="n">output</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">string</span><span class="p">,]</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">output</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">string</span><span class="p">,]</span>
+            <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">writeOutput</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="nb">file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">times</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;Problem in {0:&gt;s} is processing file {1:&gt;s}</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getName</span><span class="p">(),</span> <span class="nb">file</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="findDMhaloes.run"><a class="viewcode-back" href="../../../SamPy.bolshoi.html#SamPy.bolshoi.collecthalomassesThreading.findDMhaloes.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Method threading will call.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="c">#grabs a file from queue</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+            <span class="c">#execute</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="c">#signals to queue job is done</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">queue</span><span class="o">.</span><span class="n">task_done</span><span class="p">()</span>
+</div></div>
+<div class="viewcode-block" id="findDMDriver"><a class="viewcode-back" href="../../../SamPy.bolshoi.html#SamPy.bolshoi.collecthalomassesThreading.findDMDriver">[docs]</a><span class="k">def</span> <span class="nf">findDMDriver</span><span class="p">(</span><span class="n">input_files</span><span class="p">,</span>
+                 <span class="n">times</span><span class="p">,</span>
+                 <span class="n">cores</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Main driver function of the wrapper.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="n">Q</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
+    <span class="c">#spawn a pool of threads, and pass them queue instance</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cores</span><span class="p">):</span>
+        <span class="c">#initiate the class instance</span>
+        <span class="n">th</span> <span class="o">=</span> <span class="n">findDMhaloes</span><span class="p">(</span><span class="n">queue</span><span class="p">,</span> <span class="n">times</span><span class="p">)</span>
+        <span class="n">th</span><span class="o">.</span><span class="n">setDaemon</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">th</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="c">#populate queue with data</span>
+    <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">input_files</span><span class="p">:</span>
+        <span class="n">queue</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+    <span class="c">#wait on the queue until everything has been processed</span>
+    <span class="n">queue</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="writeOutput"><a class="viewcode-back" href="../../../SamPy.bolshoi.html#SamPy.bolshoi.collecthalomassesThreading.writeOutput">[docs]</a><span class="k">def</span> <span class="nf">writeOutput</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">file</span><span class="p">,</span> <span class="n">times</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Writes the output data to ascii files.</span>
+<span class="sd">    Each time step is recorded to a single file.</span>
+<span class="sd">    The filename will contain the output *redshift*</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">print</span> <span class="s">&#39;File {0:&gt;s} contains {1:d} timesteps&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="s">&#39;DMhaloz{0:&gt;s}{1:&gt;s}.txt&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="n">key</span><span class="p">]),</span> <span class="nb">file</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&#39;Now outputting to {0:&gt;s} &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">d</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+            <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="combineFiles"><a class="viewcode-back" href="../../../SamPy.bolshoi.html#SamPy.bolshoi.collecthalomassesThreading.combineFiles">[docs]</a><span class="k">def</span> <span class="nf">combineFiles</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">outputfile</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Combines the content of all files that are listed</span>
+<span class="sd">    in the files list to a single file named outputfile.</span>
+<span class="sd">    Iterates over the input files line-by-line to save</span>
+<span class="sd">    memory.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">outputfile</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;Writing </span><span class="si">%s</span><span class="s"> to </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">outputfile</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)):</span>
+            <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+    <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c">#number of cores to use</span>
+    <span class="n">cores</span> <span class="o">=</span> <span class="mi">6</span>
+    
+    <span class="c">#inpute merger tree files</span>
+    <span class="n">inputs</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">&#39;/Users/niemi/Desktop/Research/Bolshoi/bolshoi_isotrees/*.dat&#39;</span><span class="p">)</span>
+
+    <span class="c">#this is for Bolshoi&#39;s tree outputs</span>
+    <span class="c">#scale : redshift</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.9434</span><span class="p">:</span> <span class="mf">0.059995760017</span><span class="p">,</span>
+             <span class="mf">0.9073</span><span class="p">:</span> <span class="mf">0.102171277417</span><span class="p">,</span>
+             <span class="mf">0.8324</span><span class="p">:</span> <span class="mf">0.201345506968</span><span class="p">,</span>
+             <span class="mf">0.7663</span><span class="p">:</span> <span class="mf">0.304971943103</span><span class="p">,</span>
+             <span class="mf">0.7124</span><span class="p">:</span> <span class="mf">0.403705783268</span><span class="p">,</span>
+             <span class="mf">0.6643</span><span class="p">:</span> <span class="mf">0.505343971097</span><span class="p">,</span>
+             <span class="mf">0.6223</span><span class="p">:</span> <span class="mf">0.606941989394</span><span class="p">,</span>
+             <span class="mf">0.5864</span><span class="p">:</span> <span class="mf">0.705320600273</span><span class="p">,</span>
+             <span class="mf">0.5564</span><span class="p">:</span> <span class="mf">0.797268152408</span><span class="p">,</span>
+             <span class="mf">0.5283</span><span class="p">:</span> <span class="mf">0.892863903085</span><span class="p">,</span>
+             <span class="mf">0.4984</span><span class="p">:</span> <span class="mf">1.00642054575</span><span class="p">}</span>
+
+    <span class="c">#call the main function</span>
+    <span class="n">findDMDriver</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span>
+                 <span class="n">times</span><span class="p">,</span>
+                 <span class="n">cores</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">times</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="s">&#39;dmMFz</span><span class="si">%s</span><span class="s">.txt&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+        <span class="k">print</span> <span class="s">&#39;Will write&#39;</span><span class="p">,</span> <span class="n">out</span>
+        <span class="n">combineFiles</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">&#39;*</span><span class="si">%s</span><span class="s">*.txt&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="n">key</span><span class="p">])),</span>
+                     <span class="n">out</span><span class="p">)</span>
+
+    <span class="k">print</span> <span class="s">&#39;All done, check the output file(s)&#39;</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

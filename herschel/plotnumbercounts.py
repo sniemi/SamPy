@@ -1750,12 +1750,12 @@ if __name__ == '__main__':
 
     #passbands to be plotted
     bands = [#'pacs70_obs',
-             #'pacs100_obs',
+             'pacs100_obs']#,
              #'pacs160_obs',
              #'spire250_obs',
              #'spire350_obs',
              #'spire500_obs',
-             'mips24_obs', ]
+             #'mips24_obs', ]
     #'IRAS12_obs',
     #'iras60_obs']
 

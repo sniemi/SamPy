@@ -1,0 +1,768 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.herschel.plotsize &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.herschel.plotsize</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s">&#39;PS&#39;</span><span class="p">)</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s">&#39;text&#39;</span><span class="p">,</span> <span class="n">usetex</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;font.size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">17</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s">&#39;xtick&#39;</span><span class="p">,</span> <span class="n">labelsize</span> <span class="o">=</span> <span class="mi">14</span><span class="p">)</span> 
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s">&#39;axes&#39;</span><span class="p">,</span> <span class="n">linewidth</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;legend.fontsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;legend.handlelength&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;xtick.major.size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;ytick.major.size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="kn">import</span> <span class="nn">pylab</span> <span class="kn">as</span> <span class="nn">P</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">N</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">cm</span>
+<span class="c">#Sami&#39;s repository</span>
+<span class="kn">import</span> <span class="nn">db.sqlite</span> <span class="kn">as</span> <span class="nn">sq</span>
+<span class="kn">import</span> <span class="nn">astronomy.hess_plot</span> <span class="kn">as</span> <span class="nn">h</span>
+<span class="kn">import</span> <span class="nn">astronomy.datamanipulation</span> <span class="kn">as</span> <span class="nn">dm</span>
+<span class="kn">import</span> <span class="nn">sandbox.MyTools</span> <span class="kn">as</span> <span class="nn">M</span>
+
+<div class="viewcode-block" id="plot_size"><a class="viewcode-back" href="../../../SamPy.herschel.html#SamPy.herschel.plotsize.plot_size">[docs]</a><span class="k">def</span> <span class="nf">plot_size</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span>
+              <span class="n">bulge</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;$2.0 &lt; z &lt; 4.0$&#39;</span><span class="p">,</span>
+              <span class="n">pmin</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">pmax</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+              <span class="n">xbin</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span> <span class="n">ybin</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span>
+              <span class="n">y1ticks</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+              <span class="n">y2ticks</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span>
+              <span class="n">xmin</span> <span class="o">=</span> <span class="mf">7.9</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="mf">11.7</span><span class="p">,</span> <span class="n">ymin</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+              <span class="n">scatters</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span> <span class="n">mean</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Plots size versus a given quantity.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c">#get data</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">sq</span><span class="o">.</span><span class="n">get_data_sqlitePowerTen</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
+
+    <span class="c">#sphericals</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">bulge</span>
+    <span class="n">xe</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">][</span><span class="n">mask</span><span class="p">]</span>
+    <span class="n">ye</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">][</span><span class="n">mask</span><span class="p">]</span>
+    <span class="c"># disks</span>
+    <span class="n">disks</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">bulge</span>
+    <span class="n">xd</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">][</span><span class="n">disks</span><span class="p">]</span>
+    <span class="n">yd</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">][</span><span class="n">disks</span><span class="p">]</span>
+
+    <span class="c">#hess</span>
+    <span class="n">sd</span><span class="p">,</span> <span class="n">sdmin</span><span class="p">,</span> <span class="n">sdmax</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">hess_plot</span><span class="p">(</span><span class="n">xd</span><span class="p">,</span> <span class="n">yd</span><span class="p">,</span> <span class="n">N</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xd</span><span class="p">)),</span> 
+                                   <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">xbin</span><span class="p">,</span> 
+                                   <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">ybin</span><span class="p">,</span>
+                                   <span class="n">pmax</span> <span class="o">=</span> <span class="n">pmax</span><span class="p">,</span> <span class="n">pmin</span> <span class="o">=</span> <span class="n">pmin</span><span class="p">)</span>
+    <span class="n">se</span><span class="p">,</span> <span class="n">semin</span><span class="p">,</span> <span class="n">semax</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">hess_plot</span><span class="p">(</span><span class="n">xe</span><span class="p">,</span> <span class="n">ye</span><span class="p">,</span> <span class="n">N</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xe</span><span class="p">)),</span> 
+                                   <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">xbin</span><span class="p">,</span> 
+                                   <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">ybin</span><span class="p">,</span>
+                                   <span class="n">pmax</span> <span class="o">=</span> <span class="n">pmax</span><span class="p">,</span> <span class="n">pmin</span> <span class="o">=</span> <span class="n">pmin</span><span class="p">)</span>
+    
+    <span class="c">#figure</span>
+<span class="c">#    fig = P.figure(figsize = (12, 12))</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">wspace</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">hspace</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span> <span class="n">left</span> <span class="o">=</span> <span class="mf">0.08</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">=</span> <span class="mf">0.07</span><span class="p">,</span>
+                        <span class="n">right</span> <span class="o">=</span> <span class="mf">0.97</span><span class="p">,</span> <span class="n">top</span> <span class="o">=</span> <span class="mf">0.93</span><span class="p">)</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+    <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+
+    <span class="c">#contours</span>
+<span class="c">#    ax1.contourf(sd, origin = &#39;lower&#39;, colors = &#39;b&#39;, </span>
+<span class="c">#                 linewidths = 0.8, linestyles = &#39;-&#39;,</span>
+<span class="c">#                 extent = [xmin, xmax, ymin, ymax],</span>
+<span class="c">#                 rightside_up = True, alpha = 0.7)#,</span>
+<span class="c">#                 #levels = [0.01, 0.3, 0.6, 0.9])</span>
+<span class="c">#    ax2.contourf(se, origin = &#39;lower&#39;, colors = &#39;r&#39;, </span>
+<span class="c">#                 linewidths = 0.8, linestyles = &#39;-&#39;,</span>
+<span class="c">#                 extent = [xmin, xmax, ymin, ymax],</span>
+<span class="c">#                 rightside_up = True, alpha = 0.7)</span>
+    <span class="n">ims</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">sd</span><span class="p">,</span> <span class="n">vmin</span> <span class="o">=</span> <span class="n">sdmin</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="n">sdmax</span><span class="p">,</span>
+                     <span class="n">origin</span> <span class="o">=</span> <span class="s">&#39;lower&#39;</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">gray</span><span class="p">,</span>
+                     <span class="n">interpolation</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">],</span>
+                     <span class="n">aspect</span> <span class="o">=</span> <span class="s">&#39;auto&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">ims</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">se</span><span class="p">,</span> <span class="n">vmin</span> <span class="o">=</span> <span class="n">semin</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="n">semax</span><span class="p">,</span>
+                     <span class="n">origin</span> <span class="o">=</span> <span class="s">&#39;lower&#39;</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">gray</span><span class="p">,</span>
+                     <span class="n">interpolation</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">],</span>
+                     <span class="n">aspect</span> <span class="o">=</span> <span class="s">&#39;auto&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c">#percentiles</span>
+    <span class="n">xbin_midd</span><span class="p">,</span> <span class="n">y50d</span><span class="p">,</span> <span class="n">y16d</span><span class="p">,</span> <span class="n">y84d</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">percentile_bins</span><span class="p">(</span><span class="n">xd</span><span class="p">,</span> <span class="n">yd</span><span class="p">,</span> <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
+    <span class="n">md</span> <span class="o">=</span> <span class="p">(</span><span class="n">y50d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">y16d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">y84d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">xbin_mide</span><span class="p">,</span> <span class="n">y50e</span><span class="p">,</span> <span class="n">y16e</span><span class="p">,</span> <span class="n">y84e</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">percentile_bins</span><span class="p">(</span><span class="n">xe</span><span class="p">,</span> <span class="n">ye</span><span class="p">,</span> <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
+    <span class="n">me</span> <span class="o">=</span> <span class="p">(</span><span class="n">y50e</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">y16e</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">y84e</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xbin_midd</span><span class="p">[</span><span class="n">md</span><span class="p">],</span> <span class="n">y50d</span><span class="p">[</span><span class="n">md</span><span class="p">],</span> <span class="s">&#39;r-&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xbin_midd</span><span class="p">[</span><span class="n">md</span><span class="p">],</span> <span class="n">y16d</span><span class="p">[</span><span class="n">md</span><span class="p">],</span> <span class="s">&#39;r--&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xbin_midd</span><span class="p">[</span><span class="n">md</span><span class="p">],</span> <span class="n">y84d</span><span class="p">[</span><span class="n">md</span><span class="p">],</span> <span class="s">&#39;r--&#39;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xbin_mide</span><span class="p">[</span><span class="n">me</span><span class="p">],</span> <span class="n">y50e</span><span class="p">[</span><span class="n">me</span><span class="p">],</span> <span class="s">&#39;r-&#39;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xbin_mide</span><span class="p">[</span><span class="n">me</span><span class="p">],</span> <span class="n">y16e</span><span class="p">[</span><span class="n">me</span><span class="p">],</span> <span class="s">&#39;r--&#39;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xbin_mide</span><span class="p">[</span><span class="n">me</span><span class="p">],</span> <span class="n">y84e</span><span class="p">[</span><span class="n">me</span><span class="p">],</span> <span class="s">&#39;r--&#39;</span><span class="p">)</span>
+
+    <span class="c">#dots</span>
+    <span class="k">if</span> <span class="n">scatters</span><span class="p">:</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xd</span><span class="p">,</span> <span class="n">yd</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+                    <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;h&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Late-type&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xe</span><span class="p">,</span> <span class="n">ye</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+                    <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Early-type&#39;</span><span class="p">)</span>
+
+    <span class="c">#hlines</span>
+    <span class="k">if</span> <span class="n">mean</span><span class="p">:</span>
+        <span class="c">#mean size</span>
+        <span class="n">mean_disk</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">yd</span><span class="p">)</span>
+        <span class="n">mean_early</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">ye</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">mean_disk</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Mean&#39;</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">mean_early</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="s">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Mean&#39;</span><span class="p">)</span>
+
+    <span class="c">#add text</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span><span class="s">&#39;Late-type galaxies&#39;</span><span class="p">,</span>
+           <span class="n">horizontalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">verticalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">transform</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span><span class="s">&#39;Early-type galaxies&#39;</span><span class="p">,</span>
+           <span class="n">horizontalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">verticalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">transform</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
+
+
+    <span class="c">#labels</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+
+    <span class="c">#limits</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
+
+    <span class="c">#yticks</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">y1ticks</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">y2ticks</span><span class="p">)</span>
+
+    <span class="c">#make grid</span>
+    <span class="c">#ax1.grid()</span>
+    <span class="c">#ax2.grid()</span>
+    
+    <span class="c">#write a legend</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">shadow</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">fancybox</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> 
+               <span class="n">numpoints</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">loc</span> <span class="o">=</span> <span class="s">&#39;upper left&#39;</span><span class="p">,</span>
+               <span class="n">scatterpoints</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">shadow</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">fancybox</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> 
+               <span class="n">numpoints</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">loc</span> <span class="o">=</span> <span class="s">&#39;upper left&#39;</span><span class="p">,</span>
+               <span class="n">scatterpoints</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_folder</span> <span class="o">+</span> <span class="n">output</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="plot_size2"><a class="viewcode-back" href="../../../SamPy.herschel.html#SamPy.herschel.plotsize.plot_size2">[docs]</a><span class="k">def</span> <span class="nf">plot_size2</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span>
+               <span class="n">bulge</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;$2.0 &lt; z &lt; 4.0$&#39;</span><span class="p">,</span>
+               <span class="n">pmin</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">pmax</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+               <span class="n">xbin</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span> <span class="n">ybin</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span>
+               <span class="n">xmin</span> <span class="o">=</span> <span class="mf">7.9</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="mf">11.7</span><span class="p">,</span> <span class="n">ymin</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Plots size versus a given quantity.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c">#get data</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sq</span><span class="o">.</span><span class="n">get_data_sqlitePowerTen</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">query</span><span class="p">))</span>
+
+    <span class="c"># disks</span>
+    <span class="n">disks</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">bulge</span>
+    <span class="n">xd</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">][</span><span class="n">disks</span><span class="p">]</span>
+    <span class="n">yd</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">][</span><span class="n">disks</span><span class="p">]</span>
+
+    <span class="c">#hess</span>
+    <span class="n">sd</span><span class="p">,</span> <span class="n">sdmin</span><span class="p">,</span> <span class="n">sdmax</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">hess_plot</span><span class="p">(</span><span class="n">xd</span><span class="p">,</span> <span class="n">yd</span><span class="p">,</span> <span class="n">N</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xd</span><span class="p">)),</span> 
+                                   <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">xbin</span><span class="p">,</span> 
+                                   <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">ybin</span><span class="p">,</span>
+                                   <span class="n">pmax</span> <span class="o">=</span> <span class="n">pmax</span><span class="p">,</span> <span class="n">pmin</span> <span class="o">=</span> <span class="n">pmin</span><span class="p">)</span>
+
+    <span class="c">#figure</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+
+
+    <span class="n">ims</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">sd</span><span class="p">,</span> <span class="n">vmin</span> <span class="o">=</span> <span class="n">sdmin</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="n">sdmax</span><span class="p">,</span>
+                     <span class="n">origin</span> <span class="o">=</span> <span class="s">&#39;lower&#39;</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">gray</span><span class="p">,</span>
+                     <span class="n">interpolation</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">],</span>
+                     <span class="n">aspect</span> <span class="o">=</span> <span class="s">&#39;auto&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c">#percentiles</span>
+    <span class="n">xbin_midd</span><span class="p">,</span> <span class="n">y50d</span><span class="p">,</span> <span class="n">y16d</span><span class="p">,</span> <span class="n">y84d</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">percentile_bins</span><span class="p">(</span><span class="n">xd</span><span class="p">,</span> <span class="n">yd</span><span class="p">,</span> <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
+    <span class="n">md</span> <span class="o">=</span> <span class="p">(</span><span class="n">y50d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">y16d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">y84d</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xbin_midd</span><span class="p">[</span><span class="n">md</span><span class="p">],</span> <span class="n">y50d</span><span class="p">[</span><span class="n">md</span><span class="p">],</span> <span class="s">&#39;r-&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xbin_midd</span><span class="p">[</span><span class="n">md</span><span class="p">],</span> <span class="n">y16d</span><span class="p">[</span><span class="n">md</span><span class="p">],</span> <span class="s">&#39;r--&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xbin_midd</span><span class="p">[</span><span class="n">md</span><span class="p">],</span> <span class="n">y84d</span><span class="p">[</span><span class="n">md</span><span class="p">],</span> <span class="s">&#39;r--&#39;</span><span class="p">)</span>
+
+    <span class="c">#add text</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span><span class="s">&#39;Late-type galaxies&#39;</span><span class="p">,</span>
+           <span class="n">horizontalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">verticalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">transform</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
+
+    <span class="c">#labels</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+
+    <span class="c">#limits</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
+
+    <span class="c">#yticks</span>
+    <span class="c">#ax1.set_yticks(y1ticks)</span>
+
+    <span class="c">#make grid</span>
+    <span class="c">#ax1.grid()</span>
+    
+    <span class="c">#write a legend</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">shadow</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">fancybox</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> 
+               <span class="n">numpoints</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">loc</span> <span class="o">=</span> <span class="s">&#39;upper left&#39;</span><span class="p">,</span>
+               <span class="n">scatterpoints</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_folder</span> <span class="o">+</span> <span class="n">output</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="plot_size_paper"><a class="viewcode-back" href="../../../SamPy.herschel.html#SamPy.herschel.plotsize.plot_size_paper">[docs]</a><span class="k">def</span> <span class="nf">plot_size_paper</span><span class="p">(</span><span class="n">xd1</span><span class="p">,</span> <span class="n">xd2</span><span class="p">,</span> <span class="n">yd1</span><span class="p">,</span> <span class="n">yd2</span><span class="p">,</span>
+                    <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span>
+                    <span class="n">pmin</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">pmax</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+                    <span class="n">xbin1</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span> <span class="n">ybin1</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span>
+                    <span class="n">xbin2</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span> <span class="n">ybin2</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span>
+                    <span class="n">y1ticks</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span>
+                    <span class="n">y2ticks</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
+                    <span class="n">xmin1</span> <span class="o">=</span> <span class="mf">7.9</span><span class="p">,</span> <span class="n">xmax1</span> <span class="o">=</span> <span class="mf">11.7</span><span class="p">,</span> 
+                    <span class="n">xmin2</span> <span class="o">=</span> <span class="mf">7.9</span><span class="p">,</span> <span class="n">xmax2</span> <span class="o">=</span> <span class="mf">11.7</span><span class="p">,</span>
+                    <span class="n">ymin</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="mi">12</span><span class="p">,</span>
+                    <span class="n">scatters</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span> <span class="n">mean</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+
+    <span class="c">#calculate hess</span>
+    <span class="n">sd1</span><span class="p">,</span> <span class="n">sdmin1</span><span class="p">,</span> <span class="n">sdmax1</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">hess_plot</span><span class="p">(</span><span class="n">xd1</span><span class="p">,</span> <span class="n">yd1</span><span class="p">,</span> <span class="n">N</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xd1</span><span class="p">)),</span> 
+                                      <span class="n">xmin1</span><span class="p">,</span> <span class="n">xmax1</span><span class="p">,</span> <span class="n">xbin1</span><span class="p">,</span> 
+                                      <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">ybin1</span><span class="p">,</span>
+                                      <span class="n">pmax</span> <span class="o">=</span> <span class="n">pmax</span><span class="p">,</span> <span class="n">pmin</span> <span class="o">=</span> <span class="n">pmin</span><span class="p">)</span>
+    <span class="n">sd2</span><span class="p">,</span> <span class="n">sdmin2</span><span class="p">,</span> <span class="n">sdmax2</span> <span class="o">=</span> <span class="n">h</span><span class="o">.</span><span class="n">hess_plot</span><span class="p">(</span><span class="n">xd2</span><span class="p">,</span> <span class="n">yd2</span><span class="p">,</span> <span class="n">N</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xd2</span><span class="p">)),</span> 
+                                      <span class="n">xmin2</span><span class="p">,</span> <span class="n">xmax2</span><span class="p">,</span> <span class="n">xbin2</span><span class="p">,</span> 
+                                      <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">ybin2</span><span class="p">,</span>
+                                      <span class="n">pmax</span> <span class="o">=</span> <span class="n">pmax</span><span class="p">,</span> <span class="n">pmin</span> <span class="o">=</span> <span class="n">pmin</span><span class="p">)</span>
+    
+    <span class="c">#load obs data</span>
+    <span class="nb">file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#39;HOME&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;/Dropbox/Research/Herschel/obs_data/CavaSizesValues.txt&#39;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">comments</span> <span class="o">=</span> <span class="s">&#39;#&#39;</span><span class="p">,</span> <span class="n">usecols</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    
+    <span class="c">#figure</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="c">#fig.suptitle(&#39;Late-type Galaxies&#39;)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">wspace</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">hspace</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span> <span class="n">left</span> <span class="o">=</span> <span class="mf">0.08</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">=</span> <span class="mf">0.07</span><span class="p">,</span>
+                        <span class="n">right</span> <span class="o">=</span> <span class="mf">0.97</span><span class="p">,</span> <span class="n">top</span> <span class="o">=</span> <span class="mf">0.93</span><span class="p">)</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+    <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+
+    <span class="n">ims</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">sd1</span><span class="p">,</span> <span class="n">vmin</span> <span class="o">=</span> <span class="n">sdmin1</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="n">sdmax1</span><span class="p">,</span>
+                     <span class="n">origin</span> <span class="o">=</span> <span class="s">&#39;lower&#39;</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">gray</span><span class="p">,</span>
+                     <span class="n">interpolation</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="n">xmin1</span><span class="p">,</span> <span class="n">xmax1</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">],</span>
+                     <span class="n">aspect</span> <span class="o">=</span> <span class="s">&#39;auto&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">ims</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">sd2</span><span class="p">,</span> <span class="n">vmin</span> <span class="o">=</span> <span class="n">sdmin2</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="n">sdmax2</span><span class="p">,</span>
+                     <span class="n">origin</span> <span class="o">=</span> <span class="s">&#39;lower&#39;</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">gray</span><span class="p">,</span>
+                     <span class="n">interpolation</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span>
+                     <span class="n">extent</span> <span class="o">=</span> <span class="p">[</span><span class="n">xmin2</span><span class="p">,</span> <span class="n">xmax2</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">],</span>
+                     <span class="n">aspect</span> <span class="o">=</span> <span class="s">&#39;auto&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+    
+    <span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xd2</span><span class="p">,</span> <span class="n">yd2</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;blue&#39;</span><span class="p">,</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;$S_{250} &gt; 5$ mJy&#39;</span><span class="p">)</span>
+
+    <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">45</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;s&#39;</span><span class="p">,</span>
+                <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;green&#39;</span><span class="p">)</span>    
+    <span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">45</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;s&#39;</span><span class="p">,</span>
+                <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;green&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Cava et al 2010&#39;</span><span class="p">)</span>
+
+    <span class="c">#percentiles</span>
+    <span class="n">xbin_midd1</span><span class="p">,</span> <span class="n">y50d1</span><span class="p">,</span> <span class="n">y16d1</span><span class="p">,</span> <span class="n">y84d1</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">percentile_bins</span><span class="p">(</span><span class="n">xd1</span><span class="p">,</span> <span class="n">yd1</span><span class="p">,</span>
+                                                         <span class="n">xmin1</span><span class="p">,</span> <span class="n">xmax1</span><span class="p">,</span>
+                                                         <span class="n">nxbins</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">xbin1</span><span class="p">,</span>
+                                                         <span class="n">limit</span> <span class="o">=</span> <span class="mi">25</span><span class="p">)</span>
+    <span class="n">md1</span> <span class="o">=</span> <span class="p">(</span><span class="n">y50d1</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">y16d1</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">y84d1</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">xbin_midd2</span><span class="p">,</span> <span class="n">y50d2</span><span class="p">,</span> <span class="n">y16d2</span><span class="p">,</span> <span class="n">y84d2</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">percentile_bins</span><span class="p">(</span><span class="n">xd2</span><span class="p">,</span> <span class="n">yd2</span><span class="p">,</span>
+                                                         <span class="n">xmin2</span><span class="p">,</span> <span class="n">xmax2</span><span class="p">,</span>
+                                                         <span class="n">nxbins</span> <span class="o">=</span> <span class="n">xbin2</span><span class="p">,</span>
+                                                         <span class="n">limit</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+    <span class="n">md2</span> <span class="o">=</span> <span class="p">(</span><span class="n">y50d2</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">y16d2</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">y84d2</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xbin_midd1</span><span class="p">[</span><span class="n">md1</span><span class="p">],</span> <span class="n">y50d1</span><span class="p">[</span><span class="n">md1</span><span class="p">],</span> <span class="s">&#39;r-&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xbin_midd1</span><span class="p">[</span><span class="n">md1</span><span class="p">],</span> <span class="n">y16d1</span><span class="p">[</span><span class="n">md1</span><span class="p">],</span> <span class="s">&#39;r--&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xbin_midd1</span><span class="p">[</span><span class="n">md1</span><span class="p">],</span> <span class="n">y84d1</span><span class="p">[</span><span class="n">md1</span><span class="p">],</span> <span class="s">&#39;r--&#39;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xbin_midd2</span><span class="p">[</span><span class="n">md2</span><span class="p">],</span> <span class="n">y50d2</span><span class="p">[</span><span class="n">md2</span><span class="p">],</span> <span class="s">&#39;r-&#39;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xbin_midd2</span><span class="p">[</span><span class="n">md2</span><span class="p">],</span> <span class="n">y16d2</span><span class="p">[</span><span class="n">md2</span><span class="p">],</span> <span class="s">&#39;r--&#39;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xbin_midd2</span><span class="p">[</span><span class="n">md2</span><span class="p">],</span> <span class="n">y84d2</span><span class="p">[</span><span class="n">md2</span><span class="p">],</span> <span class="s">&#39;r--&#39;</span><span class="p">)</span>
+
+    <span class="c">#add text</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span><span class="s">&#39;Late-type galaxies</span><span class="se">\n</span><span class="s">$2 \leq z &lt; 4$&#39;</span><span class="p">,</span>
+           <span class="n">horizontalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">verticalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">transform</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
+<span class="c">#    P.text(0.5, 0.95,&#39;$S_{250} &gt; 5$ mJy&#39;,</span>
+<span class="c">#           horizontalalignment=&#39;center&#39;,</span>
+<span class="c">#           verticalalignment=&#39;center&#39;,</span>
+<span class="c">#           transform = ax2.transAxes)</span>
+
+    <span class="c">#labels</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+    <span class="c">#yticks</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">ax1</span><span class="o">.</span><span class="n">get_xticks</span><span class="p">()[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">ax2</span><span class="o">.</span><span class="n">get_xticks</span><span class="p">()[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">y1ticks</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">y2ticks</span><span class="p">)</span>
+    <span class="c">#limits</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin1</span><span class="p">,</span> <span class="n">xmax1</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin2</span><span class="p">,</span> <span class="n">xmax2</span><span class="p">)</span>
+    <span class="c">#make grid</span>
+    <span class="c">#ax1.grid()</span>
+    <span class="c">#ax2.grid()</span>
+    <span class="c">#write a legend</span>
+    <span class="c">#ax1.legend(shadow = True, fancybox = True, </span>
+    <span class="c">#           numpoints = 1, loc = &#39;upper left&#39;,</span>
+    <span class="c">#           scatterpoints = 1)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">shadow</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">fancybox</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> 
+               <span class="n">numpoints</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">loc</span> <span class="o">=</span> <span class="s">&#39;upper left&#39;</span><span class="p">,</span>
+               <span class="n">scatterpoints</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">markerscale</span> <span class="o">=</span> <span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_folder</span> <span class="o">+</span> <span class="n">output</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="plot_size_paperKDE"><a class="viewcode-back" href="../../../SamPy.herschel.html#SamPy.herschel.plotsize.plot_size_paperKDE">[docs]</a><span class="k">def</span> <span class="nf">plot_size_paperKDE</span><span class="p">(</span><span class="n">xd1</span><span class="p">,</span> <span class="n">xd2</span><span class="p">,</span> <span class="n">yd1</span><span class="p">,</span> <span class="n">yd2</span><span class="p">,</span>
+                       <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span>
+                       <span class="n">xbin1</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span> <span class="n">ybin1</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span>
+                       <span class="n">xbin2</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span> <span class="n">ybin2</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span>
+                       <span class="n">y1ticks</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span>
+                       <span class="n">y2ticks</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
+                       <span class="n">xmin1</span> <span class="o">=</span> <span class="mf">7.9</span><span class="p">,</span> <span class="n">xmax1</span> <span class="o">=</span> <span class="mf">11.7</span><span class="p">,</span> 
+                       <span class="n">xmin2</span> <span class="o">=</span> <span class="mf">7.9</span><span class="p">,</span> <span class="n">xmax2</span> <span class="o">=</span> <span class="mf">11.7</span><span class="p">,</span>
+                       <span class="n">ymin</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="mi">12</span><span class="p">,</span>
+                       <span class="n">scatters</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span> <span class="n">mean</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+                       <span class="n">lvls</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+
+    <span class="c">#calclate KDEs</span>
+    <span class="n">mu1</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">AnaKDE</span><span class="p">([</span><span class="n">xd1</span><span class="p">,</span> <span class="n">yd1</span><span class="p">])</span>
+    <span class="n">x_vec1</span><span class="p">,</span> <span class="n">y_vec1</span><span class="p">,</span> <span class="n">zm1</span><span class="p">,</span> <span class="n">lvls1</span><span class="p">,</span> <span class="n">d01</span><span class="p">,</span> <span class="n">d11</span> <span class="o">=</span> <span class="n">mu1</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">xmin1</span><span class="p">,</span> <span class="n">xmax1</span><span class="p">,</span> <span class="n">xbin1</span><span class="p">),</span>
+                                                       <span class="n">N</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">ybin1</span><span class="p">),</span>
+                                                       <span class="n">return_data</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+    <span class="n">mu2</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">AnaKDE</span><span class="p">([</span><span class="n">xd2</span><span class="p">,</span> <span class="n">yd2</span><span class="p">])</span>
+    <span class="n">x_vec2</span><span class="p">,</span> <span class="n">y_vec2</span><span class="p">,</span> <span class="n">zm2</span><span class="p">,</span> <span class="n">lvls2</span><span class="p">,</span> <span class="n">d02</span><span class="p">,</span> <span class="n">d12</span> <span class="o">=</span> <span class="n">mu2</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">xmin2</span><span class="p">,</span> <span class="n">xmax2</span><span class="p">,</span> <span class="n">xbin2</span><span class="p">),</span>
+                                                       <span class="n">N</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">ybin2</span><span class="p">),</span>
+                                                       <span class="n">return_data</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+    <span class="c">#load obs data</span>
+    <span class="nb">file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#39;HOME&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;/Dropbox/Research/Herschel/obs_data/CavaSizesValues.txt&#39;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">comments</span> <span class="o">=</span> <span class="s">&#39;#&#39;</span><span class="p">,</span> <span class="n">usecols</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    
+    <span class="c">#make the figure</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">wspace</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">hspace</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span> <span class="n">left</span> <span class="o">=</span> <span class="mf">0.08</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">=</span> <span class="mf">0.07</span><span class="p">,</span>
+                        <span class="n">right</span> <span class="o">=</span> <span class="mf">0.97</span><span class="p">,</span> <span class="n">top</span> <span class="o">=</span> <span class="mf">0.93</span><span class="p">)</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+    <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+    <span class="c">#make filled contours</span>
+    <span class="k">if</span> <span class="n">lvls</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">cont</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">x_vec1</span><span class="p">,</span> <span class="n">y_vec1</span><span class="p">,</span> <span class="n">zm1</span><span class="p">,</span>
+                            <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;gist_yarg&#39;</span><span class="p">))</span>
+        <span class="n">cont</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">x_vec2</span><span class="p">,</span> <span class="n">y_vec2</span><span class="p">,</span> <span class="n">zm2</span><span class="p">,</span>
+                            <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;gist_yarg&#39;</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cont</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">x_vec1</span><span class="p">,</span> <span class="n">y_vec1</span><span class="p">,</span> <span class="n">zm1</span><span class="p">,</span>
+                            <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;gist_yarg&#39;</span><span class="p">),</span>
+                            <span class="n">levels</span> <span class="o">=</span> <span class="n">lvls</span><span class="p">)</span>
+        <span class="n">cont</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">x_vec2</span><span class="p">,</span> <span class="n">y_vec2</span><span class="p">,</span> <span class="n">zm2</span><span class="p">,</span>
+                            <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;gist_yarg&#39;</span><span class="p">),</span>
+                            <span class="n">levels</span> <span class="o">=</span> <span class="n">lvls</span><span class="p">)</span>
+
+    <span class="c">#plot scatter</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xd2</span><span class="p">,</span> <span class="n">yd2</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mf">0.5</span>   <span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;blue&#39;</span><span class="p">,</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;$S_{250} &gt; 5$ mJy&#39;</span><span class="p">)</span>
+    <span class="c">#plot observed data</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">45</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;s&#39;</span><span class="p">,</span>
+                <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;green&#39;</span><span class="p">)</span>    
+    <span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">45</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;s&#39;</span><span class="p">,</span>
+                <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;green&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Cava et al 2010&#39;</span><span class="p">)</span>
+    <span class="c">#calculate and plot percentiles</span>
+    <span class="n">xbin_midd1</span><span class="p">,</span> <span class="n">y50d1</span><span class="p">,</span> <span class="n">y16d1</span><span class="p">,</span> <span class="n">y84d1</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">percentile_bins</span><span class="p">(</span><span class="n">xd1</span><span class="p">,</span> <span class="n">yd1</span><span class="p">,</span>
+                                                         <span class="n">xmin1</span><span class="p">,</span> <span class="n">xmax1</span><span class="p">,</span>
+                                                         <span class="n">nxbins</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+                                                         <span class="n">limit</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+    <span class="n">md1</span> <span class="o">=</span> <span class="p">(</span><span class="n">y50d1</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">y16d1</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">y84d1</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">xbin_midd2</span><span class="p">,</span> <span class="n">y50d2</span><span class="p">,</span> <span class="n">y16d2</span><span class="p">,</span> <span class="n">y84d2</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">percentile_bins</span><span class="p">(</span><span class="n">xd2</span><span class="p">,</span> <span class="n">yd2</span><span class="p">,</span>
+                                                         <span class="n">xmin2</span><span class="p">,</span> <span class="n">xmax2</span><span class="p">,</span>
+                                                         <span class="n">nxbins</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span>
+                                                         <span class="n">limit</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">md2</span> <span class="o">=</span> <span class="p">(</span><span class="n">y50d2</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">y16d2</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">y84d2</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xbin_midd1</span><span class="p">[</span><span class="n">md1</span><span class="p">],</span> <span class="n">y50d1</span><span class="p">[</span><span class="n">md1</span><span class="p">],</span> <span class="s">&#39;r-&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xbin_midd1</span><span class="p">[</span><span class="n">md1</span><span class="p">],</span> <span class="n">y16d1</span><span class="p">[</span><span class="n">md1</span><span class="p">],</span> <span class="s">&#39;r--&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xbin_midd1</span><span class="p">[</span><span class="n">md1</span><span class="p">],</span> <span class="n">y84d1</span><span class="p">[</span><span class="n">md1</span><span class="p">],</span> <span class="s">&#39;r--&#39;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xbin_midd2</span><span class="p">[</span><span class="n">md2</span><span class="p">],</span> <span class="n">y50d2</span><span class="p">[</span><span class="n">md2</span><span class="p">],</span> <span class="s">&#39;r-&#39;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xbin_midd2</span><span class="p">[</span><span class="n">md2</span><span class="p">],</span> <span class="n">y16d2</span><span class="p">[</span><span class="n">md2</span><span class="p">],</span> <span class="s">&#39;r--&#39;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xbin_midd2</span><span class="p">[</span><span class="n">md2</span><span class="p">],</span> <span class="n">y84d2</span><span class="p">[</span><span class="n">md2</span><span class="p">],</span> <span class="s">&#39;r--&#39;</span><span class="p">)</span>
+
+    <span class="c">#add text</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span><span class="s">&#39;Late-type galaxies</span><span class="se">\n</span><span class="s">$2 \leq z &lt; 4$&#39;</span><span class="p">,</span>
+           <span class="n">horizontalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">verticalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">transform</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
+
+    <span class="c">#labels</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+    <span class="c">#yticks</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">([])</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">ax1</span><span class="o">.</span><span class="n">get_xticks</span><span class="p">()[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">ax2</span><span class="o">.</span><span class="n">get_xticks</span><span class="p">()[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">y1ticks</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">y2ticks</span><span class="p">)</span>
+    <span class="c">#limits</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin1</span><span class="p">,</span> <span class="n">xmax1</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin2</span><span class="p">,</span> <span class="n">xmax2</span><span class="p">)</span>
+    <span class="c">#make grid</span>
+    <span class="c">#ax1.grid()</span>
+    <span class="c">#ax2.grid()</span>
+    <span class="c">#write a legend</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">shadow</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">fancybox</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> 
+               <span class="n">numpoints</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">loc</span> <span class="o">=</span> <span class="s">&#39;upper left&#39;</span><span class="p">,</span>
+               <span class="n">scatterpoints</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">markerscale</span> <span class="o">=</span> <span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_folder</span> <span class="o">+</span> <span class="n">output</span><span class="p">)</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c">#find the home directory, because the output is to dropbox </span>
+    <span class="c">#and my user name is not always the same, this hack is required.</span>
+    <span class="n">hm</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#39;HOME&#39;</span><span class="p">)</span>
+    <span class="c">#constants</span>
+    <span class="c">#path = hm + &#39;/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/&#39;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">hm</span> <span class="o">+</span> <span class="s">&#39;/Research/Herschel/runs/big_volume/&#39;</span>
+    <span class="n">out_folder</span> <span class="o">=</span> <span class="n">hm</span> <span class="o">+</span> <span class="s">&#39;/Dropbox/Research/Herschel/plots/size/big/&#39;</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="s">&#39;sams.db&#39;</span>
+    
+    <span class="c">#bulge-to-disk ratio</span>
+    <span class="n">bulge</span> <span class="o">=</span> <span class="mf">0.4</span>
+    
+    <span class="n">query1</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.mstar, galprop.r_disk, Pow10(galprop.mbulge - galprop.mstar)</span>
+<span class="s">                from FIR, galprop where</span>
+<span class="s">                galprop.tmerge &gt; 0.5 and</span>
+<span class="s">                FIR.z &gt;= 2.0 and</span>
+<span class="s">                FIR.z &lt; 4.0 and</span>
+<span class="s">                FIR.spire250_obs &gt; 1e-15 and</span>
+<span class="s">                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="s">                FIR.gal_id = galprop.gal_id and</span>
+<span class="s">                FIR.halo_id = galprop.halo_id</span>
+<span class="s">                &#39;&#39;&#39;</span>
+    <span class="n">query2</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.mstar, galprop.r_disk, Pow10(galprop.mbulge - galprop.mstar)</span>
+<span class="s">                from FIR, galprop where</span>
+<span class="s">                galprop.tmerge &gt; 0.5 and</span>
+<span class="s">                FIR.z &gt;= 2.0 and</span>
+<span class="s">                FIR.z &lt; 4.0 and</span>
+<span class="s">                FIR.spire250_obs &gt; 5e-3 and</span>
+<span class="s">                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="s">                FIR.gal_id = galprop.gal_id and</span>
+<span class="s">                FIR.halo_id = galprop.halo_id</span>
+<span class="s">                &#39;&#39;&#39;</span>
+    <span class="c">#get data query1</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">sq</span><span class="o">.</span><span class="n">get_data_sqlitePowerTen</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">query1</span><span class="p">)</span>
+    <span class="c"># disks</span>
+    <span class="n">disks</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">bulge</span>
+    <span class="n">xd1</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">][</span><span class="n">disks</span><span class="p">]</span>
+    <span class="n">yd1</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">][</span><span class="n">disks</span><span class="p">]</span>
+    <span class="c">#get data query1</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">sq</span><span class="o">.</span><span class="n">get_data_sqlitePowerTen</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">query2</span><span class="p">)</span>
+    <span class="c"># disks</span>
+    <span class="n">disks</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">bulge</span>
+    <span class="n">xd2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">][</span><span class="n">disks</span><span class="p">]</span>
+    <span class="n">yd2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">][</span><span class="n">disks</span><span class="p">]</span>
+    <span class="c">#find all galaxies in similar Mstellar range as SPIRE bright</span>
+    <span class="n">yd2min</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">yd2</span><span class="p">)</span>
+    <span class="n">yd2max</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">yd2</span><span class="p">)</span>
+    <span class="n">msk</span> <span class="o">=</span> <span class="p">(</span><span class="n">yd1</span> <span class="o">&gt;=</span> <span class="n">yd2min</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">yd1</span> <span class="o">&lt;=</span> <span class="n">yd2max</span><span class="p">)</span>
+    <span class="c">#print out some info</span>
+    <span class="k">print</span> <span class="s">&#39;Mean size of all galaxies, number of galaxies&#39;</span><span class="p">,</span> <span class="n">N</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">yd1</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">yd1</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&#39;Mean size of all galaxies with the same stellar mass selection as SPIRE detected&#39;</span><span class="p">,</span> <span class="n">N</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">yd1</span><span class="p">[</span><span class="n">msk</span><span class="p">]),</span> <span class="nb">len</span><span class="p">(</span><span class="n">yd1</span><span class="p">[</span><span class="n">msk</span><span class="p">])</span>
+    <span class="k">print</span> <span class="s">&#39;Mean size of SPIRE detected galaxies&#39;</span><span class="p">,</span> <span class="n">N</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">yd2</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">yd2</span><span class="p">)</span>
+
+    <span class="c">#star the actual plots</span>
+    <span class="k">print</span> <span class="s">&#39;Begin plotting&#39;</span>
+    <span class="k">print</span> <span class="s">&#39;Input DB: &#39;</span><span class="p">,</span> <span class="n">path</span> <span class="o">+</span> <span class="n">db</span>
+    <span class="k">print</span> <span class="s">&#39;Output folder: &#39;</span><span class="p">,</span> <span class="n">out_folder</span>
+
+    <span class="n">plot_size_paper</span><span class="p">(</span><span class="n">xd1</span><span class="p">,</span> <span class="n">xd2</span><span class="p">,</span> <span class="n">yd1</span><span class="p">,</span> <span class="n">yd2</span><span class="p">,</span>
+                    <span class="s">r&#39;$\log_{10}(M_{\star}/M_{\odot})$&#39;</span><span class="p">,</span> 
+                    <span class="s">r&#39;$R_{\mathrm{disk}} \quad [\mathrm{kpc}]$&#39;</span><span class="p">,</span>
+                    <span class="s">&#39;SizeStellarMass.ps&#39;</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span>
+                    <span class="n">xmin1</span> <span class="o">=</span> <span class="mf">8.5</span><span class="p">,</span> <span class="n">xmax1</span> <span class="o">=</span> <span class="mf">12.0</span><span class="p">,</span>
+                    <span class="n">xmin2</span> <span class="o">=</span> <span class="mf">10.1</span><span class="p">,</span> <span class="n">xmax2</span> <span class="o">=</span> <span class="mf">11.7</span><span class="p">,</span>
+                    <span class="n">pmin</span> <span class="o">=</span> <span class="mf">0.02</span><span class="p">,</span> <span class="n">xbin1</span> <span class="o">=</span> <span class="mi">25</span><span class="p">,</span> <span class="n">ybin1</span> <span class="o">=</span> <span class="mi">25</span><span class="p">,</span>
+                    <span class="n">xbin2</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">ybin2</span> <span class="o">=</span> <span class="mi">20</span><span class="p">)</span>
+
+<span class="c">#    plot_size_paper(xd1, xd2, yd1, yd2,</span>
+<span class="c">#                    r&#39;$\log_{10}(M_{\star}/M_{\odot})$&#39;, </span>
+<span class="c">#                    r&#39;$R_{\mathrm{disk}} \quad [\mathrm{kpc}]$&#39;,</span>
+<span class="c">#                    &#39;SizeStellarMass2.ps&#39;, out_folder,</span>
+<span class="c">#                    xmin1 = 8.5, xmax1 = 11.9,</span>
+<span class="c">#                    xmin2 = 10.1, xmax2 = 11.7,</span>
+<span class="c">#                    pmin = 0.02, xbin1 = 20, ybin1 = 20,</span>
+<span class="c">#                    xbin2 = 15, ybin2 = 15)</span>
+
+<span class="c">#    plot_size_paperKDE(xd1[::2], xd2, yd1[::2], yd2,</span>
+<span class="c">#                       r&#39;$\log_{10}(M_{\star}/M_{\odot})$&#39;, </span>
+<span class="c">#                       r&#39;$R_{\mathrm{disk}} \quad [\mathrm{kpc}]$&#39;,</span>
+<span class="c">#                       &#39;SizeStellarMass3.ps&#39;, out_folder,</span>
+<span class="c">#                       xmin1 = 9.2, xmax1 = 12.0,</span>
+<span class="c">#                       xmin2 = 10.1, xmax2 = 11.7,</span>
+<span class="c">#                       xbin1 = 40, ybin1 = 40,</span>
+<span class="c">#                       xbin2 = 40, ybin2 = 40)</span>
+<span class="c">#</span>
+<span class="c">#    plot_size_paperKDE(xd1[::2], xd2, yd1[::2], yd2,</span>
+<span class="c">#                       r&#39;$\log_{10}(M_{\star}/M_{\odot})$&#39;, </span>
+<span class="c">#                       r&#39;$R_{\mathrm{disk}} \quad [\mathrm{kpc}]$&#39;,</span>
+<span class="c">#                       &#39;SizeStellarMass4.ps&#39;, out_folder,</span>
+<span class="c">#                       xmin1 = 9.2, xmax1 = 12.0,</span>
+<span class="c">#                       xmin2 = 10.1, xmax2 = 11.7,</span>
+<span class="c">#                       xbin1 = 80, ybin1 = 80,</span>
+<span class="c">#                       xbin2 = 80, ybin2 = 80)</span>
+<span class="c">#</span>
+<span class="c">#    plot_size_paperKDE(xd1[::2], xd2, yd1[::2], yd2,</span>
+<span class="c">#                       r&#39;$\log_{10}(M_{\star}/M_{\odot})$&#39;, </span>
+<span class="c">#                       r&#39;$R_{\mathrm{disk}} \quad [\mathrm{kpc}]$&#39;,</span>
+<span class="c">#                       &#39;SizeStellarMass5.ps&#39;, out_folder,</span>
+<span class="c">#                       xmin1 = 9.2, xmax1 = 12.0,</span>
+<span class="c">#                       xmin2 = 10.1, xmax2 = 11.7,</span>
+<span class="c">#                       xbin1 = 80, ybin1 = 80,</span>
+<span class="c">#                       xbin2 = 80, ybin2 = 80,</span>
+<span class="c">#                       lvls = N.linspace(0, 2, 10))</span>
+<span class="c">#    </span>
+<span class="c">#    plot_size_paperKDE(xd1[::2], xd2, yd1[::2], yd2,</span>
+<span class="c">#                       r&#39;$\log_{10}(M_{\star}/M_{\odot})$&#39;, </span>
+<span class="c">#                       r&#39;$R_{\mathrm{disk}} \quad [\mathrm{kpc}]$&#39;,</span>
+<span class="c">#                       &#39;SizeStellarMass6.ps&#39;, out_folder,</span>
+<span class="c">#                       xmin1 = 9.2, xmax1 = 12.0,</span>
+<span class="c">#                       xmin2 = 10.1, xmax2 = 11.7,</span>
+<span class="c">#                       xbin1 = 80, ybin1 = 80,</span>
+<span class="c">#                       xbin2 = 80, ybin2 = 80,</span>
+<span class="c">#                       lvls = N.logspace(0, 2, 10))</span>
+<span class="c">#</span>
+<span class="c">#    plot_size_paperKDE(xd1[::2], xd2, yd1[::2], yd2,</span>
+<span class="c">#                       r&#39;$\log_{10}(M_{\star}/M_{\odot})$&#39;, </span>
+<span class="c">#                       r&#39;$R_{\mathrm{disk}} \quad [\mathrm{kpc}]$&#39;,</span>
+<span class="c">#                       &#39;SizeStellarMass7.ps&#39;, out_folder,</span>
+<span class="c">#                       xmin1 = 9.2, xmax1 = 12.0,</span>
+<span class="c">#                       xmin2 = 10.1, xmax2 = 11.7,</span>
+<span class="c">#                       xbin1 = 80, ybin1 = 80,</span>
+<span class="c">#                       xbin2 = 80, ybin2 = 80,</span>
+<span class="c">#                       lvls = [0.01, 0.05, 0.1, 0.3, 0.5, 0.7, 0.9])</span>
+
+    
+<span class="c">#    query1 = &#39;&#39;&#39;select galprop.mstar, galprop.r_disk, Pow10(galprop.mbulge - galprop.mstar)</span>
+<span class="c">#                from FIR, galprop where</span>
+<span class="c">#                FIR.z &gt;= 2.0 and</span>
+<span class="c">#                FIR.z &lt; 4.0 and</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                galprop.tmerge &gt; 0.5 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-12 and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    query2 = &#39;&#39;&#39;select galprop.mstar, galprop.r_disk, Pow10(galprop.mbulge - galprop.mstar)</span>
+<span class="c">#                from FIR, galprop where</span>
+<span class="c">#                FIR.z &gt;= 2.0 and</span>
+<span class="c">#                FIR.z &lt; 4.0 and</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &gt; 5e-3 and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    plot_size_paper(query1, query2, r&#39;$\log(M_{\star}/M_{\odot})$&#39;, </span>
+<span class="c">#               r&#39;$R_{\textrm{disk}}$ \quad [kpc]&#39;, &#39;SizeStellarMassMergersIn.ps&#39;,</span>
+<span class="c">#               out_folder, xmin1 = 8.2, xmax1 = 11.65,</span>
+<span class="c">#               xmin2 = 10.1, xmax2 = 11.65,</span>
+<span class="c">#               pmin = 0.05, xbin1 = 13, ybin1 = 11,</span>
+<span class="c">#               xbin2 = 13, ybin2 = 11)</span>
+<span class="c">#</span>
+<span class="c">#    query1 = &#39;&#39;&#39;select galprop.mstardot, galprop.r_disk, Pow10(galprop.mbulge - galprop.mstar)</span>
+<span class="c">#                from FIR, galprop where</span>
+<span class="c">#                FIR.z &gt;= 2.0 and</span>
+<span class="c">#                FIR.z &lt; 4.0 and</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                galprop.tmerge &gt; 0.5 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-12 and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    query2 = &#39;&#39;&#39;select galprop.mstardot, galprop.r_disk, Pow10(galprop.mbulge - galprop.mstar)</span>
+<span class="c">#                from FIR, galprop where</span>
+<span class="c">#                FIR.z &gt;= 2.0 and</span>
+<span class="c">#                FIR.z &lt; 4.0 and</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                galprop.tmerge &gt; 0.5 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 5e-3 and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    plot_size_paper(query1, query2, r&#39;$\dot{M}_{\star} \ [M_{\odot}yr^{-1}]$&#39;, </span>
+<span class="c">#                    r&#39;$R_{\textrm{disk}}$ \quad [kpc]&#39;, &#39;SizeSFR.ps&#39;,</span>
+<span class="c">#                    out_folder, xmin1 = 0, xmax1 = 200,</span>
+<span class="c">#                    xmin2 = 0, xmax2 = 200,</span>
+<span class="c">#                    pmin = 0.05, xbin1 = 20, ybin1 = 10,</span>
+<span class="c">#                    xbin2 = 20, ybin2 = 10)</span>
+
+<span class="c">###################################################################################################</span>
+<span class="c">#OBSOLETE PLOTS</span>
+<span class="c">###################################################################################################</span>
+<span class="c">#    query = &#39;&#39;&#39;select galprop.mstar, galprop.r_disk, Pow10(galprop.mbulge - galprop.mstar)</span>
+<span class="c">#                from FIR, galprop where</span>
+<span class="c">#                FIR.z &gt; 2.0 and</span>
+<span class="c">#                FIR.z &lt; 4.0 and</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &gt; 5.0e-03 and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#</span>
+<span class="c">#    plot_size(query, r&#39;$\log(M_{\star}/M_{\odot})$&#39;, </span>
+<span class="c">#              r&#39;$R_{\textrm{disk}}$ \quad [kpc]&#39;, &#39;Size.ps&#39;,</span>
+<span class="c">#              out_folder, xmin = 9.9, xmax = 11.7)</span>
+<span class="c">#    print query</span>
+
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs*1000, galprop.r_disk, Pow10(galprop.mbulge - galprop.mstar)</span>
+<span class="c">#                from FIR, galprop where</span>
+<span class="c">#                FIR.z &gt; 2.0 and</span>
+<span class="c">#                FIR.z &lt; 4.0 and</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-9 and</span>
+<span class="c">#                galprop.tmerge &gt; 0.5</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#</span>
+<span class="c">#    plot_size(query, r&#39;$S_{250}$ [mJy]&#39;, </span>
+<span class="c">#              r&#39;$R_{\textrm{disk}}$ \quad [kpc]&#39;, &#39;Size3.ps&#39;,</span>
+<span class="c">#              out_folder, xmin = 1e-3, xmax = 20)</span>
+<span class="c">#    print query</span>
+
+<span class="c">#    query = &#39;&#39;&#39;select galprop.mstar, galprop.r_disk, Pow10(galprop.mbulge - galprop.mstar)</span>
+<span class="c">#                from FIR, galprop where</span>
+<span class="c">#                FIR.z &gt; 2.0 and</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                galprop.tmerge &gt; 0.5 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-9 and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e7</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    plot_size(query, r&#39;$\log(M_{\star}/M_{\odot})$&#39;, </span>
+<span class="c">#              r&#39;$R_{\textrm{disk}}$ \quad [kpc]&#39;, &#39;Size4.ps&#39;,</span>
+<span class="c">#              out_folder, title = r&#39;$z &gt; 2$&#39;)</span>
+<span class="c">#    print query</span>
+
+<span class="c">#    query = &#39;&#39;&#39;select galprop.tmerge, galprop.r_disk, Pow10(galprop.mbulge - galprop.mstar)</span>
+<span class="c">#                from FIR, galprop where</span>
+<span class="c">#                FIR.z &gt; 2.0 and</span>
+<span class="c">#                FIR.z &lt; 4.0 and</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &gt; 5.0e-03</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#</span>
+<span class="c">#    plot_size(query, r&#39;$t_{\textrm{merge}} \quad$ [Gyr]&#39;, </span>
+<span class="c">#              r&#39;$R_{\textrm{disk}}$ \quad [kpc]&#39;, &#39;Tmerge.ps&#39;,</span>
+<span class="c">#              out_folder,</span>
+<span class="c">#              y1ticks = [1, 3, 5, 7, 10, 15, 20],</span>
+<span class="c">#              y2ticks = [1, 3, 5, 7, 10, 15],</span>
+<span class="c">#              xmin = 0, xmax = 2.7, ymin = 0, ymax = 20)</span>
+<span class="c">#    print query</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

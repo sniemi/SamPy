@@ -1,0 +1,243 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.herschel.plotcorrelations &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.herschel.plotcorrelations</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="c">#matplotlib.use(&#39;PS&#39;)</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s">&#39;AGG&#39;</span><span class="p">)</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s">&#39;text&#39;</span><span class="p">,</span> <span class="n">usetex</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;font.size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">17</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s">&#39;xtick&#39;</span><span class="p">,</span> <span class="n">labelsize</span> <span class="o">=</span> <span class="mi">14</span><span class="p">)</span> 
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s">&#39;axes&#39;</span><span class="p">,</span> <span class="n">linewidth</span> <span class="o">=</span> <span class="mf">1.2</span><span class="p">)</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;legend.fontsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;legend.handlelength&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;xtick.major.size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;ytick.major.size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pylab</span> <span class="kn">as</span> <span class="nn">P</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">N</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="kn">as</span> <span class="nn">SS</span>
+<span class="c">#Sami&#39;s repository</span>
+<span class="kn">import</span> <span class="nn">db.sqlite</span> <span class="kn">as</span> <span class="nn">sq</span>
+    
+<div class="viewcode-block" id="plot_correlation"><a class="viewcode-back" href="../../../SamPy.herschel.html#SamPy.herschel.plotcorrelations.plot_correlation">[docs]</a><span class="k">def</span> <span class="nf">plot_correlation</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="p">,</span> <span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">):</span>
+    <span class="c">#get data</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">sq</span><span class="o">.</span><span class="n">get_data_sqliteSMNfunctions</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="mi">10</span><span class="o">**</span><span class="mi">3</span>
+    <span class="c">#make the figure</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;$</span><span class="si">%.1f</span><span class="s"> \leq z &lt; </span><span class="si">%.1f</span><span class="s">$&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span><span class="p">))</span> 
+    <span class="n">P</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="s">&#39;k&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">9</span><span class="p">)</span>
+    <span class="c">#P.yscale(&#39;log&#39;)</span>
+<span class="c">#    if &#39;meanage&#39; in xlabel:</span>
+<span class="c">#        P.xlim(0.0, 8.0)</span>
+<span class="c">#    if &#39;mstar&#39; in xlabel:</span>
+<span class="c">#        P.xlim(7, 12)</span>
+<span class="c">#    if &#39;mstardot&#39; in xlabel:</span>
+<span class="c">#        P.xlim(0, 800)</span>
+    <span class="k">if</span> <span class="s">&#39;sfr_ave&#39;</span> <span class="ow">in</span> <span class="n">xlabel</span><span class="p">:</span>
+        <span class="n">P</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">&#39;sfr_bur&#39;</span> <span class="ow">in</span> <span class="n">xlabel</span><span class="p">:</span>
+        <span class="n">P</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">750</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">&#39;tmerge&#39;</span> <span class="ow">in</span> <span class="n">xlabel</span><span class="p">:</span>
+        <span class="n">P</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">&#39;pacs70&#39;</span> <span class="ow">in</span> <span class="n">ylabel</span><span class="p">:</span>
+        <span class="n">P</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">&#39;pacs100&#39;</span> <span class="ow">in</span> <span class="n">ylabel</span><span class="p">:</span>
+        <span class="n">P</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">&#39;pacs160&#39;</span> <span class="ow">in</span> <span class="n">ylabel</span><span class="p">:</span>
+        <span class="n">P</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">37</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">&#39;spire250&#39;</span> <span class="ow">in</span> <span class="n">ylabel</span><span class="p">:</span>
+        <span class="n">P</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">&#39;spire350&#39;</span> <span class="ow">in</span> <span class="n">ylabel</span><span class="p">:</span>
+        <span class="n">P</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">45</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">&#39;spire500&#39;</span> <span class="ow">in</span> <span class="n">ylabel</span><span class="p">:</span>
+        <span class="n">P</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">26</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">&#39;tmajmerge&#39;</span> <span class="ow">in</span> <span class="n">xlabel</span><span class="p">:</span>
+        <span class="n">P</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">&#39;r_disk&#39;</span> <span class="ow">in</span> <span class="n">xlabel</span><span class="p">:</span>
+        <span class="n">P</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">23</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s">&#39;sigma_bul&#39;</span> <span class="ow">in</span> <span class="n">xlabel</span><span class="p">:</span>
+        <span class="n">P</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+
+    <span class="n">P</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">,</span> <span class="s">&#39;\_&#39;</span><span class="p">))</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">,</span> <span class="s">&#39;\_&#39;</span><span class="p">))</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_folder</span> <span class="o">+</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">_</span><span class="si">%s</span><span class="s">.png&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="p">[:</span><span class="o">-</span><span class="mi">7</span><span class="p">]))</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    
+    <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Spearmann R-test (rho, P) for </span><span class="si">%s</span><span class="s"> and </span><span class="si">%s</span><span class="s">:&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="p">[:</span><span class="o">-</span><span class="mi">7</span><span class="p">])</span>
+    <span class="k">print</span> <span class="n">SS</span><span class="o">.</span><span class="n">spearmanr</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c">#find the home directory, because the output is to dropbox </span>
+    <span class="c">#and my user name is not always the same, this hack is required.</span>
+    <span class="n">hm</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#39;HOME&#39;</span><span class="p">)</span>
+    <span class="c">#constants</span>
+<span class="c">#    path = hm + &#39;/Dropbox/Research/Herschel/runs/test3/&#39;</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">hm</span> <span class="o">+</span> <span class="s">&#39;/Dropbox/Research/Herschel/runs/reds_zero/&#39;</span>
+    <span class="n">out_folder</span> <span class="o">=</span> <span class="n">hm</span> <span class="o">+</span> <span class="s">&#39;/Dropbox/Research/Herschel/plots/spire_detected/&#39;</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="s">&#39;sams.db&#39;</span>
+
+    <span class="n">zmin</span> <span class="o">=</span> <span class="mf">2.0</span>
+    <span class="n">zmax</span> <span class="o">=</span> <span class="mf">4.0</span>
+
+    <span class="c">#5sigma limits derived by Kuang</span>
+    <span class="n">depths</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;pacs100_obs&#39;</span><span class="p">:</span> <span class="mf">1.7e-3</span><span class="p">,</span>
+              <span class="s">&#39;pacs160_obs&#39;</span><span class="p">:</span> <span class="mf">4.5e-3</span><span class="p">,</span>
+              <span class="s">&#39;spire250_obs&#39;</span><span class="p">:</span> <span class="mf">5.0e-3</span><span class="p">,</span>
+              <span class="s">&#39;spire350_obs&#39;</span><span class="p">:</span> <span class="mf">9.0e-3</span><span class="p">,</span>
+              <span class="s">&#39;spire500_obs&#39;</span><span class="p">:</span> <span class="mf">10.0e-3</span>
+              <span class="p">}</span>
+    <span class="n">FIRbands</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;pacs70_obs&#39;</span><span class="p">,</span>
+                <span class="s">&#39;pacs100_obs&#39;</span><span class="p">,</span>
+                <span class="s">&#39;pacs160_obs&#39;</span><span class="p">,</span>
+                <span class="s">&#39;spire250_obs&#39;</span><span class="p">,</span>
+                <span class="s">&#39;spire350_obs&#39;</span><span class="p">,</span>
+                <span class="s">&#39;spire500_obs&#39;</span><span class="p">]</span>
+
+    <span class="n">galprop</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;mstar&#39;</span><span class="p">,</span> <span class="s">&#39;mstardot&#39;</span><span class="p">,</span> <span class="s">&#39;sfr_burst&#39;</span><span class="p">,</span> <span class="s">&#39;sfr_ave&#39;</span><span class="p">,</span> <span class="s">&#39;meanage&#39;</span><span class="p">,</span> <span class="s">&#39;tmerge&#39;</span><span class="p">,</span>
+               <span class="s">&#39;r_disk&#39;</span><span class="p">,</span> <span class="s">&#39;sigma_bulge&#39;</span><span class="p">,</span> <span class="s">&#39;mhalo&#39;</span><span class="p">,</span> <span class="s">&#39;m_strip&#39;</span><span class="p">,</span> <span class="s">&#39;mcold&#39;</span><span class="p">,</span> <span class="s">&#39;maccdot&#39;</span><span class="p">,</span>
+               <span class="s">&#39;maccdot_radio&#39;</span><span class="p">,</span> <span class="s">&#39;Zstar&#39;</span><span class="p">,</span> <span class="s">&#39;Zcold&#39;</span><span class="p">,</span> <span class="s">&#39;tau0&#39;</span><span class="p">,</span> <span class="s">&#39;tmajmerge&#39;</span><span class="p">]</span>
+    <span class="n">galprop</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;meanage&#39;</span><span class="p">]</span>
+    <span class="n">galphot</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;f775w&#39;</span><span class="p">,</span> <span class="s">&#39;f606w&#39;</span><span class="p">,</span> <span class="s">&#39;f125w&#39;</span><span class="p">,</span> <span class="s">&#39;f160w&#39;</span><span class="p">]</span>
+    <span class="n">galphotdust</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;f775w&#39;</span><span class="p">,</span> <span class="s">&#39;f606w&#39;</span><span class="p">,</span> <span class="s">&#39;f125w&#39;</span><span class="p">,</span> <span class="s">&#39;f160w&#39;</span><span class="p">]</span>
+
+    <span class="n">t1</span> <span class="o">=</span> <span class="s">&#39;galprop&#39;</span>
+    <span class="n">t2</span> <span class="o">=</span> <span class="s">&#39;galphot&#39;</span>
+    <span class="n">t3</span> <span class="o">=</span> <span class="s">&#39;galphotdust&#39;</span>
+    <span class="n">t4</span> <span class="o">=</span> <span class="s">&#39;FIR&#39;</span>
+
+    <span class="k">for</span> <span class="n">ir</span> <span class="ow">in</span> <span class="n">FIRbands</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">galprop</span><span class="p">:</span>
+<span class="c">#            query = &#39;&#39;&#39;select %s.%s, %s.%s from %s, %s where</span>
+<span class="c">#                       %s.z &gt;= %.4f and</span>
+<span class="c">#                        %s.z &lt; %.4f and</span>
+<span class="c">#                        %s.gal_id = %s.gal_id and</span>
+<span class="c">#                        %s.halo_id = %s.halo_id and</span>
+<span class="c">#                        %s.%s &gt; 1e-9 and</span>
+<span class="c">#                        FIR.spire250_obs &gt; 5.0e-04&#39;&#39;&#39; % (t1, p,</span>
+<span class="c">#                                                         t4, ir,</span>
+<span class="c">#                                                         t1, t4,</span>
+<span class="c">#                                                         t4, zmin,</span>
+<span class="c">#                                                         t4, zmax,</span>
+<span class="c">#                                                         t1, t4,</span>
+<span class="c">#                                                         t1, t4,</span>
+<span class="c">#                                                         t4, ir)</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select </span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s"> from </span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s"> where</span>
+<span class="s">                       </span><span class="si">%s</span><span class="s">.z &gt;= </span><span class="si">%.4f</span><span class="s"> and</span>
+<span class="s">                        </span><span class="si">%s</span><span class="s">.z &lt; </span><span class="si">%.4f</span><span class="s"> and</span>
+<span class="s">                        </span><span class="si">%s</span><span class="s">.gal_id = </span><span class="si">%s</span><span class="s">.gal_id and</span>
+<span class="s">                        </span><span class="si">%s</span><span class="s">.halo_id = </span><span class="si">%s</span><span class="s">.halo_id and</span>
+<span class="s">                        </span><span class="si">%s</span><span class="s">.</span><span class="si">%s</span><span class="s"> &gt; 1e-9 and</span>
+<span class="s">                        galprop.mstar &gt; 9.5&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span>
+                                                         <span class="n">t4</span><span class="p">,</span> <span class="n">ir</span><span class="p">,</span>
+                                                         <span class="n">t1</span><span class="p">,</span> <span class="n">t4</span><span class="p">,</span>
+                                                         <span class="n">t4</span><span class="p">,</span> <span class="n">zmin</span><span class="p">,</span>
+                                                         <span class="n">t4</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span>
+                                                         <span class="n">t1</span><span class="p">,</span> <span class="n">t4</span><span class="p">,</span>
+                                                         <span class="n">t1</span><span class="p">,</span> <span class="n">t4</span><span class="p">,</span>
+                                                         <span class="n">t4</span><span class="p">,</span> <span class="n">ir</span><span class="p">)</span>
+
+            
+            <span class="c">#print query</span>
+            <span class="n">plot_correlation</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span>
+                             <span class="n">ir</span> <span class="o">+</span> <span class="s">&#39; [mJy]&#39;</span><span class="p">,</span>
+                             <span class="n">zmin</span><span class="p">,</span> <span class="n">zmax</span><span class="p">,</span>
+                             <span class="n">out_folder</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,261 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.focus.PhaseretrievalresultsTinyTimACS &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.focus.PhaseretrievalresultsTinyTimACS</h1><div class="highlight"><pre>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">HISTORY:</span>
+<span class="sd">Created on March 3, 2011</span>
+
+<span class="sd">:author: Sami-Matias Niemi</span>
+<span class="sd">:contact: niemi@stsci.edu</span>
+
+<span class="sd">:version: 0.1</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s">&#39;PDF&#39;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">pylab</span> <span class="kn">as</span> <span class="nn">P</span>
+<span class="kn">import</span> <span class="nn">glob</span> <span class="kn">as</span> <span class="nn">G</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">N</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">cm</span>
+<span class="c">#from my repo</span>
+<span class="kn">import</span> <span class="nn">SamPy.focus.phaseretrievalresults</span> <span class="kn">as</span> <span class="nn">ph</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Sami-Matias Niemi&#39;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;0.1&#39;</span>
+
+<div class="viewcode-block" id="TinyTimResults"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.PhaseretrievalresultsTinyTimACS.TinyTimResults">[docs]</a><span class="k">class</span> <span class="nc">TinyTimResults</span><span class="p">(</span><span class="n">ph</span><span class="o">.</span><span class="n">PhaseRetResults</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Expansion to PhaseRetResults class</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+<div class="viewcode-block" id="TinyTimResults.findRealFocus"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.PhaseretrievalresultsTinyTimACS.TinyTimResults.findRealFocus">[docs]</a>    <span class="k">def</span> <span class="nf">findRealFocus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">file</span><span class="p">):</span>
+        <span class="n">parms</span> <span class="o">=</span> <span class="s">&#39;./&#39;</span> <span class="o">+</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;/complete_results/parameters.txt&#39;</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">parms</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s">&#39;Focus&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                <span class="n">fcs</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;|&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">fcs</span>
+</div>
+<div class="viewcode-block" id="TinyTimResults.plotFocusDifference"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.PhaseretrievalresultsTinyTimACS.TinyTimResults.plotFocusDifference">[docs]</a>    <span class="k">def</span> <span class="nf">plotFocusDifference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+        
+        <span class="n">tmp1</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">tmp2</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">tmp3</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">tmp4</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">input</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="nb">input</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">tmp1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">tmp2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">tmp3</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">tmp4</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span><span class="o">-</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+            <span class="n">x1</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&#39;bo&#39;</span><span class="p">)</span>
+            <span class="n">x2</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&#39;rs&#39;</span><span class="p">)</span>
+            <span class="n">x3</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&#39;kD&#39;</span><span class="p">)</span>
+            <span class="n">x4</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">3</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s">&#39;mo&#39;</span><span class="p">)</span>
+
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">],[</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">],</span> <span class="s">&#39;k:&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">7.5</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="o">-</span><span class="mf">7.5</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">)</span>
+        
+        <span class="n">P</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span>
+           <span class="n">horizontalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">verticalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">transform</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;Phase Retrieval Result [Secondary mirror despace]&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;TinyTim Focus Offset [Secondary mirror despace]&#39;</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span> <span class="n">x3</span><span class="p">,</span> <span class="n">x4</span><span class="p">],</span>
+                  <span class="p">[</span><span class="s">&#39;Nominal setup&#39;</span><span class="p">,</span> <span class="s">&#39;Fitting Sph&#39;</span><span class="p">,</span> <span class="s">&#39;Sph = 0, fixed&#39;</span><span class="p">,</span> <span class="s">&#39;Sph = 0, blur fixed&#39;</span><span class="p">],</span>
+                  <span class="n">shadow</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">fancybox</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">numpoints</span>  <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                  <span class="n">loc</span> <span class="o">=</span> <span class="s">&#39;best&#39;</span><span class="p">)</span>
+        <span class="n">P</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&#39;Focus.pdf&#39;</span><span class="p">)</span>
+
+        <span class="c">#print out statistics</span>
+        <span class="n">tmp1</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tmp1</span><span class="p">)</span>
+        <span class="n">tmp2</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tmp2</span><span class="p">)</span>
+        <span class="n">tmp3</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tmp3</span><span class="p">)</span>
+        <span class="n">tmp4</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tmp4</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&#39;Average offset (PR - TT) for nominal method is </span><span class="si">%.2f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">N</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">tmp1</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&#39;while STD is </span><span class="si">%.3f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">N</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">tmp1</span><span class="p">)</span>
+        <span class="k">print</span>
+        <span class="k">print</span> <span class="s">&#39;Average offset (PR - TT) for fitted spherical is </span><span class="si">%.2f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">N</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">tmp2</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&#39;while STD is </span><span class="si">%.3f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">N</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">tmp2</span><span class="p">)</span>
+        <span class="k">print</span>
+        <span class="k">print</span> <span class="s">&#39;Average offset (PR - TT) for fixed spherical = 0 is </span><span class="si">%.2f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">N</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">tmp3</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&#39;while STD is </span><span class="si">%.3f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">N</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">tmp3</span><span class="p">)</span>
+        <span class="k">print</span>
+        <span class="k">print</span> <span class="s">&#39;Average offset (PR - TT) for fixed sph=0 and blur is </span><span class="si">%.2f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">N</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">tmp4</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&#39;while STD is </span><span class="si">%.3f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">N</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">tmp4</span><span class="p">)</span>
+
+    </div>
+<div class="viewcode-block" id="TinyTimResults.plotFocusFieldPosition"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.PhaseretrievalresultsTinyTimACS.TinyTimResults.plotFocusFieldPosition">[docs]</a>    <span class="k">def</span> <span class="nf">plotFocusFieldPosition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">title</span><span class="p">):</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+
+        <span class="n">c1</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">input</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="nb">input</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">c1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">5</span><span class="p">])</span>
+            <span class="n">x1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">y1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">])</span>
+
+        <span class="n">x1</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="n">c1</span><span class="p">,</span>
+                        <span class="n">marker</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span>
+                        <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;jet&#39;</span><span class="p">),</span>
+                        <span class="n">edgecolor</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">)</span>
+
+        <span class="n">c1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span><span class="p">,</span> <span class="n">shrink</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span> <span class="n">fraction</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">)</span>
+        <span class="n">c1</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;TinyTim Focus Offset - Phase Retrieval Measurement&#39;</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4096</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2051</span><span class="p">)</span>
+
+        <span class="n">P</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.05</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span>
+           <span class="n">horizontalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">verticalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">transform</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
+
+        <span class="n">P</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&#39;FocusFieldPos.pdf&#39;</span><span class="p">)</span>
+
+        </div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c">#define some variables</span>
+    <span class="nb">str</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;file&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+           <span class="s">&#39;target&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+           <span class="s">&#39;mjd&#39;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+           <span class="s">&#39;date&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+           <span class="s">&#39;time&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+           <span class="s">&#39;focus&#39;</span><span class="p">:</span><span class="mi">5</span><span class="p">}</span>
+
+    <span class="n">cameras</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;ACS&#39;</span><span class="p">]</span> 
+
+    <span class="n">t1</span> <span class="o">=</span> <span class="s">&#39;ACS/WFC1, PSF diameter = 3.0 arcsec, Filter F502N, variable field positions&#39;</span>
+    <span class="n">t2</span> <span class="o">=</span> <span class="s">&#39;ACS/WFC1, PSF diameter = 3.0 arcsec, Filter F502N&#39;</span>
+
+    <span class="n">PR</span> <span class="o">=</span> <span class="n">TinyTimResults</span><span class="p">(</span><span class="n">cameras</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+
+    <span class="c">#find all data files</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">G</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">&#39;t*/results.txt&#39;</span><span class="p">)</span>
+    
+    <span class="c">#loop over the data files and find the focus info</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">out2</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;processing </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">file</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">PR</span><span class="o">.</span><span class="n">readResults</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+        <span class="c">#get the observed values</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">res</span><span class="p">:</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="nb">str</span><span class="p">[</span><span class="s">&#39;focus&#39;</span><span class="p">]])</span>
+        <span class="c">#find the true focus</span>
+        <span class="n">trueFocus</span> <span class="o">=</span> <span class="n">PR</span><span class="o">.</span><span class="n">findRealFocus</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+        <span class="c">#output values</span>
+        <span class="n">out</span><span class="p">[</span><span class="nb">file</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">trueFocus</span><span class="p">,</span> <span class="n">tmp</span><span class="p">]</span>
+        <span class="n">out2</span><span class="p">[</span><span class="nb">file</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">trueFocus</span><span class="p">,</span> <span class="n">res</span><span class="p">]</span>
+    
+    <span class="c">#generate a plot</span>
+    <span class="n">PR</span><span class="o">.</span><span class="n">plotFocusDifference</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">t1</span><span class="p">)</span>
+    <span class="n">PR</span><span class="o">.</span><span class="n">plotFocusFieldPosition</span><span class="p">(</span><span class="n">out2</span><span class="p">,</span> <span class="n">t2</span><span class="p">)</span>
+    
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

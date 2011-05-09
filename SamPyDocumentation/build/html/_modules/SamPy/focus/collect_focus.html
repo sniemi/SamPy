@@ -1,0 +1,272 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.focus.collect_focus &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.focus.collect_focus</h1><div class="highlight"><pre>
+<span class="c">#! /usr/stsci/pyssg/Python-2.7/bin/python</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Collects focus measurement results and outputs them</span>
+<span class="sd">to files, one for each instrument and chip.</span>
+
+<span class="sd">This is so horribly written that it should be redone </span>
+<span class="sd">completely from scratch. There are Python tuples, lists</span>
+<span class="sd">and NumPy arrays, and they are all badly mixed.</span>
+
+<span class="sd">@note: Uses hardcoded path to python 2.7 of IRAF env.</span>
+
+<span class="sd">@author: Sami-Matias Niemi </span>
+<span class="sd">@contact: niemi@stsci.edu</span>
+<span class="sd">@organization: Space Telescope Science Insitute</span>
+
+<span class="sd">@todo: improve documentation</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">N</span>
+<span class="kn">import</span> <span class="nn">glob</span> <span class="kn">as</span> <span class="nn">G</span>
+
+<div class="viewcode-block" id="findZernikes"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.collect_focus.findZernikes">[docs]</a><span class="k">def</span> <span class="nf">findZernikes</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">instrument</span> <span class="o">=</span> <span class="s">&#39;WFC3&#39;</span><span class="p">,</span> <span class="n">file_instrument</span> <span class="o">=</span> <span class="s">&#39;i&#39;</span><span class="p">):</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">position</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">stars</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;Processing file </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">file</span>
+        <span class="n">txt</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">txt</span><span class="p">:</span>
+            <span class="n">l</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">instrument</span> <span class="ow">in</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">position</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">coords</span> <span class="o">=</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">file_instrument</span><span class="p">):</span>
+                <span class="n">stars</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">outp</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coords</span><span class="p">,</span> <span class="n">l</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="nb">float</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="mi">6</span><span class="p">]))</span>
+                <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">outp</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&#39;In total, found </span><span class="si">%i</span><span class="s"> positions and </span><span class="si">%i</span><span class="s"> stars&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">stars</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span>
+</div>
+<div class="viewcode-block" id="modList"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.collect_focus.modList">[docs]</a><span class="k">def</span> <span class="nf">modList</span><span class="p">(</span><span class="n">data</span><span class="p">,</span>
+            <span class="n">dtype</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;names&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s">&#39;file&#39;</span><span class="p">,</span> <span class="s">&#39;cam&#39;</span><span class="p">,</span><span class="s">&#39;date&#39;</span><span class="p">,</span> <span class="s">&#39;MJD&#39;</span><span class="p">,</span> <span class="s">&#39;Focus&#39;</span><span class="p">),</span>
+                     <span class="s">&#39;formats&#39;</span><span class="p">:(</span><span class="s">&#39;|S12&#39;</span><span class="p">,</span><span class="s">&#39;|S8&#39;</span><span class="p">,</span><span class="s">&#39;|S12&#39;</span><span class="p">,</span><span class="s">&#39;&lt;f8&#39;</span><span class="p">,</span><span class="s">&#39;&lt;f8&#39;</span><span class="p">)},</span>
+            <span class="n">filecol</span> <span class="o">=</span> <span class="s">&#39;file&#39;</span><span class="p">):</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">data</span><span class="p">])</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">dtype</span><span class="p">))</span>
+    <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="n">filecol</span><span class="p">]</span> <span class="o">==</span> <span class="nb">file</span><span class="p">)</span>
+        <span class="n">focusd</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">d</span><span class="p">[</span><span class="n">mask</span><span class="p">][</span><span class="s">&#39;Focus&#39;</span><span class="p">]])</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">focusd</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">focusd</span><span class="p">)</span> <span class="o">/</span> <span class="n">N</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">focusd</span><span class="p">))</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="n">mask</span><span class="p">][</span><span class="s">&#39;file&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> 
+               <span class="n">d</span><span class="p">[</span><span class="n">mask</span><span class="p">][</span><span class="s">&#39;cam&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+               <span class="n">d</span><span class="p">[</span><span class="n">mask</span><span class="p">][</span><span class="s">&#39;date&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+               <span class="n">d</span><span class="p">[</span><span class="n">mask</span><span class="p">][</span><span class="s">&#39;MJD&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span>
+        <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+        <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">s</span><span class="p">,</span><span class="mi">5</span><span class="p">))</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">output</span>
+</div>
+<div class="viewcode-block" id="writeOutput"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.collect_focus.writeOutput">[docs]</a><span class="k">def</span> <span class="nf">writeOutput</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">outputfile</span><span class="p">,</span> <span class="n">chip</span><span class="p">,</span>
+                <span class="n">header</span> <span class="o">=</span> <span class="s">&#39;#file camera date mjd focus error</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">):</span>
+    <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">outputfile</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s">&#39;WFC&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+                <span class="c">#will add the chip number</span>
+                <span class="n">st</span> <span class="o">+=</span> <span class="s">&#39;UVIS&#39;</span> <span class="o">+</span> <span class="n">chip</span> <span class="o">+</span> <span class="s">&#39; &#39;</span>
+            <span class="k">elif</span> <span class="s">&#39;ACS&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+                <span class="c">#will add the chip number</span>
+                <span class="n">st</span> <span class="o">+=</span> <span class="s">&#39;WFC&#39;</span> <span class="o">+</span> <span class="n">chip</span> <span class="o">+</span> <span class="s">&#39; &#39;</span>
+            <span class="k">elif</span> <span class="s">&#39;/&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+                <span class="c">#this will swap the date to month/date/year</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)</span>
+                <span class="n">st</span> <span class="o">+=</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39; &#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">55000</span><span class="p">:</span>
+                        <span class="n">st</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="si">%14.6f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">x</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">st</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="si">%10.5f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">x</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="n">st</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span>
+        <span class="n">st</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+        <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">st</span><span class="p">)</span>
+    <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="append_to_FocusModel"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.collect_focus.append_to_FocusModel">[docs]</a><span class="k">def</span> <span class="nf">append_to_FocusModel</span><span class="p">(</span><span class="n">inputfile</span><span class="p">,</span> <span class="n">outputfile</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This function appends new measurements to existing data</span>
+<span class="sd">    files that are read by e.g. Colin&#39;s focustool.</span>
+<span class="sd">    @param inputfile: Name of the input data file that</span>
+<span class="sd">                      potentially contains new data.</span>
+<span class="sd">    @param outputfile: Name of the output dat file to which</span>
+<span class="sd">                       new data are appended to.</span>
+<span class="sd">    @param path: Path from where the outputfile can be found.</span>
+<span class="sd">    @return: Boolean indicating if new data were identified.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c">#boolean to control whether new data have been found</span>
+    <span class="c">#if True, then the new data will be appended to the</span>
+    <span class="c">#outputfile</span>
+    <span class="n">newData</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="c">#read in data</span>
+    <span class="n">inputdata</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">inputfile</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+    <span class="n">outdata</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="n">outputfile</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+    <span class="c">#last line in output data</span>
+    <span class="n">lastout</span> <span class="o">=</span> <span class="n">outdata</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="c">#last MJD in output file</span>
+    <span class="n">oMJD</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">lastout</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">inputdata</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s">&#39;#&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">3</span><span class="p">])</span> <span class="o">&gt;</span> <span class="n">oMJD</span><span class="p">:</span>
+                <span class="n">newData</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">break</span>
+    <span class="c">#New data available, an update is required.</span>
+    <span class="k">if</span> <span class="n">newData</span><span class="p">:</span>
+        <span class="c">#file handler</span>
+        <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="o">+</span><span class="n">outputfile</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+        <span class="c">#find the line that is the same</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="n">inputdata</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">lastout</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="c">#this except is required after year change</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ind</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">inputdata</span><span class="p">)):</span>
+            <span class="k">print</span> <span class="s">&#39;Adding line </span><span class="si">%s</span><span class="s"> to </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">inputdata</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span> <span class="n">outputfile</span><span class="p">)</span>
+            <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">inputdata</span><span class="p">[</span><span class="n">x</span><span class="p">])</span>
+        <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">newData</span>
+</div>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.collect_focus.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Driver of collect_focus.py</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c">#note that the input directory is hardcoded and should be changed every year!</span>
+    <span class="n">input_folder</span> <span class="o">=</span> <span class="s">&#39;/grp/hst/OTA/focus/Data/prop12398/&#39;</span>
+    <span class="n">output_folder</span> <span class="o">=</span> <span class="s">&#39;/grp/hst/OTA/focus/source/FocusModel/&#39;</span>
+    <span class="c">#find all results</span>
+    <span class="n">filesC1</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">input_folder</span> <span class="o">+</span> <span class="s">&#39;*/resultsChip1.txt&#39;</span><span class="p">))</span>
+    <span class="n">filesC2</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">G</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">input_folder</span> <span class="o">+</span> <span class="s">&#39;*/resultsChip2.txt&#39;</span><span class="p">))</span>
+    <span class="c">#find all Zernike polynomials</span>
+    <span class="n">C1WFC3</span> <span class="o">=</span> <span class="n">findZernikes</span><span class="p">(</span><span class="n">filesC1</span><span class="p">)</span>
+    <span class="n">C2WFC3</span> <span class="o">=</span> <span class="n">findZernikes</span><span class="p">(</span><span class="n">filesC2</span><span class="p">)</span>
+    <span class="n">C1ACS</span> <span class="o">=</span> <span class="n">findZernikes</span><span class="p">(</span><span class="n">filesC1</span><span class="p">,</span> <span class="n">instrument</span> <span class="o">=</span> <span class="s">&#39;ACS&#39;</span><span class="p">,</span> <span class="n">file_instrument</span> <span class="o">=</span> <span class="s">&#39;j&#39;</span><span class="p">)</span>
+    <span class="n">C2ACS</span> <span class="o">=</span> <span class="n">findZernikes</span><span class="p">(</span><span class="n">filesC2</span><span class="p">,</span> <span class="n">instrument</span> <span class="o">=</span> <span class="s">&#39;ACS&#39;</span><span class="p">,</span> <span class="n">file_instrument</span> <span class="o">=</span> <span class="s">&#39;j&#39;</span><span class="p">)</span>
+    <span class="c">#get the mean focuses</span>
+    <span class="n">meanC1A</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">modList</span><span class="p">(</span><span class="n">C1ACS</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="nb">file</span><span class="p">:</span> <span class="nb">file</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="n">meanC2A</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">modList</span><span class="p">(</span><span class="n">C2ACS</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="nb">file</span><span class="p">:</span> <span class="nb">file</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="n">meanC1W</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">modList</span><span class="p">(</span><span class="n">C1WFC3</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="nb">file</span><span class="p">:</span> <span class="nb">file</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="n">meanC2W</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">modList</span><span class="p">(</span><span class="n">C2WFC3</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="nb">file</span><span class="p">:</span> <span class="nb">file</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="c">#write the output</span>
+    <span class="n">writeOutput</span><span class="p">(</span><span class="n">meanC1A</span><span class="p">,</span> <span class="s">&#39;FocusACSChip1.txt&#39;</span><span class="p">,</span> <span class="s">&#39;1&#39;</span><span class="p">)</span>
+    <span class="n">writeOutput</span><span class="p">(</span><span class="n">meanC2A</span><span class="p">,</span> <span class="s">&#39;FocusACSChip2.txt&#39;</span><span class="p">,</span> <span class="s">&#39;2&#39;</span><span class="p">)</span>
+    <span class="n">writeOutput</span><span class="p">(</span><span class="n">meanC1W</span><span class="p">,</span> <span class="s">&#39;FocusWFC3Chip1.txt&#39;</span><span class="p">,</span> <span class="s">&#39;1&#39;</span><span class="p">)</span>
+    <span class="n">writeOutput</span><span class="p">(</span><span class="n">meanC2W</span><span class="p">,</span> <span class="s">&#39;FocusWFC3Chip2.txt&#39;</span><span class="p">,</span> <span class="s">&#39;2&#39;</span><span class="p">)</span>
+    <span class="c">#append to the files in the output_folder</span>
+    <span class="n">append_to_FocusModel</span><span class="p">(</span><span class="s">&#39;FocusACSChip1.txt&#39;</span><span class="p">,</span> <span class="s">&#39;WFC1FocusHistory.txt&#39;</span><span class="p">,</span>
+                         <span class="n">output_folder</span><span class="p">)</span>
+    <span class="n">append_to_FocusModel</span><span class="p">(</span><span class="s">&#39;FocusACSChip2.txt&#39;</span><span class="p">,</span> <span class="s">&#39;WFC2FocusHistory.txt&#39;</span><span class="p">,</span>
+                         <span class="n">output_folder</span><span class="p">)</span>
+    <span class="n">append_to_FocusModel</span><span class="p">(</span><span class="s">&#39;FocusWFC3Chip1.txt&#39;</span><span class="p">,</span> <span class="s">&#39;UVIS1FocusHistory.txt&#39;</span><span class="p">,</span>
+                         <span class="n">output_folder</span><span class="p">)</span>
+    <span class="n">append_to_FocusModel</span><span class="p">(</span><span class="s">&#39;FocusWFC3Chip2.txt&#39;</span><span class="p">,</span> <span class="s">&#39;UVIS2FocusHistory.txt&#39;</span><span class="p">,</span>
+                         <span class="n">output_folder</span><span class="p">)</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c">#call the main function</span>
+    <span class="n">main</span><span class="p">()</span>
+    <span class="c">#the end</span>
+    <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">All done...&#39;</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

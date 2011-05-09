@@ -1,0 +1,881 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.herschel.plotcolourproperties &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.herschel.plotcolourproperties</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="c">#matplotlib.use(&#39;PS&#39;)</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s">&#39;Agg&#39;</span><span class="p">)</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s">&#39;text&#39;</span><span class="p">,</span> <span class="n">usetex</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;font.size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">15</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s">&#39;xtick&#39;</span><span class="p">,</span> <span class="n">labelsize</span> <span class="o">=</span> <span class="mi">14</span><span class="p">)</span> 
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s">&#39;axes&#39;</span><span class="p">,</span> <span class="n">linewidth</span> <span class="o">=</span> <span class="mf">1.1</span><span class="p">)</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;legend.fontsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;legend.handlelength&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;xtick.major.size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;ytick.major.size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="kn">import</span> <span class="nn">pylab</span> <span class="kn">as</span> <span class="nn">P</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">cm</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid</span> <span class="kn">import</span> <span class="n">make_axes_locatable</span> 
+<span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1.inset_locator</span> <span class="kn">import</span> <span class="n">zoomed_inset_axes</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1.inset_locator</span> <span class="kn">import</span> <span class="n">mark_inset</span>
+<span class="kn">import</span>  <span class="nn">matplotlib.axes</span> <span class="kn">as</span> <span class="nn">maxes</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">N</span>
+<span class="c">#Sami&#39;s repository</span>
+<span class="kn">import</span> <span class="nn">db.sqlite</span> <span class="kn">as</span> <span class="nn">sq</span>
+<span class="kn">import</span> <span class="nn">sandbox.MyTools</span> <span class="kn">as</span> <span class="nn">M</span>
+<span class="kn">import</span> <span class="nn">astronomy.conversions</span> <span class="kn">as</span> <span class="nn">co</span>
+
+<div class="viewcode-block" id="plotColourProperties"><a class="viewcode-back" href="../../../SamPy.herschel.html#SamPy.herschel.plotcolourproperties.plotColourProperties">[docs]</a><span class="k">def</span> <span class="nf">plotColourProperties</span><span class="p">(</span><span class="n">query</span><span class="p">,</span>
+                         <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="p">,</span>
+                         <span class="n">output</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span>
+                         <span class="n">ymin</span> <span class="o">=</span> <span class="o">-</span><span class="mi">12</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+                         <span class="n">xmin</span> <span class="o">=</span> <span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="mf">3.2</span><span class="p">,</span>
+                         <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+                         <span class="n">clabel</span> <span class="o">=</span> <span class="s">&#39;$\mathrm{Redshift}$&#39;</span><span class="p">):</span>
+    <span class="c">#get data, all galaxies</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">sq</span><span class="o">.</span><span class="n">get_data_sqliteSMNfunctions</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
+    <span class="n">x1</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">x2</span> <span class="o">=</span> <span class="n">co</span><span class="o">.</span><span class="n">ABMagnitudeToJansky</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x1</span> <span class="o">/</span> <span class="n">x2</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1e3</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">3</span><span class="p">]</span>
+    <span class="c">#make the figure</span>
+<span class="c">#    fig = P.figure()</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span> <span class="o">=</span> <span class="mf">0.09</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">=</span> <span class="mf">0.08</span><span class="p">,</span>
+                        <span class="n">right</span> <span class="o">=</span> <span class="mf">0.92</span><span class="p">,</span> <span class="n">top</span> <span class="o">=</span> <span class="mf">0.94</span><span class="p">)</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+    <span class="c">#plot scatters</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;o&#39;</span><span class="p">,</span>
+                     <span class="n">c</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;jet&#39;</span><span class="p">),</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">,</span>
+                     <span class="n">edgecolor</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">)</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;o&#39;</span><span class="p">,</span>
+                     <span class="n">c</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;jet&#39;</span><span class="p">),</span>
+                     <span class="n">edgecolor</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">,</span> <span class="n">visible</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="n">c1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">shrink</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span> <span class="n">fraction</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">pad</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">)</span>
+    <span class="n">c1</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">clabel</span><span class="p">)</span>
+    <span class="c">#labels</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+    <span class="c">#limits</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
+    <span class="c">#add annotate</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.03</span><span class="p">,</span><span class="n">title</span><span class="p">,</span>
+           <span class="n">horizontalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">verticalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">transform</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
+    <span class="c">#make grid</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="c">#legend and save</span>
+    <span class="c">#P.legend(loc = &#39;upper left&#39;, scatterpoints = 1)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_folder</span> <span class="o">+</span> <span class="n">output</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="plotColourProperties2"><a class="viewcode-back" href="../../../SamPy.herschel.html#SamPy.herschel.plotcolourproperties.plotColourProperties2">[docs]</a><span class="k">def</span> <span class="nf">plotColourProperties2</span><span class="p">(</span><span class="n">query</span><span class="p">,</span>
+                          <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="p">,</span>
+                          <span class="n">output</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span>
+                          <span class="n">ymin</span> <span class="o">=</span> <span class="o">-</span><span class="mi">13</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+                          <span class="n">xmin</span> <span class="o">=</span> <span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
+                          <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">ylog</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+    <span class="c">#get data, all galaxies</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">sq</span><span class="o">.</span><span class="n">get_data_sqliteSMNfunctions</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
+    <span class="n">x1</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">x2</span> <span class="o">=</span> <span class="n">co</span><span class="o">.</span><span class="n">ABMagnitudeToJansky</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x1</span> <span class="o">/</span> <span class="n">x2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ylog</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span><span class="mi">2</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">3</span><span class="p">]</span>
+    <span class="c">#make the figure</span>
+<span class="c">#    fig = P.figure()</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span> <span class="o">=</span> <span class="mf">0.09</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">=</span> <span class="mf">0.08</span><span class="p">,</span>
+                        <span class="n">right</span> <span class="o">=</span> <span class="mf">0.92</span><span class="p">,</span> <span class="n">top</span> <span class="o">=</span> <span class="mf">0.94</span><span class="p">)</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+    <span class="c">#plot scatters</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mf">0.6</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;o&#39;</span><span class="p">,</span>
+                     <span class="n">c</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;jet&#39;</span><span class="p">),</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">,</span>
+                     <span class="n">edgecolor</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">)</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;o&#39;</span><span class="p">,</span>
+                     <span class="n">c</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;jet&#39;</span><span class="p">),</span>
+                     <span class="n">edgecolor</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">,</span> <span class="n">visible</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="n">c1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">shrink</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span> <span class="n">fraction</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">)</span>
+    <span class="n">c1</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;$\mathrm{Redshift}$&#39;</span><span class="p">)</span>
+    <span class="c">#labels</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+    <span class="c">#limits</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
+    <span class="c">#add annotate</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.03</span><span class="p">,</span><span class="n">title</span><span class="p">,</span>
+           <span class="n">horizontalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">verticalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">transform</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
+    <span class="c">#make grid</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="c">#legend and save</span>
+    <span class="c">#P.legend(loc = &#39;upper left&#39;, scatterpoints = 1)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_folder</span> <span class="o">+</span> <span class="n">output</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="plotColourProperties3"><a class="viewcode-back" href="../../../SamPy.herschel.html#SamPy.herschel.plotcolourproperties.plotColourProperties3">[docs]</a><span class="k">def</span> <span class="nf">plotColourProperties3</span><span class="p">(</span><span class="n">query</span><span class="p">,</span>
+                          <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="p">,</span>
+                          <span class="n">output</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span>
+                          <span class="n">ymin</span> <span class="o">=</span> <span class="o">-</span><span class="mi">12</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+                          <span class="n">xmin</span> <span class="o">=</span> <span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="mf">3.2</span><span class="p">,</span>
+                          <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">):</span>
+    <span class="c">#get data, all galaxies</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">sq</span><span class="o">.</span><span class="n">get_data_sqliteSMNfunctions</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
+    <span class="n">x1</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">x2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x1</span> <span class="o">/</span> <span class="n">x2</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1e3</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">3</span><span class="p">]</span>
+    <span class="c">#make the figure</span>
+<span class="c">#    fig = P.figure()</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span> <span class="o">=</span> <span class="mf">0.09</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">=</span> <span class="mf">0.08</span><span class="p">,</span>
+                        <span class="n">right</span> <span class="o">=</span> <span class="mf">0.92</span><span class="p">,</span> <span class="n">top</span> <span class="o">=</span> <span class="mf">0.94</span><span class="p">)</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+    <span class="c">#plot scatters</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;o&#39;</span><span class="p">,</span>
+                     <span class="n">c</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;jet&#39;</span><span class="p">),</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">,</span>
+                     <span class="n">edgecolor</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">)</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;o&#39;</span><span class="p">,</span>
+                     <span class="n">c</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;jet&#39;</span><span class="p">),</span>
+                     <span class="n">edgecolor</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">,</span> <span class="n">visible</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="n">c1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">shrink</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span> <span class="n">fraction</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">)</span>
+    <span class="n">c1</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;$\mathrm{Redshift}$&#39;</span><span class="p">)</span>
+    <span class="c">#labels</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+    <span class="c">#limits</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
+    <span class="c">#add annotate</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.03</span><span class="p">,</span><span class="n">title</span><span class="p">,</span>
+           <span class="n">horizontalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">verticalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">transform</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
+    <span class="c">#make grid</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="c">#legend and save</span>
+    <span class="c">#P.legend(loc = &#39;upper left&#39;, scatterpoints = 1)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_folder</span> <span class="o">+</span> <span class="n">output</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="plotColourProperties4"><a class="viewcode-back" href="../../../SamPy.herschel.html#SamPy.herschel.plotcolourproperties.plotColourProperties4">[docs]</a><span class="k">def</span> <span class="nf">plotColourProperties4</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">):</span>
+    <span class="c">#get data, all galaxies</span>
+    <span class="c">#FIR.spire250_obs, FIR.irac_ch4_obs, galprop.mstardot,</span>
+    <span class="c">#galprop.sfr_burst, galprop.sfr_ave, FIR.z, galprop.tmerge</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">sq</span><span class="o">.</span><span class="n">get_data_sqliteSMNfunctions</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
+    <span class="n">x1</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">x2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x1</span> <span class="o">/</span> <span class="n">x2</span><span class="p">)</span>
+    <span class="n">sfr</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">burst</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">3</span><span class="p">]</span>
+    <span class="n">avera</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">4</span><span class="p">]</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">5</span><span class="p">]</span>
+    <span class="n">tmerge</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">6</span><span class="p">]</span>
+    <span class="c">#masks</span>
+    <span class="n">noMerge</span> <span class="o">=</span> <span class="n">tmerge</span> <span class="o">&lt;</span> <span class="mf">0.0</span>
+    <span class="n">recent</span> <span class="o">=</span> <span class="p">(</span><span class="n">tmerge</span> <span class="o">&lt;</span> <span class="mf">0.25</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">tmerge</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">mergers</span> <span class="o">=</span> <span class="n">tmerge</span> <span class="o">&gt;</span> <span class="mf">0.0</span>
+    <span class="c">#make the figure</span>
+<span class="c">#    fig = P.figure()</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span> <span class="o">=</span> <span class="mf">0.085</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">=</span> <span class="mf">0.08</span><span class="p">,</span>
+                        <span class="n">right</span> <span class="o">=</span> <span class="mf">0.99</span><span class="p">,</span> <span class="n">top</span> <span class="o">=</span> <span class="mf">0.99</span><span class="p">,</span>
+                        <span class="n">wspace</span> <span class="o">=</span> <span class="mf">0.21</span><span class="p">,</span> <span class="n">hspace</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">221</span><span class="p">)</span>
+    <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">222</span><span class="p">)</span>
+    <span class="n">ax3</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">223</span><span class="p">)</span>
+    <span class="n">ax4</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">224</span><span class="p">)</span>
+    <span class="c">#plot scatters</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">noMerge</span><span class="p">],</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">sfr</span><span class="p">[</span><span class="n">noMerge</span><span class="p">]),</span> <span class="n">s</span> <span class="o">=</span> <span class="mf">3.5</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;&lt;&#39;</span><span class="p">,</span>
+                     <span class="n">c</span><span class="o">=</span><span class="n">z</span><span class="p">[</span><span class="n">noMerge</span><span class="p">],</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;jet&#39;</span><span class="p">),</span>
+                     <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.15</span><span class="p">,</span> <span class="n">edgecolor</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">,</span>
+                     <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Never Merged&#39;</span><span class="p">)</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">noMerge</span><span class="p">],</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">sfr</span><span class="p">[</span><span class="n">noMerge</span><span class="p">]),</span> <span class="n">s</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;&lt;&#39;</span><span class="p">,</span>
+                     <span class="n">c</span><span class="o">=</span><span class="n">z</span><span class="p">[</span><span class="n">noMerge</span><span class="p">],</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;jet&#39;</span><span class="p">),</span> <span class="n">edgecolor</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">,</span>
+                     <span class="n">visible</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="n">s2</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">recent</span><span class="p">],</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">sfr</span><span class="p">[</span><span class="n">recent</span><span class="p">]),</span> <span class="n">s</span> <span class="o">=</span> <span class="mf">3.5</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;&gt;&#39;</span><span class="p">,</span>
+                     <span class="n">c</span><span class="o">=</span><span class="n">z</span><span class="p">[</span><span class="n">recent</span><span class="p">],</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;jet&#39;</span><span class="p">),</span>
+                     <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.15</span><span class="p">,</span> <span class="n">edgecolor</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">,</span>
+                     <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Recent Mergers $T_{\mathrm{merge}} &lt; 250$ Myr&#39;</span><span class="p">)</span>
+    <span class="n">s2</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">recent</span><span class="p">],</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">sfr</span><span class="p">[</span><span class="n">recent</span><span class="p">]),</span> <span class="n">s</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;&gt;&#39;</span><span class="p">,</span>
+                     <span class="n">c</span><span class="o">=</span><span class="n">z</span><span class="p">[</span><span class="n">recent</span><span class="p">],</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;jet&#39;</span><span class="p">),</span> <span class="n">edgecolor</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">,</span>
+                     <span class="n">visible</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="n">s3</span> <span class="o">=</span> <span class="n">ax3</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">recent</span><span class="p">],</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">burst</span><span class="p">[</span><span class="n">recent</span><span class="p">]),</span> <span class="n">s</span> <span class="o">=</span> <span class="mf">3.5</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;&gt;&#39;</span><span class="p">,</span>
+                     <span class="n">c</span><span class="o">=</span><span class="n">z</span><span class="p">[</span><span class="n">recent</span><span class="p">],</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;jet&#39;</span><span class="p">),</span>
+                     <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.15</span><span class="p">,</span> <span class="n">edgecolor</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">,</span>
+                     <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Recent Mergers $T_{\mathrm{merge}} &lt; 250$ Myr&#39;</span><span class="p">)</span>
+    <span class="n">s3</span> <span class="o">=</span> <span class="n">ax3</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">recent</span><span class="p">],</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">burst</span><span class="p">[</span><span class="n">recent</span><span class="p">]),</span> <span class="n">s</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;&gt;&#39;</span><span class="p">,</span>
+                     <span class="n">c</span><span class="o">=</span><span class="n">z</span><span class="p">[</span><span class="n">recent</span><span class="p">],</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;jet&#39;</span><span class="p">),</span> <span class="n">edgecolor</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">,</span>
+                    <span class="n">visible</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="n">s6</span> <span class="o">=</span> <span class="n">ax4</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">noMerge</span><span class="p">],</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">avera</span><span class="p">[</span><span class="n">noMerge</span><span class="p">]),</span> <span class="n">s</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;o&#39;</span><span class="p">,</span>
+                     <span class="n">c</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">edgecolor</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">,</span>
+                     <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Never Merged&#39;</span><span class="p">)</span>
+    <span class="n">s7</span> <span class="o">=</span> <span class="n">ax4</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">recent</span><span class="p">],</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">avera</span><span class="p">[</span><span class="n">recent</span><span class="p">]),</span> <span class="n">s</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;s&#39;</span><span class="p">,</span>
+                     <span class="n">c</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">edgecolor</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">,</span>
+                     <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Recent Mergers $T_{\mathrm{merge}} &lt; 250$ Myr&#39;</span><span class="p">)</span>    
+    <span class="n">s6</span> <span class="o">=</span> <span class="n">ax4</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">noMerge</span><span class="p">],</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">avera</span><span class="p">[</span><span class="n">noMerge</span><span class="p">]),</span> <span class="n">s</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;o&#39;</span><span class="p">,</span>
+                     <span class="n">c</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="n">edgecolor</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">,</span> <span class="n">visible</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="n">s7</span> <span class="o">=</span> <span class="n">ax4</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">recent</span><span class="p">],</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">avera</span><span class="p">[</span><span class="n">recent</span><span class="p">]),</span> <span class="n">s</span> <span class="o">=</span> <span class="mf">2.0</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;s&#39;</span><span class="p">,</span>
+                     <span class="n">c</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="n">edgecolor</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">,</span> <span class="n">visible</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>    
+    <span class="c">#colorbars</span>
+    <span class="n">cax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.11</span><span class="p">,</span> <span class="mf">0.93</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.15</span><span class="o">/</span><span class="mf">12.</span><span class="p">])</span><span class="c">#[left, bottom, width, height]</span>
+    <span class="n">c1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">cax</span> <span class="o">=</span> <span class="n">cax1</span><span class="p">,</span> <span class="n">orientation</span> <span class="o">=</span> <span class="s">&#39;horizontal&#39;</span><span class="p">,</span>
+                      <span class="n">ticks</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mf">2.6</span><span class="p">,</span><span class="mf">3.4</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+    <span class="n">c1</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;$\mathrm{Redshift}$&#39;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">13</span><span class="p">)</span>
+    <span class="n">cax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.93</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.15</span><span class="o">/</span><span class="mf">12.</span><span class="p">])</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">s2</span><span class="p">,</span> <span class="n">cax</span> <span class="o">=</span> <span class="n">cax2</span><span class="p">,</span> <span class="n">orientation</span> <span class="o">=</span> <span class="s">&#39;horizontal&#39;</span><span class="p">,</span>
+                      <span class="n">ticks</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mf">2.6</span><span class="p">,</span><span class="mf">3.4</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+    <span class="n">c2</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;$\mathrm{Redshift}$&#39;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">13</span><span class="p">)</span>
+    <span class="n">cax3</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">([</span><span class="mf">0.11</span><span class="p">,</span> <span class="mf">0.475</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.15</span><span class="o">/</span><span class="mf">12.</span><span class="p">])</span>
+    <span class="n">c3</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">s3</span><span class="p">,</span> <span class="n">cax</span> <span class="o">=</span> <span class="n">cax3</span><span class="p">,</span> <span class="n">orientation</span> <span class="o">=</span> <span class="s">&#39;horizontal&#39;</span><span class="p">,</span>
+                      <span class="n">ticks</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mf">2.6</span><span class="p">,</span><span class="mf">3.4</span><span class="p">,</span><span class="mi">4</span><span class="p">])</span>
+    <span class="n">c3</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;$\mathrm{Redshift}$&#39;</span><span class="p">,</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">13</span><span class="p">)</span>
+
+    <span class="c">#labels</span>
+    <span class="n">xlabel</span> <span class="o">=</span> <span class="s">r&#39;$\log_{10} \left ( \frac{S_{250}}{S_{8.0}} \right )$&#39;</span>
+    <span class="n">ylabel1</span> <span class="o">=</span> <span class="s">r&#39;$\log_{10}(\dot{M}_{\star} \ [M_{\odot} \ \mathrm{yr}^{-1}])$&#39;</span>
+    <span class="n">ylabel3</span> <span class="o">=</span> <span class="s">r&#39;$\log_{10}(\dot{M}_{\mathrm{BURST}} \ [M_{\odot} \ \mathrm{yr}^{-1}])$&#39;</span>
+    <span class="n">ylabel4</span> <span class="o">=</span> <span class="s">r&#39;$\log_{10}(&lt; \dot{M}_{\star} &gt; \ [M_{\odot} \ \mathrm{yr}^{-1}])$&#39;</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([])</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel1</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([])</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel1</span><span class="p">)</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel3</span><span class="p">)</span>
+    <span class="n">ax4</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+    <span class="n">ax4</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel4</span><span class="p">)</span>
+    <span class="c">#limits</span>
+    <span class="n">xmin</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.5</span> 
+    <span class="n">xmax</span> <span class="o">=</span> <span class="mf">3.3</span>
+    <span class="n">ymin</span> <span class="o">=</span> <span class="o">-</span><span class="mf">3.8</span>
+    <span class="n">ymax</span> <span class="o">=</span> <span class="mf">3.2</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
+    <span class="n">ax4</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+    <span class="n">ax4</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
+    <span class="c">#make grid</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="n">ax4</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="c">#legends and save</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span> <span class="o">=</span> <span class="s">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">scatterpoints</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">markerscale</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span> <span class="o">=</span> <span class="s">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">scatterpoints</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">markerscale</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span> <span class="o">=</span> <span class="s">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">scatterpoints</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">markerscale</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+    <span class="n">ax3</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span> <span class="o">=</span> <span class="s">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">scatterpoints</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">markerscale</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+    <span class="n">ax4</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span> <span class="o">=</span> <span class="s">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">scatterpoints</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">markerscale</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_folder</span> <span class="o">+</span> <span class="n">output</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="plotProperties"><a class="viewcode-back" href="../../../SamPy.herschel.html#SamPy.herschel.plotcolourproperties.plotProperties">[docs]</a><span class="k">def</span> <span class="nf">plotProperties</span><span class="p">(</span><span class="n">query</span><span class="p">,</span>
+                   <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="p">,</span>
+                   <span class="n">output</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span>
+                   <span class="n">ymin</span> <span class="o">=</span> <span class="o">-</span><span class="mi">12</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+                   <span class="n">xmin</span> <span class="o">=</span> <span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="mf">3.2</span><span class="p">,</span>
+                   <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span>
+                   <span class="n">clabel</span> <span class="o">=</span> <span class="s">&#39;$\mathrm{Redshift}$&#39;</span><span class="p">):</span>
+    <span class="c">#get data, all galaxies</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">sq</span><span class="o">.</span><span class="n">get_data_sqliteSMNfunctions</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1e3</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">noMerge</span> <span class="o">=</span> <span class="n">z</span> <span class="o">&lt;</span> <span class="mf">0.0</span>
+    <span class="n">merged</span> <span class="o">=</span> <span class="n">z</span> <span class="o">&gt;</span> <span class="mf">0.0</span>
+    <span class="c">#make the figure</span>
+<span class="c">#    fig = P.figure()</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span> <span class="o">=</span> <span class="mf">0.09</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">=</span> <span class="mf">0.08</span><span class="p">,</span>
+                        <span class="n">right</span> <span class="o">=</span> <span class="mf">0.92</span><span class="p">,</span> <span class="n">top</span> <span class="o">=</span> <span class="mf">0.94</span><span class="p">)</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+    <span class="c">#plot scatters</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">noMerge</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">noMerge</span><span class="p">],</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;o&#39;</span><span class="p">,</span>
+                     <span class="n">c</span><span class="o">=</span><span class="s">&#39;black&#39;</span><span class="p">,</span><span class="n">edgecolor</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Never Merged&#39;</span><span class="p">)</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">merged</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">merged</span><span class="p">],</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;o&#39;</span><span class="p">,</span>
+                     <span class="n">c</span><span class="o">=</span><span class="n">z</span><span class="p">[</span><span class="n">merged</span><span class="p">],</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;jet&#39;</span><span class="p">),</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+                     <span class="n">edgecolor</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Merged&#39;</span><span class="p">)</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">merged</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">merged</span><span class="p">],</span> <span class="n">s</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;o&#39;</span><span class="p">,</span>
+                     <span class="n">c</span><span class="o">=</span><span class="n">z</span><span class="p">[</span><span class="n">merged</span><span class="p">],</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;jet&#39;</span><span class="p">),</span>
+                     <span class="n">edgecolor</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">,</span> <span class="n">visible</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="n">c1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">shrink</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span> <span class="n">fraction</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">pad</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">)</span>
+    <span class="n">c1</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">clabel</span><span class="p">)</span>
+    <span class="c">#labels</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+    <span class="c">#limits</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
+    <span class="c">#add annotate</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.03</span><span class="p">,</span><span class="n">title</span><span class="p">,</span>
+           <span class="n">horizontalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">verticalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">transform</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
+    <span class="c">#make grid</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="c">#legend and save</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span> <span class="o">=</span> <span class="s">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">scatterpoints</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">markerscale</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+             <span class="n">shadow</span> <span class="o">=</span> <span class="bp">True</span><span class="p">,</span> <span class="n">fancybox</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_folder</span> <span class="o">+</span> <span class="n">output</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="plotColourFlux"><a class="viewcode-back" href="../../../SamPy.herschel.html#SamPy.herschel.plotcolourproperties.plotColourFlux">[docs]</a><span class="k">def</span> <span class="nf">plotColourFlux</span><span class="p">(</span><span class="n">query</span><span class="p">,</span>
+                   <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="p">,</span>
+                   <span class="n">output</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span>
+                   <span class="n">ymin</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+                   <span class="n">xmin</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="mi">60</span><span class="p">,</span>
+                   <span class="n">title</span> <span class="o">=</span> <span class="s">&#39;$S_{250} &gt; 5 \ \mathrm{mJy}$&#39;</span><span class="p">,</span>
+                   <span class="n">clabel</span> <span class="o">=</span> <span class="s">&#39;$\mathrm{Redshift}$&#39;</span><span class="p">):</span>
+    <span class="c">#get data, all galaxies</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">sq</span><span class="o">.</span><span class="n">get_data_sqliteSMNfunctions</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1e3</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="mi">2</span><span class="p">]</span>
+    <span class="c">#make the figure</span>
+<span class="c">#    fig = P.figure()</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span> <span class="o">=</span> <span class="mf">0.09</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">=</span> <span class="mf">0.08</span><span class="p">,</span>
+                        <span class="n">right</span> <span class="o">=</span> <span class="mf">0.92</span><span class="p">,</span> <span class="n">top</span> <span class="o">=</span> <span class="mf">0.94</span><span class="p">)</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+    <span class="c">#plot scatters</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;o&#39;</span><span class="p">,</span>
+                     <span class="n">c</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;jet&#39;</span><span class="p">),</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span>
+                     <span class="n">edgecolor</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">)</span>
+    <span class="n">s1</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s">&#39;o&#39;</span><span class="p">,</span>
+                     <span class="n">c</span><span class="o">=</span><span class="n">z</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;jet&#39;</span><span class="p">),</span>
+                     <span class="n">edgecolor</span> <span class="o">=</span> <span class="s">&#39;none&#39;</span><span class="p">,</span> <span class="n">visible</span> <span class="o">=</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="n">c1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">shrink</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span> <span class="n">fraction</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span> <span class="n">pad</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">)</span>
+    
+<span class="c">#    axins = zoomed_inset_axes(ax1, 3.2, loc=1) # zoom = 3.2</span>
+<span class="c">#    axins.scatter(x, y, s = 20, marker = &#39;o&#39;,</span>
+<span class="c">#                     c=z, cmap = cm.get_cmap(&#39;jet&#39;), alpha = 0.45,</span>
+<span class="c">#                     edgecolor = &#39;none&#39;)</span>
+<span class="c">#    #</span>
+<span class="c">#    ax1.axvline(5, linestyle = &#39;:&#39;, color = &#39;green&#39;, lw = 2)</span>
+<span class="c">#    # sub region of the original image</span>
+<span class="c">#    x1, x2, y1, y2 = 4.8, 15.2, -0.2, 0.18</span>
+<span class="c">#    axins.set_xlim(x1, x2)</span>
+<span class="c">#    axins.set_ylim(y1, y2)</span>
+<span class="c">#    mark_inset(ax1, axins, loc1=2, loc2=4, fc=&quot;none&quot;, ec=&quot;0.5&quot;)</span>
+<span class="c">#    P.xticks(visible=False)</span>
+<span class="c">#    P.yticks(visible=False)</span>
+    
+    <span class="n">c1</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">clabel</span><span class="p">)</span>
+    <span class="c">#labels</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+    <span class="c">#limits</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
+    <span class="c">#add annotate</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.03</span><span class="p">,</span><span class="n">title</span><span class="p">,</span>
+           <span class="n">horizontalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">verticalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">transform</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
+    <span class="c">#make grid</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="c">#legend and save</span>
+    <span class="c">#P.legend(loc = &#39;upper left&#39;, scatterpoints = 1)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_folder</span> <span class="o">+</span> <span class="n">output</span><span class="p">)</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c">#find the home directory, because the output is to dropbox </span>
+    <span class="c">#and my user name is not always the same, this hack is required.</span>
+    <span class="n">hm</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#39;HOME&#39;</span><span class="p">)</span>
+    <span class="c">#constants</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">hm</span> <span class="o">+</span> <span class="s">&#39;/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/&#39;</span>
+    <span class="n">out_folder</span> <span class="o">=</span> <span class="n">hm</span> <span class="o">+</span> <span class="s">&#39;/Dropbox/Research/Herschel/plots/colours/&#39;</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="s">&#39;sams.db&#39;</span>
+
+    <span class="nb">type</span> <span class="o">=</span> <span class="s">&#39;.png&#39;</span>
+
+    <span class="k">print</span> <span class="s">&#39;Begin plotting&#39;</span>
+<span class="c">#################################################################################</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select FIR.spire250_obs, galphotdust.f775w - galphotdust.f850lp, FIR.z</span>
+<span class="s">                from FIR, galphotdust where</span>
+<span class="s">                FIR.z &gt;= 2.0 and</span>
+<span class="s">                FIR.z &lt; 4.0 and</span>
+<span class="s">                FIR.gal_id = galphotdust.gal_id and</span>
+<span class="s">                FIR.halo_id = galphotdust.halo_id and</span>
+<span class="s">                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="s">                FIR.spire250_obs &gt; 5e-3</span>
+<span class="s">                &#39;&#39;&#39;</span>
+    <span class="n">ylab</span> <span class="o">=</span> <span class="s">r&#39;$S_{F775W} - S_{F850LP}$&#39;</span>
+    <span class="n">xlab</span> <span class="o">=</span> <span class="s">r&#39;$ S_{250} \ [\mathrm{mJy}]$&#39;</span>
+    <span class="n">plotColourFlux</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">xlab</span><span class="p">,</span> <span class="n">ylab</span><span class="p">,</span><span class="s">&#39;UVColorSPIRE&#39;</span><span class="o">+</span><span class="nb">type</span><span class="p">,</span>  <span class="n">out_folder</span><span class="p">)</span>
+<span class="c">#################################################################################</span>
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs, galphotdust.f775w, FIR.spire250_obs,</span>
+<span class="c">#                FIR.z</span>
+<span class="c">#                from FIR, galphotdust where</span>
+<span class="c">#                FIR.z &gt;= 2.0 and</span>
+<span class="c">#                FIR.z &lt; 4.0 and</span>
+<span class="c">#                FIR.gal_id = galphotdust.gal_id and</span>
+<span class="c">#                FIR.halo_id = galphotdust.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="c">#                galphotdust.f775w &lt; 60 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-19</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    xlab = r&#39;$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$&#39;</span>
+<span class="c">#    ylab = r&#39;$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$&#39;</span>
+<span class="c">#    plotColourProperties(query, xlab, ylab,&#39;ColorSPIRE&#39;+type,  out_folder)</span>
+<span class="c">#################################################################################</span>
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs, galphotdust.f775w, FIR.spire250_obs,</span>
+<span class="c">#                FIR.z</span>
+<span class="c">#                from FIR, galphotdust where</span>
+<span class="c">#                FIR.z &gt;= 2.0 and</span>
+<span class="c">#                FIR.z &lt; 2.2 and</span>
+<span class="c">#                FIR.gal_id = galphotdust.gal_id and</span>
+<span class="c">#                FIR.halo_id = galphotdust.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="c">#                galphotdust.f775w &lt; 60 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-19</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    xlab = r&#39;$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$&#39;</span>
+<span class="c">#    ylab = r&#39;$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$&#39;</span>
+<span class="c">#    plotColourProperties(query, xlab, ylab,&#39;ColorSPIREz2&#39;+type,  out_folder)</span>
+<span class="c">################################################################################</span>
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs, galphotdust.f775w, FIR.spire250_obs,</span>
+<span class="c">#                FIR.z</span>
+<span class="c">#                from FIR, galphotdust, galprop where</span>
+<span class="c">#                FIR.z &gt;= 3.0 and</span>
+<span class="c">#                FIR.z &lt; 3.3 and</span>
+<span class="c">#                FIR.gal_id = galphotdust.gal_id and</span>
+<span class="c">#                FIR.halo_id = galphotdust.halo_id and</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="c">#                galphotdust.f775w &lt; 60 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-19 and</span>
+<span class="c">#                galprop.tmajmerge  &gt; 0 and</span>
+<span class="c">#                galprop.tmajmerge &lt; 0.25</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    xlab = r&#39;$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$&#39;</span>
+<span class="c">#    ylab = r&#39;$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$&#39;</span>
+<span class="c">#    plotColourProperties(query, xlab, ylab,&#39;ColorSPIREz3OnlyRecentMajorMergers&#39;+type,  out_folder)</span>
+<span class="c">################################################################################</span>
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs, galphotdust.f160w, FIR.spire250_obs,</span>
+<span class="c">#                galprop.mcold</span>
+<span class="c">#                from FIR, galphotdust, galprop where</span>
+<span class="c">#                FIR.z &gt;= 3.0 and</span>
+<span class="c">#                FIR.z &lt; 3.3 and</span>
+<span class="c">#                FIR.gal_id = galphotdust.gal_id and</span>
+<span class="c">#                FIR.halo_id = galphotdust.halo_id and</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-19 and</span>
+<span class="c">#                galprop.mcold &gt; 6</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    xlab = r&#39;$\log_{10} \left ( \frac{S_{250}}{S_{F160W}} \right )$&#39;</span>
+<span class="c">#    ylab = r&#39;$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$&#39;</span>
+<span class="c">#    clabel = &#39;mcold&#39;</span>
+<span class="c">#    plotColourProperties(query, xlab, ylab,&#39;ColorSPIREz3Special16&#39;+type, out_folder,</span>
+<span class="c">#                         clabel=clabel)</span>
+<span class="c">################################################################################</span>
+<span class="c">#    query = &#39;&#39;&#39;select galprop.mstardot, FIR.spire250_obs, galprop.tmerge</span>
+<span class="c">#                from FIR, galprop where</span>
+<span class="c">#                FIR.z &gt;= 2.0 and</span>
+<span class="c">#                FIR.z &lt; 4.0 and</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-6</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    xlab = r&#39;$\log_{10} ( \dot{M}_{\star} )$&#39;</span>
+<span class="c">#    ylab = r&#39;$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$&#39;</span>
+<span class="c">#    clabel = &#39;$T_{\mathrm{merge}}$&#39;</span>
+<span class="c">#    plotProperties(query, xlab, ylab,&#39;FluxMerge&#39;+type, out_folder,clabel=clabel,</span>
+<span class="c">#                   ymin = -3, ymax = 2, xmin = -2, xmax = 3.2)</span>
+<span class="c">################################################################################</span>
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs, galphotdust.f775w, FIR.spire250_obs,</span>
+<span class="c">#                FIR.z</span>
+<span class="c">#                from FIR, galphotdust where</span>
+<span class="c">#                FIR.z &gt;= 2.0 and</span>
+<span class="c">#                FIR.z &lt; 4.0 and</span>
+<span class="c">#                FIR.gal_id = galphotdust.gal_id and</span>
+<span class="c">#                FIR.halo_id = galphotdust.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="c">#                galphotdust.f775w &lt; 33 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-7</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    xlab = r&#39;$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$&#39;</span>
+<span class="c">#    ylab = r&#39;$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$&#39;</span>
+<span class="c">#    plotColourProperties(query, xlab, ylab,&#39;ColorSPIRE2&#39;+type, out_folder,</span>
+<span class="c">#                         xmin = 0.0, xmax = 3.5, ymin = -4.0, ymax = 1.2,</span>
+<span class="c">#                         title = &#39;$S_{250} &gt; 10^{-7}\ \mathrm{Jy} \ \mathrm{and} \ \mathrm{F775W} &lt; 33$&#39;)</span>
+<span class="c">################################################################################</span>
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs, galphotdust.f775w, FIR.spire250_obs,</span>
+<span class="c">#                FIR.z</span>
+<span class="c">#                from FIR, galphotdust where</span>
+<span class="c">#                FIR.gal_id = galphotdust.gal_id and</span>
+<span class="c">#                FIR.halo_id = galphotdust.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="c">#                galphotdust.f775w &lt; 33 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-7</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    xlab = r&#39;$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$&#39;</span>
+<span class="c">#    ylab = r&#39;$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$&#39;</span>
+<span class="c">#    plotColourProperties(query, xlab, ylab,&#39;ColorSPIRE3&#39;+type, out_folder,</span>
+<span class="c">#                         xmin = 0.0, xmax = 3.5, ymin = -4.0, ymax = 1.2,</span>
+<span class="c">#                         title = &#39;$S_{250} &gt; 10^{-7}\ \mathrm{Jy} \ \mathrm{and} \ \mathrm{F775W} &lt; 33$&#39;)</span>
+<span class="c">################################################################################</span>
+<span class="c">#    print &#39;plot no subhaloes&#39;</span>
+<span class="c">##################################################################################</span>
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs, galphotdust.f775w, FIR.spire250_obs,</span>
+<span class="c">#                FIR.z</span>
+<span class="c">#                from FIR, galphotdust, galprop where</span>
+<span class="c">#                FIR.z &gt;= 2.0 and</span>
+<span class="c">#                FIR.z &lt; 4.0 and</span>
+<span class="c">#                FIR.gal_id = galphotdust.gal_id and</span>
+<span class="c">#                FIR.halo_id = galphotdust.halo_id and</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="c">#                galphotdust.f775w &lt; 60 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-19 and</span>
+<span class="c">#                galprop.t_sat &gt; 99</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    xlab = r&#39;$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$&#39;</span>
+<span class="c">#    ylab = r&#39;$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$&#39;</span>
+<span class="c">#    plotColourProperties(query, xlab, ylab,&#39;ColorSPIRENoSub&#39;+type,  out_folder)</span>
+<span class="c">################################################################################</span>
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs, galphotdust.f775w, FIR.spire250_obs,</span>
+<span class="c">#                FIR.z</span>
+<span class="c">#                from FIR, galphotdust, galprop where</span>
+<span class="c">#                FIR.z &gt;= 2.0 and</span>
+<span class="c">#                FIR.z &lt; 4.0 and</span>
+<span class="c">#                FIR.gal_id = galphotdust.gal_id and</span>
+<span class="c">#                FIR.halo_id = galphotdust.halo_id and</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="c">#                galphotdust.f775w &lt; 60 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-7 and</span>
+<span class="c">#                galprop.t_sat &gt; 99</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    xlab = r&#39;$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$&#39;</span>
+<span class="c">#    ylab = r&#39;$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$&#39;</span>
+<span class="c">#    plotColourProperties(query, xlab, ylab,&#39;ColorSPIRE2NoSub&#39;+type, out_folder,</span>
+<span class="c">#                         xmin = 0.0, xmax = 3.5, ymin = -4.0, ymax = 1.2,</span>
+<span class="c">#                         title = &#39;$S_{250} &gt; 10^{-7}\ \mathrm{Jy} \ \mathrm{and} \ \mathrm{F775W} &lt; 33$&#39;)</span>
+<span class="c">################################################################################</span>
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs, galphotdust.f775w, FIR.spire250_obs,</span>
+<span class="c">#                FIR.z</span>
+<span class="c">#                from FIR, galphotdust, galprop where</span>
+<span class="c">#                FIR.gal_id = galphotdust.gal_id and</span>
+<span class="c">#                FIR.halo_id = galphotdust.halo_id and</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="c">#                galprop.t_sat &gt; 99 and </span>
+<span class="c">#                galphotdust.f775w &lt; 33 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-7</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    xlab = r&#39;$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$&#39;</span>
+<span class="c">#    ylab = r&#39;$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$&#39;</span>
+<span class="c">#    plotColourProperties(query, xlab, ylab,&#39;ColorSPIRE3NoSub&#39;+type, out_folder,</span>
+<span class="c">#                         xmin = 0.0, xmax = 3.5, ymin = -4.0, ymax = 1.2,</span>
+<span class="c">#                         title = &#39;$S_{250} &gt; 10^{-7}\ \mathrm{Jy} \ \mathrm{and} \ \mathrm{F775W} &lt; 33$&#39;)</span>
+<span class="c">#################################################################################</span>
+<span class="c">#    print &#39;Plotting IRAC props&#39;</span>
+<span class="c">#################################################################################</span>
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs, FIR.irac_ch4_obs, FIR.spire250_obs,</span>
+<span class="c">#                FIR.z</span>
+<span class="c">#                from FIR where</span>
+<span class="c">#                FIR.z &gt;= 2.0 and</span>
+<span class="c">#                FIR.z &lt; 4.0 and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e7</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    xlab = r&#39;$\log_{10} \left ( \frac{S_{250}}{S_{8.0}} \right )$&#39;</span>
+<span class="c">#    ylab = r&#39;$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$&#39;</span>
+<span class="c">#    plotColourProperties3(query, xlab, ylab,&#39;ColorIRACSPIRE&#39;+type,  out_folder)</span>
+<span class="c">################################################################################</span>
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs, FIR.irac_ch4_obs, FIR.spire250_obs,</span>
+<span class="c">#                FIR.z</span>
+<span class="c">#                from FIR where</span>
+<span class="c">#                FIR.z &gt;= 2.0 and</span>
+<span class="c">#                FIR.z &lt; 4.0 and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="c">#                FIR.irac_ch4_obs &gt; 1e-7 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-7</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    xlab = r&#39;$\log_{10} \left ( \frac{S_{250}}{S_{8.0}} \right )$&#39;</span>
+<span class="c">#    ylab = r&#39;$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$&#39;</span>
+<span class="c">#    plotColourProperties3(query, xlab, ylab,&#39;ColorIRACSPIRE2&#39;+type, out_folder,</span>
+<span class="c">#                          xmin = 0.0, ymin = -4.0, ymax = 1.2,</span>
+<span class="c">#                          title = &#39;$S_{250} &gt; 10^{-7}\ \mathrm{Jy} \ \mathrm{and} \ S_{8.0} &gt; 10^{-7}\ \mathrm{Jy}$&#39;)</span>
+<span class="c">#################################################################################</span>
+<span class="c">#    print &#39;Plotting physical properties&#39;</span>
+<span class="c">################################################################################</span>
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs, galphotdust.f850lp, galprop.mstar,</span>
+<span class="c">#                FIR.z</span>
+<span class="c">#                from FIR, galprop, galphotdust where</span>
+<span class="c">#                FIR.z &gt;= 2.0 and</span>
+<span class="c">#                FIR.z &lt; 4.0 and</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                FIR.gal_id = galphotdust.gal_id and</span>
+<span class="c">#                FIR.halo_id = galphotdust.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-19</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    xlab = r&#39;$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$&#39;</span>
+<span class="c">#    ylab = r&#39;$\log_{10}(M_{\star} \ [M_{\odot}])$&#39;</span>
+<span class="c">#    plotColourProperties2(query, xlab, ylab,&#39;ColorMstellar&#39;+type, out_folder,</span>
+<span class="c">#                          xmin = -1.4, xmax = 3.1, ymin = 7.0, ymax = 11.5)</span>
+<span class="c">#################################################################################</span>
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs, galphotdust.f850lp, galprop.Zstar,</span>
+<span class="c">#                FIR.z</span>
+<span class="c">#                from FIR, galprop, galphotdust where</span>
+<span class="c">#                FIR.z &gt;= 2.0 and</span>
+<span class="c">#                FIR.z &lt; 4.0 and</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                FIR.gal_id = galphotdust.gal_id and</span>
+<span class="c">#                FIR.halo_id = galphotdust.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-19</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    xlab = r&#39;$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$&#39;</span>
+<span class="c">#    ylab = r&#39;$\log_{10}(Z_{\star})$&#39;</span>
+<span class="c">#    plotColourProperties2(query, xlab, ylab,&#39;ColorZstellar&#39;+type, out_folder,</span>
+<span class="c">#                          xmin = -1.4, xmax = 3.1, ymin = -1.8, ymax = 0.5,</span>
+<span class="c">#                          ylog = True)</span>
+<span class="c">################################################################################</span>
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs, galphotdust.f850lp, galprop.Zstar,</span>
+<span class="c">#                FIR.z</span>
+<span class="c">#                from FIR, galprop, galphotdust where</span>
+<span class="c">#                FIR.z &gt;= 2.0 and</span>
+<span class="c">#                FIR.z &lt; 2.4 and</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                FIR.gal_id = galphotdust.gal_id and</span>
+<span class="c">#                FIR.halo_id = galphotdust.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-19</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    xlab = r&#39;$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$&#39;</span>
+<span class="c">#    ylab = r&#39;$\log_{10}(Z_{\star})$&#39;</span>
+<span class="c">#    plotColourProperties2(query, xlab, ylab,&#39;ColorZstellarLowZ&#39;+type, out_folder,</span>
+<span class="c">#                          xmin = -1.4, xmax = 3.1, ymin = -1.8, ymax = 0.5,</span>
+<span class="c">#                          ylog = True)</span>
+<span class="c">#################################################################################</span>
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs, galphotdust.f850lp, galprop.Zcold,</span>
+<span class="c">#                FIR.z</span>
+<span class="c">#                from FIR, galprop, galphotdust where</span>
+<span class="c">#                FIR.z &gt;= 2.0 and</span>
+<span class="c">#                FIR.z &lt; 4.0 and</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                FIR.gal_id = galphotdust.gal_id and</span>
+<span class="c">#                FIR.halo_id = galphotdust.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-19</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    xlab = r&#39;$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$&#39;</span>
+<span class="c">#    ylab = r&#39;$\log_{10}(Z_{\mathrm{COLDGAS}})$&#39;</span>
+<span class="c">#    plotColourProperties2(query, xlab, ylab,&#39;ColorZcoldgas&#39;+type, out_folder,</span>
+<span class="c">#                          xmin = -1.4, xmax = 3.1, ymin = -1.6, ymax = 0.5,</span>
+<span class="c">#                          ylog = True)</span>
+<span class="c">################################################################################</span>
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs, galphotdust.f850lp, galprop.mstar,</span>
+<span class="c">#                FIR.z</span>
+<span class="c">#                from FIR, galprop, galphotdust where</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                FIR.gal_id = galphotdust.gal_id and</span>
+<span class="c">#                FIR.halo_id = galphotdust.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-19</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    xlab = r&#39;$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$&#39;</span>
+<span class="c">#    ylab = r&#39;$\log_{10}(M_{\star} \ [M_{\odot}])$&#39;</span>
+<span class="c">#    plotColourProperties2(query, xlab, ylab,&#39;ColorMstellar2&#39;+type, out_folder,</span>
+<span class="c">#                          xmin = -1.4, xmax = 3.1, ymin = 7.0, ymax = 11.5)</span>
+<span class="c">################################################################################</span>
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs, galphotdust.f850lp, galprop.mhalo,</span>
+<span class="c">#                FIR.z</span>
+<span class="c">#                from FIR, galprop, galphotdust where</span>
+<span class="c">#                FIR.z &gt;= 2.0 and</span>
+<span class="c">#                FIR.z &lt; 4.0 and</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                FIR.gal_id = galphotdust.gal_id and</span>
+<span class="c">#                FIR.halo_id = galphotdust.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-19</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    xlab = r&#39;$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$&#39;</span>
+<span class="c">#    ylab = r&#39;$\log_{10}(M_{\mathrm{DM}} \ [M_{\odot}])$&#39;</span>
+<span class="c">#    plotColourProperties2(query, xlab, ylab,&#39;ColorMhalo&#39;+type, out_folder,</span>
+<span class="c">#                          xmin = -1.4, xmax = 3.1, ymin = 9.5, ymax = 13.5)</span>
+<span class="c">################################################################################</span>
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs, galphotdust.f850lp, galprop.mhalo,</span>
+<span class="c">#                FIR.z</span>
+<span class="c">#                from FIR, galprop, galphotdust where</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                FIR.gal_id = galphotdust.gal_id and</span>
+<span class="c">#                FIR.halo_id = galphotdust.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-19</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    xlab = r&#39;$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$&#39;</span>
+<span class="c">#    ylab = r&#39;$\log_{10}(M_{\mathrm{DM}} \ [M_{\odot}])$&#39;</span>
+<span class="c">#    plotColourProperties2(query, xlab, ylab,&#39;ColorMhalo2&#39;+type, out_folder,</span>
+<span class="c">#                          xmin = -1.4, xmax = 3.1, ymin = 9.5, ymax = 13.5)</span>
+<span class="c">###############################################################################</span>
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs, galphotdust.f850lp, galprop.mstardot,</span>
+<span class="c">#                FIR.z</span>
+<span class="c">#                from FIR, galprop, galphotdust where</span>
+<span class="c">#                FIR.z &gt;= 2.0 and</span>
+<span class="c">#                FIR.z &lt; 4.0 and</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                FIR.gal_id = galphotdust.gal_id and</span>
+<span class="c">#                FIR.halo_id = galphotdust.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-19</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    xlab = r&#39;$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$&#39;</span>
+<span class="c">#    ylab = r&#39;$\log_{10}(\dot{M}_{\star} \ [M_{\odot}])$&#39;</span>
+<span class="c">#    plotColourProperties2(query, xlab, ylab,&#39;ColorSFR&#39;+type, out_folder,</span>
+<span class="c">#                          xmin = -1.4, xmax = 3.1, ymin = -4, ymax = 3.0,</span>
+<span class="c">#                          ylog = True)</span>
+<span class="c">################################################################################</span>
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs, galphotdust.f850lp, galprop.mstardot,</span>
+<span class="c">#                FIR.z</span>
+<span class="c">#                from FIR, galprop, galphotdust where</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                FIR.gal_id = galphotdust.gal_id and</span>
+<span class="c">#                FIR.halo_id = galphotdust.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-19</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    xlab = r&#39;$\log_{10} \left ( \frac{S_{250}}{S_{F775W}} \right )$&#39;</span>
+<span class="c">#    ylab = r&#39;$\log_{10}(\dot{M}_{\star} \ [M_{\odot}])$&#39;</span>
+<span class="c">#    plotColourProperties2(query, xlab, ylab,&#39;ColorSFR2&#39;+type, out_folder,</span>
+<span class="c">#                          xmin = -1.4, xmax = 3.1, ymin = -4, ymax = 3.0,</span>
+<span class="c">#                          ylog = True)</span>
+<span class="c">#################################################################################</span>
+<span class="c">#    print &#39;plot SFRs&#39;</span>
+<span class="c">#################################################################################</span>
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs, FIR.irac_ch4_obs, galprop.mstardot,</span>
+<span class="c">#                galprop.sfr_burst, galprop.sfr_ave, FIR.z, galprop.tmerge</span>
+<span class="c">#                from FIR, galprop where</span>
+<span class="c">#                FIR.z &gt;= 2.0 and</span>
+<span class="c">#                FIR.z &lt; 4.0 and</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 1e-19 and</span>
+<span class="c">#                galprop.mstardot &gt; 0</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    plotColourProperties4(query,&#39;ColorSFRBurst&#39;+type, out_folder)</span>
+<span class="c">###############################################################################</span>
+
+    <span class="k">print</span> <span class="s">&#39;All done&#39;</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

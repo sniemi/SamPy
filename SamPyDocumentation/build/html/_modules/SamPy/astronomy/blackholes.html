@@ -1,0 +1,158 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.astronomy.blackholes &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.astronomy.blackholes</h1><div class="highlight"><pre>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Observational constrains related to black hole</span>
+<span class="sd">masses in galaxies.</span>
+
+<span class="sd">:requires: NumPy</span>
+
+<span class="sd">:version: 0.1</span>
+
+<span class="sd">:author: Sami-Matias Niemi</span>
+<span class="sd">:contact: niemi@stsci.edu</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">N</span>
+
+<span class="c">#This should be global, as all observational data are in the same place</span>
+<span class="c">#Note however that because the data is in Dropbox the absolute path</span>
+<span class="c">#may not be the same. Thus the home directory is tracked using the HOME</span>
+<span class="c">#environment variable</span>
+<span class="n">observation_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#39;HOME&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;/Dropbox/Research/Observations/&#39;</span>
+
+<div class="viewcode-block" id="MassesHaeringRix"><a class="viewcode-back" href="../../../SamPy.astronomy.html#SamPy.astronomy.blackholes.MassesHaeringRix">[docs]</a><span class="k">def</span> <span class="nf">MassesHaeringRix</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    The full data file contains:</span>
+<span class="sd">    Galaxy Type M_{bh} mbherrp mbherrm mbhexp Ref sigma</span>
+<span class="sd">    L_{bulge} \Upsilon M_bulge Ref dist</span>
+<span class="sd">    :return: bulge mass, black hole mass, ellipticals, spirals, S0s</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="nb">file</span> <span class="o">=</span> <span class="n">observation_path</span> <span class="o">+</span> <span class="s">&#39;haering_rix/table1.dat&#39;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">comments</span><span class="o">=</span><span class="s">&#39;;&#39;</span><span class="p">)</span>
+    <span class="n">m_bulge</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">10</span><span class="p">])</span>
+    <span class="n">m_bh</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">5</span><span class="p">])</span>
+    <span class="n">ellip</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
+    <span class="n">s0</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span>
+    <span class="n">spiral</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span>
+    <span class="k">return</span> <span class="n">m_bulge</span><span class="p">,</span> <span class="n">m_bh</span><span class="p">,</span> <span class="n">ellip</span><span class="p">,</span> <span class="n">spiral</span><span class="p">,</span> <span class="n">s0</span>
+</div>
+<div class="viewcode-block" id="MarconiMassFunction"><a class="viewcode-back" href="../../../SamPy.astronomy.html#SamPy.astronomy.blackholes.MarconiMassFunction">[docs]</a><span class="k">def</span> <span class="nf">MarconiMassFunction</span><span class="p">(</span><span class="n">const</span><span class="o">=</span><span class="mf">0.362216</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Marconi et al. BHMF -- columns:</span>
+<span class="sd">    (1)  Log_{10}[ M_bh / M_sun ]</span>
+<span class="sd">    (2)  Log_{10}[-1sigma phi(M_bh)]</span>
+<span class="sd">    (3)  Log_{10}(phi(M_bh)) == dN / [dV*dln(M_bh)], i.e.</span>
+<span class="sd">         n(M_bh) in Mpc^{-3}*ln(M_bh)^{-1} (number per interval in</span>
+<span class="sd">          natural log(M_bh))</span>
+<span class="sd">         -- if you want what is more typically plotted, i.e. number</span>
+<span class="sd">          per log_{10} interval in M_bh, then you need to multiply</span>
+<span class="sd">          phi by ln[10], or add Log_{10}(ln[10]) = 0.362216 to the value of</span>
+<span class="sd">          Log_{10}[Phi] given below</span>
+<span class="sd">    (4)  log_{10}[+1sigma phi(M_bh)]</span>
+
+<span class="sd">    :param constant (float) : ?</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="nb">file</span> <span class="o">=</span> <span class="n">observation_path</span> <span class="o">+</span> <span class="s">&#39;phopkins/rachel_bhmf_data.dat&#39;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">comments</span><span class="o">=</span><span class="s">&#39;;&#39;</span><span class="p">)</span>
+    <span class="n">phi_low</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">const</span>
+    <span class="n">phi_med</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">const</span>
+    <span class="n">phi_high</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">const</span>
+    <span class="k">return</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">phi_low</span><span class="p">,</span> <span class="n">phi_med</span><span class="p">,</span> <span class="n">phi_high</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

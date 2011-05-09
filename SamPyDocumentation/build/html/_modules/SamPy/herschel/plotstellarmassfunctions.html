@@ -1,0 +1,374 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.herschel.plotstellarmassfunctions &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.herschel.plotstellarmassfunctions</h1><div class="highlight"><pre>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">@todo: fix the comoving volume calculation.</span>
+<span class="sd">Take a look the luminosity function plotting...</span>
+
+<span class="sd">@author: Sami Niemi</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s">&#39;text&#39;</span><span class="p">,</span> <span class="n">usetex</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s">&#39;xtick&#39;</span><span class="p">,</span> <span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span> 
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s">&#39;axes&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">1.2</span><span class="p">)</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s">&#39;lines&#39;</span><span class="p">,</span> <span class="n">markeredgewidth</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;lines.linewidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.8</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;legend.fontsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">9</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;legend.handlelength&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;font.size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;xtick.major.size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;ytick.major.size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s">&#39;PS&#39;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">N</span>
+<span class="kn">import</span> <span class="nn">pylab</span> <span class="kn">as</span> <span class="nn">P</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">cosmocalc</span> <span class="kn">import</span> <span class="n">cosmocalc</span>
+<span class="c">#Sami&#39;s repo</span>
+<span class="kn">import</span> <span class="nn">db.sqlite</span>
+<span class="kn">import</span> <span class="nn">astronomy.differentialfunctions</span> <span class="kn">as</span> <span class="nn">df</span>
+
+<div class="viewcode-block" id="plot_stellarmasses"><a class="viewcode-back" href="../../../SamPy.herschel.html#SamPy.herschel.plotstellarmassfunctions.plot_stellarmasses">[docs]</a><span class="k">def</span> <span class="nf">plot_stellarmasses</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">cut</span><span class="p">,</span> <span class="n">redshifts</span><span class="p">,</span>
+                       <span class="n">out_folder</span><span class="p">,</span> <span class="n">obs_data</span><span class="p">,</span>
+                       <span class="n">solid_angle</span> <span class="o">=</span> <span class="mf">1.077</span><span class="o">*</span><span class="mi">10</span><span class="o">**-</span><span class="mi">5</span><span class="p">,</span>
+                       <span class="n">ymin</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="mi">3</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="mi">10</span><span class="o">**</span><span class="mi">6</span><span class="p">,</span>
+                       <span class="n">xmin</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+                       <span class="n">nbins</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="mf">3.0</span><span class="p">,</span>
+                       <span class="n">H0</span> <span class="o">=</span> <span class="mf">70.0</span><span class="p">,</span> <span class="n">WM</span><span class="o">=</span><span class="mf">0.28</span><span class="p">,</span> <span class="n">zmax</span> <span class="o">=</span> <span class="mf">6.0</span><span class="p">,</span>
+                       <span class="n">write_out</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    160 square arcminutes in steradians =</span>
+<span class="sd">    1.354*10**-5 sr (steradians)</span>
+<span class="sd">    Simulation was 10 times the GOODS realization, so</span>
+<span class="sd">    the solid angle is 1.354*10**-4</span>
+<span class="sd">    </span>
+<span class="sd">    @param sigma: sigma level of the errors to be plotted</span>
+<span class="sd">    @param nbins: number of bins (for simulated data)</span>
+<span class="sd">    @param area: actually 1 / area, used to weight galaxies</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c">#fudge factor to handle errors that are way large</span>
+    <span class="n">fudge</span> <span class="o">=</span> <span class="n">ymin</span>
+
+    <span class="c">#subplot numbers</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="mi">3</span> 
+
+    <span class="c">#get data</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.mstar from galprop, FIR where</span>
+<span class="s">    galprop.gal_id = FIR.gal_id and</span>
+<span class="s">    galprop.halo_id = FIR.halo_id and </span><span class="si">%s</span><span class="s">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="n">cut</span>
+    <span class="n">masses_limit</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">sqlite</span><span class="o">.</span><span class="n">get_data_sqlite</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.mstar from galprop, FIR where</span>
+<span class="s">    galprop.gal_id = FIR.gal_id and</span>
+<span class="s">    galprop.halo_id = FIR.halo_id&#39;&#39;&#39;</span>    
+    <span class="n">masses_total</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">sqlite</span><span class="o">.</span><span class="n">get_data_sqlite</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
+
+    <span class="c">#make the figure</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">wspace</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">hspace</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="c">#get the co-moving volume to the backend</span>
+    <span class="n">vol</span> <span class="o">=</span> <span class="n">cosmocalc</span><span class="p">(</span><span class="n">zmax</span><span class="p">,</span> <span class="n">H0</span><span class="p">,</span> <span class="n">WM</span><span class="p">)[</span><span class="s">&#39;VCM_Gpc3&#39;</span><span class="p">]</span>
+
+    <span class="c">#weight each galaxy</span>
+    <span class="n">wghts</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">masses_total</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">solid_angle</span><span class="o">*</span><span class="n">vol</span><span class="o">*</span><span class="mf">1e9</span><span class="p">))</span>
+    <span class="c">#calculate the differential stellar mass function</span>
+    <span class="c">#with log binning</span>
+    <span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">nu</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">diff_function_log_binning</span><span class="p">(</span><span class="n">masses_total</span><span class="p">,</span>
+                                            <span class="n">wgth</span> <span class="o">=</span> <span class="n">wghts</span><span class="p">,</span> 
+                                            <span class="n">mmax</span> <span class="o">=</span> <span class="n">xmax</span><span class="p">,</span>
+                                            <span class="n">mmin</span> <span class="o">=</span> <span class="n">xmin</span><span class="p">,</span>
+                                            <span class="n">nbins</span> <span class="o">=</span> <span class="n">nbins</span><span class="p">,</span>
+                                            <span class="n">log</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+    <span class="c">#get the knots</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="n">b</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">n</span>
+    <span class="c">#plot the knots</span>
+    <span class="n">mtot</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s">&#39;k-&#39;</span><span class="p">)</span>
+    <span class="c">#poisson error</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">nu</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    <span class="n">err</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">solid_angle</span><span class="o">*</span><span class="n">vol</span><span class="o">*</span><span class="mf">1e9</span><span class="p">))</span> <span class="o">*</span> <span class="n">N</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">nu</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span> <span class="o">*</span> <span class="n">sigma</span>
+    <span class="n">up</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">+</span> <span class="n">err</span>
+    <span class="n">lw</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">-</span> <span class="n">err</span>
+    <span class="n">lw</span><span class="p">[</span><span class="n">lw</span> <span class="o">&lt;</span> <span class="n">ymin</span><span class="p">]</span> <span class="o">=</span> <span class="n">ymin</span>
+    <span class="n">stot</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">up</span><span class="p">,</span> <span class="n">lw</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;#728FCE&#39;</span><span class="p">)</span>   
+     
+    <span class="c">#limited mass</span>
+    <span class="n">wghts</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">masses_limit</span><span class="p">))</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">solid_angle</span><span class="o">*</span><span class="n">vol</span><span class="o">*</span><span class="mf">1e9</span><span class="p">))</span>
+    <span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">nu</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">diff_function_log_binning</span><span class="p">(</span><span class="n">masses_limit</span><span class="p">,</span>
+                                            <span class="n">wgth</span> <span class="o">=</span> <span class="n">wghts</span><span class="p">,</span> 
+                                            <span class="n">mmax</span> <span class="o">=</span> <span class="n">xmax</span><span class="p">,</span>
+                                            <span class="n">mmin</span> <span class="o">=</span> <span class="n">xmin</span><span class="p">,</span>
+                                            <span class="n">nbins</span> <span class="o">=</span> <span class="n">nbins</span><span class="p">,</span>
+                                            <span class="n">log</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+    <span class="c">#get the knots</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="n">b</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">n</span>
+    <span class="c">#plot the knots</span>
+    <span class="n">mlim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s">&#39;r-&#39;</span><span class="p">)</span>
+    <span class="c">#poisson error</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">nu</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    <span class="n">err</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">solid_angle</span><span class="o">*</span><span class="n">vol</span><span class="o">*</span><span class="mf">1e9</span><span class="p">))</span> <span class="o">*</span> <span class="n">N</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">nu</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span> <span class="o">*</span> <span class="n">sigma</span>
+    <span class="n">up</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">+</span> <span class="n">err</span>
+    <span class="n">lw</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">-</span> <span class="n">err</span>
+    <span class="n">lw</span><span class="p">[</span><span class="n">lw</span> <span class="o">&lt;</span> <span class="n">ymin</span><span class="p">]</span> <span class="o">=</span> <span class="n">ymin</span>
+    <span class="n">slim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">up</span><span class="p">,</span> <span class="n">lw</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;red&#39;</span><span class="p">)</span>
+    
+    <span class="c">#write to the file if needed, using appending so might get long...</span>
+    <span class="k">if</span> <span class="n">write_out</span><span class="p">:</span>
+        <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">out_folder</span> <span class="o">+</span> <span class="s">&#39;outputTotal.txt&#39;</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+        <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#Mstellar[log10(M_sun)] dN/dlog10(M_sun) high low</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">aa</span><span class="p">,</span> <span class="n">bb</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">dd</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">up</span> <span class="p">,</span><span class="n">lw</span><span class="p">):</span>
+            <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%e</span><span class="s"> </span><span class="si">%e</span><span class="s"> </span><span class="si">%e</span><span class="s"> </span><span class="si">%e</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">aa</span><span class="p">,</span> <span class="n">bb</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">dd</span><span class="p">))</span>
+        <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="c">#add annotation</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="s">&#39;Total&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">),</span> <span class="n">xycoords</span><span class="o">=</span><span class="s">&#39;axes fraction&#39;</span><span class="p">,</span>
+               <span class="n">ha</span> <span class="o">=</span> <span class="s">&#39;center&#39;</span><span class="p">)</span>
+
+    <span class="c">#set scale</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s">&#39;log&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s">&#39;log&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="n">xmin</span><span class="p">,</span> <span class="mi">10</span><span class="o">**</span><span class="n">xmax</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([])</span>
+
+
+    <span class="n">ptot</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s">&#39;#728FCE&#39;</span><span class="p">)</span>
+    <span class="n">plim</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">fc</span><span class="o">=</span><span class="s">&#39;red&#39;</span><span class="p">)</span>
+    <span class="n">sline</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%i</span><span class="s">$\sigma$ errors&#39;</span> <span class="o">%</span> <span class="n">sigma</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="n">mtot</span><span class="p">,</span> <span class="n">ptot</span><span class="p">,</span> <span class="n">plim</span><span class="p">),</span> 
+             <span class="p">(</span><span class="s">&#39;All Galaxies&#39;</span><span class="p">,</span> <span class="n">sline</span><span class="p">,</span> <span class="s">&#39;$S_{250} &gt; 5$ mJy&#39;</span><span class="p">))</span>
+
+    <span class="c">#redshift limited plots</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">red</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">redshifts</span><span class="p">):</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.mstar from galprop, FIR where</span>
+<span class="s">        galprop.gal_id = FIR.gal_id and galprop.halo_id = FIR.halo_id</span>
+<span class="s">        and </span><span class="si">%s</span><span class="s">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">red</span><span class="p">)</span>
+        <span class="n">mtotal</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">sqlite</span><span class="o">.</span><span class="n">get_data_sqlite</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.mstar from galprop, FIR where</span>
+<span class="s">        galprop.gal_id = FIR.gal_id and galprop.halo_id = FIR.halo_id</span>
+<span class="s">        and </span><span class="si">%s</span><span class="s"> and </span><span class="si">%s</span><span class="s">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cut</span><span class="p">,</span> <span class="n">red</span><span class="p">)</span>
+        <span class="n">mlimit</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">sqlite</span><span class="o">.</span><span class="n">get_data_sqlite</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
+        
+        <span class="c">#modify redshift string</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">red</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="n">rtitle</span> <span class="o">=</span> <span class="s">r&#39;$</span><span class="si">%s</span><span class="s"> &lt; z \leq </span><span class="si">%s</span><span class="s">$&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">tmp</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span>
+
+        <span class="c">#make a subplot</span>
+        <span class="n">axs</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="c">#get a comoving volume to the back end</span>
+        <span class="n">volb</span> <span class="o">=</span> <span class="n">cosmocalc</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">6</span><span class="p">]),</span> <span class="n">H0</span><span class="p">,</span> <span class="n">WM</span><span class="p">)[</span><span class="s">&#39;VCM_Gpc3&#39;</span><span class="p">]</span>
+        <span class="n">volf</span> <span class="o">=</span> <span class="n">cosmocalc</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="n">H0</span><span class="p">,</span> <span class="n">WM</span><span class="p">)[</span><span class="s">&#39;VCM_Gpc3&#39;</span><span class="p">]</span>
+
+        <span class="c">#weights</span>
+        <span class="n">wgvol</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">solid_angle</span><span class="o">*</span><span class="n">volb</span><span class="o">*</span><span class="mf">1e9</span><span class="p">))</span>
+<span class="c">#        wgvol = (1./(solid_angle*(volb-volf)*1e9))</span>
+        <span class="n">wghts</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mtotal</span><span class="p">))</span> <span class="o">+</span> <span class="n">wgvol</span>
+        <span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">nu</span> <span class="o">=</span>  <span class="n">df</span><span class="o">.</span><span class="n">diff_function_log_binning</span><span class="p">(</span><span class="n">mtotal</span><span class="p">,</span>
+                                                 <span class="n">wgth</span> <span class="o">=</span> <span class="n">wghts</span><span class="p">,</span> 
+                                                 <span class="n">mmax</span> <span class="o">=</span> <span class="n">xmax</span><span class="p">,</span>
+                                                 <span class="n">mmin</span> <span class="o">=</span> <span class="n">xmin</span><span class="p">,</span>
+                                                 <span class="n">nbins</span> <span class="o">=</span> <span class="n">nbins</span><span class="p">,</span>
+                                                 <span class="n">log</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="n">b</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">n</span>
+        <span class="c">#plot the knots</span>
+        <span class="n">axs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s">&#39;k-&#39;</span><span class="p">)</span>
+        <span class="c">#poisson error</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">nu</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">wgvol</span> <span class="o">*</span> <span class="n">N</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">nu</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span> <span class="o">*</span> <span class="n">sigma</span>
+        <span class="n">up</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">+</span> <span class="n">err</span>
+        <span class="n">lw</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">-</span> <span class="n">err</span>
+        <span class="n">lw</span><span class="p">[</span><span class="n">lw</span> <span class="o">&lt;</span> <span class="n">ymin</span><span class="p">]</span> <span class="o">=</span> <span class="n">ymin</span>
+        <span class="n">axs</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">up</span><span class="p">,</span> <span class="n">lw</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;#728FCE&#39;</span><span class="p">)</span>
+        
+        <span class="c">#limited mass</span>
+        <span class="n">wghts</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mlimit</span><span class="p">))</span> <span class="o">+</span> <span class="n">wgvol</span>
+        <span class="n">b</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">nu</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">diff_function_log_binning</span><span class="p">(</span><span class="n">mlimit</span><span class="p">,</span>
+                                                <span class="n">wgth</span> <span class="o">=</span> <span class="n">wghts</span><span class="p">,</span> 
+                                                <span class="n">mmax</span> <span class="o">=</span> <span class="n">xmax</span><span class="p">,</span>
+                                                <span class="n">mmin</span> <span class="o">=</span> <span class="n">xmin</span><span class="p">,</span>
+                                                <span class="n">nbins</span> <span class="o">=</span> <span class="n">nbins</span><span class="p">,</span>
+                                                <span class="n">log</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="n">b</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">n</span>
+        <span class="c">#plot the knots</span>
+        <span class="n">axs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s">&#39;r-&#39;</span><span class="p">)</span>
+        <span class="c">#poisson error</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">nu</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">wgvol</span> <span class="o">*</span> <span class="n">N</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">nu</span><span class="p">[</span><span class="n">mask</span><span class="p">])</span> <span class="o">*</span> <span class="n">sigma</span>
+        <span class="n">up</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">+</span> <span class="n">err</span>
+        <span class="n">lw</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">-</span> <span class="n">err</span>
+        <span class="n">lw</span><span class="p">[</span><span class="n">lw</span> <span class="o">&lt;</span> <span class="n">ymin</span><span class="p">]</span> <span class="o">=</span> <span class="n">ymin</span>
+        <span class="n">axs</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">up</span><span class="p">,</span> <span class="n">lw</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;red&#39;</span><span class="p">)</span>
+
+        <span class="c">#write to output</span>
+        <span class="k">if</span> <span class="n">write_out</span><span class="p">:</span>
+            <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">out_folder</span> <span class="o">+</span> <span class="s">&#39;outputredshiftbin</span><span class="si">%i</span><span class="s">.txt&#39;</span> <span class="o">%</span> <span class="n">i</span><span class="p">,</span> <span class="s">&#39;a&#39;</span><span class="p">)</span>
+            <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#&#39;</span> <span class="o">+</span> <span class="n">rtitle</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+            <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#Mstellar[log10(M_sun)] dN/dlog10(M_sun) high low</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">aa</span><span class="p">,</span> <span class="n">bb</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">dd</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">mask</span><span class="p">],</span> <span class="n">up</span><span class="p">,</span> <span class="n">lw</span><span class="p">):</span>
+                <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%e</span><span class="s"> </span><span class="si">%e</span><span class="s"> </span><span class="si">%e</span><span class="s"> </span><span class="si">%e</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">aa</span><span class="p">,</span> <span class="n">bb</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">dd</span><span class="p">))</span>
+            <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="c">#add annotation</span>
+        <span class="n">axs</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">rtitle</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">),</span> <span class="n">xycoords</span><span class="o">=</span><span class="s">&#39;axes fraction&#39;</span><span class="p">,</span>
+                     <span class="n">ha</span> <span class="o">=</span> <span class="s">&#39;center&#39;</span><span class="p">)</span>
+
+        <span class="c">#set scales</span>
+        <span class="n">axs</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s">&#39;log&#39;</span><span class="p">)</span>
+        <span class="n">axs</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s">&#39;log&#39;</span><span class="p">)</span>
+        <span class="n">axs</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="n">xmin</span><span class="p">,</span> <span class="mi">10</span><span class="o">**</span><span class="n">xmax</span><span class="p">)</span>
+        <span class="n">axs</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+
+        <span class="c">#remove unnecessary ticks and add units</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">axs</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([])</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">axs</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">r&#39;$M_{\star} \quad [M_{\odot}]$&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">axs</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">axs</span><span class="o">.</span><span class="n">get_xticks</span><span class="p">()[</span><span class="mi">1</span><span class="p">:])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">axs</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([])</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">axs</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">r&#39;$\frac{dN}{d \log_{10} M_{\star}} \ [Mpc^{-3} \ dex^{-1}]$&#39;</span><span class="p">)</span>
+            
+    <span class="c">#save figure</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_folder</span><span class="o">+</span><span class="s">&#39;stellarmassfunction.ps&#39;</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c">#find the home directory, because the output is to dropbox </span>
+    <span class="c">#and my user name is not always the same, this hack is required.</span>
+    <span class="n">hm</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#39;HOME&#39;</span><span class="p">)</span>
+    <span class="c">#constants</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">hm</span> <span class="o">+</span> <span class="s">&#39;/Dropbox/Research/Herschel/runs/reds_zero/&#39;</span>
+    <span class="n">database</span> <span class="o">=</span> <span class="s">&#39;sams.db&#39;</span>
+    <span class="n">out_folder</span> <span class="o">=</span> <span class="n">hm</span> <span class="o">+</span> <span class="s">&#39;/Dropbox/Research/Herschel/plots/stellar_mass_functions/&#39;</span>
+    <span class="n">obs_data</span> <span class="o">=</span> <span class="n">hm</span><span class="o">+</span><span class="s">&#39;/Dropbox/Research/Herschel/obs_data/&#39;</span>
+
+    <span class="c">#5sigma limits derived by Kuang</span>
+    <span class="n">depths</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;pacs100_obs&#39;</span><span class="p">:</span> <span class="mf">1.7</span><span class="p">,</span>
+              <span class="s">&#39;pacs160_obs&#39;</span><span class="p">:</span> <span class="mf">4.5</span><span class="p">,</span>
+              <span class="s">&#39;spire250_obs&#39;</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">,</span>
+              <span class="s">&#39;spire350_obs&#39;</span><span class="p">:</span> <span class="mf">9.0</span><span class="p">,</span>
+              <span class="s">&#39;spire500_obs&#39;</span><span class="p">:</span> <span class="mf">10.0</span>
+              <span class="p">}</span>
+
+    <span class="c">#luminosity cut</span>
+<span class="c">#    cut = &#39;FIR.spire250_obs &gt; 5.0e-3 and FIR.spire250_obs &lt; 10e6&#39;</span>
+    <span class="n">cut</span> <span class="o">=</span> <span class="s">&#39;FIR.spire250 &gt; 9&#39;</span>
+
+    <span class="n">redshifts</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;FIR.z &gt;= 0.0 and FIR.z &lt;= 0.5&#39;</span><span class="p">,</span>
+                 <span class="s">&#39;FIR.z &gt; 1.9 and FIR.z &lt;= 2.1&#39;</span><span class="p">,</span>
+                 <span class="s">&#39;FIR.z &gt; 2.9 and FIR.z &lt;= 3.1&#39;</span><span class="p">,</span>
+                 <span class="s">&#39;FIR.z &gt; 3.9 and FIR.z &lt;= 4.1&#39;</span><span class="p">]</span>
+    
+    <span class="n">plot_stellarmasses</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">cut</span><span class="p">,</span> <span class="n">redshifts</span><span class="p">,</span>
+                       <span class="n">out_folder</span><span class="p">,</span> <span class="n">obs_data</span><span class="p">,</span>
+                       <span class="n">xmin</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="mi">12</span><span class="p">,</span>
+                       <span class="n">ymin</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**-</span><span class="mi">6</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**-</span><span class="mi">1</span><span class="p">,</span>
+                       <span class="n">nbins</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="mf">5.0</span><span class="p">)</span><span class="c">#,</span>
+                       <span class="c">#write_out = True)</span>
+
+
+    <span class="k">print</span> <span class="s">&#39;All done...&#39;</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

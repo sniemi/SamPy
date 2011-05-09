@@ -1,0 +1,633 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.focus.FocusModel &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.focus.FocusModel</h1><div class="highlight"><pre>
+<span class="sd">&#39;&#39;&#39;User Interface for Focus Monitor&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">string</span><span class="o">,</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">dates</span>
+<span class="kn">from</span> <span class="nn">matplotlib.dates</span> <span class="kn">import</span> <span class="n">MinuteLocator</span><span class="p">,</span> <span class="n">DateFormatter</span>
+<span class="kn">from</span> <span class="nn">Tkinter</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">tkMessageBox</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">N</span>
+<span class="kn">import</span> <span class="nn">pylab</span> <span class="kn">as</span> <span class="nn">P</span>
+
+
+<div class="viewcode-block" id="modelled"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.FocusModel.modelled">[docs]</a><span class="k">def</span> <span class="nf">modelled</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span> <span class="n">startTime</span><span class="p">,</span> <span class="n">stopTime</span><span class="p">):</span>
+    <span class="s">&quot; Date in form of a string: month day  year. Times as 15:33 - 24 hour clock&quot;</span>
+    <span class="k">print</span> <span class="s">&#39;Modelled&#39;</span><span class="p">,</span> <span class="n">camera</span><span class="p">,</span> <span class="n">date</span><span class="p">,</span><span class="n">startTime</span><span class="p">,</span><span class="n">stopTime</span>
+    <span class="n">thermal</span> <span class="o">=</span> <span class="s">&quot;/Users/niemi/Desktop/temp/hst/OTA/thermal/&quot;</span>
+ 
+    <span class="c"># Focus model offsets</span>
+    <span class="n">camConst</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;PC&#39;</span><span class="p">:</span> <span class="mf">261.1</span><span class="p">,</span> <span class="s">&#39;HRC&#39;</span><span class="p">:</span> <span class="mf">261.0</span><span class="p">,</span> <span class="s">&#39;WFC1&#39;</span><span class="p">:</span> <span class="mf">259.7</span><span class="p">,</span> <span class="s">&#39;WFC2&#39;</span><span class="p">:</span> <span class="mf">260.35</span><span class="p">}</span>
+    <span class="n">secMove</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;2004.12.22&#39;</span><span class="p">:</span><span class="mf">4.16</span><span class="p">,</span> <span class="s">&#39;2006.07.31&#39;</span><span class="p">:</span><span class="mf">5.34</span><span class="p">}</span>
+
+    <span class="c"># Define data lists</span>
+    <span class="n">julian</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">temp1</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">temp2</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">temp3</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">temp4</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">temp5</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">temp6</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">hours</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">focusDate</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="s">&#39;%m/</span><span class="si">%d</span><span class="s">/%Y&#39;</span><span class="p">)</span>
+    <span class="n">timeAxis</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">year</span> <span class="o">=</span> <span class="n">focusDate</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">month</span> <span class="o">=</span> <span class="n">focusDate</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">day</span> <span class="o">=</span> <span class="n">focusDate</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="c"># Get date-dependent focus adjustment</span>
+    <span class="n">focusShift</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">dateStamp</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%4d</span><span class="s">.</span><span class="si">%02d</span><span class="s">.</span><span class="si">%02d</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">year</span><span class="p">,</span><span class="n">month</span><span class="p">,</span><span class="n">day</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">secMove</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">dateStamp</span> <span class="o">&gt;</span> <span class="n">k</span><span class="p">:</span>
+            <span class="n">focusShift</span> <span class="o">=</span> <span class="n">focusShift</span> <span class="o">+</span> <span class="n">secMove</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+    <span class="k">print</span> <span class="s">&#39;Secondary mirror move &#39;</span><span class="p">,</span> <span class="n">focusShift</span>
+
+    <span class="n">dayOfYear</span> <span class="o">=</span> <span class="n">focusDate</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span>
+    <span class="n">dayString</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%03d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">dayOfYear</span>
+    <span class="n">yearString</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">year</span><span class="p">)</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">startTime</span><span class="p">,</span><span class="s">&#39;:&#39;</span><span class="p">)</span>
+    <span class="n">stop</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">stopTime</span><span class="p">,</span> <span class="s">&#39;:&#39;</span><span class="p">)</span>
+    <span class="n">startHour</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">startMinute</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">start</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">stopHour</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">stop</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">stopMinute</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">stop</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">jday</span> <span class="o">=</span> <span class="n">toJulian</span><span class="p">(</span><span class="n">year</span><span class="p">,</span><span class="n">month</span><span class="p">,</span><span class="n">day</span><span class="p">)</span>
+    <span class="n">jstart</span> <span class="o">=</span> <span class="n">jday</span> <span class="o">+</span><span class="p">(</span><span class="n">startHour</span><span class="o">+</span><span class="n">startMinute</span><span class="o">/</span><span class="mf">60.0</span><span class="p">)</span><span class="o">/</span><span class="mf">24.0</span> <span class="o">-</span> <span class="mf">40.0</span><span class="o">/</span><span class="p">(</span><span class="mf">60.0</span><span class="o">*</span><span class="mf">24.0</span><span class="p">)</span>  <span class="c"># 40 minute backtrack</span>
+    <span class="n">jstop</span> <span class="o">=</span> <span class="n">jday</span> <span class="o">+</span> <span class="p">(</span><span class="n">stopHour</span> <span class="o">+</span> <span class="n">stopMinute</span><span class="o">/</span><span class="mf">60.0</span><span class="p">)</span><span class="o">/</span><span class="mf">24.0</span>
+    <span class="n">fileName</span> <span class="o">=</span>  <span class="s">&#39;thermalData&#39;</span> <span class="o">+</span> <span class="n">yearString</span> <span class="o">+</span> <span class="s">&#39;.dat&#39;</span> 
+    <span class="c">#if not(os.access(thermal + fileName, os.F_OK)): # then check Chris Long&#39;s file</span>
+    <span class="n">f</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">thermal</span> <span class="o">+</span> <span class="n">fileName</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>    
+    <span class="k">while</span> <span class="n">f</span><span class="p">:</span> 
+        <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s">&#39;&#39;</span> <span class="p">:</span> <span class="k">break</span>
+        <span class="n">columns</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="n">timeStamp</span> <span class="o">=</span> <span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">jul</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">jstart</span> <span class="o">&lt;=</span> <span class="n">jul</span> <span class="o">&lt;=</span> <span class="n">jstop</span> <span class="p">:</span>
+            <span class="n">julian</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">jul</span><span class="p">)</span>
+            <span class="n">tup</span> <span class="o">=</span> <span class="n">fromJulian</span><span class="p">(</span><span class="n">jul</span><span class="p">)</span>
+            <span class="n">hr</span> <span class="o">=</span> <span class="n">tup</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span> <span class="p">(</span><span class="n">tup</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">+</span><span class="n">tup</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">/</span><span class="mf">60.0</span><span class="p">)</span><span class="o">/</span><span class="mf">60.0</span> <span class="c"># Extract hours</span>
+            <span class="n">hours</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hr</span><span class="p">)</span>
+            <span class="n">tobj</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="n">tup</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tup</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">tup</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">tup</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">tup</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">tup</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+            <span class="n">timeAxis</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tobj</span><span class="p">)</span>
+            <span class="n">num</span> <span class="o">=</span> <span class="n">dates</span><span class="o">.</span><span class="n">date2num</span><span class="p">(</span><span class="n">tobj</span><span class="p">)</span>
+            <span class="n">temp1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">columns</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="n">temp2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">columns</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span> 
+            <span class="n">temp3</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">columns</span><span class="p">[</span><span class="mi">4</span><span class="p">]))</span>
+            <span class="n">temp4</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">columns</span><span class="p">[</span><span class="mi">5</span><span class="p">]))</span>
+            <span class="n">temp5</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">columns</span><span class="p">[</span><span class="mi">6</span><span class="p">]))</span>
+            <span class="n">temp6</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">columns</span><span class="p">[</span><span class="mi">7</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="n">day</span> <span class="o">&gt;</span> <span class="n">dayOfYear</span> <span class="p">:</span> <span class="k">break</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    
+    <span class="k">if</span>  <span class="nb">len</span><span class="p">(</span><span class="n">temp1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c"># No temperature data in time range - Check Chris Long file</span>
+        <span class="n">longFile</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">thermal</span> <span class="o">+</span> <span class="s">&#39;/breathing2009/BreathingData&#39;</span> <span class="o">+</span> <span class="s">&#39;*&#39;</span><span class="p">)</span> <span class="c"># will produce a list</span>
+        <span class="k">if</span>  <span class="nb">len</span><span class="p">(</span><span class="n">longFile</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">longFile</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+            <span class="k">print</span> <span class="s">&#39;Using &#39;</span><span class="p">,</span> <span class="n">longFile</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="c"># Use latest version</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">longFile</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+            <span class="k">while</span> <span class="n">f</span><span class="p">:</span> 
+                <span class="n">line</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s">&#39;&#39;</span> <span class="p">:</span> <span class="k">break</span>
+                <span class="n">columns</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+                <span class="n">timeStamp</span> <span class="o">=</span> <span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">jul</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">columns</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+                <span class="k">if</span> <span class="n">jstart</span> <span class="o">&lt;=</span> <span class="n">jul</span> <span class="o">&lt;=</span> <span class="n">jstop</span> <span class="p">:</span>
+                    <span class="n">julian</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">jul</span><span class="p">)</span>
+                    <span class="n">tup</span> <span class="o">=</span> <span class="n">fromJulian</span><span class="p">(</span><span class="n">jul</span><span class="p">)</span>
+                    <span class="n">hr</span> <span class="o">=</span> <span class="n">tup</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">+</span> <span class="p">(</span><span class="n">tup</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">+</span><span class="n">tup</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">/</span><span class="mf">60.0</span><span class="p">)</span><span class="o">/</span><span class="mf">60.0</span> <span class="c"># Extract hours</span>
+                    <span class="n">hours</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hr</span><span class="p">)</span>
+                    <span class="n">tobj</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="n">tup</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">tup</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">tup</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">tup</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">tup</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">tup</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+                    <span class="n">timeAxis</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tobj</span><span class="p">)</span>
+                    <span class="n">num</span> <span class="o">=</span> <span class="n">dates</span><span class="o">.</span><span class="n">date2num</span><span class="p">(</span><span class="n">tobj</span><span class="p">)</span>
+                    <span class="n">temp1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">columns</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+                    <span class="n">temp2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">columns</span><span class="p">[</span><span class="mi">3</span><span class="p">]))</span> 
+                    <span class="n">temp3</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">columns</span><span class="p">[</span><span class="mi">4</span><span class="p">]))</span>
+                    <span class="n">temp4</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">columns</span><span class="p">[</span><span class="mi">5</span><span class="p">]))</span>
+                    <span class="n">temp5</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">columns</span><span class="p">[</span><span class="mi">6</span><span class="p">]))</span>
+                    <span class="n">temp6</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">columns</span><span class="p">[</span><span class="mi">7</span><span class="p">]))</span>
+                    <span class="k">if</span> <span class="n">day</span> <span class="o">&gt;</span> <span class="n">dayOfYear</span> <span class="p">:</span> <span class="k">break</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;Did not find Chris Long file&#39;</span>
+            <span class="k">print</span> <span class="s">&#39;No matching thermal data file&#39;</span>
+            <span class="n">gui</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="s">&#39;No matching thermal data file&#39;</span><span class="p">)</span>
+            <span class="k">return</span>
+        
+    <span class="n">jtime</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">julian</span><span class="p">)</span>
+    <span class="n">aftLS</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">temp1</span><span class="p">)</span>
+    <span class="n">trussAxial</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">temp2</span><span class="p">)</span>
+    <span class="n">trussDiam</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">temp3</span><span class="p">)</span>
+    <span class="n">aftShroud</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">temp4</span><span class="p">)</span>
+    <span class="n">fwdShell</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">temp5</span><span class="p">)</span>
+    <span class="n">lightShield</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">temp6</span><span class="p">)</span>
+    <span class="c">#tBreath is value of light shield temp  minus average of previous eight values</span>
+    <span class="n">tBreath</span> <span class="o">=</span> <span class="n">lightShield</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c"># Make a real copy</span>
+    <span class="n">l</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">tBreath</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">l</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;No temperature data&#39;</span>
+        <span class="n">gui</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="s">&#39;No temperature data&#39;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="n">r1</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">tBreath</span><span class="p">[</span><span class="n">r1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">r2</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="n">l</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">r2</span><span class="p">:</span>
+        <span class="n">tBreath</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.7</span><span class="o">*</span><span class="p">(</span><span class="n">lightShield</span><span class="p">[</span><span class="n">r</span><span class="p">]</span><span class="o">-</span><span class="nb">sum</span><span class="p">(</span><span class="n">lightShield</span><span class="p">[</span><span class="n">r</span><span class="o">-</span><span class="mi">8</span><span class="p">:</span><span class="n">r</span><span class="p">])</span><span class="o">/</span><span class="mf">8.0</span><span class="p">)</span>
+
+    <span class="n">focusModel</span> <span class="o">=</span> <span class="n">camConst</span><span class="p">[</span><span class="n">camera</span><span class="p">]</span> <span class="o">+</span> <span class="n">focusShift</span> \
+    <span class="o">-</span> <span class="mf">0.0052</span><span class="o">*</span><span class="n">jtime</span> <span class="o">+</span> <span class="mf">0.48</span><span class="o">*</span><span class="n">aftLS</span> <span class="o">+</span> <span class="mf">0.81</span><span class="o">*</span><span class="n">trussAxial</span> <span class="o">-</span> <span class="mf">0.28</span><span class="o">*</span><span class="n">aftShroud</span> <span class="o">+</span> <span class="mf">0.18</span><span class="o">*</span><span class="n">fwdShell</span> <span class="o">+</span> <span class="mf">0.55</span><span class="o">*</span><span class="n">tBreath</span>
+    <span class="k">print</span> <span class="s">&#39;Average model</span><span class="si">%10.2f</span><span class="s">&#39;</span><span class="o">%</span> <span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">focusModel</span><span class="p">[</span><span class="mi">8</span><span class="p">:]))</span>
+    <span class="c"># Just the Bely term</span>
+    <span class="n">Bely</span> <span class="o">=</span> <span class="mf">0.55</span><span class="o">*</span><span class="n">tBreath</span>
+    <span class="n">bShift</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">focusModel</span><span class="p">)</span><span class="o">-</span> <span class="n">N</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">Bely</span><span class="p">)</span>
+    <span class="n">Bely</span> <span class="o">=</span> <span class="n">Bely</span> <span class="o">+</span><span class="n">bShift</span>
+    
+    <span class="c"># Time independent Focus model with mean zero offset</span>
+    <span class="n">flatModel</span><span class="o">=</span> <span class="n">camConst</span><span class="p">[</span><span class="n">camera</span><span class="p">]</span> <span class="o">+</span> <span class="n">focusShift</span> \
+    <span class="o">+</span> <span class="mf">0.48</span><span class="o">*</span><span class="n">aftLS</span> <span class="o">+</span> <span class="mf">0.81</span><span class="o">*</span><span class="n">trussAxial</span> <span class="o">-</span> <span class="mf">0.28</span><span class="o">*</span><span class="n">aftShroud</span> <span class="o">+</span> <span class="mf">0.18</span><span class="o">*</span><span class="n">fwdShell</span> <span class="o">+</span> <span class="mf">0.55</span><span class="o">*</span><span class="n">tBreath</span> <span class="o">-</span> <span class="mf">281.64</span>
+    <span class="k">print</span> <span class="s">&#39;Flat model</span><span class="si">%10.2f</span><span class="s">&#39;</span><span class="o">%</span> <span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">flatModel</span><span class="p">[</span><span class="mi">8</span><span class="p">:]))</span>
+    
+
+
+    <span class="c"># Make up an output file</span>
+    
+    <span class="n">op</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;plotdata&#39;</span> <span class="o">+</span> <span class="n">dateStamp</span> <span class="o">+</span> <span class="s">&#39;.txt&#39;</span><span class="p">,</span><span class="s">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">op</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;Julian Date     Date       Time    Model  Flat Model</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="n">l</span><span class="p">):</span>
+        <span class="n">dataString1</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%12.6f</span><span class="s">&#39;</span> <span class="o">%</span><span class="n">jtime</span><span class="p">[</span><span class="n">r</span><span class="p">]</span>
+        <span class="n">dataString2</span> <span class="o">=</span> <span class="n">timeAxis</span><span class="p">[</span><span class="n">r</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">&#39; %b </span><span class="si">%d</span><span class="s"> %Y %H:%M:%S&#39;</span><span class="p">)</span>
+        <span class="n">dataString3</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%8.4f</span><span class="s"> </span><span class="si">%8.4f</span><span class="s"> </span><span class="se">\n</span><span class="s">&#39;</span><span class="o">%</span> \
+        <span class="p">(</span><span class="n">focusModel</span><span class="p">[</span><span class="n">r</span><span class="p">],</span> <span class="n">flatModel</span><span class="p">[</span><span class="n">r</span><span class="p">])</span>
+        <span class="n">op</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">dataString1</span> <span class="o">+</span> <span class="n">dataString2</span> <span class="o">+</span> <span class="n">dataString3</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">timeAxis</span><span class="p">[</span><span class="n">r</span><span class="p">]</span>
+        <span class="c">#print t.strftime(&#39;%b %d %Y %H:%M:%S&#39;)</span>
+    <span class="n">op</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="c"># Set up for plots        </span>
+    <span class="n">P</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  
+    <span class="n">P</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span> 
+    <span class="n">P</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Degrees C&#39;</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Temperatures &#39;</span> <span class="o">+</span> <span class="n">date</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dates</span><span class="o">.</span><span class="n">date2num</span><span class="p">(</span><span class="n">timeAxis</span><span class="p">),</span><span class="n">temp3</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dates</span><span class="o">.</span><span class="n">date2num</span><span class="p">(</span><span class="n">timeAxis</span><span class="p">),</span><span class="n">temp4</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dates</span><span class="o">.</span><span class="n">date2num</span><span class="p">(</span><span class="n">timeAxis</span><span class="p">),</span><span class="n">temp5</span><span class="p">)</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">MinuteLocator</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">40</span><span class="p">)))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">((</span><span class="n">DateFormatter</span><span class="p">(</span><span class="s">&#39;%H:%M&#39;</span><span class="p">)))</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="s">&#39;Truss Dia&#39;</span><span class="p">,</span> <span class="s">&#39;Aft Shr&#39;</span><span class="p">,</span> <span class="s">&#39;Fwd Sh&#39;</span><span class="p">),</span> <span class="n">loc</span> <span class="o">=</span> <span class="s">&#39;upper left&#39;</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dates</span><span class="o">.</span><span class="n">date2num</span><span class="p">(</span><span class="n">timeAxis</span><span class="p">),</span><span class="n">temp1</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dates</span><span class="o">.</span><span class="n">date2num</span><span class="p">(</span><span class="n">timeAxis</span><span class="p">),</span><span class="n">temp6</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="s">&#39;Aft LS&#39;</span><span class="p">,</span><span class="s">&#39;Light Sh&#39;</span><span class="p">))</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Time&#39;</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Degrees C&#39;</span><span class="p">)</span>
+    <span class="n">ax2</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><span class="n">MinuteLocator</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">40</span><span class="p">)))</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">((</span><span class="n">DateFormatter</span><span class="p">(</span><span class="s">&#39;%H:%M&#39;</span><span class="p">)))</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="n">P</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="c">#P.clf()</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hours</span><span class="p">[</span><span class="mi">8</span><span class="p">:],</span><span class="n">focusModel</span><span class="p">[</span><span class="mi">8</span><span class="p">:],</span> <span class="s">&#39;-ro&#39;</span><span class="p">)</span>
+    <span class="c">#P.plot(hours[8:], Bely[8:], &#39;-g+&#39;)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Model &#39;</span> <span class="o">+</span> <span class="n">date</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Time&#39;</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;microns&#39;</span><span class="p">)</span>
+    <span class="c">#print gui.display</span>
+    <span class="k">if</span> <span class="n">gui</span><span class="o">.</span><span class="n">display</span> <span class="o">==</span> <span class="s">&#39;Comparison&#39;</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="s">&#39;Measured&#39;</span><span class="p">,</span> <span class="s">&#39;Model&#39;</span><span class="p">),</span> <span class="n">loc</span> <span class="o">=</span> <span class="s">&#39;upper right&#39;</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+    <span class="k">return</span>
+</div>
+<div class="viewcode-block" id="measured"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.FocusModel.measured">[docs]</a><span class="k">def</span> <span class="nf">measured</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">testDate</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Extract focus measurements&#39;&#39;&#39;</span>
+    <span class="k">print</span> <span class="s">&#39;MEASURED&#39;</span>
+    <span class="n">fDate</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">fJulian</span> <span class="o">=</span><span class="p">[]</span>
+    <span class="n">fActual</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">dateList</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">measure</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">camera</span> <span class="o">+</span> <span class="s">&#39;FocusHistory.txt&#39;</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">focusData</span> <span class="o">=</span> <span class="n">measure</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+    <span class="n">measure</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span> <span class="k">print</span> <span class="n">focusData</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="c">#Temporary test</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">focusData</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">count</span><span class="p">,</span> <span class="s">&#39;lines in History file&#39;</span>
+    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">count</span><span class="p">):</span>
+        <span class="n">pieces</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">focusData</span><span class="p">[</span><span class="n">l</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pieces</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">:</span>
+           <span class="n">dataSet</span> <span class="o">=</span> <span class="n">pieces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+           <span class="k">if</span> <span class="n">dataSet</span> <span class="o">!=</span> <span class="s">&#39;0&#39;</span><span class="p">:</span>
+              <span class="n">fDate</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pieces</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+              <span class="n">fJulian</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pieces</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+              <span class="n">fActual</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pieces</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+    <span class="n">entries</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fDate</span><span class="p">)</span>
+    <span class="k">print</span> <span class="n">entries</span><span class="p">,</span><span class="s">&#39; entries&#39;</span>
+
+    <span class="n">plotJulian</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">plotTime</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">plotFocus</span> <span class="o">=</span><span class="p">[]</span>
+    <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span> <span class="p">:</span>
+        <span class="k">if</span> <span class="n">fDate</span><span class="p">[</span><span class="n">e</span><span class="p">]</span> <span class="o">==</span> <span class="n">testDate</span> <span class="p">:</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">fJulian</span><span class="p">[</span><span class="n">e</span><span class="p">])</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="mf">24.0</span><span class="o">*</span><span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="n">floor</span><span class="p">(</span><span class="n">t</span><span class="p">))</span>
+            <span class="n">plotJulian</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+            <span class="n">plotTime</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">h</span><span class="p">)</span>
+            <span class="n">plotFocus</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">fActual</span><span class="p">[</span><span class="n">e</span><span class="p">]))</span>
+    <span class="n">meanF</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">plotFocus</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">plotFocus</span><span class="p">)</span>
+    <span class="k">print</span> <span class="s">&#39;Average measurement</span><span class="si">%10.2f</span><span class="s">&#39;</span><span class="o">%</span> <span class="p">(</span><span class="n">meanF</span><span class="p">)</span>
+    <span class="c"># Reformat date</span>
+    <span class="n">pDate</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">testDate</span><span class="p">,</span><span class="s">&#39;%m/</span><span class="si">%d</span><span class="s">/%y&#39;</span><span class="p">)</span>
+    <span class="n">dateText</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">asctime</span><span class="p">(</span><span class="n">pDate</span><span class="p">)</span>
+    <span class="n">datePieces</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">dateText</span><span class="p">)</span>
+    <span class="n">plotDate</span> <span class="o">=</span> <span class="n">datePieces</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">datePieces</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="n">datePieces</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+
+    <span class="n">P</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>          
+    <span class="n">P</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">plotTime</span><span class="p">,</span><span class="n">plotFocus</span><span class="p">,</span><span class="s">&#39;-bo&#39;</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">camera</span> <span class="o">+</span><span class="s">&#39; Focus measurement &#39;</span> <span class="o">+</span> <span class="n">plotDate</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;Time&#39;</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;Microns&#39;</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">plotJulian</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">plotJulian</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+</div>
+<div class="viewcode-block" id="toJulian"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.FocusModel.toJulian">[docs]</a><span class="k">def</span> <span class="nf">toJulian</span><span class="p">(</span><span class="n">year</span><span class="p">,</span><span class="n">month</span><span class="p">,</span><span class="n">day</span><span class="p">)</span> <span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;Use time functions&#39;&#39;&#39;</span>
+    <span class="n">dateString</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">year</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">month</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">day</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; UTC&#39;</span>
+    <span class="n">tup</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">dateString</span><span class="p">,</span> <span class="s">&#39;%Y %m </span><span class="si">%d</span><span class="s"> %Z&#39;</span><span class="p">)</span>
+    <span class="n">sec</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">mktime</span><span class="p">(</span><span class="n">tup</span><span class="p">)</span>
+    <span class="n">days</span> <span class="o">=</span> <span class="p">(</span><span class="n">sec</span><span class="o">-</span><span class="n">time</span><span class="o">.</span><span class="n">timezone</span><span class="p">)</span><span class="o">/</span><span class="mf">86400.0</span>  <span class="c"># Cancel time zone correction</span>
+    <span class="n">jday</span> <span class="o">=</span> <span class="n">days</span> <span class="o">+</span> <span class="mi">40587</span> <span class="c"># Julian date of Jan 1 1900</span>
+    <span class="k">return</span> <span class="n">jday</span>
+</div>
+<div class="viewcode-block" id="fromJulian"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.FocusModel.fromJulian">[docs]</a><span class="k">def</span> <span class="nf">fromJulian</span><span class="p">(</span><span class="n">j</span><span class="p">):</span>
+    <span class="n">days</span> <span class="o">=</span> <span class="n">j</span><span class="o">-</span><span class="mi">40587</span> <span class="c"># From Jan 1 1900</span>
+    <span class="n">sec</span> <span class="o">=</span> <span class="n">days</span><span class="o">*</span><span class="mf">86400.0</span>
+    <span class="n">tup</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">gmtime</span><span class="p">(</span><span class="n">sec</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tup</span>
+
+</div>
+<div class="viewcode-block" id="comparison"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.FocusModel.comparison">[docs]</a><span class="k">def</span> <span class="nf">comparison</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">date</span><span class="p">):</span>
+    <span class="n">monthName</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;blank&#39;</span><span class="p">,</span><span class="s">&#39;January&#39;</span><span class="p">,</span> <span class="s">&#39;February&#39;</span><span class="p">,</span> <span class="s">&#39;March&#39;</span><span class="p">,</span> <span class="s">&#39;April&#39;</span><span class="p">,</span> <span class="s">&#39;May&#39;</span><span class="p">,</span> <span class="s">&#39;June&#39;</span><span class="p">,</span>
+              <span class="s">&#39;July&#39;</span><span class="p">,</span> <span class="s">&#39;August&#39;</span><span class="p">,</span> <span class="s">&#39;September&#39;</span><span class="p">,</span> <span class="s">&#39;October&#39;</span><span class="p">,</span> <span class="s">&#39;November&#39;</span><span class="p">,</span> <span class="s">&#39;December&#39;</span><span class="p">]</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="n">measured</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">date</span><span class="p">)</span> <span class="c"># times now contains start and end Julian times</span>
+    <span class="n">t0</span> <span class="o">=</span> <span class="n">times</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">tp0</span> <span class="o">=</span> <span class="n">fromJulian</span><span class="p">(</span><span class="n">t0</span><span class="p">)</span>
+    <span class="n">h0</span> <span class="o">=</span> <span class="mf">24.0</span><span class="o">*</span><span class="p">(</span><span class="n">t0</span><span class="o">-</span><span class="nb">int</span><span class="p">(</span><span class="n">t0</span><span class="p">))</span>
+    <span class="n">ih0</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">h0</span><span class="p">)</span>
+    <span class="n">m0</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">60</span><span class="o">*</span><span class="p">(</span><span class="n">h0</span><span class="o">-</span><span class="nb">int</span><span class="p">(</span><span class="n">h0</span><span class="p">)))</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">times</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">tp1</span> <span class="o">=</span> <span class="n">fromJulian</span><span class="p">(</span><span class="n">t1</span><span class="p">)</span>
+    <span class="n">h1</span> <span class="o">=</span> <span class="mf">24.0</span><span class="o">*</span><span class="p">(</span><span class="n">t1</span><span class="o">-</span><span class="nb">int</span><span class="p">(</span><span class="n">t1</span><span class="p">))</span>
+    <span class="n">ih1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">h1</span><span class="p">)</span>
+    <span class="n">m1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">60</span><span class="o">*</span><span class="p">(</span><span class="n">h1</span><span class="o">-</span><span class="nb">int</span><span class="p">(</span><span class="n">h1</span><span class="p">)))</span>
+    <span class="n">dateString</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%2d</span><span class="s">/</span><span class="si">%2d</span><span class="s">/</span><span class="si">%4d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">tp1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">tp1</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">tp1</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">dateString</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="n">dateString</span><span class="p">)</span> <span class="c"># clean up leading blanks</span>
+    <span class="n">startTime</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%02d</span><span class="s">:</span><span class="si">%02d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">h0</span><span class="p">,</span> <span class="n">m0</span><span class="p">)</span>
+    <span class="n">stopTime</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%02d</span><span class="s">:</span><span class="si">%02d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">h1</span><span class="p">,</span> <span class="n">m1</span><span class="p">)</span>
+    <span class="n">modelled</span><span class="p">(</span><span class="n">camera</span><span class="p">,</span> <span class="n">dateString</span><span class="p">,</span> <span class="n">startTime</span><span class="p">,</span> <span class="n">stopTime</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="FocusMenu"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.FocusModel.FocusMenu">[docs]</a><span class="k">class</span> <span class="nc">FocusMenu</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span> <span class="p">:</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="bp">None</span>
+        
+ 
+<div class="viewcode-block" id="FocusMenu.CreateForm"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.FocusModel.FocusMenu.CreateForm">[docs]</a>    <span class="k">def</span> <span class="nf">CreateForm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">Tk</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;HST Focus Monitor&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">disp</span> <span class="o">=</span> <span class="n">StringVar</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">disp</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;Modelled&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cam</span> <span class="o">=</span> <span class="n">StringVar</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cam</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s">&#39;PC&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">year</span> <span class="o">=</span> <span class="n">IntVar</span><span class="p">()</span>
+         
+        <span class="n">Label</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Display&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">Label</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Camera&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">W</span><span class="p">)</span>
+
+        <span class="c"># Camera choice</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rc1</span> <span class="o">=</span> <span class="n">Radiobutton</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&#39;PC&#39;</span><span class="p">,</span>  <span class="n">variable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cam</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="s">&#39;PC&#39;</span> <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rc1</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">sticky</span><span class="o">=</span><span class="n">W</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rc2</span> <span class="o">=</span> <span class="n">Radiobutton</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&#39;HRC&#39;</span><span class="p">,</span>  <span class="n">variable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cam</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="s">&#39;HRC&#39;</span> <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rc2</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">sticky</span><span class="o">=</span><span class="n">W</span><span class="p">)</span>
+
+        <span class="c">#Display choice</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rd1</span> <span class="o">=</span> <span class="n">Radiobutton</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Modelled&#39;</span><span class="p">,</span>   <span class="n">variable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">disp</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="s">&#39;Modelled&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rd1</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">column</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">sticky</span><span class="o">=</span><span class="n">W</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rd2</span> <span class="o">=</span> <span class="n">Radiobutton</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Measured&#39;</span><span class="p">,</span>   <span class="n">variable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">disp</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="s">&#39;Measured&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rd2</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span><span class="n">column</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">sticky</span><span class="o">=</span><span class="n">W</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rd3</span> <span class="o">=</span> <span class="n">Radiobutton</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Comparison&#39;</span><span class="p">,</span> <span class="n">variable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">disp</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="s">&#39;Comparison&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rd3</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">column</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">sticky</span><span class="o">=</span><span class="n">W</span><span class="p">)</span>
+
+        <span class="c"># Year of model or measurement</span>
+        <span class="n">Label</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Year to display&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span><span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">W</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yearEntry</span> <span class="o">=</span> <span class="n">Entry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">yearEntry</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">b1</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Proceed&#39;</span><span class="p">,</span> <span class="n">command</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GetDate</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b1</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span><span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">b2</span> <span class="o">=</span> <span class="n">Button</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Exit&#39;</span><span class="p">,</span> <span class="n">command</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Finish</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">b2</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span><span class="n">column</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span> <span class="o">=</span> <span class="n">Label</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">foreground</span> <span class="o">=</span> <span class="s">&#39;blue&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span><span class="n">sticky</span><span class="o">=</span><span class="n">S</span><span class="p">)</span>
+        </div>
+<div class="viewcode-block" id="FocusMenu.Show"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.FocusModel.FocusMenu.Show">[docs]</a>    <span class="k">def</span> <span class="nf">Show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">mainloop</span><span class="p">()</span>
+       
+        </div>
+<div class="viewcode-block" id="FocusMenu.GetDate"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.FocusModel.FocusMenu.GetDate">[docs]</a>    <span class="k">def</span> <span class="nf">GetDate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>          
+        <span class="c"># Validate year and date input</span>
+        <span class="n">firstYear</span> <span class="o">=</span> <span class="mi">2003</span>
+        <span class="n">lastYear</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">gmtime</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="c"># Get current year</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">display</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">disp</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cam</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">year</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">yearEntry</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="n">goodyear</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">iy</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">year</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">iy</span> <span class="o">&lt;</span> <span class="n">firstYear</span> <span class="ow">or</span> <span class="n">iy</span> <span class="o">&gt;</span> <span class="n">lastYear</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Year must be between 2003 and current year&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">goodyear</span> <span class="o">=</span> <span class="bp">True</span>    
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Bad format for Year&#39;</span><span class="p">)</span>
+            <span class="n">msg</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">goodyear</span><span class="p">:</span> <span class="c"># Show selection for exact date</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span> <span class="o">==</span> <span class="s">&#39;Measured&#39;</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span> <span class="o">==</span> <span class="s">&#39;Comparison&#39;</span><span class="p">:</span>
+                <span class="c">#print &#39;Display&#39;, self.display</span>
+                <span class="n">focusFile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span> <span class="o">+</span> <span class="s">&#39;FocusHistory.txt&#39;</span>
+                <span class="k">print</span> <span class="s">&#39;Focus File&#39;</span><span class="p">,</span> <span class="n">focusFile</span> <span class="c"># Temporary</span>
+                <span class="n">measure</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">focusFile</span><span class="p">,</span><span class="s">&#39;r&#39;</span><span class="p">)</span>
+                <span class="n">focusData</span> <span class="o">=</span> <span class="n">measure</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+                <span class="n">lf</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">focusData</span><span class="p">)</span>
+                <span class="n">measure</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">dateList</span> <span class="o">=</span> <span class="p">[]</span> <span class="c"># Prepare to collect measurement dates from one year</span>
+                <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">lf</span><span class="p">):</span> <span class="c">#Skip first  line</span>
+                    <span class="n">pieces</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">focusData</span><span class="p">[</span><span class="n">l</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pieces</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">pieces</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s">&quot;0&quot;</span><span class="p">:</span> <span class="c"># Skip blank and meaningless lines</span>
+                        <span class="p">[</span><span class="n">m</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">pieces</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s">&#39;/&#39;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">==</span> <span class="n">iy</span> <span class="o">%</span> <span class="mi">100</span><span class="p">:</span> <span class="c"># Match last two digits of year</span>
+                            <span class="n">dateStamp</span> <span class="o">=</span> <span class="n">pieces</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="c"># If this is different from previous date, add to list</span>
+                            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dateList</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">dateList</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">dateStamp</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dateList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dateStamp</span><span class="p">)</span>
+
+                <span class="c"># Now make up listbox with dateList             </span>
+                <span class="n">ly</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dateList</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">ly</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">nodata</span> <span class="o">=</span> <span class="s">&#39;No data for &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span> <span class="o">+</span> <span class="s">&#39; in &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">year</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="n">nodata</span><span class="p">)</span>
+                    <span class="n">goodyear</span> <span class="o">=</span> <span class="bp">False</span>
+                    <span class="k">return</span>
+
+                <span class="n">Label</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Choose date of measurement&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span><span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">NW</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">measureDates</span> <span class="o">=</span> <span class="n">Listbox</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">ly</span><span class="p">,</span> <span class="n">selectmode</span><span class="o">=</span><span class="n">SINGLE</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">measureDates</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dateChoice</span> <span class="o">=</span> <span class="bp">None</span> <span class="c"># until chosen</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ly</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">measureDates</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">END</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">dateList</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">measureDates</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s">&quot;&lt;Button1-ButtonRelease&gt;&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ChooseDate</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">b1</span><span class="o">.</span><span class="n">grid_forget</span><span class="p">()</span>  <span class="c"># Remove PROCEED button</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rc1</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">state</span> <span class="o">=</span> <span class="n">DISABLED</span><span class="p">)</span> <span class="c"># Turn off camera and display choices                </span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rc2</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">state</span> <span class="o">=</span> <span class="n">DISABLED</span><span class="p">)</span>               
+                <span class="bp">self</span><span class="o">.</span><span class="n">rd1</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">state</span> <span class="o">=</span> <span class="n">DISABLED</span><span class="p">)</span>               
+                <span class="bp">self</span><span class="o">.</span><span class="n">rd2</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">state</span> <span class="o">=</span> <span class="n">DISABLED</span><span class="p">)</span>               
+                <span class="bp">self</span><span class="o">.</span><span class="n">rd3</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">state</span> <span class="o">=</span> <span class="n">DISABLED</span><span class="p">)</span>               
+                <span class="bp">self</span><span class="o">.</span><span class="n">yearEntry</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">state</span> <span class="o">=</span> <span class="n">DISABLED</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+
+                <span class="n">Button</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Display&#39;</span><span class="p">,</span> <span class="n">command</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">StartGraph</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">display</span> <span class="o">==</span> <span class="s">&#39;Modelled&#39;</span><span class="p">:</span> <span class="c"># Select arbitrary dates and times</span>
+                <span class="c">#print &#39;Display&#39;,self.display</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">b1</span><span class="o">.</span><span class="n">grid_forget</span><span class="p">()</span>  <span class="c"># Remove PROCEED button</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rc1</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">state</span> <span class="o">=</span> <span class="n">DISABLED</span><span class="p">)</span> <span class="c"># Turn off camera and display choices                </span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rc2</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">state</span> <span class="o">=</span> <span class="n">DISABLED</span><span class="p">)</span>               
+                <span class="bp">self</span><span class="o">.</span><span class="n">rd1</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">state</span> <span class="o">=</span> <span class="n">DISABLED</span><span class="p">)</span>               
+                <span class="bp">self</span><span class="o">.</span><span class="n">rd2</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">state</span> <span class="o">=</span> <span class="n">DISABLED</span><span class="p">)</span>               
+                <span class="bp">self</span><span class="o">.</span><span class="n">rd3</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">state</span> <span class="o">=</span> <span class="n">DISABLED</span><span class="p">)</span>               
+                <span class="bp">self</span><span class="o">.</span><span class="n">yearEntry</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">state</span> <span class="o">=</span> <span class="n">DISABLED</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="s">&#39;&#39;</span><span class="p">)</span>
+
+                <span class="n">Label</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Date e.g. 11/23&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">W</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dayEntry</span> <span class="o">=</span> <span class="n">Entry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dayEntry</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">Label</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Start time in form 12:23&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span><span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">W</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">time1Entry</span> <span class="o">=</span> <span class="n">Entry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">time1Entry</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">time2Entry</span> <span class="o">=</span> <span class="n">Entry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">time2Entry</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">Label</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Use 24 hour clock&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">9</span><span class="p">,</span><span class="n">column</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">Label</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Stop time&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sticky</span><span class="o">=</span><span class="n">W</span><span class="p">)</span>
+                <span class="n">Button</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Display&#39;</span><span class="p">,</span> <span class="n">command</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">GetTimes</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span><span class="n">column</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+ </div>
+<div class="viewcode-block" id="FocusMenu.GetTimes"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.FocusModel.FocusMenu.GetTimes">[docs]</a>    <span class="k">def</span> <span class="nf">GetTimes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">day</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dayEntry</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">d</span><span class="p">)</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">day</span><span class="p">,</span> <span class="s">&#39;/&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">12</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">31</span><span class="p">):</span> 
+                    <span class="n">goodday</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Numerical error in date&#39;</span><span class="p">)</span>
+                    <span class="n">goodday</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Date to be in form mm/dd&#39;</span><span class="p">)</span>
+                <span class="n">goodday</span> <span class="o">=</span> <span class="bp">False</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">time1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time1Entry</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="p">(</span><span class="n">hour1</span><span class="p">,</span><span class="n">minute1</span><span class="p">)</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time1</span><span class="p">,</span> <span class="s">&#39;:&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">hour1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">23</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">minute1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">59</span><span class="p">):</span>
+                    <span class="n">goodstart</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Numerical error in start time&#39;</span><span class="p">)</span>
+                    <span class="n">goodstart</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Start time to be in form hh:mm&#39;</span><span class="p">)</span>
+                <span class="n">goodstart</span> <span class="o">=</span> <span class="bp">False</span>
+
+            <span class="k">if</span> <span class="n">goodstart</span><span class="p">:</span> <span class="k">print</span> <span class="s">&#39;h1m1&#39;</span><span class="p">,</span> <span class="n">hour1</span><span class="p">,</span> <span class="n">minute1</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">time2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time2Entry</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="p">(</span><span class="n">hour2</span><span class="p">,</span> <span class="n">minute2</span><span class="p">)</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time2</span><span class="p">,</span> <span class="s">&#39;:&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">hour2</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">23</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">minute2</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">59</span><span class="p">):</span>
+                    <span class="n">goodstop</span> <span class="o">=</span> <span class="bp">True</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Numerical error in stop time&#39;</span><span class="p">)</span>
+                    <span class="n">goodstop</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Stop time to be in form hh:mm&#39;</span><span class="p">)</span>
+                <span class="n">goodstop</span> <span class="o">=</span> <span class="bp">False</span>
+
+            <span class="k">if</span> <span class="n">goodstop</span><span class="p">:</span> <span class="k">print</span> <span class="s">&#39;h2m2&#39;</span><span class="p">,</span> <span class="n">hour2</span><span class="p">,</span> <span class="n">minute2</span>
+            
+            <span class="c"># Final check</span>
+            <span class="k">if</span> <span class="n">goodstart</span> <span class="ow">and</span> <span class="n">goodstop</span><span class="p">:</span>
+                <span class="n">t1</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">hour1</span><span class="p">)</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">minute1</span><span class="p">)</span><span class="o">/</span><span class="mf">60.0</span>
+                <span class="n">t2</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">hour2</span><span class="p">)</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">minute2</span><span class="p">)</span><span class="o">/</span><span class="mf">60.0</span>
+                <span class="k">if</span> <span class="n">t1</span> <span class="o">&gt;</span> <span class="n">t2</span><span class="p">:</span>
+                    <span class="n">goodstop</span> <span class="o">=</span> <span class="bp">False</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Start time is later than stop time&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">row</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">goodstop</span> <span class="o">=</span> <span class="bp">True</span>    
+
+            <span class="k">if</span> <span class="n">goodday</span> <span class="ow">and</span> <span class="n">goodstart</span> <span class="ow">and</span> <span class="n">goodstop</span> <span class="p">:</span> 
+                <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Generating graphs&#39;</span><span class="p">)</span>
+                <span class="n">graph</span><span class="p">()</span> <span class="c"># Start display</span>
+                
+                
+            <span class="k">return</span>
+            </div>
+<div class="viewcode-block" id="FocusMenu.ChooseDate"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.FocusModel.FocusMenu.ChooseDate">[docs]</a>    <span class="k">def</span> <span class="nf">ChooseDate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">measureDates</span><span class="o">.</span><span class="n">curselection</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dateChoice</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dateList</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+</div>
+<div class="viewcode-block" id="FocusMenu.StartGraph"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.FocusModel.FocusMenu.StartGraph">[docs]</a>    <span class="k">def</span> <span class="nf">StartGraph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dateChoice</span><span class="p">:</span> <span class="c"># Proceed only if date choice has been made</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Generating graphs&#39;</span><span class="p">)</span>           
+            <span class="n">graph</span><span class="p">()</span>
+            <span class="c">#self.statusBar.config(text = &#39;Finished&#39;)</span>
+        <span class="k">else</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">statusBar</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">text</span> <span class="o">=</span> <span class="s">&#39;Choose a date&#39;</span><span class="p">)</span> 
+        </div>
+<div class="viewcode-block" id="FocusMenu.Finish"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.FocusModel.FocusMenu.Finish">[docs]</a>    <span class="k">def</span> <span class="nf">Finish</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">destroy</span><span class="p">()</span>
+        <span class="n">P</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s">&#39;all&#39;</span><span class="p">)</span>       
+</div></div>
+<div class="viewcode-block" id="graph"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.FocusModel.graph">[docs]</a><span class="k">def</span> <span class="nf">graph</span><span class="p">():</span>
+    <span class="n">monthName</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;blank&#39;</span><span class="p">,</span><span class="s">&#39;January&#39;</span><span class="p">,</span> <span class="s">&#39;February&#39;</span><span class="p">,</span> <span class="s">&#39;March&#39;</span><span class="p">,</span> <span class="s">&#39;April&#39;</span><span class="p">,</span> <span class="s">&#39;May&#39;</span><span class="p">,</span> <span class="s">&#39;June&#39;</span><span class="p">,</span>
+              <span class="s">&#39;July&#39;</span><span class="p">,</span> <span class="s">&#39;August&#39;</span><span class="p">,</span> <span class="s">&#39;September&#39;</span><span class="p">,</span> <span class="s">&#39;October&#39;</span><span class="p">,</span> <span class="s">&#39;November&#39;</span><span class="p">,</span> <span class="s">&#39;December&#39;</span><span class="p">]</span>
+    <span class="k">print</span> <span class="s">&#39;Create display&#39;</span>
+    <span class="k">print</span> <span class="s">&#39;Camera&#39;</span><span class="p">,</span> <span class="n">gui</span><span class="o">.</span><span class="n">camera</span>
+    <span class="k">print</span> <span class="s">&#39;Display &#39;</span><span class="p">,</span> <span class="n">gui</span><span class="o">.</span><span class="n">display</span>
+    <span class="k">if</span> <span class="n">gui</span><span class="o">.</span><span class="n">display</span> <span class="o">==</span> <span class="s">&#39;Modelled&#39;</span><span class="p">:</span>
+        <span class="c">#print gui.day, gui.year, gui.time1, gui.time2        </span>
+        <span class="n">fulldate</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%5s</span><span class="s">/</span><span class="si">%4s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">gui</span><span class="o">.</span><span class="n">day</span><span class="p">,</span> <span class="n">gui</span><span class="o">.</span><span class="n">year</span><span class="p">)</span>
+        <span class="n">fulldate</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="n">fulldate</span><span class="p">)</span>
+        <span class="n">modelled</span> <span class="p">(</span><span class="n">gui</span><span class="o">.</span><span class="n">camera</span><span class="p">,</span> <span class="n">fulldate</span><span class="p">,</span> <span class="n">gui</span><span class="o">.</span><span class="n">time1</span><span class="p">,</span> <span class="n">gui</span><span class="o">.</span><span class="n">time2</span><span class="p">)</span>
+        
+    <span class="k">elif</span> <span class="n">gui</span><span class="o">.</span><span class="n">display</span> <span class="o">==</span> <span class="s">&#39;Measured&#39;</span><span class="p">:</span>
+        <span class="c">#print &#39;Date &#39;, gui.dateChoice</span>
+        <span class="n">times</span> <span class="o">=</span> <span class="n">measured</span><span class="p">(</span><span class="n">gui</span><span class="o">.</span><span class="n">camera</span><span class="p">,</span> <span class="n">gui</span><span class="o">.</span><span class="n">dateChoice</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">gui</span><span class="o">.</span><span class="n">display</span> <span class="o">==</span> <span class="s">&quot;Comparison&quot;</span> <span class="p">:</span>
+        <span class="c">#print gui.camera, gui.dateChoice</span>
+        <span class="n">comparison</span><span class="p">(</span><span class="n">gui</span><span class="o">.</span><span class="n">camera</span><span class="p">,</span> <span class="n">gui</span><span class="o">.</span><span class="n">dateChoice</span><span class="p">)</span>
+        
+    <span class="k">print</span> <span class="s">&#39;Finished&#39;</span>
+    <span class="c">#gui.statusBar.config(text = &#39;Finished&#39;)</span>
+    <span class="k">return</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="n">gui</span> <span class="o">=</span> <span class="n">FocusMenu</span><span class="p">()</span>   <span class="c"># Creates an instance of FocusMenu</span>
+    <span class="n">gui</span><span class="o">.</span><span class="n">CreateForm</span><span class="p">()</span>    <span class="c"># Builds the form</span>
+    <span class="n">gui</span><span class="o">.</span><span class="n">Show</span><span class="p">()</span>          <span class="c"># Starts the loop</span>
+
+        
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,343 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fitting Package &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="SamPy Package" href="SamPy.html" />
+    <link rel="next" title="focus Package" href="SamPy.focus.html" />
+    <link rel="prev" title="fits Package" href="SamPy.fits.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.focus.html" title="focus Package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.fits.html" title="fits Package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.html" accesskey="U">SamPy Package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">fitting Package</a><ul>
+<li><a class="reference internal" href="#module-SamPy.fitting.SplineArtist"><tt class="docutils literal"><span class="pre">SplineArtist</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.fitting.SplineFitting"><tt class="docutils literal"><span class="pre">SplineFitting</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.fitting.SplineFitting2D"><tt class="docutils literal"><span class="pre">SplineFitting2D</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.fitting.fits"><tt class="docutils literal"><span class="pre">fits</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.fitting.weigtedFittingExample"><tt class="docutils literal"><span class="pre">weigtedFittingExample</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.fits.html"
+                        title="previous chapter">fits Package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.focus.html"
+                        title="next chapter">focus Package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.fitting.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="fitting-package">
+<h1>fitting Package<a class="headerlink" href="#fitting-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-SamPy.fitting.SplineArtist">
+<span id="splineartist-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">SplineArtist</span></tt> Module<a class="headerlink" href="#module-SamPy.fitting.SplineArtist" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="SamPy.fitting.SplineArtist.SplineArtist">
+<em class="property">class </em><tt class="descclassname">SamPy.fitting.SplineArtist.</tt><tt class="descname">SplineArtist</tt><big>(</big><em>xdata</em>, <em>ydata</em>, <em>xrange</em>, <em>ylog=False</em>, <em>order=3</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/SplineArtist.html#SplineArtist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.SplineArtist.SplineArtist" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="SamPy.fitting.SplineArtist.SplineArtist.draw_spline">
+<tt class="descname">draw_spline</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/SplineArtist.html#SplineArtist.draw_spline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.SplineArtist.SplineArtist.draw_spline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Draws a spline function through the nods that have been set.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.fitting.SplineArtist.SplineArtist.get_spline">
+<tt class="descname">get_spline</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/SplineArtist.html#SplineArtist.get_spline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.SplineArtist.SplineArtist.get_spline" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="SamPy.fitting.SplineArtist.SplineArtist.onclick">
+<tt class="descname">onclick</tt><big>(</big><em>event</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/SplineArtist.html#SplineArtist.onclick"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.SplineArtist.SplineArtist.onclick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define a mouse click event:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.fitting.SplineArtist.SplineArtist.onpress">
+<tt class="descname">onpress</tt><big>(</big><em>event</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/SplineArtist.html#SplineArtist.onpress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.SplineArtist.SplineArtist.onpress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define key press events:
+q/Q quits the whole script!</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.fitting.SplineArtist.SplineArtist.plot_diff">
+<tt class="descname">plot_diff</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/SplineArtist.html#SplineArtist.plot_diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.SplineArtist.SplineArtist.plot_diff" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="SamPy.fitting.SplineArtist.SplineArtist.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/SplineArtist.html#SplineArtist.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.SplineArtist.SplineArtist.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-SamPy.fitting.SplineFitting">
+<span id="splinefitting-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">SplineFitting</span></tt> Module<a class="headerlink" href="#module-SamPy.fitting.SplineFitting" title="Permalink to this headline">¶</a></h2>
+<p>ABOUT:
+Example how to spline B-spline to fake data.</p>
+<p>DEPENDS:
+Python 2.5 or later (no 3.x compatible)
+NumPy
+SciPy</p>
+<p>TESTED:
+Python 2.5.1
+NumPy: 1.4.0.dev7576
+SciPy: 0.7.1
+matplotlib 1.0.svn</p>
+<p>HISTORY:
+Created on November 26, 2009</p>
+<p>VERSION:
+0.1: test release (SMN)</p>
+<p>&#64;author: Sami-Matias Niemi (<a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a>)</p>
+<dl class="class">
+<dt id="SamPy.fitting.SplineFitting.SplineFitting">
+<em class="property">class </em><tt class="descclassname">SamPy.fitting.SplineFitting.</tt><tt class="descname">SplineFitting</tt><big>(</big><em>xnodes</em>, <em>spline_order=3</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/SplineFitting.html#SplineFitting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.SplineFitting.SplineFitting" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits a B-spline representation of 1-D curve.
+Uses Levenberg-Marquardt algorithm for minimizing 
+the sum of squares.</p>
+<dl class="method">
+<dt id="SamPy.fitting.SplineFitting.SplineFitting.doFit">
+<tt class="descname">doFit</tt><big>(</big><em>ynodes</em>, <em>x</em>, <em>y</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/SplineFitting.html#SplineFitting.doFit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.SplineFitting.SplineFitting.doFit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the point which minimizes the sum of squares of M (non-linear)
+equations in N unknowns given a starting estimate, x0, using a
+modification of the Levenberg-Marquardt algorithm.
+&#64;return: fitted parameters, error/success message</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.fitting.SplineFitting.SplineFitting.errfunc">
+<tt class="descname">errfunc</tt><big>(</big><em>ynodes</em>, <em>x</em>, <em>y</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/SplineFitting.html#SplineFitting.errfunc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.SplineFitting.SplineFitting.errfunc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error function.
+&#64;return: fit - ydata</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.fitting.SplineFitting.SplineFitting.fitfunc">
+<tt class="descname">fitfunc</tt><big>(</big><em>x</em>, <em>ynodes</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/SplineFitting.html#SplineFitting.fitfunc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.SplineFitting.SplineFitting.fitfunc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function that is fitted.
+This can be changed to whatever function.
+Note that ynodes can then be a list of parameters.
+&#64;return: 1-D B-spline value at each x.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-SamPy.fitting.SplineFitting2D">
+<span id="splinefitting2d-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">SplineFitting2D</span></tt> Module<a class="headerlink" href="#module-SamPy.fitting.SplineFitting2D" title="Permalink to this headline">¶</a></h2>
+<p>Created on Thu Nov 26 22:00:20 2009</p>
+<p>Author: josef-pktd and scipy mailinglist example</p>
+<dl class="function">
+<dt id="SamPy.fitting.SplineFitting2D.makeLSQspline">
+<tt class="descclassname">SamPy.fitting.SplineFitting2D.</tt><tt class="descname">makeLSQspline</tt><big>(</big><em>xl</em>, <em>yl</em>, <em>xr</em>, <em>yr</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/SplineFitting2D.html#makeLSQspline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.SplineFitting2D.makeLSQspline" title="Permalink to this definition">¶</a></dt>
+<dd><p>docstring for makespline</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-SamPy.fitting.fits">
+<span id="fits-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">fits</span></tt> Module<a class="headerlink" href="#module-SamPy.fitting.fits" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="SamPy.fitting.fits.FindZeroDoubleExp">
+<tt class="descclassname">SamPy.fitting.fits.</tt><tt class="descname">FindZeroDoubleExp</tt><big>(</big><em>p</em>, <em>x0</em>, <em>yshift=0.0</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/fits.html#FindZeroDoubleExp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.fits.FindZeroDoubleExp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.fitting.fits.FindZeroSingleExp">
+<tt class="descclassname">SamPy.fitting.fits.</tt><tt class="descname">FindZeroSingleExp</tt><big>(</big><em>p</em>, <em>x0</em>, <em>yshift=0.0</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/fits.html#FindZeroSingleExp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.fits.FindZeroSingleExp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.fitting.fits.FitDoubleExponent">
+<tt class="descclassname">SamPy.fitting.fits.</tt><tt class="descname">FitDoubleExponent</tt><big>(</big><em>xcorr</em>, <em>ycorr</em>, <em>initials</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/fits.html#FitDoubleExponent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.fits.FitDoubleExponent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits a double exponential to data.
+&#64;return: corrfit</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.fitting.fits.FitExponent">
+<tt class="descclassname">SamPy.fitting.fits.</tt><tt class="descname">FitExponent</tt><big>(</big><em>xcorr</em>, <em>ycorr</em>, <em>initials</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/fits.html#FitExponent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.fits.FitExponent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits an exponential to data.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.fitting.fits.PolyFit">
+<tt class="descclassname">SamPy.fitting.fits.</tt><tt class="descname">PolyFit</tt><big>(</big><em>x</em>, <em>y</em>, <em>order=1</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/fits.html#PolyFit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.fits.PolyFit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits a polynomial to the data.
+&#64;return: 
+fitted y values, error of the fit</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.fitting.fits.doubleExponent">
+<tt class="descclassname">SamPy.fitting.fits.</tt><tt class="descname">doubleExponent</tt><big>(</big><em>x</em>, <em>p</em>, <em>yshift</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/fits.html#doubleExponent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.fits.doubleExponent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.fitting.fits.linearregression">
+<tt class="descclassname">SamPy.fitting.fits.</tt><tt class="descname">linearregression</tt><big>(</big><em>x</em>, <em>y</em>, <em>confidence_level=95</em>, <em>show_plots=False</em>, <em>report=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/fits.html#linearregression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.fits.linearregression" title="Permalink to this definition">¶</a></dt>
+<dd><p>A function to calculate simple linear regression
+inputs: x,y-data pairs and a confidence level (in percent)
+outputs: slope = b1, intercept = b0 its confidence intervals
+and R (+squared)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.fitting.fits.singleExponent">
+<tt class="descclassname">SamPy.fitting.fits.</tt><tt class="descname">singleExponent</tt><big>(</big><em>x</em>, <em>p</em>, <em>yshift</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/fits.html#singleExponent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.fits.singleExponent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-SamPy.fitting.weigtedFittingExample">
+<span id="weigtedfittingexample-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">weigtedFittingExample</span></tt> Module<a class="headerlink" href="#module-SamPy.fitting.weigtedFittingExample" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="SamPy.fitting.weigtedFittingExample.first_order">
+<tt class="descclassname">SamPy.fitting.weigtedFittingExample.</tt><tt class="descname">first_order</tt><big>(</big><em>x</em>, <em>a0</em>, <em>a1</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/weigtedFittingExample.html#first_order"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.weigtedFittingExample.first_order" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.fitting.weigtedFittingExample.rand">
+<tt class="descclassname">SamPy.fitting.weigtedFittingExample.</tt><tt class="descname">rand</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.fitting.weigtedFittingExample.rand" title="Permalink to this definition">¶</a></dt>
+<dd><p>rand(d0, d1, ..., dn)</p>
+<p>Random values in a given shape.</p>
+<p>Create an array of the given shape and propagate it with
+random samples from a uniform distribution
+over <tt class="docutils literal"><span class="pre">[0,</span> <span class="pre">1)</span></tt>.</p>
+<dl class="docutils">
+<dt>d0, d1, ..., dn <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Shape of the output.</dd>
+</dl>
+<dl class="docutils">
+<dt>out <span class="classifier-delimiter">:</span> <span class="classifier">ndarray, shape <tt class="docutils literal"><span class="pre">(d0,</span> <span class="pre">d1,</span> <span class="pre">...,</span> <span class="pre">dn)</span></tt></span></dt>
+<dd>Random values.</dd>
+</dl>
+<p>random</p>
+<p>This is a convenience function. If you want an interface that
+takes a shape-tuple as the first argument, refer to
+<cite>random</cite>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">array([[ 0.14022471,  0.96360618],  #random</span>
+<span class="go">       [ 0.37601032,  0.25528411],  #random</span>
+<span class="go">       [ 0.49313049,  0.94909878]]) #random</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.fitting.weigtedFittingExample.second_order">
+<tt class="descclassname">SamPy.fitting.weigtedFittingExample.</tt><tt class="descname">second_order</tt><big>(</big><em>x</em>, <em>a0</em>, <em>a1</em>, <em>a2</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/weigtedFittingExample.html#second_order"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.weigtedFittingExample.second_order" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.fitting.weigtedFittingExample.third_order">
+<tt class="descclassname">SamPy.fitting.weigtedFittingExample.</tt><tt class="descname">third_order</tt><big>(</big><em>x</em>, <em>a0</em>, <em>a1</em>, <em>a2</em>, <em>a3</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/weigtedFittingExample.html#third_order"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.weigtedFittingExample.third_order" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.focus.html" title="focus Package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.fits.html" title="fits Package"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.html" >SamPy Package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,339 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.grisms.generateAssociationDB &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.grisms.generateAssociationDB</h1><div class="highlight"><pre>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">This little script can be used to generate a cPickled</span>
+<span class="sd">association database that is in the format that the PHLAG</span>
+<span class="sd">grism pipeline developed by ECF will understand.</span>
+
+<span class="sd">The script looks all FITS files in the current working</span>
+<span class="sd">directory and tries to generate the association database</span>
+<span class="sd">by matching direct images to grism images. Note that the</span>
+<span class="sd">matching algorithm is extremely limited and works only if</span>
+<span class="sd">the direct images and grism images have the same RA or DEC.</span>
+<span class="sd">Thus, the script is only suitable for the test that will</span>
+<span class="sd">be carried out in April 2011, as for this test all the</span>
+<span class="sd">datasets have been hand picked.</span>
+
+<span class="sd">This script should not be used unless its limitations</span>
+<span class="sd">have been understood!</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">smnIO.findFiles</span> <span class="kn">as</span> <span class="nn">f</span>
+<span class="kn">import</span> <span class="nn">pyfits</span> <span class="kn">as</span> <span class="nn">pf</span>
+<span class="kn">import</span> <span class="nn">cPickle</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Sami-Matias Niemi&#39;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+
+<div class="viewcode-block" id="createAssociationDB"><a class="viewcode-back" href="../../../SamPy.grisms.html#SamPy.grisms.generateAssociationDB.createAssociationDB">[docs]</a><span class="k">def</span> <span class="nf">createAssociationDB</span><span class="p">(</span><span class="n">grism</span><span class="p">,</span> <span class="n">direct</span><span class="p">,</span> <span class="n">match</span><span class="p">,</span>
+                        <span class="n">output</span> <span class="o">=</span><span class="s">&#39;ACSTEST.db&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Email from Martin Kuemmel:</span>
+<span class="sd">    Concerning the format:</span>
+<span class="sd">    - Each association (see listing below contains two main entries, the</span>
+<span class="sd">    first entry (a list)  containing information on the grism images and</span>
+<span class="sd">    the second a dictionary) containing direct imaging information.</span>
+
+<span class="sd">    - The grism image information is a list, which each entry consisting of</span>
+<span class="sd">     a tuple with four items. The first item is the name of the grism</span>
+<span class="sd">     image, the second item is the exposure time of the grism image,</span>
+<span class="sd">     the third item is the name of the associated direct image and the</span>
+<span class="sd">     fourth item a real number measuring the &#39;distance&#39; between the grism</span>
+<span class="sd">     image and the direct image. Very close pairs of grism image - direct</span>
+<span class="sd">     image have a distance of 0.0. I think there is a very complicated</span>
+<span class="sd">     formula that measures this distance, however the most important input</span>
+<span class="sd">     is the pointing on the sky. If a grism and a direct image have the</span>
+<span class="sd">     same pointing on the sky, they are very close. Also the time</span>
+<span class="sd">     difference between the direct image and the grism image has some</span>
+<span class="sd">     influence.</span>
+
+<span class="sd">    - The direct image information is a dictionary that contains the filter</span>
+<span class="sd">     names as keys. For each filter there is a list of tuples with three</span>
+<span class="sd">     items. The first item is the direct image name, the second item is</span>
+<span class="sd">     the exposure time and the third item is the overlap with the area covered</span>
+<span class="sd">     by the grism images of that association. For some reason (I have forgotten),</span>
+<span class="sd">     this overlap can be more than 1.</span>
+
+<span class="sd">    So the two &#39;dir_min_overlap&#39; that you quote are two different values,</span>
+<span class="sd">    the first one measuring the distance between the grism image and the</span>
+<span class="sd">    closest associated direct image (from all possible associated direct</span>
+<span class="sd">    images, the closest one is chosen), and the second one measuring the</span>
+<span class="sd">    area overlap with all grism images.</span>
+
+<span class="sd">    We did have algorithms and formulas to compute these numbers, but in</span>
+<span class="sd">    the end it was always some sort of magic with Alberto Micol and Marco</span>
+<span class="sd">    Lombardi the magicians. I asked Alberto, but he was rather involved in</span>
+<span class="sd">    NICMOS, and Marco is really far away now, his account at ESO does no</span>
+<span class="sd">    longer exists and his old computer (standing in front of me) needed a</span>
+<span class="sd">    new disk some weeks ago.</span>
+
+<span class="sd">    So I guess that we can not offer much support on this. In any case,</span>
+<span class="sd">    WFC3 is a different instrument with 2 complementary grisms and</span>
+<span class="sd">    different prescriptions for taking associated direct imaging and hence</span>
+<span class="sd">    a different basis of how data is taken.</span>
+
+<span class="sd">    Hope this helped,</span>
+<span class="sd">    Martin</span>
+
+<span class="sd">    ([(&#39;J6FL8YKUQ&#39;, 764.0, &#39;J6FL8YKRQ&#39;, 0.0),</span>
+<span class="sd">    (&#39;J6FL8YKWQ&#39;, 764.0, &#39;J6FL8YKRQ&#39;, 0.0),</span>
+<span class="sd">    (&#39;J6FL8YKYQ&#39;, 764.0, &#39;J6FL8YKRQ&#39;, 0.0),</span>
+<span class="sd">    (&#39;J6FL8YL0Q&#39;, 764.0, &#39;J6FL8YKRQ&#39;, 0.0),</span>
+<span class="sd">    (&#39;J6FL8YL2Q&#39;, 764.0, &#39;J6FL8YKRQ&#39;, 0.0),</span>
+<span class="sd">    (&#39;J6FL8YL4Q&#39;, 764.0, &#39;J6FL8YKRQ&#39;, 0.0),</span>
+<span class="sd">    (&#39;J6FL8YL6Q&#39;, 764.0, &#39;J6FL8YKRQ&#39;, 0.0),</span>
+<span class="sd">    (&#39;J6FL8YL8Q&#39;, 764.0, &#39;J6FL8YKRQ&#39;, 0.0)],</span>
+<span class="sd">    {&#39;F850LP&#39;:</span>
+<span class="sd">    [(&#39;J8WQ91E8Q&#39;, 500.0, 0.89063763040941479),</span>
+<span class="sd">    (&#39;J8WQ91EAQ&#39;, 500.0, 0.89063763040941479),</span>
+<span class="sd">    (&#39;J8WQ91ECQ&#39;, 500.0, 0.89063763040941479),</span>
+<span class="sd">    (&#39;J6FL7YIDQ&#39;, 500.0, 0.97062910394576651),</span>
+<span class="sd">    (&#39;J6FL8YKRQ&#39;, 500.0, 1.011511942107943),</span>
+<span class="sd">    (&#39;J8WQ91E7Q&#39;, 500.0, 0.89063763040941479)]})&#39;&#39;&#39;</span>
+    <span class="n">dc</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">match</span><span class="p">):</span>
+        <span class="n">nm</span> <span class="o">=</span> <span class="s">&#39;ACSTEST</span><span class="si">%i</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">match</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+            <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
+                        <span class="n">grism</span><span class="p">[</span><span class="n">value</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                        <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
+                        <span class="mf">0.0</span><span class="p">))</span>
+
+        <span class="n">dirdata</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c">#this next one fakes and puts the same file twice!</span>
+        <span class="n">dirdata</span><span class="p">[</span><span class="n">direct</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[(</span><span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
+                                   <span class="n">direct</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">),</span>
+                                   <span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
+                                   <span class="n">direct</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="mf">1.0</span><span class="p">)]</span>
+
+        <span class="n">dc</span><span class="p">[</span><span class="n">nm</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">tmp</span><span class="p">,</span> <span class="n">dirdata</span><span class="p">)</span>
+
+    <span class="c">#pickle the stuff to a file</span>
+    <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">cPickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">dc</span><span class="p">,</span> <span class="n">fh</span><span class="p">)</span>
+    <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="findGrismImages"><a class="viewcode-back" href="../../../SamPy.grisms.html#SamPy.grisms.generateAssociationDB.findGrismImages">[docs]</a><span class="k">def</span> <span class="nf">findGrismImages</span><span class="p">(</span><span class="n">filelist</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Finds all direct and grism images from a</span>
+<span class="sd">    given filelist. Will pull out some information</span>
+<span class="sd">    such as exposure time and filter from the header.</span>
+<span class="sd">    Will also record RA and DEC, this could potentially</span>
+<span class="sd">    be used to calculate the overlap and is currently</span>
+<span class="sd">    used to match images later.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">direct</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">grism</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">filelist</span><span class="p">:</span>
+        <span class="n">fh</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+        <span class="n">hdr0</span> <span class="o">=</span> <span class="n">fh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">header</span>
+        <span class="k">if</span> <span class="s">&#39;F&#39;</span> <span class="ow">in</span> <span class="n">hdr0</span><span class="p">[</span><span class="s">&#39;FILTER1&#39;</span><span class="p">]:</span>
+            <span class="n">direct</span><span class="p">[</span><span class="nb">file</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">hdr0</span><span class="p">[</span><span class="s">&#39;EXPTIME&#39;</span><span class="p">],</span>
+                            <span class="n">hdr0</span><span class="p">[</span><span class="s">&#39;FILTER1&#39;</span><span class="p">],</span>
+                            <span class="n">hdr0</span><span class="p">[</span><span class="s">&#39;RA_TARG&#39;</span><span class="p">],</span>
+                            <span class="n">hdr0</span><span class="p">[</span><span class="s">&#39;DEC_TARG&#39;</span><span class="p">]]</span>
+        <span class="k">elif</span> <span class="s">&#39;F&#39;</span> <span class="ow">in</span> <span class="n">hdr0</span><span class="p">[</span><span class="s">&#39;FILTER2&#39;</span><span class="p">]:</span>
+            <span class="n">direct</span><span class="p">[</span><span class="nb">file</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">hdr0</span><span class="p">[</span><span class="s">&#39;EXPTIME&#39;</span><span class="p">],</span>
+                            <span class="n">hdr0</span><span class="p">[</span><span class="s">&#39;FILTER2&#39;</span><span class="p">],</span>
+                            <span class="n">hdr0</span><span class="p">[</span><span class="s">&#39;RA_TARG&#39;</span><span class="p">],</span>
+                            <span class="n">hdr0</span><span class="p">[</span><span class="s">&#39;DEC_TARG&#39;</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">grism</span><span class="p">[</span><span class="nb">file</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">hdr0</span><span class="p">[</span><span class="s">&#39;EXPTIME&#39;</span><span class="p">],</span>
+                           <span class="n">hdr0</span><span class="p">[</span><span class="s">&#39;FILTER1&#39;</span><span class="p">],</span>
+                           <span class="n">hdr0</span><span class="p">[</span><span class="s">&#39;RA_TARG&#39;</span><span class="p">],</span>
+                           <span class="n">hdr0</span><span class="p">[</span><span class="s">&#39;DEC_TARG&#39;</span><span class="p">]]</span>
+    <span class="k">return</span> <span class="n">direct</span><span class="p">,</span> <span class="n">grism</span>
+</div>
+<div class="viewcode-block" id="matchDirectImageToGrismImage"><a class="viewcode-back" href="../../../SamPy.grisms.html#SamPy.grisms.generateAssociationDB.matchDirectImageToGrismImage">[docs]</a><span class="k">def</span> <span class="nf">matchDirectImageToGrismImage</span><span class="p">(</span><span class="n">direct</span><span class="p">,</span> <span class="n">grism</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Matches direct images to grism images in an extremely</span>
+<span class="sd">    dummy way. Will just check that either RA or DEC are</span>
+<span class="sd">    equal. This can potentially lead to crazy results as</span>
+<span class="sd">    it does not guarantee that there is overlap. Moreover,</span>
+<span class="sd">    if one has applied a tiny offset to the grism image to</span>
+<span class="sd">    for example account for the fact that the dispersion</span>
+<span class="sd">    is always towards the same direction, then this matching</span>
+<span class="sd">    would fail. One should probably use some header keyword</span>
+<span class="sd">    information such as POSTARGs together with the RA and DEC</span>
+<span class="sd">    to find the closest matches. However, for the testing</span>
+<span class="sd">    that will be performed in April 2011 this dummy way of</span>
+<span class="sd">    matching should be sufficient.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">key1</span> <span class="ow">in</span> <span class="n">direct</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">key2</span> <span class="ow">in</span> <span class="n">grism</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">direct</span><span class="p">[</span><span class="n">key1</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="n">grism</span><span class="p">[</span><span class="n">key2</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span> <span class="ow">or</span> \
+                <span class="n">direct</span><span class="p">[</span><span class="n">key1</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="n">grism</span><span class="p">[</span><span class="n">key2</span><span class="p">][</span><span class="mi">3</span><span class="p">]:</span>
+                <span class="c">#found the exact same coordinates</span>
+                <span class="c">#in reality this matching wouldn&#39;t</span>
+                <span class="c">#be enough as there might be offset</span>
+                <span class="c">#so such info should be taken from</span>
+                <span class="c">#the header and used</span>
+                <span class="k">if</span> <span class="n">key1</span> <span class="ow">in</span> <span class="n">match</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                    <span class="n">match</span><span class="p">[</span><span class="n">key1</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="n">key2</span><span class="p">,</span> <span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">match</span><span class="p">[</span><span class="n">key1</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">key2</span><span class="p">,</span> <span class="p">]</span>
+    <span class="k">return</span> <span class="n">match</span>
+</div>
+<div class="viewcode-block" id="makeDirectImageDictionary"><a class="viewcode-back" href="../../../SamPy.grisms.html#SamPy.grisms.generateAssociationDB.makeDirectImageDictionary">[docs]</a><span class="k">def</span> <span class="nf">makeDirectImageDictionary</span><span class="p">(</span><span class="n">direct</span><span class="p">,</span> <span class="n">match</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Generates a dictionary from the direct image information.</span>
+<span class="sd">    This dictionary is in the format that ECF used to make</span>
+<span class="sd">    their association db, so it is more or less ready to be</span>
+<span class="sd">    pickled. For details, see the comment in createAssociationDB.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">match</span><span class="p">:</span>
+        <span class="c">#here we assume that the coverage is full</span>
+        <span class="c">#this could/should also be calculated somehow...</span>
+        <span class="n">coverage</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
+                    <span class="n">direct</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">coverage</span><span class="p">))</span>
+    <span class="c">#this assumes that all direct images use the same</span>
+    <span class="c">#filter. As this may not be the case, the filters</span>
+    <span class="c">#should be matched as well to be on the safe side</span>
+    <span class="n">out</span><span class="p">[</span><span class="n">direct</span><span class="p">[</span><span class="n">direct</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]][</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">tmp</span>
+    <span class="k">return</span> <span class="n">out</span>
+</div>
+<div class="viewcode-block" id="makeGrismImageList"><a class="viewcode-back" href="../../../SamPy.grisms.html#SamPy.grisms.generateAssociationDB.makeGrismImageList">[docs]</a><span class="k">def</span> <span class="nf">makeGrismImageList</span><span class="p">(</span><span class="n">grism</span><span class="p">,</span> <span class="n">match</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Generates a list of grism images. This list is in the</span>
+<span class="sd">    format that ECF used to make their association db, so it</span>
+<span class="sd">    is more or less ready to be pickled. For details,</span>
+<span class="sd">    see the comment in createAssociationDB.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">grism</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">match</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">match</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                <span class="n">direct</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="c">#this should be calculated, but we can now</span>
+        <span class="c">#assume that the direct image and grism image</span>
+        <span class="c">#are with the same pointing</span>
+        <span class="n">distance</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="nb">file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
+                    <span class="n">grism</span><span class="p">[</span><span class="nb">file</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="n">direct</span><span class="p">,</span>
+                    <span class="n">distance</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">out</span>
+    
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c">#find all the FITS files in the current working dir</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">findFitsFiles</span><span class="p">()</span>
+    <span class="c">#sort out direct images and grism</span>
+
+    <span class="n">direct</span><span class="p">,</span> <span class="n">grism</span> <span class="o">=</span> <span class="n">findGrismImages</span><span class="p">(</span><span class="n">files</span><span class="p">)</span>
+
+    <span class="c">#keys are direct images</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">matchDirectImageToGrismImage</span><span class="p">(</span><span class="n">direct</span><span class="p">,</span> <span class="n">grism</span><span class="p">)</span>
+
+    <span class="c">#make Direct Image dictionary</span>
+    <span class="c">#directDict = makeDirectImageDictionary(direct, match)</span>
+
+    <span class="c">#make a list of grism images</span>
+    <span class="c">#grismList = makeGrismImageList(grism, match)</span>
+
+    <span class="c">#finally make the association DB</span>
+    <span class="n">createAssociationDB</span><span class="p">(</span><span class="n">grism</span><span class="p">,</span> <span class="n">direct</span><span class="p">,</span> <span class="n">match</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

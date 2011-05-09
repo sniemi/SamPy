@@ -1,0 +1,295 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.stis.STISCCDImagingFlats &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.stis.STISCCDImagingFlats</h1><div class="highlight"><pre>
+<span class="c">#! /usr/bin/env python</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">ABOUT:</span>
+<span class="sd">Plots ratios between STIS CCD imaging flats.</span>
+
+<span class="sd">DEPENDS:</span>
+<span class="sd">Python 2.5 or later (no 3.x compatible)</span>
+<span class="sd">NumPy</span>
+<span class="sd">PyFITS</span>
+<span class="sd">matplotlib</span>
+
+<span class="sd">TESTED:</span>
+<span class="sd">Python 2.5.1</span>
+<span class="sd">NumPy: 1.4.0.dev7576</span>
+<span class="sd">PyFITS: 2.2.2</span>
+<span class="sd">matplotlib 1.0.svn</span>
+
+<span class="sd">HISTORY:</span>
+<span class="sd">Created on November 18, 2009</span>
+
+<span class="sd">VERSION:</span>
+<span class="sd">0.15: test release (SMN)</span>
+
+<span class="sd">@author: Sami-Matias Niemi (niemi@stsci.edu)</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Sami-Matias Niemi&#39;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;0.15&#39;</span>
+
+<div class="viewcode-block" id="Idetifiers"><a class="viewcode-back" href="../../../SamPy.stis.html#SamPy.stis.STISCCDImagingFlats.Idetifiers">[docs]</a><span class="k">def</span> <span class="nf">Idetifiers</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    0th extension header keywords.</span>
+<span class="sd">    Used to select and pair FITS files.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">common</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;PROPOSID&#39;</span><span class="p">:</span> <span class="mi">11853</span><span class="p">,</span>
+              <span class="s">&#39;SCLAMP&#39;</span>  <span class="p">:</span> <span class="s">&#39;TUNGSTEN&#39;</span><span class="p">,</span>
+              <span class="s">&#39;OBSMODE&#39;</span> <span class="p">:</span> <span class="s">&#39;ACCUM&#39;</span><span class="p">,</span>
+              <span class="s">&#39;CCDAMP&#39;</span>  <span class="p">:</span> <span class="s">&#39;D&#39;</span><span class="p">,</span>
+              <span class="s">&#39;CCDGAIN&#39;</span> <span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+
+    <span class="n">clear</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;APERTURE&#39;</span><span class="p">:</span> <span class="s">&#39;50CCD&#39;</span><span class="p">,</span>
+             <span class="s">&#39;PROPAPER&#39;</span><span class="p">:</span> <span class="s">&#39;50CCD&#39;</span><span class="p">,</span>                
+             <span class="s">&#39;FILTER&#39;</span>  <span class="p">:</span> <span class="s">&#39;Clear&#39;</span><span class="p">,</span>     
+             <span class="s">&#39;APER_FOV&#39;</span><span class="p">:</span> <span class="s">&#39;50x50&#39;</span><span class="p">}</span>
+
+    <span class="n">f28x50lp</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;APERTURE&#39;</span><span class="p">:</span> <span class="s">&#39;F28X50LP&#39;</span><span class="p">,</span>         
+                <span class="s">&#39;PROPAPER&#39;</span><span class="p">:</span> <span class="s">&#39;F28X50LP&#39;</span><span class="p">,</span>        
+                <span class="s">&#39;FILTER&#39;</span>  <span class="p">:</span> <span class="s">&#39;Long_Pass&#39;</span><span class="p">,</span>        
+                <span class="s">&#39;APER_FOV&#39;</span><span class="p">:</span> <span class="s">&#39;28x50&#39;</span><span class="p">}</span>
+    
+    <span class="k">return</span> <span class="n">common</span><span class="p">,</span> <span class="n">clear</span><span class="p">,</span> <span class="n">f28x50lp</span>
+</div>
+<div class="viewcode-block" id="ImStats"><a class="viewcode-back" href="../../../SamPy.stis.html#SamPy.stis.STISCCDImagingFlats.ImStats">[docs]</a><span class="k">def</span> <span class="nf">ImStats</span><span class="p">(</span><span class="n">im1</span><span class="p">,</span> <span class="n">im2</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculates some basic image statistics from </span>
+<span class="sd">    two images given.</span>
+<span class="sd">    @return: ratio, image1 mean, image1 std, ratio mean</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">ratio</span> <span class="o">=</span> <span class="p">(</span><span class="n">im1</span> <span class="o">*</span> <span class="n">scale</span><span class="p">)</span> <span class="o">/</span> <span class="n">im2</span>
+    <span class="n">ratiosub</span> <span class="o">=</span> <span class="n">ratio</span><span class="p">[</span><span class="mi">500</span><span class="p">:</span><span class="mi">600</span><span class="p">,</span><span class="mi">500</span><span class="p">:</span><span class="mi">600</span><span class="p">]</span>
+    <span class="n">im1sub</span> <span class="o">=</span> <span class="n">im1</span><span class="p">[</span><span class="mi">500</span><span class="p">:</span><span class="mi">600</span><span class="p">,</span><span class="mi">500</span><span class="p">:</span><span class="mi">600</span><span class="p">]</span>
+    <span class="n">imean</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">im1sub</span><span class="p">)</span>
+    <span class="n">istd</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">im1sub</span><span class="p">)</span>
+    <span class="n">rmean</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">ratiosub</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ratio</span><span class="p">,</span> <span class="n">imean</span><span class="p">,</span> <span class="n">istd</span><span class="p">,</span> <span class="n">rmean</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">matplotlib</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s">&#39;PDF&#39;</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">cm</span>
+    <span class="kn">import</span> <span class="nn">pyfits</span> <span class="kn">as</span> <span class="nn">PF</span>
+    <span class="kn">import</span> <span class="nn">pylab</span> <span class="kn">as</span> <span class="nn">P</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">N</span>
+    <span class="kn">import</span> <span class="nn">glob</span>
+    
+    <span class="n">filelist</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">&#39;*_raw.fits&#39;</span><span class="p">)</span> 
+    
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">filelist</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">sys</span>
+        <span class="k">print</span> <span class="s">&#39;No _raw.fits files were found. Will exit now...&#39;</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">)</span>
+    
+    <span class="n">common</span><span class="p">,</span> <span class="n">clear</span><span class="p">,</span> <span class="n">f28</span> <span class="o">=</span> <span class="n">Idetifiers</span><span class="p">()</span>
+    
+    <span class="k">for</span> <span class="n">val1</span><span class="p">,</span> <span class="n">name1</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">filelist</span><span class="p">):</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">fh1</span> <span class="o">=</span> <span class="n">PF</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">name1</span><span class="p">)</span>
+        <span class="n">hdr10</span> <span class="o">=</span> <span class="n">fh1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">header</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">common</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">common</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">!=</span> <span class="n">hdr10</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                <span class="n">right</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="n">right</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;Finding a pair for &#39;</span><span class="p">,</span> <span class="n">name1</span>
+            <span class="k">for</span> <span class="n">val2</span><span class="p">,</span> <span class="n">name2</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">filelist</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">name1</span> <span class="o">!=</span> <span class="n">name2</span> <span class="ow">and</span> <span class="n">val2</span> <span class="o">&gt;</span> <span class="n">val1</span><span class="p">:</span>
+                    <span class="n">right2</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="n">ClearB</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="n">F28B</span> <span class="o">=</span> <span class="bp">True</span>
+                    <span class="n">fh2</span> <span class="o">=</span> <span class="n">PF</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">name2</span><span class="p">)</span>
+                    <span class="n">hdr20</span> <span class="o">=</span> <span class="n">fh2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">header</span>
+                    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">common</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">common</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">!=</span> <span class="n">hdr20</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                            <span class="n">right2</span> <span class="o">=</span> <span class="bp">False</span>
+                    <span class="k">if</span> <span class="n">right2</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">clear</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">clear</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">!=</span> <span class="n">hdr10</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="ow">or</span> <span class="n">clear</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">!=</span> <span class="n">hdr20</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                                <span class="n">ClearB</span> <span class="o">=</span> <span class="bp">False</span>
+                        <span class="k">if</span> <span class="n">ClearB</span><span class="p">:</span>
+                            <span class="k">print</span> <span class="s">&#39;Clear Pair:&#39;</span><span class="p">,</span>  <span class="n">name1</span><span class="p">,</span> <span class="n">name2</span>
+                            <span class="n">exp1</span> <span class="o">=</span> <span class="n">hdr10</span><span class="p">[</span><span class="s">&#39;TEXPTIME&#39;</span><span class="p">]</span>
+                            <span class="n">exp2</span> <span class="o">=</span> <span class="n">hdr20</span><span class="p">[</span><span class="s">&#39;TEXPTIME&#39;</span><span class="p">]</span>
+                            <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.</span>
+                            <span class="k">if</span> <span class="n">exp1</span> <span class="o">!=</span> <span class="n">exp2</span><span class="p">:</span>
+                                <span class="k">print</span> <span class="s">&#39;Exposure times do not match, will scale...&#39;</span>
+                                <span class="n">scale</span> <span class="o">=</span> <span class="n">exp2</span> <span class="o">/</span> <span class="n">exp1</span>
+                            <span class="c">#images</span>
+                            <span class="n">im1</span> <span class="o">=</span> <span class="n">fh1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+                            <span class="n">im2</span> <span class="o">=</span> <span class="n">fh2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+                            <span class="n">ratio</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">rm</span> <span class="o">=</span> <span class="n">ImStats</span><span class="p">(</span><span class="n">im1</span><span class="p">,</span> <span class="n">im2</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+                            <span class="c">#plotting</span>
+                            <span class="n">P</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Scaled Ratio of </span><span class="si">%s</span><span class="s"> / </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name1</span><span class="p">,</span> <span class="n">name2</span><span class="p">))</span>
+                            <span class="n">ims</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">ratio</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">gist_yarg</span><span class="p">,</span> <span class="n">origin</span> <span class="o">=</span> <span class="s">&#39;lower&#39;</span><span class="p">,</span>
+                                           <span class="n">interpolation</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
+                            <span class="n">cb</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">ims</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s">&#39;vertical&#39;</span><span class="p">)</span>
+                            <span class="n">cb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;Ratio&#39;</span><span class="p">)</span>
+                            <span class="nb">str</span> <span class="o">=</span> <span class="s">&#39;APERTURE = &#39;</span> <span class="o">+</span> <span class="n">hdr10</span><span class="p">[</span><span class="s">&#39;APERTURE&#39;</span><span class="p">]</span> <span class="o">+</span> \
+                                    <span class="s">&#39;, FILTER = &#39;</span> <span class="o">+</span> <span class="n">hdr10</span><span class="p">[</span><span class="s">&#39;FILTER&#39;</span><span class="p">]</span> <span class="o">+</span> \
+                                    <span class="s">&#39;, APER_FOV = &#39;</span> <span class="o">+</span> <span class="n">hdr10</span><span class="p">[</span><span class="s">&#39;APER_FOV&#39;</span><span class="p">]</span> <span class="o">+</span> \
+                                    <span class="s">&#39;</span><span class="se">\n</span><span class="s"> SCLAMP = &#39;</span> <span class="o">+</span> <span class="n">hdr10</span><span class="p">[</span><span class="s">&#39;SCLAMP&#39;</span><span class="p">]</span> <span class="o">+</span> \
+                                    <span class="s">&#39;, TDATEOBS1 = &#39;</span> <span class="o">+</span> <span class="n">hdr10</span><span class="p">[</span><span class="s">&#39;TDATEOBS&#39;</span><span class="p">]</span> <span class="o">+</span> \
+                                    <span class="s">&#39;, TDATEOBS2 = &#39;</span> <span class="o">+</span> <span class="n">hdr20</span><span class="p">[</span><span class="s">&#39;TDATEOBS&#39;</span><span class="p">]</span>
+                            <span class="n">P</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span>
+                                       <span class="n">xy</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">),</span> 
+                                       <span class="n">horizontalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+                                       <span class="n">verticalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+                                       <span class="n">size</span> <span class="o">=</span> <span class="s">&#39;x-small&#39;</span><span class="p">,</span>
+                                       <span class="n">xycoords</span><span class="o">=</span><span class="s">&#39;figure fraction&#39;</span><span class="p">)</span>
+                            <span class="n">str2</span> <span class="o">=</span> <span class="s">&#39;File = </span><span class="si">%s</span><span class="s">, box([500:600,500:600]), Mean = </span><span class="si">%6.2f</span><span class="s">, Stdev = </span><span class="si">%4.1f</span><span class="s">, SNR = </span><span class="si">%4.1f</span><span class="s">, Mean Ratio = </span><span class="si">%5.4f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name1</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">m</span><span class="o">/</span><span class="n">s</span><span class="p">,</span> <span class="n">rm</span><span class="p">)</span>
+                            <span class="n">P</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">str2</span><span class="p">,</span>
+                                       <span class="n">xy</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.97</span><span class="p">),</span> 
+                                       <span class="n">horizontalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+                                       <span class="n">verticalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+                                       <span class="n">size</span> <span class="o">=</span> <span class="s">&#39;x-small&#39;</span><span class="p">,</span>
+                                       <span class="n">xycoords</span><span class="o">=</span><span class="s">&#39;figure fraction&#39;</span><span class="p">)</span>
+                            <span class="n">P</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">name1</span><span class="p">[:</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span><span class="o">+</span><span class="s">&#39;.pdf&#39;</span><span class="p">)</span>                                       
+                            <span class="n">P</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                                
+                        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">f28</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">f28</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">!=</span> <span class="n">hdr10</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="ow">or</span> <span class="n">f28</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">!=</span> <span class="n">hdr20</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                                <span class="n">F28B</span> <span class="o">=</span> <span class="bp">False</span>
+                        <span class="k">if</span> <span class="n">F28B</span><span class="p">:</span>
+                            <span class="k">print</span> <span class="s">&#39;F28 Pair&#39;</span><span class="p">,</span> <span class="n">name1</span><span class="p">,</span> <span class="n">name2</span>
+                            <span class="n">exp1</span> <span class="o">=</span> <span class="n">hdr10</span><span class="p">[</span><span class="s">&#39;TEXPTIME&#39;</span><span class="p">]</span>
+                            <span class="n">exp2</span> <span class="o">=</span> <span class="n">hdr20</span><span class="p">[</span><span class="s">&#39;TEXPTIME&#39;</span><span class="p">]</span>
+                            <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.</span>
+                            <span class="k">if</span> <span class="n">exp1</span> <span class="o">!=</span> <span class="n">exp2</span><span class="p">:</span>
+                                <span class="k">print</span> <span class="s">&#39;Exposure times do not match, will scale...&#39;</span>
+                                <span class="n">scale</span> <span class="o">=</span> <span class="n">exp2</span> <span class="o">/</span> <span class="n">exp1</span>
+                            <span class="c">#images</span>
+                            <span class="n">im1</span> <span class="o">=</span> <span class="n">fh1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+                            <span class="n">im2</span> <span class="o">=</span> <span class="n">fh2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+                            <span class="n">ratio</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">rm</span> <span class="o">=</span> <span class="n">ImStats</span><span class="p">(</span><span class="n">im1</span><span class="p">,</span> <span class="n">im2</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+                            <span class="c">#plotting</span>
+                            <span class="n">P</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s">&#39;Scaled Ratio of </span><span class="si">%s</span><span class="s"> / </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name1</span><span class="p">,</span> <span class="n">name2</span><span class="p">))</span>
+                            <span class="n">ims</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">ratio</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="n">cm</span><span class="o">.</span><span class="n">gist_yarg</span><span class="p">,</span> <span class="n">origin</span> <span class="o">=</span> <span class="s">&#39;lower&#39;</span><span class="p">,</span>
+                                           <span class="n">interpolation</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span>
+                            <span class="n">cb</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">ims</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s">&#39;vertical&#39;</span><span class="p">)</span>
+                            <span class="n">cb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;Ratio&#39;</span><span class="p">)</span>
+                            <span class="nb">str</span> <span class="o">=</span> <span class="s">&#39;APERTURE = &#39;</span> <span class="o">+</span> <span class="n">hdr10</span><span class="p">[</span><span class="s">&#39;APERTURE&#39;</span><span class="p">]</span> <span class="o">+</span> \
+                                    <span class="s">&#39;, FILTER = &#39;</span> <span class="o">+</span> <span class="n">hdr10</span><span class="p">[</span><span class="s">&#39;FILTER&#39;</span><span class="p">]</span> <span class="o">+</span> \
+                                    <span class="s">&#39;, APER_FOV = &#39;</span> <span class="o">+</span> <span class="n">hdr10</span><span class="p">[</span><span class="s">&#39;APER_FOV&#39;</span><span class="p">]</span> <span class="o">+</span> \
+                                    <span class="s">&#39;</span><span class="se">\n</span><span class="s"> SCLAMP = &#39;</span> <span class="o">+</span> <span class="n">hdr10</span><span class="p">[</span><span class="s">&#39;SCLAMP&#39;</span><span class="p">]</span> <span class="o">+</span> \
+                                    <span class="s">&#39;, TDATEOBS1 = &#39;</span> <span class="o">+</span> <span class="n">hdr10</span><span class="p">[</span><span class="s">&#39;TDATEOBS&#39;</span><span class="p">]</span> <span class="o">+</span> \
+                                    <span class="s">&#39;, TDATEOBS2 = &#39;</span> <span class="o">+</span> <span class="n">hdr20</span><span class="p">[</span><span class="s">&#39;TDATEOBS&#39;</span><span class="p">]</span>
+                            <span class="n">P</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span>
+                                       <span class="n">xy</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">),</span> 
+                                       <span class="n">horizontalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+                                       <span class="n">verticalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+                                       <span class="n">size</span> <span class="o">=</span> <span class="s">&#39;x-small&#39;</span><span class="p">,</span>
+                                       <span class="n">xycoords</span><span class="o">=</span><span class="s">&#39;figure fraction&#39;</span><span class="p">)</span>
+                            <span class="n">str2</span> <span class="o">=</span> <span class="s">&#39;File = </span><span class="si">%s</span><span class="s">, box([500:600,500:600]), Mean = </span><span class="si">%6.2f</span><span class="s">, Stdev = </span><span class="si">%4.1f</span><span class="s">, SNR = </span><span class="si">%4.1f</span><span class="s">, Mean Ratio = </span><span class="si">%5.4f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">name1</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">m</span><span class="o">/</span><span class="n">s</span><span class="p">,</span> <span class="n">rm</span><span class="p">)</span>
+                            <span class="n">P</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">str2</span><span class="p">,</span>
+                                       <span class="n">xy</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.97</span><span class="p">),</span> 
+                                       <span class="n">horizontalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+                                       <span class="n">verticalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+                                       <span class="n">size</span> <span class="o">=</span> <span class="s">&#39;x-small&#39;</span><span class="p">,</span>
+                                       <span class="n">xycoords</span><span class="o">=</span><span class="s">&#39;figure fraction&#39;</span><span class="p">)</span>
+                            <span class="n">P</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">name1</span><span class="p">[:</span><span class="o">-</span><span class="mi">5</span><span class="p">]</span><span class="o">+</span><span class="s">&#39;.pdf&#39;</span><span class="p">)</span>
+                            <span class="n">P</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                                                        
+                    <span class="n">fh2</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">fh1</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

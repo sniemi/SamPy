@@ -1,0 +1,214 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>statistics Package &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="SamPy Package" href="SamPy.html" />
+    <link rel="next" title="stis Package" href="SamPy.stis.html" />
+    <link rel="prev" title="smnIO Package" href="SamPy.smnIO.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.stis.html" title="stis Package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.smnIO.html" title="smnIO Package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.html" accesskey="U">SamPy Package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">statistics Package</a><ul>
+<li><a class="reference internal" href="#module-SamPy.statistics.StatTool"><tt class="docutils literal"><span class="pre">StatTool</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.statistics.StatTool2files"><tt class="docutils literal"><span class="pre">StatTool2files</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.statistics.plot_ica_vs_pca"><tt class="docutils literal"><span class="pre">plot_ica_vs_pca</span></tt> Module</a><ul>
+<li><a class="reference internal" href="#fastica-on-2d-point-clouds">FastICA on 2D point clouds</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.smnIO.html"
+                        title="previous chapter">smnIO Package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.stis.html"
+                        title="next chapter">stis Package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.statistics.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="statistics-package">
+<h1>statistics Package<a class="headerlink" href="#statistics-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-SamPy.statistics.StatTool">
+<span id="stattool-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">StatTool</span></tt> Module<a class="headerlink" href="#module-SamPy.statistics.StatTool" title="Permalink to this headline">¶</a></h2>
+<p>This is the ultimate statistical tool!
+Calculates pretty much anything you can think of.
+This version uses two input files!</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">Scipy</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">Numpy</td>
+</tr>
+<tr class="field"><th class="field-name">date:</th><td class="field-body">2008</td>
+</tr>
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="SamPy.statistics.StatTool.process_args">
+<tt class="descclassname">SamPy.statistics.StatTool.</tt><tt class="descname">process_args</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/statistics/StatTool.html#process_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.statistics.StatTool.process_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-SamPy.statistics.StatTool2files">
+<span id="stattool2files-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">StatTool2files</span></tt> Module<a class="headerlink" href="#module-SamPy.statistics.StatTool2files" title="Permalink to this headline">¶</a></h2>
+<p>This is the ultimate statistical tool!
+Calculates pretty much anything you can think of.
+This version uses two input files!</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">Scipy</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">Numpy</td>
+</tr>
+<tr class="field"><th class="field-name">date:</th><td class="field-body">2008</td>
+</tr>
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="SamPy.statistics.StatTool2files.process_args">
+<tt class="descclassname">SamPy.statistics.StatTool2files.</tt><tt class="descname">process_args</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/statistics/StatTool2files.html#process_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.statistics.StatTool2files.process_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-SamPy.statistics.plot_ica_vs_pca">
+<span id="plot-ica-vs-pca-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">plot_ica_vs_pca</span></tt> Module<a class="headerlink" href="#module-SamPy.statistics.plot_ica_vs_pca" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="fastica-on-2d-point-clouds">
+<h3>FastICA on 2D point clouds<a class="headerlink" href="#fastica-on-2d-point-clouds" title="Permalink to this headline">¶</a></h3>
+<p>Illustrate visually the results of <em class="xref std std-ref">ICA</em> vs <em class="xref std std-ref">PCA</em> in the
+feature space.</p>
+<p>Representing ICA in the feature space gives the view of &#8216;geometric ICA&#8217;:
+ICA is an algorithm that finds directions in the feature space
+corresponding to projections with high non-Gaussianity. These directions
+need not be orthogonal in the original feature space, but they are
+orthogonal in the whitened feature space, in which all directions
+correspond to the same variance.</p>
+<p>PCA, on the other hand, finds orthogonal directions in the raw feature
+space that correspond to directions accoutning for maximum variance.</p>
+<p>Here we simulate independent sources using a highly non-Gaussian
+process, 2 student T with a low number of degrees of freedom (top left
+figure). We mix them to create observations (top right figure).
+In this raw observation space, directions identified by PCA are
+represented by green vectors. We represent the signal in the PCA space,
+after whitening by the variance corresponding to the PCA vectors (lower
+left). Running ICA corresponds to finding a rotation in this space to
+identify the directions of largest non-Gaussianity (lower right).</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.stis.html" title="stis Package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.smnIO.html" title="smnIO Package"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.html" >SamPy Package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,235 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.db.sqlite &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.db.sqlite</h1><div class="highlight"><pre>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">This file contains SQLite3 related functions.</span>
+
+<span class="sd">@requires: NumPy</span>
+
+<span class="sd">@author: Sami-Matias Niemi</span>
+<span class="sd">@version: 0.1</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">sqlite3</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">N</span>
+<span class="c">#Sami&#39;s repository</span>
+<span class="kn">import</span> <span class="nn">astronomy.conversions</span> <span class="kn">as</span> <span class="nn">conv</span>
+
+
+<div class="viewcode-block" id="toPowerTen"><a class="viewcode-back" href="../../../SamPy.db.html#SamPy.db.sqlite.toPowerTen">[docs]</a><span class="k">def</span> <span class="nf">toPowerTen</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    @note: This function can be passed on to slite3 connection</span>
+<span class="sd">    @param value: can either be a number or a NumPy array</span>
+<span class="sd">    @return: 10**value</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">N</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="toLogTen"><a class="viewcode-back" href="../../../SamPy.db.html#SamPy.db.sqlite.toLogTen">[docs]</a><span class="k">def</span> <span class="nf">toLogTen</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    @note: This function can be passed on to slite3 connection</span>
+<span class="sd">    @param value: can either be a number or a NumPy array </span>
+<span class="sd">    @return: Log_10(value)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">N</span><span class="o">.</span><span class="n">Log10</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="SSFR"><a class="viewcode-back" href="../../../SamPy.db.html#SamPy.db.sqlite.SSFR">[docs]</a><span class="k">def</span> <span class="nf">SSFR</span><span class="p">(</span><span class="n">mstardot</span><span class="p">,</span> <span class="n">mstar</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Log_10(value1 / 10**value2)</span>
+<span class="sd">    @note: This function can be passed on to slite3 connection</span>
+<span class="sd">    @param mstardot: star formation rate</span>
+<span class="sd">    @param mstar: stellar mass in log10(M_solar)</span>
+<span class="sd">    @return: specific star formation rate in Gyr**-1</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">mstardot</span> <span class="o">/</span> <span class="mi">10</span><span class="o">**</span><span class="n">mstar</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="get_data_sqlitePowerTen"><a class="viewcode-back" href="../../../SamPy.db.html#SamPy.db.sqlite.get_data_sqlitePowerTen">[docs]</a><span class="k">def</span> <span class="nf">get_data_sqlitePowerTen</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Run an SQL query to a database with a custom</span>
+<span class="sd">    made function &quot;toPowerTen&quot;.</span>
+<span class="sd">    @param path: path to the SQLite3 database</span>
+<span class="sd">    @param db: name of the SQLite3 database</span>
+<span class="sd">    @param query: valid SQL query</span>
+<span class="sd">    @return: all data in a NumPy array   </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="n">db</span><span class="p">)</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">create_function</span><span class="p">(</span><span class="s">&#39;Pow10&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">toPowerTen</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">fetchall</span><span class="p">())</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">data</span>
+</div>
+<div class="viewcode-block" id="get_data_sqliteSMNfunctions"><a class="viewcode-back" href="../../../SamPy.db.html#SamPy.db.sqlite.get_data_sqliteSMNfunctions">[docs]</a><span class="k">def</span> <span class="nf">get_data_sqliteSMNfunctions</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Run an SQL query to a database with custom</span>
+<span class="sd">    made functions &quot;toPowerTen&quot; and &quot;janskyToMagnitude&quot;.</span>
+<span class="sd">    @param path: path to the SQLite3 database</span>
+<span class="sd">    @param db: name of the SQLite3 database</span>
+<span class="sd">    @param query: valid SQL query</span>
+<span class="sd">    @return: all data in a NumPy array</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="n">db</span><span class="p">)</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">create_function</span><span class="p">(</span><span class="s">&#39;janskyToMagnitude&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">conv</span><span class="o">.</span><span class="n">janskyToMagnitude</span><span class="p">)</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">create_function</span><span class="p">(</span><span class="s">&#39;Pow10&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">toPowerTen</span><span class="p">)</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">create_function</span><span class="p">(</span><span class="s">&#39;Log10&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">toLogTen</span><span class="p">)</span>    
+    <span class="n">conn</span><span class="o">.</span><span class="n">create_function</span><span class="p">(</span><span class="s">&#39;SSFR&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">SSFR</span><span class="p">)</span>  
+    <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">fetchall</span><span class="p">())</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">data</span>
+
+</div>
+<div class="viewcode-block" id="get_data_sqlite"><a class="viewcode-back" href="../../../SamPy.db.html#SamPy.db.sqlite.get_data_sqlite">[docs]</a><span class="k">def</span> <span class="nf">get_data_sqlite</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This function can be used to pull out data</span>
+<span class="sd">    from an slite3 database. Output is given as</span>
+<span class="sd">    a numpy array for ease of further processing.</span>
+<span class="sd">    @param path: path to the db file, should end with /</span>
+<span class="sd">    @param db: name of the database file</span>
+<span class="sd">    @param query: query to be performed</span>
+<span class="sd">    @return: numpy array of data </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">path</span> <span class="o">+</span> <span class="n">db</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">fetchall</span><span class="p">())</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">data</span>
+</div>
+<div class="viewcode-block" id="parseColumnNamesSAMTables"><a class="viewcode-back" href="../../../SamPy.db.html#SamPy.db.sqlite.parseColumnNamesSAMTables">[docs]</a><span class="k">def</span> <span class="nf">parseColumnNamesSAMTables</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span>
+                              <span class="n">commentchar</span> <span class="o">=</span> <span class="s">&#39;#&#39;</span><span class="p">,</span>
+                              <span class="n">colnumber</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Parse column names from a text file that follows</span>
+<span class="sd">    SExtractor format, i.e., columns are specified in</span>
+<span class="sd">    the beginning of the file. Each column are specified</span>
+<span class="sd">    in a single line that starts with a comment charachter.</span>
+<span class="sd">    The line assumed to follow the following format:</span>
+<span class="sd">    # number name</span>
+<span class="sd">    For example:</span>
+<span class="sd">    # 1 the_first_column.</span>
+<span class="sd">    In the case of the example, the function would return</span>
+<span class="sd">    a list [&#39;the_first_column&#39;,].</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="nb">next</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">while</span> <span class="nb">next</span><span class="p">:</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">commentchar</span><span class="p">):</span>
+            <span class="nb">next</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="n">cols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="n">colnumber</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">cols</span>
+</div>
+<div class="viewcode-block" id="generateSQLString"><a class="viewcode-back" href="../../../SamPy.db.html#SamPy.db.sqlite.generateSQLString">[docs]</a><span class="k">def</span> <span class="nf">generateSQLString</span><span class="p">(</span><span class="n">columns</span><span class="p">,</span> <span class="n">format</span><span class="p">,</span> <span class="n">start</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Generates an SQL string from two vectors that</span>
+<span class="sd">    describe the name of the column and the format.</span>
+<span class="sd">    Can be used to assist when generating a string</span>
+<span class="sd">    to create a new table.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">start</span> <span class="o">+=</span> <span class="s">&#39;(&#39;</span>
+    <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">columns</span><span class="p">,</span> <span class="n">format</span><span class="p">):</span>
+        <span class="n">start</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">, &#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+        
+    <span class="n">start</span> <span class="o">=</span> <span class="n">start</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;)&#39;</span>
+    <span class="k">return</span> <span class="n">start</span>
+</pre></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

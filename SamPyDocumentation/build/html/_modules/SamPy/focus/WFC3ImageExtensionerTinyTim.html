@@ -1,0 +1,215 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.focus.WFC3ImageExtensionerTinyTim &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.focus.WFC3ImageExtensionerTinyTim</h1><div class="highlight"><pre>
+<span class="c">#! /usr/bin/env python</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Created on March 3, 2011</span>
+
+<span class="sd">:author : Sami-Matias Niemi (niemi@stsci.edu)</span>
+<span class="sd">:version : 0.1</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">pyfits</span> <span class="kn">as</span> <span class="nn">PF</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">N</span>
+<span class="kn">import</span> <span class="nn">glob</span> <span class="kn">as</span> <span class="nn">g</span>
+
+<div class="viewcode-block" id="parse_parameterfile"><a class="viewcode-back" href="../../../SamPy.focus.html#SamPy.focus.WFC3ImageExtensionerTinyTim.parse_parameterfile">[docs]</a><span class="k">def</span> <span class="nf">parse_parameterfile</span><span class="p">(</span><span class="nb">file</span> <span class="o">=</span> <span class="s">&#39;./complete_results/parameters.txt&#39;</span><span class="p">):</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c">#read data</span>
+    <span class="n">pdata</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+    <span class="c">#loop over data</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">pdata</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s">&#39;Chip&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">chip</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;|&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">out</span><span class="p">[</span><span class="s">&#39;CHIP&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">chip</span>
+        <span class="k">if</span> <span class="s">&#39;Position&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;|&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="n">out</span><span class="p">[</span><span class="s">&#39;LTV1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="nb">float</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">out</span><span class="p">[</span><span class="s">&#39;LTV2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="nb">float</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s">&#39;Filter&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">filt</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;|&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">out</span><span class="p">[</span><span class="s">&#39;FILTER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">filt</span>
+        <span class="k">if</span> <span class="s">&#39;Camera&#39;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+            <span class="n">apr</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;|&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">out</span><span class="p">[</span><span class="s">&#39;APERTURE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">apr</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+
+    <span class="c"># file assignment</span>
+    <span class="nb">file</span> <span class="o">=</span> <span class="s">&#39;result00.fits&#39;</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="s">&#39;iTinyTimPSF.fits&#39;</span>
+
+    <span class="c">#try to open the template, will exit if not possible</span>
+    <span class="c">#TODO change this, actually don&#39;t need the data, just the shape...</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="s">&#39;/grp/hst/OTA/focus/Data/prop11877/visit09-jan2010/ibcy09usq_flt.fits&#39;</span>
+    <span class="c">#yorg, xorg = 4096, 2051</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">tempdata</span> <span class="o">=</span> <span class="n">PF</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">template</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+        <span class="n">yorg</span><span class="p">,</span> <span class="n">xorg</span> <span class="o">=</span> <span class="n">tempdata</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">tempdata</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">tempdata</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">N</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;Cannot open template file </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">template</span>
+        <span class="kn">import</span> <span class="nn">sys</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s">&#39;Will exit now&#39;</span><span class="p">)</span>
+
+    <span class="c">#find all suitable wfc3 files</span>
+    <span class="n">wfc3file</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">&#39;./complete_results/</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">file</span><span class="p">)</span>
+
+    <span class="c">#get data from the parameter file</span>
+    <span class="n">prms</span> <span class="o">=</span> <span class="n">parse_parameterfile</span><span class="p">()</span>
+
+    <span class="c">#make full frame data file</span>
+    <span class="k">print</span> <span class="s">&#39;processing file </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">file</span>
+    <span class="c">#open file handler and read data and headers and close the handler</span>
+    <span class="n">fh</span> <span class="o">=</span> <span class="n">PF</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">wfc3file</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">fh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+    <span class="n">hd0</span> <span class="o">=</span> <span class="n">fh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">header</span>
+    <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="c">#check out the shape of the subarray</span>
+    <span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
+    <span class="c">#add the keys</span>
+    <span class="k">print</span> <span class="n">prms</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">prms</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s">&#39;CHIP&#39;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+            <span class="n">hd0</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;CCDCHIP&#39;</span><span class="p">,</span> <span class="n">prms</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">hd0</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">prms</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+    <span class="n">hd0</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;EXPTIME&#39;</span><span class="p">,</span> <span class="s">&#39;1&#39;</span><span class="p">)</span>
+    <span class="n">hd0</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;EXPSTART&#39;</span><span class="p">,</span> <span class="mf">5.55555e4</span><span class="p">)</span>
+    <span class="n">hd0</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;DATE-OBS&#39;</span><span class="p">,</span> <span class="s">&#39;2015-01-01&#39;</span><span class="p">)</span>
+    <span class="n">hd0</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;SIZAXIS1&#39;</span><span class="p">,</span> <span class="n">xorg</span><span class="p">)</span>
+    <span class="n">hd0</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;SIZAXIS2&#39;</span><span class="p">,</span> <span class="n">yorg</span><span class="p">)</span>
+    <span class="n">hd0</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;ORIENTAT&#39;</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+
+    <span class="c">#set the positions</span>
+    <span class="n">xstart</span> <span class="o">=</span> <span class="n">prms</span><span class="p">[</span><span class="s">&#39;LTV1&#39;</span><span class="p">]</span> <span class="c">#offset in X to subsection start</span>
+    <span class="n">ystart</span> <span class="o">=</span> <span class="n">prms</span><span class="p">[</span><span class="s">&#39;LTV2&#39;</span><span class="p">]</span> <span class="c">#offset in Y to subsection start</span>
+    <span class="n">apert</span> <span class="o">=</span> <span class="n">prms</span><span class="p">[</span><span class="s">&#39;APERTURE&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">prms</span><span class="p">[</span><span class="s">&#39;CHIP&#39;</span><span class="p">]</span>
+
+    <span class="c">#make integers</span>
+    <span class="n">xstart</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">xstart</span><span class="p">))</span>
+    <span class="n">ystart</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">ystart</span><span class="p">))</span>
+
+    <span class="c">#assign the data to the temp array to a right place</span>
+    <span class="n">tempdata</span><span class="p">[</span><span class="o">-</span><span class="n">ystart</span><span class="p">:</span> <span class="n">y</span> <span class="o">-</span> <span class="n">ystart</span><span class="p">,</span> <span class="o">-</span><span class="n">xstart</span><span class="p">:</span> <span class="n">x</span> <span class="o">-</span> <span class="n">xstart</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e5</span><span class="o">*</span><span class="n">data</span>
+
+    <span class="c">#check which chip was used</span>
+    <span class="k">if</span> <span class="s">&#39;UVIS1&#39;</span> <span class="ow">in</span> <span class="n">apert</span><span class="p">:</span>
+        <span class="c">#is in extension 4!</span>
+        <span class="c">#this is so horrible solution... arggggggh</span>
+        <span class="n">hdu</span> <span class="o">=</span> <span class="n">PF</span><span class="o">.</span><span class="n">PrimaryHDU</span><span class="p">(</span><span class="n">header</span> <span class="o">=</span> <span class="n">hd0</span><span class="p">)</span>
+        <span class="n">hdu1</span> <span class="o">=</span> <span class="n">PF</span><span class="o">.</span><span class="n">ImageHDU</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">header</span> <span class="o">=</span> <span class="n">hd0</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;SCI&#39;</span><span class="p">)</span>
+        <span class="n">hdu2</span> <span class="o">=</span> <span class="n">PF</span><span class="o">.</span><span class="n">ImageHDU</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">header</span> <span class="o">=</span> <span class="n">hd0</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;SCI&#39;</span><span class="p">)</span>
+        <span class="n">hdu3</span> <span class="o">=</span> <span class="n">PF</span><span class="o">.</span><span class="n">ImageHDU</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">header</span> <span class="o">=</span> <span class="n">hd0</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;SCI&#39;</span><span class="p">)</span>
+        <span class="n">hdu4</span> <span class="o">=</span> <span class="n">PF</span><span class="o">.</span><span class="n">ImageHDU</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">tempdata</span><span class="p">,</span> <span class="n">header</span> <span class="o">=</span> <span class="n">hd0</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;SCI&#39;</span><span class="p">)</span>
+        <span class="n">thdulist</span> <span class="o">=</span> <span class="n">PF</span><span class="o">.</span><span class="n">HDUList</span><span class="p">([</span><span class="n">hdu</span><span class="p">,</span> <span class="n">hdu1</span><span class="p">,</span> <span class="n">hdu2</span><span class="p">,</span> <span class="n">hdu3</span><span class="p">,</span> <span class="n">hdu4</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="s">&#39;UVIS2&#39;</span> <span class="ow">in</span> <span class="n">apert</span><span class="p">:</span>
+        <span class="n">hdu</span> <span class="o">=</span> <span class="n">PF</span><span class="o">.</span><span class="n">PrimaryHDU</span><span class="p">(</span><span class="n">header</span> <span class="o">=</span> <span class="n">hd0</span><span class="p">)</span>
+        <span class="n">hdu1</span> <span class="o">=</span> <span class="n">PF</span><span class="o">.</span><span class="n">ImageHDU</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">tempdata</span><span class="p">,</span> <span class="n">header</span> <span class="o">=</span> <span class="n">hd0</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">&#39;SCI&#39;</span><span class="p">)</span>
+        <span class="n">thdulist</span> <span class="o">=</span> <span class="n">PF</span><span class="o">.</span><span class="n">HDUList</span><span class="p">([</span><span class="n">hdu</span><span class="p">,</span> <span class="n">hdu1</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span> <span class="k">print</span> <span class="s">&#39;Error with file </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">file</span>
+
+    <span class="c">#write the output</span>
+    <span class="n">thdulist</span><span class="o">.</span><span class="n">writeto</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+
+    <span class="k">print</span> <span class="s">&#39;All done&#39;</span>
+     
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

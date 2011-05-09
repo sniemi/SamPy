@@ -1,0 +1,170 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.fits.ShowHeader &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.fits.ShowHeader</h1><div class="highlight"><pre>
+<span class="c">#! /sw/bin/python</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Extremely simple script that can be used printing FITS headers.</span>
+
+<span class="sd">Accepts wildcard in the name, but then the filename must be given inside quote marks</span>
+<span class="sd">i.e. &quot;*.fits&quot;</span>
+
+<span class="sd">Created on Mar 27, 2009</span>
+
+<span class="sd">@author: Sami-Matias Niemi for STScI</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Sami-Matias Niemi&#39;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;1.0&#39;</span>
+
+<div class="viewcode-block" id="containsAny"><a class="viewcode-back" href="../../../SamPy.fits.html#SamPy.fits.ShowHeader.containsAny">[docs]</a><span class="k">def</span> <span class="nf">containsAny</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">set</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Checks if a given string contains any of the characters in a given set.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">:</span> <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">return</span> <span class="bp">False</span>
+</div>
+<div class="viewcode-block" id="containsAll"><a class="viewcode-back" href="../../../SamPy.fits.html#SamPy.fits.ShowHeader.containsAll">[docs]</a><span class="k">def</span> <span class="nf">containsAll</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">set</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Checks if a given string contains all characters in a given set.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">:</span> <span class="k">return</span> <span class="bp">False</span>
+    <span class="k">return</span> <span class="bp">True</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    
+    <span class="kn">import</span> <span class="nn">sys</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">pyfits</span> <span class="kn">as</span> <span class="nn">PF</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">No PyFits installed.. will exit</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+    
+    <span class="n">filename</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="n">extension</span> <span class="o">=</span> <span class="mi">1</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">extension</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">No header extension given, will print the first extension header of file: </span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">filename</span>
+        <span class="n">extension</span> <span class="o">=</span> <span class="mi">1</span>
+        
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">containsAny</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;*&#39;</span><span class="p">):</span>
+            <span class="k">print</span> <span class="s">&#39;A wildcard detected..</span><span class="se">\n</span><span class="s">&#39;</span>
+            <span class="kn">import</span> <span class="nn">glob</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+                <span class="n">hdulist</span> <span class="o">=</span> <span class="n">PF</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+                <span class="n">hd</span> <span class="o">=</span> <span class="n">hdulist</span><span class="p">[</span><span class="n">extension</span><span class="p">]</span><span class="o">.</span><span class="n">header</span>
+                <span class="n">hdulist</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">print</span> <span class="s">&#39;Header extension </span><span class="si">%i</span><span class="s"> of </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">extension</span><span class="p">,</span> <span class="nb">file</span><span class="p">)</span>
+                <span class="k">print</span> <span class="n">hd</span>
+                <span class="k">print</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">hdulist</span> <span class="o">=</span> <span class="n">PF</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="n">hd</span> <span class="o">=</span> <span class="n">hdulist</span><span class="p">[</span><span class="n">extension</span><span class="p">]</span><span class="o">.</span><span class="n">header</span>
+            <span class="n">hdulist</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">print</span>
+            <span class="k">print</span> <span class="n">hd</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">Error while opening file </span><span class="si">%s</span><span class="s"> and reading extensions </span><span class="si">%i</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">extension</span><span class="p">))</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

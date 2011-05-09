@@ -1,0 +1,503 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>plot Package &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="SamPy Package" href="SamPy.html" />
+    <link rel="next" title="COSIHB Package" href="SamPy.plot.COSIHB.html" />
+    <link rel="prev" title="pca Package" href="SamPy.pca.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.plot.COSIHB.html" title="COSIHB Package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.pca.html" title="pca Package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.html" accesskey="U">SamPy Package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">plot Package</a><ul>
+<li><a class="reference internal" href="#module-SamPy.plot.basic"><tt class="docutils literal"><span class="pre">basic</span></tt> Module</a><ul>
+<li><a class="reference internal" href="#basic-plotting-routines">Basic Plotting Routines</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-SamPy.plot.colorbarExample"><tt class="docutils literal"><span class="pre">colorbarExample</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.plot.colorbarExample2"><tt class="docutils literal"><span class="pre">colorbarExample2</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.plot.interactive_correlation_plot"><tt class="docutils literal"><span class="pre">interactive_correlation_plot</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.plot.interactive_mean_std_normal_distribution"><tt class="docutils literal"><span class="pre">interactive_mean_std_normal_distribution</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.plot.interactive_two_sample_t_test"><tt class="docutils literal"><span class="pre">interactive_two_sample_t_test</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.plot.tools"><tt class="docutils literal"><span class="pre">tools</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.plot.trilogy"><tt class="docutils literal"><span class="pre">trilogy</span></tt> Module</a></li>
+<li><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.pca.html"
+                        title="previous chapter">pca Package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.plot.COSIHB.html"
+                        title="next chapter">COSIHB Package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.plot.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="plot-package">
+<h1>plot Package<a class="headerlink" href="#plot-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-SamPy.plot.basic">
+<span id="basic-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">basic</span></tt> Module<a class="headerlink" href="#module-SamPy.plot.basic" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="basic-plotting-routines">
+<h3>Basic Plotting Routines<a class="headerlink" href="#basic-plotting-routines" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="SamPy.plot.basic.scatterHistograms">
+<tt class="descclassname">SamPy.plot.basic.</tt><tt class="descname">scatterHistograms</tt><big>(</big><em>xdata</em>, <em>ydata</em>, <em>xlabel</em>, <em>ylabel</em>, <em>binwidth</em>, <em>output</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/basic.html#scatterHistograms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.basic.scatterHistograms" title="Permalink to this definition">¶</a></dt>
+<dd><p>This functions generates a scatter plot and
+projected histograms to both axes.</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-SamPy.plot.colorbarExample">
+<span id="colorbarexample-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">colorbarExample</span></tt> Module<a class="headerlink" href="#module-SamPy.plot.colorbarExample" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="SamPy.plot.colorbarExample.make_axes">
+<tt class="descclassname">SamPy.plot.colorbarExample.</tt><tt class="descname">make_axes</tt><big>(</big><em>parent</em>, <em>**kw</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/colorbarExample.html#make_axes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.colorbarExample.make_axes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-SamPy.plot.colorbarExample2">
+<span id="colorbarexample2-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">colorbarExample2</span></tt> Module<a class="headerlink" href="#module-SamPy.plot.colorbarExample2" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-SamPy.plot.interactive_correlation_plot">
+<span id="interactive-correlation-plot-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">interactive_correlation_plot</span></tt> Module<a class="headerlink" href="#module-SamPy.plot.interactive_correlation_plot" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="SamPy.plot.interactive_correlation_plot.check_if_click_is_on_an_existing_point">
+<tt class="descclassname">SamPy.plot.interactive_correlation_plot.</tt><tt class="descname">check_if_click_is_on_an_existing_point</tt><big>(</big><em>mouse_x_coord</em>, <em>mouse_y_coord</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/interactive_correlation_plot.html#check_if_click_is_on_an_existing_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.interactive_correlation_plot.check_if_click_is_on_an_existing_point" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.interactive_correlation_plot.clear_the_figure_and_empty_points_list">
+<tt class="descclassname">SamPy.plot.interactive_correlation_plot.</tt><tt class="descname">clear_the_figure_and_empty_points_list</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/plot/interactive_correlation_plot.html#clear_the_figure_and_empty_points_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.interactive_correlation_plot.clear_the_figure_and_empty_points_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.interactive_correlation_plot.do_this_when_the_mouse_is_clicked">
+<tt class="descclassname">SamPy.plot.interactive_correlation_plot.</tt><tt class="descname">do_this_when_the_mouse_is_clicked</tt><big>(</big><em>this_event</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/interactive_correlation_plot.html#do_this_when_the_mouse_is_clicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.interactive_correlation_plot.do_this_when_the_mouse_is_clicked" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.interactive_correlation_plot.plot_the_correlation">
+<tt class="descclassname">SamPy.plot.interactive_correlation_plot.</tt><tt class="descname">plot_the_correlation</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/plot/interactive_correlation_plot.html#plot_the_correlation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.interactive_correlation_plot.plot_the_correlation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-SamPy.plot.interactive_mean_std_normal_distribution">
+<span id="interactive-mean-std-normal-distribution-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">interactive_mean_std_normal_distribution</span></tt> Module<a class="headerlink" href="#module-SamPy.plot.interactive_mean_std_normal_distribution" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="SamPy.plot.interactive_mean_std_normal_distribution.check_if_click_is_on_an_existing_point">
+<tt class="descclassname">SamPy.plot.interactive_mean_std_normal_distribution.</tt><tt class="descname">check_if_click_is_on_an_existing_point</tt><big>(</big><em>mouse_x_coord</em>, <em>mouse_y_coord</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/interactive_mean_std_normal_distribution.html#check_if_click_is_on_an_existing_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.interactive_mean_std_normal_distribution.check_if_click_is_on_an_existing_point" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.interactive_mean_std_normal_distribution.clear_the_figure_and_empty_points_list">
+<tt class="descclassname">SamPy.plot.interactive_mean_std_normal_distribution.</tt><tt class="descname">clear_the_figure_and_empty_points_list</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/plot/interactive_mean_std_normal_distribution.html#clear_the_figure_and_empty_points_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.interactive_mean_std_normal_distribution.clear_the_figure_and_empty_points_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.interactive_mean_std_normal_distribution.do_this_when_the_mouse_is_clicked">
+<tt class="descclassname">SamPy.plot.interactive_mean_std_normal_distribution.</tt><tt class="descname">do_this_when_the_mouse_is_clicked</tt><big>(</big><em>this_event</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/interactive_mean_std_normal_distribution.html#do_this_when_the_mouse_is_clicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.interactive_mean_std_normal_distribution.do_this_when_the_mouse_is_clicked" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.interactive_mean_std_normal_distribution.plot_the_mean_std_and_normal">
+<tt class="descclassname">SamPy.plot.interactive_mean_std_normal_distribution.</tt><tt class="descname">plot_the_mean_std_and_normal</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/plot/interactive_mean_std_normal_distribution.html#plot_the_mean_std_and_normal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.interactive_mean_std_normal_distribution.plot_the_mean_std_and_normal" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-SamPy.plot.interactive_two_sample_t_test">
+<span id="interactive-two-sample-t-test-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">interactive_two_sample_t_test</span></tt> Module<a class="headerlink" href="#module-SamPy.plot.interactive_two_sample_t_test" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="SamPy.plot.interactive_two_sample_t_test.check_if_click_is_on_an_existing_point">
+<tt class="descclassname">SamPy.plot.interactive_two_sample_t_test.</tt><tt class="descname">check_if_click_is_on_an_existing_point</tt><big>(</big><em>mouse_x_coord</em>, <em>mouse_y_coord</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/interactive_two_sample_t_test.html#check_if_click_is_on_an_existing_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.interactive_two_sample_t_test.check_if_click_is_on_an_existing_point" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.interactive_two_sample_t_test.clear_the_figure_and_empty_points_list">
+<tt class="descclassname">SamPy.plot.interactive_two_sample_t_test.</tt><tt class="descname">clear_the_figure_and_empty_points_list</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/plot/interactive_two_sample_t_test.html#clear_the_figure_and_empty_points_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.interactive_two_sample_t_test.clear_the_figure_and_empty_points_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.interactive_two_sample_t_test.do_this_when_the_mouse_is_clicked">
+<tt class="descclassname">SamPy.plot.interactive_two_sample_t_test.</tt><tt class="descname">do_this_when_the_mouse_is_clicked</tt><big>(</big><em>this_event</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/interactive_two_sample_t_test.html#do_this_when_the_mouse_is_clicked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.interactive_two_sample_t_test.do_this_when_the_mouse_is_clicked" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.interactive_two_sample_t_test.plot_the_two_sample_t_test">
+<tt class="descclassname">SamPy.plot.interactive_two_sample_t_test.</tt><tt class="descname">plot_the_two_sample_t_test</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/plot/interactive_two_sample_t_test.html#plot_the_two_sample_t_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.interactive_two_sample_t_test.plot_the_two_sample_t_test" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-SamPy.plot.tools">
+<span id="tools-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">tools</span></tt> Module<a class="headerlink" href="#module-SamPy.plot.tools" title="Permalink to this headline">¶</a></h2>
+<p>A collection of functions that may or may not be useful
+when plotting data using matplotlib.</p>
+<p>&#64;author: Sami-Matias Niemi
+&#64;version: 0.1</p>
+<dl class="function">
+<dt id="SamPy.plot.tools.give_colours">
+<tt class="descclassname">SamPy.plot.tools.</tt><tt class="descname">give_colours</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/plot/tools.html#give_colours"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.tools.give_colours" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a tuple of colours that can be used
+with matplotlib when several different colours
+are needed.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-SamPy.plot.trilogy">
+<span id="trilogy-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">trilogy</span></tt> Module<a class="headerlink" href="#module-SamPy.plot.trilogy" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="SamPy.plot.trilogy.RGB2im">
+<tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">RGB2im</tt><big>(</big><em>RGB</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#RGB2im"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.RGB2im" title="Permalink to this definition">¶</a></dt>
+<dd><p>r, g, b = data  (3, ny, nx)
+Converts to an Image</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.trilogy.RGBscale2im">
+<tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">RGBscale2im</tt><big>(</big><em>RGB</em>, <em>levdict</em>, <em>noiselums</em>, <em>colorsatfac</em>, <em>mode='RGB'</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#RGBscale2im"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.RGBscale2im" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="SamPy.plot.trilogy.Trilogy">
+<em class="property">class </em><tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">Trilogy</tt><big>(</big><em>infile=None</em>, <em>images=None</em>, <em>imagesorder='BGR'</em>, <em>**inparams</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#Trilogy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.Trilogy" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="SamPy.plot.trilogy.Trilogy.determinescalings">
+<tt class="descname">determinescalings</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#Trilogy.determinescalings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.Trilogy.determinescalings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine data scalings
+will sample a (samplesize x samplesize) region of the (centered) core
+make color image of the core as a test if desired</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.plot.trilogy.Trilogy.loadimagesize">
+<tt class="descname">loadimagesize</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#Trilogy.loadimagesize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.Trilogy.loadimagesize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="SamPy.plot.trilogy.Trilogy.loadinputs">
+<tt class="descname">loadinputs</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#Trilogy.loadinputs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.Trilogy.loadinputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load R,G,B filenames and options</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.plot.trilogy.Trilogy.loadstamps">
+<tt class="descname">loadstamps</tt><big>(</big><em>limits</em>, <em>silent=1</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#Trilogy.loadstamps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.Trilogy.loadstamps" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="SamPy.plot.trilogy.Trilogy.makecolorimage">
+<tt class="descname">makecolorimage</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#Trilogy.makecolorimage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.Trilogy.makecolorimage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make color image (in sections)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.plot.trilogy.Trilogy.makethumbnail">
+<tt class="descname">makethumbnail</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#Trilogy.makethumbnail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.Trilogy.makethumbnail" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="SamPy.plot.trilogy.Trilogy.makethumbnail1">
+<tt class="descname">makethumbnail1</tt><big>(</big><em>outroot</em>, <em>width</em>, <em>fmt='jpg'</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#Trilogy.makethumbnail1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.Trilogy.makethumbnail1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="SamPy.plot.trilogy.Trilogy.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#Trilogy.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.Trilogy.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="SamPy.plot.trilogy.Trilogy.setdefaults">
+<tt class="descname">setdefaults</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#Trilogy.setdefaults"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.Trilogy.setdefaults" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="SamPy.plot.trilogy.Trilogy.setimages">
+<tt class="descname">setimages</tt><big>(</big><em>images=None</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#Trilogy.setimages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.Trilogy.setimages" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="SamPy.plot.trilogy.Trilogy.setinparams">
+<tt class="descname">setinparams</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#Trilogy.setinparams"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.Trilogy.setinparams" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="SamPy.plot.trilogy.Trilogy.setnoiselums">
+<tt class="descname">setnoiselums</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#Trilogy.setnoiselums"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.Trilogy.setnoiselums" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="SamPy.plot.trilogy.Trilogy.setoutfile">
+<tt class="descname">setoutfile</tt><big>(</big><em>outname=None</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#Trilogy.setoutfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.Trilogy.setoutfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="SamPy.plot.trilogy.Trilogy.showsample">
+<tt class="descname">showsample</tt><big>(</big><em>outfile</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#Trilogy.showsample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.Trilogy.showsample" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.trilogy.adjsat">
+<tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">adjsat</tt><big>(</big><em>RGB</em>, <em>K</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#adjsat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.adjsat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adjust the color saturation of an image.  K &gt; 1 boosts it.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.trilogy.clip2">
+<tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">clip2</tt><big>(</big><em>m</em>, <em>m_min=None</em>, <em>m_max=None</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#clip2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.clip2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.trilogy.da">
+<tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">da</tt><big>(</big><em>k</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#da"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.da" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.trilogy.determinescaling">
+<tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">determinescaling</tt><big>(</big><em>data</em>, <em>unsatpercent</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#determinescaling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.determinescaling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines data values (x0,x1,x2) which will be scaled to (0,noiselum,1)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.trilogy.grayimage">
+<tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">grayimage</tt><big>(</big><em>scaled</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#grayimage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.grayimage" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.trilogy.grayscaledimage">
+<tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">grayscaledimage</tt><big>(</big><em>stamp</em>, <em>levels</em>, <em>noiselum</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#grayscaledimage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.grayscaledimage" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.trilogy.imscale1">
+<tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">imscale1</tt><big>(</big><em>data</em>, <em>levels</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#imscale1"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.imscale1" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.trilogy.imscale2">
+<tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">imscale2</tt><big>(</big><em>data</em>, <em>levels</em>, <em>y1</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#imscale2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.imscale2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.trilogy.loaddict">
+<tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">loaddict</tt><big>(</big><em>filename</em>, <em>dir=''</em>, <em>silent=0</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#loaddict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.loaddict" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.trilogy.loadfile">
+<tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">loadfile</tt><big>(</big><em>filename</em>, <em>dir=''</em>, <em>silent=0</em>, <em>keepnewlines=0</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#loadfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.loadfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.trilogy.loadfitsimagedata">
+<tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">loadfitsimagedata</tt><big>(</big><em>image</em>, <em>indir=''</em>, <em>silent=1</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#loadfitsimagedata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.loadfitsimagedata" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="SamPy.plot.trilogy.meanstd_robust">
+<em class="property">class </em><tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">meanstd_robust</tt><big>(</big><em>x</em>, <em>n_sigma=3</em>, <em>n=5</em>, <em>sortedalready=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#meanstd_robust"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.meanstd_robust" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="SamPy.plot.trilogy.meanstd_robust.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#meanstd_robust.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.meanstd_robust.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.trilogy.offsetarray">
+<tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">offsetarray</tt><big>(</big><em>data</em>, <em>offset</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#offsetarray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.offsetarray" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.trilogy.params_cl">
+<tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">params_cl</tt><big>(</big><em>converttonumbers=True</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#params_cl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.params_cl" title="Permalink to this definition">¶</a></dt>
+<dd><p>RETURNS PARAMETERS FROM COMMAND LINE (&#8216;cl&#8217;) AS DICTIONARY:
+KEYS ARE OPTIONS BEGINNING WITH &#8216;-&#8216;
+VALUES ARE WHATEVER FOLLOWS KEYS: EITHER NOTHING (&#8216;&#8217;), A VALUE, OR A LIST OF VALUES
+ALL VALUES ARE CONVERTED TO INT / FLOAT WHEN APPROPRIATE</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.trilogy.processimagename">
+<tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">processimagename</tt><big>(</big><em>image</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#processimagename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.processimagename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.trilogy.rms">
+<tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">rms</tt><big>(</big><em>x</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#rms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.rms" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.trilogy.satK2m">
+<tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">satK2m</tt><big>(</big><em>K</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#satK2m"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.satK2m" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.trilogy.savelevels">
+<tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">savelevels</tt><big>(</big><em>levdict</em>, <em>outfile='levels.txt'</em>, <em>outdir=''</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#savelevels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.savelevels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.trilogy.setlevels">
+<tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">setlevels</tt><big>(</big><em>data</em>, <em>pp</em>, <em>stripneg=False</em>, <em>sortedalready=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#setlevels"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.setlevels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="class">
+<dt id="SamPy.plot.trilogy.stat_robust">
+<em class="property">class </em><tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">stat_robust</tt><big>(</big><em>x</em>, <em>n_sigma=3</em>, <em>n=5</em>, <em>reject_fraction=None</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#stat_robust"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.stat_robust" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="SamPy.plot.trilogy.stat_robust.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#stat_robust.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.stat_robust.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.trilogy.str2num">
+<tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">str2num</tt><big>(</big><em>str</em>, <em>rf=0</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#str2num"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.str2num" title="Permalink to this definition">¶</a></dt>
+<dd><p>CONVERTS A STRING TO A NUMBER (INT OR FLOAT) IF POSSIBLE
+ALSO RETURNS FORMAT IF rf=1</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.trilogy.stringsplitatof">
+<tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">stringsplitatof</tt><big>(</big><em>str</em>, <em>separator=''</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#stringsplitatof"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.stringsplitatof" title="Permalink to this definition">¶</a></dt>
+<dd><p>Splits a string into floats</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.plot.trilogy.striskey">
+<tt class="descclassname">SamPy.plot.trilogy.</tt><tt class="descname">striskey</tt><big>(</big><em>str</em><big>)</big><a class="reference internal" href="_modules/SamPy/plot/trilogy.html#striskey"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.plot.trilogy.striskey" title="Permalink to this definition">¶</a></dt>
+<dd><p>IS str AN OPTION LIKE -C or -ker
+(IT&#8217;S NOT IF IT&#8217;S -2 or -.9)</p>
+</dd></dl>
+
+</div>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="SamPy.plot.COSIHB.html">COSIHB Package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="SamPy.plot.COSIHB.html#module-SamPy.plot.COSIHB.IO"><tt class="docutils literal"><span class="pre">IO</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SamPy.plot.COSIHB.html#module-SamPy.plot.COSIHB.compare_synphot_files"><tt class="docutils literal"><span class="pre">compare_synphot_files</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SamPy.plot.COSIHB.html#module-SamPy.plot.COSIHB.plotting"><tt class="docutils literal"><span class="pre">plotting</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SamPy.plot.COSIHB.html#module-SamPy.plot.COSIHB.synphotSensitivity"><tt class="docutils literal"><span class="pre">synphotSensitivity</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SamPy.plot.COSIHB.html#module-SamPy.plot.COSIHB.wrapperSynphot"><tt class="docutils literal"><span class="pre">wrapperSynphot</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="SamPy.plot.COSIHB.html#module-SamPy.plot.COSIHB.wrapper_OLD"><tt class="docutils literal"><span class="pre">wrapper_OLD</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.plot.COSIHB.html" title="COSIHB Package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.pca.html" title="pca Package"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.html" >SamPy Package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

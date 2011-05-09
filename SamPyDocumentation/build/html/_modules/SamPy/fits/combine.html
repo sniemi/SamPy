@@ -1,0 +1,241 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.fits.combine &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.fits.combine</h1><div class="highlight"><pre>
+<span class="c">#!/usr/bin/env python</span>
+<span class="c"># -*- encoding: utf-8 -*-</span>
+<span class="c">#</span>
+<span class="c"># ABOUT    : This script is a quick way of combining fits files</span>
+<span class="c">#</span>
+<span class="c"># USAGE    : reduce.py [-n] [-m] [-a] [-f] &lt;file list or name&gt; [-o] &lt;output file&gt;</span>
+<span class="c">#            where:</span>
+<span class="c">#            [-m] median combine</span>
+<span class="c">#            [-a] average combine</span>
+<span class="c">#            [-f] combines given files</span>
+<span class="c">#            [-o] name of the output file</span>
+<span class="c">#            [-n] uses NumPy and PyFits rather than Pyraf</span>
+<span class="c">#</span>
+<span class="c"># AUTHOR   : Sami-Matias Niemi</span>
+<span class="c">#</span>
+<span class="c"># HISTORY  : 26/11/2008 Initial Release</span>
+
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;0.1a&quot;</span>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&quot;Sami-Matias Niemi&quot;</span>
+
+<div class="viewcode-block" id="process_args"><a class="viewcode-back" href="../../../SamPy.fits.html#SamPy.fits.combine.process_args">[docs]</a><span class="k">def</span> <span class="nf">process_args</span><span class="p">(</span><span class="n">just_print_help</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Processes the command line arguments o FITSCombine.py data reduction script.</span>
+<span class="sd">    </span>
+<span class="sd">    @param just_print_help: will print help</span>
+<span class="sd">    @type: boolean</span>
+<span class="sd">    @return: parsed commmand line options</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">optparse</span> <span class="kn">import</span> <span class="n">OptionParser</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">OptionParser</span><span class="p">()</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-m&quot;</span><span class="p">,</span> <span class="s">&quot;--median&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;med&quot;</span><span class="p">,</span>
+                      <span class="n">help</span><span class="o">=</span><span class="s">&quot;The combined image is a median from input images&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-a&quot;</span><span class="p">,</span> <span class="s">&quot;--average&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="s">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;avg&quot;</span><span class="p">,</span>
+                      <span class="n">help</span><span class="o">=</span><span class="s">&quot;The combined image is an average from input images&quot;</span><span class="p">)</span>     
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-f&quot;</span><span class="p">,</span> <span class="s">&quot;--files&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;input&quot;</span><span class="p">,</span>
+                      <span class="n">help</span><span class="o">=</span><span class="s">&quot;File list of the files to be combined&quot;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s">&quot;file.list&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-o&quot;</span><span class="p">,</span> <span class="s">&quot;--output&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;output&quot;</span><span class="p">,</span>
+                      <span class="n">help</span><span class="o">=</span><span class="s">&quot;Name of the output file.&quot;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s">&#39;output.fits&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-v&quot;</span><span class="p">,</span> <span class="s">&quot;--verbose&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;verbose&quot;</span><span class="p">,</span>
+                      <span class="n">help</span><span class="o">=</span><span class="s">&quot;Verbose mode.&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&quot;-n&quot;</span><span class="p">,</span> <span class="s">&quot;--numpy&quot;</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span><span class="s">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&quot;numpy&quot;</span><span class="p">,</span>
+                      <span class="n">help</span> <span class="o">=</span><span class="s">&quot;Uses Numpy and PyFits rathen than Pyraf for combining.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">just_print_help</span><span class="p">:</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">print_help</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span> 
+
+</div>
+<div class="viewcode-block" id="combinePyraf"><a class="viewcode-back" href="../../../SamPy.fits.html#SamPy.fits.combine.combinePyraf">[docs]</a><span class="k">def</span> <span class="nf">combinePyraf</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">median</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Combines given images using IRAF&#39;s imcombine.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">pyraf</span> <span class="kn">import</span> <span class="n">iraf</span>
+    <span class="kn">from</span> <span class="nn">pyraf.iraf</span> <span class="kn">import</span> <span class="n">imred</span>
+
+    <span class="n">reject</span> <span class="o">=</span> <span class="s">&quot;sigclip&quot;</span>
+    <span class="n">combine</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">median</span><span class="p">:</span> <span class="n">combine</span> <span class="o">=</span> <span class="s">&quot;median&quot;</span>
+    <span class="k">else</span><span class="p">:</span> <span class="n">combine</span> <span class="o">=</span> <span class="s">&quot;average&quot;</span>
+
+    <span class="n">iraf</span><span class="o">.</span><span class="n">imcombine</span><span class="p">(</span><span class="nb">input</span> <span class="o">=</span> <span class="nb">input</span><span class="p">,</span> <span class="n">output</span> <span class="o">=</span> <span class="n">output</span><span class="p">,</span> <span class="n">combine</span> <span class="o">=</span> <span class="n">combine</span><span class="p">,</span> <span class="n">reject</span> <span class="o">=</span> <span class="n">reject</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="n">scale</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="combine"><a class="viewcode-back" href="../../../SamPy.fits.html#SamPy.fits.combine.combine">[docs]</a><span class="k">def</span> <span class="nf">combine</span><span class="p">(</span><span class="n">filelist</span><span class="p">,</span> <span class="n">median</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Combines given images.</span>
+<span class="sd">    </span>
+<span class="sd">    @param filelist: list of files to be combined.</span>
+<span class="sd">    @type: list</span>
+<span class="sd">    @param median: Performs median combining, if False uses average values</span>
+<span class="sd">    @type: boolean</span>
+<span class="sd">    @param verbose: verbose mode.</span>
+<span class="sd">    @type: boolean</span>
+<span class="sd">    @return: The combined image (2d-array with pixel values)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">pyfits</span>
+    <span class="kn">import</span> <span class="nn">numpy</span>
+        
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">median</span><span class="p">:</span> 
+            <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="si">%i</span><span class="s"> images will be median combined&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">filelist</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;</span><span class="se">\n</span><span class="si">%i</span><span class="s"> images will be average combined&quot;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="n">filelist</span><span class="p">)</span>
+    
+    <span class="n">filedata</span> <span class="o">=</span> <span class="p">[</span><span class="n">pyfits</span><span class="o">.</span><span class="n">getdata</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">filelist</span><span class="p">]</span>
+    
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">filedata</span><span class="p">))</span>  <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+       <span class="k">print</span> <span class="s">&quot;Given images have different dimensions!&quot;</span>
+       <span class="k">print</span> <span class="s">&quot;Program will exit...&quot;</span>
+       <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">median</span><span class="p">:</span>
+        <span class="n">IM</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">filedata</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">IM</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">filelist</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">IM</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Main program.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">pyfits</span>
+    <span class="kn">import</span> <span class="nn">sys</span>
+    
+    <span class="c">#if scaling is done</span>
+    <span class="c">#works only for Pyraf for time being...</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="s">&quot;exposure&quot;</span>
+
+    <span class="p">(</span><span class="n">opts</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span> <span class="o">=</span> <span class="n">process_args</span><span class="p">()</span>
+    
+    <span class="n">verbose</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">verbose</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">):</span> <span class="n">verbose</span> <span class="o">=</span> <span class="bp">True</span> 
+    
+    <span class="k">if</span> <span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">input</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">or</span> <span class="n">opts</span><span class="o">.</span><span class="n">output</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">):</span>
+        <span class="n">process_args</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">numpy</span><span class="p">:</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">input</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+    
+        <span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">med</span><span class="p">:</span>
+            <span class="n">median</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">combined</span> <span class="o">=</span> <span class="n">combine</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">median</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">avg</span><span class="p">:</span>
+            <span class="n">median</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">combined</span> <span class="o">=</span> <span class="n">combine</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">median</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+
+        <span class="n">pyfits</span><span class="o">.</span><span class="n">writeto</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="n">combined</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&quot;Combined fits file has been written. See the image: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">opts</span><span class="o">.</span><span class="n">output</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="s">&quot;@&quot;</span> <span class="o">+</span> <span class="n">opts</span><span class="o">.</span><span class="n">input</span>
+        <span class="n">median</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">med</span><span class="p">:</span>
+            <span class="n">median</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">avg</span><span class="p">:</span>
+            <span class="n">median</span> <span class="o">=</span> <span class="bp">False</span>
+        
+        <span class="n">combinePyraf</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">opts</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="n">median</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&quot;Combined fits file has been written using imcombine. See the image: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">opts</span><span class="o">.</span><span class="n">output</span>
+
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

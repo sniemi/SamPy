@@ -1,0 +1,247 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.fitting.SplineFitting &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.fitting.SplineFitting</h1><div class="highlight"><pre>
+<span class="c">#! /usr/bin/env python</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">ABOUT:</span>
+<span class="sd">Example how to spline B-spline to fake data.</span>
+
+<span class="sd">DEPENDS:</span>
+<span class="sd">Python 2.5 or later (no 3.x compatible)</span>
+<span class="sd">NumPy</span>
+<span class="sd">SciPy</span>
+
+<span class="sd">TESTED:</span>
+<span class="sd">Python 2.5.1</span>
+<span class="sd">NumPy: 1.4.0.dev7576</span>
+<span class="sd">SciPy: 0.7.1</span>
+<span class="sd">matplotlib 1.0.svn</span>
+
+<span class="sd">HISTORY:</span>
+<span class="sd">Created on November 26, 2009</span>
+
+<span class="sd">VERSION:</span>
+<span class="sd">0.1: test release (SMN)</span>
+
+<span class="sd">@author: Sami-Matias Niemi (niemi@stsci.edu)</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">N</span>
+<span class="kn">import</span> <span class="nn">scipy.signal</span> <span class="kn">as</span> <span class="nn">SS</span>
+<span class="kn">import</span> <span class="nn">scipy.interpolate</span> <span class="kn">as</span> <span class="nn">I</span>
+<span class="kn">import</span> <span class="nn">scipy.optimize</span> <span class="kn">as</span> <span class="nn">O</span>
+<span class="kn">import</span> <span class="nn">pylab</span> <span class="kn">as</span> <span class="nn">P</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Sami-Matias Niemi (niemi@stsci.edu)&#39;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;0.1&#39;</span>
+
+<div class="viewcode-block" id="SplineFitting"><a class="viewcode-back" href="../../../SamPy.fitting.html#SamPy.fitting.SplineFitting.SplineFitting">[docs]</a><span class="k">class</span> <span class="nc">SplineFitting</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Fits a B-spline representation of 1-D curve.</span>
+<span class="sd">    Uses Levenberg-Marquardt algorithm for minimizing </span>
+<span class="sd">    the sum of squares.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xnodes</span><span class="p">,</span> <span class="n">spline_order</span> <span class="o">=</span> <span class="mi">3</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xnodes</span> <span class="o">=</span> <span class="n">xnodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k</span> <span class="o">=</span> <span class="n">spline_order</span>
+    
+    <span class="k">def</span> <span class="nf">_fakeData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1024</span><span class="p">,</span><span class="mi">1024</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gety</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="n">yn</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="mf">0.25</span><span class="o">*</span><span class="n">N</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">yn</span>
+         
+    <span class="k">def</span> <span class="nf">_gety</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">a</span><span class="o">*</span><span class="n">N</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">b</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">c</span><span class="o">*</span><span class="n">N</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">d</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+       
+<div class="viewcode-block" id="SplineFitting.fitfunc"><a class="viewcode-back" href="../../../SamPy.fitting.html#SamPy.fitting.SplineFitting.SplineFitting.fitfunc">[docs]</a>    <span class="k">def</span> <span class="nf">fitfunc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">ynodes</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Function that is fitted.</span>
+<span class="sd">        This can be changed to whatever function.</span>
+<span class="sd">        Note that ynodes can then be a list of parameters.</span>
+<span class="sd">        @return: 1-D B-spline value at each x.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">I</span><span class="o">.</span><span class="n">splev</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">I</span><span class="o">.</span><span class="n">splrep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xnodes</span><span class="p">,</span> <span class="n">ynodes</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="SplineFitting.errfunc"><a class="viewcode-back" href="../../../SamPy.fitting.html#SamPy.fitting.SplineFitting.SplineFitting.errfunc">[docs]</a>    <span class="k">def</span> <span class="nf">errfunc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ynodes</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Error function.</span>
+<span class="sd">        @return: fit - ydata</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitfunc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ynodes</span><span class="p">)</span> <span class="o">-</span> <span class="n">y</span>
+</div>
+<div class="viewcode-block" id="SplineFitting.doFit"><a class="viewcode-back" href="../../../SamPy.fitting.html#SamPy.fitting.SplineFitting.SplineFitting.doFit">[docs]</a>    <span class="k">def</span> <span class="nf">doFit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ynodes</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Return the point which minimizes the sum of squares of M (non-linear)</span>
+<span class="sd">        equations in N unknowns given a starting estimate, x0, using a</span>
+<span class="sd">        modification of the Levenberg-Marquardt algorithm.</span>
+<span class="sd">        @return: fitted parameters, error/success message</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">O</span><span class="o">.</span><span class="n">leastsq</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">errfunc</span><span class="p">,</span> <span class="n">ynodes</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+    </div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Executed if ran from a command line.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c">#Initializes the instance with dummy xnodes</span>
+    <span class="n">Spline</span> <span class="o">=</span> <span class="n">SplineFitting</span><span class="p">([</span><span class="mi">0</span><span class="p">,])</span>
+    
+    <span class="c">#Makes some faked data</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Spline</span><span class="o">.</span><span class="n">_fakeData</span><span class="p">()</span>
+    
+    <span class="c">#Median filter the data</span>
+    <span class="n">medianFiltered</span> <span class="o">=</span> <span class="n">SS</span><span class="o">.</span><span class="n">medfilt</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+    
+    <span class="c">#Spline nodes and initial guess for y positions from median filtered</span>
+    <span class="n">xnods</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1050</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+    <span class="n">ynods</span> <span class="o">=</span> <span class="n">medianFiltered</span><span class="p">[</span><span class="n">xnods</span><span class="p">]</span>
+    <span class="c">#Updates dummy xnodes in Spline instance with read deal</span>
+    <span class="n">Spline</span><span class="o">.</span><span class="n">xnodes</span> <span class="o">=</span> <span class="n">xnods</span>
+
+    <span class="c">#Do the fitting</span>
+    <span class="n">fittedYnodes</span><span class="p">,</span> <span class="n">success</span> <span class="o">=</span> <span class="n">Spline</span><span class="o">.</span><span class="n">doFit</span><span class="p">(</span><span class="n">ynods</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    
+    <span class="c">#We can check how good the fit is</span>
+    <span class="n">chi2</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">Spline</span><span class="o">.</span><span class="n">errfunc</span><span class="p">(</span><span class="n">fittedYnodes</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">dof</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ynods</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.</span>
+    <span class="n">crit</span> <span class="o">=</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">dof</span><span class="o">-</span><span class="mf">1.</span><span class="p">))</span> <span class="o">+</span> <span class="mf">1.635</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="c">#only valid for large dofs</span>
+    <span class="k">print</span> <span class="s">&#39;Chi**2 </span><span class="si">%6.2f</span><span class="s"> vs </span><span class="si">%6.2f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">chi2</span><span class="p">,</span> <span class="n">crit</span><span class="p">)</span>
+    <span class="c">#note that there is also chisquare in scipy.stats which</span>
+    <span class="c">#could be used to evaluate p-values...</span>
+    
+    <span class="c">#Lets plot the data for visual inspection</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+    <span class="n">left</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.8</span>
+    <span class="n">rect1</span> <span class="o">=</span> <span class="p">[</span><span class="n">left</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">]</span>
+    <span class="n">rect2</span> <span class="o">=</span> <span class="p">[</span><span class="n">left</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">]</span>
+
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">(</span><span class="n">rect2</span><span class="p">)</span>  <span class="c">#left, bottom, width, height</span>
+    <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">(</span><span class="n">rect1</span><span class="p">)</span>
+    
+    <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&#39;Noisy data&#39;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">medianFiltered</span><span class="p">,</span> <span class="s">&#39;y-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span> <span class="s">&#39;Median Filtered&#39;</span><span class="p">,</span> <span class="n">lw</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Spline</span><span class="o">.</span><span class="n">fitfunc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ynods</span><span class="p">),</span> <span class="s">&#39;m-&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Initial Spline&#39;</span><span class="p">,</span> <span class="n">lw</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Spline</span><span class="o">.</span><span class="n">fitfunc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">fittedYnodes</span><span class="p">),</span> <span class="s">&#39;r-&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Fitted Spline&#39;</span><span class="p">,</span> <span class="n">lw</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xnods</span><span class="p">,</span> <span class="n">ynods</span><span class="p">,</span> <span class="s">&#39;go&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span><span class="s">&#39;Initial Spline nodes&#39;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xnods</span><span class="p">,</span> <span class="n">fittedYnodes</span><span class="p">,</span> <span class="s">&#39;gs&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span><span class="s">&#39;Fitted Spline nodes&#39;</span><span class="p">)</span>
+
+    <span class="n">ax1</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>    
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">SS</span><span class="o">.</span><span class="n">medfilt</span><span class="p">((</span><span class="n">y</span><span class="o">-</span><span class="n">Spline</span><span class="o">.</span><span class="n">fitfunc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ynods</span><span class="p">)),</span> <span class="mi">55</span><span class="p">),</span> <span class="s">&#39;m-&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Initial guess residuals&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">SS</span><span class="o">.</span><span class="n">medfilt</span><span class="p">((</span><span class="n">y</span><span class="o">-</span><span class="n">Spline</span><span class="o">.</span><span class="n">fitfunc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">fittedYnodes</span><span class="p">)),</span> <span class="mi">55</span><span class="p">),</span> <span class="s">&#39;r-&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Fitted residuals&#39;</span><span class="p">)</span>
+
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span>
+  
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([])</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">ax2</span><span class="o">.</span><span class="n">get_yticks</span><span class="p">()[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">ax1</span><span class="o">.</span><span class="n">get_yticks</span><span class="p">()[::</span><span class="mi">2</span><span class="p">])</span>
+    
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;Residuals&#39;</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;Arbitrary Counts&#39;</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;Pixels&#39;</span><span class="p">)</span>
+    
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c">#IRAFDEV has too old matplotlib...</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">numpoints</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">loc</span> <span class="o">=</span> <span class="s">&#39;best&#39;</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span> <span class="o">=</span> <span class="s">&#39;best&#39;</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&#39;SplineFitting.pdf&#39;</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,314 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.plot.interactive_correlation_plot &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.plot.interactive_correlation_plot</h1><div class="highlight"><pre>
+<span class="c">### Interactively plot points</span>
+<span class="c">### to show the correlation between the x and y directions.</span>
+<span class="c">### By Rajeev Raizada, Jan.2011.</span>
+<span class="c">### Requires Python, with the Matplotlib and SciPy modules.</span>
+<span class="c">### You can download Python and those modules for free from</span>
+<span class="c">### http://www.python.org/download</span>
+<span class="c">### http://scipy.org</span>
+<span class="c">### http://matplotlib.sourceforge.net</span>
+<span class="c">###</span>
+<span class="c">### Please feel more than free to use this code for teaching.</span>
+<span class="c">### If you use it, I&#39;d love to hear from you!</span>
+<span class="c">### If you have any questions, comments or feedback, </span>
+<span class="c">### please send them to me: rajeev dot raizada at dartmouth dot edu</span>
+<span class="c">###</span>
+<span class="c">### Some tutorial exercises which might be useful to try:</span>
+<span class="c">### 1. Click to make a few points in more or less a straight line.</span>
+<span class="c">###    What is the correlation value? </span>
+<span class="c">###    Now add a point far away from the line.</span>
+<span class="c">###    What does adding that point do to the correlation value?</span>
+<span class="c">###    Try deleting the point by clicking on it, then re-adding it, to compare.</span>
+<span class="c">### 2. Click outside the axes to reset the plot.</span>
+<span class="c">###    Now put in about 10 points in a oval-ish cloud,</span>
+<span class="c">###    deleting and adjusting them so that you get a correlation</span>
+<span class="c">###    of around r=0.6.</span>
+<span class="c">###    What is the size of the p-value associated with this correlation?</span>
+<span class="c">###    (This p-value is the probability of observing this r-value</span>
+<span class="c">###    if the population the points were sampled from actually had zero correlation).</span>
+<span class="c">###    Now add another 10 points, so that there are 20 in all,</span>
+<span class="c">###    while keeping the correlation value at r=0.6.</span>
+<span class="c">###    What is the p-value now?</span>
+<span class="c">### 3. Click outside the axes to reset the plot.</span>
+<span class="c">###    Now make in turn, approximately, each of the four plots </span>
+<span class="c">###    shown in Anscombe&#39;s Quartet:</span>
+<span class="c">###    http://en.wikipedia.org/wiki/Anscombe&#39;s_quartet</span>
+<span class="c">###    What does this tell you how only knowing a correlation-value</span>
+<span class="c">###    might give you a misleading picture of the data?</span>
+
+<span class="c">###########################################</span>
+<span class="c"># First, we import the modules that we need</span>
+<span class="kn">import</span> <span class="nn">pylab</span>
+<span class="kn">import</span> <span class="nn">scipy</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span>  <span class="c"># We need this one for the norm.pdf function</span>
+
+<span class="c">#####################################################</span>
+<span class="c"># Next, we define the functions that the program uses</span>
+
+<span class="c">### This function clears the figure and empties the points list</span>
+<div class="viewcode-block" id="clear_the_figure_and_empty_points_list"><a class="viewcode-back" href="../../../SamPy.plot.html#SamPy.plot.interactive_correlation_plot.clear_the_figure_and_empty_points_list">[docs]</a><span class="k">def</span> <span class="nf">clear_the_figure_and_empty_points_list</span><span class="p">():</span>
+    <span class="k">global</span> <span class="n">coords_array</span> 
+    <span class="k">global</span> <span class="n">point_handles_array</span>  
+    <span class="c"># Reset our variables to be empty</span>
+    <span class="n">coords_array</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+    <span class="n">point_handles_array</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+    <span class="n">handle_of_regression_line_plot</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c">### Clear the figure window</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>  <span class="c"># clf means &quot;clear the figure&quot;</span>
+    <span class="c">### In order to keep the boundaries of the figure fixed in place,</span>
+    <span class="c">### we will draw a white box around the region that we want.</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis_range</span><span class="o">*</span><span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+               <span class="n">axis_range</span><span class="o">*</span><span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span><span class="s">&#39;w-&#39;</span><span class="p">)</span>
+    <span class="c">### We want a long title, so we put a \n in the middle, to start a new line of title-text      </span>
+    <span class="n">multiline_title_string</span> <span class="o">=</span> <span class="s">&#39;Click to add points, on old points to delete,&#39;</span> \
+                             <span class="s">&#39; outside axes to reset.</span><span class="se">\n</span><span class="s">&#39;</span> \
+                             <span class="s">&#39; The red line is the linear regression best-fit.&#39;</span>  
+    <span class="n">pylab</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">multiline_title_string</span><span class="p">)</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>  <span class="c"># Add a grid on to the figure window</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;equal&#39;</span><span class="p">)</span> <span class="c"># Make the tick-marks equally spaced on x- and y-axes</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="n">axis_range</span><span class="o">*</span><span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+    
+    
+<span class="c"># This is the function which gets called when the mouse is clicked in the figure window</span></div>
+<div class="viewcode-block" id="do_this_when_the_mouse_is_clicked"><a class="viewcode-back" href="../../../SamPy.plot.html#SamPy.plot.interactive_correlation_plot.do_this_when_the_mouse_is_clicked">[docs]</a><span class="k">def</span> <span class="nf">do_this_when_the_mouse_is_clicked</span><span class="p">(</span><span class="n">this_event</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">coords_array</span> 
+    <span class="k">global</span> <span class="n">point_handles_array</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">this_event</span><span class="o">.</span><span class="n">xdata</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">this_event</span><span class="o">.</span><span class="n">ydata</span>
+    <span class="c">### If the click is outside the range, then clear figure and points list</span>
+    <span class="k">if</span> <span class="n">this_event</span><span class="o">.</span><span class="n">xdata</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span> <span class="c"># This means we clicked outside the axis</span>
+        <span class="n">clear_the_figure_and_empty_points_list</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span> <span class="c"># We clicked inside the axis</span>
+        <span class="n">number_of_points</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">coords_array</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">number_of_points</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">point_to_be_deleted</span> <span class="o">=</span> <span class="n">check_if_click_is_on_an_existing_point</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>  
+            <span class="k">if</span> <span class="n">point_to_be_deleted</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="c"># We delete a point</span>
+                <span class="c"># We will delete that row from coords_array. The rows are axis 0</span>
+                <span class="n">coords_array</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">coords_array</span><span class="p">,</span><span class="n">point_to_be_deleted</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+                <span class="c"># We will also hide that point on the figure, by finding its handle</span>
+                <span class="n">handle_of_point_to_be_deleted</span> <span class="o">=</span> <span class="n">point_handles_array</span><span class="p">[</span><span class="n">point_to_be_deleted</span><span class="p">]</span>
+                <span class="n">pylab</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">handle_of_point_to_be_deleted</span><span class="p">,</span><span class="n">visible</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+                <span class="c"># Now that we have erased the point with that handle,</span>
+                <span class="c"># we can delete that handle from the handles list</span>
+                <span class="n">point_handles_array</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">point_handles_array</span><span class="p">,</span><span class="n">point_to_be_deleted</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c"># We make a new point</span>
+                <span class="n">coords_array</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">coords_array</span><span class="p">,[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]))</span>
+                <span class="n">new_point_handle</span> <span class="o">=</span> <span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="s">&#39;*&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">)</span>
+                <span class="n">point_handles_array</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">point_handles_array</span><span class="p">,</span><span class="n">new_point_handle</span><span class="p">)</span> 
+        <span class="k">if</span> <span class="n">number_of_points</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">coords_array</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">]])</span>
+            <span class="n">new_point_handle</span> <span class="o">=</span> <span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="s">&#39;*&#39;</span><span class="p">,</span><span class="n">color</span><span class="o">=</span><span class="s">&#39;blue&#39;</span><span class="p">)</span>
+            <span class="n">point_handles_array</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">point_handles_array</span><span class="p">,</span><span class="n">new_point_handle</span><span class="p">)</span>
+        <span class="c">### Now plot the statistics that this program is demonstrating</span>
+        <span class="n">number_of_points</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">coords_array</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="c"># Recount how many points we have now</span>
+        <span class="k">if</span> <span class="n">number_of_points</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span> 
+            <span class="n">plot_the_correlation</span><span class="p">()</span>
+        <span class="c">### Finally, check to see whether we have fewer than two points</span>
+        <span class="c">### as a result of any possible point-deletions above.</span>
+        <span class="c">### If we do, then delete the stats info from the plot, </span>
+        <span class="c">### as it isn&#39;t meaningful for just one data point</span>
+        <span class="n">number_of_points</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">coords_array</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  
+        <span class="k">if</span> <span class="n">number_of_points</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span> <span class="c"># We only show mean and std if there are two or more points</span>
+            <span class="n">pylab</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">handle_of_regression_line_plot</span><span class="p">,</span><span class="n">visible</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">pylab</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">pylab</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+        <span class="c"># Set the axis back to its original value, in case Python has changed it during plotting</span>
+        <span class="n">pylab</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;equal&#39;</span><span class="p">)</span> <span class="c"># Make the tick-marks equally spaced on x- and y-axes</span>
+        <span class="n">pylab</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="n">axis_range</span><span class="o">*</span><span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+        
+        
+<span class="c"># This is the function which calculates and plots the statistics</span></div>
+<div class="viewcode-block" id="plot_the_correlation"><a class="viewcode-back" href="../../../SamPy.plot.html#SamPy.plot.interactive_correlation_plot.plot_the_correlation">[docs]</a><span class="k">def</span> <span class="nf">plot_the_correlation</span><span class="p">():</span>
+    <span class="c"># First, delete any existing regression line plots from the figure</span>
+    <span class="k">global</span> <span class="n">handle_of_regression_line_plot</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">setp</span><span class="p">(</span><span class="n">handle_of_regression_line_plot</span><span class="p">,</span><span class="n">visible</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="c">#### Next, calculate and plot the stats</span>
+    <span class="n">number_of_points</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">coords_array</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  
+    <span class="n">x_coords</span> <span class="o">=</span>  <span class="n">coords_array</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span> <span class="c"># Python starts counting from zero</span>
+    <span class="n">y_coords</span> <span class="o">=</span>  <span class="n">coords_array</span><span class="p">[:,</span><span class="mi">1</span><span class="p">]</span> 
+    <span class="c">#### To get the best-fit line, we&#39;ll do a regression</span>
+    <span class="n">slope</span><span class="p">,</span> <span class="n">y_intercept</span><span class="p">,</span> <span class="n">r_from_regression</span><span class="p">,</span> <span class="n">p_from_regression</span><span class="p">,</span> <span class="n">std_err</span> <span class="o">=</span> <span class="p">(</span>
+                          <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">linregress</span><span class="p">(</span><span class="n">x_coords</span><span class="p">,</span><span class="n">y_coords</span><span class="p">)</span>     <span class="p">)</span>
+    <span class="c">#### Plot the best-fit line in red</span>
+    <span class="n">handle_of_regression_line_plot</span> <span class="o">=</span> <span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis_range</span><span class="o">*</span><span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]),</span> 
+                    <span class="n">y_intercept</span> <span class="o">+</span> <span class="n">slope</span><span class="o">*</span><span class="n">axis_range</span><span class="o">*</span><span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]),</span><span class="s">&#39;r-&#39;</span><span class="p">)</span>
+    <span class="c">#### Uncomment the next two lines if you want to verify</span>
+    <span class="c">#### that the stats we get from regression and from correlation are the same.</span>
+    <span class="c"># r_from_corr,p_from_corr = scipy.stats.pearsonr(x_coords,y_coords) </span>
+    <span class="c"># print r_from_regression,r_from_corr,p_from_regression,p_from_corr </span>
+    <span class="c">#### In order to make the p-values format nicely</span>
+    <span class="c">#### even when they have a bunch of zeros at the start, we do this:</span>
+    <span class="n">p_value_string</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%1.2g</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">p_from_regression</span> 
+    <span class="n">pylab</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">number_of_points</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; points: &#39;</span> <span class="o">+</span>
+                <span class="s">&#39;  p-value of corr = &#39;</span> <span class="o">+</span> <span class="n">p_value_string</span> <span class="o">+</span>
+                <span class="s">&#39;  Correlation, r = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">r_from_regression</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span> <span class="p">)</span> 
+                                    <span class="c"># The &#39;,2&#39; means show 2 decimal places</span>
+    <span class="c"># Set the axis back to its original value, in case Python has changed it during plotting</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;equal&#39;</span><span class="p">)</span> <span class="c"># Make the tick-marks equally spaced on x- and y-axes</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="n">axis_range</span><span class="o">*</span><span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+        
+<span class="c"># This is the function which deletes existing points if you click on them       </span></div>
+<div class="viewcode-block" id="check_if_click_is_on_an_existing_point"><a class="viewcode-back" href="../../../SamPy.plot.html#SamPy.plot.interactive_correlation_plot.check_if_click_is_on_an_existing_point">[docs]</a><span class="k">def</span> <span class="nf">check_if_click_is_on_an_existing_point</span><span class="p">(</span><span class="n">mouse_x_coord</span><span class="p">,</span><span class="n">mouse_y_coord</span><span class="p">):</span>
+    <span class="c"># First, figure out how many points we have.</span>
+    <span class="c"># Each point is one row in the coords_array,</span>
+    <span class="c"># so we count the number of rows, which is dimension-0 for Python</span>
+    <span class="n">number_of_points</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">coords_array</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>    
+    <span class="n">this_coord</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span> <span class="n">mouse_x_coord</span><span class="p">,</span> <span class="n">mouse_y_coord</span> <span class="p">]])</span> 
+            <span class="c"># The double square brackets above give the this_coord array </span>
+            <span class="c"># an explicit structure of having rows and also columns</span>
+    <span class="k">if</span> <span class="n">number_of_points</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>  
+        <span class="c"># If there are some points, we want to calculate the distance</span>
+        <span class="c"># of the new mouse-click location from every existing point.</span>
+        <span class="c"># One way to do this is to make an array which is the same size</span>
+        <span class="c"># as coords_array, and which contains the mouse x,y-coords on every row.</span>
+        <span class="c"># Then we can subtract that xy_coord_matchng_matrix from coords_array</span>
+        <span class="n">ones_vec</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">number_of_points</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">xy_coord_matching_matrix</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">ones_vec</span><span class="p">,</span><span class="n">this_coord</span><span class="p">)</span>
+        <span class="n">distances_from_existing_points</span> <span class="o">=</span> <span class="p">(</span><span class="n">coords_array</span> <span class="o">-</span> <span class="n">xy_coord_matching_matrix</span><span class="p">)</span>
+        <span class="n">squared_distances_from_existing_points</span> <span class="o">=</span> <span class="n">distances_from_existing_points</span><span class="o">**</span><span class="mi">2</span>
+        <span class="n">sum_sq_dists</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">squared_distances_from_existing_points</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> 
+                   <span class="c"># The axis=1 means &quot;sum over dimension 1&quot;, which is columns for Python          </span>
+        <span class="n">euclidean_dists</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">sum_sq_dists</span><span class="p">)</span>
+        <span class="n">distance_threshold</span> <span class="o">=</span> <span class="mf">0.5</span>
+        <span class="n">within_threshold_points</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">euclidean_dists</span> <span class="o">&lt;</span> <span class="n">distance_threshold</span> <span class="p">)</span>
+        <span class="n">num_within_threshold_points</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">within_threshold_points</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">num_within_threshold_points</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c"># We only want one matching point.</span>
+            <span class="c"># It&#39;s possible that more than one might be within threshold.</span>
+            <span class="c"># So, we take the unique smallest distance</span>
+            <span class="n">point_to_be_deleted</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">euclidean_dists</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">point_to_be_deleted</span>
+        <span class="k">else</span><span class="p">:</span> <span class="c"># If there are zero points, then we are not deleting any </span>
+            <span class="n">point_to_be_deleted</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="k">return</span> <span class="n">point_to_be_deleted</span>
+
+
+<span class="c">#######################################################################</span>
+<span class="c"># This is the main part of the program, which calls the above functions </span>
+<span class="c">#######################################################################</span>
+<span class="c"># First, initialise some of our variables to be empty</span></div>
+<span class="n">coords_array</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+<span class="n">point_handles_array</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+<span class="n">handle_of_regression_line_plot</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="c">### Set up an initial space to click inside</span>
+<span class="n">axis_range</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="c">### Make the figure window</span>
+<span class="n">pylab</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="c">### Clear the figure window</span>
+<span class="n">pylab</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span> <span class="c"># clf means &quot;clear the figure&quot;</span>
+<span class="c">### In order to keep the boundaries of the figure fixed in place,</span>
+<span class="c">### we will draw a white box around the region that we want.</span>
+<span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis_range</span><span class="o">*</span><span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+           <span class="n">axis_range</span><span class="o">*</span><span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span><span class="s">&#39;w-&#39;</span><span class="p">)</span>
+<span class="n">pylab</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s">&#39;equal&#39;</span><span class="p">)</span>  <span class="c"># Make the tick-marks equally spaced on x- and y-axes</span>
+<span class="n">pylab</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="n">axis_range</span><span class="o">*</span><span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+<span class="c">### Python issues a warning when we try to calculate</span>
+<span class="c">### the correlation when there are just two points,</span>
+<span class="c">### as the p-value is zero. This next line hides that warning</span>
+<span class="n">scipy</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="n">invalid</span><span class="o">=</span><span class="s">&quot;ignore&quot;</span><span class="p">)</span>
+<span class="c">### Tell Python to call a function every time</span>
+<span class="c">### when the mouse is pressed in this figure</span>
+<span class="n">pylab</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s">&#39;button_press_event&#39;</span><span class="p">,</span> <span class="n">do_this_when_the_mouse_is_clicked</span><span class="p">)</span>
+
+<span class="n">clear_the_figure_and_empty_points_list</span><span class="p">()</span>
+<span class="n">pylab</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>    <span class="c"># This shows the figure window onscreen</span>
+    
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

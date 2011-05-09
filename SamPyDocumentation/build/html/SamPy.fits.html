@@ -1,0 +1,290 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>fits Package &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="SamPy Package" href="SamPy.html" />
+    <link rel="next" title="fitting Package" href="SamPy.fitting.html" />
+    <link rel="prev" title="finance Package" href="SamPy.finance.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.fitting.html" title="fitting Package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.finance.html" title="finance Package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.html" accesskey="U">SamPy Package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">fits Package</a><ul>
+<li><a class="reference internal" href="#module-SamPy.fits.ShowHeader"><tt class="docutils literal"><span class="pre">ShowHeader</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.fits.combine"><tt class="docutils literal"><span class="pre">combine</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.finance.html"
+                        title="previous chapter">finance Package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.fitting.html"
+                        title="next chapter">fitting Package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.fits.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="fits-package">
+<h1>fits Package<a class="headerlink" href="#fits-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-SamPy.fits.ShowHeader">
+<span id="showheader-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">ShowHeader</span></tt> Module<a class="headerlink" href="#module-SamPy.fits.ShowHeader" title="Permalink to this headline">¶</a></h2>
+<p>Extremely simple script that can be used to print FITS headers to stdout.</p>
+<p>Accepts wildcard in the name, but then the filename must be given inside quote marks
+i.e. &#8220;<a href="#id1"><span class="problematic" id="id2">*</span></a>.fits&#8221;</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">date:</th><td class="field-body">Mar 27, 2009</td>
+</tr>
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a></td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="SamPy.fits.ShowHeader.containsAll">
+<tt class="descclassname">SamPy.fits.ShowHeader.</tt><tt class="descname">containsAll</tt><big>(</big><em>str</em>, <em>set</em><big>)</big><a class="reference internal" href="_modules/SamPy/fits/ShowHeader.html#containsAll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fits.ShowHeader.containsAll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if a given string contains all characters in a given set.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>str</strong> (<em>string</em>) &#8211; input string</li>
+<li><strong>set</strong> (<em>string</em>) &#8211; set if characters</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.fits.ShowHeader.containsAny">
+<tt class="descclassname">SamPy.fits.ShowHeader.</tt><tt class="descname">containsAny</tt><big>(</big><em>str</em>, <em>set</em><big>)</big><a class="reference internal" href="_modules/SamPy/fits/ShowHeader.html#containsAny"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fits.ShowHeader.containsAny" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks if a given string contains any of the characters in a given set.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>str</strong> (<em>string</em>) &#8211; input string</li>
+<li><strong>set</strong> (<em>string</em>) &#8211; set if characters</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">boolean</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.fits.ShowHeader.showHeader">
+<tt class="descclassname">SamPy.fits.ShowHeader.</tt><tt class="descname">showHeader</tt><big>(</big><em>filename</em>, <em>extension</em><big>)</big><a class="headerlink" href="#SamPy.fits.ShowHeader.showHeader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows the FITS header of a given file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> (<em>string</em>) &#8211; name of the file</li>
+<li><strong>extension</strong> (<em>integer</em>) &#8211; number of the FITS extension</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-SamPy.fits.combine">
+<span id="combine-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">combine</span></tt> Module<a class="headerlink" href="#module-SamPy.fits.combine" title="Permalink to this headline">¶</a></h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">about:</th><td class="field-body"><p class="first">This script is a quick way of combining fits files</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">usage:</th><td class="field-body"><p class="first">reduce.py [-n] [-m] [-a] [-f] &lt;file list or name&gt; [-o] &lt;output file&gt;
+where:</p>
+<blockquote>
+<div><p>[-m] median combine
+[-a] average combine
+[-f] combines given files
+[-o] name of the output file
+[-n] uses NumPy and PyFits rather than Pyraf</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field"><th class="field-name">date:</th><td class="field-body"><p class="first">26/11/2008 Initial Release</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">author:</th><td class="field-body"><p class="first">Sami-Matias Niemi</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">contact:</th><td class="field-body"><p class="first last"><a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="SamPy.fits.combine.combine">
+<tt class="descclassname">SamPy.fits.combine.</tt><tt class="descname">combine</tt><big>(</big><em>filelist</em>, <em>median=False</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/fits/combine.html#combine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fits.combine.combine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines given images.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filelist</strong> (<em>list</em>) &#8211; list of files to be combined.</li>
+<li><strong>median</strong> (<em>boolean</em>) &#8211; Performs median combining, if False uses average values</li>
+<li><strong>verbose</strong> (<em>boolean</em>) &#8211; verbose mode.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The combined image (2d-array with pixel values)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.fits.combine.combinePyraf">
+<tt class="descclassname">SamPy.fits.combine.</tt><tt class="descname">combinePyraf</tt><big>(</big><em>input</em>, <em>output</em>, <em>median</em>, <em>scale</em><big>)</big><a class="reference internal" href="_modules/SamPy/fits/combine.html#combinePyraf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fits.combine.combinePyraf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines given images using IRAF&#8217;s imcombine.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.fits.combine.process_args">
+<tt class="descclassname">SamPy.fits.combine.</tt><tt class="descname">process_args</tt><big>(</big><em>just_print_help=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/fits/combine.html#process_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fits.combine.process_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes the command line arguments o FITSCombine.py data reduction script.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><strong>just_print_help</strong> (<em>boolean</em>) &#8211; will print help</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">parsed commmand line options</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.fitting.html" title="fitting Package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.finance.html" title="finance Package"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.html" >SamPy Package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,438 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.sandbox.MyTools &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.sandbox.MyTools</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">@requires: NumPy</span>
+<span class="sd">@requires: SciPy</span>
+<span class="sd">@requires: Pylab (at least 1.0.0)</span>
+<span class="sd">@author: Carolin Villforth</span>
+<span class="sd">@summary: A collection of General Useful Tools of all Trades</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">scipy</span>
+<span class="kn">import</span> <span class="nn">pylab</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">stats</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.axes_grid1</span> <span class="kn">import</span> <span class="n">host_subplot</span>
+<span class="kn">import</span> <span class="nn">mpl_toolkits.axisartist</span> <span class="kn">as</span> <span class="nn">AA</span>
+
+<div class="viewcode-block" id="AnaKDE"><a class="viewcode-back" href="../../../SamPy.sandbox.html#SamPy.sandbox.MyTools.AnaKDE">[docs]</a><span class="k">class</span> <span class="nc">AnaKDE</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Tool for Analyzing Kernel Density Estimators (KDE)</span>
+<span class="sd">    Interactive Plotting</span>
+<span class="sd">    @type input: data array/KDE</span>
+<span class="sd">    @type InData: True/False</span>
+<span class="sd">    @type CFill: True/False</span>
+<span class="sd">    @type PlotData: True/False</span>
+<span class="sd">    @type levels: None/List</span>
+<span class="sd">    @param input: Input Data, either a KDE or an array with the data.</span>
+<span class="sd">    </span>
+<span class="sd">    If data is input, InData needs to be set to True.</span>
+<span class="sd">    </span>
+<span class="sd">    If KDE is input, InData needs to be set to False.</span>
+<span class="sd">    @param InData: Defining Data Input Type (see input)</span>
+<span class="sd">    @param CFill: If True, filled contours will be plotted.</span>
+<span class="sd">    </span>
+<span class="sd">    If False, line contours will be plotted</span>
+<span class="sd">    @param PlotData: Overplot raw data points over contour?</span>
+<span class="sd">    @param levels: Define levels for contour plot (if None, pylab will create automatic levels)</span>
+<span class="sd">    @warning: This is not tested for nasty inputs!</span>
+<span class="sd">    @warning: No Exceptions are raised at any point</span>
+<span class="sd">    @todo: Create possibility for log-file output.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="nb">input</span><span class="p">,</span><span class="n">InData</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">CFill</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">PlotData</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">levels</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">InData</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kde</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">gaussian_kde</span><span class="p">([</span><span class="nb">input</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nb">input</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="nb">input</span>
+        <span class="k">elif</span> <span class="n">InData</span> <span class="o">==</span> <span class="bp">False</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kde</span> <span class="o">=</span> <span class="nb">input</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CFill</span> <span class="o">=</span> <span class="n">CFill</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">PlotData</span> <span class="o">=</span> <span class="n">PlotData</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">=</span> <span class="n">levels</span>
+<div class="viewcode-block" id="AnaKDE.contour"><a class="viewcode-back" href="../../../SamPy.sandbox.html#SamPy.sandbox.MyTools.AnaKDE.contour">[docs]</a>    <span class="k">def</span> <span class="nf">contour</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x_vec</span><span class="p">,</span><span class="n">y_vec</span><span class="p">,</span><span class="n">return_data</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plotting a contour of the KDE</span>
+<span class="sd">        See Class main for all input parameters</span>
+<span class="sd">        @type x_vec: array</span>
+<span class="sd">        @type y_vec: array</span>
+<span class="sd">        @param x_vec: X Vector along which KDE is evaluated</span>
+<span class="sd">        @param y_vec: Y Vector along which KDE is evaluated</span>
+<span class="sd">        @note: inherits parameters from main class </span>
+<span class="sd">        @note: I am not quite sure what contour does on funny vectors (unqeually spaced.....)</span>
+<span class="sd">        @note: self.test is for veryfing that the x,y order is kept intact properly by contour (I believe its now in order)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_vec</span> <span class="o">=</span> <span class="n">x_vec</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_vec</span> <span class="o">=</span> <span class="n">y_vec</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">x_vec</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">y_vec</span><span class="p">:</span>
+              <span class="n">tmp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kde</span><span class="o">.</span><span class="n">evaluate</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+              <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+              <span class="bp">self</span><span class="o">.</span><span class="n">test</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">tmp</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z_matrix</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">,[</span><span class="nb">len</span><span class="p">(</span><span class="n">x_vec</span><span class="p">),</span><span class="nb">len</span><span class="p">(</span><span class="n">y_vec</span><span class="p">)])</span>
+        <span class="k">if</span> <span class="n">return_data</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x_vec</span><span class="p">,</span> <span class="n">y_vec</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">z_matrix</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">levels</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figure</span> <span class="o">=</span> <span class="n">pylab</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">CFill</span> <span class="o">==</span> <span class="bp">False</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">x_vec</span><span class="p">,</span><span class="n">y_vec</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">z_matrix</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span><span class="n">levels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">CFill</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">x_vec</span><span class="p">,</span><span class="n">y_vec</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">z_matrix</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span><span class="n">levels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">PlotData</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">ls</span><span class="o">=</span><span class="s">&#39;None&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s">&#39;.&#39;</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+<div class="viewcode-block" id="AnaKDE.OpenInteractive"><a class="viewcode-back" href="../../../SamPy.sandbox.html#SamPy.sandbox.MyTools.AnaKDE.OpenInteractive">[docs]</a>    <span class="k">def</span> <span class="nf">OpenInteractive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sampling</span><span class="o">=</span><span class="mi">100</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Opens an Interactive Window for Evaluating the KDE</span>
+<span class="sd">        @type sampling: int</span>
+<span class="sd">        @param sampling: sampling for vector extraction (OBSOLETE????)</span>
+<span class="sd">        @warning: Open Only after a Contour has been created!</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;--------------This is an interactive KDE Analyzer--------------&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;You can extract a vector or integrate over a rectangular box&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;Choose a vector or box  by clicking on the KDE.&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;Press &#39;h&#39; to see all options.&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cid_click</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s">&#39;button_press_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_onclick</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cid_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s">&#39;key_press_event&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_onkey</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coos</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sampling</span> <span class="o">=</span> <span class="n">sampling</span></div>
+    <span class="k">def</span> <span class="nf">_onclick</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper Function for Pylab Interactive Session</span>
+<span class="sd">        Defines Mouse Interaction</span>
+<span class="sd">        @type event: some pylab instance</span>
+<span class="sd">        @param event: this is created by pylab</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c">#print &#39;button=%d, x=%d, y=%d, xdata=%f, ydata=%f&#39;%(</span>
+        <span class="c">#event.button, event.x, event.y, event.xdata, event.ydata)</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">event</span><span class="o">.</span><span class="n">button</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">xdata</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">ydata</span><span class="p">]</span>
+        <span class="k">print</span> <span class="s">&quot;You clicked at x,y coordinates: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">+</span> <span class="s">&#39;,&#39;</span>  <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coos</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">tmp</span><span class="p">[</span><span class="mi">3</span><span class="p">]],[</span><span class="n">tmp</span><span class="p">[</span><span class="mi">4</span><span class="p">]],</span><span class="n">ls</span><span class="o">=</span><span class="s">&#39;None&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span><span class="n">ms</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">)</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">_onkey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper Function for Pylab Interactive Session</span>
+<span class="sd">        Defines Keyboard Interaction</span>
+<span class="sd">        @type event: some pylab instance</span>
+<span class="sd">        @param event: this is created by pylab</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">print</span> <span class="s">&#39;You just pressed: &#39;</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;q&#39;</span><span class="p">,</span><span class="s">&#39;Q&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_disconnect</span><span class="p">()</span>
+            <span class="n">pylab</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">print</span> <span class="s">&quot;ByeBye&quot;</span>
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;e&#39;</span><span class="p">,</span><span class="s">&#39;E&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_Extract</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;n&#39;</span><span class="p">,</span><span class="s">&#39;N&#39;</span><span class="p">):</span>
+            <span class="k">print</span> <span class="s">&quot;You pressed &#39;n/N&#39;&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;Define a new vector.&quot;</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">pylab</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coos</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;c&#39;</span><span class="p">,</span><span class="s">&#39;C&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">CFill</span> <span class="o">==</span> <span class="bp">False</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_vec</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y_vec</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">z_matrix</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span><span class="n">levels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">CFill</span> <span class="o">==</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_vec</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y_vec</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">z_matrix</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span><span class="n">levels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">PlotData</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">ls</span><span class="o">=</span><span class="s">&#39;None&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s">&#39;.&#39;</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;i&#39;</span><span class="p">,</span><span class="s">&#39;I&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_Integrate</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;h&#39;</span><span class="p">,</span><span class="s">&#39;H&#39;</span><span class="p">):</span>
+            <span class="k">print</span> <span class="s">&quot;-------------------------------------------------&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;&#39;e&#39;: extract a vector&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;&#39;i&#39;: integrate over a rectangular box&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;&#39;n&#39;: clear list of clicks and restart extracting&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;&#39;c&#39;: clear the plot&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;&#39;h&#39;: print help&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;&#39;z&#39;: zoom&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;&#39;u&#39;: unzoom&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;&#39;q&#39;: quit&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;All other keys are inactive.&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;Click to set pointers.&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;-------------------------------------------------&quot;</span>
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;z&#39;</span><span class="p">,</span><span class="s">&#39;Z&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_Zoom</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s">&#39;u&#39;</span><span class="p">,</span><span class="s">&#39;U&#39;</span><span class="p">):</span>
+            <span class="n">pylab</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_vec</span><span class="p">,),</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_vec</span><span class="p">))</span>
+            <span class="n">pylab</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_vec</span><span class="p">,),</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_vec</span><span class="p">))</span>
+            <span class="k">print</span> <span class="s">&quot;Unzoomed.&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;The key you pressed is inactive.&quot;</span>
+    <span class="k">def</span> <span class="nf">_disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper Function for Pylab Interactive Session</span>
+<span class="sd">        Disconnects the Interactive Session</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_disconnect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cid_click</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_disconnect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cid_key</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_Extract</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Extracts the KDE along a vector</span>
+<span class="sd">        Requires Interactive Session to be running</span>
+<span class="sd">        @warning: Not directly accesible, only talks to the Interactive Session!</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coos</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;You did not click often enough, try again!&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;Flushing coordinates&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coos</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">return</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coos</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coos</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coos</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coos</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coos</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">x_start</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">x_end</span><span class="p">],[</span><span class="bp">self</span><span class="o">.</span><span class="n">y_start</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y_end</span><span class="p">],</span><span class="n">ls</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">&#39;g&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+            <span class="k">print</span> <span class="s">&quot;Sampling along the following vector:&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;Starting Point:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_start</span><span class="p">)</span> <span class="o">+</span><span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_start</span><span class="p">)</span>
+            <span class="k">print</span> <span class="s">&quot;End Point:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_end</span><span class="p">)</span> <span class="o">+</span><span class="s">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_end</span><span class="p">)</span>
+            <span class="k">print</span> <span class="s">&quot;Sampling is &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sampling</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x_ext</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_start</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">x_end</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sampling</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y_ext</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_start</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y_end</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">sampling</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sample_points</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">x_ext</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y_ext</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sampled_along_vector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kde</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sample_points</span><span class="p">)</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">fig_new</span> <span class="o">=</span> <span class="n">pylab</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax_new</span> <span class="o">=</span> <span class="n">host_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">axes_class</span><span class="o">=</span><span class="n">AA</span><span class="o">.</span><span class="n">Axes</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax_new</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sampling</span><span class="p">),</span><span class="bp">self</span><span class="o">.</span><span class="n">sampled_along_vector</span><span class="p">,</span><span class="n">ls</span><span class="o">=</span><span class="s">&#39;-&#39;</span><span class="p">,</span><span class="n">marker</span><span class="o">=</span><span class="s">&#39;None&#39;</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax_new2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax_new</span><span class="o">.</span><span class="n">twin</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax_new2</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sampling</span><span class="p">)[::</span><span class="mi">10</span><span class="p">][</span><span class="mi">1</span><span class="p">:])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax_new2</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_ext</span><span class="p">[::</span><span class="mi">10</span><span class="p">][</span><span class="mi">1</span><span class="p">:],</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;S5&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax_new</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sampling</span><span class="p">)[::</span><span class="mi">10</span><span class="p">][</span><span class="mi">1</span><span class="p">:])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax_new</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_ext</span><span class="p">[::</span><span class="mi">10</span><span class="p">][</span><span class="mi">1</span><span class="p">:],</span><span class="n">dtype</span><span class="o">=</span><span class="s">&#39;S5&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax_new</span><span class="o">.</span><span class="n">axis</span><span class="p">[</span><span class="s">&quot;bottom&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&quot;X&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ax_new2</span><span class="o">.</span><span class="n">axis</span><span class="p">[</span><span class="s">&quot;top&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&quot;Y&quot;</span><span class="p">)</span>
+            
+            <span class="k">print</span> <span class="s">&quot;There you go!&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;Press &#39;n&#39; to close this plot and see another vector.&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;Press &#39;q&#39; to stop extracting vectors!&quot;</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;You seem to have clicked too often.&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;Flushing coordinates....&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coos</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">def</span> <span class="nf">_Integrate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Integrates the KDE over a box.</span>
+<span class="sd">        Requires Interactive Session to be running</span>
+<span class="sd">        @warning: Not directly accesible, only talks to the Interactive Session!</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coos</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;You did not click often enough, try again!&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;Flushing coordinates&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coos</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">return</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coos</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coos</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coos</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coos</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coos</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">x_start</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">x_end</span><span class="p">],[</span><span class="bp">self</span><span class="o">.</span><span class="n">y_start</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y_start</span><span class="p">],</span><span class="n">ls</span><span class="o">=</span><span class="s">&#39;:&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">x_start</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">x_end</span><span class="p">],[</span><span class="bp">self</span><span class="o">.</span><span class="n">y_end</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y_end</span><span class="p">],</span><span class="n">ls</span><span class="o">=</span><span class="s">&#39;:&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">x_start</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">x_start</span><span class="p">],[</span><span class="bp">self</span><span class="o">.</span><span class="n">y_start</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y_end</span><span class="p">],</span><span class="n">ls</span><span class="o">=</span><span class="s">&#39;:&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">x_end</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">x_end</span><span class="p">],[</span><span class="bp">self</span><span class="o">.</span><span class="n">y_start</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y_end</span><span class="p">],</span><span class="n">ls</span><span class="o">=</span><span class="s">&#39;:&#39;</span><span class="p">,</span><span class="n">lw</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">&#39;k&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">kde</span><span class="o">.</span><span class="n">integrate_box</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">x_start</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y_start</span><span class="p">],[</span><span class="bp">self</span><span class="o">.</span><span class="n">x_end</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y_end</span><span class="p">]))</span>
+            <span class="k">print</span> <span class="s">&quot;The integral over the following box:&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;startx,starty/endx,endy = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coos</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">:])</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coos</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">3</span><span class="p">:])</span>
+            <span class="k">print</span> <span class="s">&quot;Is: &quot;</span>  <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+            <span class="k">print</span> <span class="s">&quot;Flushing coordinates...&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coos</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;You seem to have clicked too often.&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;Flushing coordinates....&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coos</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">def</span> <span class="nf">_Zoom</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Zooms the Interactive Plot</span>
+<span class="sd">        Requires Interactive Session to be running</span>
+<span class="sd">        @warning: Not directly accesible, only talks to the Interactive Session!</span>
+<span class="sd">        @bug: zooming can flip the axes if that&#39;s how the user clicked! This is confusing</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coos</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;You did not click often enough, try again!&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;Flushing coordinates&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coos</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">return</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coos</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coos</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coos</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coos</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y_end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coos</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span>
+            <span class="n">pylab</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_start</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">x_end</span><span class="p">)</span>
+            <span class="n">pylab</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_start</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">y_end</span><span class="p">)</span>
+            <span class="k">print</span> <span class="s">&quot;Zoomed, press &#39;u&#39; to unzoom.&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;Flushing coordinates...&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coos</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;You seem to have clicked too often.&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;Flushing coordinates....&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coos</span> <span class="o">=</span> <span class="p">[]</span>
+<div class="viewcode-block" id="AnaKDE.RePlot"><a class="viewcode-back" href="../../../SamPy.sandbox.html#SamPy.sandbox.MyTools.AnaKDE.RePlot">[docs]</a>    <span class="k">def</span> <span class="nf">RePlot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Replots the Contour</span>
+<span class="sd">        Use after changing parameters</span>
+<span class="sd">        @bug: Replot should not re-evaluate the KDE is x_vec and y_vec have not been updated!</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pylab</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">pylab</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">x_vec</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">x_vec</span><span class="p">,</span><span class="n">y_vec</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">y_vec</span><span class="p">)</span></div>
+<div class="viewcode-block" id="AnaKDE.Update"><a class="viewcode-back" href="../../../SamPy.sandbox.html#SamPy.sandbox.MyTools.AnaKDE.Update">[docs]</a>    <span class="k">def</span> <span class="nf">Update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x_vec</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">y_vec</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span><span class="n">CFill</span><span class="o">=-</span><span class="mi">999</span><span class="p">,</span><span class="n">PlotData</span><span class="o">=-</span><span class="mi">999</span><span class="p">,</span><span class="n">levels</span> <span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update Class Parameters</span>
+<span class="sd">        Use Replot to Create an updated plot, then open an interactive Session.</span>
+<span class="sd">        All parameters as in Main Class</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">updated</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="k">if</span> <span class="n">x_vec</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">x_vec</span> <span class="o">=</span> <span class="n">x_vec</span>
+            <span class="k">print</span> <span class="s">&quot;Updated x_vec to: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_vec</span><span class="p">)</span>
+            <span class="n">updated</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">if</span> <span class="n">y_vec</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">y_vec</span> <span class="o">=</span> <span class="n">y_vec</span>
+            <span class="k">print</span> <span class="s">&quot;Updated y_vec to: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_vec</span><span class="p">)</span>
+            <span class="n">updated</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">if</span> <span class="n">CFill</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">999</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">CFill</span> <span class="o">=</span> <span class="n">CFill</span>
+            <span class="k">print</span> <span class="s">&quot;Updated CFill to: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CFill</span><span class="p">)</span>
+            <span class="n">updated</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">if</span> <span class="n">PlotData</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">999</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">PlotData</span> <span class="o">=</span> <span class="n">PlotData</span>
+            <span class="k">print</span> <span class="s">&quot;Updated PlotData to: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PlotData</span><span class="p">)</span>
+            <span class="n">updated</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">if</span> <span class="n">levels</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">=</span> <span class="n">levels</span>
+            <span class="k">print</span> <span class="s">&quot;Updated levels to: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span><span class="p">)</span>
+            <span class="n">updated</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">if</span> <span class="n">updated</span> <span class="o">==</span> <span class="bp">False</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Nothing updated.&quot;</span></div>
+<div class="viewcode-block" id="AnaKDE.Info"><a class="viewcode-back" href="../../../SamPy.sandbox.html#SamPy.sandbox.MyTools.AnaKDE.Info">[docs]</a>    <span class="k">def</span> <span class="nf">Info</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Prints out all current parameters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;-------Current AnaKDE Parameters-------&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;-------InData (Data Input?)------------&quot;</span>
+        <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Indata</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&quot;---CFill (Plotting Filled contours?)---&quot;</span>
+        <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CFill</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&quot;-----PLotData (Plotting data?)---------&quot;</span>
+        <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PlotData</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&quot;------x_vec (X Samplin Vector)---------&quot;</span>
+        <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_vec</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&quot;------y_vec (X Samplin Vector)---------&quot;</span>
+        <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y_vec</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&quot;---levels (Levels for Contour Plot)----&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Automatic&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span><span class="p">)</span>
+        
+        
+        
+        </div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+    </div>
+  </body>
+</html>

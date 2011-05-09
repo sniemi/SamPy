@@ -1,0 +1,19 @@
+cos Package
+===========
+
+:mod:`plot_GET` Module
+----------------------
+
+.. automodule:: SamPy.cos.plot_GET
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`plot_all_GET` Module
+--------------------------
+
+.. automodule:: SamPy.cos.plot_all_GET
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
