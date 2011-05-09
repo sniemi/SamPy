@@ -1202,13 +1202,13 @@ def plotTemplateComparison(database, band, redshifts,
     #constants
     path = [hm + '/Dropbox/Research/Herschel/runs/ce01/',
             hm + '/Dropbox/Research/Herschel/runs/cp11/',
-            #hm + '/Research/Herschel/runs/big_volume/']
-            hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/']
+            hm + '/Research/Herschel/runs/big_volume/']
+            #hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/']
     out_folder = hm + '/Dropbox/Research/Herschel/plots/number_counts/'
     ar = [2.25, #10 times goods
           2.25, #10 times goods
-          #0.225] #big volume
-          2.25] #10 times goods
+          0.225] #big volume
+          #2.25] #10 times goods
     #obs data
     obs_data = hm + '/Dropbox/Research/Herschel/obs_data/'
     #GOODS observations, file given by Kuang
@@ -1750,11 +1750,11 @@ if __name__ == '__main__':
 
     #passbands to be plotted
     bands = [#'pacs70_obs',
-             'pacs100_obs']#,
-             #'pacs160_obs',
-             #'spire250_obs',
-             #'spire350_obs',
-             #'spire500_obs',
+             'pacs100_obs',
+             'pacs160_obs',
+             'spire250_obs',
+             'spire350_obs',
+             'spire500_obs']#,
              #'mips24_obs', ]
     #'IRAS12_obs',
     #'iras60_obs']
@@ -1790,7 +1790,7 @@ if __name__ == '__main__':
             plotTemplateComparison(database, bd, redshifts,
                                    xmin=0.5, xmax=500,
                                    ymin=2e2, ymax=5 * 10 ** 5,
-                                   nbins=17, sigma=1.0)
+                                   nbins=17, sigma=3.0)
         elif 'spire' in bd:
             print 'plotting ', bd
             #            plot_number_counts2(path, database, bd, redshifts2,
@@ -1802,7 +1802,7 @@ if __name__ == '__main__':
             plotTemplateComparison(database, bd, redshifts2,
                                    xmin=0.5, xmax=1800,
                                    ymin=7e2, ymax=8e5,
-                                   nbins=11, sigma=1.0)
+                                   nbins=11, sigma=3.0)
         else:
             print 'plotting ', bd
             plotTemplateComparison(database, bd, redshifts2,
