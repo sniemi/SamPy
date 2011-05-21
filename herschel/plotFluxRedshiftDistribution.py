@@ -9,7 +9,7 @@ matplotlib.rcParams['legend.fontsize'] = 12
 matplotlib.rcParams['legend.handlelength'] = 2
 matplotlib.rcParams['xtick.major.size'] = 5
 matplotlib.rcParams['ytick.major.size'] = 5
-import os
+import os, re
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator, NullFormatter
@@ -170,26 +170,34 @@ def scatterHistograms(xdata,
 
 def plotFluxRedshiftDistribution(path,
                                  database,
-                                 out_folder):
-    query = '''select FIR.spire250_obs, FIR.z
+                                 out_folder,
+                                 band = 'spire250_obs'):
+    query = '''select FIR.%s, FIR.z
     from FIR where
-    FIR.spire250_obs > 1e-6 and
+    FIR.%s > 1e-6 and
     FIR.z >= 1.9 and
     FIR.z < 4.1 and
-    FIR.spire250_obs < 1e5
-    '''
+    FIR.%s < 1e5
+    ''' % (band, band, band)
     #get data
     data = db.sqlite.get_data_sqlite(path, database, query)
     #convert fluxes to mJy
     flux = np.log10(data[:, 0] * 1e3) # log of mJy
     redshift = data[:, 1]
 
+    #get wavelength
+    try:
+        wave = re.search('\d\d\d', band).group()
+    except:
+        #pacs 70 has only two digits
+        wave = re.search('\d\d', band).group()
+
     #xlabels
     xlabel = r'$z$'
-    ylabel = r'$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$'
+    ylabel = r'$\log_{10} ( S_{%s} \ [\mathrm{mJy}] )$' % wave
 
     #output folder and file name
-    output = "{0:>s}FluxRedshiftDist.png".format(out_folder)
+    output = "%sFluxRedshiftDist%s.png"% (out_folder, wave)
 
     #generate the plot
     scatterHistograms(redshift,
@@ -209,4 +217,5 @@ if __name__ == '__main__':
     database = 'sams.db'
     out_folder = hm + '/Dropbox/Research/Herschel/plots/flux_dist/'
 
-    plotFluxRedshiftDistribution(path, database, out_folder)
+    #plotFluxRedshiftDistribution(path, database, out_folder)
+    plotFluxRedshiftDistribution(path, database, out_folder, band='pacs160_obs')

@@ -457,15 +457,38 @@ if __name__ == '__main__':
 #                                 out_folder, obs, xmin=1.5, size=30, xmax=3.8,
 #                                 mergetimelimit=0.25, alpha=0.5, ch=2,
 #                                 title='Simulated Galaxies: $S_{250} > 5 \ \mathrm{mJy}$')
-    ###############################################################################
-    query = '''select FIR.spire250_obs / FIR.irac_ch2_obs,
+#    ###############################################################################
+#    #This is what the paper has now
+#    query = '''select FIR.spire250_obs / FIR.irac_ch2_obs,
+#                galphotdust.f775w, galphotdust.f850lp,
+#                galprop.tmerge, galprop.tmajmerge
+#                from FIR, galprop, galphotdust where
+#                FIR.z >= 2.0 and
+#                FIR.spire250_obs > 5e-3 and
+#                FIR.z < 4.0 and
+#                FIR.spire250_obs < 1e6 and
+#                galphotdust.f775w_obs < 50 and
+#                galphotdust.f850lp_obs < 50 and
+#                FIR.gal_id = galprop.gal_id and
+#                FIR.halo_id = galprop.halo_id and
+#                FIR.gal_id = galphotdust.gal_id and
+#                FIR.halo_id = galphotdust.halo_id
+#                '''
+#    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{4.5}} \right )$'
+#    ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
+#    plotMergerFractionsMultiplot2(query, xlab, ylab, 'ColorMergerPaper7'+type,
+#                                  out_folder, xmin=1.9, size=40, xmax=4.0,
+#                                  mergetimelimit=0.25, alpha=0.5,
+#                                  title='Simulated Galaxies: $S_{250} > 5 \ \mathrm{mJy}$')
+
+    query = '''select FIR.pacs160_obs / FIR.irac_ch2_obs,
                 galphotdust.f775w, galphotdust.f850lp,
                 galprop.tmerge, galprop.tmajmerge
                 from FIR, galprop, galphotdust where
                 FIR.z >= 2.0 and
-                FIR.spire250_obs > 5e-3 and
+                FIR.pacs160_obs > 4e-3 and
                 FIR.z < 4.0 and
-                FIR.spire250_obs < 1e6 and
+                FIR.pacs160_obs < 1e6 and
                 galphotdust.f775w_obs < 50 and
                 galphotdust.f850lp_obs < 50 and
                 FIR.gal_id = galprop.gal_id and
@@ -473,10 +496,11 @@ if __name__ == '__main__':
                 FIR.gal_id = galphotdust.gal_id and
                 FIR.halo_id = galphotdust.halo_id
                 '''
-    xlab = r'$\log_{10}\left ( \frac{S_{250}}{S_{4.5}} \right )$'
+    xlab = r'$\log_{10}\left ( \frac{S_{160}}{S_{4.5}} \right )$'
     ylab = r'$\mathrm{F775W} - \mathrm{F850lp}$'
-    plotMergerFractionsMultiplot2(query, xlab, ylab, 'ColorMergerPaper7'+type,
+    plotMergerFractionsMultiplot2(query, xlab, ylab, 'ColorMergerPaper8'+type,
                                   out_folder, xmin=1.9, size=40, xmax=4.0,
                                   mergetimelimit=0.25, alpha=0.5,
-                                  title='Simulated Galaxies: $S_{250} > 5 \ \mathrm{mJy}$')
+                                  title='Simulated Galaxies: $S_{160} > 4 \ \mathrm{mJy}$')
+
     print 'All done'

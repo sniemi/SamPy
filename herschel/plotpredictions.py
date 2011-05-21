@@ -31,7 +31,7 @@ def plot_sfrs(path, db, redshifts, out_folder,
     ax = fig.add_subplot(111)
 
     for reds in redshifts:
-        query = '''select galprop.mstardot, FIR.spire250_obs*1000
+        query = '''select galprop.mstardot, FIR.pacs160_obs*1000
                 from FIR, galprop where
                 %s and
                 FIR.gal_id = galprop.gal_id and
@@ -69,7 +69,7 @@ def plot_sfrs(path, db, redshifts, out_folder,
         #                           report = True)
 
     ax.axvline(N.log10(fluxlimit), ls=':', color='green')
-    #label = '$S_{250} =$ %.1f mJy' % fluxlimit)
+    #label = '$S_{160} =$ %.1f mJy' % fluxlimit)
 
     if obs:
         data = N.loadtxt('/Users/sammy/Dropbox/Research/Herschel/LaceySFRs.txt')
@@ -90,7 +90,7 @@ def plot_sfrs(path, db, redshifts, out_folder,
         ax.plot(data[msk5][:, 1], data[msk5][:, 2],
                 'y--', label='$\mathrm{L10:}\ z = 4.0$')
 
-    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
     ax.set_ylabel('$\log_{10}(\dot{M}_{\star} \ [M_{\odot}\mathrm{yr}^{-1}])$')
 
     ax.set_xlim(xmin, xmax)
@@ -113,7 +113,7 @@ def plot_ssfr(path, db, redshifts, out_folder,
     ax = fig.add_subplot(111)
 
     for reds in redshifts:
-        query = '''select galprop.mstardot, galprop.mstar, FIR.spire250_obs
+        query = '''select galprop.mstardot, galprop.mstar, FIR.pacs160_obs
                 from FIR, galprop where
                 %s and
                 FIR.gal_id = galprop.gal_id and
@@ -145,10 +145,10 @@ def plot_ssfr(path, db, redshifts, out_folder,
                     label='$z = %.1f$' % zz)
 
     ax.axvline(N.log10(fluxlimit), ls=':', color='green')
-    #label = '$S_{250} =$ %.1f mJy' % fluxlimit)
+    #label = '$S_{160} =$ %.1f mJy' % fluxlimit)
 
 
-    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
     ax.set_ylabel(r'$\log_{10} \left (\frac{\dot{M}_{\star}}{M_{\star}} \ [\mathrm{yr}^{-1}] \right )$')
 
     ax.set_xlim(xmin, xmax)
@@ -168,7 +168,7 @@ def plot_stellarmass(path, db, redshifts, out_folder,
     ax = fig.add_subplot(111)
 
     for i, reds in enumerate(redshifts):
-        query = '''select galprop.mstar, FIR.spire250_obs*1000
+        query = '''select galprop.mstar, FIR.pacs160_obs*1000
                 from FIR, galprop where
                 %s and
                 FIR.gal_id = galprop.gal_id and
@@ -201,7 +201,7 @@ def plot_stellarmass(path, db, redshifts, out_folder,
 
     ax.axvline(N.log10(fluxlimit), ls=':', color='green')
 
-    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
     ax.set_ylabel('$\log_{10}(M_{\star} \ [M_{\odot}])$')
 
     ax.set_xlim(xmin, xmax)
@@ -214,14 +214,14 @@ def plot_stellarmass(path, db, redshifts, out_folder,
 def plot_Lbol(path, db, redshifts, out_folder,
               xmin=0.0, xmax=2.3, fluxlimit=5):
     '''
-    Plots SPIRE 250 flux versus bolometric luminosity
+    Plots pacs 160 flux versus bolometric luminosity
     '''
     #figure
     fig = P.figure()
     ax = fig.add_subplot(111)
 
     for i, reds in enumerate(redshifts):
-        query = '''select FIR.L_bol, FIR.spire250_obs
+        query = '''select FIR.L_bol, FIR.pacs160_obs
                 from FIR where %s and FIR.L_bol > 0 and FIR.L_bol < 1e8''' % reds
         #tmp
         tmp = reds.split()
@@ -250,7 +250,7 @@ def plot_Lbol(path, db, redshifts, out_folder,
 
     ax.axvline(N.log10(fluxlimit), ls=':', color='green')
 
-    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
     ax.set_ylabel('$\log_{10}(L_{\mathrm{bol}} \ [L_{\odot}])$')
 
     ax.set_xlim(xmin, xmax)
@@ -262,14 +262,14 @@ def plot_Lbol(path, db, redshifts, out_folder,
 def plot_Ldust(path, db, redshifts, out_folder,
               xmin=0.0, xmax=2.3, fluxlimit=5):
     '''
-    Plots SPIRE 250 flux versus dust luminosity
+    Plots pacs 160 flux versus dust luminosity
     '''
     #figure
     fig = P.figure()
     ax = fig.add_subplot(111)
 
     for i, reds in enumerate(redshifts):
-        query = '''select FIR.L_dust, FIR.spire250_obs
+        query = '''select FIR.L_dust, FIR.pacs160_obs
                 from FIR where %s and FIR.L_dust > 0 and FIR.L_dust < 1e8''' % reds
         #tmp
         tmp = reds.split()
@@ -298,7 +298,7 @@ def plot_Ldust(path, db, redshifts, out_folder,
 
     ax.axvline(N.log10(fluxlimit), ls=':', color='green')
 
-    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
     ax.set_ylabel('$\log_{10}(L_{\mathrm{dust}} \ [L_{\odot}])$')
 
     ax.set_xlim(xmin, xmax)
@@ -318,7 +318,7 @@ def plot_coldgas(path, db, reshifts, out_folder,
     ax = fig.add_subplot(111)
 
     for i, reds in enumerate(redshifts):
-        query = '''select galprop.mcold, FIR.spire250_obs*1000
+        query = '''select galprop.mcold, FIR.pacs160_obs*1000
                 from FIR, galprop where
                 %s and
                 FIR.gal_id = galprop.gal_id and
@@ -351,7 +351,7 @@ def plot_coldgas(path, db, reshifts, out_folder,
 
     ax.axvline(N.log10(fluxlimit), ls=':', color='green')
 
-    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
     ax.set_ylabel('$\log_{10}(M_{\mathrm{coldgas}} \ [M_{\odot}])$')
 
     ax.set_xlim(xmin, xmax)
@@ -371,7 +371,7 @@ def plot_massratios(path, db, reshifts, out_folder,
     ax = fig.add_subplot(111)
 
     for i, reds in enumerate(redshifts):
-        query = '''select galprop.mcold - galprop.mstar, FIR.spire250_obs*1000
+        query = '''select galprop.mcold - galprop.mstar, FIR.pacs160_obs*1000
                 from FIR, galprop where
                 %s and
                 FIR.gal_id = galprop.gal_id and
@@ -404,7 +404,7 @@ def plot_massratios(path, db, reshifts, out_folder,
 
     ax.axvline(N.log10(fluxlimit), ls=':', color='green')
 
-    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
     ax.set_ylabel(r'$\log_{10} \left ( \frac{M_{\mathrm{coldgas}}}{M_{\star}} \right )$')
 
     ax.set_xlim(xmin, xmax)
@@ -424,7 +424,7 @@ def plot_burstmass(path, db, reshifts, out_folder,
     ax = fig.add_subplot(111)
 
     for i, reds in enumerate(redshifts):
-        query = '''select galprop.mstar_burst, FIR.spire250_obs*1000
+        query = '''select galprop.mstar_burst, FIR.pacs160_obs*1000
                 from FIR, galprop where
                 %s and
                 FIR.gal_id = galprop.gal_id and
@@ -458,7 +458,7 @@ def plot_burstmass(path, db, reshifts, out_folder,
 
     ax.axvline(N.log10(fluxlimit), ls=':', color='green')
 
-    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
     ax.set_ylabel(r'$\log_{10} ( M_{\mathrm{starburst}})$')
 
     ax.set_xlim(xmin, xmax)
@@ -478,7 +478,7 @@ def plot_metallicity(path, db, reshifts, out_folder,
     ax = fig.add_subplot(111)
 
     for i, reds in enumerate(redshifts):
-        query = '''select galprop.zstar, FIR.spire250_obs*1000
+        query = '''select galprop.zstar, FIR.pacs160_obs*1000
                 from FIR, galprop where
                 %s and
                 FIR.gal_id = galprop.gal_id and
@@ -511,7 +511,7 @@ def plot_metallicity(path, db, reshifts, out_folder,
 
     ax.axvline(N.log10(fluxlimit), ls=':', color='green')
 
-    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
     ax.set_ylabel('$Z_{\star}$')
 
     ax.set_xlim(xmin, xmax)
@@ -531,7 +531,7 @@ def plot_starburst(path, db, reshifts, out_folder,
     ax = fig.add_subplot(111)
 
     for i, reds in enumerate(redshifts):
-        query = '''select galprop.mstar_burst - galprop.mstar, FIR.spire250_obs*1000
+        query = '''select galprop.mstar_burst - galprop.mstar, FIR.pacs160_obs*1000
                 from FIR, galprop where
                 %s and
                 FIR.gal_id = galprop.gal_id and
@@ -564,7 +564,7 @@ def plot_starburst(path, db, reshifts, out_folder,
 
     ax.axvline(N.log10(fluxlimit), ls=':', color='green')
 
-    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
     ax.set_ylabel(r'$\log_{10} \left ( \frac{M_{starbust}}{M_{\star}} \right )$')
 
     ax.set_xlim(xmin, xmax)
@@ -584,7 +584,7 @@ def plot_BHmass(path, db, reshifts, out_folder,
     ax = fig.add_subplot(111)
 
     for i, reds in enumerate(redshifts):
-        query = '''select galprop.mBH, FIR.spire250_obs*1000
+        query = '''select galprop.mBH, FIR.pacs160_obs*1000
                 from FIR, galprop where
                 %s and
                 FIR.gal_id = galprop.gal_id and
@@ -617,7 +617,7 @@ def plot_BHmass(path, db, reshifts, out_folder,
 
     ax.axvline(N.log10(fluxlimit), ls=':', color='green')
 
-    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
     ax.set_ylabel('$\log_{10}(M_{BH} \ [M_{\odot}])$')
 
     ax.set_xlim(xmin, xmax)
@@ -637,7 +637,7 @@ def plot_DMmass(path, db, reshifts, out_folder,
     ax = fig.add_subplot(111)
 
     for i, reds in enumerate(redshifts):
-        query = '''select galprop.mhalo, FIR.spire250_obs*1000
+        query = '''select galprop.mhalo, FIR.pacs160_obs*1000
                 from FIR, galprop where
                 %s and
                 FIR.gal_id = galprop.gal_id and
@@ -670,7 +670,7 @@ def plot_DMmass(path, db, reshifts, out_folder,
 
     ax.axvline(N.log10(fluxlimit), ls=':', color='green')
 
-    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
     ax.set_ylabel('$\log_{10}(M_{\mathrm{dm}} \ [M_{\odot}])$')
 
     ax.set_xlim(xmin, xmax)
@@ -690,7 +690,7 @@ def plot_Age(path, db, reshifts, out_folder,
     ax = fig.add_subplot(111)
 
     for i, reds in enumerate(redshifts):
-        query = '''select galprop.meanage, FIR.spire250_obs*1000
+        query = '''select galprop.meanage, FIR.pacs160_obs*1000
                 from FIR, galprop where
                 %s and
                 FIR.gal_id = galprop.gal_id and
@@ -723,7 +723,7 @@ def plot_Age(path, db, reshifts, out_folder,
 
     ax.axvline(N.log10(fluxlimit), ls=':', color='green')
 
-    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
     ax.set_ylabel('Mean Age [Gyr]')
 
     ax.set_xlim(xmin, xmax)
@@ -758,20 +758,20 @@ def plot_mergerfraction(path, db, reshifts, out_folder, outname,
     #loop over all the redshifts
     for i, reds in enumerate(redshifts):
         if obs:
-            query = '''select FIR.spire250_obs, galprop.tmerge, galprop.tmajmerge
+            query = '''select FIR.pacs160_obs, galprop.tmerge, galprop.tmajmerge
                     from FIR, galprop where
                     %s and
-                    FIR.spire250_obs > 5e-4 and
-                    FIR.spire250_obs < 1e6 and
+                    FIR.pacs160_obs > 5e-4 and
+                    FIR.pacs160_obs < 1e6 and
                     FIR.gal_id = galprop.gal_id and
                     FIR.halo_id = galprop.halo_id
                     ''' % reds
         else:
-            query = '''select FIR.spire250, galprop.tmerge, galprop.tmajmerge
+            query = '''select FIR.pacs160, galprop.tmerge, galprop.tmajmerge
                     from FIR, galprop where
                     %s and
-                    FIR.spire250 > 8.8 and
-                    FIR.spire250 < 13.0 and
+                    FIR.pacs160 > 8.8 and
+                    FIR.pacs160 < 13.0 and
                     FIR.gal_id = galprop.gal_id and
                     FIR.halo_id = galprop.halo_id
                     ''' % reds
@@ -835,11 +835,11 @@ def plot_mergerfraction(path, db, reshifts, out_folder, outname,
         ax4.axvline(N.log10(fluxlimit), ls=':', color='green')
         #labels
     if obs:
-        ax3.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
-        ax4.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+        ax3.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
+        ax4.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
     else:
-        ax3.set_xlabel('$\log_{10}(L_{250} \ [L_{\odot}])$')
-        ax4.set_xlabel('$\log_{10}(L_{250} \ [L_{\odot}])$')
+        ax3.set_xlabel('$\log_{10}(L_{160} \ [L_{\odot}])$')
+        ax4.set_xlabel('$\log_{10}(L_{160} \ [L_{\odot}])$')
     ax1.set_ylabel('$\mathrm{Merger\ Fraction}$')
     ax3.set_ylabel('$\mathrm{Merger\ Fraction}$')
     ax2.set_yticklabels([])
@@ -911,20 +911,20 @@ def plot_mergerfraction2(path, db, reshifts, out_folder, outname,
     #loop over all the redshifts
     for i, reds in enumerate(redshifts):
         if obs:
-            query = '''select FIR.spire250_obs, galprop.tmerge, galprop.tmajmerge
+            query = '''select FIR.pacs160_obs, galprop.tmerge, galprop.tmajmerge
                     from FIR, galprop where
                     %s and
-                    FIR.spire250_obs > 5e-4 and
-                    FIR.spire250_obs < 1e6 and
+                    FIR.pacs160_obs > 5e-4 and
+                    FIR.pacs160_obs < 1e6 and
                     FIR.gal_id = galprop.gal_id and
                     FIR.halo_id = galprop.halo_id
                     ''' % reds
         else:
-            query = '''select FIR.spire250, galprop.tmerge, galprop.tmajmerge
+            query = '''select FIR.pacs160, galprop.tmerge, galprop.tmajmerge
                     from FIR, galprop where
                     %s and
-                    FIR.spire250 > 8.8 and
-                    FIR.spire250 < 13.0 and
+                    FIR.pacs160 > 8.8 and
+                    FIR.pacs160 < 13.0 and
                     FIR.gal_id = galprop.gal_id and
                     FIR.halo_id = galprop.halo_id
                     ''' % reds
@@ -991,11 +991,11 @@ def plot_mergerfraction2(path, db, reshifts, out_folder, outname,
         ax4.axvline(N.log10(fluxlimit), ls=':', color='green')
         #labels
     if obs:
-        ax3.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
-        ax4.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+        ax3.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
+        ax4.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
     else:
-        ax3.set_xlabel('$\log_{10}(L_{250} \ [L_{\odot}])$')
-        ax4.set_xlabel('$\log_{10}(L_{250} \ [L_{\odot}])$')
+        ax3.set_xlabel('$\log_{10}(L_{160} \ [L_{\odot}])$')
+        ax4.set_xlabel('$\log_{10}(L_{160} \ [L_{\odot}])$')
     ax1.set_ylabel('$\mathrm{Merger\ Fraction}$')
     ax3.set_ylabel('$\mathrm{Merger\ Fraction}$')
     ax2.set_yticklabels([])
@@ -1048,7 +1048,7 @@ if __name__ == '__main__':
     #constants
     #path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
     path = hm + '/Research/Herschel/runs/big_volume/'
-    out_folder = hm + '/Dropbox/Research/Herschel/plots/predictions/big/'
+    out_folder = hm + '/Dropbox/Research/Herschel/plots/predictions/big/160/'
     db = 'sams.db'
 
     redshifts = ['FIR.z > 0.1 and FIR.z < 0.3',
@@ -1063,22 +1063,20 @@ if __name__ == '__main__':
     print 'Output folder: ', out_folder
 
     #These plots are in the paper
-    #plot_sfrs(path, db, redshifts, out_folder)
-
-    #plot_mergerfraction2(path, db, redshifts, out_folder, 'MergeFractions',
-    #                     xbin = [10,8,9,7,5,5], png = False, neverMerged = True)
-    #    plot_stellarmass(path, db, redshifts, out_folder)
-    #    plot_coldgas(path, db, redshifts, out_folder)
-
-
-    #These plots were in the paper
-    #    plot_ssfr(path, db, redshifts, out_folder)
-
+    plot_sfrs(path, db, redshifts, out_folder, obs=False)
+#
+#    plot_mergerfraction2(path, db, redshifts, out_folder, 'MergeFractions',
+#                         xbin = [10,8,9,7,5,5], png = False, neverMerged = True)
+#    plot_stellarmass(path, db, redshifts, out_folder)
+#    plot_coldgas(path, db, redshifts, out_folder)
+#
+#    #These plots were in the paper
+#    plot_ssfr(path, db, redshifts, out_folder)
+#    plot_Lbol(path, db, redshifts, out_folder)
+#    plot_Ldust(path, db, redshifts, out_folder)
 
 
     #TEST plots
-    plot_Lbol(path, db, redshifts, out_folder)
-    plot_Ldust(path, db, redshifts, out_folder)
 #    plot_mergerfraction(path, db, redshifts, out_folder, 'MergeFractions',
 #                        xbin = [10,8,9,7,5,5], png = False)
 #    plot_sfrs(path, db, redshifts, out_folder, obs = True)
