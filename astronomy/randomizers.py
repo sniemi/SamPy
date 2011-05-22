@@ -1,3 +1,12 @@
+'''
+This module can be used to randomize for example galaxy positions.
+
+:depends: NumPy
+
+:author: Sami-Matias Niemi
+
+:date: 21 May, 2011
+'''
 import numpy as np
 
 __author__ = 'Sami-Matias Niemi'
@@ -10,7 +19,11 @@ def randomUnitSphere(points=1):
     points returned can be controlled with
     the optional points keyword argument.
 
-    :param points (int): the number of points drawn
+    :param: the number of random points drawn
+    :ptype: int
+
+    :return: random theta and phi angles
+    :rtype: dictionary
     '''
 
     #get random values u and v

@@ -1,14 +1,19 @@
 Welcome to SamPy's documentation!
-==============================================================
+=================================
 
-Contents:
+Table of Contents
+=================
+
+.. toctree::
+   :maxdepth: 1
+
+   intro
 
 .. toctree::
    :maxdepth: 3
 
-   intro
-   
    SamPy
+
 
 Indices and tables
 ==================

@@ -1,9 +1,5 @@
 '''
-Astronomy Basics
-================
-
-This module contains basic information of different
-subjects often needed in astronomy.
+This module contains basic information of different subjects often needed in astronomy such as conversions from one magnitude system to another.
 
 :author: Sami-Matias Niemi
 :contact: niemi@stsci.edu

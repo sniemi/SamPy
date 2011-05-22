@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
-    <link rel="up" title="Module code" href="../../index.html" /> 
+    <link rel="up" title="SamPy.dates" href="../dates.html" /> 
   </head>
   <body>
 
@@ -42,7 +42,8 @@
         <li><a href="../../../index.html">home</a>|&nbsp;</li>
         <li><a href="../../../search.html">search</a>|&nbsp;</li>
 
-          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../dates.html" accesskey="U">SamPy.dates</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -75,7 +76,7 @@
 <span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Sami-Matias Niemi&#39;</span>
 <span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;0.1&#39;</span>
 
-<div class="viewcode-block" id="toJulian"><a class="viewcode-back" href="../../../SamPy.dates.html#SamPy.dates.julians.toJulian">[docs]</a><span class="k">def</span> <span class="nf">toJulian</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">,</span> <span class="n">hour</span><span class="p">,</span> <span class="n">minute</span><span class="p">,</span> <span class="n">timezone</span> <span class="o">=</span> <span class="s">&#39;UTC&#39;</span><span class="p">)</span> <span class="p">:</span>
+<div class="viewcode-block" id="toJulian"><a class="viewcode-back" href="../../../SamPy.dates.julians.html#SamPy.dates.julians.toJulian">[docs]</a><span class="k">def</span> <span class="nf">toJulian</span><span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">,</span> <span class="n">hour</span><span class="p">,</span> <span class="n">minute</span><span class="p">,</span> <span class="n">timezone</span> <span class="o">=</span> <span class="s">&#39;UTC&#39;</span><span class="p">)</span> <span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    @param: </span>
 <span class="sd">    year, month, day, hour, minute, and timezone </span>
@@ -89,7 +90,7 @@
     <span class="n">jday</span> <span class="o">=</span> <span class="n">days</span> <span class="o">+</span> <span class="mi">40587</span> <span class="c"># Julian date of Jan 1 1900</span>
     <span class="k">return</span> <span class="n">jday</span>
 </div>
-<div class="viewcode-block" id="toJulian2"><a class="viewcode-back" href="../../../SamPy.dates.html#SamPy.dates.julians.toJulian2">[docs]</a><span class="k">def</span> <span class="nf">toJulian2</span><span class="p">(</span><span class="n">date</span><span class="p">)</span> <span class="p">:</span>
+<div class="viewcode-block" id="toJulian2"><a class="viewcode-back" href="../../../SamPy.dates.julians.html#SamPy.dates.julians.toJulian2">[docs]</a><span class="k">def</span> <span class="nf">toJulian2</span><span class="p">(</span><span class="n">date</span><span class="p">)</span> <span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Converts date and time to Modified Julian Date.</span>
 <span class="sd">    Uses time functions. Note that date has to be in Python time format.</span>
@@ -99,7 +100,7 @@
     <span class="n">jday</span> <span class="o">=</span> <span class="n">days</span> <span class="o">+</span> <span class="mi">40587</span> <span class="c"># Julian date of Jan 1 1900</span>
     <span class="k">return</span> <span class="n">jday</span>
 </div>
-<div class="viewcode-block" id="fromJulian"><a class="viewcode-back" href="../../../SamPy.dates.html#SamPy.dates.julians.fromJulian">[docs]</a><span class="k">def</span> <span class="nf">fromJulian</span><span class="p">(</span><span class="n">j</span><span class="p">):</span>
+<div class="viewcode-block" id="fromJulian"><a class="viewcode-back" href="../../../SamPy.dates.julians.html#SamPy.dates.julians.fromJulian">[docs]</a><span class="k">def</span> <span class="nf">fromJulian</span><span class="p">(</span><span class="n">j</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Converts Modified Julian days to human readable format</span>
 <span class="sd">    @return: human readable date and time</span>
@@ -108,14 +109,14 @@
     <span class="n">sec</span> <span class="o">=</span> <span class="n">days</span><span class="o">*</span><span class="mf">86400.0</span>
     <span class="k">return</span> <span class="n">time</span><span class="o">.</span><span class="n">gmtime</span><span class="p">(</span><span class="n">sec</span><span class="p">)</span>
 </div>
-<div class="viewcode-block" id="fromHSTDeployment"><a class="viewcode-back" href="../../../SamPy.dates.html#SamPy.dates.julians.fromHSTDeployment">[docs]</a><span class="k">def</span> <span class="nf">fromHSTDeployment</span><span class="p">(</span><span class="n">julian</span><span class="p">):</span>
+<div class="viewcode-block" id="fromHSTDeployment"><a class="viewcode-back" href="../../../SamPy.dates.julians.html#SamPy.dates.julians.fromHSTDeployment">[docs]</a><span class="k">def</span> <span class="nf">fromHSTDeployment</span><span class="p">(</span><span class="n">julian</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    @return: number of days since HST was deployed (24 Apr 1990)</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">julian0</span> <span class="o">=</span> <span class="mf">48005.0</span>
     <span class="k">return</span> <span class="n">julian</span> <span class="o">-</span> <span class="n">julian0</span>
 </div>
-<div class="viewcode-block" id="HSTdayToRealDate"><a class="viewcode-back" href="../../../SamPy.dates.html#SamPy.dates.julians.HSTdayToRealDate">[docs]</a><span class="k">def</span> <span class="nf">HSTdayToRealDate</span><span class="p">(</span><span class="n">hstday</span><span class="p">):</span>
+<div class="viewcode-block" id="HSTdayToRealDate"><a class="viewcode-back" href="../../../SamPy.dates.julians.html#SamPy.dates.julians.HSTdayToRealDate">[docs]</a><span class="k">def</span> <span class="nf">HSTdayToRealDate</span><span class="p">(</span><span class="n">hstday</span><span class="p">):</span>
     <span class="k">return</span> <span class="n">fromJulian</span><span class="p">(</span><span class="n">hstday</span> <span class="o">+</span> <span class="mf">48005.0</span><span class="p">)</span></div>
 </pre></div>
 
@@ -136,7 +137,8 @@
         <li><a href="../../../index.html">home</a>|&nbsp;</li>
         <li><a href="../../../search.html">search</a>|&nbsp;</li>
 
-          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+          <li><a href="../../index.html" >Module code</a> &raquo;</li>
+          <li><a href="../dates.html" >SamPy.dates</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

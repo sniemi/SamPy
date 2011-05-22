@@ -1,22 +1,9 @@
 '''
-ABOUT:
-         This script converts the day number to a human readable date.
+This simple module can be used to convert a day number to a human readable date.
+The file functions also as a standalone script which can be called from the
+command line.
 
-USAGE:   
-         NumberDate day_number
-         
-         E.g NumberDate 250
-
-DEPENDS:
-         Python 2.6 (no 3.0 compatible)
-
-EXITSTA:  
-          0: No errors
-         -8: Invalid day_number
-         -9: No day_number given
-
-HISTORY:
-         Sep 9 2009: Initial Version 0.1
+:history: Sep 9 2009; Initial Version 0.1
 
 :author: Sami-Matias Niemi
 :contact: niemi@stsci.edu
@@ -26,12 +13,24 @@ import datetime, sys
 __author__ = 'Sami-Matias Niemi'
 __version__ = '0.1'
 
-def print_day_number(day):
+def dayNumber(day, verbose=True):
+    '''
+    This simple function converts a given integer to
+    the date of the current year.
+    
+    :param: number of the day
+    :ptype: int
+
+    :return: date
+    :rtype: python datetime
+    '''
     currentYear = datetime.datetime.today().year
     date = datetime.datetime.strptime(str(currentYear) + day, '%Y%j')
-    
-    print 'Day %s of year %s corresponds to %s.' % (day, currentYear, date.strftime("%A %d. %B %Y"))
 
+    if verbose:
+        print 'Day {0:>s} of year {1:>s} corresponds to {2:>s}.'.format(day, currentYear, date.strftime("%A %d. %B %Y"))
+
+    return date
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -43,6 +42,4 @@ if __name__ == "__main__":
         print 'You gave an invalid day number, please use day_number = [1,366]'
         sys.exit(-8)
 
-    day = sys.argv[1]
-
-    print_day_number(day)
+    dayNumber(sys.argv[1])

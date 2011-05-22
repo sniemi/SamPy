@@ -1,19 +1,11 @@
 dates Package
 =============
 
-:mod:`NumberDate` Module
-------------------------
+.. currentmodule:: SamPy.dates
 
-.. automodule:: SamPy.dates.NumberDate
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-:mod:`julians` Module
----------------------
-
-.. automodule:: SamPy.dates.julians
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. autosummary::
+   :toctree:
+   
+   NumberDate
+   julians
 
