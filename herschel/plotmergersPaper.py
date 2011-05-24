@@ -280,9 +280,8 @@ def plotMergerFractionsMultiplot2(query, xlabel, ylabel,
     c1.set_label('Time since latest merger [Myr]')
     c2.set_label('Time since latest merger [Myr]')
     #plot dividing line
-    # y = x - 2.5
     x = N.array([2.0, 2.5, 3.0, 4.0])
-    y = x - 2.7
+    y = x - 2.4
     ax1.plot(x, y, 'g--', lw=1.8)
     ax2.plot(x, y, 'g--', lw=1.8)
 
@@ -486,7 +485,7 @@ if __name__ == '__main__':
                 galprop.tmerge, galprop.tmajmerge
                 from FIR, galprop, galphotdust where
                 FIR.z >= 2.0 and
-                FIR.pacs160_obs > 4e-3 and
+                FIR.pacs160_obs > 5e-3 and
                 FIR.z < 4.0 and
                 FIR.pacs160_obs < 1e6 and
                 galphotdust.f775w_obs < 50 and
@@ -501,6 +500,6 @@ if __name__ == '__main__':
     plotMergerFractionsMultiplot2(query, xlab, ylab, 'ColorMergerPaper8'+type,
                                   out_folder, xmin=1.9, size=40, xmax=4.0,
                                   mergetimelimit=0.25, alpha=0.5,
-                                  title='Simulated Galaxies: $S_{160} > 4 \ \mathrm{mJy}$')
+                                  title='Simulated Galaxies: $S_{160} > 5 \ \mathrm{mJy}$')
 
     print 'All done'

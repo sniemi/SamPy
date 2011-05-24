@@ -627,8 +627,8 @@ def plot_BHmass(path, db, reshifts, out_folder,
     P.savefig(out_folder + 'BHmass.ps')
 
 
-def plot_DMmass(path, db, reshifts, out_folder,
-                xmin=0.0, xmax=2.0, fluxlimit=5):
+def plot_DMmass(path, db, redshifts, out_folder,
+                xmin=0.0, xmax=2.5, fluxlimit=5):
     '''
     Plots 
     '''
@@ -637,7 +637,7 @@ def plot_DMmass(path, db, reshifts, out_folder,
     ax = fig.add_subplot(111)
 
     for i, reds in enumerate(redshifts):
-        query = '''select galprop.mhalo, FIR.pacs160_obs*1000
+        query = '''select galprop.mhalo, FIR.spire250_obs*1000
                 from FIR, galprop where
                 %s and
                 FIR.gal_id = galprop.gal_id and
@@ -656,12 +656,13 @@ def plot_DMmass(path, db, reshifts, out_folder,
 
         #percentiles
         xmaxb = N.max(xd)
-        nxbins = int(12 * (xmaxb - xmin))
+        nxbins = int(9 * (xmaxb - xmin))
         xbin_midd, y50d, y16d, y84d = dm.percentile_bins(xd,
                                                          yd,
                                                          xmin,
                                                          xmaxb,
-                                                         nxbins=nxbins)
+                                                         nxbins=nxbins,
+                                                         limit=9)
         msk = y50d > -10
         add = eval('0.0%s' % str(i))
         ax.errorbar(xbin_midd[msk] + add, y50d[msk],
@@ -670,17 +671,17 @@ def plot_DMmass(path, db, reshifts, out_folder,
 
     ax.axvline(N.log10(fluxlimit), ls=':', color='green')
 
-    ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
+    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
     ax.set_ylabel('$\log_{10}(M_{\mathrm{dm}} \ [M_{\odot}])$')
 
     ax.set_xlim(xmin, xmax)
-    ax.set_ylim(11.0, 13.0)
+    ax.set_ylim(10.98, 13.3)
 
     P.legend(loc='lower right')
     P.savefig(out_folder + 'DMmass.ps')
 
 
-def plot_Age(path, db, reshifts, out_folder,
+def plot_Age(path, db, redshifts, out_folder,
              xmin=0.0, xmax=2.1, fluxlimit=5):
     '''
     Plots 
@@ -886,7 +887,7 @@ def plot_mergerfraction(path, db, reshifts, out_folder, outname,
     P.savefig(out_folder + outname + type)
 
 
-def plot_mergerfraction2(path, db, reshifts, out_folder, outname,
+def plot_mergerfraction2(path, db, redshifts, out_folder, outname,
                          xmin=-0.01, xmax=2.3, fluxlimit=5,
                          png=True, mergetimelimit=0.25,
                          xbin=[10, 8, 9, 7, 7, 5],
@@ -1048,7 +1049,7 @@ if __name__ == '__main__':
     #constants
     #path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
     path = hm + '/Research/Herschel/runs/big_volume/'
-    out_folder = hm + '/Dropbox/Research/Herschel/plots/predictions/big/160/'
+    out_folder = hm + '/Dropbox/Research/Herschel/plots/predictions/big/250/'
     db = 'sams.db'
 
     redshifts = ['FIR.z > 0.1 and FIR.z < 0.3',
@@ -1056,24 +1057,23 @@ if __name__ == '__main__':
                  'FIR.z > 0.9 and FIR.z < 1.1',
                  'FIR.z > 1.9 and FIR.z < 2.1',
                  'FIR.z > 2.9 and FIR.z < 3.1',
-                 'FIR.z > 3.9 and FIR.z < 4.1']
+                 'FIR.z > 3.8 and FIR.z < 4.2']
 
     print 'Begin plotting'
     print 'Input DB: ', path + db
     print 'Output folder: ', out_folder
 
     #These plots are in the paper
-    plot_sfrs(path, db, redshifts, out_folder, obs=False)
-#
+#    plot_sfrs(path, db, redshifts, out_folder, obs=False)
 #    plot_mergerfraction2(path, db, redshifts, out_folder, 'MergeFractions',
-#                         xbin = [10,8,9,7,5,5], png = False, neverMerged = True)
+#                         xbin = [10,8,7,7,5,5], png = False, neverMerged = True)
 #    plot_stellarmass(path, db, redshifts, out_folder)
 #    plot_coldgas(path, db, redshifts, out_folder)
-#
-#    #These plots were in the paper
 #    plot_ssfr(path, db, redshifts, out_folder)
 #    plot_Lbol(path, db, redshifts, out_folder)
 #    plot_Ldust(path, db, redshifts, out_folder)
+
+    plot_DMmass(path, db, redshifts, out_folder)
 
 
     #TEST plots
@@ -1084,7 +1084,6 @@ if __name__ == '__main__':
 #    plot_metallicity(path, db, redshifts, out_folder)
 #    plot_starburst(path, db, redshifts, out_folder)
 #    plot_BHmass(path, db, redshifts, out_folder)
-#    plot_DMmass(path, db, redshifts, out_folder)
 #    plot_Age(path, db, redshifts, out_folder)
 #    plot_burstmass(path, db, redshifts, out_folder)
 #    plot_mergerfraction(path, db, redshifts, out_folder, 'Merge')

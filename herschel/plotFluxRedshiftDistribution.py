@@ -125,7 +125,7 @@ def scatterHistograms(xdata,
                       hatch='x')
     #set legend of x histogram
     plt.legend((x1[2][0], x2[2][0]),
-               ('All Galaxies', r'$S_{250}> 5\ \mathrm{mJy}$'),
+               ('All Galaxies', r'$S_{160}> 5\ \mathrm{mJy}$'),
                shadow=False,
                fancybox=False,
                bbox_to_anchor=(0.01, 1.34),

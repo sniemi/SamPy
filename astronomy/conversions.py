@@ -141,6 +141,7 @@ def convertSphericalToCartesian(r, theta, phi):
     '''
     Converts Spherical coordiantes to Cartesian.
     Returns a dictionary.
+    http://mathworld.wolfram.com/SphericalCoordinates.html
     '''
     x = r * np.sin(phi) * np.cos(theta)
     y = r * np.sin(phi) * np.sin(theta)
