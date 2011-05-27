@@ -1,5 +1,12 @@
+'''
+This file contains functions that can be used to store data
+
+:author: Sami-Matias Niemi
+'''
 __author__ = 'Sami- Matias Niemi'
 __version__ = 0.1
+
+import cPickle
 
 def combineFiles(files, outputfile):
     '''
@@ -17,3 +24,12 @@ def combineFiles(files, outputfile):
             fh.write(line)
     print 'The content of {0:d} files were combined to a single file'.format(i)
     fh.close()
+
+def cPickleDumpDictionary(dictionary, output):
+    '''
+    Dumps a dictionary of data to a cPickled file
+    '''
+
+    out = open(output, 'wb')
+    cPickle.dump(dictionary, out)
+    out.close()

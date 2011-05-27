@@ -20,6 +20,8 @@ from cosmocalc import cosmocalc
 import os
 #From SamPy
 import db.sqlite as sq
+import smnIO.write as wr
+import smnIO.read as read
 import astronomy.datamanipulation as dm
 
 __author__ = 'Sami-Matias Niemi'
@@ -29,18 +31,24 @@ def mkRedshiftPlot(x, y, outFolder):
     Generate a redshift plot
     '''
     #percentiles
-    xbin_midd, y50d, y16d, y84d = dm.percentile_bins(x, y, 0, 9.5)
-    md = (y50d > 0) & (y16d > 0) & (y84d > 0)
+    #xbin_midd, y50d, y16d, y84d = dm.percentile_bins(x, y, 0, 9.5)
+    #md = (y50d > 0) & (y16d > 0) & (y84d > 0)
 
     fig = P.figure(figsize = (12, 12))
     ax = fig.add_subplot(121)
     ax.plot(x, y, 'bo')
-    ax.plot(xbin_midd[md], y50d[md], 'r-')
-    ax.plot(xbin_midd[md], y16d[md], 'r--')
-    ax.plot(xbin_midd[md], y84d[md], 'r--')
+    #ax.plot(xbin_midd[md], y50d[md], 'r-')
+    #ax.plot(xbin_midd[md], y16d[md], 'r--')
+    #ax.plot(xbin_midd[md], y84d[md], 'r--')
     ax.set_xlabel('Redshift')
     ax.set_ylabel('Projected Distance [kpc]')
     P.savefig(outFolder + 'test.png')
+
+def getDiameterDistances(data, redshift=0):
+    out = {}
+    for x in set(data[:, redshift]):
+        out[x] = cosmocalc(x, 71.0, 0.28)['PS_kpc'] #in kpc / arc seconds
+    return out
 
 def findValues(data, group=3):
     '''
@@ -48,6 +56,8 @@ def findValues(data, group=3):
     Data are first grouped by group=3 column
     '''
     conversion = 0.000277777778 # degree to arcsecond
+
+    ddist = getDiameterDistances(data)
 
     redshift = []
     pdist = []
@@ -58,8 +68,8 @@ def findValues(data, group=3):
         #redshift
         z = tmp[0][0]
 
-        #get the diameter distance
-        dd = cosmocalc(z, 71.0, 0.28)['PS_kpc'] #in kpc / arc seconds
+        #look the diameter distance from the lookup table
+        dd = ddist[z]
 
         #the first halo, assume it to be the main halo
         RADeg1 = tmp[0][1]
@@ -83,13 +93,9 @@ def findValues(data, group=3):
 
     return dict
 
-if __name__ == '__main__':
-    #find the home directory, because the output is to dropbox
-    #and my user name is not always the same, this hack is required.
-    hm = os.getenv('HOME')
+def getAndProcessData(home, outfile='SubDists.pkl'):
     #constants
-    path = hm + '/Desktop/CANDELS/lightConeRuns/goodsn/'
-    outFolder = hm + '/Dropbox/'
+    path = home + '/Desktop/CANDELS/lightConeRuns/goodsn/'
     db = 'sams.db'
 
     #SQL query where all the magic happens
@@ -110,6 +116,22 @@ if __name__ == '__main__':
 
     #group data
     grouped = findValues(data)
+
+    #dump it to a picked file
+    wr.cPickleDumpDictionary(grouped, outfile)
+
+    return grouped
+
+if __name__ == '__main__':
+    #find the home directory, because the output is to dropbox
+    #and my user name is not always the same, this hack is required.
+    hm = os.getenv('HOME')
+    outFolder = hm + '/Dropbox/'
+
+    # Pull out the information and process data
+    grouped = getAndProcessData(hm)
+    # or read it from a pickled file
+    grouped = read.cPickledData('SubDists.pkl')
 
     #make some plots
     mkRedshiftPlot(grouped['redshift'],

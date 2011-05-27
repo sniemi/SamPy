@@ -16,6 +16,7 @@ parse different data files.
 import smnIO.sextutils as su
 import astronomy.basics
 import numpy as np
+import cPickle
 
 __author__ = 'Sami-Matias Niemi'
 
@@ -101,3 +102,12 @@ def GFBasicData(path, AB=True):
         gdust.j = gdust.k - AB_vega_K
 
     return g, gdust, p, h
+
+
+def cPickledData(filename):
+    '''
+    Reads in cPickled data and returns it
+    '''
+    inp = open(filename)
+    out = cPickle.load(inp)
+    return out
