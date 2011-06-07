@@ -3,6 +3,7 @@ Find sub-halo galaxy distances from the main halo as a function of redshift, hal
 
 :requires: astLib.astCoords
 :requires: cosmocalc
+:requires: NumPy
 '''
 import matplotlib
 matplotlib.use('Agg')
@@ -15,6 +16,7 @@ matplotlib.rcParams['legend.handlelength'] = 3
 matplotlib.rcParams['xtick.major.size'] = 5
 matplotlib.rcParams['ytick.major.size'] = 5
 import pylab as P
+import numpy as N
 import astLib.astCoords as Coords
 from cosmocalc import cosmocalc
 import os
@@ -30,16 +32,27 @@ def mkRedshiftPlot(x, y, outFolder):
     '''
     Generate a redshift plot
     '''
-    #percentiles
-    #xbin_midd, y50d, y16d, y84d = dm.percentile_bins(x, y, 0, 9.5)
-    #md = (y50d > 0) & (y16d > 0) & (y84d > 0)
+    aa = []
+    bb = []
 
     fig = P.figure(figsize = (12, 12))
     ax = fig.add_subplot(121)
-    ax.plot(x, y, 'bo')
-    #ax.plot(xbin_midd[md], y50d[md], 'r-')
-    #ax.plot(xbin_midd[md], y16d[md], 'r--')
-    #ax.plot(xbin_midd[md], y84d[md], 'r--')
+    for r, a in zip(x, y):
+        tmp = [r for foo in range(len(a))]
+        ax.plot(tmp, a, 'bo')
+        aa += tmp
+        bb += a.tolist()
+
+    #percentiles
+    xbin_midd, y50d, y16d, y84d = dm.percentile_bins(N.array(aa),
+                                                     N.array(bb),
+                                                     0,
+                                                     9.5)
+    md = (y50d > 0) & (y16d > 0) & (y84d > 0)
+    ax.plot(xbin_midd[md], y50d[md], 'r-')
+    ax.plot(xbin_midd[md], y16d[md], 'r--')
+    ax.plot(xbin_midd[md], y84d[md], 'r--')
+
     ax.set_xlabel('Redshift')
     ax.set_ylabel('Projected Distance [kpc]')
     P.savefig(outFolder + 'test.png')
@@ -129,9 +142,14 @@ if __name__ == '__main__':
     outFolder = hm + '/Dropbox/'
 
     # Pull out the information and process data
-    grouped = getAndProcessData(hm)
+    #grouped = getAndProcessData(hm)
     # or read it from a pickled file
     grouped = read.cPickledData('SubDists.pkl')
+
+    print grouped['redshift'][:2]
+    print
+    print grouped['physical_distance'][:2]
+
 
     #make some plots
     mkRedshiftPlot(grouped['redshift'],
