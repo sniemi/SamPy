@@ -12,10 +12,10 @@ dark matter halo functions etc.
 '''
 import numpy as N
 
-def diffFunctionLogBinning(data, column = 0, log = False,
-                           wgth = None, mmax = 15.5, mmin = 9.0,
-                           nbins = 35, h = 0.7, volume = 250, nvols = 1,
-                           physical_units = False, verbose = False):
+def diffFunctionLogBinning(data, column=0, log=False,
+                           wgth=None, mmax=15.5, mmin=9.0,
+                           nbins=35, h=0.7, volume=250, nvols=1,
+                           physical_units=False, verbose=False):
     '''
     Calculates a differential function from data.
     Uses NumPy to calculate a histogram and then divides.
@@ -26,16 +26,16 @@ def diffFunctionLogBinning(data, column = 0, log = False,
     if len(N.shape(data)) == 1:
         ngal = len(data)
     else:
-        ngal = len(data[:,column])
-    
+        ngal = len(data[:, column])
+
     #if data are in physical units or not, use h
     if not physical_units:
         h = 1.0
-    
+
     #if wgth is None then make weights based on 
     #the volume and the number of volumes
     if wgth == None:
-        weight = N.zeros(ngal) + (1./(nvols*(float(volume)/h)**3))
+        weight = N.zeros(ngal) + (1. / (nvols * (float(volume) / h) ** 3))
     else:
         weight = wgth
 
@@ -44,20 +44,20 @@ def diffFunctionLogBinning(data, column = 0, log = False,
         if len(N.shape(data)) == 1:
             d = N.log10(data)
         else:
-            d = N.log10(data[:,column])
+            d = N.log10(data[:, column])
         mmin = N.log10(mmin)
         mmax = N.log10(mmax)
     else:
-        d = data[:,column]   
+        d = data[:, column]
 
-    #calculate mass functions
+        #calculate mass functions
     mf, edges = N.histogram(d,
                             nbins,
                             range=(mmin, mmax),
                             weights=weight)
-    mbin = (edges[1:] + edges[:-1])/2.
+    mbin = (edges[1:] + edges[:-1]) / 2.
     dm = edges[1] - edges[0]
-    
+
     if verbose:
         print '\nNumber of galaxies = %i' % ngal
         print 'min = %f, max = %f' % (mmin, mmax)
@@ -68,10 +68,10 @@ def diffFunctionLogBinning(data, column = 0, log = False,
     return mbin, mf / dm
 
 
-def diff_function_log_binning(data, column = 0, log = False,
-                              wgth = None, mmax = 15.5, mmin = 9.0,
-                              nbins = 35, h = 0.7, volume = 250, nvols = 1,
-                              physical_units = False, verbose = False):
+def diff_function_log_binning(data, column=0, log=False,
+                              wgth=None, mmax=15.5, mmin=9.0,
+                              nbins=35, h=0.7, volume=250, nvols=1,
+                              physical_units=False, verbose=False):
     '''
     Calculates a differential function from data.
     :warning: One should not use this, unless the number of
@@ -83,16 +83,16 @@ def diff_function_log_binning(data, column = 0, log = False,
     if len(N.shape(data)) == 1:
         ngal = len(data)
     else:
-        ngal = len(data[:,column])
-    
+        ngal = len(data[:, column])
+
     #if data are in physical units or not, use h
     if not physical_units:
         h = 1.0
-    
+
     #if wgth is None then make weights based on 
     #the volume and the number of volumes
     if wgth == None:
-        weight = N.zeros(ngal) + (1./(nvols*(float(volume)/h)**3))
+        weight = N.zeros(ngal) + (1. / (nvols * (float(volume) / h) ** 3))
     else:
         weight = wgth
 
@@ -101,15 +101,15 @@ def diff_function_log_binning(data, column = 0, log = False,
         if len(N.shape(data)) == 1:
             d = N.log10(data)
         else:
-            d = N.log10(data[:,column])
+            d = N.log10(data[:, column])
         mmin = N.log10(mmin)
         mmax = N.log10(mmax)
     else:
-        d = data[:,column]   
+        d = data[:, column]
 
-    #bins 
+        #bins
     dm = (mmax - mmin) / float(nbins)
-    mbin = (N.arange(nbins) + 0.5)*dm + mmin
+    mbin = (N.arange(nbins) + 0.5) * dm + mmin
     #one could also use N.linspace(mmin, mmax, nbins)
     #note however that one should then use + dm / 2. 
 
@@ -122,9 +122,9 @@ def diff_function_log_binning(data, column = 0, log = False,
     #differential functions function, dummy values are -99
     mf = N.zeros(nbins) - 99.9
     nu = N.zeros(nbins) - 99
-    
+
     #find out bins
-    ibin = N.floor((d - mmin)/dm)
+    ibin = N.floor((d - mmin) / dm)
 
     #make a mask of suitable bins
     mask = (ibin >= 0) & (ibin < nbins)
@@ -140,10 +140,11 @@ def diff_function_log_binning(data, column = 0, log = False,
         print nu
     return mbin, mf / dm, nu
 
-def mass_function(data, column = 0, log = False,
-                  wght = None, mmin = 9.0, mmax = 15.0, 
-                  nbins = 35, h = 0.7, volume = 250,
-                  nvols = 1, verbose = False):
+
+def mass_function(data, column=0, log=False,
+                  wght=None, mmin=9.0, mmax=15.0,
+                  nbins=35, h=0.7, volume=250,
+                  nvols=1, verbose=False):
     '''
     Calculates a mass function from data.
     Returns differential mass function and bins:
@@ -160,18 +161,18 @@ def mass_function(data, column = 0, log = False,
         if len(data.shape) > 1:
             dat = data[:, column] * h
         else:
-            dat = data *h
+            dat = data * h
     del data
     #number of galaxies
     ngal = len(dat)
     #set weights if None given
     if wght == None:
-        wght = N.zeros(ngal) + (1./(nvols*(float(volume)/h)**3))
+        wght = N.zeros(ngal) + (1. / (nvols * (float(volume) / h) ** 3))
 
     #bins, one could also use N.linspace() or N.logscape()
     dm = (mmax - mmin) / float(nbins)
     #mid points
-    mbin = (N.arange(nbins)+0.5)*dm + mmin
+    mbin = (N.arange(nbins) + 0.5) * dm + mmin
 
     #verbose output
     if verbose:
@@ -181,48 +182,51 @@ def mass_function(data, column = 0, log = False,
 
     mf = N.zeros(nbins)
     #find out in which bins each data point belongs to
-    ibin = N.floor((dat - mmin)/dm)
+    ibin = N.floor((dat - mmin) / dm)
     #make a mask of suitable bins
     mask = (ibin >= 0) & (ibin < nbins)
     #calculate the sum in each bin
     for i in range(nbins):
         mf[i] = N.sum(wght[ibin[mask] == i])
     mf = N.array(mf)
-    
+
     if not log:
-        mbin = N.e**mbin
+        mbin = N.e ** mbin
         if verbose:
-            print '\nResults:', mbin, mf/dm
-        return mbin, mf/dm
+            print '\nResults:', mbin, mf / dm
+        return mbin, mf / dm
     else:
         if verbose:
-            print '\nResults:', mbin, mf/dm
-        return mbin, mf/dm
-    
+            print '\nResults:', mbin, mf / dm
+        return mbin, mf / dm
+
+
 def stellarMassFunction(data,
-                        wght = None, mmin = None, mmax = None, 
-                        nbins = 40, h = 0.7, volume = 50,
-                        nvols = 8, verbose = False,
-                        early_type_galaxies = 0.4,
-                        central_galaxy_id = 1):
+                        wght=None, mmin=None, mmax=None,
+                        nbins=40, h=0.7, volume=50,
+                        nvols=8, verbose=False,
+                        early_type_galaxies=0.4,
+                        central_galaxy_id=1):
     '''
     Calculates a stellar mass function from data. Calculates
     stellar mass functions for all galaxies, early- and late-types
-    and central galaxies seprately.
+    and central galaxies separately.
 
-    :params data (dictionary): data should be in format:
-    data['stellar_mass'] = []
-    data['bulge_mass'] = []
-    data['galaxy_id'] = []
+    :param: data, it should in the following format:
+            data['stellar_mass'] = []
+            data['bulge_mass'] = []
+            data['galaxy_id'] = []
+    :dtype: dictionary
 
-    :return output (dictionary):
+    :return: output
+    :rtype: dictionary
     '''
     #get number of galaxies
     ngal = len(data['stellar_mass'])
 
     #set weights if None given
     if wght == None:
-        wght = N.zeros(ngal) + (1./(nvols*(float(volume)/h)**3))
+        wght = N.zeros(ngal) + (1. / (nvols * (float(volume) / h) ** 3))
 
     #set minimum and maximum mass if None given
     if mmin == None:
@@ -233,7 +237,7 @@ def stellarMassFunction(data,
     #calculate the stepsize
     dm = (mmax - mmin) / float(nbins)
     #mid points
-    mbin = (N.arange(nbins) + 0.5)*dm + mmin
+    mbin = (N.arange(nbins) + 0.5) * dm + mmin
 
     #verbose output
     if verbose:
@@ -251,9 +255,9 @@ def stellarMassFunction(data,
     mf_bulge = N.zeros(nbins)
 
     #adapted from IDL, could be done without looping
-    btt = 10.0**(data['bulge_mass'] - data['stellar_mass'])
+    btt = 10.0 ** (data['bulge_mass'] - data['stellar_mass'])
     for i in range(ngal):
-        ibin = int(N.floor((data['stellar_mass'][i] - mmin)/dm))
+        ibin = int(N.floor((data['stellar_mass'][i] - mmin) / dm))
         if ibin >= 0 and ibin < nbins:
             mf_star[ibin] += wght[i]
             #stellar mass, by type
@@ -261,15 +265,15 @@ def stellarMassFunction(data,
                 mf_early[ibin] += wght[i]
             else:
                 mf_late[ibin] += wght[i]
-            #stellar mass, centrals galaxies only
+                #stellar mass, centrals galaxies only
             if data['galaxy_id'][i] == central_galaxy_id:
                 mf_star_central[ibin] += wght[i]
 
     #Get the log of the mass fuction and divide with dex
-    mf_star =  N.log10(mf_star/dm)
-    mf_early = N.log10(mf_early/dm)
-    mf_late = N.log10(mf_late/dm)
-    mf_star_central = N.log10(mf_star_central/dm)
+    mf_star = N.log10(mf_star / dm)
+    mf_early = N.log10(mf_early / dm)
+    mf_late = N.log10(mf_late / dm)
+    mf_star_central = N.log10(mf_star_central / dm)
 
     out = {}
     out['mf_stellar_mass'] = mf_star

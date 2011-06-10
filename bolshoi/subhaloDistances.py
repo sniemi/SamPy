@@ -4,6 +4,9 @@ Find sub-halo galaxy distances from the main halo as a function of redshift, hal
 :requires: astLib.astCoords
 :requires: cosmocalc
 :requires: NumPy
+
+:author: Sami-Matias Niemi
+:cotact: niemi@stsci.edu
 '''
 import matplotlib
 matplotlib.use('Agg')
@@ -38,10 +41,15 @@ def mkRedshiftPlot(x, y, outFolder):
     fig = P.figure(figsize = (12, 12))
     ax = fig.add_subplot(121)
     for r, a in zip(x, y):
-        tmp = [r for foo in range(len(a))]
-        ax.plot(tmp, a, 'bo')
-        aa += tmp
-        bb += a.tolist()
+        if a.shape[0] > 0:
+            tmp = [r for foo in range(len(a))]
+            ax.scatter(tmp, a, s=1, c='b', marker='o')
+            aa += tmp
+            bb += a.tolist()
+#        else:
+#            print 'Odd...'
+#            print r
+#            print a
 
     #percentiles
     xbin_midd, y50d, y16d, y84d = dm.percentile_bins(N.array(aa),
@@ -145,11 +153,6 @@ if __name__ == '__main__':
     #grouped = getAndProcessData(hm)
     # or read it from a pickled file
     grouped = read.cPickledData('SubDists.pkl')
-
-    print grouped['redshift'][:2]
-    print
-    print grouped['physical_distance'][:2]
-
 
     #make some plots
     mkRedshiftPlot(grouped['redshift'],

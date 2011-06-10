@@ -1,4 +1,6 @@
 '''
+Collects dark matter halo information from Bolshoi merger tree files.
+
 This one uses parallel python:
 http://www.parallelpython.com
 '''
@@ -57,21 +59,26 @@ if __name__ == '__main__':
     ncpus = 6
     
     #inpute merger tree files
-    inputs = g.glob('/Users/niemi/Desktop/Research/Bolshoi/bolshoi_isotrees/*.dat')
+    inputs = g.glob('/Users/niemi/Desktop/Research/Bolshoi/bolshoi_newisotrees/*.dat')
 
     #this is for Bolshoi's tree outputs
     #scale : redshift
-    times = {0.9434: 0.059995760017,
+    times = {0.9973: 0.00270730973629,
              0.9073: 0.102171277417,
-             0.8324: 0.201345506968,
+             0.8323: 0.201489847411,
              0.7663: 0.304971943103,
-             0.7124: 0.403705783268,
+             0.7123: 0.403902849923,
              0.6643: 0.505343971097,
              0.6223: 0.606941989394,
-             0.5864: 0.705320600273,
-             0.5564: 0.797268152408,
+             0.5863: 0.705611461709,
+             0.5563: 0.797591227755,
              0.5283: 0.892863903085,
-             0.4984: 1.00642054575}
+             0.4983: 1.00682319888,
+             0.3303: 2.02755071147,
+             0.2463: 3.06008932197,
+             0.1983: 4.04286434695,
+             0.1683: 4.94177064765,
+             0.1443: 5.93000693001}
 
     columns = {'mvir': 9,
                'orig_mvir': 10,
