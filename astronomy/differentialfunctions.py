@@ -1,13 +1,15 @@
 '''
-Some functions to calculate differential functions. These
-can be used to calculate luminosity functions, stellar and
-dark matter halo functions etc.
+Functions to calculate differential functions.
+
+These functions can be used to calculate for example
+luminosity functions, stellar and dark matter halo
+functions etc.
 
 :requires: NumPy
 
-:version: 0.15
+:version: 0.17
 
-:author: Sami Niemi
+:author: Sami-Matias Niemi
 :contact: niemi@stsci.edu
 '''
 import numpy as N
@@ -15,7 +17,7 @@ import numpy as N
 def diffFunctionLogBinning(data, column=0, log=False,
                            wgth=None, mmax=15.5, mmin=9.0,
                            nbins=35, h=0.7, volume=250, nvols=1,
-                           physical_units=False, verbose=False):
+                           verbose=False):
     '''
     Calculates a differential function from data.
     Uses NumPy to calculate a histogram and then divides.
@@ -27,10 +29,6 @@ def diffFunctionLogBinning(data, column=0, log=False,
         ngal = len(data)
     else:
         ngal = len(data[:, column])
-
-    #if data are in physical units or not, use h
-    if not physical_units:
-        h = 1.0
 
     #if wgth is None then make weights based on 
     #the volume and the number of volumes
@@ -71,7 +69,7 @@ def diffFunctionLogBinning(data, column=0, log=False,
 def diff_function_log_binning(data, column=0, log=False,
                               wgth=None, mmax=15.5, mmin=9.0,
                               nbins=35, h=0.7, volume=250, nvols=1,
-                              physical_units=False, verbose=False):
+                              verbose=False):
     '''
     Calculates a differential function from data.
     :warning: One should not use this, unless the number of
@@ -85,9 +83,6 @@ def diff_function_log_binning(data, column=0, log=False,
     else:
         ngal = len(data[:, column])
 
-    #if data are in physical units or not, use h
-    if not physical_units:
-        h = 1.0
 
     #if wgth is None then make weights based on 
     #the volume and the number of volumes

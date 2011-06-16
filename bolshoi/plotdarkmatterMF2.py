@@ -19,11 +19,13 @@ import numpy as N
 import glob as g
 import os
 #From Sami's repo
+import db.sqlite
 import astronomy.differentialfunctions as df
 import smnIO.read as io
 import log.Logger as lg
 
-def plotMassFunction(simus, outdir, noPhantoms=True):
+def plotMassFunction(simus, sheth, outdir, h, simuPath, simuDB,
+                     noPhantoms=True):
     '''
     This function plots dark matter halo mass functions from
     file(s) given in simus. The usual usage is that simus
@@ -51,27 +53,62 @@ def plotMassFunction(simus, outdir, noPhantoms=True):
         #get the redshift
         redshift = float(file.split('z')[1][:5])
         logging.debug('Plotting redshift %.2f dark matter mass functions', redshift)
+        #different redshift ranges
+        if redshift < 1.8:
+            rlow = redshift - 0.02
+            rhigh = redshift + 0.02
+        else:
+            rlow = redshift - 0.1
+            rhigh = redshift + 0.1
 
+        #read bolshoi data
         BoshoiData = io.readBolshoiDMfile(file, 0, noPhantoms)
 
         #calculate the mass functions from the Bolshoi data
-        mbin0, mf0 = df.diffFunctionLogBinning(BoshoiData / h,
+        mbin0, mf0 = df.diffFunctionLogBinning(BoshoiData/h,
                                                nbins=35,
-                                               h=0.7,
-                                               mmin=10**9.0,
-                                               mmax=10**15.0,
-                                               physical_units=True)
+                                               h=h,
+                                               mmin=1e9,
+                                               mmax=1e15,
+                                               volume=50.0,
+                                               nvols=18)
 
         #use chain rule to get dN / dM
         #dN/dM = dN/dlog10(M) * dlog10(M)/dM
         #d/dM (log10(M)) = 1 / (M*ln(10))
         mf0 *= 1. / (mbin0 * N.log(10))
         #put mass back to power
-        mbin0 = 10 ** mbin0
+        mbin0 = 10**mbin0
 
+        #get the SAMs data
+        #if round(redshift, 2) < 0.08:
+        if i < 1:
+            query = '''select mhalo from galprop where galprop.gal_id = 1'''
+            GalpropData = 10**db.sqlite.get_data_sqlite(simuPath, simuDB, query)
+        else:
+            query = '''select mhalo from galpropz where 
+                       galpropz.zgal > {0:f} and galpropz.zgal < {1:f} and
+                       galpropz.gal_id = 1'''.format(rlow, rhigh)
+            GalpropData = db.sqlite.get_data_sqlite(simuPath, simuDB, query) * 1e9
+        logging.debug(query)
+
+
+        #calculate the mass functions from the SAM data, only x volumes
+        mbin0SAM, mf0SAM = df.diffFunctionLogBinning(GalpropData,
+                                                     nbins=35,
+                                                     h=h,
+                                                     mmin=1e9,
+                                                     mmax=1e15,
+                                                     volume=50.0,
+                                                     nvols=15)
+        #use chain rule to get dN / dM
+        #dN/dM = dN/dlog10(M) * dlog10(M)/dM
+        #d/dM (log10(M)) = 1 / (M*ln(10))
+        mf0SAM *= 1. / (mbin0SAM * N.log(10))
+        mbin0SAM = 10**mbin0SAM
 
         #start a figure
-        fig = P.figure()
+        fig = P.figure(figsize=(10,10))
         ax1 = fig.add_axes(rect2)  #left, bottom, width, height
         ax2 = fig.add_axes(rect1)
 
@@ -81,39 +118,35 @@ def plotMassFunction(simus, outdir, noPhantoms=True):
         else:
             ax1.set_title('$z \sim %.2f$' % redshift)
 
-
-#        #Analytical MFs
-#        #0th column: log10 of mass (Msolar, NOT Msolar/h)
-#        #1st column: mass (Msolar/h)
-#        #2nd column: (dn/dM)*dM, per Mpc^3 (NOT h^3/Mpc^3)
-#        xST = 10 ** dt['Sheth-Tormen'][:, 0]
-#        yST = dt['Sheth-Tormen'][:, 2] * fudge
-#        sh = ax1.plot(xST, yST, 'b-', lw=1.3)
-#        #PS
-#        xPS = 10 ** dt['Press-Schecter'][:, 0]
-#        yPS = dt['Press-Schecter'][:, 2] * fudge
-#        ps = ax1.plot(xPS, yPS, 'g--', lw=1.1)
+        #Analytical MFs
+        #0th column: log10 of mass (Msolar, NOT Msolar/h)
+        #1st column: mass (Msolar/h)
+        #2nd column: (dn/dM)*dM, per Mpc^3 (NOT h^3/Mpc^3)
+        logging.debug(sheth[i])
+        dt = N.loadtxt(sheth[i])
+        xST = 10**dt[:, 0]
+        yST = dt[:, 2] * fudge
+        sh = ax1.plot(xST, yST, 'b-', lw=1.3)
 
         #MF from Bolshoi
         bolshoi = ax1.plot(mbin0, mf0, 'ro:', ms=5)
 
-#        #plot the residuals
-#        if round(float(redshift), 1) < 1.5:
-#            #interploate to right x scale
-#            yST = N.interp(mbin0, xST, yST)
-#            yPS = N.interp(mbin0, xPS, yPS)
-#            #make the plot
-#            ax2.annotate('$z \sim %.1f$' % redshift,
-#                    (1.5 * 10 ** 9, 1.05), xycoords='data',
-#                         size=10)
-#            ax2.axhline(1.0, color='b')
-#            ax2.plot(mbin0, mf0 / yST, 'b-')
-#            ax2.plot(mbin0, mf0 / yPS, 'g-')
+        #MF from the SAM run
+        samax = ax1.plot(mbin0SAM, mf0SAM, 'gs--', ms=4)
 
-        ax1.set_ylim(10 ** -7, 10 ** -1)
+        #plot the residuals
+        ax2.axhline(1.0, color='k')
+        ax2.plot(mbin0, mf0 / mf0SAM, 'm-')
+        #interploate to right x scale
+        mfintST1 = N.interp(xST, mbin0, mf0)
+        mfintST2 = N.interp(xST, mbin0SAM, mf0SAM)
+        ax2.plot(xST, mfintST1 / yST, 'r-')
+        ax2.plot(xST, mfintST2 / yST, 'g-')
+
+        ax1.set_ylim(1e-7, 1e-1)
         ax2.set_ylim(0.45, 1.55)
-        ax1.set_xlim(10 ** 9, 10 ** 15)
-        ax2.set_xlim(10 ** 9, 10 ** 15)
+        ax1.set_xlim(1e9, 1e15)
+        ax2.set_xlim(1e9, 1e15)
 
         ax1.set_xscale('log')
         ax2.set_xscale('log')
@@ -125,10 +158,9 @@ def plotMassFunction(simus, outdir, noPhantoms=True):
         ax1.set_ylabel(r'$\mathrm{d}N / \mathrm{d}M_{\mathrm{vir}} \quad [\mathrm{Mpc}^{-3} \mathrm{dex}^{-1}]$')
         ax2.set_ylabel(r'$\frac{\mathrm{Bolshoi}}{\mathrm{Model}}$')
 
-        #        ax1.legend((bolshoi, sh, ps),
-        #                ('Bolshoi', 'Sheth-Tormen', 'Press-Schecter'),
-        #                                    shadow=True, fancybox=True,
-        #                                    numpoints=1)
+        ax1.legend((bolshoi, samax, sh),
+                   ('Bolshoi', 'galpropz', 'Sheth-Tormen'),
+                   shadow=True, fancybox=True, numpoints=1)
 
         P.savefig(outdir + 'DMMF{0:d}.png'.format(i))
         P.close()
@@ -137,6 +169,10 @@ def plotMassFunction(simus, outdir, noPhantoms=True):
 if __name__ == '__main__':
     #Hubble constant
     h = 0.7
+
+    #note that this is only available on tuonela.stsci.edu
+    simuPath = '/Users/niemi/Desktop/Research/run/newtree1/'
+    simuDB = 'sams.db'
 
     #output directory
     wrkdir = os.getenv('HOME') + '/Dropbox/Research/Bolshoi/dm_halo_mf/'
@@ -147,6 +183,7 @@ if __name__ == '__main__':
     logging = lg.setUpLogger(outdir + log_filename)
 
     #find files
+    sheth = g.glob(wrkdir + 'analytical/*sheth*tormen*-fit.dat')
     simus = g.glob(os.getenv('HOME') + '/Desktop/Research/dmHaloes/dmMFz*.txt')
 
-    plotMassFunction(simus, outdir)
+    plotMassFunction(simus, sheth, outdir, h, simuPath, simuDB)
