@@ -1,3 +1,8 @@
+'''
+Plots stellar to dark matter halo mass ratios from Bolshoi and compares the results to Peter's curves.
+
+:author: Sami-Matias Niemi
+'''
 import matplotlib
 matplotlib.rc('text', usetex=True)
 matplotlib.rcParams['font.size'] = 15
@@ -15,8 +20,6 @@ import os, logging
 import glob as g
 #From Sami's Repo
 import db.sqlite
-import astronomy.stellarMFs as SMF
-import astronomy.differentialfunctions as df
 import astronomy.datamanipulation as dm
 import plot.tools as pt
 
@@ -158,7 +161,7 @@ def stellarHaloMFRatioMultiPanel(path, database, redshifts,
         query += ' and gal_id = 1'
 
         if ii < 6:
-            ax = fig.add_subplot(2, 3, ii+1)
+            ax = fig.add_subplot(2, 3, ii + 1)
 
         #get data from the SQLite3 db
         dat = db.sqlite.get_data_sqlite(path, database, query)
@@ -220,17 +223,17 @@ def stellarHaloMFRatioMultiPanel(path, database, redshifts,
                    horizontalalignment='center',
                    verticalalignment='center',
                    transform=ax.transAxes,
-                   fontsize=12)            
+                   fontsize=12)
         elif ii == 5:
             P.text(0.5, 0.93,
-                   r'$z \sim %.1f (s)\ \& \ %.1f (d)$' % (rd, rd+1),
+                   r'$z \sim %.1f (s)\ \& \ %.1f (d)$' % (rd, rd + 1),
                    horizontalalignment='center',
                    verticalalignment='center',
                    transform=ax.transAxes,
                    fontsize=12)
 
         #set axes scales and labels
-        ax.set_xlim(xmin-0.1, xmax)
+        ax.set_xlim(xmin - 0.1, xmax)
         ax.set_ylim(ymin, ymax)
 
         #set small ticks
@@ -250,7 +253,7 @@ def stellarHaloMFRatioMultiPanel(path, database, redshifts,
             ax.legend(shadow=True,
                       fancybox=True,
                       numpoints=1,
-                      loc = 'lower right')
+                      loc='lower right')
 
         #set ylabel
         if ii == 0 or ii == 3:
@@ -301,8 +304,8 @@ if __name__ == '__main__':
     #find the home directory, because the output is to dropbox 
     #and my user name is not always the same, this hack is required.
     hm = os.getenv('HOME')
-    path1 = hm + '/Dropbox/Research/Bolshoi/run/trial2/'
-    path2 = hm + '/Desktop/Research/run/trial3/'
+    #path1 = hm + '/Dropbox/Research/Bolshoi/run/trial2/'
+    path2 = hm + '/Desktop/Research/run/newtree1/'
     database = 'sams.db'
     outpath = hm + '/Dropbox/Research/Bolshoi/MassRatioPlots/'
 
@@ -320,8 +323,8 @@ if __name__ == '__main__':
     #                  'galpropz.zgal > 3.9 and galpropz.zgal <= 4.1',
     #                  'galpropz.zgal > 4.9 and galpropz.zgal <= 5.2']
 
-    main(redshifts1, path1, database, outpath, 'RatioMFs1')
-#    main(redshifts2, path2, database, outpath, 'RatioMFs2')
+    #main(redshifts1, path1, database, outpath, 'RatioMFs1')
+    main(redshifts1, path2, database, outpath, 'RatioMFsNew')
 
 #    logging.debug('Making the second plot')
 #    redshifts = ['galpropz.zgal >= 0.9 and galpropz.zgal <= 1.3',
