@@ -14,7 +14,7 @@ import glob as g
 if __name__ == '__main__':
 
     #try to open the template, will exit if not possible
-    #TODO change this, actually don't need the data, just the shape...
+    #One could change this, actually don't need the data, just the shape...
     template = '/grp/hst/OTA/focus/Data/prop11877/visit09-jan2010/ibcy09usq_flt.fits'
     try:
         tempdata = PF.open(template)[1].data

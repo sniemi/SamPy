@@ -39,7 +39,7 @@ if __name__ == '__main__':
     output = 'iTinyTimPSF.fits'
 
     #try to open the template, will exit if not possible
-    #TODO change this, actually don't need the data, just the shape...
+    #One could change this, actually don't need the data, just the shape...
     template = '/grp/hst/OTA/focus/Data/prop11877/visit09-jan2010/ibcy09usq_flt.fits'
     #yorg, xorg = 4096, 2051
     try:

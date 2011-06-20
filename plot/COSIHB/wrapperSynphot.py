@@ -344,7 +344,7 @@ if __name__ == '__main__':
     #hard coded COS dark values per pixel
     #For latest values, see:
     #http://www.stsci.edu/hst/observatory/etcs/etc_user_guide/1_ref_9_background.html
-    # @todo: one could automize this part so that the latest dark would be parsed
+    # one could automize this part so that the latest dark would be parsed
     darkFUV = 0.0000022 #OLD: 3.*7.2e-7
     darkNUV = 3.0e-4 #OLD: (11./34.)*2.1e-4
     #ETC box height

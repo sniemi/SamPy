@@ -1142,7 +1142,6 @@ def FocusTrendSinceDayZeroDates2(output,
 
     #P.title('HST Focus Measurements (PC \& HRC)')
 
-    #TODO delete these
     weird = True
     weirdtop = 7800
     if weird:
