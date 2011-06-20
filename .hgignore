@@ -1,3 +1,6 @@
 sandbox/__init__.pyc
 .idea/*
 .DS_Store
+\.pydevproject
+\.project
+cos/__init__\.py
