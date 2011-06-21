@@ -1,8 +1,9 @@
 '''
-Different stellar mass functions. Some are based on
-observational data while others are fitting functions.
+Different stellar mass functions.
+Some are based on observational data while others are fitting functions.
 
 :requires: NumPy
+:requires: smnIO.sextutils
 
 :version: 0.2
 
@@ -31,21 +32,23 @@ def stellarMfs():
 
 def highRedshiftMFs():
     '''
-    Stellar mass functions from Valentino et al. arXiv:1008.3901v2
-    These values probably use the Salpeter IMF.
-    If so then subtract 0.25 dex from log(m*) to get to Chabrier.
+    Stellar mass functions from Valentino Gonzalez et al. arXiv:1008.3901v2
+    :note: These values probably use the Salpeter IMF. If so we should then subtract 0.25 dex from log(m*) to go to Chabrier.
     Table 1
-                        log10 (dN/dlog10 (M/M_sun)/Mpc3 )
-    log10(M/M_sun)     #z = 3.8    #5.0    #5.9    #6.8
+                            log10 (dN/dlog10 (M/M_sun)/Mpc3 )
+    log10(M/M_sun)         3.8    err     5.0    err      5.9   err     6.8    err
+
+    :return: high-redshift stellar mass functions from Gonzalez. et al (2011) paper
+    :rtype: dictionary
     '''
     out = {}
     file = observation_path + 'stellarmf/HighRedshift.dat'
     tmp = N.loadtxt(file)
     out['stellar_mass'] = tmp[:, 0] - 0.25
-    out['z = 3.8'] = tmp[:, 1]
-    out['z = 5.0'] = tmp[:, 2]
-    out['z = 5.9'] = tmp[:, 3]
-    out['z = 6.8'] = tmp[:, 4]
+    out['z = 3.8'] = (tmp[:, 1],  tmp[:, 2])
+    out['z = 5.0'] = (tmp[:, 3],  tmp[:, 4])
+    out['z = 5.9'] = (tmp[:, 5],  tmp[:, 6])
+    out['z = 6.8'] = (tmp[:, 7],  tmp[:, 8])
     return out
 
 
@@ -89,8 +92,8 @@ def bellK(h=0.7, chabrier=True):
     Then we present the V/V_max data points; x   phi  phi-1sig  phi+1sig
     Convert to h (default = 0.7) and Chabrier IMF.
 
-    :param h: the Hubble parameter (default h = 0.7)
-    :param chabrier: whether or not to convert to Chabrier IMF (default = True)
+    :param: h: the Hubble parameter (default h = 0.7)
+    :param: chabrier: whether or not to convert to Chabrier IMF (default = True)
 
     :return: log10(stellar mass), log10(phi), log10(phi_low), log10(phi_high)
     '''
