@@ -7,6 +7,7 @@ This file contains SQLite3 related functions.
 :version: 0.1
 '''
 import sqlite3
+import re
 import numpy as N
 #Sami's repository
 import astronomy.conversions as conv
@@ -127,13 +128,25 @@ def parseColumnNamesSAMTables(filename,
 
 
 def parseASCIITitle(filename,
-                    splitChar=' '):
+                    strip=True):
     '''
-    Parse a single line ascii information
+    Parse a single line ascii information.
+    If strip=True then will remove all dots and replace them with
+    empty spaces.
+
+    :param: filename: name of the file to processed
+    :param: strip: a flag whether dots should be stripped from the name
+
+    :rtype: list
     '''
     firstLine = open(filename).readline()
-    splitted = firstLine.split(splitChar)
-    cols = [x for x in splitted]
+    if strip:
+        cols =[]
+        for x in firstLine.split():
+            tmp = re.sub(r'[^\w]', '', x.strip('.'))
+            cols.append(tmp)
+    else:
+        cols = [x for x in firstLine.split()]
     return cols
 
 

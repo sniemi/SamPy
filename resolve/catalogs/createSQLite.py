@@ -11,7 +11,7 @@ import glob as g
 import log.Logger as lg
 import db.sqlite
 
-def generateSQLiteDBfromASCII(output='catalog.db',
+def generateSQLiteDBfromASCII(output='catalogs.db',
                               fileidentifier='*.txt'):
     '''
     The script will make a table out from each ascii
@@ -61,6 +61,8 @@ def generateSQLiteDBfromASCII(output='catalog.db',
                                                         formats,
                                                         start)
 
+        log.info(sql_create_string)
+
         #create a cursor instance
         c = conn.cursor()
 
@@ -83,9 +85,9 @@ def generateSQLiteDBfromASCII(output='catalog.db',
 
         #create index to make searching faster
         if 'Spring' in file:
-            indexString = 'CREATE UNIQUE INDEX %s_ids on spring (halo_id)' 
+            indexString = 'CREATE UNIQUE INDEX spring_ids on spring (RA, DEC, SDSSVel)'
         if 'Fall' in file:
-            indexString = 'CREATE UNIQUE INDEX %s_ids on fall (halo_id)'
+            indexString = 'CREATE UNIQUE INDEX fall_ids on fall (RA, DEC, SDSSVel)'
 
 
         c.execute(indexString)
@@ -103,5 +105,5 @@ if __name__ == '__main__':
     log_filename = 'insertSAMTablesToSQLite.log'
     log = lg.setUpLogger(log_filename)
 
-    generateSQLiteDBfromSAMTables()
+    generateSQLiteDBfromASCII()
   
