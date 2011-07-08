@@ -17,12 +17,13 @@ def generateSQLiteDBfromASCII(output='catalog.db',
     The script will make a table out from each ascii
     output file.
 
-    :param output: name of the output file
-    :param fileidentifier: string how to identify input data
-    :type output: string
-    :type fileidentifier: string
+    :param: output: name of the output file
+    :param: fileidentifier: string how to identify input data
+
+    :dtype output: string
+    :dtype fileidentifier: string
     '''
-    
+
     #find all files
     files = g.glob(fileidentifier)
     #create a Connection object that represents the database
@@ -34,22 +35,26 @@ def generateSQLiteDBfromASCII(output='catalog.db',
         columns = db.sqlite.parseASCIITitle(file)
         formats = []
         for col in columns:
-            if 'halo_id' in col:
-                formats.append('INTEGER')
-            elif 'gal_id' in col:
-                formats.append('INTEGER')
-            elif 'weight' in col or 'ngal' in col:
+            if 'Name' in col:
+                formats.append('STRING')
+            elif 'Flag' in col:
                 formats.append('INTEGER')
             else:
                 formats.append('REAL')
 
-        if 'galprop.dat' in file:
-            start = 'create table galprop '
-            ins = 'insert into galprop values ('
+        if 'Fall' in file:
+            start = 'create table fall '
+            ins = 'insert into fall values ('
             for x in range(len(formats)):
                 ins += '?,'
             ins = ins[:-1] + ')'
 
+        if 'Spring' in file:
+            start = 'create table spring '
+            ins = 'insert into spring values ('
+            for x in range(len(formats)):
+                ins += '?,'
+            ins = ins[:-1] + ')'
 
         #generate an SQL table creation string
         sql_create_string = db.sqlite.generateSQLString(columns,
@@ -77,18 +82,11 @@ def generateSQLiteDBfromASCII(output='catalog.db',
         log.info('Finished inserting data')
 
         #create index to make searching faster
-        if file in ['halos.dat']:
-            indexString = 'CREATE UNIQUE INDEX %s_ids on %s (halo_id)' % (file[:-4], file[:-4])
-        elif file in ['galphot.dat', 'galphotdust.dat']:
-            indexString = 'CREATE UNIQUE INDEX %s_ids on %s (halo_id, gal_id, z)' % (file[:-4], file[:-4])
-        elif file in 'galpropz.dat':
-            indexString = 'CREATE UNIQUE INDEX %s_ids on %s (halo_id, gal_id, zgal)' % (file[:-4], file[:-4])
-        elif 'totals.dat' in file:
-            indexString = 'CREATE UNIQUE INDEX %s_ids on %s (z)' % (file[:-4], file[:-4])
-        elif 'lightcone.dat' in file:
-            indexString = 'CREATE INDEX %s_ids on %s (halo_id, gal_id)' % (file[:-4], file[:-4])
-        else:
-            indexString = 'CREATE UNIQUE INDEX %s_ids on %s (halo_id, gal_id)' % (file[:-4], file[:-4])
+        if 'Spring' in file:
+            indexString = 'CREATE UNIQUE INDEX %s_ids on spring (halo_id)' 
+        if 'Fall' in file:
+            indexString = 'CREATE UNIQUE INDEX %s_ids on fall (halo_id)'
+
 
         c.execute(indexString)
         log.info('%s', indexString)
