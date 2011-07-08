@@ -6,7 +6,7 @@ i.e. "*.fits"
 
 :date: Mar 27, 2009
 :author: Sami-Matias Niemi
-:contact: niemi@stsci.edu
+:contact: sniemi@email.unc.edu
 '''
 import sys
 import pyfits as PF
@@ -18,9 +18,9 @@ def containsAny(str, set):
     '''
     Checks if a given string contains any of the characters in a given set.
 
-    :param str: input string
+    :param: str: input string
     :type str: string
-    :param set: set if characters
+    :param: set: set if characters
     :type set: string
 
     :rtype: boolean
@@ -33,10 +33,10 @@ def containsAll(str, set):
     '''
     Checks if a given string contains all characters in a given set.
 
-    :param str: input string
-    :type str: string
-    :param set: set if characters
-    :type set: string
+    :param: str: input string
+    :type: string
+    :param: set: set if characters
+    :type: string
 
     :rtype: boolean
     '''
@@ -47,6 +47,8 @@ def containsAll(str, set):
 def showHeader(filename, extension):
     '''
     Shows the FITS header of a given file.
+
+    :note: Ignores missing END, for non-standard FITS files.
 
     :param filename: name of the file
     :type filename: string
@@ -59,14 +61,14 @@ def showHeader(filename, extension):
             import glob
             files = glob.glob(filename)
             for file in files:
-                hdulist = PF.open(file)
+                hdulist = PF.open(file, ignore_missing_end=True)
                 hd = hdulist[extension].header
                 hdulist.close()
                 print 'Header extension %i of %s' % (extension, file)
                 print hd
                 print
         else:
-            hdulist = PF.open(filename)
+            hdulist = PF.open(filename, ignore_missing_end=True)
             hd = hdulist[extension].header
             hdulist.close()
             print

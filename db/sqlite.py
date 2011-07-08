@@ -1,10 +1,10 @@
 '''
 This file contains SQLite3 related functions.
 
-@requires: NumPy
+:requires: NumPy
 
-@author: Sami-Matias Niemi
-@version: 0.1
+:author: Sami-Matias Niemi
+:version: 0.1
 '''
 import sqlite3
 import numpy as N
@@ -20,6 +20,7 @@ def toPowerTen(value):
     '''
     return N.power(10, value)
 
+
 def toLogTen(value):
     '''
     @note: This function can be passed on to slite3 connection
@@ -27,6 +28,7 @@ def toLogTen(value):
     @return: Log_10(value)
     '''
     return N.Log10(value)
+
 
 def SSFR(mstardot, mstar):
     '''
@@ -36,7 +38,8 @@ def SSFR(mstardot, mstar):
     @param mstar: stellar mass in log10(M_solar)
     @return: specific star formation rate in Gyr**-1
     '''
-    return N.log10(mstardot / 10**mstar)
+    return N.log10(mstardot / 10 ** mstar)
+
 
 def get_data_sqlitePowerTen(path, db, query):
     '''
@@ -55,6 +58,7 @@ def get_data_sqlitePowerTen(path, db, query):
     c.close()
     return data
 
+
 def get_data_sqliteSMNfunctions(path, db, query):
     '''
     Run an SQL query to a database with custom
@@ -67,8 +71,8 @@ def get_data_sqliteSMNfunctions(path, db, query):
     conn = sqlite3.connect(path + db)
     conn.create_function('janskyToMagnitude', 1, conv.janskyToMagnitude)
     conn.create_function('Pow10', 1, toPowerTen)
-    conn.create_function('Log10', 1, toLogTen)    
-    conn.create_function('SSFR', 2, SSFR)  
+    conn.create_function('Log10', 1, toLogTen)
+    conn.create_function('SSFR', 2, SSFR)
     c = conn.cursor()
     c.execute(query)
     data = N.array(c.fetchall())
@@ -93,9 +97,10 @@ def get_data_sqlite(path, db, query):
     c.close()
     return data
 
+
 def parseColumnNamesSAMTables(filename,
-                              commentchar = '#',
-                              colnumber = 2):
+                              commentchar='#',
+                              colnumber=2):
     '''
     Parse column names from a text file that follows
     SExtractor format, i.e., columns are specified in
@@ -120,6 +125,18 @@ def parseColumnNamesSAMTables(filename,
             cols.append(tmp[colnumber])
     return cols
 
+
+def parseASCIITitle(filename,
+                    splitChar=' '):
+    '''
+    Parse a single line ascii information
+    '''
+    firstLine = open(filename).readline()
+    splitted = firstLine.split(splitChar)
+    cols = [x for x in splitted]
+    return cols
+
+
 def generateSQLString(columns, format, start):
     '''
     Generates an SQL string from two vectors that
@@ -130,7 +147,7 @@ def generateSQLString(columns, format, start):
     start += '('
     for a, b in zip(columns, format):
         start += '%s %s, ' % (a, b)
-        
+
     start = start[:-2] + ')'
     return start
 

@@ -1,7 +1,7 @@
 '''
 This file contains a wrapper class to fetch data from a Sybase or MySQL database.
 
-@author: Sami-Matias Niemi (niemi@stsci.edu) for STScI.
+:author: Sami-Matias Niemi (niemi@stsci.edu) for STScI.
 '''
 
 __author__ = 'Sami-Matias Niemi'
