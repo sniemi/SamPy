@@ -6,15 +6,15 @@ This file contains some helper functions to
 parse different data files.
 
 :author : Sami-Matias Niemi
-:contact : niemi@stsci.edu
+:contact : sniemi@unc.edu
 :version : 0.1
 
 :requires: NumPy
-:requires: astronomy.basics
-:requires: smnIO.sexutils
+:requires: SamPy.astronomy.basics
+:requires: SamPy.smnIO.sexutils
 '''
-import smnIO.sextutils as su
-import astronomy.basics
+import SamPy.smnIO.sextutils as su
+import SamPy.astronomy.basics
 import numpy as np
 import cPickle
 
