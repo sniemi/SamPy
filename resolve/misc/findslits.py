@@ -1,10 +1,34 @@
+'''
+Fits slit image to a direct image to find x and y positions.
+
+Currently the script uses a slit image. In the future however
+we probably want to use the spectrum itself because there is
+no guarantee that a slit confirmation image has always been
+taken.
+
+:todo: try to do the minimalization with scipy.optmize or
+some other technique which might be faster and/or more
+robust.
+
+:todo: in the future one should allow rotation in the
+fitting as well. This is a major complication and one
+should think hard how to implement it correctly.
+'''
+import matplotlib
+#matplotlib.rc('text', usetex=True)
+#matplotlib.rcParams['font.size'] = 17
+import sys
+from optparse import OptionParser
 import pyfits as PF
 import pylab as P
 import numpy as np
 import matplotlib.patches as patches
+from matplotlib import cm
 #SMN
 import SamPy.smnIO.write
 import SamPy.smnIO.read
+import SamPy.image.manipulation as m
+
 
 def slitPosition(input, xy):
     '''
@@ -72,9 +96,16 @@ def slitPosition(input, xy):
     return out
 
 
-def readSlitPositions(slitfile, slitdata, low=552, up=552):
+def readSlitPositions(slitfile, slitdata):
     '''
     Reads slit positions from a slitfile and slitdata from another file.
+
+    This file should follow DS9 format, i.e.:
+    box 1545  871 7 499 0
+    box 1512 1522 7 614 0
+    box 1482 2175 7 499 0
+
+    :note: slit image positions, not the slit positions on the sky!
 
     :param: slitfile: name of the slit file
     :param: slitdata: slitdata array
@@ -93,36 +124,35 @@ def readSlitPositions(slitfile, slitdata, low=552, up=552):
         tmp = line.split()
         out['width'] = int(tmp[3])
         out['height'] = int(tmp[4])
-        out['ymin'] = int(tmp[2]) - (out['height']/2)
-        out['ymax'] = int(tmp[2]) + (out['height']/2)
-        out['xmin'] = int(tmp[1]) - (out['width']/2)
-        out['xmax'] = int(tmp[1]) + (out['width']/2)
+        out['ymin'] = int(tmp[2]) - (out['height'] / 2)
+        out['ymax'] = int(tmp[2]) + (out['height'] / 2)
+        out['xmin'] = int(tmp[1]) - (out['width'] / 2)
+        out['xmax'] = int(tmp[1]) + (out['width'] / 2)
         out['xy'] = (out['xmin'], out['ymin'])
         out['shape'] = slitdata.shape
         out['throughput'] = 1.0
+        out['values'] = slitdata[out['ymin']:out['ymax'] + 1, out['xmin']:out['xmax'] + 1]
 
         if i == 0:
-            #first is low
-            out['values'] = slitdata[out['ymin']-low:out['ymax']+1-low, out['xmin']:out['xmax']+1]
-            #last is up
+            out['name'] = 'low'
         elif i == 2:
-            out['values'] = slitdata[out['ymin']+up:out['ymax']+1+up, out['xmin']:out['xmax']+1]
+            out['name'] = 'up'
         else:
-            out['values'] = slitdata[out['ymin']:out['ymax']+1, out['xmin']:out['xmax']+1]
+            out['name'] = 'mid'
 
         slits.append(out)
 
     return slits
 
 
-def generateSlitMask(slits, offsetx=0, offsety=0, throughput=False, slitValue=False):
+def generateSlitMask(slits, throughput=False):
     '''
     This function can be used to generate a slit mask from given slits.
     '''
-    #slit mask
     if len(set([x['shape'] for x in slits])) > 1:
         print 'Shape of the slits do not match'
-    #else, take the shape of the first one
+
+    #slitmask
     slitmask = np.zeros(slits[0]['shape'])
 
     for slit in slits:
@@ -131,53 +161,43 @@ def generateSlitMask(slits, offsetx=0, offsety=0, throughput=False, slitValue=Fa
         else:
             val = 1.0
 
-        if slitValue:
-            val *= slit['values']
-            
-        slitmask[slit['ymin'] + offsety:slit['ymax'] + 1 + offsety,
-                 slit['xmin'] + offsetx:slit['xmax'] + 1 + offsetx] = val
+        slitmask[slit['ymin']:slit['ymax'] + 1,
+        slit['xmin']:slit['xmax'] + 1] = val
+
     return slitmask
 
 
-
-def generatePlots(input, slits, type='.pdf'):
+def generateSkyMask(slits, offsetx=0, offsety=0):
     '''
-    Generates diagnostic plots from slit image.
+    This function can be used to generate a slit mask on the sky
     '''
-    fig = P.figure()
-    b = P.gca()
-    ax = fig.add_subplot(111)
 
-    #show image
-    ax.imshow(np.log10(input), origin='lower')
-
+    skymask = np.zeros(slits[0]['shape'])
     for slit in slits:
-        b.add_patch(patches.Rectangle(slit['xy'],
-                                      slit['width'],
-                                      slit['height'],
-                                      fill=False))
+        skymask[slit['ymin'] + offsety:slit['ymax'] + 1 + offsety,
+        slit['xmin'] + offsetx:slit['xmax'] + 1 + offsetx] = 1
 
-    #rotate xticks
-    for tl in ax.get_xticklabels():
-        tl.set_rotation(40)
+    return skymask
 
-    P.savefig('slit.pdf')
-    P.close()
 
+def generateSlitImages(slits, output, type='.pdf'):
+    '''
+    Generatesdiagnostic plots from slit image.
+    '''
     #generate a separate image of the slit data of each slit image.
     for i, slit in enumerate(slits):
         fig = P.figure()
         ax = fig.add_subplot(111)
 
         #take log10 from the slit data
-        ax.imshow(np.log10(slit['values']),
+        ax.imshow(np.log10(slit['values'] * slit['throughput']),
                   origin='lower')
 
         #rotate x axis labels
         for tl in ax.get_xticklabels():
             tl.set_rotation(40)
-            
-        P.savefig('slit' + str(i + 1) + type)
+
+        P.savefig(output + str(i + 1) + type)
         P.close()
 
 
@@ -216,7 +236,7 @@ def overPlotSlits(slits, image, output, type='.pdf', ext=0, logscale=True):
     P.close()
 
 
-def writeDS9RegionFile(slits, output='ds9Slit.reg'):
+def writeDS9RegionFile(slits, output='skyslits.reg'):
     '''
     Writes a DS9 region file for all the slits.
     Draws a rectangle around each slit.
@@ -235,7 +255,7 @@ def writeDS9RegionFile(slits, output='ds9Slit.reg'):
 def approxSkyPosition(lowslit, midslit, upslit):
     '''
     Generates an approximated sky position for slits.
-    Assumes that both slits are shifted 550 pixels in y direction.
+    Assumes that both slits are shifted 553 pixels in y direction.
     Such an assumption is crude, but should allow a starting point.
 
     :note: this functions modifies the slit throughput as well
@@ -243,111 +263,216 @@ def approxSkyPosition(lowslit, midslit, upslit):
     :todo: one should refine this after measuring the sky position accurately.
     '''
     #throughputs for the two slits which use glass
-    lwthr = 1 #0.56
-    upthr = 1 #0.56
+    lwthr = 0.6
+    upthr = 0.6
 
     #positions, estimated, shuold be updated
-    lw = 552
-    up = 552
+    lw = 553
+    up = 553
 
     lowslit['ymin'] += lw
     lowslit['ymax'] += lw
     lowslit['xy'] = (lowslit['xy'][0], lowslit['xy'][1] + lw)
-    lowslit['throughput'] = 1./lwthr
+    lowslit['throughput'] = 1. / lwthr
 
     upslit['ymin'] -= up
     upslit['ymax'] -= up
     upslit['xy'] = (upslit['xy'][0], upslit['xy'][1] - up)
-    upslit['throughput'] = 1./upthr
+    upslit['throughput'] = 1. / upthr
 
     return lowslit, midslit, upslit
 
 
-def chiSquare(observed, expected):
-    return np.sum((observed - expected)**2/expected)
-    
-
-def fitSlitImageToDirectImage(directimage, slitimage, slits, xran=25, yran=25, step=1):
+def chiSquare(model, obs):
     '''
-    This is a really stupid way of finding the x and y position of the slits.
+    Simple chi**2 calculation
+    '''
+    r = np.sum((obs - model) ** 2 / model)
+    return r
 
-    :todo: Try to implement smarter and faster algorithm
+
+def fitSlitsToDirectImage(slits, directimage,
+                          xran=25, yran=25, step=1,
+                          normalize='True', debug=True):
+    '''
+    Fits a slit image to a direct image.
+    This functions does not collapse the slit image, but uses each pixel.
+    By default the counts are normalized to a peak count, but this can
+    be controlled using the optionaly keyword normalize.
 
     :rtype: dictionary
     '''
-    #erturn dictionary
-    r = {}
 
-    #obtain a slitmask based on slits without any offsets
-    model = slitimage * generateSlitMask(slits, throughput=True, slitValue=True)
-    modeldata = model[model > 0]
+    #generates a model array from the slit values, takes into account potential
+    #throughput of a slit
+    model = np.hstack((slits[0]['values'].ravel() * slits[0]['throughput'],
+                       slits[1]['values'].ravel() * slits[1]['throughput'],
+                       slits[2]['values'].ravel() * slits[2]['throughput']))
 
-    #nomalize
-    #modeldata /= np.max(modeldata)
+    if normalize:
+        model /= np.max(model)
 
-    #normalization factor
-    norm = len(modeldata) - 1
-
-#    P.imshow(np.log10(model), origin='lower')
-#    P.xlim(1300, 1700)
-#    P.ylim(1000, 2000)
-#    P.savefig('model.pdf')
-#    P.close()
-
-    r['model'] = model
-    del model
+    norm = len(model)
 
     out = []
-    ii = 0
     #loop over a range of x and y positions around the nominal position and record x, y and chisquare
     for x in range(-xran, xran, step):
         for y in range(-yran, yran, step):
-            #update the noAnotMask position with offsets and multiply with the direct image
-            comparison = directimage * generateSlitMask(slits, offsetx=x, offsety=y)
-            compdata = comparison[comparison > 0]
+            dirdata = []
+            #get data from direct image
+            for slit in slits:
+                data = directimage[slit['ymin'] + y:slit['ymax'] + 1 + y,
+                       slit['xmin'] + x:slit['xmax'] + 1 + x].copy()
+                dirdata.append(data)
 
-            #normalize
-            #compdata /= np.max(compdata)
+            obs = np.hstack((dirdata[0].ravel(),
+                             dirdata[1].ravel(),
+                             dirdata[2].ravel()))
 
-            chisq = chiSquare(compdata, modeldata)
+            if normalize:
+                obs /= np.max(obs)
 
-            out.append([x, y, chisq, chisq/norm])
+            chisq = chiSquare(model, obs)
+            out.append([x, y, chisq, chisq / norm])
 
-            #for debugging
-            ii += 1
-            print x, y, chisq, chisq/norm
-            str = 'x%iy%i' % (x, y)
-            r[str] = comparison
-#            P.figure()
-#            P.imshow(np.log10(comparison)   , origin='lower')
-#            P.xlim(1300, 1700)
-#            P.ylim(1000, 2000)
-#            P.show()
-#            tmp = raw_input()
-#            #P.savefig('%icomparison.pdf' % ii)
-#            P.close()
+            if debug:
+                print x, y, chisq, chisq / norm
 
+    #return dictionary
+    r = {}
+    r['xran'] = xran
+    r['yran'] = yran
+    r['model'] = model
     r['output'] = np.array(out)
     return r
 
 
 def fakeSlitData(slits, fakeimgdata):
     '''
-    This function can be used to cut out imaging data to test the fitting algorithm
+    Cuts out imaging data to test the fitting algorithm.
     '''
     for slit in slits:
-        slit['values'] = fakeimgdata[slit['ymin']:slit['ymax']+1, slit['xmin']:slit['xmax']+1]
+        slit['values'] = fakeimgdata[slit['ymin']:slit['ymax'] + 1, slit['xmin']:slit['xmax'] + 1]
     return slits
 
-if __name__ == '__main__':
-    #boolean to control whether the slit positions should be found automatically or not
-    automatic = False
-    #debugging mode, where slit data are being faked
-    debug = True
 
-    #input test data
-    slitimage = PF.open('47_Tucsi_0.fits')[0].data[0]
-    #I don't get why there needs to be an extra [0]... PYFITS has changed?
+def plotMinimalization(data, output='minim', type='.png'):
+    '''
+    Generates a two dimensional map of the minimalization.
+
+    :param: data
+    '''
+    d = data['output']
+    #begin image
+    P.figure()
+    P.scatter(d[:, 0],
+              d[:, 1],
+              c=1. / np.log10(d[:, 2]),
+              s=55,
+              cmap=cm.get_cmap('jet'),
+              edgecolor='none',
+              alpha=0.5)
+    P.xlim(-data['xran'], data['xran'])
+    P.ylim(-data['yran'], data['yran'])
+    P.xlabel('X [pixels]')
+    P.ylabel('Y [pixels]')
+    P.savefig(output + 'Map' + type)
+    P.close()
+
+    #second figure
+    P.figure()
+    P.scatter(d[:, 0], d[:, 3], s=2)
+    P.xlim(-data['xran'], data['xran'])
+    P.xlabel('X [pixels]')
+    P.ylabel('$\chi^{2}$')
+    P.savefig(output + 'XCut' + type)
+    P.close()
+
+    #second figure
+    P.figure()
+    P.scatter(d[:, 1], d[:, 3], s=2)
+    P.xlim(-data['yran'], data['yran'])
+    P.xlabel('Y [pixels]')
+    P.ylabel('$\chi^{2}$')
+    P.savefig(output + 'YCut' + type)
+    P.close()
+
+
+def outputMinima(inputfile, slitfile, slitpos, data, output='min.txt', stdout=True):
+    '''
+    Outputs the results to a file and also the screen if stdout = True.
+    '''
+    tmp = data['output'][np.argmin(data['output'][:, 2]), :]
+    str = '{0:>s}\t{1:>s}\t{2:>s}\t{3:.0f}\t{4:.0f}\t{5:.1f}'.format(inputfile, slitfile, slitpos, tmp[0], tmp[1], tmp[2])
+
+    #to screen
+    if stdout:
+        print '\n\ndirect image    slit image    slit pos \t\t x \t y \t chi**2'
+        print str
+
+    #to file
+    fh = open(output, 'a')
+    fh.write(str + '\n')
+    fh.close()
+
+
+def processArgs(just_print_help=False):
+    '''
+    Processes command line arguments
+    '''
+    parser = OptionParser()
+
+    parser.add_option("-s", "--slit", dest="slit",
+                      help="Name of the slit image file", metavar="string")
+    parser.add_option("-f", "--fitting", dest="fitImage",
+                      help='Name of the direct image to which the slit data will be fitted', metavar='string')
+    parser.add_option("-d", "--debug", dest="debug", action='store_true',
+                      help='Debugging mode on')
+    parser.add_option("-v", "--verbose", action="store_true", dest="verbose",
+                      help="Verbose mode on")
+    parser.add_option("-p", "--position", dest="position",
+                      help="Name of the slit position file", metavar="string")
+    parser.add_option("-b", "--blur", action="store_true", dest="blur",
+                      help="Whether the input direct image should be gaussian blurred or not")
+    parser.add_option("-a", "--automatic", action="store_true", dest="automatic",
+                      help="If on tries to determine slit positions automatically from the slit image")
+    if just_print_help:
+        parser.print_help()
+    else:
+        return parser.parse_args()
+
+
+def main(opts, args):
+    '''
+    Driver function
+    '''
+
+    if (opts.slit is None or opts.fitImage is None):
+        processArgs(True)
+        sys.exit(1)
+
+    #rename the commmand line options
+    slit = opts.slit
+    fitImage = opts.fitImage
+    #slit position file defaults to slit.reg
+    if (opts.position is None):
+        slitPos = 'slit.reg'
+        print 'Using {0:>s} for slit positions'.format(slitPos)
+    else:
+        slitPos = opts.position
+        #debugging mode, where slit data are being faked
+    debug = opts.debug
+    #whether the data should be blurred or not
+    blur = opts.blur
+    #boolean to control whether the slit positions should be found automatically or not
+    automatic = opts.automatic
+
+    #load images
+    img = PF.open(fitImage, ignore_missing_end=True)[0].data[0]
+    slitimage = PF.open(slit, ignore_missing_end=True)[0].data[0]
+
+    if blur:
+        img = m.blurImage(img, 4)
 
     if automatic:
         #gets the slit positions automatically, does not work perfectly
@@ -355,28 +480,34 @@ if __name__ == '__main__':
         midslit = slitPosition(slitimage, {'xmin': 1500, 'xmax': 1525, 'ymin': 1200, 'ymax': 1850})
         lowslit = slitPosition(slitimage, {'xmin': 1530, 'xmax': 1550, 'ymin': 600, 'ymax': 1130})
         slits = (upslit, midslit, lowslit)
-        generatePlots(slitimage, slits)
+        generateSlitImages(slits, 'slits')
         #updates the slit positions to sky positions
         slits = approxSkyPosition(lowslit, midslit, upslit)
         writeDS9RegionFile(slits)
     else:
-        slits = readSlitPositions('slit.reg', slitimage)
-        #generatePlots(slitimage, slits)
+        slits = readSlitPositions(slitPos, slitimage)
+        generateSlitImages(slits, 'slits')
+        slits = approxSkyPosition(*slits)
+        writeDS9RegionFile(slits)
+
+    if debug:
+        slits = fakeSlitData(slits, img)
 
     #pickles the data
     #SamPy.smnIO.write.cPickleDumpDictionary(slits, 'slits.pk')
     #slits = SamPy.smnIO.read.cPickledData('slits.pk')
 
     #generates diagnostic plots and writes the slit positions for DS9 inspection
-    #overPlotSlits(slits, '47_Tuci_0.fits', 'overplottedLog')
+    overPlotSlits(slits, fitImage, 'overplottedLog')
 
-    #the image to which one wants the stuff to be fitted
-    img = PF.open('47_Tuci_0.fits')[0].data[0]
+    #find the chisqr minimum and make a diagnostic plot
+    minimals = fitSlitsToDirectImage(slits, img, xran=100, yran=100, step=1)
+    plotMinimalization(minimals)
 
-    if debug:
-        slits = fakeSlitData(slits, img)
+    #output some info
+    outputMinima(fitImage, slit, slitPos, minimals)
 
-    minimals = fitSlitImageToDirectImage(img, slitimage, slits, xran=10, yran=10, step=5)
 
-    tmp = minimals['output'][np.argmin(minimals['output'][:,2]),:]
-    print tmp
+if __name__ == '__main__':
+    #Gets the command line arguments and call main function
+    main(*processArgs())
