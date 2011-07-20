@@ -372,8 +372,10 @@ class MakeFlat:
         Note that ynodes can then be a list of parameters.
         k defines the order of the spline fitting, it is hard coded
         to be 3, but could be changed if needed.
+
         :param x: the x position where to evaluate the B-spline
         :param ynodes: y position of the nodes
+
         :return: 1-D evaluated B-spline value at x.
         '''
         return I.splev(x, I.splrep(self.xnodes, ynodes, k = 3))
@@ -381,9 +383,11 @@ class MakeFlat:
     def _errfunc(self, ynodes, x, y):
         '''
         Error function; simply _fitfunction - ydata
+
         :param ynodes: y position of the nodes to be evaluated
         :param x: x positions where to evaluate the B-spline
-        :param y: y positions 
+        :param y: y positions
+
         :return: Spline evaluated y positions - ydata
         '''
         return self._fitfunc(x, ynodes) - y
@@ -393,10 +397,12 @@ class MakeFlat:
         Return the point which minimizes the sum of squares of M (non-linear)
         equations in N unknowns given a starting estimate, x0, using a
         modification of the Levenberg-Marquardt algorithm.
+
         :param x:
         :param y:
         :param ynodes:
-        :param xnodes: 
+        :param xnodes:
+
         :return: fitted parameters, error/success message
         '''
         self.xnodes = xnodes
@@ -405,9 +411,11 @@ class MakeFlat:
     def _cspline(self, x, y, t):
         '''
         Uses interpolation to find the B-spline representation of 1-D curve.
+
         :param x: x position
         :param y: y position
         :param t: position in which to evaluate the B-spline
+        
         :return: interpolated y position of the B-sline
         '''
         tck = I.splrep(x, y)

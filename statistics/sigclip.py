@@ -3,7 +3,7 @@ Sigmaclipped standard deviation, mean, and median
 '''
 import numpy
 
-def stdevclipping(array, lowcut=4, highcut=4, maxnit=5, verbose=False):
+def stdevclipping(array, lowcut=4, highcut=4, maxnit=50, verbose=False):
     if type(array) in (list, tuple):
         flat = numpy.array(array).ravel()
     else:

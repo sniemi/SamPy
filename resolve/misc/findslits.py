@@ -13,6 +13,12 @@ robust.
 :todo: in the future one should allow rotation in the
 fitting as well. This is a major complication and one
 should think hard how to implement it correctly.
+
+:requires: PyFITS
+:requires: NumPy
+:requires: matplotlib
+
+:author: Sami-Matias Niemi
 '''
 import matplotlib
 #matplotlib.rc('text', usetex=True)
@@ -29,6 +35,31 @@ import SamPy.smnIO.write
 import SamPy.smnIO.read
 import SamPy.image.manipulation as m
 
+
+import scipy.ndimage.filters as f
+
+def findSlitPositions(slitImage, threshold=1000):
+    '''
+    Finds slit positions from a slit image.
+
+    This method uses the Sobel filter in scipy.ndimage.filters
+
+    :todo: this is not ready!
+
+    :param: filename
+
+    '''
+    #sobel filter
+    filtered = f.sobel(slitImage, axis=1)
+    #create a mask above the threshold
+    msk = filtered > threshold
+    masked = filtered[msk]
+    #indices
+    y, x = np.indices(slitImage.shape)
+
+    yargs = y[msk]
+
+    return masked
 
 def slitPosition(input, xy):
     '''
