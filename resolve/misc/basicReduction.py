@@ -99,9 +99,9 @@ class SOARReduction():
             self.log.info('Found {0:d} bias frames...'.format(numb))
         return self.biasFiles
 
-    def findNes(self, identifier='Ne'):
+    def findNes(self, identifier='Ne', outfile='complist'):
         '''
-        Finds all Neon exposures.
+        Finds all Neon exposures and outputs them to a file.
 
         :note: this does not check the CAM_ANG
 
@@ -118,6 +118,9 @@ class SOARReduction():
             self.log.info('Did not find any Ne frames, will exit')
             sys.exit('Did not find any Ne frames, will exit')
 
+        #output text file
+        out = open(outfile, 'w')
+
         #loop over and the look that the OBSTYPE == COMP
         for i, file in enumerate(self.NeFiles):
             #file handler
@@ -128,15 +131,19 @@ class SOARReduction():
             if prihdr['OBSTYPE'] != 'COMP':
                 del self.NeFiles[i]
                 self.log.info('OBSTYPE of %s i not COMP, removed from Ne list' % (file))
+            else:
+                out.write(file + '\n')
+
+        out.close()
 
         numb = len(self.NeFiles)
         self.log.info('Found {0:d} Ne frames...'.format(numb))
         return self.NeFiles
 
 
-    def findScienceFrames(self, identifier='spec'):
+    def findScienceFrames(self, identifier='spec', outfile='sciencelist'):
         '''
-        Finds all science exposures.
+        Finds all science exposures and outputs them to a file.
 
         :note: this does not check the CAM_ANG
 
@@ -153,6 +160,9 @@ class SOARReduction():
             self.log.info('Did not find any spec frames, will exit')
             sys.exit('Did not find any spec frames, will exit')
 
+        #output file
+        out = open(outfile, 'w')
+
         #loop over and the look that the OBSTYPE == OBJECT
         for i, file in enumerate(self.scienceFiles):
             #file handler
@@ -163,6 +173,10 @@ class SOARReduction():
             if prihdr['OBSTYPE'] != 'OBJECT':
                 del self.scienceFiles[i]
                 self.log.info('OBSTYPE of %s i not OBJECT, removed from science list' % (file))
+            else:
+                out.write(file + '\n')
+
+        out.close()
 
         numb = len(self.scienceFiles)
         self.log.info('Found {0:d} science frames...'.format(numb))
@@ -344,7 +358,7 @@ class SOARReduction():
 
 
     def normalizeFlat(self, filename=None, output='normim.fits', nodes=18,
-                      rot=0.54707797, column=False):
+                      rot=0.54707797, countLimit = 1500, column=False):
         '''
         Normalizes the flat in a very crude way.
         The method used is very simple:
@@ -358,6 +372,7 @@ class SOARReduction():
         :param: output, name of the output file
         :param: nodes, the number of spline nodes
         :param: rot, the amount of rotation applied in degrees
+        :pamam: countLimit, if the average masked counts are below this, the data are set to unity
         :param: column, whether the fitting should be done in column direction
 
         :return: normalized flat
@@ -415,21 +430,28 @@ class SOARReduction():
             else:
                 line = indata[i, :][msk]
                 tmp = SS.medfilt(line, 13)
-                #this is stupid as it has been adapted from another script...
-                xnod = np.arange(nodes) * (np.max(xpx[msk]) - xpx[0]) / (nodes - 1) + xpx[0]
-                ynod = np.array([np.mean(tmp[x - 5:x + 5]) for x in xnod])
-                ynod[np.isnan(ynod)] = np.mean(tmp)
-                fitynods, _t = self._splinefitScipy(xpx[msk], tmp, ynod, xnod)
-                fit = self._cspline(xnod, fitynods, xpx[msk])
+                if np.mean(tmp) > countLimit:
+                    #this is stupid as it has been adapted from another script...
+                    xnod = np.arange(nodes) * (np.max(xpx[msk]) - xpx[0]) / (nodes - 1) + xpx[0]
+                    ynod = np.array([np.mean(tmp[x - 5:x + 5]) for x in xnod])
+                    ynod[np.isnan(ynod)] = np.mean(tmp)
+                    fitynods, _t = self._splinefitScipy(xpx[msk], tmp, ynod, xnod)
+                    fit = self._cspline(xnod, fitynods, xpx[msk])
 
-                #divide with the fit
-                indata[i, :][msk] /= fit
-                #set the masked values to unity
-                indata[i, :][-msk] = 1.0
+                    #divide with the fit
+                    indata[i, :][msk] /= fit
+                    #set the masked values to unity
+                    indata[i, :][-msk] = 1.0
 
-                #record average residual
-                avg = np.mean(indata[i, :][msk])
-                self.log.info('Average of the fit residual is {0:f} for row {1:d}'.format(avg, i))
+                    #record average residual
+                    avg = np.mean(indata[i, :][msk])
+                    self.log.info('Average of the fit residual is {0:f} for row {1:d}'.format(avg, i))
+
+                else:
+                    indata[i, :] = 1.0
+                    txt = 'the average median filtered masked counts of row {0:d} are {1:.2f} (< {2:.2f}), thus, it was set to unity'.format(
+                            i, np.mean(tmp), countLimit)
+                    self.log.info(txt)
 
         #rotate back to original
         indata = int.rotate(indata, rot, reshape=False, cval=1.0)
@@ -584,9 +606,46 @@ class SOARReduction():
             fh.close(output_verify='ignore')
 
 
-if __name__ == '__main__':
+def doAll():
+    '''
+    Driver function for SOAR image slicer data reduction
+    '''
     #intiate the class instance
     reduce = SOARReduction()
+    #renames some files
+    reduce.renameUnusedFiles()
+    #find bias files
+    biases = reduce.findBiases()
+    #subtract the overscan
+    reduce.subtractOverscan(biases)
+    #find all the rest of the files
+    frames = reduce.findNonBiasFrames()
+    #subtract the overscan from these files
+    reduce.subtractOverscan(frames)
+    #make a bias frame
+    bias = reduce.makeBias()
+    #subtract the bias frame from the rest
+    reduce.subtractBias(frames)
+    #find flat field files and write a list of flats
+    flats = reduce.findFlats()
+    #combines the flats
+    combflat = reduce.makeFlat()
+    #normalize the combined flat
+    norm = reduce.normalizeFlat()
+    #find Neon arcs
+    arcs = reduce.findNes()
+    #finds science frames
+    science = reduce.findScienceFrames()
+    #flat field arcs and science images
+    reduce.divideWithFlat(arcs)
+    reduce.divideWithFlat(science)
+
+
+if __name__ == '__main__':
+
+    doAll()
+    #intiate the class instance
+#    reduce = SOARReduction()
 #    #renames some files
 #    reduce.renameUnusedFiles()
 #    #find bias files
@@ -607,10 +666,10 @@ if __name__ == '__main__':
 #    combflat = reduce.makeFlat()
 #    #normalize the combined flat
 #    norm = reduce.normalizeFlat(filename='flatima.fits')
-    #find Neon arcs
-    arcs = reduce.findNes()
-    #finds science frames
-    science = reduce.findScienceFrames()
-    #flat field science frames and arcs
-    reduce.divideWithFlat(arcs, flatFile='normim.fits')
-    reduce.divideWithFlat(science, flatFile='normim.fits')
+#    #find Neon arcs
+#    arcs = reduce.findNes()
+#    #finds science frames
+#    science = reduce.findScienceFrames()
+#    #flat field science frames and arcs
+#    reduce.divideWithFlat(arcs, flatFile='normim.fits')
+#    reduce.divideWithFlat(science, flatFile='normim.fits')
