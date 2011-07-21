@@ -1,5 +1,11 @@
 '''
 Basic reduction steps for SOAR image slicer data.
+This script should be used only for a quicklook and not for science.
+The basic idea is that the script provides good enough calibration
+so that a science spectra can be convolved with a system throughput
+curve to get a spatially resolved flux. This information can then
+be further used to fit the position of the spectra to a direct imaqe
+in order to allow a velocity field to be derived.
 
 :requires: PyFITS
 :requires: NumPy
@@ -10,7 +16,10 @@ Basic reduction steps for SOAR image slicer data.
 
 :version: 0.1
 
-:note: this script does not make use of a pseudo dark at the mo
+:note: the script does not make use of a pseudo dark at the mo
+:note: the script modifies fiels in place!! should be changed..
+:note: the scripts does not take into account camera or grating angles!
+       thus the reduction might be faulty for some files...
 
 '''
 import glob as g
@@ -20,6 +29,7 @@ import numpy as np
 import scipy.signal as SS
 import scipy.interpolate as I
 import scipy.optimize as O
+import scipy.ndimage.interpolation as int
 import SamPy.log.Logger as lg
 
 import pylab as P
@@ -88,6 +98,75 @@ class SOARReduction():
         else:
             self.log.info('Found {0:d} bias frames...'.format(numb))
         return self.biasFiles
+
+    def findNes(self, identifier='Ne'):
+        '''
+        Finds all Neon exposures.
+
+        :note: this does not check the CAM_ANG
+
+        :param: identifier: to match Ne files
+
+        :return: a list of files matching the identifier
+        :rtype: list
+        '''
+        self.NeIdentifier = identifier
+
+        self.NeFiles = g.glob('*{0:>s}*'.format(self.NeIdentifier))
+        numb = len(self.NeFiles)
+        if numb == 0:
+            self.log.info('Did not find any Ne frames, will exit')
+            sys.exit('Did not find any Ne frames, will exit')
+
+        #loop over and the look that the OBSTYPE == COMP
+        for i, file in enumerate(self.NeFiles):
+            #file handler
+            fh = pf.open(file, ignore_missing_end=True)
+            #primary header
+            prihdr = fh[0].header
+
+            if prihdr['OBSTYPE'] != 'COMP':
+                del self.NeFiles[i]
+                self.log.info('OBSTYPE of %s i not COMP, removed from Ne list' % (file))
+
+        numb = len(self.NeFiles)
+        self.log.info('Found {0:d} Ne frames...'.format(numb))
+        return self.NeFiles
+
+
+    def findScienceFrames(self, identifier='spec'):
+        '''
+        Finds all science exposures.
+
+        :note: this does not check the CAM_ANG
+
+        :param: identifier: to match spec files
+
+        :return: a list of files matching the identifier
+        :rtype: list
+        '''
+        self.scienceIdentifier = identifier
+
+        self.scienceFiles = g.glob('*{0:>s}*'.format(self.scienceIdentifier))
+        numb = len(self.scienceFiles)
+        if numb == 0:
+            self.log.info('Did not find any spec frames, will exit')
+            sys.exit('Did not find any spec frames, will exit')
+
+        #loop over and the look that the OBSTYPE == OBJECT
+        for i, file in enumerate(self.scienceFiles):
+            #file handler
+            fh = pf.open(file, ignore_missing_end=True)
+            #primary header
+            prihdr = fh[0].header
+
+            if prihdr['OBSTYPE'] != 'OBJECT':
+                del self.scienceFiles[i]
+                self.log.info('OBSTYPE of %s i not OBJECT, removed from science list' % (file))
+
+        numb = len(self.scienceFiles)
+        self.log.info('Found {0:d} science frames...'.format(numb))
+        return self.scienceFiles
 
 
     def findNonBiasFrames(self, exclude=None):
@@ -264,11 +343,25 @@ class SOARReduction():
         return self.flat
 
 
-    def normalizeFlat(self, filename=None, output='normim.fits', nodes=25):
+    def normalizeFlat(self, filename=None, output='normim.fits', nodes=18,
+                      rot=0.54707797, column=False):
         '''
         Normalizes the flat in a very crude way.
+        The method used is very simple:
+        - first rotate the image so that the features are along a row
+        - mask the edges of the detector
+        - fit a third-order spline along each row
+        - divide the data with the fit
+        - rotate back
 
-        :note: one should probably use something else for this step
+        :param: filename, name of the file to be normalized
+        :param: output, name of the output file
+        :param: nodes, the number of spline nodes
+        :param: rot, the amount of rotation applied in degrees
+        :param: column, whether the fitting should be done in column direction
+
+        :return: normalized flat
+        :rtype: ndarray
         '''
         self.normFlat = output
 
@@ -279,12 +372,17 @@ class SOARReduction():
             inf = filename
             indata = pf.getdata(filename)[0]
 
+        #rotate the input image
+        indata = int.rotate(indata, -rot, reshape=False)
+        self.log.info('Rotating the flat %f degrees' % -rot)
+
+        # x and y dimensions
         s = indata.shape
-        nx = s[0]
-        ny = s[1]
+        ny = s[0]
+        nx = s[1]
 
         #nodes
-        xpx = np.arange(nx, dtype=int)
+        xpx = np.arange(nx, dtype=np.int)
         xnod = np.arange(nodes) * (nx - 1.) / (nodes - 1.)   #spaced nodes incl ends
 
         #add extra pt half way btwn first and last pts at ends
@@ -292,21 +390,52 @@ class SOARReduction():
         xnod = np.insert(xnod, 1, dl / 2.)
         xnod = np.insert(xnod, -1, (xnod[-1] - dl / 2.))
 
-        for i in range(ny):
-            line = indata[:, i]
-            tmp = SS.medfilt(line, 13)
-            #this is stupid as it has been adapted from another script...
-            xnod = np.arange(nodes) * (np.max(xpx) - xpx[0]) / (nodes - 1) + xpx[0]
-            ynod = np.array([np.mean(tmp[x - 5:x + 5]) for x in xnod])
-            ynod[np.isnan(ynod)] = np.mean(tmp)
-            fitynods, _t = self._splinefitScipy(xpx, tmp, ynod, xnod)
-            fit = self._cspline(xnod, fitynods, xpx)
+        if column:
+            tmp = nx
+        else:
+            tmp = ny
+            msk = np.ones(nx, dtype=np.bool)
+            #mask a bit from both ends
+            msk[0:12] = False
+            msk[-20:] = False
 
-            #divide with the fit
-            indata[:, i] /= fit
+        for i in range(tmp):
+            if column:
+                line = indata[:, i]
+                tmp = SS.medfilt(line, 13)
+                #this is stupid as it has been adapted from another script...
+                xnod = np.arange(nodes) * (np.max(xpx) - xpx[0]) / (nodes - 1) + xpx[0]
+                ynod = np.array([np.mean(tmp[x - 5:x + 5]) for x in xnod])
+                ynod[np.isnan(ynod)] = np.mean(tmp)
+                fitynods, _t = self._splinefitScipy(xpx, tmp, ynod, xnod)
+                fit = self._cspline(xnod, fitynods, xpx)
+
+                #divide with the fit
+                indata[:, i] /= fit
+            else:
+                line = indata[i, :][msk]
+                tmp = SS.medfilt(line, 13)
+                #this is stupid as it has been adapted from another script...
+                xnod = np.arange(nodes) * (np.max(xpx[msk]) - xpx[0]) / (nodes - 1) + xpx[0]
+                ynod = np.array([np.mean(tmp[x - 5:x + 5]) for x in xnod])
+                ynod[np.isnan(ynod)] = np.mean(tmp)
+                fitynods, _t = self._splinefitScipy(xpx[msk], tmp, ynod, xnod)
+                fit = self._cspline(xnod, fitynods, xpx[msk])
+
+                #divide with the fit
+                indata[i, :][msk] /= fit
+                #set the masked values to unity
+                indata[i, :][-msk] = 1.0
+
+                #record average residual
+                avg = np.mean(indata[i, :][msk])
+                self.log.info('Average of the fit residual is {0:f} for row {1:d}'.format(avg, i))
+
+        #rotate back to original
+        indata = int.rotate(indata, rot, reshape=False, cval=1.0)
+        self.log.info('Rotating the flat %f degrees' % rot)
 
         self.normalizedFlat = indata
-
         self.log.info('FLAT frame {0:>s} was normalized and saved to {1:>s}'.format(inf, output))
 
         #write the output
@@ -314,7 +443,6 @@ class SOARReduction():
         hdulist = pf.HDUList([hdu])
         hdulist.writeto(self.normFlat)
         self.log.info('Combined flat saved to {0:>s}'.format(self.normFlat))
-
 
         return self.normalizedFlat
 
@@ -424,6 +552,38 @@ class SOARReduction():
             fh.close(output_verify='ignore')
 
 
+    def divideWithFlat(self, filelist, ext=0, flatFile=None):
+        '''
+        Divides with the normalized flat
+        '''
+        if flatFile is None:
+            f = self.normalizedFlat
+            flatFile = self.normFlat
+        else:
+            f = pf.open(flatFile)[0].data
+
+        for file in filelist:
+            #file handler
+            fh = pf.open(file, mode='update', ignore_missing_end=True)
+
+            #data
+            data = fh[ext].data
+            if data.shape[0] == 1 or self.dataWeird == True:
+                data = fh[ext].data[0]
+
+            #update data
+            data /= f
+
+            #save file
+            fh.flush(output_verify='warn')
+
+            #update log
+            self.log.info('Divided {0:>s} with {1:>s} and saved the file...'.format(file, flatFile))
+
+            #close handler
+            fh.close(output_verify='ignore')
+
+
 if __name__ == '__main__':
     #intiate the class instance
     reduce = SOARReduction()
@@ -445,4 +605,12 @@ if __name__ == '__main__':
 #    flats = reduce.findFlats()
 #    #combines the flats
 #    combflat = reduce.makeFlat()
-    norm = reduce.normalizeFlat(filename='flatima.fits')
+#    #normalize the combined flat
+#    norm = reduce.normalizeFlat(filename='flatima.fits')
+    #find Neon arcs
+    arcs = reduce.findNes()
+    #finds science frames
+    science = reduce.findScienceFrames()
+    #flat field science frames and arcs
+    reduce.divideWithFlat(arcs, flatFile='normim.fits')
+    reduce.divideWithFlat(science, flatFile='normim.fits')
