@@ -32,8 +32,6 @@ import scipy.optimize as O
 import scipy.ndimage.interpolation as int
 import SamPy.log.Logger as lg
 
-import pylab as P
-
 __author__ = 'Sami-Matias Niemi'
 
 class SOARReduction():
@@ -642,34 +640,4 @@ def doAll():
 
 
 if __name__ == '__main__':
-
     doAll()
-    #intiate the class instance
-#    reduce = SOARReduction()
-#    #renames some files
-#    reduce.renameUnusedFiles()
-#    #find bias files
-#    biases = reduce.findBiases()
-#    #subtract the overscan
-#    reduce.subtractOverscan(biases)
-#    #find all the rest of the files
-#    frames = reduce.findNonBiasFrames()
-#    #subtract the overscan from these files
-#    reduce.subtractOverscan(frames)
-#    #make a bias frame
-#    bias = reduce.makeBias()
-#    #subtract the bias frame from the rest
-#    reduce.subtractBias(frames)
-#    #find flat field files and write a list of flats
-#    flats = reduce.findFlats()
-#    #combines the flats
-#    combflat = reduce.makeFlat()
-#    #normalize the combined flat
-#    norm = reduce.normalizeFlat(filename='flatima.fits')
-#    #find Neon arcs
-#    arcs = reduce.findNes()
-#    #finds science frames
-#    science = reduce.findScienceFrames()
-#    #flat field science frames and arcs
-#    reduce.divideWithFlat(arcs, flatFile='normim.fits')
-#    reduce.divideWithFlat(science, flatFile='normim.fits')

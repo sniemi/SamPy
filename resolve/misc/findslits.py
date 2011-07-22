@@ -499,8 +499,13 @@ def main(opts, args):
     automatic = opts.automatic
 
     #load images
-    img = PF.open(fitImage, ignore_missing_end=True)[0].data[0]
-    slitimage = PF.open(slit, ignore_missing_end=True)[0].data[0]
+    img = PF.open(fitImage, ignore_missing_end=True)[0].data
+    if img.shape[0] == 1:
+        img = img[0]
+    slitimage = PF.open(slit, ignore_missing_end=True)[0].data
+    if slitimage.shape[0] == 1:
+        slitimage = slitimage[0]
+
 
     if blur:
         img = m.blurImage(img, 4)
