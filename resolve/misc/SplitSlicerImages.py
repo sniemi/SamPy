@@ -1,5 +1,6 @@
 '''
-Splits image slicer fits files.
+Splits image slicer FITS files to separate file, one for each slice.
+Adds some information to the FITS header.
 
 :requires: pyFITS
 
@@ -7,6 +8,9 @@ Splits image slicer fits files.
 :contact: sniemi@unc.edu
 
 :version: 0.1
+
+:todo: Make a command line argument reader; file id and y cuts (y1 & y2)
+
 '''
 import glob as g
 import pyfits as pf
@@ -70,7 +74,7 @@ class SplitSlicerImages():
         return self.files
 
 
-    def splitFiles(self, filelist=None, ext=0, splity=[215, 456]):
+    def splitFiles(self, filelist=None, ext=0, splity=[215, 456], id='slice'):
         '''
         Splits all the FITS files in the filelist to three separate files
         one for each slicer.
@@ -78,6 +82,7 @@ class SplitSlicerImages():
         :param: fileslist, a list of files to be split
         :param: ext, extension of the fits file
         :param: splity, y pixel values for splitting
+        :param: id, name identifier for each slice
         '''
         if filelist == None:
             filelist = self.files
@@ -95,29 +100,50 @@ class SplitSlicerImages():
 
             for i, y in enumerate(splity):
                 if i == 0:
-                    out = name + '.slicer' + str(i + 1) + '.fits'
-                    prihdr.update('SLICER', i + 1)
+                    out = name + '.' + id + str(i + 1) + '.fits'
+                    prihdr.update('SLICE', i + 1, comment='int 1,2,3 describing the slice')
+                    prihdr.update('YCUT', '[0:%i)' %(y), comment='y coordinates of the cut')
                     pf.writeto(out, data[:y, :], prihdr, output_verify='ignore')
                     #make a note to the log
                     self.log.info('Writing file %s' % out)
                 elif i == 1:
-                    out = name + '.slicer' + str(i + 1) + '.fits'
-                    prihdr.update('SLICER', i + 1)
+                    out = name + '.' + id + str(i + 1) + '.fits'
+                    prihdr.update('SLICE', i + 1, comment='int 1,2,3 describing the slice')
+                    prihdr.update('YCUT', '[%i:%i)'% (splity[0], y), comment='y coordinates of the cut')
                     pf.writeto(out, data[splity[0]:y, :], prihdr, output_verify='ignore')
                     #make a note to the log
                     self.log.info('Writing file %s' % out)
 
             #the last slice
-            out = name + '.slicer3.fits'
-            prihdr.update('SLICER', 3)
+            out = name + '.' + id + '3.fits'
+            prihdr.update('SLICE', 3, comment='int 1,2,3 describing the slice')
+            prihdr.update('YCUT', '[%i:%i]' % (y, len(data[:,0])), comment='y coordinates of the cut')
             pf.writeto(out, data[y:, :], prihdr, output_verify='ignore')
             #make a log note
             self.log.info('Writing file %s' % out)
 
             fh.close()
 
+        self._outputFileLists()
+
+        
+    def _outputFileLists(self, idef=['slice1', 'slice2', 'slice3']):
+        '''
+        Generates file lists for each slice.
+
+        :note: this is poorly written...
+        '''
+        for id in idef:
+            out = id+'filelist'
+            fh = open(out, 'w')
+            for file in self.files:
+                tmp = file[:-4] + id
+                fh.write(tmp+'\n')
+            fh.close()
+            self.log.info('Writing %s' % out)
+
 
 if __name__ == '__main__':
     split = SplitSlicerImages()
-    split.findFiles(identifier='0248.Ne')
+    split.findFiles(identifier='ftbz*.Ne')
     split.splitFiles()
