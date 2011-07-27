@@ -128,7 +128,7 @@ class SOARReduction():
 
             if prihdr['OBSTYPE'] != 'COMP':
                 del self.NeFiles[i]
-                self.log.info('OBSTYPE of %s i not COMP, removed from Ne list' % (file))
+                self.log.info('OBSTYPE of {0:>s} i not COMP, removed from Ne list'.format(file))
             else:
                 out.write(file + '\n')
 

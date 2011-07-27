@@ -1,0 +1,202 @@
+'''
+Provices matching RAs and DECs.
+
+:requires: astLib.astCoords
+:require: NumPy
+
+'''
+import math
+import numpy as np
+import astLib.astCoords as astCoords
+
+DEG_PER_HR = 360. / 24.             # degrees per hour
+DEG_PER_MIN = DEG_PER_HR / 60.      # degrees per min
+DEG_PER_S = DEG_PER_MIN / 60.       # degrees per sec
+DEG_PER_AMIN = 1. / 60.             # degrees per arcmin
+DEG_PER_ASEC = DEG_PER_AMIN / 60.   # degrees per arcsec
+RAD_PER_DEG = math.pi / 180.             # radians per degree
+
+def match(ra1, dec1, ra2, dec2, tol, allmatches=False):
+    '''
+    match(ra1, dec1, ra2, dec2, tol)
+
+    Given two sets of numpy arrays of ra,dec and a tolerance tol
+    (float), returns an array of integers with the same length as the
+    first input array.  If integer > 0, it is the index of the closest
+    matching second array element within tol arcsec.  If -1, then there
+    was no matching ra/dec within tol arcsec.
+
+    if allmatches = True, then for each object in the first array,
+    return the index of everything in the second arrays within the
+    search tolerance, not just the closest match.
+
+    if seps = True, return the separations from each matching object as
+    well as the index.
+
+    Note to get the indices of objects in ra2, dec2 without a match, use
+
+    imatch = match(ra1, dec1, ra2, dec2, 2.)
+    inomatch = numpy.setdiff1d(np.arange(len(ra2)), set(imatch))
+
+    doctests:
+
+    >>> npts = 10
+    >>> ra1 = np.linspace(340, 341, npts)
+    >>> dec1 = np.linspace(20, 21, npts)
+    >>> ra2 = ra1 + (1.-2*np.random.random(npts)) * DEG_PER_ASEC
+    >>> dec2 = dec1 + (1.-2*np.random.random(npts)) * DEG_PER_ASEC
+    >>> match(ra1, dec1, ra2, dec2, 2.)
+    array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+    '''
+    from numpy.core.records import fromarrays
+
+    ra1, ra2, dec1, dec2 = map(np.asarray, (ra1, ra2, dec1, dec2))
+
+    isorted = ra2.argsort()
+    sdec2 = dec2[isorted]
+    sra2 = ra2[isorted]
+
+    LIM = tol * DEG_PER_ASEC
+
+    match = []
+
+    #this is faster but less accurate
+    # use mean dec, assumes decs similar
+    #decav = np.mean(sdec2.mean() + dec1.mean())
+    #RA_LIM = LIM / np.cos(decav * RAD_PER_DEG)
+
+    for ra, dec in zip(ra1, dec1):
+        #slower but more accurate
+        RA_LIM = LIM / np.cos(dec * RAD_PER_DEG)
+        i1 = sra2.searchsorted(ra - RA_LIM)
+        #i2 = sra2.searchsorted(ra + RA_LIM)
+        i2 = i1 + sra2[i1:].searchsorted(ra + RA_LIM)
+        #print i1,i2
+        close = []
+        for j in xrange(i1, i2):
+            decdist = np.abs(dec - sdec2[j])
+            if decdist > LIM:
+                continue
+            else:
+                # if ras and decs are within LIM, then
+                # calculate actual separation
+                disq = astCoords.calcAngSepDeg(ra, dec, sra2[j], sdec2[j])
+                close.append((disq, j))
+
+        close.sort()
+        if not allmatches:
+            # Choose the object with the closest separation inside the
+            # requested tolerance, if one was found.
+            if len(close) > 0:
+                min_dist, jmin = close[0]
+                if min_dist < LIM:
+                    match.append((isorted[jmin], min_dist))
+                    continue
+                # otherwise no match
+            match.append((-1, -1))
+        else:
+            # append all the matching objects
+            jclose = []
+            seps = []
+            for dist, j in close:
+                if dist < LIM:
+                    jclose.append(j)
+                    seps.append(dist)
+                else:
+                    break
+            match.append(fromarrays([isorted[jclose], seps],
+                                                           dtype=[('ind', 'i8'), ('sep', 'f8')]))
+
+    if not allmatches:
+        # return both indices and separations in a recarray
+        temp = np.rec.fromrecords(match, names='ind,sep')
+        # change to arcseconds
+        temp.sep *= 3600.
+        temp.sep[temp.sep < 0] = -1.
+        return temp
+    else:
+        return match
+
+
+def indmatch(ra1, dec1, ra2, dec2, tol):
+    '''
+    Finds objects in ra1, dec1 that have a matching object in ra2,dec2
+    within tol arcsec.
+
+    Returns i1, i2 where i1 are indices into ra1,dec1 that have
+    matches, and i2 are the indices into ra2, dec2 giving the matching
+    objects.
+    '''
+    m = match(ra1, dec1, ra2, dec2, tol)
+    c = m.ind > -1
+    i1 = c.nonzero()[0]
+    i2 = m.ind[c]
+    return i1, i2
+
+
+def unique_radec(ra, dec, tol):
+    """ Find unique ras and decs in a list of coordinates.
+
+    RA and Dec must be array sof the same length, and in degrees.
+
+    tol is the tolerance for matching in arcsec. Any coord separated by
+    less that this amount are assumed to be the same.
+
+    Returns two arrays.  The first is an array of indices giving the
+    first occurence of a unique coordinate in the input list.  The
+    second is a list giving the indices of all coords that were
+    matched to a given unique coord.
+
+    The matching algorithm is confusing, but hopefully correct and not too
+    slow. Potential for improvement...
+
+    Example
+    -------
+
+    >>> ra,dec = np.loadtxt('radec.txt.gz', unpack=1)
+    >>> iunique, iextra = unique_radec(ra,dec,2)
+    >>> iknown, extraknown = np.loadtxt('radec_known.txt.gz', unpack=1)
+    >>> np.allclose(iunique, iknown)
+    >>> np.allclose(iextra, extraknown)
+    """
+    matches = match(ra, dec, ra, dec, tol, allmatches=True)
+    imatchflat = []
+    for m in matches:
+        imatchflat.extend(m.ind)
+        #pdb.set_trace()
+    inomatch = np.setdiff1d(np.arange(len(ra)), list(set(imatchflat)))
+
+    assert len(inomatch) == 0
+    # Indices giving unique ra, decs
+    iunique = []
+    # Will be same length as iunique. Gives all indices in original
+    # coords that are matched to each unique coord.
+    iextras = []
+    assigned = set()
+    for j, m in enumerate(matches):
+        if not (j % 1000):
+            print j
+            # get the lowest index in this group
+        isort = sorted(m.ind)
+        ilow = isort[0]
+        if ilow not in assigned:
+            iunique.append(ilow)
+            assigned.add(ilow)
+            iextras.append([ilow])
+            # assign any extra indices to this unique coord.
+            for i in isort[1:]:
+                # check not already been assigned to another coord
+                if i not in assigned:
+                    iextras[-1].append(i)
+                    assigned.add(i)
+
+    return np.array(iunique), iextras
+
+
+def _test():
+    import doctest
+
+    doctest.testmod()
+
+if __name__ == "__main__":
+    _test()
