@@ -1,12 +1,17 @@
 '''
-Provices matching RAs and DECs.
+Provices matching for a list of RAs and DECs.
 
 :requires: astLib.astCoords
-:require: NumPy
+:requires: NumPy
 
+:author: Sami-Matias Niemi
+:contact: sniemi@unc.edu
+
+:version: 0.1
 '''
 import math
 import numpy as np
+from numpy.core.records import fromarrays
 import astLib.astCoords as astCoords
 
 DEG_PER_HR = 360. / 24.             # degrees per hour
@@ -18,8 +23,6 @@ RAD_PER_DEG = math.pi / 180.             # radians per degree
 
 def match(ra1, dec1, ra2, dec2, tol, allmatches=False):
     '''
-    match(ra1, dec1, ra2, dec2, tol)
-
     Given two sets of numpy arrays of ra,dec and a tolerance tol
     (float), returns an array of integers with the same length as the
     first input array.  If integer > 0, it is the index of the closest
@@ -30,27 +33,14 @@ def match(ra1, dec1, ra2, dec2, tol, allmatches=False):
     return the index of everything in the second arrays within the
     search tolerance, not just the closest match.
 
-    if seps = True, return the separations from each matching object as
-    well as the index.
+    :note: does not force one-to-one mapping
 
-    Note to get the indices of objects in ra2, dec2 without a match, use
-
+    Note to get the indices of objects in ra2, dec2 without a match:
     imatch = match(ra1, dec1, ra2, dec2, 2.)
     inomatch = numpy.setdiff1d(np.arange(len(ra2)), set(imatch))
-
-    doctests:
-
-    >>> npts = 10
-    >>> ra1 = np.linspace(340, 341, npts)
-    >>> dec1 = np.linspace(20, 21, npts)
-    >>> ra2 = ra1 + (1.-2*np.random.random(npts)) * DEG_PER_ASEC
-    >>> dec2 = dec1 + (1.-2*np.random.random(npts)) * DEG_PER_ASEC
-    >>> match(ra1, dec1, ra2, dec2, 2.)
-    array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
     '''
-    from numpy.core.records import fromarrays
 
-    ra1, ra2, dec1, dec2 = map(np.asarray, (ra1, ra2, dec1, dec2))
+    #ra1, ra2, dec1, dec2 = map(np.asarray, (ra1, ra2, dec1, dec2))
 
     isorted = ra2.argsort()
     sdec2 = dec2[isorted]
@@ -68,10 +58,9 @@ def match(ra1, dec1, ra2, dec2, tol, allmatches=False):
     for ra, dec in zip(ra1, dec1):
         #slower but more accurate
         RA_LIM = LIM / np.cos(dec * RAD_PER_DEG)
+        
         i1 = sra2.searchsorted(ra - RA_LIM)
-        #i2 = sra2.searchsorted(ra + RA_LIM)
         i2 = i1 + sra2[i1:].searchsorted(ra + RA_LIM)
-        #print i1,i2
         close = []
         for j in xrange(i1, i2):
             decdist = np.abs(dec - sdec2[j])
@@ -118,7 +107,7 @@ def match(ra1, dec1, ra2, dec2, tol, allmatches=False):
         return match
 
 
-def indmatch(ra1, dec1, ra2, dec2, tol):
+def indmatch(ra1, dec1, ra2, dec2, tol, one=True):
     '''
     Finds objects in ra1, dec1 that have a matching object in ra2,dec2
     within tol arcsec.
@@ -126,11 +115,32 @@ def indmatch(ra1, dec1, ra2, dec2, tol):
     Returns i1, i2 where i1 are indices into ra1,dec1 that have
     matches, and i2 are the indices into ra2, dec2 giving the matching
     objects.
+
+    :param: one, whether one-to-one mapping should be done
+
     '''
     m = match(ra1, dec1, ra2, dec2, tol)
     c = m.ind > -1
     i1 = c.nonzero()[0]
     i2 = m.ind[c]
+    if one:
+        dl = 0
+        # :todo: this is horribly written, shuold do better
+        for x in i2:
+            tmp = np.where(i2 == x)[0]
+            if len(tmp) > 1:
+                #found a duplicate
+                keeps = i1[tmp]
+                rm = i2[tmp][0]
+                dists = astCoords.calcAngSepDeg(ra2[rm], dec2[rm],
+                                                ra1[keeps], dec1[keeps])
+                smaller = np.argmin(dists)
+                delete = tmp[tmp != tmp[smaller]]
+                i1 = np.delete(i1 ,delete)
+                i2 = np.delete(i2, delete)
+                dl += len(delete)
+        print 'removed %i double matches, left the closest match' % dl
+
     return i1, i2
 
 
@@ -192,11 +202,3 @@ def unique_radec(ra, dec, tol):
 
     return np.array(iunique), iextras
 
-
-def _test():
-    import doctest
-
-    doctest.testmod()
-
-if __name__ == "__main__":
-    _test()
