@@ -1,3 +1,6 @@
+'''
+Plotting COS grating efficiency data
+'''
 import matplotlib
 matplotlib.rc('text', usetex = True)
 matplotlib.rc('xtick', labelsize = 9)
@@ -12,7 +15,8 @@ import datetime as D
 def fromJulian(j):
     '''
     Converts Julian Date to human readable format
-    @return: human readable date and time
+
+    :return: human readable date and time
     '''
     days = j - 2440587.5
     sec = days*86400.0

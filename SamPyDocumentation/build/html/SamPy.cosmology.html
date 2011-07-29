@@ -104,6 +104,7 @@
 </div>
 <div class="section" id="module-SamPy.cosmology.distances">
 <span id="distances-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">distances</span></tt> Module<a class="headerlink" href="#module-SamPy.cosmology.distances" title="Permalink to this headline">¶</a></h2>
+<p>Functions related cosmology such as diameter and proper motion distances.</p>
 <p>Plot some distance measures versus redshift and omega_M.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -111,8 +112,36 @@
 <tbody valign="top">
 <tr class="field"><th class="field-name">requires:</th><td class="field-body">CosmoloPy</td>
 </tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">cosmocalc</td>
+</tr>
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
 </tbody>
 </table>
+<dl class="function">
+<dt id="SamPy.cosmology.distances.getDiameterDistances">
+<tt class="descclassname">SamPy.cosmology.distances.</tt><tt class="descname">getDiameterDistances</tt><big>(</big><em>data</em>, <em>redshift=0</em><big>)</big><a class="headerlink" href="#SamPy.cosmology.distances.getDiameterDistances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates a diameter distance in kpc / arc seconds
+from data for all unique redshifts. The redshift
+keyword indicates the column of redshifts.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Requires :</th><td class="field-body">cosmocalc</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">data</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">redshift column</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">diameter distances</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">dictionary</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="function">
 <dt id="SamPy.cosmology.distances.plot_DA">
 <tt class="descclassname">SamPy.cosmology.distances.</tt><tt class="descname">plot_DA</tt><big>(</big><em>filename</em><big>)</big><a class="reference internal" href="_modules/SamPy/cosmology/distances.html#plot_DA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.cosmology.distances.plot_DA" title="Permalink to this definition">¶</a></dt>

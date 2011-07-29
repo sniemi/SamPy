@@ -1,13 +1,13 @@
-SamPy.astronomy.baryons
-=======================
+SamPy.astronomy.coord
+=====================
 
 .. currentmodule:: SamPy.astronomy
 
 
-:mod:`baryons` Module
+:mod:`coord` Module
 ---------------------
 
-.. automodule:: SamPy.astronomy.baryons
+.. automodule:: SamPy.astronomy.coord
     :members:
     :undoc-members:
     :show-inheritance:

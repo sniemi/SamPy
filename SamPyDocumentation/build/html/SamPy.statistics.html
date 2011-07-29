@@ -61,10 +61,7 @@
 <li><a class="reference internal" href="#">statistics Package</a><ul>
 <li><a class="reference internal" href="#module-SamPy.statistics.StatTool"><tt class="docutils literal"><span class="pre">StatTool</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-SamPy.statistics.StatTool2files"><tt class="docutils literal"><span class="pre">StatTool2files</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-SamPy.statistics.plot_ica_vs_pca"><tt class="docutils literal"><span class="pre">plot_ica_vs_pca</span></tt> Module</a><ul>
-<li><a class="reference internal" href="#fastica-on-2d-point-clouds">FastICA on 2D point clouds</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#plot-ica-vs-pca-module"><tt class="docutils literal"><span class="pre">plot_ica_vs_pca</span></tt> Module</a></li>
 </ul>
 </li>
 </ul>
@@ -153,29 +150,8 @@ This version uses two input files!</p>
 <dd></dd></dl>
 
 </div>
-<div class="section" id="module-SamPy.statistics.plot_ica_vs_pca">
-<span id="plot-ica-vs-pca-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">plot_ica_vs_pca</span></tt> Module<a class="headerlink" href="#module-SamPy.statistics.plot_ica_vs_pca" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="fastica-on-2d-point-clouds">
-<h3>FastICA on 2D point clouds<a class="headerlink" href="#fastica-on-2d-point-clouds" title="Permalink to this headline">¶</a></h3>
-<p>Illustrate visually the results of <em class="xref std std-ref">ICA</em> vs <em class="xref std std-ref">PCA</em> in the
-feature space.</p>
-<p>Representing ICA in the feature space gives the view of &#8216;geometric ICA&#8217;:
-ICA is an algorithm that finds directions in the feature space
-corresponding to projections with high non-Gaussianity. These directions
-need not be orthogonal in the original feature space, but they are
-orthogonal in the whitened feature space, in which all directions
-correspond to the same variance.</p>
-<p>PCA, on the other hand, finds orthogonal directions in the raw feature
-space that correspond to directions accoutning for maximum variance.</p>
-<p>Here we simulate independent sources using a highly non-Gaussian
-process, 2 student T with a low number of degrees of freedom (top left
-figure). We mix them to create observations (top right figure).
-In this raw observation space, directions identified by PCA are
-represented by green vectors. We represent the signal in the PCA space,
-after whitening by the variance corresponding to the PCA vectors (lower
-left). Running ICA corresponds to finding a rotation in this space to
-identify the directions of largest non-Gaussianity (lower right).</p>
-</div>
+<div class="section" id="plot-ica-vs-pca-module">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">plot_ica_vs_pca</span></tt> Module<a class="headerlink" href="#plot-ica-vs-pca-module" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 

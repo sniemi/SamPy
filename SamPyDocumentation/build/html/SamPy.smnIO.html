@@ -213,7 +213,7 @@ files.</p>
 <p>This file contains some helper functions to
 parse different data files.</p>
 <p>:author : Sami-Matias Niemi
-:contact : <a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a>
+:contact : <a class="reference external" href="mailto:sniemi&#37;&#52;&#48;unc&#46;edu">sniemi<span>&#64;</span>unc<span>&#46;</span>edu</a>
 :version : 0.1</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -221,9 +221,9 @@ parse different data files.</p>
 <tbody valign="top">
 <tr class="field"><th class="field-name">requires:</th><td class="field-body">NumPy</td>
 </tr>
-<tr class="field"><th class="field-name">requires:</th><td class="field-body">astronomy.basics</td>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">SamPy.astronomy.basics</td>
 </tr>
-<tr class="field"><th class="field-name">requires:</th><td class="field-body">smnIO.sexutils</td>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">SamPy.smnIO.sexutils</td>
 </tr>
 </tbody>
 </table>
@@ -250,6 +250,12 @@ small simulation is being processed.</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.smnIO.read.cPickledData">
+<tt class="descclassname">SamPy.smnIO.read.</tt><tt class="descname">cPickledData</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.read.cPickledData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads in cPickled data and returns it</p>
 </dd></dl>
 
 <dl class="function">
@@ -524,6 +530,21 @@ Except it doesn&#8217;t really, if we modified the individual columns...</p>
 </div>
 <div class="section" id="module-SamPy.smnIO.write">
 <span id="write-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">write</span></tt> Module<a class="headerlink" href="#module-SamPy.smnIO.write" title="Permalink to this headline">¶</a></h2>
+<p>This file contains functions that can be used to store data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="SamPy.smnIO.write.cPickleDumpDictionary">
+<tt class="descclassname">SamPy.smnIO.write.</tt><tt class="descname">cPickleDumpDictionary</tt><big>(</big><em>dictionary</em>, <em>output</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.write.cPickleDumpDictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dumps a dictionary of data to a cPickled file</p>
+</dd></dl>
+
 <dl class="function">
 <dt id="SamPy.smnIO.write.combineFiles">
 <tt class="descclassname">SamPy.smnIO.write.</tt><tt class="descname">combineFiles</tt><big>(</big><em>files</em>, <em>outputfile</em><big>)</big><a class="reference internal" href="_modules/SamPy/smnIO/write.html#combineFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.smnIO.write.combineFiles" title="Permalink to this definition">¶</a></dt>

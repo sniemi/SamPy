@@ -17,3 +17,10 @@ cos Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`reading` Module
+--------------------------
+
+.. automodule:: SamPy.cos.reading
+    :members:
+    :undoc-members:
+    :show-inheritance:

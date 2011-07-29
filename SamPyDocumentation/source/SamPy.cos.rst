@@ -1,10 +1,10 @@
 cos Package
 ===========
 
-:mod:`plot_GET` Module
-----------------------
+:mod:`COSNUVCalib` Module
+--------------------------
 
-.. automodule:: SamPy.cos.plot_GET
+.. automodule:: SamPy.cos.COSNUVCalib
     :members:
     :undoc-members:
     :show-inheritance:
@@ -17,3 +17,10 @@ cos Package
     :undoc-members:
     :show-inheritance:
 
+:mod:`reading` Module
+--------------------------
+
+.. automodule:: SamPy.cos.reading
+    :members:
+    :undoc-members:
+    :show-inheritance:

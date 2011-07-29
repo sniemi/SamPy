@@ -1,4 +1,6 @@
 '''
+Calculates pixels shifts between two COS NUV spectra.
+
 ABOUT:
 	This script can be used to determine the shift (in pixels) of one
 	spectrum with respect to another. The cross correlation between
