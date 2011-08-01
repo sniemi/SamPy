@@ -30,6 +30,8 @@ import pylab as P
 import numpy as np
 import matplotlib.patches as patches
 from matplotlib import cm
+import scipy.optimize as optimize
+import scipy.ndimage.interpolation as interpolation
 #SMN
 import SamPy.smnIO.write
 import SamPy.smnIO.read
@@ -232,19 +234,18 @@ def generateSlitImages(slits, output, type='.pdf'):
         P.close()
 
 
-def overPlotSlits(slits, image, output, type='.pdf', ext=0, logscale=True):
+def overPlotSlits(slits, imdata, output, type='.pdf', logscale=True):
     '''
     Overplot the slits 
     '''
-    imdata = PF.open(image, ignore_missing_end=True)[ext].data[0]
-
     fig = P.figure()
     b = P.gca()
     ax = fig.add_subplot(111)
 
     #show image
     if logscale:
-        ax.imshow(np.log10(imdata), origin='lower')
+        imdata[imdata > 0] = np.log10(imdata[imdata > 0])
+        ax.imshow(imdata, origin='lower')
     else:
         ax.imshow(imdata, origin='lower')
 
@@ -321,15 +322,61 @@ def chiSquare(model, obs):
     r = np.sum((obs - model) ** 2 / model)
     return r
 
+def fitfunct(x, y, directimage, slits):
+    #get data from direct image
+    dirdata=[]
+    for slit in slits:
+        d = directimage[slit['ymin'] + int(y):slit['ymax'] + 1 + int(y),
+                        slit['xmin'] + int(x):slit['xmax'] + 1 + int(x)]
+        dirdata.append(d)
+
+    obs = np.hstack((dirdata[0].ravel(),
+                     dirdata[1].ravel(),
+                     dirdata[2].ravel()))
+    obs /= np.max(obs)
+    return obs
+
+def errorf(params, directimage, slits, data):
+    return fitfunct(params[0], params[1], directimage, slits) - data
+
+def fitSlitsToDirectImageLSQ(slits, directimage, params = [-1, -1]):
+    '''
+    Uses scipy.optimize.leastsq
+    '''
+    #generates a model array from the slit values, takes into account potential
+    #throughput of a slit
+    data = np.hstack((slits[0]['values'].ravel() * slits[0]['throughput'],
+                      slits[1]['values'].ravel() * slits[1]['throughput'],
+                      slits[2]['values'].ravel() * slits[2]['throughput']))
+    data /= np.max(data)
+
+    p = optimize.leastsq(errorf,
+                         params,
+                         args=(directimage, slits, data),
+                         full_output=True,
+                         ftol=1e-18,
+                         xtol=1e-18)
+    return p
 
 def fitSlitsToDirectImage(slits, directimage,
                           xran=25, yran=25, step=1,
+                          rot=0.5, rotstep=0.02, rotation=True,
                           normalize='True', debug=True):
     '''
     Fits a slit image to a direct image.
     This functions does not collapse the slit image, but uses each pixel.
     By default the counts are normalized to a peak count, but this can
-    be controlled using the optionaly keyword normalize.
+    be controlled using the optional keyword normalize.
+
+    :param: slits
+    :param: directimage
+    :param: xran, +/- x-range to cover
+    :param: yran, +/- y-range to cover
+    :param: step, size of pixel steps in x and y
+    :param: rot, +/- rotation angle in degrees
+    :param: rotstep, step in degrees
+    :param: normalize, wheter slit and direct image values should be normalized or not
+    :param: debug, print debugging information
 
     :rtype: dictionary
     '''
@@ -345,32 +392,46 @@ def fitSlitsToDirectImage(slits, directimage,
 
     norm = len(model)
 
+    #generate rotations
+    if rotation:
+        rotations = np.arange(-rot, rot, rotstep)
+        rotations[(rotations < 1e-8) & (rotations > -1e-8)] = 0.0
+        #make a copy of the direct image
+        origimage = directimage.copy()
+    else:
+        rotations = [0,]
+
     out = []
-    #loop over a range of x and y positions around the nominal position and record x, y and chisquare
-    for x in range(-xran, xran, step):
-        for y in range(-yran, yran, step):
-            dirdata = []
-            #get data from direct image
-            for slit in slits:
-                data = directimage[slit['ymin'] + y:slit['ymax'] + 1 + y,
-                       slit['xmin'] + x:slit['xmax'] + 1 + x].copy()
-                dirdata.append(data)
+    #loop over a range of rotations,  x and y positions around the nominal position and record x, y and chisquare
+    for r in rotations:
+        if rotation:
+            directimage = interpolation.rotate(origimage, r)
+        for x in range(-xran, xran, step):
+            for y in range(-yran, yran, step):
+                dirdata = []
+                #get data from direct image
+                for slit in slits:
+                    data = directimage[slit['ymin'] + y:slit['ymax'] + 1 + y,
+                           slit['xmin'] + x:slit['xmax'] + 1 + x].copy()
+                    dirdata.append(data)
 
-            obs = np.hstack((dirdata[0].ravel(),
-                             dirdata[1].ravel(),
-                             dirdata[2].ravel()))
+                obs = np.hstack((dirdata[0].ravel(),
+                                 dirdata[1].ravel(),
+                                 dirdata[2].ravel()))
 
-            if normalize:
-                obs /= np.max(obs)
+                if normalize:
+                    obs /= np.max(obs)
 
-            chisq = chiSquare(model, obs)
-            out.append([x, y, chisq, chisq / norm])
+                chisq = chiSquare(model, obs)
+                out.append([r, x, y, chisq, chisq / norm])
 
-            if debug:
-                print x, y, chisq, chisq / norm
+                if debug:
+                    print r, x, y, chisq, chisq / norm
 
     #return dictionary
     r = {}
+    r['rot'] = r
+    r['rotation_step'] = rotstep
     r['xran'] = xran
     r['yran'] = yran
     r['model'] = model
@@ -396,9 +457,9 @@ def plotMinimalization(data, output='minim', type='.png'):
     d = data['output']
     #begin image
     P.figure()
-    P.scatter(d[:, 0],
-              d[:, 1],
-              c=1. / np.log10(d[:, 2]),
+    P.scatter(d[:, 1],
+              d[:, 2],
+              c=1. / np.log10(d[:, 3]),
               s=55,
               cmap=cm.get_cmap('jet'),
               edgecolor='none',
@@ -412,7 +473,7 @@ def plotMinimalization(data, output='minim', type='.png'):
 
     #second figure
     P.figure()
-    P.scatter(d[:, 0], d[:, 3], s=2)
+    P.scatter(d[:, 1], d[:, 3], s=2)
     P.xlim(-data['xran'], data['xran'])
     P.xlabel('X [pixels]')
     P.ylabel('$\chi^{2}$')
@@ -421,7 +482,7 @@ def plotMinimalization(data, output='minim', type='.png'):
 
     #second figure
     P.figure()
-    P.scatter(d[:, 1], d[:, 3], s=2)
+    P.scatter(d[:, 2], d[:, 3], s=2)
     P.xlim(-data['yran'], data['yran'])
     P.xlabel('Y [pixels]')
     P.ylabel('$\chi^{2}$')
@@ -433,12 +494,12 @@ def outputMinima(inputfile, slitfile, slitpos, data, output='min.txt', stdout=Tr
     '''
     Outputs the results to a file and also the screen if stdout = True.
     '''
-    tmp = data['output'][np.argmin(data['output'][:, 2]), :]
-    str = '{0:>s}\t{1:>s}\t{2:>s}\t{3:.0f}\t{4:.0f}\t{5:.1f}'.format(inputfile, slitfile, slitpos, tmp[0], tmp[1], tmp[2])
+    tmp = data['output'][np.argmin(data['output'][:, 3]), :]
+    str = '{0:>s}\t{1:>s}\t{2:>s}\t{3:.1f}\t{4:.0f}\t{5:.0f}\t{6:.1f}'.format(inputfile, slitfile, slitpos, tmp[0], tmp[1], tmp[2], tmp[3])
 
     #to screen
     if stdout:
-        print '\n\ndirect image    slit image    slit pos \t\t x \t y \t chi**2'
+        print '\n\ndirect image    slit image    slit pos \t\t rot \t x \t y \t chi**2'
         print str
 
     #to file
@@ -534,10 +595,14 @@ def main(opts, args):
     #slits = SamPy.smnIO.read.cPickledData('slits.pk')
 
     #generates diagnostic plots and writes the slit positions for DS9 inspection
-    overPlotSlits(slits, fitImage, 'overplottedLog')
+    overPlotSlits(slits, img, 'overplottedLog')
+
+    #a = fitSlitsToDirectImageLSQ(slits, img)
+    #print a
+    #import sys; sys.exit()
 
     #find the chisqr minimum and make a diagnostic plot
-    minimals = fitSlitsToDirectImage(slits, img, xran=100, yran=100, step=1)
+    minimals = fitSlitsToDirectImage(slits, img, xran=40, yran=40, step=1)
     plotMinimalization(minimals)
 
     #output some info

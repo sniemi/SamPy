@@ -57,14 +57,16 @@ class SplineFitting:
         Function that is fitted.
         This can be changed to whatever function.
         Note that ynodes can then be a list of parameters.
-        @return: 1-D B-spline value at each x.
+
+        :return: 1-D B-spline value at each x.
         '''
         return I.splev(x, I.splrep(self.xnodes, ynodes, k = self.k))
 
     def errfunc(self, ynodes, x, y):
         '''
         Error function.
-        @return: fit - ydata
+
+        :return: fit - ydata
         '''
         return self.fitfunc(x, ynodes) - y
 
@@ -73,7 +75,8 @@ class SplineFitting:
         Return the point which minimizes the sum of squares of M (non-linear)
         equations in N unknowns given a starting estimate, x0, using a
         modification of the Levenberg-Marquardt algorithm.
-        @return: fitted parameters, error/success message
+
+        :return: fitted parameters, error/success message
         '''
         return O.leastsq(self.errfunc, ynodes, args=(x, y))
     
