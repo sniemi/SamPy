@@ -70,16 +70,13 @@
           <div class="body">
             
   <h1>Source code for SamPy.stis.STISCCDImagingFlats</h1><div class="highlight"><pre>
-<span class="c">#! /usr/bin/env python</span>
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">ABOUT:</span>
 <span class="sd">Plots ratios between STIS CCD imaging flats.</span>
 
-<span class="sd">DEPENDS:</span>
-<span class="sd">Python 2.5 or later (no 3.x compatible)</span>
-<span class="sd">NumPy</span>
-<span class="sd">PyFITS</span>
-<span class="sd">matplotlib</span>
+<span class="sd">:requires: NumPy</span>
+<span class="sd">:requires: PyFITS</span>
+<span class="sd">:requires: matplotlib</span>
 
 <span class="sd">TESTED:</span>
 <span class="sd">Python 2.5.1</span>
@@ -87,13 +84,11 @@
 <span class="sd">PyFITS: 2.2.2</span>
 <span class="sd">matplotlib 1.0.svn</span>
 
-<span class="sd">HISTORY:</span>
-<span class="sd">Created on November 18, 2009</span>
+<span class="sd">:date: Created on November 18, 2009</span>
 
-<span class="sd">VERSION:</span>
-<span class="sd">0.15: test release (SMN)</span>
+<span class="sd">:version: 0.15: test release (SMN)</span>
 
-<span class="sd">@author: Sami-Matias Niemi (niemi@stsci.edu)</span>
+<span class="sd">:author: Sami-Matias Niemi (niemi@stsci.edu)</span>
 <span class="sd">&#39;&#39;&#39;</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Sami-Matias Niemi&#39;</span>
@@ -126,7 +121,8 @@
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculates some basic image statistics from </span>
 <span class="sd">    two images given.</span>
-<span class="sd">    @return: ratio, image1 mean, image1 std, ratio mean</span>
+<span class="sd">    </span>
+<span class="sd">    :return: ratio, image1 mean, image1 std, ratio mean</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">ratio</span> <span class="o">=</span> <span class="p">(</span><span class="n">im1</span> <span class="o">*</span> <span class="n">scale</span><span class="p">)</span> <span class="o">/</span> <span class="n">im2</span>
     <span class="n">ratiosub</span> <span class="o">=</span> <span class="n">ratio</span><span class="p">[</span><span class="mi">500</span><span class="p">:</span><span class="mi">600</span><span class="p">,</span><span class="mi">500</span><span class="p">:</span><span class="mi">600</span><span class="p">]</span>
@@ -289,7 +285,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
-    <link rel="up" title="SamPy.astronomy" href="../astronomy.html" /> 
+    <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body>
 
@@ -42,8 +42,7 @@
         <li><a href="../../../index.html">home</a>|&nbsp;</li>
         <li><a href="../../../search.html">search</a>|&nbsp;</li>
 
-          <li><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li><a href="../astronomy.html" accesskey="U">SamPy.astronomy</a> &raquo;</li> 
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -74,13 +73,13 @@
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">Some functions for astronomy related unit conversions.</span>
 
-<span class="sd">@requires: NumPy</span>
-<span class="sd">@requires: cosmocalc (http://cxc.harvard.edu/contrib/cosmocalc/)</span>
+<span class="sd">:requires: NumPy</span>
+<span class="sd">:requires: cosmocalc (http://cxc.harvard.edu/contrib/cosmocalc/)</span>
 
-<span class="sd">@version: 0.11</span>
+<span class="sd">:version: 0.11</span>
 
-<span class="sd">@author: Sami Niemi</span>
-<span class="sd">@contact: niemi@stsci.edu</span>
+<span class="sd">:author: Sami Niemi</span>
+<span class="sd">:contact: niemi@stsci.edu</span>
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">cosmocalc</span> <span class="kn">import</span> <span class="n">cosmocalc</span>
@@ -88,26 +87,34 @@
 <div class="viewcode-block" id="janskyToMagnitude"><a class="viewcode-back" href="../../../SamPy.astronomy.conversions.html#SamPy.astronomy.conversions.janskyToMagnitude">[docs]</a><span class="k">def</span> <span class="nf">janskyToMagnitude</span><span class="p">(</span><span class="n">jansky</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Converts Janskys to AB magnitudes.</span>
-<span class="sd">    @note: Can be used with SQLite3 database.</span>
-<span class="sd">    @param jansky: can either be a number or a NumPy array</span>
-<span class="sd">    @return: either a float or NumPy array</span>
+
+<span class="sd">    :note: Can be used with SQLite3 database.</span>
+
+<span class="sd">    :param jansky: can either be a number or a NumPy array</span>
+
+<span class="sd">    :return: either a float or NumPy array</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="mf">8.9</span> <span class="o">-</span> <span class="mf">2.5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">jansky</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="ABMagnitudeToJansky"><a class="viewcode-back" href="../../../SamPy.astronomy.conversions.html#SamPy.astronomy.conversions.ABMagnitudeToJansky">[docs]</a><span class="k">def</span> <span class="nf">ABMagnitudeToJansky</span><span class="p">(</span><span class="n">ABmagnitude</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Converts AB magnitudes to Janskys.</span>
-<span class="sd">    @note: Can be used with SQLite3 database.</span>
-<span class="sd">    @param ABmagnitude: can be either a number or a NumPy array</span>
-<span class="sd">    @return: either a float or NumPy array </span>
+
+<span class="sd">    :note: Can be used with SQLite3 database.</span>
+
+<span class="sd">    :param ABmagnitude: can be either a number or a NumPy array</span>
+
+<span class="sd">    :return: either a float or NumPy array</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="mi">10</span><span class="o">**</span><span class="p">((</span><span class="mf">23.9</span> <span class="o">-</span> <span class="n">ABmagnitude</span><span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span><span class="o">/</span><span class="mf">1e6</span>
 </div>
 <div class="viewcode-block" id="arcminSquaredToSteradians"><a class="viewcode-back" href="../../../SamPy.astronomy.conversions.html#SamPy.astronomy.conversions.arcminSquaredToSteradians">[docs]</a><span class="k">def</span> <span class="nf">arcminSquaredToSteradians</span><span class="p">(</span><span class="n">arcmin2</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Converts arcmin**2 to steradians.</span>
-<span class="sd">    @param arcmin2: arcmin**2</span>
-<span class="sd">    @return: steradians </span>
+
+<span class="sd">    :param arcmin2: arcmin**2</span>
+
+<span class="sd">    :return: steradians</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="n">arcmin2</span> <span class="o">/</span> <span class="p">((</span><span class="mi">180</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
 </div>
@@ -117,8 +124,10 @@
 <span class="sd">    Calls arcminSqauredToSteradians to</span>
 <span class="sd">    convert arcmin**2 to steradians and</span>
 <span class="sd">    then divides this with 4pi.</span>
-<span class="sd">    @param arcmin2: arcmin**2 </span>
-<span class="sd">    @return: solid angle</span>
+
+<span class="sd">    :param arcmin2: arcmin**2</span>
+
+<span class="sd">    :return: solid angle</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="n">arcminSquaredToSteradians</span><span class="p">(</span><span class="n">arcmin2</span><span class="p">)</span> <span class="o">/</span> <span class="mf">4.</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
 </div>
@@ -127,12 +136,14 @@
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculates the comoving volume between two redshifts when</span>
 <span class="sd">    the sky survey has covered arcmin**2 region.</span>
-<span class="sd">    @param arcmin2: area on the sky in arcmin**2</span>
-<span class="sd">    @param zmin: redshift of the front part of the volume</span>
-<span class="sd">    @param zmax: redshift of the back part of the volume</span>
-<span class="sd">    @param H0: Value of the Hubble constant</span>
-<span class="sd">    @param WM: Value of the mass density     </span>
-<span class="sd">    @return: comoving volume between zmin and zmax of arcmin2</span>
+
+<span class="sd">    :param arcmin2: area on the sky in arcmin**2</span>
+<span class="sd">    :param zmin: redshift of the front part of the volume</span>
+<span class="sd">    :param zmax: redshift of the back part of the volume</span>
+<span class="sd">    :param H0: Value of the Hubble constant</span>
+<span class="sd">    :param WM: Value of the mass density</span>
+
+<span class="sd">    :return: comoving volume between zmin and zmax of arcmin2</span>
 <span class="sd">            solid angle in Mpc**3</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">front</span> <span class="o">=</span> <span class="n">cosmocalc</span><span class="p">(</span><span class="n">zmin</span><span class="p">,</span> <span class="n">H0</span><span class="p">,</span> <span class="n">WM</span><span class="p">)[</span><span class="s">&#39;VCM_Gpc3&#39;</span><span class="p">]</span>
@@ -143,8 +154,10 @@
 <div class="viewcode-block" id="Luminosity"><a class="viewcode-back" href="../../../SamPy.astronomy.conversions.html#SamPy.astronomy.conversions.Luminosity">[docs]</a><span class="k">def</span> <span class="nf">Luminosity</span><span class="p">(</span><span class="n">abs_mag</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Converts AB magnitudes to luminosities in L_sun</span>
-<span class="sd">    @param abs_mag: AB magnitude of the object</span>
-<span class="sd">    @return: luminosity </span>
+
+<span class="sd">    :param abs_mag: AB magnitude of the object</span>
+
+<span class="sd">    :return: luminosity</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">return</span> <span class="mf">10.0</span><span class="o">**</span><span class="p">((</span><span class="mf">4.85</span><span class="o">-</span><span class="n">abs_mag</span><span class="p">)</span><span class="o">/</span><span class="mf">2.5</span><span class="p">)</span>
 </div>
@@ -165,13 +178,13 @@
     <span class="sd">&#39;&#39;&#39;                                                                                                             </span>
 <span class="sd">    Converts a mag_AB value at a wavelength to f_lambda                                                              </span>
 <span class="sd">                                                                                                                     </span>
-<span class="sd">    @param flambda: mag_AB value                                                                                     </span>
-<span class="sd">    @type flambda: float                                                                                             </span>
-<span class="sd">    @param wlength: wavelength value [nm]                                                                            </span>
-<span class="sd">    @type wlength: float                                                                                             </span>
+<span class="sd">    :param flambda: mag_AB value</span>
+<span class="sd">    :type flambda: float</span>
+<span class="sd">    :param wlength: wavelength value [nm]</span>
+<span class="sd">    :type wlength: float</span>
 <span class="sd">                                                                                                                     </span>
-<span class="sd">    @return: the mag_AB value                                                                                        </span>
-<span class="sd">    @rtype: float                                                                                                    </span>
+<span class="sd">    :return: the mag_AB value</span>
+<span class="sd">    :rtype: float</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="kn">import</span> <span class="nn">math</span>
 
@@ -200,6 +213,7 @@
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Converts Spherical coordiantes to Cartesian.</span>
 <span class="sd">    Returns a dictionary.</span>
+<span class="sd">    http://mathworld.wolfram.com/SphericalCoordinates.html</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
@@ -220,6 +234,7 @@
 <span class="sd">    ra = atan2(xi, cos(dec0)-eta*sin(dec0)) + ra0</span>
 <span class="sd">    dec = atan2(eta*cos(dec0)+sin(dec0),</span>
 <span class="sd">                sqrt((cos(dec0)-eta*sin(dec0))**2 + xi**2))</span>
+
 <span class="sd">    :param data (dictionary): should contain standard coordinates X, Y,</span>
 <span class="sd">    RA and DEC of the centre point, and the CD matrix.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -304,13 +319,12 @@
         <li><a href="../../../index.html">home</a>|&nbsp;</li>
         <li><a href="../../../search.html">search</a>|&nbsp;</li>
 
-          <li><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li><a href="../astronomy.html" >SamPy.astronomy</a> &raquo;</li> 
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

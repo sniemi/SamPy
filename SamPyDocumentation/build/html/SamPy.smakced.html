@@ -59,8 +59,8 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">smakced Package</a><ul>
-<li><a class="reference internal" href="#getsmackeddata-module"><tt class="docutils literal"><span class="pre">getSmackedData</span></tt> Module</a></li>
-<li><a class="reference internal" href="#getsmackeddatanonumpy-module"><tt class="docutils literal"><span class="pre">getSmackedDataNoNumpy</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.smakced.getSmackedData"><tt class="docutils literal"><span class="pre">getSmackedData</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.smakced.getSmackedDataNoNumpy"><tt class="docutils literal"><span class="pre">getSmackedDataNoNumpy</span></tt> Module</a></li>
 </ul>
 </li>
 </ul>
@@ -99,11 +99,186 @@
             
   <div class="section" id="smakced-package">
 <h1>smakced Package<a class="headerlink" href="#smakced-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="getsmackeddata-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">getSmackedData</span></tt> Module<a class="headerlink" href="#getsmackeddata-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.smakced.getSmackedData">
+<span id="getsmackeddata-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">getSmackedData</span></tt> Module<a class="headerlink" href="#module-SamPy.smakced.getSmackedData" title="Permalink to this headline">¶</a></h2>
+<p>Pulls out data from the SMAKCED wiki page
+and parses it into a NumPy array, which is
+easy to sort and manipulate.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">NumPy</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">BeautifulSoup</td>
+</tr>
+<tr class="field"><th class="field-name">date:</th><td class="field-body">Created on Mar 26, 2010</td>
+</tr>
+<tr class="field"><th class="field-name">version:</th><td class="field-body">0.1</td>
+</tr>
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="SamPy.smakced.getSmackedData.Smakced">
+<em class="property">class </em><tt class="descclassname">SamPy.smakced.getSmackedData.</tt><tt class="descname">Smakced</tt><big>(</big><em>url</em>, <em>table</em><big>)</big><a class="reference internal" href="_modules/SamPy/smakced/getSmackedData.html#Smakced"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.smakced.getSmackedData.Smakced" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Class related to SMAKCED collaboration wiki page.</p>
+<dl class="method">
+<dt id="SamPy.smakced.getSmackedData.Smakced.getData">
+<tt class="descname">getData</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/smakced/getSmackedData.html#Smakced.getData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.smakced.getSmackedData.Smakced.getData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve data from the SMAKCED web page.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">retrieved raw data</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.smakced.getSmackedData.Smakced.parseTable">
+<tt class="descname">parseTable</tt><big>(</big><em>data</em><big>)</big><a class="reference internal" href="_modules/SamPy/smakced/getSmackedData.html#Smakced.parseTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.smakced.getSmackedData.Smakced.parseTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses html table data using BeautifulSoup.
+Note that table number has been hard coded.
+The SMAKCED wiki page returns several &#8220;tables&#8221;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> &#8211; data that has been retrieved with the getData method</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">array containing table entries</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.smakced.getSmackedData.Smakced.writeToFile">
+<tt class="descname">writeToFile</tt><big>(</big><em>data</em>, <em>output</em><big>)</big><a class="reference internal" href="_modules/SamPy/smakced/getSmackedData.html#Smakced.writeToFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.smakced.getSmackedData.Smakced.writeToFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes an html page that contains tables to a file
+in ascii format.
+Uses BeautifulSoup for parsing tables.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Note :</th><td class="field-body"><p class="first">This method is untested.</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> &#8211; data that has been retrieved with</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>the getData method
+:param output: name of the output file</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="getsmackeddatanonumpy-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">getSmackedDataNoNumpy</span></tt> Module<a class="headerlink" href="#getsmackeddatanonumpy-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.smakced.getSmackedDataNoNumpy">
+<span id="getsmackeddatanonumpy-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">getSmackedDataNoNumpy</span></tt> Module<a class="headerlink" href="#module-SamPy.smakced.getSmackedDataNoNumpy" title="Permalink to this headline">¶</a></h2>
+<p>Pulls out data from the SMAKCED wiki page
+and parses it into an array that is simple
+to manipulate and output.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">BeautifulSoup</td>
+</tr>
+</tbody>
+</table>
+<p>HISTORY:
+Created on Mar 26, 2010 (version 0.1)
+Removed NumPy dependency April 2, 2010 (version 0.2)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">version:</th><td class="field-body">0.2</td>
+</tr>
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="SamPy.smakced.getSmackedDataNoNumpy.Smakced">
+<em class="property">class </em><tt class="descclassname">SamPy.smakced.getSmackedDataNoNumpy.</tt><tt class="descname">Smakced</tt><big>(</big><em>url</em>, <em>table</em><big>)</big><a class="reference internal" href="_modules/SamPy/smakced/getSmackedDataNoNumpy.html#Smakced"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.smakced.getSmackedDataNoNumpy.Smakced" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Class related to SMAKCED collaboration wiki page.</p>
+<dl class="method">
+<dt id="SamPy.smakced.getSmackedDataNoNumpy.Smakced.getData">
+<tt class="descname">getData</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/smakced/getSmackedDataNoNumpy.html#Smakced.getData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.smakced.getSmackedDataNoNumpy.Smakced.getData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve data from the SMAKCED web page.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">retrieved raw data</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.smakced.getSmackedDataNoNumpy.Smakced.parseTable">
+<tt class="descname">parseTable</tt><big>(</big><em>data</em><big>)</big><a class="reference internal" href="_modules/SamPy/smakced/getSmackedDataNoNumpy.html#Smakced.parseTable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.smakced.getSmackedDataNoNumpy.Smakced.parseTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses html table data using BeautifulSoup.
+Note that table number has been hard coded.
+The SMAKCED wiki page returns several &#8220;tables&#8221;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> &#8211; data that has been retrieved with the getData method</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">array containing table entries</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.smakced.getSmackedDataNoNumpy.Smakced.writeToFile">
+<tt class="descname">writeToFile</tt><big>(</big><em>data</em>, <em>output</em><big>)</big><a class="reference internal" href="_modules/SamPy/smakced/getSmackedDataNoNumpy.html#Smakced.writeToFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.smakced.getSmackedDataNoNumpy.Smakced.writeToFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes an html page that contains tables to a file
+in ascii format.
+Uses BeautifulSoup for parsing tables.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Note :</th><td class="field-body"><p class="first">This method is untested.</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>data</strong> &#8211; data that has been retrieved with</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>the getData method
+:param output: name of the output file</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 
@@ -136,7 +311,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

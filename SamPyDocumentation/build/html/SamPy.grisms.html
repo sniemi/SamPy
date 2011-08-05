@@ -59,9 +59,9 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">grisms Package</a><ul>
-<li><a class="reference internal" href="#extract-splitless-module"><tt class="docutils literal"><span class="pre">extract_splitless</span></tt> Module</a></li>
-<li><a class="reference internal" href="#generateassociationdb-module"><tt class="docutils literal"><span class="pre">generateAssociationDB</span></tt> Module</a></li>
-<li><a class="reference internal" href="#overplot-sextractor-module"><tt class="docutils literal"><span class="pre">overplot_sextractor</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.grisms.extract_splitless"><tt class="docutils literal"><span class="pre">extract_splitless</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.grisms.generateAssociationDB"><tt class="docutils literal"><span class="pre">generateAssociationDB</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.grisms.overplot_sextractor"><tt class="docutils literal"><span class="pre">overplot_sextractor</span></tt> Module</a></li>
 <li><a class="reference internal" href="#prepare-slitless-module"><tt class="docutils literal"><span class="pre">prepare_slitless</span></tt> Module</a></li>
 </ul>
 </li>
@@ -101,14 +101,142 @@
             
   <div class="section" id="grisms-package">
 <h1>grisms Package<a class="headerlink" href="#grisms-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="extract-splitless-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">extract_splitless</span></tt> Module<a class="headerlink" href="#extract-splitless-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.grisms.extract_splitless">
+<span id="extract-splitless-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">extract_splitless</span></tt> Module<a class="headerlink" href="#module-SamPy.grisms.extract_splitless" title="Permalink to this headline">¶</a></h2>
+<p>This script can be used to run aXe.</p>
+<dl class="function">
+<dt id="SamPy.grisms.extract_splitless.generate_input_image_list">
+<tt class="descclassname">SamPy.grisms.extract_splitless.</tt><tt class="descname">generate_input_image_list</tt><big>(</big><em>filter</em>, <em>grism</em><big>)</big><a class="reference internal" href="_modules/SamPy/grisms/extract_splitless.html#generate_input_image_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.grisms.extract_splitless.generate_input_image_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format : [name of grism image] [object catalogue] [name of direct image]
+&#64;todo: this is not robust and may find wrong images!!! Should be redone!</p>
+</dd></dl>
+
 </div>
-<div class="section" id="generateassociationdb-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">generateAssociationDB</span></tt> Module<a class="headerlink" href="#generateassociationdb-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.grisms.generateAssociationDB">
+<span id="generateassociationdb-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">generateAssociationDB</span></tt> Module<a class="headerlink" href="#module-SamPy.grisms.generateAssociationDB" title="Permalink to this headline">¶</a></h2>
+<p>This little script can be used to generate a cPickled
+association database that is in the format that the PHLAG
+grism pipeline developed by ECF will understand.</p>
+<p>The script looks all FITS files in the current working
+directory and tries to generate the association database
+by matching direct images to grism images. Note that the
+matching algorithm is extremely limited and works only if
+the direct images and grism images have the same RA or DEC.
+Thus, the script is only suitable for the test that will
+be carried out in April 2011, as for this test all the
+datasets have been hand picked.</p>
+<p>This script should not be used unless its limitations
+have been understood!</p>
+<dl class="function">
+<dt id="SamPy.grisms.generateAssociationDB.createAssociationDB">
+<tt class="descclassname">SamPy.grisms.generateAssociationDB.</tt><tt class="descname">createAssociationDB</tt><big>(</big><em>grism</em>, <em>direct</em>, <em>match</em>, <em>output='ACSTEST.db'</em><big>)</big><a class="reference internal" href="_modules/SamPy/grisms/generateAssociationDB.html#createAssociationDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.grisms.generateAssociationDB.createAssociationDB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Email from Martin Kuemmel concerning the format:</p>
+<ul class="simple">
+<li>Each association (see listing below contains two main entries, the
+first entry (a list)  containing information on the grism images and
+the second a dictionary) containing direct imaging information.</li>
+<li>The grism image information is a list, which each entry consisting of
+a tuple with four items. The first item is the name of the grism
+image, the second item is the exposure time of the grism image,
+the third item is the name of the associated direct image and the
+fourth item a real number measuring the &#8216;distance&#8217; between the grism
+image and the direct image. Very close pairs of grism image - direct
+image have a distance of 0.0. I think there is a very complicated
+formula that measures this distance, however the most important input
+is the pointing on the sky. If a grism and a direct image have the
+same pointing on the sky, they are very close. Also the time
+difference between the direct image and the grism image has some
+influence.</li>
+<li>The direct image information is a dictionary that contains the filter
+names as keys. For each filter there is a list of tuples with three
+items. The first item is the direct image name, the second item is
+the exposure time and the third item is the overlap with the area covered
+by the grism images of that association. For some reason (I have forgotten),
+this overlap can be more than 1.</li>
+</ul>
+<p>So the two &#8216;dir_min_overlap&#8217; that you quote are two different values,
+the first one measuring the distance between the grism image and the
+closest associated direct image (from all possible associated direct
+images, the closest one is chosen), and the second one measuring the
+area overlap with all grism images.</p>
+<p>We did have algorithms and formulas to compute these numbers, but in
+the end it was always some sort of magic with Alberto Micol and Marco
+Lombardi the magicians. I asked Alberto, but he was rather involved in
+NICMOS, and Marco is really far away now, his account at ESO does no
+longer exists and his old computer (standing in front of me) needed a
+new disk some weeks ago.</p>
+<p>So I guess that we can not offer much support on this. In any case,
+WFC3 is a different instrument with 2 complementary grisms and
+different prescriptions for taking associated direct imaging and hence
+a different basis of how data is taken.</p>
+<p>Hope this helped,
+Martin</p>
+<p>([(&#8216;J6FL8YKUQ&#8217;, 764.0, &#8216;J6FL8YKRQ&#8217;, 0.0),
+(&#8216;J6FL8YKWQ&#8217;, 764.0, &#8216;J6FL8YKRQ&#8217;, 0.0),
+(&#8216;J6FL8YKYQ&#8217;, 764.0, &#8216;J6FL8YKRQ&#8217;, 0.0),
+(&#8216;J6FL8YL0Q&#8217;, 764.0, &#8216;J6FL8YKRQ&#8217;, 0.0),
+(&#8216;J6FL8YL2Q&#8217;, 764.0, &#8216;J6FL8YKRQ&#8217;, 0.0),
+(&#8216;J6FL8YL4Q&#8217;, 764.0, &#8216;J6FL8YKRQ&#8217;, 0.0),
+(&#8216;J6FL8YL6Q&#8217;, 764.0, &#8216;J6FL8YKRQ&#8217;, 0.0),
+(&#8216;J6FL8YL8Q&#8217;, 764.0, &#8216;J6FL8YKRQ&#8217;, 0.0)],
+{&#8216;F850LP&#8217;:
+[(&#8216;J8WQ91E8Q&#8217;, 500.0, 0.89063763040941479),
+(&#8216;J8WQ91EAQ&#8217;, 500.0, 0.89063763040941479),
+(&#8216;J8WQ91ECQ&#8217;, 500.0, 0.89063763040941479),
+(&#8216;J6FL7YIDQ&#8217;, 500.0, 0.97062910394576651),
+(&#8216;J6FL8YKRQ&#8217;, 500.0, 1.011511942107943),
+(&#8216;J8WQ91E7Q&#8217;, 500.0, 0.89063763040941479)]})</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.grisms.generateAssociationDB.findGrismImages">
+<tt class="descclassname">SamPy.grisms.generateAssociationDB.</tt><tt class="descname">findGrismImages</tt><big>(</big><em>filelist</em><big>)</big><a class="reference internal" href="_modules/SamPy/grisms/generateAssociationDB.html#findGrismImages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.grisms.generateAssociationDB.findGrismImages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds all direct and grism images from a
+given filelist. Will pull out some information
+such as exposure time and filter from the header.
+Will also record RA and DEC, this could potentially
+be used to calculate the overlap and is currently
+used to match images later.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.grisms.generateAssociationDB.makeDirectImageDictionary">
+<tt class="descclassname">SamPy.grisms.generateAssociationDB.</tt><tt class="descname">makeDirectImageDictionary</tt><big>(</big><em>direct</em>, <em>match</em><big>)</big><a class="reference internal" href="_modules/SamPy/grisms/generateAssociationDB.html#makeDirectImageDictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.grisms.generateAssociationDB.makeDirectImageDictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a dictionary from the direct image information.
+This dictionary is in the format that ECF used to make
+their association db, so it is more or less ready to be
+pickled. For details, see the comment in createAssociationDB.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.grisms.generateAssociationDB.makeGrismImageList">
+<tt class="descclassname">SamPy.grisms.generateAssociationDB.</tt><tt class="descname">makeGrismImageList</tt><big>(</big><em>grism</em>, <em>match</em><big>)</big><a class="reference internal" href="_modules/SamPy/grisms/generateAssociationDB.html#makeGrismImageList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.grisms.generateAssociationDB.makeGrismImageList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a list of grism images. This list is in the
+format that ECF used to make their association db, so it
+is more or less ready to be pickled. For details,
+see the comment in createAssociationDB.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.grisms.generateAssociationDB.matchDirectImageToGrismImage">
+<tt class="descclassname">SamPy.grisms.generateAssociationDB.</tt><tt class="descname">matchDirectImageToGrismImage</tt><big>(</big><em>direct</em>, <em>grism</em><big>)</big><a class="reference internal" href="_modules/SamPy/grisms/generateAssociationDB.html#matchDirectImageToGrismImage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.grisms.generateAssociationDB.matchDirectImageToGrismImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Matches direct images to grism images in an extremely
+dummy way. Will just check that either RA or DEC are
+equal. This can potentially lead to crazy results as
+it does not guarantee that there is overlap. Moreover,
+if one has applied a tiny offset to the grism image to
+for example account for the fact that the dispersion
+is always towards the same direction, then this matching
+would fail. One should probably use some header keyword
+information such as POSTARGs together with the RA and DEC
+to find the closest matches. However, for the testing
+that will be performed in April 2011 this dummy way of
+matching should be sufficient.</p>
+</dd></dl>
+
 </div>
-<div class="section" id="overplot-sextractor-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">overplot_sextractor</span></tt> Module<a class="headerlink" href="#overplot-sextractor-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.grisms.overplot_sextractor">
+<span id="overplot-sextractor-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">overplot_sextractor</span></tt> Module<a class="headerlink" href="#module-SamPy.grisms.overplot_sextractor" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="prepare-slitless-module">
 <h2><tt class="xref py py-mod docutils literal"><span class="pre">prepare_slitless</span></tt> Module<a class="headerlink" href="#prepare-slitless-module" title="Permalink to this headline">¶</a></h2>
@@ -144,7 +272,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

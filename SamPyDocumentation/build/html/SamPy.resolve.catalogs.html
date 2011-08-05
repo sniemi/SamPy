@@ -49,7 +49,7 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">SamPy.resolve.catalogs</a><ul>
-<li><a class="reference internal" href="#createsqlite-module"><tt class="docutils literal"><span class="pre">createSQLite</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.resolve.catalogs.createSQLite"><tt class="docutils literal"><span class="pre">createSQLite</span></tt> Module</a></li>
 </ul>
 </li>
 </ul>
@@ -82,8 +82,42 @@
             
   <div class="section" id="sampy-resolve-catalogs">
 <h1>SamPy.resolve.catalogs<a class="headerlink" href="#sampy-resolve-catalogs" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="createsqlite-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">createSQLite</span></tt> Module<a class="headerlink" href="#createsqlite-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.resolve.catalogs.createSQLite">
+<span id="createsqlite-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">createSQLite</span></tt> Module<a class="headerlink" href="#module-SamPy.resolve.catalogs.createSQLite" title="Permalink to this headline">¶</a></h2>
+<p>This module contains a function that can be used to
+generate an SQLite3 database from ascii files.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:sniemi&#37;&#52;&#48;unc&#46;edu">sniemi<span>&#64;</span>unc<span>&#46;</span>edu</a></td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="SamPy.resolve.catalogs.createSQLite.generateSQLiteDBfromASCII">
+<tt class="descclassname">SamPy.resolve.catalogs.createSQLite.</tt><tt class="descname">generateSQLiteDBfromASCII</tt><big>(</big><em>output='catalogs.db'</em>, <em>fileidentifier='*.txt'</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/catalogs/createSQLite.html#generateSQLiteDBfromASCII"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.catalogs.createSQLite.generateSQLiteDBfromASCII" title="Permalink to this definition">¶</a></dt>
+<dd><p>The script will make a table out from each ascii
+output file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">output: name of the output file</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">fileidentifier: string how to identify input data</td>
+</tr>
+<tr class="field"><th class="field-name">Dtype output:</th><td class="field-body">string</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">Dtype fileidentifier:</th></tr>
+<tr><td>&nbsp;</td><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 </div>
 
@@ -109,7 +143,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

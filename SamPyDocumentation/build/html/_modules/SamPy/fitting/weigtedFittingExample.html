@@ -69,52 +69,52 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <h1>Source code for SamPy.fitting.weigtedFittingExample</h1><pre>
-from scipy.optimize.minpack import curve_fit
-import numpy as np
-from numpy.random import rand
-import pylab
+  <h1>Source code for SamPy.fitting.weigtedFittingExample</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">scipy.optimize.minpack</span> <span class="kn">import</span> <span class="n">curve_fit</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy.random</span> <span class="kn">import</span> <span class="n">rand</span>
+<span class="kn">import</span> <span class="nn">pylab</span>
 
-<div class="viewcode-block" id="first_order"><a class="viewcode-back" href="../../../SamPy.fitting.html#SamPy.fitting.weigtedFittingExample.first_order">[docs]</a>def first_order(x, a0, a1):
-    return a0 + a1 * x</div>
-<div class="viewcode-block" id="second_order"><a class="viewcode-back" href="../../../SamPy.fitting.html#SamPy.fitting.weigtedFittingExample.second_order">[docs]</a>def second_order(x, a0, a1, a2):
-    return a0 + a1 * x + a2 * (x**2)</div>
-<div class="viewcode-block" id="third_order"><a class="viewcode-back" href="../../../SamPy.fitting.html#SamPy.fitting.weigtedFittingExample.third_order">[docs]</a>def third_order(x, a0, a1, a2, a3):
-    return a0 + a1 * x + a2 * (x**2) + a3 * (x**3)
+<div class="viewcode-block" id="first_order"><a class="viewcode-back" href="../../../SamPy.fitting.html#SamPy.fitting.weigtedFittingExample.first_order">[docs]</a><span class="k">def</span> <span class="nf">first_order</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">a1</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a0</span> <span class="o">+</span> <span class="n">a1</span> <span class="o">*</span> <span class="n">x</span></div>
+<div class="viewcode-block" id="second_order"><a class="viewcode-back" href="../../../SamPy.fitting.html#SamPy.fitting.weigtedFittingExample.second_order">[docs]</a><span class="k">def</span> <span class="nf">second_order</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a0</span> <span class="o">+</span> <span class="n">a1</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">a2</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span></div>
+<div class="viewcode-block" id="third_order"><a class="viewcode-back" href="../../../SamPy.fitting.html#SamPy.fitting.weigtedFittingExample.third_order">[docs]</a><span class="k">def</span> <span class="nf">third_order</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">a3</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">a0</span> <span class="o">+</span> <span class="n">a1</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">a2</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">a3</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span>
 </div>
-if __name__ == '__main__':
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
 
-    #Make data
-    x = np.arange(10)
-    y = x**3 + 2.0*x**2+ 3.0*x + 4.0
-    l1 = pylab.plot(x, y, 'b')
-    #Introduce scatter
-    scatter = (rand(10) - 0.5) * 1e2
-    scatter[1] *= 2.1
-    scatter[5] *= 2.5
-    scatter[7] *= 0.01
-    print scatter
-    ys = y+scatter
-    #Make weight
-    weight = scatter
+    <span class="c">#Make data</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">x</span><span class="o">**</span><span class="mi">3</span> <span class="o">+</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span><span class="o">+</span> <span class="mf">3.0</span><span class="o">*</span><span class="n">x</span> <span class="o">+</span> <span class="mf">4.0</span>
+    <span class="n">l1</span> <span class="o">=</span> <span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">)</span>
+    <span class="c">#Introduce scatter</span>
+    <span class="n">scatter</span> <span class="o">=</span> <span class="p">(</span><span class="n">rand</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1e2</span>
+    <span class="n">scatter</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">2.1</span>
+    <span class="n">scatter</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">2.5</span>
+    <span class="n">scatter</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">0.01</span>
+    <span class="k">print</span> <span class="n">scatter</span>
+    <span class="n">ys</span> <span class="o">=</span> <span class="n">y</span><span class="o">+</span><span class="n">scatter</span>
+    <span class="c">#Make weight</span>
+    <span class="n">weight</span> <span class="o">=</span> <span class="n">scatter</span>
 
-    #Fit without weighting
-    popt, pcov = curve_fit(third_order, x, ys)
-    #Fit with weighting
-    popt1, pcov1 = curve_fit(third_order, x, ys, sigma = weight)
-    yfit = third_order(x, popt[0], popt[1], popt[2], popt[3])
-    yfit1 = third_order(x, popt1[0], popt1[1], popt1[2], popt1[3])
-    l2 = pylab.errorbar(x, ys, yerr = scatter, fmt = 'go')
-    l3 = pylab.plot(x, yfit, linestyle = '--', color = 'r')
-    l4 = pylab.plot(x, yfit1, linestyle = '--', color = 'c')
-    pylab.legend((l1, l2[0], l3, l4),
-                 ('Starting Data', 'Scattered Data', 'Unweighted', 'Weighted'), loc= 'best')
+    <span class="c">#Fit without weighting</span>
+    <span class="n">popt</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">third_order</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">ys</span><span class="p">)</span>
+    <span class="c">#Fit with weighting</span>
+    <span class="n">popt1</span><span class="p">,</span> <span class="n">pcov1</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">third_order</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">sigma</span> <span class="o">=</span> <span class="n">weight</span><span class="p">)</span>
+    <span class="n">yfit</span> <span class="o">=</span> <span class="n">third_order</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">popt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">popt</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">popt</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">popt</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="n">yfit1</span> <span class="o">=</span> <span class="n">third_order</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">popt1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">popt1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">popt1</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">popt1</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+    <span class="n">l2</span> <span class="o">=</span> <span class="n">pylab</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">yerr</span> <span class="o">=</span> <span class="n">scatter</span><span class="p">,</span> <span class="n">fmt</span> <span class="o">=</span> <span class="s">&#39;go&#39;</span><span class="p">)</span>
+    <span class="n">l3</span> <span class="o">=</span> <span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">yfit</span><span class="p">,</span> <span class="n">linestyle</span> <span class="o">=</span> <span class="s">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">l4</span> <span class="o">=</span> <span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">yfit1</span><span class="p">,</span> <span class="n">linestyle</span> <span class="o">=</span> <span class="s">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&#39;c&#39;</span><span class="p">)</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="n">l1</span><span class="p">,</span> <span class="n">l2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">l3</span><span class="p">,</span> <span class="n">l4</span><span class="p">),</span>
+                 <span class="p">(</span><span class="s">&#39;Starting Data&#39;</span><span class="p">,</span> <span class="s">&#39;Scattered Data&#39;</span><span class="p">,</span> <span class="s">&#39;Unweighted&#39;</span><span class="p">,</span> <span class="s">&#39;Weighted&#39;</span><span class="p">),</span> <span class="n">loc</span><span class="o">=</span> <span class="s">&#39;best&#39;</span><span class="p">)</span>
 
-    pylab.xlim(-0.1, 10.3)
-    pylab.show()
+    <span class="n">pylab</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">10.3</span><span class="p">)</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
-    #raw_input('Enter')
-</pre>
+    <span class="c">#raw_input(&#39;Enter&#39;)</span>
+</pre></div>
 
           </div>
         </div>
@@ -138,7 +138,7 @@ if __name__ == '__main__':
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

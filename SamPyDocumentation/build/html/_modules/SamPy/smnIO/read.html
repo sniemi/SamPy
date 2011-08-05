@@ -71,18 +71,24 @@
             
   <h1>Source code for SamPy.smnIO.read</h1><div class="highlight"><pre>
 <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Reading Data</span>
+<span class="sd">============</span>
+
 <span class="sd">This file contains some helper functions to</span>
 <span class="sd">parse different data files.</span>
 
 <span class="sd">:author : Sami-Matias Niemi</span>
-<span class="sd">:contact : niemi@stsci.edu</span>
+<span class="sd">:contact : sniemi@unc.edu</span>
 <span class="sd">:version : 0.1</span>
 
 <span class="sd">:requires: NumPy</span>
+<span class="sd">:requires: SamPy.astronomy.basics</span>
+<span class="sd">:requires: SamPy.smnIO.sexutils</span>
 <span class="sd">&#39;&#39;&#39;</span>
-<span class="kn">import</span> <span class="nn">smnIO.sextutils</span> <span class="kn">as</span> <span class="nn">su</span>
-<span class="kn">import</span> <span class="nn">astronomy.basics</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">N</span>
+<span class="kn">import</span> <span class="nn">SamPy.smnIO.sextutils</span> <span class="kn">as</span> <span class="nn">su</span>
+<span class="kn">import</span> <span class="nn">SamPy.astronomy.basics</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">cPickle</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Sami-Matias Niemi&#39;</span>
 
@@ -91,10 +97,17 @@
 <span class="sd">    This little helper function can be used to read</span>
 <span class="sd">    dark matter halo masses from files produced from</span>
 <span class="sd">    the merger trees of the Bolshoi simulation.</span>
-<span class="sd">    :param filename (string): name of the file</span>
-<span class="sd">    :param column (int): which column to grep</span>
-<span class="sd">    :param no_phantoms (boolean): wchich dark matter mass to read</span>
-<span class="sd">    :return: NumPy array of dark matter halo masses</span>
+
+<span class="sd">    :param filename: name of the file</span>
+<span class="sd">    :param column: which column to grep</span>
+<span class="sd">    :param no_phantoms: which dark matter mass to read</span>
+
+<span class="sd">    :type filename: string</span>
+<span class="sd">    :type column: int</span>
+<span class="sd">    :type no_phantoms: boolean</span>
+
+<span class="sd">    :return: dark matter halo masses</span>
+<span class="sd">    :rtype: NumPy array</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
@@ -106,7 +119,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="n">column</span><span class="p">]))</span>
         <span class="n">line</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">N</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
 
 </div>
 <div class="viewcode-block" id="GFBasicData"><a class="viewcode-back" href="../../../SamPy.smnIO.html#SamPy.smnIO.read.GFBasicData">[docs]</a><span class="k">def</span> <span class="nf">GFBasicData</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">AB</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
@@ -114,9 +127,17 @@
 <span class="sd">    Reads Rachel&#39;s SAMs output data.</span>
 <span class="sd">    If AB = True then the function converts</span>
 <span class="sd">    Johnson U, B, V, and K bands to Vega system.</span>
-<span class="sd">    :param path (string): path in which the files are located</span>
-<span class="sd">    :param AB (boolean): whether Johnson U, B, V, and K bands</span>
-<span class="sd">    are converted to Vega system or not.</span>
+
+<span class="sd">    :note: This is really ineffective way of reading in</span>
+<span class="sd">           data and should be used only when a rather</span>
+<span class="sd">           small simulation is being processed.</span>
+
+<span class="sd">    :param path: path in which the files are located</span>
+<span class="sd">    :param AB: whether Johnson U, B, V, and K bands are converted to Vega system or not.</span>
+
+<span class="sd">    :type path: string</span>
+<span class="sd">    :type AB: boolean</span>
+
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">AB</span> <span class="o">=</span> <span class="n">astronomy</span><span class="o">.</span><span class="n">basics</span><span class="o">.</span><span class="n">JohnsonToABmagnitudes</span><span class="p">()</span>
 
@@ -152,7 +173,16 @@
         <span class="n">gdust</span><span class="o">.</span><span class="n">vj</span> <span class="o">=</span> <span class="n">gdust</span><span class="o">.</span><span class="n">vj</span> <span class="o">-</span> <span class="n">AB_vega_V</span>
         <span class="n">gdust</span><span class="o">.</span><span class="n">j</span> <span class="o">=</span> <span class="n">gdust</span><span class="o">.</span><span class="n">k</span> <span class="o">-</span> <span class="n">AB_vega_K</span>
 
-    <span class="k">return</span> <span class="n">g</span><span class="p">,</span> <span class="n">gdust</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">h</span></div>
+    <span class="k">return</span> <span class="n">g</span><span class="p">,</span> <span class="n">gdust</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">h</span>
+
+</div>
+<div class="viewcode-block" id="cPickledData"><a class="viewcode-back" href="../../../SamPy.smnIO.html#SamPy.smnIO.read.cPickledData">[docs]</a><span class="k">def</span> <span class="nf">cPickledData</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Reads in cPickled data and returns it</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">inp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">cPickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">inp</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span></div>
 </pre></div>
 
           </div>
@@ -177,7 +207,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

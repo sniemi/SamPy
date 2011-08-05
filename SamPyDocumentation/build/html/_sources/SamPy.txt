@@ -30,5 +30,5 @@ Subpackages
     SamPy.smnIO
     SamPy.statistics
     SamPy.stis
+    SamPy.resolve
     SamPy.wrapper
-

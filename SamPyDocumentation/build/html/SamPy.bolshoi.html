@@ -24,7 +24,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
     <link rel="up" title="SamPy Package" href="SamPy.html" />
-    <link rel="next" title="candels Package" href="SamPy.candels.html" /> 
+    <link rel="next" title="candels Package" href="SamPy.candels.html" />
+    <link rel="prev" title="SamPy.astronomy.stellarMFs" href="SamPy.astronomy.stellarMFs.html" /> 
   </head>
   <body>
 
@@ -43,6 +44,9 @@
         <li class="right" >
           <a href="SamPy.candels.html" title="candels Package"
              accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.stellarMFs.html" title="SamPy.astronomy.stellarMFs"
+             accesskey="P">previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
 
@@ -58,7 +62,7 @@
 <li><a class="reference internal" href="#collecthalomasses-module"><tt class="docutils literal"><span class="pre">collecthalomasses</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-SamPy.bolshoi.collecthalomassesThreading"><tt class="docutils literal"><span class="pre">collecthalomassesThreading</span></tt> Module</a></li>
 <li><a class="reference internal" href="#findredshiftsbolshoitrees-module"><tt class="docutils literal"><span class="pre">findRedshiftsBolshoiTrees</span></tt> Module</a></li>
-<li><a class="reference internal" href="#generatetestplots-module"><tt class="docutils literal"><span class="pre">generateTestPlots</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.bolshoi.generateTestPlots"><tt class="docutils literal"><span class="pre">generateTestPlots</span></tt> Module</a></li>
 <li><a class="reference internal" href="#plotmassratios-module"><tt class="docutils literal"><span class="pre">plotMassRatios</span></tt> Module</a></li>
 <li><a class="reference internal" href="#plotdarkmattermf-module"><tt class="docutils literal"><span class="pre">plotdarkmattermf</span></tt> Module</a></li>
 <li><a class="reference internal" href="#plotstellarmf-module"><tt class="docutils literal"><span class="pre">plotstellarmf</span></tt> Module</a></li>
@@ -67,6 +71,9 @@
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.astronomy.stellarMFs.html"
+                        title="previous chapter">SamPy.astronomy.stellarMFs</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="SamPy.candels.html"
                         title="next chapter">candels Package</a></p>
@@ -160,8 +167,96 @@ The filename will contain the output <em>redshift</em></p>
 <div class="section" id="findredshiftsbolshoitrees-module">
 <h2><tt class="xref py py-mod docutils literal"><span class="pre">findRedshiftsBolshoiTrees</span></tt> Module<a class="headerlink" href="#findredshiftsbolshoitrees-module" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="generatetestplots-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">generateTestPlots</span></tt> Module<a class="headerlink" href="#generatetestplots-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.bolshoi.generateTestPlots">
+<span id="generatetestplots-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">generateTestPlots</span></tt> Module<a class="headerlink" href="#module-SamPy.bolshoi.generateTestPlots" title="Permalink to this headline">¶</a></h2>
+<p>This script can be used to generate some basic plots
+from Rachel&#8217;s SAM. In these plots comparisons to
+observational constrains are also performed.</p>
+<p>:author : Sami-Matias Niemi
+:contact : <a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a></p>
+<dl class="function">
+<dt id="SamPy.bolshoi.generateTestPlots.fix">
+<tt class="descclassname">SamPy.bolshoi.generateTestPlots.</tt><tt class="descname">fix</tt><big>(</big><em>x</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/generateTestPlots.html#fix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.generateTestPlots.fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>IDL function.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.bolshoi.generateTestPlots.fstar_plot">
+<tt class="descclassname">SamPy.bolshoi.generateTestPlots.</tt><tt class="descname">fstar_plot</tt><big>(</big><em>prop</em>, <em>output='fstar.png'</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/generateTestPlots.html#fstar_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.generateTestPlots.fstar_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stellar mass to halo mass ratio as a function of halo mass.
+This plot differs slightly from the one in the Somerville 2008:
+the plot in the paper is the fraction of baryons in stars.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.bolshoi.generateTestPlots.gasfrac_hess">
+<tt class="descclassname">SamPy.bolshoi.generateTestPlots.</tt><tt class="descname">gasfrac_hess</tt><big>(</big><em>mstar</em>, <em>fgas</em>, <em>weight</em>, <em>label</em>, <em>output</em>, <em>mmin=8.5</em>, <em>mmax=11.7</em>, <em>nmbins=16</em>, <em>fgasmin=0.0</em>, <em>fgasmax=1.0</em>, <em>nfbins=10</em>, <em>pmax=1.0</em>, <em>pmin=0.01</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/generateTestPlots.html#gasfrac_hess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.generateTestPlots.gasfrac_hess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot _conditional_ distribution of gas fraction vs. stellar mass.
+Ported from an IDL code, should be cleaned.
+Most likely N.zeros are not needed</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.bolshoi.generateTestPlots.gasfrac_sam_cent">
+<tt class="descclassname">SamPy.bolshoi.generateTestPlots.</tt><tt class="descname">gasfrac_sam_cent</tt><big>(</big><em>halos</em>, <em>prop</em>, <em>label='Bolshoi'</em>, <em>output='fgascentral'</em>, <em>tpy='.pdf'</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/generateTestPlots.html#gasfrac_sam_cent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.generateTestPlots.gasfrac_sam_cent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.bolshoi.generateTestPlots.main">
+<tt class="descclassname">SamPy.bolshoi.generateTestPlots.</tt><tt class="descname">main</tt><big>(</big><em>path</em>, <em>label</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/generateTestPlots.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.generateTestPlots.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Driver function, call this with a path to the data,
+and label you wish to use for the files.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.bolshoi.generateTestPlots.massfunc_plot">
+<tt class="descclassname">SamPy.bolshoi.generateTestPlots.</tt><tt class="descname">massfunc_plot</tt><big>(</big><em>halos</em>, <em>props</em>, <em>mmax=12.5</em>, <em>mmin=5.0</em>, <em>nbins=30</em>, <em>output='SMN'</em>, <em>nvolumes=15</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/generateTestPlots.html#massfunc_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.generateTestPlots.massfunc_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots stellar mass functions, cold gas mass functions, &amp; BH MF</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.bolshoi.generateTestPlots.massmet_hess">
+<tt class="descclassname">SamPy.bolshoi.generateTestPlots.</tt><tt class="descname">massmet_hess</tt><big>(</big><em>mstar</em>, <em>met</em>, <em>weight</em>, <em>obs_data</em>, <em>output</em>, <em>mmin=8.8</em>, <em>mmax=12.4</em>, <em>nmbins=18</em>, <em>Zmin=-1.5</em>, <em>Zmax=1.0</em>, <em>nzbins=20</em>, <em>pmax=1.0</em>, <em>pmin=0.001</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/generateTestPlots.html#massmet_hess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.generateTestPlots.massmet_hess" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.bolshoi.generateTestPlots.massmet_star">
+<tt class="descclassname">SamPy.bolshoi.generateTestPlots.</tt><tt class="descname">massmet_star</tt><big>(</big><em>halos</em>, <em>g</em>, <em>p</em>, <em>obs_data</em>, <em>label</em>, <em>typ='.pdf'</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/generateTestPlots.html#massmet_star"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.generateTestPlots.massmet_star" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.bolshoi.generateTestPlots.mbh_hess">
+<tt class="descclassname">SamPy.bolshoi.generateTestPlots.</tt><tt class="descname">mbh_hess</tt><big>(</big><em>mbulge</em>, <em>mbh</em>, <em>weight</em>, <em>ymin</em>, <em>ymax</em>, <em>nybins</em>, <em>mbin_fit</em>, <em>mbh_fit</em>, <em>output</em>, <em>obs</em>, <em>mmin=8.0</em>, <em>mmax=12.0</em>, <em>nmbins=40</em>, <em>pmax=1.0</em>, <em>pmin=0.001</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/generateTestPlots.html#mbh_hess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.generateTestPlots.mbh_hess" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.bolshoi.generateTestPlots.mhb">
+<tt class="descclassname">SamPy.bolshoi.generateTestPlots.</tt><tt class="descname">mhb</tt><big>(</big><em>h</em>, <em>p</em>, <em>obs</em>, <em>label</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/generateTestPlots.html#mhb"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.generateTestPlots.mhb" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.bolshoi.generateTestPlots.perc_bin">
+<tt class="descclassname">SamPy.bolshoi.generateTestPlots.</tt><tt class="descname">perc_bin</tt><big>(</big><em>xbin</em>, <em>xdata</em>, <em>ydata</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/generateTestPlots.html#perc_bin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.generateTestPlots.perc_bin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute median and 16 and 8 percentiles of y-data in bins in x</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.bolshoi.generateTestPlots.ssfr_plot">
+<tt class="descclassname">SamPy.bolshoi.generateTestPlots.</tt><tt class="descname">ssfr_plot</tt><big>(</big><em>halos</em>, <em>prop</em>, <em>mask</em>, <em>output</em>, <em>typ='.pdf'</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/generateTestPlots.html#ssfr_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.generateTestPlots.ssfr_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specific starformation rate plots.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.bolshoi.generateTestPlots.ssfr_wrapper">
+<tt class="descclassname">SamPy.bolshoi.generateTestPlots.</tt><tt class="descname">ssfr_wrapper</tt><big>(</big><em>halos</em>, <em>prop</em>, <em>label</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/generateTestPlots.html#ssfr_wrapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.generateTestPlots.ssfr_wrapper" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.bolshoi.generateTestPlots.ssfrhess_sam">
+<tt class="descclassname">SamPy.bolshoi.generateTestPlots.</tt><tt class="descname">ssfrhess_sam</tt><big>(</big><em>mstar</em>, <em>ssfr</em>, <em>weight</em>, <em>output</em>, <em>mmin=9.027</em>, <em>dm=0.309</em>, <em>nmbins=11</em>, <em>ssfrmin=-13.0</em>, <em>ssfrmax=-8.5</em>, <em>nssfrbins=24</em>, <em>ssfr_cut=-11.1</em>, <em>pmax=0.5</em>, <em>pmin=1e-05</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/generateTestPlots.html#ssfrhess_sam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.generateTestPlots.ssfrhess_sam" title="Permalink to this definition">¶</a></dt>
+<dd><p>log ssfr in yr</p>
+</dd></dl>
+
 </div>
 <div class="section" id="plotmassratios-module">
 <h2><tt class="xref py py-mod docutils literal"><span class="pre">plotMassRatios</span></tt> Module<a class="headerlink" href="#plotmassratios-module" title="Permalink to this headline">¶</a></h2>
@@ -195,6 +290,9 @@ The filename will contain the output <em>redshift</em></p>
         <li class="right" >
           <a href="SamPy.candels.html" title="candels Package"
              >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.stellarMFs.html" title="SamPy.astronomy.stellarMFs"
+             >previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
 
@@ -203,7 +301,7 @@ The filename will contain the output <em>redshift</em></p>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

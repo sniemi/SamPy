@@ -70,17 +70,18 @@
           <div class="body">
             
   <h1>Source code for SamPy.fits.ShowHeader</h1><div class="highlight"><pre>
-<span class="c">#! /sw/bin/python</span>
 <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">Extremely simple script that can be used printing FITS headers.</span>
+<span class="sd">Extremely simple script that can be used to print FITS headers to stdout.</span>
 
 <span class="sd">Accepts wildcard in the name, but then the filename must be given inside quote marks</span>
 <span class="sd">i.e. &quot;*.fits&quot;</span>
 
-<span class="sd">Created on Mar 27, 2009</span>
-
-<span class="sd">@author: Sami-Matias Niemi for STScI</span>
+<span class="sd">:date: Mar 27, 2009</span>
+<span class="sd">:author: Sami-Matias Niemi</span>
+<span class="sd">:contact: sniemi@email.unc.edu</span>
 <span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">pyfits</span> <span class="kn">as</span> <span class="nn">PF</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Sami-Matias Niemi&#39;</span>
 <span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;1.0&#39;</span>
@@ -88,6 +89,13 @@
 <div class="viewcode-block" id="containsAny"><a class="viewcode-back" href="../../../SamPy.fits.html#SamPy.fits.ShowHeader.containsAny">[docs]</a><span class="k">def</span> <span class="nf">containsAny</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">set</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Checks if a given string contains any of the characters in a given set.</span>
+
+<span class="sd">    :param: str: input string</span>
+<span class="sd">    :type str: string</span>
+<span class="sd">    :param: set: set if characters</span>
+<span class="sd">    :type set: string</span>
+
+<span class="sd">    :rtype: boolean</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">:</span> <span class="k">return</span> <span class="bp">True</span>
@@ -96,50 +104,58 @@
 <div class="viewcode-block" id="containsAll"><a class="viewcode-back" href="../../../SamPy.fits.html#SamPy.fits.ShowHeader.containsAll">[docs]</a><span class="k">def</span> <span class="nf">containsAll</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">set</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Checks if a given string contains all characters in a given set.</span>
+
+<span class="sd">    :param: str: input string</span>
+<span class="sd">    :type: string</span>
+<span class="sd">    :param: set: set if characters</span>
+<span class="sd">    :type: string</span>
+
+<span class="sd">    :rtype: boolean</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">c</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">:</span> <span class="k">return</span> <span class="bp">False</span>
     <span class="k">return</span> <span class="bp">True</span>
 </div>
-<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
-    
-    <span class="kn">import</span> <span class="nn">sys</span>
-    
-    <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">pyfits</span> <span class="kn">as</span> <span class="nn">PF</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">No PyFits installed.. will exit</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
-    
-    <span class="n">filename</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
-    <span class="n">extension</span> <span class="o">=</span> <span class="mi">1</span>
-    
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">filename</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">extension</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">No header extension given, will print the first extension header of file: </span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">filename</span>
-        <span class="n">extension</span> <span class="o">=</span> <span class="mi">1</span>
-        
+<div class="viewcode-block" id="showHeader"><a class="viewcode-back" href="../../../SamPy.fits.html#SamPy.fits.ShowHeader.showHeader">[docs]</a><span class="k">def</span> <span class="nf">showHeader</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">extension</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Shows the FITS header of a given file.</span>
+
+<span class="sd">    :note: Ignores missing END, for non-standard FITS files.</span>
+
+<span class="sd">    :param filename: name of the file</span>
+<span class="sd">    :type filename: string</span>
+<span class="sd">    :param extension: number of the FITS extension</span>
+<span class="sd">    :type extension: integer</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">containsAny</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s">&#39;*&#39;</span><span class="p">):</span>
             <span class="k">print</span> <span class="s">&#39;A wildcard detected..</span><span class="se">\n</span><span class="s">&#39;</span>
             <span class="kn">import</span> <span class="nn">glob</span>
             <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
             <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
-                <span class="n">hdulist</span> <span class="o">=</span> <span class="n">PF</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+                <span class="n">hdulist</span> <span class="o">=</span> <span class="n">PF</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">ignore_missing_end</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
                 <span class="n">hd</span> <span class="o">=</span> <span class="n">hdulist</span><span class="p">[</span><span class="n">extension</span><span class="p">]</span><span class="o">.</span><span class="n">header</span>
                 <span class="n">hdulist</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
                 <span class="k">print</span> <span class="s">&#39;Header extension </span><span class="si">%i</span><span class="s"> of </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">extension</span><span class="p">,</span> <span class="nb">file</span><span class="p">)</span>
                 <span class="k">print</span> <span class="n">hd</span>
                 <span class="k">print</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">hdulist</span> <span class="o">=</span> <span class="n">PF</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="n">hdulist</span> <span class="o">=</span> <span class="n">PF</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">ignore_missing_end</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
             <span class="n">hd</span> <span class="o">=</span> <span class="n">hdulist</span><span class="p">[</span><span class="n">extension</span><span class="p">]</span><span class="o">.</span><span class="n">header</span>
             <span class="n">hdulist</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="k">print</span>
             <span class="k">print</span> <span class="n">hd</span>
     <span class="k">except</span><span class="p">:</span>
         <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">Error while opening file </span><span class="si">%s</span><span class="s"> and reading extensions </span><span class="si">%i</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">extension</span><span class="p">))</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">extension</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">No header extension given, will print the first extension header of file: </span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">filename</span>
+        <span class="n">extension</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">showHeader</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">extension</span><span class="p">)</span>
 </pre></div>
 
           </div>
@@ -164,7 +180,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

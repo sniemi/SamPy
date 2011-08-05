@@ -59,7 +59,7 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">sandbox Package</a><ul>
-<li><a class="reference internal" href="#mytools-module"><tt class="docutils literal"><span class="pre">MyTools</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.sandbox.MyTools"><tt class="docutils literal"><span class="pre">MyTools</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-SamPy.sandbox.simpleMultiprocessingExample"><tt class="docutils literal"><span class="pre">simpleMultiprocessingExample</span></tt> Module</a></li>
 </ul>
 </li>
@@ -99,8 +99,81 @@
             
   <div class="section" id="sandbox-package">
 <h1>sandbox Package<a class="headerlink" href="#sandbox-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="mytools-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">MyTools</span></tt> Module<a class="headerlink" href="#mytools-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.sandbox.MyTools">
+<span id="mytools-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">MyTools</span></tt> Module<a class="headerlink" href="#module-SamPy.sandbox.MyTools" title="Permalink to this headline">¶</a></h2>
+<p>&#64;requires: NumPy
+&#64;requires: SciPy
+&#64;requires: Pylab (at least 1.0.0)
+&#64;author: Carolin Villforth
+&#64;summary: A collection of General Useful Tools of all Trades</p>
+<dl class="class">
+<dt id="SamPy.sandbox.MyTools.AnaKDE">
+<em class="property">class </em><tt class="descclassname">SamPy.sandbox.MyTools.</tt><tt class="descname">AnaKDE</tt><big>(</big><em>input</em>, <em>InData=True</em>, <em>CFill=True</em>, <em>PlotData=False</em>, <em>levels=None</em><big>)</big><a class="reference internal" href="_modules/SamPy/sandbox/MyTools.html#AnaKDE"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.sandbox.MyTools.AnaKDE" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Tool for Analyzing Kernel Density Estimators (KDE)
+Interactive Plotting
+&#64;type input: data array/KDE
+&#64;type InData: True/False
+&#64;type CFill: True/False
+&#64;type PlotData: True/False
+&#64;type levels: None/List
+&#64;param input: Input Data, either a KDE or an array with the data.</p>
+<p>If data is input, InData needs to be set to True.</p>
+<p>If KDE is input, InData needs to be set to False.
+&#64;param InData: Defining Data Input Type (see input)
+&#64;param CFill: If True, filled contours will be plotted.</p>
+<p>If False, line contours will be plotted
+&#64;param PlotData: Overplot raw data points over contour?
+&#64;param levels: Define levels for contour plot (if None, pylab will create automatic levels)
+&#64;warning: This is not tested for nasty inputs!
+&#64;warning: No Exceptions are raised at any point
+&#64;todo: Create possibility for log-file output.</p>
+<dl class="method">
+<dt id="SamPy.sandbox.MyTools.AnaKDE.Info">
+<tt class="descname">Info</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/sandbox/MyTools.html#AnaKDE.Info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.sandbox.MyTools.AnaKDE.Info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints out all current parameters</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.sandbox.MyTools.AnaKDE.OpenInteractive">
+<tt class="descname">OpenInteractive</tt><big>(</big><em>sampling=100</em><big>)</big><a class="reference internal" href="_modules/SamPy/sandbox/MyTools.html#AnaKDE.OpenInteractive"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.sandbox.MyTools.AnaKDE.OpenInteractive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Opens an Interactive Window for Evaluating the KDE
+&#64;type sampling: int
+&#64;param sampling: sampling for vector extraction (OBSOLETE????)
+&#64;warning: Open Only after a Contour has been created!</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.sandbox.MyTools.AnaKDE.RePlot">
+<tt class="descname">RePlot</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/sandbox/MyTools.html#AnaKDE.RePlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.sandbox.MyTools.AnaKDE.RePlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replots the Contour
+Use after changing parameters
+&#64;bug: Replot should not re-evaluate the KDE is x_vec and y_vec have not been updated!</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.sandbox.MyTools.AnaKDE.Update">
+<tt class="descname">Update</tt><big>(</big><em>x_vec=False</em>, <em>y_vec=False</em>, <em>CFill=-999</em>, <em>PlotData=-999</em>, <em>levels=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/sandbox/MyTools.html#AnaKDE.Update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.sandbox.MyTools.AnaKDE.Update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update Class Parameters
+Use Replot to Create an updated plot, then open an interactive Session.
+All parameters as in Main Class</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.sandbox.MyTools.AnaKDE.contour">
+<tt class="descname">contour</tt><big>(</big><em>x_vec</em>, <em>y_vec</em>, <em>return_data=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/sandbox/MyTools.html#AnaKDE.contour"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.sandbox.MyTools.AnaKDE.contour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plotting a contour of the KDE
+See Class main for all input parameters
+&#64;type x_vec: array
+&#64;type y_vec: array
+&#64;param x_vec: X Vector along which KDE is evaluated
+&#64;param y_vec: Y Vector along which KDE is evaluated
+&#64;note: inherits parameters from main class 
+&#64;note: I am not quite sure what contour does on funny vectors (unqeually spaced.....)
+&#64;note: self.test is for veryfing that the x,y order is kept intact properly by contour (I believe its now in order)</p>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 <div class="section" id="module-SamPy.sandbox.simpleMultiprocessingExample">
 <span id="simplemultiprocessingexample-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">simpleMultiprocessingExample</span></tt> Module<a class="headerlink" href="#module-SamPy.sandbox.simpleMultiprocessingExample" title="Permalink to this headline">¶</a></h2>
@@ -141,7 +214,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

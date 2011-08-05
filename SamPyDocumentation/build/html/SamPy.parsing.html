@@ -124,14 +124,14 @@ by stock Python.
 </ul>
 <p>Beautiful Soup defines classes for two main parsing strategies:</p>
 <blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li>BeautifulStoneSoup, for parsing XML, SGML, or your domain-specific
 language that kind of looks like XML.</li>
 <li>BeautifulSoup, for parsing run-of-the-mill HTML code, be it valid
 or invalid. This class has web browser-like heuristics for
 obtaining a sensible parse tree in the face of common HTML errors.</li>
 </ul>
-</div></blockquote>
+</blockquote>
 <p>Beautiful Soup also defines a class (UnicodeDammit) for autodetecting
 the encoding of an HTML or XML document, and converting it to
 Unicode. Much of this code is taken from Mark Pilgrim&#8217;s Universal Feed Parser.</p>
@@ -145,7 +145,7 @@ documentation:
 modification, are permitted provided that the following conditions are
 met:</p>
 <blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li>Redistributions of source code must retain the above copyright
 notice, this list of conditions and the following disclaimer.</li>
 <li>Redistributions in binary form must reproduce the above
@@ -157,7 +157,7 @@ Night Kosher Bakery nor the names of its contributors may be
 used to endorse or promote products derived from this software
 without specific prior written permission.</li>
 </ul>
-</div></blockquote>
+</blockquote>
 <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 &#8220;AS IS&#8221; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -171,7 +171,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE, DAMMIT.</p>
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.BeautifulSOAP">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">BeautifulSOAP</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x6f9ec50&gt;</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#BeautifulSOAP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulSOAP" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">BeautifulSOAP</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x104d5fe88&gt;</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#BeautifulSOAP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulSOAP" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup" title="SamPy.parsing.BeautifulSoup.BeautifulStoneSoup"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.BeautifulStoneSoup</span></tt></a></p>
 <p>This class will push a tag with only a single string child into
 the tag&#8217;s parent as an attribute. The attribute&#8217;s name is the tag
@@ -214,30 +214,30 @@ always fetch it and parse it explicitly.</p>
 <p>Most tags can&#8217;t be nested at all. For instance, the occurance of
 a &lt;p&gt; tag should implicitly close the previous &lt;p&gt; tag.</p>
 <blockquote>
-<div><dl class="docutils">
+<dl class="docutils">
 <dt>&lt;p&gt;Para1&lt;p&gt;Para2</dt>
 <dd><p class="first last">should be transformed into:</p>
 </dd>
 </dl>
 <p>&lt;p&gt;Para1&lt;/p&gt;&lt;p&gt;Para2</p>
-</div></blockquote>
+</blockquote>
 <p>Some tags can be nested arbitrarily. For instance, the occurance
 of a &lt;blockquote&gt; tag should _not_ implicitly close the previous
 &lt;blockquote&gt; tag.</p>
 <blockquote>
-<div><dl class="docutils">
+<dl class="docutils">
 <dt>Alice said: &lt;blockquote&gt;Bob said: &lt;blockquote&gt;Blah</dt>
 <dd><p class="first last">should NOT be transformed into:</p>
 </dd>
 </dl>
 <p>Alice said: &lt;blockquote&gt;Bob said: &lt;/blockquote&gt;&lt;blockquote&gt;Blah</p>
-</div></blockquote>
+</blockquote>
 <p>Some tags can be nested, but the nesting is reset by the
 interposition of other tags. For instance, a &lt;tr&gt; tag should
 implicitly close the previous &lt;tr&gt; tag within the same &lt;table&gt;,
 but not close a &lt;tr&gt; tag in another table.</p>
 <blockquote>
-<div><dl class="docutils">
+<dl class="docutils">
 <dt>&lt;table&gt;&lt;tr&gt;Blah&lt;tr&gt;Blah</dt>
 <dd><p class="first last">should be transformed into:</p>
 </dd>
@@ -249,7 +249,7 @@ but not close a &lt;tr&gt; tag in another table.</p>
 </dd>
 </dl>
 <p>&lt;tr&gt;Blah&lt;table&gt;&lt;/tr&gt;&lt;tr&gt;Blah</p>
-</div></blockquote>
+</blockquote>
 </li>
 </ul>
 <p>Differing assumptions about tag nesting rules are a major source
@@ -269,15 +269,15 @@ document from the beginning.</p>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.BeautifulStoneSoup">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">BeautifulStoneSoup</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x6f9ec50&gt;</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#BeautifulStoneSoup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">BeautifulStoneSoup</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x104d5fe88&gt;</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#BeautifulStoneSoup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.Tag" title="SamPy.parsing.BeautifulSoup.Tag"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.Tag</span></tt></a></p>
 <p>This class contains the basic parser and search code. It defines
 a parser that knows nothing about tag behavior except for the
 following:</p>
 <blockquote>
-<div>You can&#8217;t close a tag without closing all the tags it encloses.
+You can&#8217;t close a tag without closing all the tags it encloses.
 That is, &#8220;&lt;foo&gt;&lt;bar&gt;&lt;/foo&gt;&#8221; actually means
-&#8220;&lt;foo&gt;&lt;bar&gt;&lt;/bar&gt;&lt;/foo&gt;&#8221;.</div></blockquote>
+&#8220;&lt;foo&gt;&lt;bar&gt;&lt;/bar&gt;&lt;/foo&gt;&#8221;.</blockquote>
 <p>[Another possible explanation is &#8220;&lt;foo&gt;&lt;bar /&gt;&lt;/foo&gt;&#8221;, but since
 this class defines no SELF_CLOSING_TAGS, it will never use that
 explanation.]</p>
@@ -436,7 +436,7 @@ declaration as a CData object.</p>
 common HTML errors like unclosed tags. However, sometimes it makes
 errors of its own. For instance, consider this fragment:</p>
 <blockquote>
-<div>&lt;b&gt;Foo&lt;b&gt;Bar&lt;/b&gt;&lt;/b&gt;</div></blockquote>
+&lt;b&gt;Foo&lt;b&gt;Bar&lt;/b&gt;&lt;/b&gt;</blockquote>
 <p>This is perfectly valid (if bizarre) HTML. However, the
 BeautifulSoup class will implicitly close the first b tag when it
 encounters the second &#8216;b&#8217;. It will think the author wrote
@@ -693,13 +693,13 @@ that created it.</p>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.RobustXMLParser">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">RobustXMLParser</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x6f9ec50&gt;</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#RobustXMLParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.RobustXMLParser" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">RobustXMLParser</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x104d5fe88&gt;</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#RobustXMLParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.RobustXMLParser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup" title="SamPy.parsing.BeautifulSoup.BeautifulStoneSoup"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.BeautifulStoneSoup</span></tt></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.SimplifyingSOAPParser">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">SimplifyingSOAPParser</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x6f9ec50&gt;</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#SimplifyingSOAPParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.SimplifyingSOAPParser" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">SimplifyingSOAPParser</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x104d5fe88&gt;</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#SimplifyingSOAPParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.SimplifyingSOAPParser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.BeautifulSOAP" title="SamPy.parsing.BeautifulSoup.BeautifulSOAP"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.BeautifulSOAP</span></tt></a></p>
 </dd></dl>
 
@@ -940,7 +940,7 @@ to determine whether or not something is stringlike.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

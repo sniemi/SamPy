@@ -339,36 +339,36 @@
             <span class="n">point_to_be_deleted</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
             <span class="k">return</span> <span class="n">point_to_be_deleted</span>
 
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="c">#######################################################################</span>
+    <span class="c"># This is the main part of the program, which calls the above functions</span>
+    <span class="c">#######################################################################</span>
+    <span class="c"># First, initialise some of our variables to be empty</span>
+    <span class="n">coords_array</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+    <span class="n">point_handles_array</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+    <span class="n">handle_of_group_A_conf_int</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">handle_of_group_B_conf_int</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">handle_of_group_A_mean</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">handle_of_group_B_mean</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c">### Set up an initial space to click inside</span>
+    <span class="n">axis_x_range</span> <span class="o">=</span> <span class="mi">30</span>
+    <span class="n">axis_y_upper_lim</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">axis_y_lower_lim</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span>
+    <span class="c">### Make the figure window</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="c">### Clear the figure window</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span> <span class="c"># clf means &quot;clear the figure&quot;</span>
+    <span class="c">### In order to keep the boundaries of the figure fixed in place,</span>
+    <span class="c">### we will draw a black box around the region that we want.</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis_x_range</span><span class="o">*</span><span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+               <span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">axis_y_lower_lim</span><span class="p">,</span><span class="n">axis_y_lower_lim</span><span class="p">,</span><span class="n">axis_y_upper_lim</span><span class="p">,</span><span class="n">axis_y_upper_lim</span><span class="p">]),</span><span class="s">&#39;k-&#39;</span><span class="p">)</span>
+    <span class="c">### Tell Python to call a function every time</span>
+    <span class="c">### when the mouse is pressed in this figure</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s">&#39;button_press_event&#39;</span><span class="p">,</span> <span class="n">do_this_when_the_mouse_is_clicked</span><span class="p">)</span>
 
-<span class="c">#######################################################################</span>
-<span class="c"># This is the main part of the program, which calls the above functions </span>
-<span class="c">#######################################################################</span>
-<span class="c"># First, initialise some of our variables to be empty</span></div>
-<span class="n">coords_array</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
-<span class="n">point_handles_array</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
-<span class="n">handle_of_group_A_conf_int</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">handle_of_group_B_conf_int</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">handle_of_group_A_mean</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">handle_of_group_B_mean</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="c">### Set up an initial space to click inside</span>
-<span class="n">axis_x_range</span> <span class="o">=</span> <span class="mi">30</span>
-<span class="n">axis_y_upper_lim</span> <span class="o">=</span> <span class="mi">20</span>
-<span class="n">axis_y_lower_lim</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span>
-<span class="c">### Make the figure window</span>
-<span class="n">pylab</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="c">### Clear the figure window</span>
-<span class="n">pylab</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span> <span class="c"># clf means &quot;clear the figure&quot;</span>
-<span class="c">### In order to keep the boundaries of the figure fixed in place,</span>
-<span class="c">### we will draw a black box around the region that we want.</span>
-<span class="n">pylab</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">axis_x_range</span><span class="o">*</span><span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
-           <span class="n">scipy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">axis_y_lower_lim</span><span class="p">,</span><span class="n">axis_y_lower_lim</span><span class="p">,</span><span class="n">axis_y_upper_lim</span><span class="p">,</span><span class="n">axis_y_upper_lim</span><span class="p">]),</span><span class="s">&#39;k-&#39;</span><span class="p">)</span>
-<span class="c">### Tell Python to call a function every time</span>
-<span class="c">### when the mouse is pressed in this figure</span>
-<span class="n">pylab</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s">&#39;button_press_event&#39;</span><span class="p">,</span> <span class="n">do_this_when_the_mouse_is_clicked</span><span class="p">)</span>
-
-<span class="n">clear_the_figure_and_empty_points_list</span><span class="p">()</span>
-<span class="n">pylab</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>    <span class="c"># This shows the figure window onscreen</span>
-    
+    <span class="n">clear_the_figure_and_empty_points_list</span><span class="p">()</span>
+    <span class="n">pylab</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>    <span class="c"># This shows the figure window onscreen</span>
 </pre></div>
 
           </div>
@@ -393,7 +393,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

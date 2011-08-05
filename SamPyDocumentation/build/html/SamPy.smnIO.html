@@ -254,7 +254,7 @@ small simulation is being processed.</p>
 
 <dl class="function">
 <dt id="SamPy.smnIO.read.cPickledData">
-<tt class="descclassname">SamPy.smnIO.read.</tt><tt class="descname">cPickledData</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.read.cPickledData" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SamPy.smnIO.read.</tt><tt class="descname">cPickledData</tt><big>(</big><em>filename</em><big>)</big><a class="reference internal" href="_modules/SamPy/smnIO/read.html#cPickledData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.smnIO.read.cPickledData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads in cPickled data and returns it</p>
 </dd></dl>
 
@@ -296,10 +296,10 @@ to be integers</p>
 <p>v2.1 - fails gracefully when the catalog has no sources
 v3.0 - added gettypes to return column types</p>
 <blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li>create new column names when they are not explictly in the header</li>
 </ul>
-</div></blockquote>
+</blockquote>
 <p>v4.0 - added gettypes to return column types
 v4.1 - uses numarray by default
 v4.2 - delete attributed &#8216;l&#8217; (input lines from catalog) before returning
@@ -307,11 +307,11 @@ v4.3 - 1/11/06Added less-offensive alias se_catalog() == sextractor()
 v4.4hf-1/21/06 Fixed bug in creating extra column names when last is a vector
 v4.4vl - V. Laidler added new methods:</p>
 <blockquote>
-<div><blockquote>
-<div>__len__ returns number of objects in catalog
+<blockquote>
+__len__ returns number of objects in catalog
 __iter__ returns the index of the next row in the catalog
 line(self,i) returns a constructed string containing the ith line
-buildheader returns a constructed header from the hdict</div></blockquote>
+buildheader returns a constructed header from the hdict</blockquote>
 <dl class="docutils">
 <dt>Added new attribute self.header: contains the header as read in</dt>
 <dd>from the catalog.</dd>
@@ -319,13 +319,13 @@ buildheader returns a constructed header from the hdict</div></blockquote>
 <dd>now assumed to be comment lines, which are added to the
 header but otherwise skipped.</dd>
 </dl>
-</div></blockquote>
+</blockquote>
 <p>v4.5 - V. Laidler removed Numeric dependence
 v4.6 - V. Laidler converted to numpy
 v5.0 - 7/5/07 Numpy conversion
 v6.0 - V. Laidler: added rw_catalog class, reworked internals to avoid</p>
 <blockquote>
-<div>column name clashes</div></blockquote>
+column name clashes</blockquote>
 <p>v7.0 - S.-M. Niemi: some modifications
 v7.1 - S.-M. Niemi: now supports string columns</p>
 <dl class="function">
@@ -437,9 +437,9 @@ Arguments:
 catalog &#8211; The input SExtractor catalog. 
 readfile &#8211; True means read the data. False means return the</p>
 <blockquote>
-<div>object without reading the data. The lines from the catalog
+object without reading the data. The lines from the catalog
 are returned as a list of ascii strings c.l. Useful if you want
-to do some special parsing of some sort.</div></blockquote>
+to do some special parsing of some sort.</blockquote>
 <p>preserve_case &#8211; default (False) converts column names to lower case</p>
 <dl class="docutils">
 <dt>The input catalog MUST have a header with the SExtractor format:</dt>
@@ -451,13 +451,13 @@ the column number, third column is the column name, and the rest
 of the line is a comment. SExtractor allows &#8220;vectors&#8221; to be identified
 only by the first column...e.g.</p>
 <blockquote>
-<div># 12 FLUX_APER
-# 20 FLUXERR_APER</div></blockquote>
+# 12 FLUX_APER
+# 20 FLUXERR_APER</blockquote>
 <p>the missing columns are all aperture fluxes through different
 apertures. These will be read into attributes:</p>
 <blockquote>
-<div>c.flux_aper   # The first one
-c.flux_aper_1 # the second one, and so on</div></blockquote>
+c.flux_aper   # The first one
+c.flux_aper_1 # the second one, and so on</blockquote>
 <p>The case of aperture radii is a bit nasty, since these only
 appear in the SExtractor configuration file. Use parseconfig()
 to read that file.</p>
@@ -541,7 +541,7 @@ Except it doesn&#8217;t really, if we modified the individual columns...</p>
 </table>
 <dl class="function">
 <dt id="SamPy.smnIO.write.cPickleDumpDictionary">
-<tt class="descclassname">SamPy.smnIO.write.</tt><tt class="descname">cPickleDumpDictionary</tt><big>(</big><em>dictionary</em>, <em>output</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.write.cPickleDumpDictionary" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SamPy.smnIO.write.</tt><tt class="descname">cPickleDumpDictionary</tt><big>(</big><em>dictionary</em>, <em>output</em><big>)</big><a class="reference internal" href="_modules/SamPy/smnIO/write.html#cPickleDumpDictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.smnIO.write.cPickleDumpDictionary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dumps a dictionary of data to a cPickled file</p>
 </dd></dl>
 
@@ -586,7 +586,7 @@ memory.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

@@ -70,8 +70,15 @@
           <div class="body">
             
   <h1>Source code for SamPy.smnIO.write</h1><div class="highlight"><pre>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">This file contains functions that can be used to store data</span>
+
+<span class="sd">:author: Sami-Matias Niemi</span>
+<span class="sd">&#39;&#39;&#39;</span>
 <span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Sami- Matias Niemi&#39;</span>
 <span class="n">__version__</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+<span class="kn">import</span> <span class="nn">cPickle</span>
 
 <div class="viewcode-block" id="combineFiles"><a class="viewcode-back" href="../../../SamPy.smnIO.html#SamPy.smnIO.write.combineFiles">[docs]</a><span class="k">def</span> <span class="nf">combineFiles</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">outputfile</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
@@ -88,7 +95,16 @@
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="s">&#39;r&#39;</span><span class="p">)):</span>
             <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
     <span class="k">print</span> <span class="s">&#39;The content of {0:d} files were combined to a single file&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-    <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+    <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="cPickleDumpDictionary"><a class="viewcode-back" href="../../../SamPy.smnIO.html#SamPy.smnIO.write.cPickleDumpDictionary">[docs]</a><span class="k">def</span> <span class="nf">cPickleDumpDictionary</span><span class="p">(</span><span class="n">dictionary</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Dumps a dictionary of data to a cPickled file</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">out</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="s">&#39;wb&#39;</span><span class="p">)</span>
+    <span class="n">cPickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">dictionary</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+    <span class="n">out</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 </pre></div>
 
           </div>
@@ -113,7 +129,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
-    <link rel="up" title="SamPy.astronomy" href="../astronomy.html" /> 
+    <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body>
 
@@ -42,8 +42,7 @@
         <li><a href="../../../index.html">home</a>|&nbsp;</li>
         <li><a href="../../../search.html">search</a>|&nbsp;</li>
 
-          <li><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li><a href="../astronomy.html" accesskey="U">SamPy.astronomy</a> &raquo;</li> 
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -72,23 +71,25 @@
             
   <h1>Source code for SamPy.astronomy.differentialfunctions</h1><div class="highlight"><pre>
 <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">Some functions to calculate differential functions. These</span>
-<span class="sd">can be used to calculate luminosity functions, stellar and</span>
-<span class="sd">dark matter halo functions etc.</span>
+<span class="sd">Functions to calculate differential functions.</span>
 
-<span class="sd">@requires: NumPy</span>
+<span class="sd">These functions can be used to calculate for example</span>
+<span class="sd">luminosity functions, stellar and dark matter halo</span>
+<span class="sd">functions etc.</span>
 
-<span class="sd">@version: 0.15</span>
+<span class="sd">:requires: NumPy</span>
 
-<span class="sd">@author: Sami Niemi</span>
-<span class="sd">@contact: niemi@stsci.edu</span>
+<span class="sd">:version: 0.17</span>
+
+<span class="sd">:author: Sami-Matias Niemi</span>
+<span class="sd">:contact: niemi@stsci.edu</span>
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">N</span>
 
-<div class="viewcode-block" id="diffFunctionLogBinning"><a class="viewcode-back" href="../../../SamPy.astronomy.differentialfunctions.html#SamPy.astronomy.differentialfunctions.diffFunctionLogBinning">[docs]</a><span class="k">def</span> <span class="nf">diffFunctionLogBinning</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">log</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
-                           <span class="n">wgth</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">mmax</span> <span class="o">=</span> <span class="mf">15.5</span><span class="p">,</span> <span class="n">mmin</span> <span class="o">=</span> <span class="mf">9.0</span><span class="p">,</span>
-                           <span class="n">nbins</span> <span class="o">=</span> <span class="mi">35</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span> <span class="n">volume</span> <span class="o">=</span> <span class="mi">250</span><span class="p">,</span> <span class="n">nvols</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-                           <span class="n">physical_units</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="diffFunctionLogBinning"><a class="viewcode-back" href="../../../SamPy.astronomy.differentialfunctions.html#SamPy.astronomy.differentialfunctions.diffFunctionLogBinning">[docs]</a><span class="k">def</span> <span class="nf">diffFunctionLogBinning</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                           <span class="n">wgth</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">mmax</span><span class="o">=</span><span class="mf">15.5</span><span class="p">,</span> <span class="n">mmin</span><span class="o">=</span><span class="mf">9.0</span><span class="p">,</span>
+                           <span class="n">nbins</span><span class="o">=</span><span class="mi">35</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">nvols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                           <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculates a differential function from data.</span>
 <span class="sd">    Uses NumPy to calculate a histogram and then divides.</span>
@@ -99,16 +100,12 @@
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">ngal</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">ngal</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span><span class="n">column</span><span class="p">])</span>
-    
-    <span class="c">#if data are in physical units or not, use h</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">physical_units</span><span class="p">:</span>
-        <span class="n">h</span> <span class="o">=</span> <span class="mf">1.0</span>
-    
+        <span class="n">ngal</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="n">column</span><span class="p">])</span>
+
     <span class="c">#if wgth is None then make weights based on </span>
     <span class="c">#the volume and the number of volumes</span>
     <span class="k">if</span> <span class="n">wgth</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="n">weight</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ngal</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">nvols</span><span class="o">*</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">volume</span><span class="p">)</span><span class="o">/</span><span class="n">h</span><span class="p">)</span><span class="o">**</span><span class="mi">3</span><span class="p">))</span>
+        <span class="n">weight</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ngal</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="p">(</span><span class="n">nvols</span> <span class="o">*</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">volume</span><span class="p">)</span> <span class="o">/</span> <span class="n">h</span><span class="p">)</span> <span class="o">**</span> <span class="mi">3</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">weight</span> <span class="o">=</span> <span class="n">wgth</span>
 
@@ -117,20 +114,20 @@
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">d</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">d</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span><span class="n">column</span><span class="p">])</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="n">column</span><span class="p">])</span>
         <span class="n">mmin</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">mmin</span><span class="p">)</span>
         <span class="n">mmax</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">mmax</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="n">column</span><span class="p">]</span>   
+        <span class="n">d</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">column</span><span class="p">]</span>
 
-    <span class="c">#calculate mass functions</span>
+        <span class="c">#calculate mass functions</span>
     <span class="n">mf</span><span class="p">,</span> <span class="n">edges</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">d</span><span class="p">,</span>
                             <span class="n">nbins</span><span class="p">,</span>
                             <span class="nb">range</span><span class="o">=</span><span class="p">(</span><span class="n">mmin</span><span class="p">,</span> <span class="n">mmax</span><span class="p">),</span>
                             <span class="n">weights</span><span class="o">=</span><span class="n">weight</span><span class="p">)</span>
-    <span class="n">mbin</span> <span class="o">=</span> <span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="n">edges</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="mf">2.</span>
+    <span class="n">mbin</span> <span class="o">=</span> <span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="n">edges</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.</span>
     <span class="n">dm</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">edges</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    
+
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
         <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Number of galaxies = </span><span class="si">%i</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">ngal</span>
         <span class="k">print</span> <span class="s">&#39;min = </span><span class="si">%f</span><span class="s">, max = </span><span class="si">%f</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">mmin</span><span class="p">,</span> <span class="n">mmax</span><span class="p">)</span>
@@ -141,13 +138,13 @@
     <span class="k">return</span> <span class="n">mbin</span><span class="p">,</span> <span class="n">mf</span> <span class="o">/</span> <span class="n">dm</span>
 
 </div>
-<div class="viewcode-block" id="diff_function_log_binning"><a class="viewcode-back" href="../../../SamPy.astronomy.differentialfunctions.html#SamPy.astronomy.differentialfunctions.diff_function_log_binning">[docs]</a><span class="k">def</span> <span class="nf">diff_function_log_binning</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">log</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
-                              <span class="n">wgth</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">mmax</span> <span class="o">=</span> <span class="mf">15.5</span><span class="p">,</span> <span class="n">mmin</span> <span class="o">=</span> <span class="mf">9.0</span><span class="p">,</span>
-                              <span class="n">nbins</span> <span class="o">=</span> <span class="mi">35</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span> <span class="n">volume</span> <span class="o">=</span> <span class="mi">250</span><span class="p">,</span> <span class="n">nvols</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-                              <span class="n">physical_units</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="diff_function_log_binning"><a class="viewcode-back" href="../../../SamPy.astronomy.differentialfunctions.html#SamPy.astronomy.differentialfunctions.diff_function_log_binning">[docs]</a><span class="k">def</span> <span class="nf">diff_function_log_binning</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                              <span class="n">wgth</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">mmax</span><span class="o">=</span><span class="mf">15.5</span><span class="p">,</span> <span class="n">mmin</span><span class="o">=</span><span class="mf">9.0</span><span class="p">,</span>
+                              <span class="n">nbins</span><span class="o">=</span><span class="mi">35</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">nvols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                              <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculates a differential function from data.</span>
-<span class="sd">    @warning: One should not use this, unless the number of</span>
+<span class="sd">    :warning: One should not use this, unless the number of</span>
 <span class="sd">    systems for each bin is used. One should use diffFunctionLogBinning</span>
 <span class="sd">    instead, which is probably faster as it uses NumPy.histogram</span>
 <span class="sd">    rathrer than my own algorithm.</span>
@@ -156,16 +153,13 @@
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">ngal</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">ngal</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span><span class="n">column</span><span class="p">])</span>
-    
-    <span class="c">#if data are in physical units or not, use h</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">physical_units</span><span class="p">:</span>
-        <span class="n">h</span> <span class="o">=</span> <span class="mf">1.0</span>
-    
+        <span class="n">ngal</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="n">column</span><span class="p">])</span>
+
+
     <span class="c">#if wgth is None then make weights based on </span>
     <span class="c">#the volume and the number of volumes</span>
     <span class="k">if</span> <span class="n">wgth</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="n">weight</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ngal</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">nvols</span><span class="o">*</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">volume</span><span class="p">)</span><span class="o">/</span><span class="n">h</span><span class="p">)</span><span class="o">**</span><span class="mi">3</span><span class="p">))</span>
+        <span class="n">weight</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ngal</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="p">(</span><span class="n">nvols</span> <span class="o">*</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">volume</span><span class="p">)</span> <span class="o">/</span> <span class="n">h</span><span class="p">)</span> <span class="o">**</span> <span class="mi">3</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">weight</span> <span class="o">=</span> <span class="n">wgth</span>
 
@@ -174,15 +168,15 @@
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">d</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">d</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span><span class="n">column</span><span class="p">])</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="n">column</span><span class="p">])</span>
         <span class="n">mmin</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">mmin</span><span class="p">)</span>
         <span class="n">mmax</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">mmax</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">d</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span><span class="n">column</span><span class="p">]</span>   
+        <span class="n">d</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">column</span><span class="p">]</span>
 
-    <span class="c">#bins </span>
+        <span class="c">#bins</span>
     <span class="n">dm</span> <span class="o">=</span> <span class="p">(</span><span class="n">mmax</span> <span class="o">-</span> <span class="n">mmin</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">nbins</span><span class="p">)</span>
-    <span class="n">mbin</span> <span class="o">=</span> <span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nbins</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="n">dm</span> <span class="o">+</span> <span class="n">mmin</span>
+    <span class="n">mbin</span> <span class="o">=</span> <span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nbins</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">dm</span> <span class="o">+</span> <span class="n">mmin</span>
     <span class="c">#one could also use N.linspace(mmin, mmax, nbins)</span>
     <span class="c">#note however that one should then use + dm / 2. </span>
 
@@ -195,9 +189,9 @@
     <span class="c">#differential functions function, dummy values are -99</span>
     <span class="n">mf</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nbins</span><span class="p">)</span> <span class="o">-</span> <span class="mf">99.9</span>
     <span class="n">nu</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nbins</span><span class="p">)</span> <span class="o">-</span> <span class="mi">99</span>
-    
+
     <span class="c">#find out bins</span>
-    <span class="n">ibin</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">d</span> <span class="o">-</span> <span class="n">mmin</span><span class="p">)</span><span class="o">/</span><span class="n">dm</span><span class="p">)</span>
+    <span class="n">ibin</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">d</span> <span class="o">-</span> <span class="n">mmin</span><span class="p">)</span> <span class="o">/</span> <span class="n">dm</span><span class="p">)</span>
 
     <span class="c">#make a mask of suitable bins</span>
     <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">ibin</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">ibin</span> <span class="o">&lt;</span> <span class="n">nbins</span><span class="p">)</span>
@@ -212,16 +206,17 @@
         <span class="k">print</span> <span class="n">mf</span> <span class="o">/</span> <span class="n">dm</span>
         <span class="k">print</span> <span class="n">nu</span>
     <span class="k">return</span> <span class="n">mbin</span><span class="p">,</span> <span class="n">mf</span> <span class="o">/</span> <span class="n">dm</span><span class="p">,</span> <span class="n">nu</span>
+
 </div>
-<div class="viewcode-block" id="mass_function"><a class="viewcode-back" href="../../../SamPy.astronomy.differentialfunctions.html#SamPy.astronomy.differentialfunctions.mass_function">[docs]</a><span class="k">def</span> <span class="nf">mass_function</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">column</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">log</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
-                  <span class="n">wght</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">mmin</span> <span class="o">=</span> <span class="mf">9.0</span><span class="p">,</span> <span class="n">mmax</span> <span class="o">=</span> <span class="mf">15.0</span><span class="p">,</span> 
-                  <span class="n">nbins</span> <span class="o">=</span> <span class="mi">35</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span> <span class="n">volume</span> <span class="o">=</span> <span class="mi">250</span><span class="p">,</span>
-                  <span class="n">nvols</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="mass_function"><a class="viewcode-back" href="../../../SamPy.astronomy.differentialfunctions.html#SamPy.astronomy.differentialfunctions.mass_function">[docs]</a><span class="k">def</span> <span class="nf">mass_function</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">column</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                  <span class="n">wght</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">mmin</span><span class="o">=</span><span class="mf">9.0</span><span class="p">,</span> <span class="n">mmax</span><span class="o">=</span><span class="mf">15.0</span><span class="p">,</span>
+                  <span class="n">nbins</span><span class="o">=</span><span class="mi">35</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span>
+                  <span class="n">nvols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculates a mass function from data.</span>
 <span class="sd">    Returns differential mass function and bins:</span>
 <span class="sd">    dN / dlnM</span>
-<span class="sd">    @TODO: add calculating the cumulative mass function.</span>
+<span class="sd">    :TODO: add calculating the cumulative mass function.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="c">#if log have been taken from the data or not</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">log</span><span class="p">:</span>
@@ -233,18 +228,18 @@
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">dat</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">column</span><span class="p">]</span> <span class="o">*</span> <span class="n">h</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">dat</span> <span class="o">=</span> <span class="n">data</span> <span class="o">*</span><span class="n">h</span>
+            <span class="n">dat</span> <span class="o">=</span> <span class="n">data</span> <span class="o">*</span> <span class="n">h</span>
     <span class="k">del</span> <span class="n">data</span>
     <span class="c">#number of galaxies</span>
     <span class="n">ngal</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dat</span><span class="p">)</span>
     <span class="c">#set weights if None given</span>
     <span class="k">if</span> <span class="n">wght</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="n">wght</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ngal</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">nvols</span><span class="o">*</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">volume</span><span class="p">)</span><span class="o">/</span><span class="n">h</span><span class="p">)</span><span class="o">**</span><span class="mi">3</span><span class="p">))</span>
+        <span class="n">wght</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ngal</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="p">(</span><span class="n">nvols</span> <span class="o">*</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">volume</span><span class="p">)</span> <span class="o">/</span> <span class="n">h</span><span class="p">)</span> <span class="o">**</span> <span class="mi">3</span><span class="p">))</span>
 
     <span class="c">#bins, one could also use N.linspace() or N.logscape()</span>
     <span class="n">dm</span> <span class="o">=</span> <span class="p">(</span><span class="n">mmax</span> <span class="o">-</span> <span class="n">mmin</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">nbins</span><span class="p">)</span>
     <span class="c">#mid points</span>
-    <span class="n">mbin</span> <span class="o">=</span> <span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nbins</span><span class="p">)</span><span class="o">+</span><span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="n">dm</span> <span class="o">+</span> <span class="n">mmin</span>
+    <span class="n">mbin</span> <span class="o">=</span> <span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nbins</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">dm</span> <span class="o">+</span> <span class="n">mmin</span>
 
     <span class="c">#verbose output</span>
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
@@ -254,46 +249,51 @@
 
     <span class="n">mf</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nbins</span><span class="p">)</span>
     <span class="c">#find out in which bins each data point belongs to</span>
-    <span class="n">ibin</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">dat</span> <span class="o">-</span> <span class="n">mmin</span><span class="p">)</span><span class="o">/</span><span class="n">dm</span><span class="p">)</span>
+    <span class="n">ibin</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">dat</span> <span class="o">-</span> <span class="n">mmin</span><span class="p">)</span> <span class="o">/</span> <span class="n">dm</span><span class="p">)</span>
     <span class="c">#make a mask of suitable bins</span>
     <span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">ibin</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">ibin</span> <span class="o">&lt;</span> <span class="n">nbins</span><span class="p">)</span>
     <span class="c">#calculate the sum in each bin</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbins</span><span class="p">):</span>
         <span class="n">mf</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">wght</span><span class="p">[</span><span class="n">ibin</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">==</span> <span class="n">i</span><span class="p">])</span>
     <span class="n">mf</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mf</span><span class="p">)</span>
-    
+
     <span class="k">if</span> <span class="ow">not</span> <span class="n">log</span><span class="p">:</span>
-        <span class="n">mbin</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">e</span><span class="o">**</span><span class="n">mbin</span>
+        <span class="n">mbin</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">e</span> <span class="o">**</span> <span class="n">mbin</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Results:&#39;</span><span class="p">,</span> <span class="n">mbin</span><span class="p">,</span> <span class="n">mf</span><span class="o">/</span><span class="n">dm</span>
-        <span class="k">return</span> <span class="n">mbin</span><span class="p">,</span> <span class="n">mf</span><span class="o">/</span><span class="n">dm</span>
+            <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Results:&#39;</span><span class="p">,</span> <span class="n">mbin</span><span class="p">,</span> <span class="n">mf</span> <span class="o">/</span> <span class="n">dm</span>
+        <span class="k">return</span> <span class="n">mbin</span><span class="p">,</span> <span class="n">mf</span> <span class="o">/</span> <span class="n">dm</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Results:&#39;</span><span class="p">,</span> <span class="n">mbin</span><span class="p">,</span> <span class="n">mf</span><span class="o">/</span><span class="n">dm</span>
-        <span class="k">return</span> <span class="n">mbin</span><span class="p">,</span> <span class="n">mf</span><span class="o">/</span><span class="n">dm</span>
-    </div>
+            <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Results:&#39;</span><span class="p">,</span> <span class="n">mbin</span><span class="p">,</span> <span class="n">mf</span> <span class="o">/</span> <span class="n">dm</span>
+        <span class="k">return</span> <span class="n">mbin</span><span class="p">,</span> <span class="n">mf</span> <span class="o">/</span> <span class="n">dm</span>
+
+</div>
 <div class="viewcode-block" id="stellarMassFunction"><a class="viewcode-back" href="../../../SamPy.astronomy.differentialfunctions.html#SamPy.astronomy.differentialfunctions.stellarMassFunction">[docs]</a><span class="k">def</span> <span class="nf">stellarMassFunction</span><span class="p">(</span><span class="n">data</span><span class="p">,</span>
-                        <span class="n">wght</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">mmin</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">mmax</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> 
-                        <span class="n">nbins</span> <span class="o">=</span> <span class="mi">40</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span> <span class="n">volume</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
-                        <span class="n">nvols</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span> <span class="n">verbose</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
-                        <span class="n">early_type_galaxies</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">,</span>
-                        <span class="n">central_galaxy_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+                        <span class="n">wght</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">mmin</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">mmax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                        <span class="n">nbins</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">volume</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                        <span class="n">nvols</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                        <span class="n">early_type_galaxies</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
+                        <span class="n">central_galaxy_id</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Calculates a stellar mass function from data. Calculates</span>
 <span class="sd">    stellar mass functions for all galaxies, early- and late-types</span>
-<span class="sd">    and central galaxies seprately.</span>
-<span class="sd">    :params data (dictionary): data should be in format:</span>
-<span class="sd">    data[&#39;stellar_mass&#39;] = []</span>
-<span class="sd">    data[&#39;bulge_mass&#39;] = []</span>
-<span class="sd">    data[&#39;galaxy_id&#39;] = []</span>
-<span class="sd">    :return output (dictionary): </span>
+<span class="sd">    and central galaxies separately.</span>
+
+<span class="sd">    :param: data, it should in the following format:</span>
+<span class="sd">            data[&#39;stellar_mass&#39;] = []</span>
+<span class="sd">            data[&#39;bulge_mass&#39;] = []</span>
+<span class="sd">            data[&#39;galaxy_id&#39;] = []</span>
+<span class="sd">    :dtype: dictionary</span>
+
+<span class="sd">    :return: output</span>
+<span class="sd">    :rtype: dictionary</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="c">#get number of galaxies</span>
     <span class="n">ngal</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;stellar_mass&#39;</span><span class="p">])</span>
 
     <span class="c">#set weights if None given</span>
     <span class="k">if</span> <span class="n">wght</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="n">wght</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ngal</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">nvols</span><span class="o">*</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">volume</span><span class="p">)</span><span class="o">/</span><span class="n">h</span><span class="p">)</span><span class="o">**</span><span class="mi">3</span><span class="p">))</span>
+        <span class="n">wght</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ngal</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">/</span> <span class="p">(</span><span class="n">nvols</span> <span class="o">*</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">volume</span><span class="p">)</span> <span class="o">/</span> <span class="n">h</span><span class="p">)</span> <span class="o">**</span> <span class="mi">3</span><span class="p">))</span>
 
     <span class="c">#set minimum and maximum mass if None given</span>
     <span class="k">if</span> <span class="n">mmin</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
@@ -304,7 +304,7 @@
     <span class="c">#calculate the stepsize</span>
     <span class="n">dm</span> <span class="o">=</span> <span class="p">(</span><span class="n">mmax</span> <span class="o">-</span> <span class="n">mmin</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">nbins</span><span class="p">)</span>
     <span class="c">#mid points</span>
-    <span class="n">mbin</span> <span class="o">=</span> <span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nbins</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="n">dm</span> <span class="o">+</span> <span class="n">mmin</span>
+    <span class="n">mbin</span> <span class="o">=</span> <span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nbins</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">dm</span> <span class="o">+</span> <span class="n">mmin</span>
 
     <span class="c">#verbose output</span>
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
@@ -322,9 +322,9 @@
     <span class="n">mf_bulge</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nbins</span><span class="p">)</span>
 
     <span class="c">#adapted from IDL, could be done without looping</span>
-    <span class="n">btt</span> <span class="o">=</span> <span class="mf">10.0</span><span class="o">**</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;bulge_mass&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;stellar_mass&#39;</span><span class="p">])</span>
+    <span class="n">btt</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">**</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;bulge_mass&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;stellar_mass&#39;</span><span class="p">])</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ngal</span><span class="p">):</span>
-        <span class="n">ibin</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;stellar_mass&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">mmin</span><span class="p">)</span><span class="o">/</span><span class="n">dm</span><span class="p">))</span>
+        <span class="n">ibin</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;stellar_mass&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">mmin</span><span class="p">)</span> <span class="o">/</span> <span class="n">dm</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">ibin</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">ibin</span> <span class="o">&lt;</span> <span class="n">nbins</span><span class="p">:</span>
             <span class="n">mf_star</span><span class="p">[</span><span class="n">ibin</span><span class="p">]</span> <span class="o">+=</span> <span class="n">wght</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="c">#stellar mass, by type</span>
@@ -332,15 +332,15 @@
                 <span class="n">mf_early</span><span class="p">[</span><span class="n">ibin</span><span class="p">]</span> <span class="o">+=</span> <span class="n">wght</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">mf_late</span><span class="p">[</span><span class="n">ibin</span><span class="p">]</span> <span class="o">+=</span> <span class="n">wght</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-            <span class="c">#stellar mass, centrals galaxies only</span>
+                <span class="c">#stellar mass, centrals galaxies only</span>
             <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s">&#39;galaxy_id&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">central_galaxy_id</span><span class="p">:</span>
                 <span class="n">mf_star_central</span><span class="p">[</span><span class="n">ibin</span><span class="p">]</span> <span class="o">+=</span> <span class="n">wght</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
     <span class="c">#Get the log of the mass fuction and divide with dex</span>
-    <span class="n">mf_star</span> <span class="o">=</span>  <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">mf_star</span><span class="o">/</span><span class="n">dm</span><span class="p">)</span>
-    <span class="n">mf_early</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">mf_early</span><span class="o">/</span><span class="n">dm</span><span class="p">)</span>
-    <span class="n">mf_late</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">mf_late</span><span class="o">/</span><span class="n">dm</span><span class="p">)</span>
-    <span class="n">mf_star_central</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">mf_star_central</span><span class="o">/</span><span class="n">dm</span><span class="p">)</span>
+    <span class="n">mf_star</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">mf_star</span> <span class="o">/</span> <span class="n">dm</span><span class="p">)</span>
+    <span class="n">mf_early</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">mf_early</span> <span class="o">/</span> <span class="n">dm</span><span class="p">)</span>
+    <span class="n">mf_late</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">mf_late</span> <span class="o">/</span> <span class="n">dm</span><span class="p">)</span>
+    <span class="n">mf_star_central</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">mf_star_central</span> <span class="o">/</span> <span class="n">dm</span><span class="p">)</span>
 
     <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">out</span><span class="p">[</span><span class="s">&#39;mf_stellar_mass&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mf_star</span>
@@ -371,13 +371,12 @@
         <li><a href="../../../index.html">home</a>|&nbsp;</li>
         <li><a href="../../../search.html">search</a>|&nbsp;</li>
 
-          <li><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li><a href="../astronomy.html" >SamPy.astronomy</a> &raquo;</li> 
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

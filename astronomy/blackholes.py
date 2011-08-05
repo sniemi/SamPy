@@ -1,6 +1,5 @@
 '''
-Observational constrains related to black hole
-masses in galaxies.
+Observational constrains related to black hole masses in galaxies.
 
 :requires: NumPy
 

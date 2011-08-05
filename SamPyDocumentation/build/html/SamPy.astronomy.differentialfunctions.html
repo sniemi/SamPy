@@ -121,7 +121,7 @@ functions etc.</p>
 </table>
 <dl class="function">
 <dt id="SamPy.astronomy.differentialfunctions.diffFunctionLogBinning">
-<tt class="descclassname">SamPy.astronomy.differentialfunctions.</tt><tt class="descname">diffFunctionLogBinning</tt><big>(</big><em>data</em>, <em>column=0</em>, <em>log=False</em>, <em>wgth=None</em>, <em>mmax=15.5</em>, <em>mmin=9.0</em>, <em>nbins=35</em>, <em>h=0.69999999999999996</em>, <em>volume=250</em>, <em>nvols=1</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/differentialfunctions.html#diffFunctionLogBinning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.differentialfunctions.diffFunctionLogBinning" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SamPy.astronomy.differentialfunctions.</tt><tt class="descname">diffFunctionLogBinning</tt><big>(</big><em>data</em>, <em>column=0</em>, <em>log=False</em>, <em>wgth=None</em>, <em>mmax=15.5</em>, <em>mmin=9.0</em>, <em>nbins=35</em>, <em>h=0.7</em>, <em>volume=250</em>, <em>nvols=1</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/differentialfunctions.html#diffFunctionLogBinning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.differentialfunctions.diffFunctionLogBinning" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates a differential function from data.
 Uses NumPy to calculate a histogram and then divides.
 each bin value with the length of the bin.
@@ -130,7 +130,7 @@ The log binning refers to 10 based log, i.e. log10(data)</p>
 
 <dl class="function">
 <dt id="SamPy.astronomy.differentialfunctions.diff_function_log_binning">
-<tt class="descclassname">SamPy.astronomy.differentialfunctions.</tt><tt class="descname">diff_function_log_binning</tt><big>(</big><em>data</em>, <em>column=0</em>, <em>log=False</em>, <em>wgth=None</em>, <em>mmax=15.5</em>, <em>mmin=9.0</em>, <em>nbins=35</em>, <em>h=0.69999999999999996</em>, <em>volume=250</em>, <em>nvols=1</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/differentialfunctions.html#diff_function_log_binning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.differentialfunctions.diff_function_log_binning" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SamPy.astronomy.differentialfunctions.</tt><tt class="descname">diff_function_log_binning</tt><big>(</big><em>data</em>, <em>column=0</em>, <em>log=False</em>, <em>wgth=None</em>, <em>mmax=15.5</em>, <em>mmin=9.0</em>, <em>nbins=35</em>, <em>h=0.7</em>, <em>volume=250</em>, <em>nvols=1</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/differentialfunctions.html#diff_function_log_binning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.differentialfunctions.diff_function_log_binning" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates a differential function from data.
 :warning: One should not use this, unless the number of
 systems for each bin is used. One should use diffFunctionLogBinning
@@ -140,7 +140,7 @@ rathrer than my own algorithm.</p>
 
 <dl class="function">
 <dt id="SamPy.astronomy.differentialfunctions.mass_function">
-<tt class="descclassname">SamPy.astronomy.differentialfunctions.</tt><tt class="descname">mass_function</tt><big>(</big><em>data</em>, <em>column=0</em>, <em>log=False</em>, <em>wght=None</em>, <em>mmin=9.0</em>, <em>mmax=15.0</em>, <em>nbins=35</em>, <em>h=0.69999999999999996</em>, <em>volume=250</em>, <em>nvols=1</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/differentialfunctions.html#mass_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.differentialfunctions.mass_function" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SamPy.astronomy.differentialfunctions.</tt><tt class="descname">mass_function</tt><big>(</big><em>data</em>, <em>column=0</em>, <em>log=False</em>, <em>wght=None</em>, <em>mmin=9.0</em>, <em>mmax=15.0</em>, <em>nbins=35</em>, <em>h=0.7</em>, <em>volume=250</em>, <em>nvols=1</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/differentialfunctions.html#mass_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.differentialfunctions.mass_function" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates a mass function from data.
 Returns differential mass function and bins:
 dN / dlnM
@@ -149,7 +149,7 @@ dN / dlnM
 
 <dl class="function">
 <dt id="SamPy.astronomy.differentialfunctions.stellarMassFunction">
-<tt class="descclassname">SamPy.astronomy.differentialfunctions.</tt><tt class="descname">stellarMassFunction</tt><big>(</big><em>data</em>, <em>wght=None</em>, <em>mmin=None</em>, <em>mmax=None</em>, <em>nbins=40</em>, <em>h=0.69999999999999996</em>, <em>volume=50</em>, <em>nvols=8</em>, <em>verbose=False</em>, <em>early_type_galaxies=0.40000000000000002</em>, <em>central_galaxy_id=1</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/differentialfunctions.html#stellarMassFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.differentialfunctions.stellarMassFunction" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SamPy.astronomy.differentialfunctions.</tt><tt class="descname">stellarMassFunction</tt><big>(</big><em>data</em>, <em>wght=None</em>, <em>mmin=None</em>, <em>mmax=None</em>, <em>nbins=40</em>, <em>h=0.7</em>, <em>volume=50</em>, <em>nvols=8</em>, <em>verbose=False</em>, <em>early_type_galaxies=0.4</em>, <em>central_galaxy_id=1</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/differentialfunctions.html#stellarMassFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.differentialfunctions.stellarMassFunction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates a stellar mass function from data. Calculates
 stellar mass functions for all galaxies, early- and late-types
 and central galaxies separately.</p>
@@ -205,7 +205,7 @@ data[&#8216;galaxy_id&#8217;] = []</td>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

@@ -5,7 +5,7 @@ SamPy.astronomy.coord
 
 
 :mod:`coord` Module
----------------------
+-------------------
 
 .. automodule:: SamPy.astronomy.coord
     :members:

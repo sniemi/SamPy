@@ -5,9 +5,9 @@ SamPy.resolve.catalogs
 
 
 :mod:`createSQLite` Module
----------------------
+--------------------------
 
-.. automodule:: SamPy.resolve.misc.createSQLite
+.. automodule:: SamPy.resolve.catalogs.createSQLite
     :members:
     :undoc-members:
     :show-inheritance:

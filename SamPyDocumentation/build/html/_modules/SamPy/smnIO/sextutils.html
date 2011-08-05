@@ -70,37 +70,39 @@
           <div class="body">
             
   <h1>Source code for SamPy.smnIO.sextutils</h1><div class="highlight"><pre>
-<span class="c"># Utilities for parseing SExtractor files</span>
-<span class="c">#</span>
-<span class="c"># H. Ferguson - revised 4/23/03 to promote ints to floats if a value</span>
-<span class="c"># with a decimal point appears somewhere in the column originally thought</span>
-<span class="c"># to be integers</span>
-<span class="c"># </span>
-<span class="c"># v2.1 - fails gracefully when the catalog has no sources</span>
-<span class="c"># v3.0 - added gettypes to return column types</span>
-<span class="c">#      - create new column names when they are not explictly in the header</span>
-<span class="c"># v4.0 - added gettypes to return column types</span>
-<span class="c"># v4.1 - uses numarray by default</span>
-<span class="c"># v4.2 - delete attributed &#39;l&#39; (input lines from catalog) before returning</span>
-<span class="c"># v4.3 - 1/11/06Added less-offensive alias se_catalog() == sextractor()</span>
-<span class="c"># v4.4hf-1/21/06 Fixed bug in creating extra column names when last is a vector</span>
-<span class="c"># v4.4vl - V. Laidler added new methods:</span>
-<span class="c">#           __len__ returns number of objects in catalog</span>
-<span class="c">#           __iter__ returns the index of the next row in the catalog</span>
-<span class="c">#           line(self,i) returns a constructed string containing the ith line </span>
-<span class="c">#           buildheader returns a constructed header from the hdict</span>
-<span class="c">#        Added new attribute self.header: contains the header as read in</span>
-<span class="c">#           from the catalog.</span>
-<span class="c">#        Lines that start with &#39;#&#39; but are not followed by an integer are</span>
-<span class="c">#           now assumed to be comment lines, which are added to the</span>
-<span class="c">#           header but otherwise skipped.</span>
-<span class="c"># v4.5 - V. Laidler removed Numeric dependence</span>
-<span class="c"># v4.6 - V. Laidler converted to numpy</span>
-<span class="c"># v5.0 - 7/5/07 Numpy conversion</span>
-<span class="c"># v6.0 - V. Laidler: added rw_catalog class, reworked internals to avoid</span>
-<span class="c">#           column name clashes</span>
-<span class="c"># v7.0 - S.-M. Niemi: some modifications</span>
-<span class="c"># v7.1 - S.-M. Niemi: now supports string columns</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Utilities for parseing SExtractor files</span>
+
+<span class="sd">H. Ferguson - revised 4/23/03 to promote ints to floats if a value</span>
+<span class="sd">with a decimal point appears somewhere in the column originally thought</span>
+<span class="sd">to be integers</span>
+
+<span class="sd">v2.1 - fails gracefully when the catalog has no sources</span>
+<span class="sd">v3.0 - added gettypes to return column types</span>
+<span class="sd">      - create new column names when they are not explictly in the header</span>
+<span class="sd">v4.0 - added gettypes to return column types</span>
+<span class="sd">v4.1 - uses numarray by default</span>
+<span class="sd">v4.2 - delete attributed &#39;l&#39; (input lines from catalog) before returning</span>
+<span class="sd">v4.3 - 1/11/06Added less-offensive alias se_catalog() == sextractor()</span>
+<span class="sd">v4.4hf-1/21/06 Fixed bug in creating extra column names when last is a vector</span>
+<span class="sd">v4.4vl - V. Laidler added new methods:</span>
+<span class="sd">           __len__ returns number of objects in catalog</span>
+<span class="sd">           __iter__ returns the index of the next row in the catalog</span>
+<span class="sd">           line(self,i) returns a constructed string containing the ith line</span>
+<span class="sd">           buildheader returns a constructed header from the hdict</span>
+<span class="sd">        Added new attribute self.header: contains the header as read in</span>
+<span class="sd">           from the catalog.</span>
+<span class="sd">        Lines that start with &#39;#&#39; but are not followed by an integer are</span>
+<span class="sd">           now assumed to be comment lines, which are added to the</span>
+<span class="sd">           header but otherwise skipped.</span>
+<span class="sd">v4.5 - V. Laidler removed Numeric dependence</span>
+<span class="sd">v4.6 - V. Laidler converted to numpy</span>
+<span class="sd">v5.0 - 7/5/07 Numpy conversion</span>
+<span class="sd">v6.0 - V. Laidler: added rw_catalog class, reworked internals to avoid</span>
+<span class="sd">           column name clashes</span>
+<span class="sd">v7.0 - S.-M. Niemi: some modifications</span>
+<span class="sd">v7.1 - S.-M. Niemi: now supports string columns</span>
+<span class="sd">&#39;&#39;&#39;</span>
 
 <span class="n">__version__</span> <span class="o">=</span> <span class="s">&#39;7.1&#39;</span>
 <span class="n">__author</span> <span class="o">=</span> <span class="s">&#39;Henry C. Ferguson, STScI&#39;</span>
@@ -218,7 +220,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_type</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_d</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="c">#this line may require changing</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_l</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">10000</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_l</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1000000</span><span class="p">:</span>
+                <span class="n">every</span> <span class="o">=</span> <span class="mi">500</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_l</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">10000</span><span class="p">:</span>
                 <span class="n">every</span> <span class="o">=</span> <span class="mi">20</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">every</span> <span class="o">=</span> <span class="mi">10</span>
@@ -514,15 +518,15 @@
 <div class="viewcode-block" id="writeheader"><a class="viewcode-back" href="../../../SamPy.smnIO.html#SamPy.smnIO.sextutils.writeheader">[docs]</a><span class="k">def</span> <span class="nf">writeheader</span><span class="p">(</span><span class="n">fh</span><span class="p">,</span> <span class="n">colnames</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Write an SExtractor-style header to an open file handle.</span>
 
-<span class="sd">    @param fh: file handle</span>
-<span class="sd">    @type fh: file</span>
+<span class="sd">    :param fh: file handle</span>
+<span class="sd">    :type fh: file</span>
 
-<span class="sd">    @param colnames: list of column names</span>
-<span class="sd">    @type colnames: list</span>
+<span class="sd">    :param colnames: list of column names</span>
+<span class="sd">    :type colnames: list</span>
 
-<span class="sd">    @todo: add space checking to colnames</span>
-<span class="sd">    @todo: permit passing a filename?</span>
-<span class="sd">    @todo: handle comments</span>
+<span class="sd">    :todo: add space checking to colnames</span>
+<span class="sd">    :todo: permit passing a filename?</span>
+<span class="sd">    :todo: handle comments</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">colnames</span><span class="p">)):</span>
         <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#   </span><span class="si">%d</span><span class="s">   </span><span class="si">%s</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">colnames</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span></div>
@@ -550,7 +554,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

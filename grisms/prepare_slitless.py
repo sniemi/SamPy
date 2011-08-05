@@ -1,16 +1,18 @@
 '''
-@summary: This script can be used to prepare data for aXe.
-The script will create a proper file struture for aXe,
+Prepares HST data for aXe, runs multidrizzle and SExtractor.
+
+:summary: This script can be used to prepare data for aXe.
+The script will create a proper file structure for aXe,
 run multidrizzle for direct images, and finally run
 SourceExtractor on the drizzled direct images.
 
-@note: This is really badly written, should make a class...
+:note: This is really badly written, should make a class...
 
-@warning: Not really tested...
+:warning: Not really tested...
 
-@author: Sami-Matias Niemi (niemi@stsci.edu)
+:author: Sami-Matias Niemi (niemi@stsci.edu)
 
-@version: 0.1a
+:version: 0.1a
 '''
 import pyfits as PF
 from pyraf import iraf
@@ -18,14 +20,15 @@ from pyraf.iraf import stsdas, hst_calib, slitless, axe, wfc3
 import glob as g
 import shutil as s
 import os
-import sextutils as su
+import SamPy.smnIO.sextutils as su
 
 def find_header_info(input_files):
     '''
     Find filter, date of the observation and exposure time information
     from the FITS header. Assumes that this information has been stored
     in the first extension header, like in case of HST.
-    @return: Returns a dictionary where each key is the filename and
+
+    :return: Returns a dictionary where each key is the filename and
              value is a list of filter, data-obs and exptime.
     '''
     out = {}
@@ -40,7 +43,8 @@ def find_direct_images(dict, column = 0):
     Pick out direct images from a dictionary (that could have been
     created using the "find_header_info" function). Assumes that all
     images whose filter names start with an "F" are direct images.
-    @return: a list of filenames that are direct images.
+
+    :rreturn: a list of filenames that are direct images.
     '''
     out = []
     for key in dict:

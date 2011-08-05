@@ -5,7 +5,7 @@ SamPy.resolve.misc
 
 
 :mod:`basicReduction` Module
----------------------
+----------------------------
 
 .. automodule:: SamPy.resolve.misc.basicReduction
     :members:
@@ -21,7 +21,7 @@ SamPy.resolve.misc
     :show-inheritance:
 
 :mod:`findslits` Module
----------------------
+-----------------------
 
 .. automodule:: SamPy.resolve.misc.findslits
     :members:
@@ -29,7 +29,7 @@ SamPy.resolve.misc
     :show-inheritance:
 
 :mod:`generateFileLists` Module
----------------------
+-------------------------------
 
 .. automodule:: SamPy.resolve.misc.generateFileLists
     :members:
@@ -37,7 +37,7 @@ SamPy.resolve.misc
     :show-inheritance:
 
 :mod:`SplitSlicerImages` Module
----------------------
+-------------------------------
 
 .. automodule:: SamPy.resolve.misc.SplitSlicerImages
     :members:

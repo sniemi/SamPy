@@ -129,14 +129,16 @@
 <span class="sd">        Function that is fitted.</span>
 <span class="sd">        This can be changed to whatever function.</span>
 <span class="sd">        Note that ynodes can then be a list of parameters.</span>
-<span class="sd">        @return: 1-D B-spline value at each x.</span>
+
+<span class="sd">        :return: 1-D B-spline value at each x.</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="n">I</span><span class="o">.</span><span class="n">splev</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">I</span><span class="o">.</span><span class="n">splrep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xnodes</span><span class="p">,</span> <span class="n">ynodes</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span><span class="p">))</span>
 </div>
 <div class="viewcode-block" id="SplineFitting.errfunc"><a class="viewcode-back" href="../../../SamPy.fitting.html#SamPy.fitting.SplineFitting.SplineFitting.errfunc">[docs]</a>    <span class="k">def</span> <span class="nf">errfunc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ynodes</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Error function.</span>
-<span class="sd">        @return: fit - ydata</span>
+
+<span class="sd">        :return: fit - ydata</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitfunc</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">ynodes</span><span class="p">)</span> <span class="o">-</span> <span class="n">y</span>
 </div>
@@ -145,7 +147,8 @@
 <span class="sd">        Return the point which minimizes the sum of squares of M (non-linear)</span>
 <span class="sd">        equations in N unknowns given a starting estimate, x0, using a</span>
 <span class="sd">        modification of the Levenberg-Marquardt algorithm.</span>
-<span class="sd">        @return: fitted parameters, error/success message</span>
+
+<span class="sd">        :return: fitted parameters, error/success message</span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">return</span> <span class="n">O</span><span class="o">.</span><span class="n">leastsq</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">errfunc</span><span class="p">,</span> <span class="n">ynodes</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
     </div></div>
@@ -241,7 +244,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

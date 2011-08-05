@@ -71,12 +71,15 @@
             
   <h1>Source code for SamPy.wrapper.gf</h1><div class="highlight"><pre>
 <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">@summary: This little wrapper can be used to</span>
-<span class="sd">run GF (R. Somerville&#39;s SAMs program) using</span>
-<span class="sd">threading.</span>
+<span class="sd">:summary: This little wrapper can be used to run GF</span>
+<span class="sd">          (R. Somerville&#39;s SAMs program) using threading.</span>
 
-<span class="sd">@author: Sami-Matias Niemi</span>
-<span class="sd">@contact: niemi@stsci.edu</span>
+<span class="sd">:author: Sami-Matias Niemi</span>
+<span class="sd">:contact: niemi@stsci.edu</span>
+
+<span class="sd">:note: Threading is not really the best way to do this.</span>
+<span class="sd">       Instead, one should use multiprocessing to launch</span>
+<span class="sd">       several processes.</span>
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="kn">import</span> <span class="nn">glob</span> <span class="kn">as</span> <span class="nn">g</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -261,7 +264,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

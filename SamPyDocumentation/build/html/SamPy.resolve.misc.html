@@ -49,11 +49,11 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">SamPy.resolve.misc</a><ul>
-<li><a class="reference internal" href="#basicreduction-module"><tt class="docutils literal"><span class="pre">basicReduction</span></tt> Module</a></li>
-<li><a class="reference internal" href="#combine-module"><tt class="docutils literal"><span class="pre">combine</span></tt> Module</a></li>
-<li><a class="reference internal" href="#findslits-module"><tt class="docutils literal"><span class="pre">findslits</span></tt> Module</a></li>
-<li><a class="reference internal" href="#generatefilelists-module"><tt class="docutils literal"><span class="pre">generateFileLists</span></tt> Module</a></li>
-<li><a class="reference internal" href="#splitslicerimages-module"><tt class="docutils literal"><span class="pre">SplitSlicerImages</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.resolve.misc.basicReduction"><tt class="docutils literal"><span class="pre">basicReduction</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.resolve.misc.combine"><tt class="docutils literal"><span class="pre">combine</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.resolve.misc.findslits"><tt class="docutils literal"><span class="pre">findslits</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.resolve.misc.generateFileLists"><tt class="docutils literal"><span class="pre">generateFileLists</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.resolve.misc.SplitSlicerImages"><tt class="docutils literal"><span class="pre">SplitSlicerImages</span></tt> Module</a></li>
 </ul>
 </li>
 </ul>
@@ -86,20 +86,629 @@
             
   <div class="section" id="sampy-resolve-misc">
 <h1>SamPy.resolve.misc<a class="headerlink" href="#sampy-resolve-misc" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="basicreduction-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">basicReduction</span></tt> Module<a class="headerlink" href="#basicreduction-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.resolve.misc.basicReduction">
+<span id="basicreduction-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">basicReduction</span></tt> Module<a class="headerlink" href="#module-SamPy.resolve.misc.basicReduction" title="Permalink to this headline">¶</a></h2>
+<p>Basic reduction steps for SOAR image slicer data.
+This script should be used only for a quicklook and not for science.
+The basic idea is that the script provides good enough calibration
+so that a science spectra can be convolved with a system throughput
+curve to get a spatially resolved flux. This information can then
+be further used to fit the position of the spectra to a direct imaqe
+in order to allow a velocity field to be derived.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">PyFITS</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">NumPy</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">SciPy</td>
+</tr>
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:sniemi&#37;&#52;&#48;unc&#46;edu">sniemi<span>&#64;</span>unc<span>&#46;</span>edu</a></td>
+</tr>
+<tr class="field"><th class="field-name">version:</th><td class="field-body">0.1</td>
+</tr>
+<tr class="field"><th class="field-name">note:</th><td class="field-body">the script does not make use of a pseudo dark at the mo</td>
+</tr>
+<tr class="field"><th class="field-name">note:</th><td class="field-body">the script modifies fiels in place!! should be changed..</td>
+</tr>
+<tr class="field"><th class="field-name">note:</th><td class="field-body">the scripts does not take into account camera or grating angles!
+thus the reduction might be faulty for some files...</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="SamPy.resolve.misc.basicReduction.SOARReduction">
+<em class="property">class </em><tt class="descclassname">SamPy.resolve.misc.basicReduction.</tt><tt class="descname">SOARReduction</tt><big>(</big><em>logfile='reduction.log'</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/basicReduction.html#SOARReduction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.basicReduction.SOARReduction" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class provides basic data reduction steps
+for SOAR image slicer data.</p>
+<dl class="method">
+<dt id="SamPy.resolve.misc.basicReduction.SOARReduction.divideWithFlat">
+<tt class="descname">divideWithFlat</tt><big>(</big><em>filelist</em>, <em>ext=0</em>, <em>flatFile=None</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/basicReduction.html#SOARReduction.divideWithFlat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.basicReduction.SOARReduction.divideWithFlat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Divides with the normalized flat</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.basicReduction.SOARReduction.findBiases">
+<tt class="descname">findBiases</tt><big>(</big><em>identifier='ZERO'</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/basicReduction.html#SOARReduction.findBiases"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.basicReduction.SOARReduction.findBiases" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds all bias frames</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">identifier: to match bias files</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">a list of files matching the identifier</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.basicReduction.SOARReduction.findFlats">
+<tt class="descname">findFlats</tt><big>(</big><em>identifier='FLAT'</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/basicReduction.html#SOARReduction.findFlats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.basicReduction.SOARReduction.findFlats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds all flat frames and writes a file listing the files.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">identifier: to match flat field frames</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">a list of files matching the identifier</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.basicReduction.SOARReduction.findNes">
+<tt class="descname">findNes</tt><big>(</big><em>identifier='Ne'</em>, <em>outfile='complist'</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/basicReduction.html#SOARReduction.findNes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.basicReduction.SOARReduction.findNes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds all Neon exposures and outputs them to a file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Note :</th><td class="field-body">this does not check the CAM_ANG</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">identifier: to match Ne files</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">a list of files matching the identifier</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.basicReduction.SOARReduction.findNonBiasFrames">
+<tt class="descname">findNonBiasFrames</tt><big>(</big><em>exclude=None</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/basicReduction.html#SOARReduction.findNonBiasFrames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.basicReduction.SOARReduction.findNonBiasFrames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds all FITS files that don&#8217;t have the bias identifier in them</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.basicReduction.SOARReduction.findScienceFrames">
+<tt class="descname">findScienceFrames</tt><big>(</big><em>identifier='spec'</em>, <em>outfile='sciencelist'</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/basicReduction.html#SOARReduction.findScienceFrames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.basicReduction.SOARReduction.findScienceFrames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds all science exposures and outputs them to a file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Note :</th><td class="field-body">this does not check the CAM_ANG</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">identifier: to match spec files</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">a list of files matching the identifier</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.basicReduction.SOARReduction.makeBias">
+<tt class="descname">makeBias</tt><big>(</big><em>combine='median'</em>, <em>biaslist=</em><span class="optional">[</span><span class="optional">]</span>, <em>output='zeroim.fits'</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/basicReduction.html#SOARReduction.makeBias"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.basicReduction.SOARReduction.makeBias" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines the bias frames to a single bias frame.</p>
+<p>note: that this does not do sigma clipping at the moment</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">combine, either median or mean</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">biaslist, a list of bias frames to be combined</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">output: the name of the output file</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">combined bias frame</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.basicReduction.SOARReduction.makeFlat">
+<tt class="descname">makeFlat</tt><big>(</big><em>combine='median'</em>, <em>flatlist=</em><span class="optional">[</span><span class="optional">]</span>, <em>output='flatima.fits'</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/basicReduction.html#SOARReduction.makeFlat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.basicReduction.SOARReduction.makeFlat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines the flat field frames to a single flat frame.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Note :</th><td class="field-body">this does not do any sigma clipping at the moment</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.basicReduction.SOARReduction.normalizeFlat">
+<tt class="descname">normalizeFlat</tt><big>(</big><em>filename=None</em>, <em>output='normim.fits'</em>, <em>nodes=18</em>, <em>rot=0.54707797</em>, <em>countLimit=1500</em>, <em>column=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/basicReduction.html#SOARReduction.normalizeFlat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.basicReduction.SOARReduction.normalizeFlat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalizes the flat in a very crude way.
+The method used is very simple:
+- first rotate the image so that the features are along a row
+- mask the edges of the detector
+- fit a third-order spline along each row
+- divide the data with the fit
+- rotate back</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">filename, name of the file to be normalized</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">output, name of the output file</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">nodes, the number of spline nodes</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">rot, the amount of rotation applied in degrees</td>
+</tr>
+<tr class="field"><th class="field-name">Pamam :</th><td class="field-body">countLimit, if the average masked counts are below this, the data are set to unity</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">column, whether the fitting should be done in column direction</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">normalized flat</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.basicReduction.SOARReduction.renameUnusedFiles">
+<tt class="descname">renameUnusedFiles</tt><big>(</big><em>PARAM20=980</em>, <em>PARAM21=672</em>, <em>PARAM22=3</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/basicReduction.html#SOARReduction.renameUnusedFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.basicReduction.SOARReduction.renameUnusedFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renames all fits files from the directory which have been
+taken with different readout mode than the usual image
+slicer data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Note :</th><td class="field-body">one could also remove the files, but this is safer</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.basicReduction.SOARReduction.subtractBias">
+<tt class="descname">subtractBias</tt><big>(</big><em>filelist</em>, <em>ext=0</em>, <em>biasFile=None</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/basicReduction.html#SOARReduction.subtractBias"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.basicReduction.SOARReduction.subtractBias" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subtracts the bias from the filelist</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.basicReduction.SOARReduction.subtractOverscan">
+<tt class="descname">subtractOverscan</tt><big>(</big><em>filelist</em>, <em>ext=0</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/basicReduction.html#SOARReduction.subtractOverscan"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.basicReduction.SOARReduction.subtractOverscan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Subtracts the overscan region from each file
+in the filelist.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Note :</th><td class="field-body">that modifies the filelist files</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">filelist: a list of files</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.resolve.misc.basicReduction.doAll">
+<tt class="descclassname">SamPy.resolve.misc.basicReduction.</tt><tt class="descname">doAll</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/basicReduction.html#doAll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.basicReduction.doAll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Driver function for SOAR image slicer data reduction</p>
+</dd></dl>
+
 </div>
-<div class="section" id="combine-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">combine</span></tt> Module<a class="headerlink" href="#combine-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.resolve.misc.combine">
+<span id="combine-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">combine</span></tt> Module<a class="headerlink" href="#module-SamPy.resolve.misc.combine" title="Permalink to this headline">¶</a></h2>
+<p>Simple script to median combine FITS files.</p>
+<dl class="function">
+<dt id="SamPy.resolve.misc.combine.combineFITS">
+<tt class="descclassname">SamPy.resolve.misc.combine.</tt><tt class="descname">combineFITS</tt><big>(</big><em>files</em>, <em>exstension=0</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/combine.html#combineFITS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.combine.combineFITS" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simple function that median combines FITS files</p>
+</dd></dl>
+
 </div>
-<div class="section" id="findslits-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">findslits</span></tt> Module<a class="headerlink" href="#findslits-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.resolve.misc.findslits">
+<span id="findslits-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">findslits</span></tt> Module<a class="headerlink" href="#module-SamPy.resolve.misc.findslits" title="Permalink to this headline">¶</a></h2>
+<p>Fits slit image to a direct image to find x and y positions.</p>
+<p>Currently the script uses a slit image. In the future however
+we probably want to use the spectrum itself because there is
+no guarantee that a slit confirmation image has always been
+taken.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">todo:</th><td class="field-body">try to do the minimalization with scipy.optmize or</td>
+</tr>
+</tbody>
+</table>
+<p>some other technique which might be faster and/or more
+robust.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">PyFITS</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">NumPy</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">matplotlib</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">SciPy</td>
+</tr>
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="SamPy.resolve.misc.findslits.FindSlitPosition">
+<em class="property">class </em><tt class="descclassname">SamPy.resolve.misc.findslits.</tt><tt class="descname">FindSlitPosition</tt><a class="reference internal" href="_modules/SamPy/resolve/misc/findslits.html#FindSlitPosition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findslits.FindSlitPosition" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="SamPy.resolve.misc.findslits.FindSlitPosition.approxSkyPosition">
+<tt class="descname">approxSkyPosition</tt><big>(</big><em>lw=553</em>, <em>up=553</em>, <em>lwthr=0.9</em>, <em>upthr=0.9</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findslits.html#FindSlitPosition.approxSkyPosition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findslits.FindSlitPosition.approxSkyPosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an approximated sky position for slits.
+Assumes that both slits are shifted 553 pixels in y direction.
+Such an assumption is crude, but should allow a starting point.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Note :</th><td class="field-body">this functions modifies the slit throughput</td>
+</tr>
+<tr class="field"><th class="field-name">Todo :</th><td class="field-body">one should refine this after measuring the sky position accurately.</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">lw, pixels to shift the lower slit</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">up, pixels to shift the upper slit</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">lwthr, 1/lwthr will be the throughput modifier for the lower slit</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">upthr, 1/upthr will be the throughput modifier for the upper slit</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findslits.FindSlitPosition.chiSquare">
+<tt class="descname">chiSquare</tt><big>(</big><em>model</em>, <em>obs</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findslits.html#FindSlitPosition.chiSquare"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findslits.FindSlitPosition.chiSquare" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simple chi**2 calculation</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findslits.FindSlitPosition.fakeSlitData">
+<tt class="descname">fakeSlitData</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findslits.html#FindSlitPosition.fakeSlitData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findslits.FindSlitPosition.fakeSlitData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cuts out imaging data to test the fitting algorithm.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findslits.FindSlitPosition.fitSlitsToDirectImage">
+<tt class="descname">fitSlitsToDirectImage</tt><big>(</big><em>xran=50</em>, <em>yran=50</em>, <em>step=1</em>, <em>rot=1.0</em>, <em>rotstep=0.1</em>, <em>rotation=True</em>, <em>normalize=False</em>, <em>debug=True</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findslits.html#FindSlitPosition.fitSlitsToDirectImage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findslits.FindSlitPosition.fitSlitsToDirectImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits a slit image to a direct image.
+This functions does not collapse the slit image, but uses each pixel.
+By default the counts are normalized to a peak count, but this can
+be controlled using the optional keyword normalize.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">xran, +/- x-range to cover</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">yran, +/- y-range to cover</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">step, size of pixel steps in x and y</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">rot, +/- rotation angle in degrees</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">rotstep, step in degrees</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">normalize, whether slit and direct image values should be normalized or not</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">debug, print debugging information</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">dictionary</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findslits.FindSlitPosition.fitSlitsToDirectImageLSQ">
+<tt class="descname">fitSlitsToDirectImageLSQ</tt><big>(</big><em>slits, directimage, params=[-1, -1]</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findslits.html#FindSlitPosition.fitSlitsToDirectImageLSQ"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findslits.FindSlitPosition.fitSlitsToDirectImageLSQ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uses scipy.optimize.leastsq</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Note :</th><td class="field-body">This does not really work at the mo...</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findslits.FindSlitPosition.generateSkyMask">
+<tt class="descname">generateSkyMask</tt><big>(</big><em>slits</em>, <em>offsetx=0</em>, <em>offsety=0</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findslits.html#FindSlitPosition.generateSkyMask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findslits.FindSlitPosition.generateSkyMask" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function can be used to generate a slit mask on the sky</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findslits.FindSlitPosition.generateSlitImages">
+<tt class="descname">generateSlitImages</tt><big>(</big><em>output</em>, <em>type='.pdf'</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findslits.html#FindSlitPosition.generateSlitImages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findslits.FindSlitPosition.generateSlitImages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates diagnostic plots from slit image.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findslits.FindSlitPosition.generateSlitMask">
+<tt class="descname">generateSlitMask</tt><big>(</big><em>slits</em>, <em>throughput=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findslits.html#FindSlitPosition.generateSlitMask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findslits.FindSlitPosition.generateSlitMask" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function can be used to generate a slit mask from given slits.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findslits.FindSlitPosition.outputMinima">
+<tt class="descname">outputMinima</tt><big>(</big><em>output='min.txt'</em>, <em>stdout=True</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findslits.html#FindSlitPosition.outputMinima"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findslits.FindSlitPosition.outputMinima" title="Permalink to this definition">¶</a></dt>
+<dd><p>Outputs the results to a file and also the screen if stdout = True.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findslits.FindSlitPosition.overPlotSlits">
+<tt class="descname">overPlotSlits</tt><big>(</big><em>output</em>, <em>type='.pdf'</em>, <em>logscale=True</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findslits.html#FindSlitPosition.overPlotSlits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findslits.FindSlitPosition.overPlotSlits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overplot the slits to image data. Will overplot both the original slit
+positions and the best fitted position. Will also plot residuals.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">output, output file name</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">type</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">logscale, whether a log10 should be taken from the image data</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findslits.FindSlitPosition.plotMinimalization">
+<tt class="descname">plotMinimalization</tt><big>(</big><em>output='minim'</em>, <em>type='.png'</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findslits.html#FindSlitPosition.plotMinimalization"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findslits.FindSlitPosition.plotMinimalization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a two dimensional map of the minimalization.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">data</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findslits.FindSlitPosition.readSlitPositions">
+<tt class="descname">readSlitPositions</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findslits.html#FindSlitPosition.readSlitPositions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findslits.FindSlitPosition.readSlitPositions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads slit positions from a slitfile and slitdata from another file.</p>
+<p>This file should follow DS9 format, i.e.:
+box 1545  871 7 499 0
+box 1512 1522 7 614 0
+box 1482 2175 7 499 0</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Note :</th><td class="field-body">slit image positions, not the slit positions on the sky!</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">information about the slits, positions and data in slit image</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">dictionary</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findslits.FindSlitPosition.runAll">
+<tt class="descname">runAll</tt><big>(</big><em>opts</em>, <em>args</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findslits.html#FindSlitPosition.runAll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findslits.FindSlitPosition.runAll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Driver function</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findslits.FindSlitPosition.slitPosition">
+<tt class="descname">slitPosition</tt><big>(</big><em>input</em>, <em>xy</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findslits.html#FindSlitPosition.slitPosition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findslits.FindSlitPosition.slitPosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find slit positions from a confirmation image.</p>
+<p>The script assumes that slits are illuminated and that
+background gives at least 10 per cent increase for the
+slit data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Note :</th><td class="field-body">modper factor is used to modify the mean background to autolocate the slits.</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">input: input data</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">xy: x and y minimum and maximum position to identify a single slit</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">dictionary</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findslits.FindSlitPosition.writeDS9RegionFile">
+<tt class="descname">writeDS9RegionFile</tt><big>(</big><em>output='skyslits.reg'</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findslits.html#FindSlitPosition.writeDS9RegionFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findslits.FindSlitPosition.writeDS9RegionFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes a DS9 region file for all the slits.
+Draws a rectangle around each slit.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.resolve.misc.findslits.processArgs">
+<tt class="descclassname">SamPy.resolve.misc.findslits.</tt><tt class="descname">processArgs</tt><big>(</big><em>just_print_help=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findslits.html#processArgs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findslits.processArgs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes command line arguments</p>
+</dd></dl>
+
 </div>
-<div class="section" id="generatefilelists-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">generateFileLists</span></tt> Module<a class="headerlink" href="#generatefilelists-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.resolve.misc.generateFileLists">
+<span id="generatefilelists-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">generateFileLists</span></tt> Module<a class="headerlink" href="#module-SamPy.resolve.misc.generateFileLists" title="Permalink to this headline">¶</a></h2>
+<p>Contains a class that can be used to generate file lists from SOAR data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">pyFITS</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">NumPy</td>
+</tr>
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:sniemi&#37;&#52;&#48;unc&#46;edu">sniemi<span>&#64;</span>unc<span>&#46;</span>edu</a></td>
+</tr>
+<tr class="field"><th class="field-name">version:</th><td class="field-body">0.1</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="SamPy.resolve.misc.generateFileLists.SOARFileLists">
+<em class="property">class </em><tt class="descclassname">SamPy.resolve.misc.generateFileLists.</tt><tt class="descname">SOARFileLists</tt><big>(</big><em>path=None</em>, <em>ext=0</em>, <em>idef='.fits'</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/generateFileLists.html#SOARFileLists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.generateFileLists.SOARFileLists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates different file lists</p>
+<dl class="method">
+<dt id="SamPy.resolve.misc.generateFileLists.SOARFileLists.findParams">
+<tt class="descname">findParams</tt><big>(</big><em>params=['PARAM20', 'PARAM21', 'PARAM22']</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/generateFileLists.html#SOARFileLists.findParams"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.generateFileLists.SOARFileLists.findParams" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads header keywords from each FITS file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.generateFileLists.SOARFileLists.printFileInfo">
+<tt class="descname">printFileInfo</tt><big>(</big><em>fileInfo=None</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/generateFileLists.html#SOARFileLists.printFileInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.generateFileLists.SOARFileLists.printFileInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints file information to the screen</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.generateFileLists.SOARFileLists.saveFileInfo">
+<tt class="descname">saveFileInfo</tt><big>(</big><em>output='fileinfo.txt'</em>, <em>fileInfo=None</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/generateFileLists.html#SOARFileLists.saveFileInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.generateFileLists.SOARFileLists.saveFileInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves file information to a file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.generateFileLists.SOARFileLists.separateByParams">
+<tt class="descname">separateByParams</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/generateFileLists.html#SOARFileLists.separateByParams"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.generateFileLists.SOARFileLists.separateByParams" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Note :</th><td class="field-body">this only works when the three default params have been used</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
-<div class="section" id="splitslicerimages-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">SplitSlicerImages</span></tt> Module<a class="headerlink" href="#splitslicerimages-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.resolve.misc.SplitSlicerImages">
+<span id="splitslicerimages-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">SplitSlicerImages</span></tt> Module<a class="headerlink" href="#module-SamPy.resolve.misc.SplitSlicerImages" title="Permalink to this headline">¶</a></h2>
+<p>Splits image slicer FITS files to separate file, one for each slice.
+Adds some information to the FITS header.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">pyFITS</td>
+</tr>
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:sniemi&#37;&#52;&#48;unc&#46;edu">sniemi<span>&#64;</span>unc<span>&#46;</span>edu</a></td>
+</tr>
+<tr class="field"><th class="field-name">version:</th><td class="field-body">0.1</td>
+</tr>
+<tr class="field"><th class="field-name">todo:</th><td class="field-body">Make a command line argument reader; file id and y cuts (y1 &amp; y2)</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="SamPy.resolve.misc.SplitSlicerImages.SplitSlicerImages">
+<em class="property">class </em><tt class="descclassname">SamPy.resolve.misc.SplitSlicerImages.</tt><tt class="descname">SplitSlicerImages</tt><big>(</big><em>logfile='splitting.log'</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/SplitSlicerImages.html#SplitSlicerImages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.SplitSlicerImages.SplitSlicerImages" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class can be used to split slicer images to separate files.</p>
+<dl class="method">
+<dt id="SamPy.resolve.misc.SplitSlicerImages.SplitSlicerImages.findFiles">
+<tt class="descname">findFiles</tt><big>(</big><em>identifier='Ne'</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/SplitSlicerImages.html#SplitSlicerImages.findFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.SplitSlicerImages.SplitSlicerImages.findFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds all .fits files that have the identifier in them.
+Uses wild cards on both sides of the identifier.
+Requires that the file ends with .fits</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">identifier: to match files</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">a list of files matching the identifier</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.SplitSlicerImages.SplitSlicerImages.splitFiles">
+<tt class="descname">splitFiles</tt><big>(</big><em>filelist=None, ext=0, splity=[215, 456], id='slice'</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/SplitSlicerImages.html#SplitSlicerImages.splitFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.SplitSlicerImages.SplitSlicerImages.splitFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Splits all the FITS files in the filelist to three separate files
+one for each slicer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">fileslist, a list of files to be split</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">ext, extension of the fits file</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">splity, y pixel values for splitting</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">id, name identifier for each slice</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
 </div>
 </div>
 
@@ -125,7 +734,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

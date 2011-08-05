@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
-    <link rel="up" title="SamPy.astronomy" href="../astronomy.html" /> 
+    <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body>
 
@@ -42,8 +42,7 @@
         <li><a href="../../../index.html">home</a>|&nbsp;</li>
         <li><a href="../../../search.html">search</a>|&nbsp;</li>
 
-          <li><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li><a href="../astronomy.html" accesskey="U">SamPy.astronomy</a> &raquo;</li> 
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -72,11 +71,11 @@
             
   <h1>Source code for SamPy.astronomy.basics</h1><div class="highlight"><pre>
 <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">This module contains basic information of different</span>
-<span class="sd">subjects often needed in astronomy.</span>
+<span class="sd">This module contains basic information of different subjects often needed in astronomy such as conversions from one magnitude system to another.</span>
 
-<span class="sd">:author : Sami-Matias Niemi</span>
-<span class="sd">:version : 0.01</span>
+<span class="sd">:author: Sami-Matias Niemi</span>
+<span class="sd">:contact: niemi@stsci.edu</span>
+<span class="sd">:version: 0.01</span>
 <span class="sd">&#39;&#39;&#39;</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Sami-Matias Niemi&#39;</span>
@@ -84,14 +83,16 @@
 
 <div class="viewcode-block" id="JohnsonToABmagnitudes"><a class="viewcode-back" href="../../../SamPy.astronomy.basics.html#SamPy.astronomy.basics.JohnsonToABmagnitudes">[docs]</a><span class="k">def</span> <span class="nf">JohnsonToABmagnitudes</span><span class="p">():</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    These values can be used to convert</span>
+<span class="sd">    Returned dictionary values can be used to convert</span>
 <span class="sd">    Johnson U, B, V, and K bands to Vega system.</span>
+
+<span class="sd">    :rtype: dictionary</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">out</span><span class="p">[</span><span class="s">&#39;AB_vega_U&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.729977</span>
     <span class="n">out</span><span class="p">[</span><span class="s">&#39;AB_vega_B&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.0934</span>
     <span class="n">out</span><span class="p">[</span><span class="s">&#39;AB_vega_V&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0112</span>
-    <span class="n">out</span><span class="p">[</span><span class="s">&#39;AB_vega_K&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1.854</span>
+    <span class="n">out</span><span class="p">[</span><span class="s">&#39;AB_vega_K&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.854</span>
     <span class="k">return</span> <span class="n">out</span></div>
 </pre></div>
 
@@ -112,13 +113,12 @@
         <li><a href="../../../index.html">home</a>|&nbsp;</li>
         <li><a href="../../../search.html">search</a>|&nbsp;</li>
 
-          <li><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li><a href="../astronomy.html" >SamPy.astronomy</a> &raquo;</li> 
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

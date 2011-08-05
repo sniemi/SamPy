@@ -98,31 +98,31 @@
 <div class="viewcode-block" id="createAssociationDB"><a class="viewcode-back" href="../../../SamPy.grisms.html#SamPy.grisms.generateAssociationDB.createAssociationDB">[docs]</a><span class="k">def</span> <span class="nf">createAssociationDB</span><span class="p">(</span><span class="n">grism</span><span class="p">,</span> <span class="n">direct</span><span class="p">,</span> <span class="n">match</span><span class="p">,</span>
                         <span class="n">output</span> <span class="o">=</span><span class="s">&#39;ACSTEST.db&#39;</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Email from Martin Kuemmel:</span>
-<span class="sd">    Concerning the format:</span>
-<span class="sd">    - Each association (see listing below contains two main entries, the</span>
-<span class="sd">    first entry (a list)  containing information on the grism images and</span>
-<span class="sd">    the second a dictionary) containing direct imaging information.</span>
+<span class="sd">    Email from Martin Kuemmel concerning the format:</span>
 
-<span class="sd">    - The grism image information is a list, which each entry consisting of</span>
-<span class="sd">     a tuple with four items. The first item is the name of the grism</span>
-<span class="sd">     image, the second item is the exposure time of the grism image,</span>
-<span class="sd">     the third item is the name of the associated direct image and the</span>
-<span class="sd">     fourth item a real number measuring the &#39;distance&#39; between the grism</span>
-<span class="sd">     image and the direct image. Very close pairs of grism image - direct</span>
-<span class="sd">     image have a distance of 0.0. I think there is a very complicated</span>
-<span class="sd">     formula that measures this distance, however the most important input</span>
-<span class="sd">     is the pointing on the sky. If a grism and a direct image have the</span>
-<span class="sd">     same pointing on the sky, they are very close. Also the time</span>
-<span class="sd">     difference between the direct image and the grism image has some</span>
-<span class="sd">     influence.</span>
+<span class="sd">    * Each association (see listing below contains two main entries, the</span>
+<span class="sd">      first entry (a list)  containing information on the grism images and</span>
+<span class="sd">      the second a dictionary) containing direct imaging information.</span>
 
-<span class="sd">    - The direct image information is a dictionary that contains the filter</span>
-<span class="sd">     names as keys. For each filter there is a list of tuples with three</span>
-<span class="sd">     items. The first item is the direct image name, the second item is</span>
-<span class="sd">     the exposure time and the third item is the overlap with the area covered</span>
-<span class="sd">     by the grism images of that association. For some reason (I have forgotten),</span>
-<span class="sd">     this overlap can be more than 1.</span>
+<span class="sd">    * The grism image information is a list, which each entry consisting of</span>
+<span class="sd">      a tuple with four items. The first item is the name of the grism</span>
+<span class="sd">      image, the second item is the exposure time of the grism image,</span>
+<span class="sd">      the third item is the name of the associated direct image and the</span>
+<span class="sd">      fourth item a real number measuring the &#39;distance&#39; between the grism</span>
+<span class="sd">      image and the direct image. Very close pairs of grism image - direct</span>
+<span class="sd">      image have a distance of 0.0. I think there is a very complicated</span>
+<span class="sd">      formula that measures this distance, however the most important input</span>
+<span class="sd">      is the pointing on the sky. If a grism and a direct image have the</span>
+<span class="sd">      same pointing on the sky, they are very close. Also the time</span>
+<span class="sd">      difference between the direct image and the grism image has some</span>
+<span class="sd">      influence.</span>
+
+<span class="sd">    * The direct image information is a dictionary that contains the filter</span>
+<span class="sd">      names as keys. For each filter there is a list of tuples with three</span>
+<span class="sd">      items. The first item is the direct image name, the second item is</span>
+<span class="sd">      the exposure time and the third item is the overlap with the area covered</span>
+<span class="sd">      by the grism images of that association. For some reason (I have forgotten),</span>
+<span class="sd">      this overlap can be more than 1.</span>
 
 <span class="sd">    So the two &#39;dir_min_overlap&#39; that you quote are two different values,</span>
 <span class="sd">    the first one measuring the distance between the grism image and the</span>
@@ -159,7 +159,8 @@
 <span class="sd">    (&#39;J8WQ91ECQ&#39;, 500.0, 0.89063763040941479),</span>
 <span class="sd">    (&#39;J6FL7YIDQ&#39;, 500.0, 0.97062910394576651),</span>
 <span class="sd">    (&#39;J6FL8YKRQ&#39;, 500.0, 1.011511942107943),</span>
-<span class="sd">    (&#39;J8WQ91E7Q&#39;, 500.0, 0.89063763040941479)]})&#39;&#39;&#39;</span>
+<span class="sd">    (&#39;J8WQ91E7Q&#39;, 500.0, 0.89063763040941479)]})</span>
+<span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">dc</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">match</span><span class="p">):</span>
         <span class="n">nm</span> <span class="o">=</span> <span class="s">&#39;ACSTEST</span><span class="si">%i</span><span class="s">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
@@ -333,7 +334,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

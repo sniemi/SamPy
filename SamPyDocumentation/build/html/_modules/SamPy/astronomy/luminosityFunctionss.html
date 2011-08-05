@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
-    <link rel="up" title="SamPy.astronomy" href="../astronomy.html" /> 
+    <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body>
 
@@ -42,8 +42,7 @@
         <li><a href="../../../index.html">home</a>|&nbsp;</li>
         <li><a href="../../../search.html">search</a>|&nbsp;</li>
 
-          <li><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li><a href="../astronomy.html" accesskey="U">SamPy.astronomy</a> &raquo;</li> 
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -72,21 +71,20 @@
             
   <h1>Source code for SamPy.astronomy.luminosityFunctionss</h1><div class="highlight"><pre>
 <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">Differrent luminosity functions.</span>
+<span class="sd">Different luminosity functions.</span>
 
-<span class="sd">@requires: NumPy</span>
+<span class="sd">:requires: NumPy</span>
 
-<span class="sd">@version: 0.1</span>
+<span class="sd">:version: 0.1</span>
 
-<span class="sd">@author: Sami-Matias Niemi</span>
-<span class="sd">@contact: niemi@stsci.edu</span>
+<span class="sd">:author: Sami-Matias Niemi</span>
+<span class="sd">:contact: niemi@stsci.edu</span>
 
-<span class="sd">@warning: This has never been tested!</span>
-<span class="sd">@todo: add more LFs. There are for example several more from the Bell.</span>
+<span class="sd">:warning: This has never been tested!</span>
+<span class="sd">:todo: add more LFs. There are for example several more from the Bell.</span>
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">N</span>
-<span class="kn">import</span> <span class="nn">smnIO.sextutils</span> <span class="kn">as</span> <span class="nn">su</span>
 
 <span class="c">#This should be global, as all observational data are in the same place</span>
 <span class="c">#Note however that because the data is in Dropbox the absolute path</span>
@@ -104,7 +102,8 @@
 <span class="sd">    0.0172471     -19.7320     -1.02577  1.57122e+08</span>
 <span class="sd">    0.000552186    0.0264740    0.0249926  2.29536e+06</span>
 <span class="sd">    Then we present the V/V_max data points; x   phi  phi-1sig  phi+1sig</span>
-<span class="sd">    @return: absolute magnitude, phi, phi_lo, phi_high</span>
+
+<span class="sd">    :return: absolute magnitude, phi, phi_lo, phi_high</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="nb">file</span> <span class="o">=</span> <span class="n">observation_path</span> <span class="o">+</span> <span class="s">&#39;bell/sdss2mass_lf/glf.out&#39;</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
@@ -132,13 +131,12 @@
         <li><a href="../../../index.html">home</a>|&nbsp;</li>
         <li><a href="../../../search.html">search</a>|&nbsp;</li>
 
-          <li><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li><a href="../astronomy.html" >SamPy.astronomy</a> &raquo;</li> 
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

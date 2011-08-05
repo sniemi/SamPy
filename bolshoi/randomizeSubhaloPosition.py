@@ -1,11 +1,13 @@
-from mpl_toolkits.mplot3d import Axes3D
+'''
+Randomizes a subhalo galaxy position (RA and DEC)
+'''
 import matplotlib.pyplot as plt
 import numpy as np
 from astLib import astCoords
 from cosmocalc import cosmocalc
 # from Sami's repo
-import astronomy.randomizers as rand
-import astronomy.conversions as conv
+import SamPy.astronomy.randomizers as rand
+import SamPy.astronomy.conversions as conv
 
 __author__ = 'Sami-Matias Niemi'
 

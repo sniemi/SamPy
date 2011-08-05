@@ -1,5 +1,5 @@
 SamPy Modules
-===============
+=============
 
 .. toctree::
    :maxdepth: 3

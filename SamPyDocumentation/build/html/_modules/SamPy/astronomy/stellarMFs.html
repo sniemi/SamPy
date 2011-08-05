@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
-    <link rel="up" title="SamPy.astronomy" href="../astronomy.html" /> 
+    <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body>
 
@@ -42,8 +42,7 @@
         <li><a href="../../../index.html">home</a>|&nbsp;</li>
         <li><a href="../../../search.html">search</a>|&nbsp;</li>
 
-          <li><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li><a href="../astronomy.html" accesskey="U">SamPy.astronomy</a> &raquo;</li> 
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -72,14 +71,15 @@
             
   <h1>Source code for SamPy.astronomy.stellarMFs</h1><div class="highlight"><pre>
 <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">Different stellar mass functions. Some are based on</span>
-<span class="sd">observational data while others are fitting functions.</span>
+<span class="sd">Different stellar mass functions.</span>
+<span class="sd">Some are based on observational data while others are fitting functions.</span>
 
-<span class="sd">:requires : NumPy</span>
+<span class="sd">:requires: NumPy</span>
+<span class="sd">:requires: smnIO.sextutils</span>
 
-<span class="sd">:version : 0.2</span>
+<span class="sd">:version: 0.2</span>
 
-<span class="sd">:author : Sami-Matias Niemi</span>
+<span class="sd">:author: Sami-Matias Niemi</span>
 <span class="sd">:contact : niemi@stsci.edu</span>
 <span class="sd">&#39;&#39;&#39;</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -104,21 +104,23 @@
 </div>
 <div class="viewcode-block" id="highRedshiftMFs"><a class="viewcode-back" href="../../../SamPy.astronomy.stellarMFs.html#SamPy.astronomy.stellarMFs.highRedshiftMFs">[docs]</a><span class="k">def</span> <span class="nf">highRedshiftMFs</span><span class="p">():</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Stellar mass functions from Valentino et al. arXiv:1008.3901v2</span>
-<span class="sd">    These values probably use the Salpeter IMF.</span>
-<span class="sd">    If so then subtract 0.25 dex from log(m*) to get to Chabrier.</span>
+<span class="sd">    Stellar mass functions from Valentino Gonzalez et al. arXiv:1008.3901v2</span>
+<span class="sd">    :note: These values probably use the Salpeter IMF. If so we should then subtract 0.25 dex from log(m*) to go to Chabrier.</span>
 <span class="sd">    Table 1</span>
-<span class="sd">                        log10 (dN/dlog10 (M/M_sun)/Mpc3 )</span>
-<span class="sd">    log10(M/M_sun)     #z = 3.8    #5.0    #5.9    #6.8</span>
+<span class="sd">                            log10 (dN/dlog10 (M/M_sun)/Mpc3 )</span>
+<span class="sd">    log10(M/M_sun)         3.8    err     5.0    err      5.9   err     6.8    err</span>
+
+<span class="sd">    :return: high-redshift stellar mass functions from Gonzalez. et al (2011) paper</span>
+<span class="sd">    :rtype: dictionary</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="nb">file</span> <span class="o">=</span> <span class="n">observation_path</span> <span class="o">+</span> <span class="s">&#39;stellarmf/HighRedshift.dat&#39;</span>
     <span class="n">tmp</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
     <span class="n">out</span><span class="p">[</span><span class="s">&#39;stellar_mass&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.25</span>
-    <span class="n">out</span><span class="p">[</span><span class="s">&#39;z = 3.8&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
-    <span class="n">out</span><span class="p">[</span><span class="s">&#39;z = 5.0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
-    <span class="n">out</span><span class="p">[</span><span class="s">&#39;z = 5.9&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span>
-    <span class="n">out</span><span class="p">[</span><span class="s">&#39;z = 6.8&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">]</span>
+    <span class="n">out</span><span class="p">[</span><span class="s">&#39;z = 3.8&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">tmp</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>  <span class="n">tmp</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="n">out</span><span class="p">[</span><span class="s">&#39;z = 5.0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">tmp</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span>  <span class="n">tmp</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">])</span>
+    <span class="n">out</span><span class="p">[</span><span class="s">&#39;z = 5.9&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">tmp</span><span class="p">[:,</span> <span class="mi">5</span><span class="p">],</span>  <span class="n">tmp</span><span class="p">[:,</span> <span class="mi">6</span><span class="p">])</span>
+    <span class="n">out</span><span class="p">[</span><span class="s">&#39;z = 6.8&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">tmp</span><span class="p">[:,</span> <span class="mi">7</span><span class="p">],</span>  <span class="n">tmp</span><span class="p">[:,</span> <span class="mi">8</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">out</span>
 
 </div>
@@ -133,8 +135,10 @@
 <span class="sd">    0.000512733    0.0154157    0.0239414  1.06609e+07</span>
 <span class="sd">    Then we present the V/V_max data points; x   phi  phi-1sig  phi+1sig</span>
 <span class="sd">    Convert to h (default = 0.7) and Chabrier IMF.</span>
+
 <span class="sd">    :param h: the Hubble parameter (default h = 0.7)</span>
 <span class="sd">    :param chabrier: whether or not to convert to Chabrier IMF (default = True)</span>
+
 <span class="sd">    :return: log10(stellar mass), log10(phi), log10(phi_low), log10(phi_high)</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="nb">file</span> <span class="o">=</span> <span class="n">observation_path</span> <span class="o">+</span> <span class="s">&#39;bell/sdss2mass_lf/gmf.out&#39;</span>
@@ -159,8 +163,10 @@
 <span class="sd">    0.000586424    0.0144582    0.0422601  1.18873e+07</span>
 <span class="sd">    Then we present the V/V_max data points; x   phi  phi-1sig  phi+1sig</span>
 <span class="sd">    Convert to h (default = 0.7) and Chabrier IMF.</span>
-<span class="sd">    :param h: the Hubble parameter (default h = 0.7)</span>
-<span class="sd">    :param chabrier: whether or not to convert to Chabrier IMF (default = True)</span>
+
+<span class="sd">    :param: h: the Hubble parameter (default h = 0.7)</span>
+<span class="sd">    :param: chabrier: whether or not to convert to Chabrier IMF (default = True)</span>
+
 <span class="sd">    :return: log10(stellar mass), log10(phi), log10(phi_low), log10(phi_high)</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="nb">file</span> <span class="o">=</span> <span class="n">observation_path</span> <span class="o">+</span> <span class="s">&#39;bell/sdss2mass_lf/kmf.out&#39;</span>
@@ -277,13 +283,12 @@
         <li><a href="../../../index.html">home</a>|&nbsp;</li>
         <li><a href="../../../search.html">search</a>|&nbsp;</li>
 
-          <li><a href="../../index.html" >Module code</a> &raquo;</li>
-          <li><a href="../astronomy.html" >SamPy.astronomy</a> &raquo;</li> 
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

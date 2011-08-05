@@ -70,22 +70,21 @@
           <div class="body">
             
   <h1>Source code for SamPy.fits.combine</h1><div class="highlight"><pre>
-<span class="c">#!/usr/bin/env python</span>
-<span class="c"># -*- encoding: utf-8 -*-</span>
-<span class="c">#</span>
-<span class="c"># ABOUT    : This script is a quick way of combining fits files</span>
-<span class="c">#</span>
-<span class="c"># USAGE    : reduce.py [-n] [-m] [-a] [-f] &lt;file list or name&gt; [-o] &lt;output file&gt;</span>
-<span class="c">#            where:</span>
-<span class="c">#            [-m] median combine</span>
-<span class="c">#            [-a] average combine</span>
-<span class="c">#            [-f] combines given files</span>
-<span class="c">#            [-o] name of the output file</span>
-<span class="c">#            [-n] uses NumPy and PyFits rather than Pyraf</span>
-<span class="c">#</span>
-<span class="c"># AUTHOR   : Sami-Matias Niemi</span>
-<span class="c">#</span>
-<span class="c"># HISTORY  : 26/11/2008 Initial Release</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">:about: This script is a quick way of combining fits files</span>
+
+<span class="sd">:usage: reduce.py [-n] [-m] [-a] [-f] &lt;file list or name&gt; [-o] &lt;output file&gt;</span>
+<span class="sd">        where:</span>
+<span class="sd">                [-m] median combine</span>
+<span class="sd">                [-a] average combine</span>
+<span class="sd">                [-f] combines given files</span>
+<span class="sd">                [-o] name of the output file</span>
+<span class="sd">                [-n] uses NumPy and PyFits rather than Pyraf</span>
+
+<span class="sd">:date: 26/11/2008 Initial Release</span>
+<span class="sd">:author: Sami-Matias Niemi</span>
+<span class="sd">:contact: niemi@stsci.edu</span>
+<span class="sd">&#39;&#39;&#39;</span>
 
 <span class="n">__version__</span> <span class="o">=</span> <span class="s">&quot;0.1a&quot;</span>
 <span class="n">__author__</span> <span class="o">=</span> <span class="s">&quot;Sami-Matias Niemi&quot;</span>
@@ -94,9 +93,10 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Processes the command line arguments o FITSCombine.py data reduction script.</span>
 <span class="sd">    </span>
-<span class="sd">    @param just_print_help: will print help</span>
-<span class="sd">    @type: boolean</span>
-<span class="sd">    @return: parsed commmand line options</span>
+<span class="sd">    :param just_print_help: will print help</span>
+<span class="sd">    :type just_print_help: boolean</span>
+<span class="sd">    </span>
+<span class="sd">    :return: parsed commmand line options</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span> <span class="nn">optparse</span> <span class="kn">import</span> <span class="n">OptionParser</span>
     <span class="n">parser</span> <span class="o">=</span> <span class="n">OptionParser</span><span class="p">()</span>
@@ -136,13 +136,14 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Combines given images.</span>
 <span class="sd">    </span>
-<span class="sd">    @param filelist: list of files to be combined.</span>
-<span class="sd">    @type: list</span>
-<span class="sd">    @param median: Performs median combining, if False uses average values</span>
-<span class="sd">    @type: boolean</span>
-<span class="sd">    @param verbose: verbose mode.</span>
-<span class="sd">    @type: boolean</span>
-<span class="sd">    @return: The combined image (2d-array with pixel values)</span>
+<span class="sd">    :param filelist: list of files to be combined.</span>
+<span class="sd">    :type filelist: list</span>
+<span class="sd">    :param median: Performs median combining, if False uses average values</span>
+<span class="sd">    :type median: boolean</span>
+<span class="sd">    :param verbose: verbose mode.</span>
+<span class="sd">    :type verbose: boolean</span>
+
+<span class="sd">    :return: The combined image (2d-array with pixel values)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">pyfits</span>
     <span class="kn">import</span> <span class="nn">numpy</span>
@@ -235,7 +236,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>
