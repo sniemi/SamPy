@@ -1,8 +1,9 @@
 '''
-Extremely simple script that can be used to print FITS headers to stdout.
+Extremely simple script that prints out a FITS header to stdout.
+Defaults to the 0th extension if not specified.
 
-Accepts wildcard in the name, but then the filename must be given inside quote marks
-i.e. "*.fits"
+Accepts wildcard in the name, but then the filename must be
+given inside quote marks i.e. "*.fits"
 
 :date: Mar 27, 2009
 :author: Sami-Matias Niemi
@@ -82,5 +83,5 @@ if __name__ == "__main__":
         extension = int(sys.argv[2])
     except:
         print '\nNo header extension given, will print the first extension header of file: %s\n' % filename
-        extension = 1
+        extension = 0
     showHeader(filename, extension)

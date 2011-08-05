@@ -17,7 +17,9 @@ __author__ = 'Sami-Matias Niemi'
 
 class SOARFileLists():
     '''
-    Generates different file lists
+    Generates several different file lists based on different
+    identifiers. This class can be useful when reducing data
+    with IRAF which requires different file lists as input.
     '''
 
     def __init__(self, path=None, ext=0, idef='.fits'):
@@ -92,7 +94,6 @@ class SOARFileLists():
 
     def separateByParams(self):
         '''
-
         :note: this only works when the three default params have been used
         '''
         vls = np.array(self.arrayInformation)
