@@ -28,8 +28,12 @@ def combineFiles(files, outputfile):
 def cPickleDumpDictionary(dictionary, output):
     '''
     Dumps a dictionary of data to a cPickled file
-    '''
 
+    :param: dictionary, a Python data container does not have to be a dictionary
+    :param: output, name of the output file
+
+    :return: None
+    '''
     out = open(output, 'wb')
     cPickle.dump(dictionary, out)
     out.close()
