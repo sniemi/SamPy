@@ -13,6 +13,46 @@ import scipy
 import scipy.optimize
 import numpy as np
 
+
+def _gaussianMoments2D(data):
+    '''
+    :return: (height, x, y, width_x, width_y) the gaussian parameters of a 2D distribution
+             by calculating its moments
+    '''
+    total = data.sum()
+    X, Y = np.indices(data.shape)
+    x = (X*data).sum()/total
+    y = (Y*data).sum()/total
+    col = data[:, int(y)]
+    widthX = np.sqrt(np.abs((np.arange(col.size)-y)**2*col).sum()/col.sum())
+    row = data[int(x), :]
+    widthY = np.sqrt(np.abs((np.arange(row.size)-x)**2*row).sum()/row.sum())
+    height = data.max()
+    return height, x, y, widthX, widthY
+
+
+def _gaussian2D(height, center_x, center_y, width_x, width_y):
+    '''
+    Returns a 2 dimensional gaussian function with the given parameters.
+    '''
+    width_x = float(width_x)
+    width_y = float(width_y)
+    return lambda x,y: height*np.exp(-(((center_x-x)/width_x)**2+((center_y-y)/width_y)**2)/2)
+
+
+def Gaussian2D(data):
+    '''
+    Fits a 2D Gaussian to a given data.
+    Uses scipy.optimize.leastsq for fitting.
+
+    :param: data
+    '''
+    params = _gaussianMoments2D(data)
+    errfunc = lambda p: np.ravel(_gaussian2D(*p)(*np.indices(data.shape)) - data)
+    p, success = scipy.optimize.leastsq(errfunc, params)
+    return p
+
+
 def Gaussian(ydata, xdata=None, initials=None):
     '''
     Fits a single Gaussian to a given data.

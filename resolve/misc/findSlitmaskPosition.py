@@ -4,6 +4,7 @@
 :requires: NumPy
 :requires: matplotlib
 :requires: SciPy
+:requires: astLib
 
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
@@ -20,6 +21,7 @@ import numpy as np
 import matplotlib.patches as patches
 from matplotlib import cm
 import scipy.ndimage.interpolation as interpolation
+import astLib.astWCS as WCS
 #from SamPy
 import SamPy.smnIO.write as write
 import SamPy.smnIO.read
@@ -67,6 +69,7 @@ class FindSlitmaskPosition():
         #load images
         fh = PF.open(self.dirfile, ignore_missing_end=True)
         self.direct['header0'] = fh[0].header
+        self.direct['WCS'] = WCS.WCS(self.dirfile)
         img = fh[0].data
         fh.close()
         if img.shape[0] == 1:
@@ -107,6 +110,7 @@ class FindSlitmaskPosition():
         thrs = [float(a) for a in self.config.get(self.section, 'throughputs').strip().split(',')]
         offseta = self.config.getfloat(self.section, 'offsetalong')
         offsetb = self.config.getfloat(self.section, 'offsetbetween')
+        binning = self.config.getint(self.section, 'binning')
         platescaleS = self.config.getfloat(self.section, 'platescaleSpectra')
         platescaleD = self.config.getfloat(self.section, 'platescaleDirect')
         names = list(self.config.get(self.section, 'names').strip().split(','))
@@ -120,7 +124,8 @@ class FindSlitmaskPosition():
                              'width' : w / platescaleS,
                              'heightSky': h,
                              'height': h / platescaleS,
-                             'throughput': 1./t}
+                             'throughput': 1./t,
+                             'binning': binning}
 
         #sky related
         self.sky['offseta'] = offseta
@@ -159,6 +164,11 @@ class FindSlitmaskPosition():
 
         xp = self.direct['xposition']
         yp = self.direct['yposition']
+
+        y, x = np.indices(self.direct['image'].shape)
+        y -= self.direct['CRPIX2']
+        x -= self.direct['CRPIX1']
+        xra = x * self.direct['CD1_1'] + self.direct['CRVAL1']
 
         fig = P.figure()
         ax = fig.add_subplot(111)
