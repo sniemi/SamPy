@@ -97,7 +97,8 @@ class FindSlitPositionsInDirectImage():
         offsetb = self.config.getfloat(self.section, 'offsetbetween')
         platescale = self.config.getfloat(self.section, 'platescale')
         names = list(self.config.get(self.section, 'names').strip().split(','))
-
+        names = [name.strip() for name in names]
+        
         out = {}
         for n, x, y, w, h, t in zip(names, xcoords, ycoords, widths, heights, thrs):
             n = n.strip()

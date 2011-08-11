@@ -4,7 +4,7 @@
 :requires: NumPy
 :requires: matplotlib
 :requires: SciPy
-:requires: astLib
+:requires: Kapteyn Python package
 
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
@@ -18,10 +18,11 @@ from optparse import OptionParser
 import pyfits as PF
 import pylab as P
 import numpy as np
+from matplotlib import pyplot as plt
 import matplotlib.patches as patches
 from matplotlib import cm
 import scipy.ndimage.interpolation as interpolation
-import astLib.astWCS as WCS
+from kapteyn import wcs, positions, maputils
 #from SamPy
 import SamPy.smnIO.write as write
 import SamPy.smnIO.read
@@ -64,12 +65,10 @@ class FindSlitmaskPosition():
         Reads in the slit and direct image FITS files.
 
         :note: now removes part of the spectra regions
-
         '''
         #load images
         fh = PF.open(self.dirfile, ignore_missing_end=True)
         self.direct['header0'] = fh[0].header
-        self.direct['WCS'] = WCS.WCS(self.dirfile)
         img = fh[0].data
         fh.close()
         if img.shape[0] == 1:
@@ -85,6 +84,7 @@ class FindSlitmaskPosition():
                 slitimage = slitimage[0]
             self.slits[slit]['image'] = slitimage
             self.slits[slit]['profile'] = np.sum(slitimage[20:-20,:], axis=1)
+            self.slits[slit]['pixels'] = len(self.slits[slit]['profile'])
 
         if self.debug:
             print '\ndirect:'
@@ -114,6 +114,7 @@ class FindSlitmaskPosition():
         platescaleS = self.config.getfloat(self.section, 'platescaleSpectra')
         platescaleD = self.config.getfloat(self.section, 'platescaleDirect')
         names = list(self.config.get(self.section, 'names').strip().split(','))
+        names = [name.strip() for name in names]
         xcoord = self.config.getint(self.section, 'xcoordinate')
         ycoord = self.config.getint(self.section, 'ycoordinate')
         filtercurve = self.config.get(self.section, 'throughputfile')
@@ -121,9 +122,9 @@ class FindSlitmaskPosition():
 
         for n, w, h, t in zip(names, widths, heights, thrs):
             self.slits[n] = {'widthSky': w,
-                             'width' : w / platescaleS,
+                             'width' : w / platescaleS / binning,
                              'heightSky': h,
-                             'height': h / platescaleS,
+                             'height': h / platescaleS / binning,
                              'throughput': 1./t,
                              'binning': binning}
 
@@ -156,37 +157,95 @@ class FindSlitmaskPosition():
         self.fitting['rotstep'] = self.config.getfloat(self.section, 'rotationstep')
 
 
+    def _calculatePosition(self):
+        y, x = np.indices(self.direct['image'].shape)
+        xp = self.direct['xposition']
+        yp = self.direct['yposition']
+        pos = (y == yp) & (x == xp)
+        y -= self.direct['header0']['CRPIX2']
+        x -= self.direct['header0']['CRPIX1']
+        xra = x * self.direct['header0']['CD1_1'] + self.direct['header0']['CRVAL1']
+        ydec = y * self.direct['header0']['CD1_2'] + self.direct['header0']['CRVAL2']
+        print xra[pos] #thse are wrong
+        print ydec[pos] #thse are wrong
+        pr = wcs.Projection(self.direct['header0'])
+        w,p,u,e = positions.str2pos('%i, %i' % (xp, yp), pr)
+        if e == '':
+           print "pixels:", p
+           print "world coordinates:", w, u
+
+
     def _plotGalaxy(self):
         '''
         Very simple script to plot an image of the galaxy
         '''
-        tol = 200
-
+        tol = 80.0 #arc seconds
+        tol = np.floor(tol / self.direct['platescale']) # pixels
+        print tol
         xp = self.direct['xposition']
         yp = self.direct['yposition']
 
-        y, x = np.indices(self.direct['image'].shape)
-        y -= self.direct['CRPIX2']
-        x -= self.direct['CRPIX1']
-        xra = x * self.direct['CD1_1'] + self.direct['CRVAL1']
+        #make a figure
+        fig = plt.figure(1)
+        frame = fig.add_subplot(111)
+        #frame.set_title(self.dirfile)
 
-        fig = P.figure()
-        ax = fig.add_subplot(111)
-        ax.imshow(np.log10(self.direct['image']), origin='lower')
+        #from Kapteyn
+        f = maputils.FITSimage(self.dirfile)
+        annim = f.Annotatedimage(frame, cmap='Spectral', clipmin=0.01, clipmax=12)
+        annim.Image(alpha=0.9)
+        grat = annim.Graticule()
+        grat.setp_gratline(wcsaxis=0,linestyle=':')
+        grat.setp_gratline(wcsaxis=1,linestyle=':')
+        units = r'$ergs/(sec.cm^2)$'
+        colbar = annim.Colorbar(fontsize=8)
+        colbar.set_label(label=units, fontsize=24)
 
-        #original Slits
-        for slit in self.slits.values():
-            ax.add_patch(patches.Rectangle(slit['xy'],
-                                           slit['xmax']-slit['xmin'],
-                                           slit['ymax']-slit['ymin'],
-                                           fill=False))
+#        #original Slits
+#        for slit in self.slits.values():
+#            frame.add_patch(patches.Rectangle(slit['xy'],
+#                                              slit['xmax']-slit['xmin'],
+#                                              slit['ymax']-slit['ymin'],
+#                                              fill=False))
 
-        P.savefig('Galaxy.pdf')
+        annim.plot()
+        annim.interact_toolbarinfo()
+        annim.interact_imagecolors()
+        annim.interact_writepos()
 
-        #zoomed in
-        ax.set_xlim(xp-tol, xp+tol)
-        ax.set_ylim(yp-tol, yp+tol)
-        P.savefig('GalaxyAZoomed.pdf')
+        plt.savefig('Galaxy.pdf')
+        plt.close()
+
+        #zoomed in version
+        fig = plt.figure(2)
+        frame = fig.add_subplot(111)
+
+#        #original Slits
+#        for slit in self.slits.values():
+#            frame.add_patch(patches.Rectangle(slit['xy'],
+#                                              slit['xmax']-slit['xmin'],
+#                                              slit['ymax']-slit['ymin'],
+#                                              fill=False))
+
+        f = maputils.FITSimage(self.dirfile)
+        f.set_limits(pxlim=(xp-tol, xp+tol), pylim=(yp-tol ,yp+tol))
+        annim = f.Annotatedimage(frame, cmap='Spectral', clipmin=0.01, clipmax=12)
+        annim.Image()
+        grat = annim.Graticule()
+        grat.setp_gratline(wcsaxis=0,linestyle=':')
+        grat.setp_gratline(wcsaxis=1,linestyle=':')
+        units = r'$ergs/(sec.cm^2)$'
+        colbar = annim.Colorbar(fontsize=7)
+        colbar.set_label(label=units, fontsize=20)
+
+        annim.plot()
+        annim.interact_toolbarinfo()
+        annim.interact_imagecolors()
+        annim.interact_writepos()
+
+        #plt.show()
+        plt.savefig('GalaxyAZoomed.pdf')
+        plt.close()
 
 
     def _generateSlitMask(self):
@@ -232,7 +291,6 @@ class FindSlitmaskPosition():
         return r
 
 
-
     def fitSlitsToDirectImage(self, normalize=False):
         '''
         Fits slits to a direct image to recover their position an orientation.
@@ -271,17 +329,21 @@ class FindSlitmaskPosition():
         else:
             rotations = [0, ]
 
-        out = {}
-        chmin = {}
-        cm = {}
-        minpos = {}
-        for slit in self.slits:
-            chmin[slit] = -9.99
-            cm[slit] = 1e20
-            out[slit] = []
-            minpos[slit] = -1e10
+        #xrange to cover
+        xm = self.direct['xposition']
+        ym = self.direct['yposition']
+        #xran = range(-self.fitting['xrange'] +xm, self.fitting['xrange'] + xm, self.fitting['xstep'])
+        xran = range(-self.fitting['xrange'], self.fitting['xrange'], self.fitting['xstep'])
+        #yran = range(-self.fitting['yrange'] +ym, self.fitting['yrange'] + ym, self.fitting['ystep'])
+        yran = range(-self.fitting['yrange'], self.fitting['yrange'], self.fitting['ystep'])
 
-        #loop over a range of rotations,  x and y positions around the nominal position and record x, y and chisquare
+        out = []
+        chmin = -1e40
+        cm = 1e30
+        minpos = -1e40
+        dir = model * 0.0
+
+        #loop over a range of rotations, x and y positions around the nominal position and record x, y and chisquare
         for r in rotations:
             if self.rotation:
                 if r != 0.0:
@@ -290,8 +352,8 @@ class FindSlitmaskPosition():
                     d = origimage.copy()
             else:
                 d = self.direct['image'].copy()
-            for x in range(-self.fitting['xrange'], self.fitting['xrange'], self.fitting['xstep']):
-                for y in range(-self.fitting['yrange'], self.fitting['yrange'], self.fitting['ystep']):
+            for x in xran:
+                for y in yran:
                     #all slits
                     dirdata = np.array([])
                     for slit in self.slits:
@@ -306,30 +368,32 @@ class FindSlitmaskPosition():
                         dirdata = np.append(dirdata, dirdat.ravel())
 
                     #remove the masked pixels
-                    dirdata = dirdata#[msk]
+                    dirdata = dirdata[self.fitting['mask']]
 
                     if self.normalize:
                         dirdata /= np.max(dirdata)
 
                     chisq = self._chiSquare(self.fitting['model'], dirdata)
 
-                    tmp = [r, x, y, chisq, chisq / s['pixels'], slit]
-                    out[slit].append(tmp)
+                    tmp = [r, x, y, chisq, chisq / s['pixels']]
+                    out.append(tmp)
 
                     #save the dirdata of the minimum chisqr
-                    if chisq < cm[slit]:
-                        chmin[slit] = dirdat
-                        cm[slit] = chisq
-                        minpos[slit] = tmp
+                    if chisq < cm:
+                        chmin = dirdat
+                        cm = chisq
+                        minpos = tmp
+                        dir = dirdata
 
                     if self.debug:
-                        print r, x, y, chisq / s['pixels'], slit
+                        print r, x, y, chisq / s['pixels']
 
         #results dictionary
         r = {}
         r['outputs'] = out
         r['chiMinData'] = chmin
         r['minimaPosition'] = minpos
+        r['bestfit'] = dir
         self.result = r
 
         if self.debug:
@@ -347,22 +411,22 @@ class FindSlitmaskPosition():
 
         '''
         data = self.result['outputs']
-        for slit in data:
-            d = np.asarray([[x[1], x[2], x[4]]for x in data[slit]])
-            P.figure()
-            P.scatter(d[:, 0],
-                      d[:, 1],
-                      c=1. / np.log10(d[:, 2]),
-                      s=30,
-                      cmap=cm.get_cmap('jet'),
-                      edgecolor='none',
-                      alpha=0.2)
-            P.xlim(-self.fitting['xrange'], self.fitting['xrange'])
-            P.ylim(-self.fitting['yrange'], self.fitting['yrange'])
-            P.xlabel('X [pixels]')
-            P.ylabel('Y [pixels]')
-            P.savefig(output + 'Map' + slit + type)
-            P.close()
+
+        d = np.asarray([[x[1], x[2], x[4]] for x in data])
+        P.figure()
+        P.scatter(d[:, 0],
+                  d[:, 1],
+                  c=1. / np.log10(d[:, 2]),
+                  s=30,
+                  cmap=cm.get_cmap('jet'),
+                  edgecolor='none',
+                  alpha=0.2)
+        P.xlim(-self.fitting['xrange'], self.fitting['xrange'])
+        P.ylim(-self.fitting['yrange'], self.fitting['yrange'])
+        P.xlabel('X [pixels]')
+        P.ylabel('Y [pixels]')
+        P.savefig(output + 'Map' + type)
+        P.close()
 
 
     def outputMinima(self):
@@ -371,65 +435,61 @@ class FindSlitmaskPosition():
         '''
         if self.debug:
             print '\n\ndirect image    slit image     \t rot' + \
-                   '\t x \t y \t xoff \t yoff \t chi**2    reduced chi**2 \t slit'
+                   '\t x \t y \t xoff \t yoff \t chi**2    reduced chi**2'
 
         fh1 = open('min.txt', 'a')
         fh2 = open('skyFitted.reg', 'w')
         fh3 = open('slitmask.txt', 'w')
 
-        for res in self.result['minimaPosition'].values():
-            r = res[0]
-            x = res[1]
-            y = res[2]
-            n = res[5]
+        r = self.result['minimaPosition'][0]
+        x = self.result['minimaPosition'][1]
+        y = self.result['minimaPosition'][2]
 
-            #take into account possible trimming of the direct image
-            try:
-                xtr = self.dirImageHDR['LTV1']
-            except:
-                xtr = 0
-            try:
-                ytr = self.dirImageHDR['LTV2']
-            except:
-                ytr = 0
+        #take into account possible trimming of the direct image
+        try:
+            xtr = self.dirImageHDR['LTV1']
+        except:
+            xtr = 0
+        try:
+            ytr = self.dirImageHDR['LTV2']
+        except:
+            ytr = 0
 
-            #derive the mid positions in a full frame
-            xpos = x + self.slits[n]['xmidSky'] - xtr
-            ypos = y + self.slits[n]['ymidSky'] - ytr
+        #derive the mid positions in a full frame
+        xpos = x + self.slits['mid']['xmidSky'] - xtr
+        ypos = y + self.slits['mid']['ymidSky'] - ytr
 
-            #save the positions to result dictionary
-            self.slits[n]['xminFitted'] = x + self.slits[n]['xminSky'] - xtr
-            self.slits[n]['xmaxFitted'] = x + self.slits[n]['xmaxSky'] - xtr
-            self.slits[n]['yminFitted'] = y + self.slits[n]['yminSky'] - ytr
-            self.slits[n]['ymaxFitted'] = y + self.slits[n]['ymaxSky'] - ytr
+        #save the positions to result dictionary
+        self.slits['mid']['xminFitted'] = x + self.slits['mid']['xminSky'] - xtr
+        self.slits['mid']['xmaxFitted'] = x + self.slits['mid']['xmaxSky'] - xtr
+        self.slits['mid']['yminFitted'] = y + self.slits['mid']['yminSky'] - ytr
+        self.slits['mid']['ymaxFitted'] = y + self.slits['mid']['ymaxSky'] - ytr
 
-            #write the file
-            fh3.write('slit\t\t= %s\n' % (n))
-            fh3.write('rotation\t= %.3f\n' % -r)
-            fh3.write('x\t\t= %i\n' % xpos)
-            fh3.write('y\t\t= %i\n' % ypos)
-            fh3.write('\n')
+        #write the file
+        fh3.write('rotation\t= %.3f\n' % -r)
+        fh3.write('x\t\t= %i\n' % xpos)
+        fh3.write('y\t\t= %i\n' % ypos)
+        fh3.write('\n')
 
-            tmp = 'box {0:1f} {1:1f} {2:1f} {3:1f} {4:.3f} \n'.format(xpos,
-                                                                      ypos,
-                                                                      self.slits[n]['wd'],
-                                                                      self.slits[n]['hd'],
-                                                                      r)
-            fh2.write(tmp)
+        tmp = 'box {0:1f} {1:1f} {2:1f} {3:1f} {4:.3f} \n'.format(xpos,
+                                                                  ypos,
+                                                                  self.slits['mid']['wd'],
+                                                                  self.slits['mid']['hd'],
+                                                                  r)
+        fh2.write(tmp)
 
-            str = '{0:>s}\t{1:>s}\t{2:.2f}\t{3:.0f}\t{4:.0f}\t{5:.0f}\t{6:.0f}\t{7:>s}\t{8:.1f}\t{9:>s}'.format(self.dirfile,
-                                                                                                                self.slitfile,
-                                                                                                                -r,
-                                                                                                                xpos,
-                                                                                                                ypos,
-                                                                                                                x,
-                                                                                                                y,
-                                                                                                                res[3],
-                                                                                                                res[4],
-                                                                                                                n)
-            fh1.write(str + '\n')
-            if self.debug:
-                print str
+        str = '{0:>s}\t{1:>s}\t{2:.2f}\t{3:.0f}\t{4:.0f}\t{5:.0f}\t{6:.0f}\t{7:>s}\t{8:.1f}'.format(self.dirfile,
+                                                                                                    self.slitfile,
+                                                                                                    -r,
+                                                                                                    xpos,
+                                                                                                    ypos,
+                                                                                                    x,
+                                                                                                    y,
+                                                                                                    self.result['minimaPosition'][3],
+                                                                                                    self.result['minimaPosition'][4])
+        fh1.write(str + '\n')
+        if self.debug:
+            print str
 
         fh1.close()
         fh2.close()
@@ -597,7 +657,7 @@ class FindSlitmaskPosition():
         '''
         This simple method pickles all important variables
         '''
-        #write.cPickleDumpDictionary(self.result, 'results.pk')
+        write.cPickleDumpDictionary(self.result, 'results.pk')
         write.cPickleDumpDictionary(self.slits, 'slits.pk')
         write.cPickleDumpDictionary(self.fitting, 'fitting.pk')
         write.cPickleDumpDictionary(self.direct, 'direct.pk')
@@ -608,15 +668,15 @@ class FindSlitmaskPosition():
         Driver function, runs all required steps.
         '''
         self._generateSlitMask()
+        self._calculatePosition()
         self._plotGalaxy()
-        self.pickleVars()
         self.fitSlitsToDirectImage()
-
-        #self.plotMinimalization()
-        #self.outputMinima()
-        #self.overPlotSlits()
-        #self.outputShiftedImage()
-        #self.pickleVars()
+        self.pickleVars()
+        self.plotMinimalization()
+        self.outputMinima()
+        self.overPlotSlits()
+        self.outputShiftedImage()
+        self.pickleVars()
 
 
 def processArgs(printHelp=False):
