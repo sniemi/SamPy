@@ -394,6 +394,105 @@ class FindSlitPositionsInDirectImage():
             print self.result['minimaPosition']
 
 
+    def fitSlitsToDirectImage2(self):
+        '''
+        Fits slits to a direct image to recover their position an orientation.
+
+        By default the counts are not normalized to a peak count, but this can
+        be controlled using the optional keyword normalize.
+
+        :note: this is a very slow algorithm because of the insanely many nested
+               for loops...
+
+        :rtype: dictionary
+        '''
+        #generates a model array from the slit values, takes into account potential
+        #throughput of a slit
+        for slit in self.slits:
+            s = self.slits[slit]
+            model = s['values'].ravel() * s['throughput']
+            #mask out negative values
+            msk = model > 0.0
+            model = model[msk]
+            mean = np.mean(model)
+            sig = np.sqrt(np.sum((model - mean)**2))
+            diff = model - mean
+            self.slits[slit]['model'] = model
+            self.slits[slit]['mask'] = msk
+            self.slits[slit]['sig'] = sig
+            self.slits[slit]['diff'] = diff
+
+        #generate rotations
+        if self.rotation:
+            rotations = np.arange(-self.fitting['rotation'], self.fitting['rotation'], self.fitting['rotstep'])
+            rotations[(rotations < 1e-8) & (rotations > -1e-8)] = 0.0
+            #make a copy of the direct image
+            origimage = self.directImage.copy()
+        else:
+            rotations = [0, ]
+
+        out = {}
+        chmin = {}
+        cm = {}
+        minpos = {}
+        for slit in self.slits:
+            chmin[slit] = -9.99
+            cm[slit] = 1e20
+            out[slit] = []
+            minpos[slit] = -1e10
+
+        #loop over a range of rotations,  x and y positions around the nominal position and record x, y and chisquare
+        for r in rotations:
+            if self.rotation:
+                if r != 0.0:
+                    d = interpolation.rotate(origimage, r, reshape=False)
+                else:
+                    d = origimage.copy()
+            else:
+                d = self.directImage.copy()
+            for x in range(-self.fitting['xrange'], self.fitting['xrange'], self.fitting['xstep']):
+                for y in range(-self.fitting['yrange'], self.fitting['yrange'], self.fitting['ystep']):
+                    #all slits
+                    for slit in self.slits:
+                        s = self.slits[slit]
+                        #direct image data
+                        dirdat = d[s['yminSky'] + y:s['ymaxSky'] + y + 1,
+                                   s['xminSky'] + x:s['xmaxSky'] + x + 1]
+                        dirdata = dirdat.ravel()
+
+                        #remove the masked pixels
+                        dirdata = dirdata[s['mask']]
+
+                        mean = np.mean(dirdata)
+                        sig = np.sqrt(np.sum((dirdata - mean)**2))
+                        diff = template1 - mean
+                        
+                        corr = np.sum(s['diff'] * diff) / s['sig'] / sig
+
+                        tmp = [r, x, y, 1./corr, 1./corr, slit]
+                        out[slit].append(tmp)
+
+                        #save the dirdata of the minimum chisqr
+                        if chisq < cm[slit]:
+                            chmin[slit] = dirdat
+                            cm[slit] = 1./corr
+                            minpos[slit] = tmp
+
+                        if self.debug:
+                            print r, x, y, 1./corr, slit
+
+        #results dictionary
+        r = {}
+        r['outputs'] = out
+        r['chiMinData'] = chmin
+        r['minimaPosition'] = minpos
+        self.result = r
+
+        if self.debug:
+            print '\nMinima positions:'
+            print self.result['minimaPosition']
+
+
     def plotMinimalization(self, output='minima', type='.png'):
         '''
         Generates a two dimensional map of the minimalization
@@ -667,6 +766,7 @@ class FindSlitPositionsInDirectImage():
         self.writeDS9RegionFile()
         self.approxSkyPosition()
         self.fitSlitsToDirectImage()
+        #self.fitSlitsToDirectImage2()
         self.plotMinimalization()
         self.outputMinima()
         self.overPlotSlits()

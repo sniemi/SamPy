@@ -54,7 +54,7 @@ def SpectrumOffset(s1, s2, ishift=0, width=15, i1=0, i2=0):
     approx = long(ishift + 100000.5) - 100000
 
     ns = len(s1)
-    i2 = i2
+
     if i2 == 0: i2 = ns - 1
 
     #extract template from specturm 2
