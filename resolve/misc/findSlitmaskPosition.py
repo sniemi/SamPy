@@ -98,8 +98,8 @@ class FindSlitmaskPosition():
         self.direct['originalImage'] = img
         self.direct['wcs'] = pywcs.WCS(self.direct['header0'])
 
-        for file, slit in zip(self.spectra, self.slits):
-            fh = PF.open(file, ignore_missing_end=True)
+        for slit in self.slits:
+            fh = PF.open(self.slits[slit]['file'], ignore_missing_end=True)
             self.slits[slit]['header0'] = fh[0].header
             slitimage = fh[0].data
             fh.close()
@@ -144,13 +144,14 @@ class FindSlitmaskPosition():
         filtercurve = self.config.get(self.section, 'throughputfile')
         postageTolerance = self.config.getfloat(self.section, 'postageTolerance')
 
-        for n, w, h, t in zip(names, widths, heights, thrs):
+        for f, n, w, h, t in zip(self.spectra, names, widths, heights, thrs):
             self.slits[n] = {'widthSky': w,
                              'widthPixels': w / platescaleS / binning,
                              'heightSky': h,
                              'heightPixels': h / platescaleS / binning,
                              'throughput': 1. / t,
-                             'binning': binning}
+                             'binning': binning,
+                             'file': f}
 
         #sky related
         self.sky['offseta'] = offseta
@@ -185,11 +186,11 @@ class FindSlitmaskPosition():
         This method can be used to calculate the WCS values.
         """
         #get RA and DEC from the header
-        ra = self.slits['mid']['header0']['RA']#.strip()
-        dec = self.slits['mid']['header0']['DEC']#.strip()
+        ra = self.slits['mid']['header0']['RA']
+        dec = self.slits['mid']['header0']['DEC']
         ra = astCoords.hms2decimal(ra, ':')
         dec = astCoords.dms2decimal(dec, ':')
-        #self.direct['wcs'].rotateCD(self.direct['rotation'])
+        self.direct['wcs'].rotateCD(self.direct['rotation'])
         pix = self.direct['wcs'].wcs_sky2pix(np.array([[ra, dec],]), 1)
         self.direct['xposition'] = 825 #int(pix[0,0])
         self.direct['yposition'] = 1511 #int(pix[0,1])
@@ -236,14 +237,15 @@ class FindSlitmaskPosition():
         plt.savefig('Galaxy.pdf')
         plt.close()
 
-        #zoomed in version
-        fig = plt.figure(2)
-        frame = fig.add_subplot(111)
+        #zoomed in version with the spectra
+        fig = plt.figure(figsize=(15, 15))
+        frame1 = fig.add_subplot(4, 1, 1)
+
         #orig = maputils.FITSimage(self.dirfile)
         f = maputils.FITSimage(self.dirfile)
         #f = orig.reproject_to(rotation=rot)
         f.set_limits(pxlim=(xp - tol, xp + tol), pylim=(yp - tol, yp + tol))
-        annim = f.Annotatedimage(frame, clipmin=0.01, clipmax=10)
+        annim = f.Annotatedimage(frame1, clipmin=0.01, clipmax=10)
         annim.Image()
         grat = annim.Graticule()
         grat.setp_gratline(wcsaxis=0, linestyle=':')
@@ -252,11 +254,27 @@ class FindSlitmaskPosition():
         colbar = annim.Colorbar(fontsize=7)
         colbar.set_label(label=units, fontsize=14)
         annim.plot()
+
+        i = 2
+        for slit in self.slits.values():
+            ax = fig.add_subplot(4, 1, i)
+            f = maputils.FITSimage(slit['file'])
+            #f.set_imageaxes('Wavelength [AA]','Pixels')
+            m = f.Annotatedimage(ax)
+            m.Image()
+            grat = m.Graticule()
+            grat.setp_gratline(wcsaxis=0, linestyle=':')
+            grat.setp_gratline(wcsaxis=1, linestyle=':')
+            ax.set_xlabel('Wavelength [AA]')
+            ax.set_ylabel('Pixels')
+            m.plot()
+            i += 1
+
         #annim.interact_toolbarinfo()
         #annim.interact_imagecolors()
         #annim.interact_writepos()
         #plt.show()
-        plt.savefig('GalaxyAZoomed.pdf')
+        plt.savefig('GalaxyZoomed.pdf')
         plt.close()
 
 
@@ -277,7 +295,7 @@ class FindSlitmaskPosition():
                                       slit['ymax']-slit['ymin'],
                                       fill=False)
             frame.add_patch(patch)
-        plt.savefig('InitialMaksPosition.pdf')
+        plt.savefig('InitialMaskPosition.pdf')
 
         #zoomed in version
         frame.set_xlim(xp - tol, xp + tol)
@@ -305,7 +323,7 @@ class FindSlitmaskPosition():
             patch.set_transform(t2)
             frame.add_patch(patch)
             
-        plt.savefig('FinalMaksPosition.pdf')
+        plt.savefig('FinalMaskPosition.pdf')
 
         #zoomed in version
         tol = np.floor(self.direct['postageTolerance'] / self.direct['platescale']) # pixels
@@ -322,6 +340,7 @@ class FindSlitmaskPosition():
         Generates a slit mask that can be used for the direct image.
 
         :todo: remove the hard coded if statements
+        :todo: make sure that the signs in front of xmod and ymod are right!
         """
         #calculate the x and y offsets between the slits on the sky in the direct image frame
         ymod = int(np.round(self.sky['offseta'] / self.direct['platescale']))
@@ -340,13 +359,13 @@ class FindSlitmaskPosition():
                 self.slits[slit]['ymin'] = self.direct['yposition'] - hd
                 self.slits[slit]['ymax'] = self.direct['yposition'] + hd
             elif slit == 'up':
-                self.slits[slit]['xmin'] = self.direct['xposition'] - wd + xmod
-                self.slits[slit]['xmax'] = self.direct['xposition'] + wd + xmod
+                self.slits[slit]['xmin'] = self.direct['xposition'] - wd - xmod
+                self.slits[slit]['xmax'] = self.direct['xposition'] + wd - xmod
                 self.slits[slit]['ymin'] = self.direct['yposition'] - hd + ymod
                 self.slits[slit]['ymax'] = self.direct['yposition'] + hd + ymod
             elif slit == 'low':
-                self.slits[slit]['xmin'] = self.direct['xposition'] - wd - xmod
-                self.slits[slit]['xmax'] = self.direct['xposition'] + wd - xmod
+                self.slits[slit]['xmin'] = self.direct['xposition'] - wd + xmod
+                self.slits[slit]['xmax'] = self.direct['xposition'] + wd + xmod
                 self.slits[slit]['ymin'] = self.direct['yposition'] - hd - ymod
                 self.slits[slit]['ymax'] = self.direct['yposition'] + hd - ymod
 
@@ -361,7 +380,7 @@ class FindSlitmaskPosition():
         return r
 
 
-    def _fitSlitsToDirectImage(self, normalize=False):
+    def _fitSlitsToDirectImage(self):
         """
         Fits slits to a direct image to recover their position an orientation.
 
@@ -393,7 +412,7 @@ class FindSlitmaskPosition():
         #generate rotations
         if self.rotation:
             rotations = np.arange(-self.fitting['rotation'], self.fitting['rotation'], self.fitting['rotstep'])
-            rotations[(rotations < 1e-8) & (rotations > -1e-8)] = 0.0
+            rotations[(rotations < 1e-5) & (rotations > -1e-5)] = 0.0
             #make a copy of the direct image
             origimage = self.direct['image'].copy()
         else:
@@ -407,7 +426,7 @@ class FindSlitmaskPosition():
         chmin = -1e40
         cm = 1e30
         minpos = -1e40
-        dir = model * 0.0
+        dir = model * 0.0 - 1e4
 
         #loop over a range of rotations, x and y positions around the nominal position and record x, y and chisquare
         for r in rotations:
@@ -418,26 +437,28 @@ class FindSlitmaskPosition():
                     d = origimage.copy()
             else:
                 d = self.direct['image'].copy()
+
+            if self.normalize:
+                d /= np.max(d)
+
             for x in xran:
                 for y in yran:
                     #all slits
                     dirdata = np.array([])
-                    for slit in self.slits:
-                        s = self.slits[slit]
+                    for s in self.slits.values():
                         #direct image data
                         dirdat = d[s['ymin'] + y:s['ymax'] + y, \
                                    s['xmin'] + x:s['xmax'] + x]
                         #sum the counts inside the slit
                         dirdat = np.sum(dirdat, axis=1)
-
                         #ravel
                         dirdata = np.append(dirdata, dirdat.ravel())
 
                     #remove the masked pixels
                     dirdata = dirdata[self.fitting['mask']]
 
-                    if self.normalize:
-                        dirdata /= np.max(dirdata)
+                    #if self.normalize:
+                    #    dirdata /= np.max(dirdata)
 
                     chisq = self._chiSquare(self.fitting['model'], dirdata)
 
@@ -501,7 +522,7 @@ class FindSlitmaskPosition():
         plt.ylim(-self.fitting['yrange'], self.fitting['yrange'])
         plt.xlabel('X [pixels]')
         plt.ylabel('Y [pixels]')
-        plt.savefig('MnimaMap.png')
+        plt.savefig('MinimaMap.png')
         plt.close()
 
 
