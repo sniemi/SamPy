@@ -128,6 +128,9 @@ class FindSlitmaskPosition():
         """
         Process configuration information and produce a dictionary
         describing slits.
+
+        :todo: replace platescale d with header keyword BSCALE
+
         """
         self.spectra = list(self.config.get(self.section, 'spectra').strip().split(','))
         self.dirfile = self.config.get(self.section, 'directimage')
