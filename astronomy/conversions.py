@@ -7,7 +7,7 @@ Some functions for astronomy related unit conversions.
 :version: 0.11
 
 :author: Sami Niemi
-:contact: niemi@stsci.edu
+:contact: sniemi@unc.edu
 '''
 import numpy as np
 from cosmocalc import cosmocalc
@@ -22,7 +22,8 @@ def janskyToMagnitude(jansky):
 
     :return: either a float or NumPy array
     '''
-    return 8.9 - 2.5*np.log10(jansky)
+    return 8.9 - 2.5 * np.log10(jansky)
+
 
 def ABMagnitudeToJansky(ABmagnitude):
     '''
@@ -34,7 +35,8 @@ def ABMagnitudeToJansky(ABmagnitude):
 
     :return: either a float or NumPy array
     '''
-    return 10**((23.9 - ABmagnitude)/2.5)/1e6
+    return 10 ** ((23.9 - ABmagnitude) / 2.5) / 1e6
+
 
 def arcminSquaredToSteradians(arcmin2):
     '''
@@ -44,7 +46,8 @@ def arcminSquaredToSteradians(arcmin2):
 
     :return: steradians
     '''
-    return arcmin2 / ((180/np.pi)**2 * 60 * 60)
+    return arcmin2 / ((180 / np.pi) ** 2 * 60 * 60)
+
 
 def arcminSquaredToSolidAnge(arcmin2):
     '''
@@ -59,8 +62,9 @@ def arcminSquaredToSolidAnge(arcmin2):
     '''
     return arcminSquaredToSteradians(arcmin2) / 4. / np.pi
 
+
 def comovingVolume(arcmin2, zmin, zmax,
-                   H0 = 70, WM = 0.28):
+                   H0=70, WM=0.28):
     '''
     Calculates the comoving volume between two redshifts when
     the sky survey has covered arcmin**2 region.
@@ -79,6 +83,7 @@ def comovingVolume(arcmin2, zmin, zmax,
     volume = (back - front) * 1e9 * arcminSquaredToSolidAnge(arcmin2)
     return volume
 
+
 def Luminosity(abs_mag):
     '''
     Converts AB magnitudes to luminosities in L_sun
@@ -87,7 +92,8 @@ def Luminosity(abs_mag):
 
     :return: luminosity
     '''
-    return 10.0**((4.85-abs_mag)/2.5)
+    return 10.0 ** ((4.85 - abs_mag) / 2.5)
+
 
 def get_flat_flambda_dmag(plambda, plambda_ref):
     '''                                                                                                             
@@ -101,6 +107,7 @@ def get_flat_flambda_dmag(plambda, plambda_ref):
 
     # return the mag difference                                                                                      
     return (mag1 - mag2)
+
 
 def get_magAB_from_flambda(flambda, wlength):
     '''                                                                                                             
@@ -117,7 +124,7 @@ def get_magAB_from_flambda(flambda, wlength):
     import math
 
     # transform from flambda to fnue                                                                                 
-    fnu = (wlength*wlength) / 2.99792458e+16 * flambda
+    fnu = (wlength * wlength) / 2.99792458e+16 * flambda
 
     # compute mag_AB                                                                                                 
     mag_AB = -2.5 * math.log10(fnu) - 48.6
@@ -125,17 +132,20 @@ def get_magAB_from_flambda(flambda, wlength):
     # return the mag_AB                                                                                              
     return mag_AB
 
+
 def redshiftFromScale(scale):
     '''
     Converts a scale factor to redshift.
     '''
-    return 1./scale - 1.
+    return 1. / scale - 1.
+
 
 def scaleFromRedshift(redshift):
     '''
     Converts a redshift to a scale factor.
     '''
-    return 1. /(redshift + 1.)
+    return 1. / (redshift + 1.)
+
 
 def convertSphericalToCartesian(r, theta, phi):
     '''
@@ -146,9 +156,10 @@ def convertSphericalToCartesian(r, theta, phi):
     x = r * np.sin(phi) * np.cos(theta)
     y = r * np.sin(phi) * np.sin(theta)
     z = r * np.cos(phi)
-    return {'x' : x,
-            'y' : y,
-            'z' : z}
+    return {'x': x,
+            'y': y,
+            'z': z}
+
 
 def RAandDECfromStandardCoordinates(data):
     '''
@@ -167,22 +178,23 @@ def RAandDECfromStandardCoordinates(data):
     RA and DEC of the centre point, and the CD matrix.
     '''
     out = {}
-    xi = (data['CD'][0,0] * data['X']) + (data['CD'][0,1]* data['Y'])
-    eta = (data['CD'][1,0] * data['X']) + (data['CD'][1,1] * data['Y'])
+    xi = (data['CD'][0, 0] * data['X']) + (data['CD'][0, 1] * data['Y'])
+    eta = (data['CD'][1, 0] * data['X']) + (data['CD'][1, 1] * data['Y'])
     xi = np.deg2rad(xi)
     eta = np.deg2rad(eta)
     ra0 = np.deg2rad(data['RA'])
     dec0 = np.deg2rad(data['DEC'])
 
-    ra = np.arctan2(xi, np.cos(dec0) - eta*np.sin(dec0)) + ra0
-    dec = np.arctan2(eta*np.cos(dec0) + np.sin(dec0),
-                    np.sqrt((np.cos(dec0) - eta*np.sin(dec0))**2 + xi**2))
+    ra = np.arctan2(xi, np.cos(dec0) - eta * np.sin(dec0)) + ra0
+    dec = np.arctan2(eta * np.cos(dec0) + np.sin(dec0),
+                     np.sqrt((np.cos(dec0) - eta * np.sin(dec0)) ** 2 + xi ** 2))
 
     ra = np.rad2deg(ra)
     ra = np.mod(ra, 360.0)
     out['RA'] = ra
     out['DEC'] = np.rad2deg(dec)
     return out
+
 
 def angularDiameterDistance(z,
                             H0=70,
@@ -198,33 +210,37 @@ def angularDiameterDistance(z,
     '''
     return cosmocalc(z, H0, WM)['DA']
 
+
 def degTodms(ideg):
     if (ideg < 0):
-       s = -1
+        s = -1
     else:
-       s = 1
+        s = 1
     ideg = abs(ideg)
-    deg = int(ideg)+0.
-    m = 60.*(ideg-deg)
-    minutes = int(m)+0.
-    seconds = 60.*(m-minutes)
+    deg = int(ideg) + 0.
+    m = 60. * (ideg - deg)
+    minutes = int(m) + 0.
+    seconds = 60. * (m - minutes)
     if s < 0:
-       dms = "-%02d:%02d:%06.3f" % (deg,minutes,seconds)
+        dms = "-%02d:%02d:%06.3f" % (deg, minutes, seconds)
     else:
-       dms = "%02d:%02d:%06.3f" % (deg,minutes,seconds)
+        dms = "%02d:%02d:%06.3f" % (deg, minutes, seconds)
     return dms
 
+
 def degTohms(ideg):
-    ihours = ideg/15.
-    hours = int(ihours)+0.
-    m = 60.*(ihours-hours)
-    minutes = int(m)+0.
-    seconds = 60.*(m-minutes)
-    hms = "%02d:%02d:%06.3f" % (hours,minutes,seconds)
+    ihours = ideg / 15.
+    hours = int(ihours) + 0.
+    m = 60. * (ihours - hours)
+    minutes = int(m) + 0.
+    seconds = 60. * (m - minutes)
+    hms = "%02d:%02d:%06.3f" % (hours, minutes, seconds)
     return hms
 
+
 def cot(x):
-    return (1./np.tan(x))
+    return (1. / np.tan(x))
+
 
 def arccot(x):
-    return (np.arctan(1./x))
+    return (np.arctan(1. / x))

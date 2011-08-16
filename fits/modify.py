@@ -1,26 +1,31 @@
 """
 FITS file modifications such as rebinning and rotation with the WCS being updated.
 
-:requires: pyfits
-:requires: pywcs
 :requires: SamPy
+:requires: PyFITS
+:requires: pywcs
+:requires: NumPy
 
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
 
 :version: 0.1
 """
+import os
 import pyfits as pf
+import numpy as np
 import pywcs
 import SamPy.image.manipulation as manipulate
+import SamPy.image.transform as transform
 
 
-def hrebin(imagefile, newx, newy, output=None, ext=0):
+def hrebin(imagefile, newx, newy, output='rebinned.fits', ext=0, total=False):
     """
     Expand or contract a FITS image and update the header.
     Based on IDL routine hrebin.pro, but removed some functionality
 
     :todo: remove the pywcs dependency
+    :todo: there might be something wrong how the surface brightness is conserved
 
     :param: imagefile: name of the FITS file to be rebinned
     :param: newx:  size of the new image in the X direction, integer scalar
@@ -55,9 +60,9 @@ def hrebin(imagefile, newx, newy, output=None, ext=0):
 
     #rebin based on whether the rebinning is exact or not
     if exact:
-        oldimg = manipulate.frebin(oldimg, newx, newy, total=False)
+        oldimg = manipulate.frebin(oldimg, newx, newy, total=total)
     else:
-        oldimg = manipulate.frebin(oldimg, newx, newy, total=False)
+        oldimg = manipulate.frebin(oldimg, newx, newy, total=total)
 
     #start updating the new header
     oldhdr['NAXIS1'] = int(newx)
@@ -87,30 +92,29 @@ def hrebin(imagefile, newx, newy, output=None, ext=0):
     #oldhdr['CDELT1'] /= xratio
     #oldhdr['CDELT2'] /= yratio
 
-    if lambd != 1.0:
-        #cd = wcs.wcs.cd
-        oldhdr['CD1_1'] /= xratio
-        oldhdr['CD1_2'] /= yratio
-        oldhdr['CD2_1'] /= xratio #cd[1,0]/xratio
-        oldhdr['CD2_2'] /= yratio #cd[1,1]/yratio
+    oldhdr['CD1_1'] /= xratio
+    oldhdr['CD1_2'] /= yratio
+    oldhdr['CD2_1'] /= xratio
+    oldhdr['CD2_2'] /= yratio
 
     oldhdr['BSCALE'] /= pix_ratio
 
-    if output is None:
-        return oldimg, oldhdr
-    else:
-        #write out a new FITS file
-        hdu = pf.PrimaryHDU(oldimg)
-        hdu.header = oldhdr
-        hdu.writeto(output)
+    #write out a new FITS file
+    hdu = pf.PrimaryHDU(oldimg)
+    hdu.header = oldhdr
+    if os.path.isfile(output):
+        os.remove(output)
+    hdu.writeto(output)
+
+    return oldimg, oldhdr
 
 
-def hrot(imagefile, angle, xc=-1, yc=-1, ext=0, output=None):
+def hrot(imagefile, angle, xc=None, yc=None, ext=0, output='rotated.fits', pivot=False):
     """
     Rotate an image and create new FITS header with updated astrometry.
     
-    param: xc: X Center of rotation (-1 for center of image)
-    param: yc: Y Center of rotation (-1 for center of image)
+    param: xc: X Center of rotation (None for center of image)
+    param: yc: Y Center of rotation (None for center of image)
     param: angle: rotation angle, in degrees
     """
     #read in the file
@@ -119,55 +123,63 @@ def hrot(imagefile, angle, xc=-1, yc=-1, ext=0, output=None):
     img = fh[ext].data
     fh.close()
 
-    wcs = pywcs.WCS(oldhdr)
+    wcs = pywcs.WCS(hdr)
 
     ysize, xsize = img.shape
 
     xc_new = (xsize - 1) / 2.
     yc_new = (ysize - 1) / 2.
 
-    #todo the actual rotaion
+    shape = img.shape
+    if xc is None:
+        xc = shape[1]/2.0
+    if yc is None:
+        yc = shape[0]/2.0
 
-
+    #do the actual rotation
+    A = transform.makeCenteredRotation(angle, (xc, yc))
+    imgrot = transform.Image(img, A)    
 
     #update astrometry
     theta = np.deg2rad(angle)
     rot_mat = np.matrix([[np.cos(theta), np.sin(theta)],
-        [-np.sin(theta), np.cos(theta)]])
-
+                        [-np.sin(theta), np.cos(theta)]])
+    
+    #WCS info
     crpix = wcs.wcs.crpix
     cd = wcs.wcs.cd
-
-    ncrpix = (rot_mat * (2000 - 1 - np.matrix([-xc, -yc]).T) + 1).T
+    
+    ncrpix = (rot_mat.T * (crpix - 1 - np.matrix([xc, yc])).T + 1).T
 
     if pivot:
         ncrpix = np.array([xc, yc]) + ncrpix
     else:
         ncrpix = np.array([xc_new, yc_new]) + ncrpix
 
-    hdr['CRPIX1'] = ncrpix[0]
-    hdr['CRPIX2'] = ncrpix[1]
+    hdr['CRPIX1'] = ncrpix[0,0]
+    hdr['CRPIX2'] = ncrpix[0,1]
 
     newcd = np.asmatrix(cd) * rot_mat
-    hdr['CD1_1'] = newcd[0, 0]
-    hdr['CD1_2'] = newcd[0, 1]
-    hdr['CD2_1'] = newcd[1, 0]
-    hdr['CD2_2'] = newcd[1, 1]
+    hdr['CD1_1'] = newcd[0,0]
+    hdr['CD1_2'] = newcd[0,1]
+    hdr['CD2_1'] = newcd[1,0]
+    hdr['CD2_2'] = newcd[1,1]
+    
+    #crota = np.rad2deg(np.arctan(newcd[1,0], newcd[1,1]))
+    #hdr['CROTA1'] = crota
+    #hdr['CROTA2'] = crota
 
-    crota = np.rad2deg(np.atan(newcd[1, 0], newcd[1, 1]))
-    hdr['CROTA1'] = crota
-    hdr['CROTA2'] = crota
-
-    if output is None:
-        return img, hdr
-    else:
-        #write out a new FITS file
-        hdu = pf.PrimaryHDU(img)
-        hdu.header = hdr
-        hdu.writeto(output)
-
-
-
+    #write out a new FITS file
+    hdu = pf.PrimaryHDU(imgrot)
+    hdu.header = hdr
+    if os.path.isfile(output):
+        os.remove(output)
+    hdu.writeto(output)
+    
+    return imgrot, hdr
+    
+    
 if __name__ == "__main__":
     file = 'frame-r-004145-5-0083.fits'
-    hrebin(file, 4000, 4000, output='rebinned.fits')
+    hrebin(file, 4096, 2978, output='rebinned.fits')
+    hrot('rebinned.fits', 50.0, xc=None, yc=None)

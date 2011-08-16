@@ -4,6 +4,7 @@ Fits all three slits separately to recover their position on the sky.
 All Inputs should be given in a configuration file, only command line argument
 needed is the name of the configuration file.
 
+:requires: SamPy
 :requires: PyFITS
 :requires: NumPy
 :requires: matplotlib
@@ -23,6 +24,7 @@ import pylab as P
 import numpy as np
 import matplotlib.patches as patches
 from matplotlib import cm
+import scipy
 import scipy.ndimage.interpolation as interpolation
 #from SamPy
 import SamPy.smnIO.write as write
@@ -292,14 +294,6 @@ class FindSlitPositionsInDirectImage():
         fh.close()
 
 
-    def _chiSquare(self, model, obs):
-        '''
-        Simple chi**2 calculation
-        '''
-        r = np.sum((obs - model) ** 2 / model)
-        return r
-
-
     def fitSlitsToDirectImage(self, normalize=False):
         '''
         Fits slits to a direct image to recover their position an orientation.
@@ -369,7 +363,8 @@ class FindSlitPositionsInDirectImage():
                         if self.normalize:
                             dirdata /= np.max(dirdata)
 
-                        chisq = self._chiSquare(s['model'], dirdata)
+                        chisq = scipy.stats.chisquare(dirdata, self.fitting['model'])
+                        chsiq = chisq[0]
 
                         tmp = [r, x, y, chisq, chisq / s['pixels'], slit]
                         out[slit].append(tmp)
