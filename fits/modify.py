@@ -43,19 +43,20 @@ def hrebin(imagefile, newx, newy, output='rebinned.fits', ext=0, total=False):
     wcs = pywcs.WCS(oldhdr)
 
     #old size
-    xsize = oldhdr['NAXIS1']
-    ysize = oldhdr['NAXIS2']
+    #xsize = oldhdr['NAXIS1']
+    #ysize = oldhdr['NAXIS2']
+    ysize, xsize = oldimg.shape
 
     #ratios
     xratio = newx / float(xsize)
     yratio = newy / float(ysize)
-    #change in aspect ratio
+    #change in the aspect ratio
     lambd = yratio / xratio
     #Ratio of pixel areas
     pix_ratio = xratio * yratio
 
     #chech whether the new size is an exact match
-    exact = (xsize % newx == 0) | (newx % xsize == 0) and \
+    exact = (xsize % newx == 0) | (newx % xsize == 0) and\
             (ysize % newy == 0) | (newy % ysize == 0)
 
     #rebin based on whether the rebinning is exact or not
@@ -68,7 +69,7 @@ def hrebin(imagefile, newx, newy, output='rebinned.fits', ext=0, total=False):
     oldhdr['NAXIS1'] = int(newx)
     oldhdr['NAXIS2'] = int(newy)
     #add comment orig size and new size
-    oldhdr.add_comment('rebinned...')
+    oldhdr.add_comment('rebinned: original image was %i by %i' % (xsize, ysize))
 
     #Correct the position of the reference pixel.
     #Note that CRPIX values are given in FORTRAN (first pixel is (1,1)) convention
@@ -97,7 +98,8 @@ def hrebin(imagefile, newx, newy, output='rebinned.fits', ext=0, total=False):
     oldhdr['CD2_1'] /= xratio
     oldhdr['CD2_2'] /= yratio
 
-    oldhdr['BSCALE'] /= pix_ratio
+    #modify the B scale
+    #oldhdr['BSCALE'] /= pix_ratio
 
     #write out a new FITS file
     hdu = pf.PrimaryHDU(oldimg)
@@ -112,10 +114,13 @@ def hrebin(imagefile, newx, newy, output='rebinned.fits', ext=0, total=False):
 def hrot(imagefile, angle, xc=None, yc=None, ext=0, output='rotated.fits', pivot=False):
     """
     Rotate an image and create new FITS header with updated astrometry.
-    
+
+    param: imagefile: name of the FITS file to be rotated
+    param: angle: rotation angle, in degrees
     param: xc: X Center of rotation (None for center of image)
     param: yc: Y Center of rotation (None for center of image)
-    param: angle: rotation angle, in degrees
+
+    :return: rotated_image, rotated_header
     """
     #read in the file
     fh = pf.open(imagefile)
@@ -132,23 +137,23 @@ def hrot(imagefile, angle, xc=None, yc=None, ext=0, output='rotated.fits', pivot
 
     shape = img.shape
     if xc is None:
-        xc = shape[1]/2.0
+        xc = shape[1] / 2.0
     if yc is None:
-        yc = shape[0]/2.0
+        yc = shape[0] / 2.0
 
     #do the actual rotation
     A = transform.makeCenteredRotation(angle, (xc, yc))
-    imgrot = transform.Image(img, A)    
+    imgrot = transform.Image(img, A)
 
     #update astrometry
     theta = np.deg2rad(angle)
     rot_mat = np.matrix([[np.cos(theta), np.sin(theta)],
-                        [-np.sin(theta), np.cos(theta)]])
-    
+        [-np.sin(theta), np.cos(theta)]])
+
     #WCS info
     crpix = wcs.wcs.crpix
     cd = wcs.wcs.cd
-    
+
     ncrpix = (rot_mat.T * (crpix - 1 - np.matrix([xc, yc])).T + 1).T
 
     if pivot:
@@ -156,15 +161,15 @@ def hrot(imagefile, angle, xc=None, yc=None, ext=0, output='rotated.fits', pivot
     else:
         ncrpix = np.array([xc_new, yc_new]) + ncrpix
 
-    hdr['CRPIX1'] = ncrpix[0,0]
-    hdr['CRPIX2'] = ncrpix[0,1]
+    hdr['CRPIX1'] = ncrpix[0, 0]
+    hdr['CRPIX2'] = ncrpix[0, 1]
 
     newcd = np.asmatrix(cd) * rot_mat
-    hdr['CD1_1'] = newcd[0,0]
-    hdr['CD1_2'] = newcd[0,1]
-    hdr['CD2_1'] = newcd[1,0]
-    hdr['CD2_2'] = newcd[1,1]
-    
+    hdr['CD1_1'] = newcd[0, 0]
+    hdr['CD1_2'] = newcd[0, 1]
+    hdr['CD2_1'] = newcd[1, 0]
+    hdr['CD2_2'] = newcd[1, 1]
+
     #crota = np.rad2deg(np.arctan(newcd[1,0], newcd[1,1]))
     #hdr['CROTA1'] = crota
     #hdr['CROTA2'] = crota
@@ -175,10 +180,71 @@ def hrot(imagefile, angle, xc=None, yc=None, ext=0, output='rotated.fits', pivot
     if os.path.isfile(output):
         os.remove(output)
     hdu.writeto(output)
-    
+
     return imgrot, hdr
-    
-    
+
+
+def hrot2(img, hdr, angle, xc=None, yc=None, pivot=False):
+    """
+    Rotate an image and updates the FITS header with updated astrometry.
+
+    param: img: image as a ndarray
+    param: hdr: PyFITS header instance
+    param: xc: X Center of rotation (None for center of image)
+    param: yc: Y Center of rotation (None for center of image)
+    param: angle: rotation angle, in degrees
+
+    :return: rotated_image, rotated_header
+    """
+    wcs = pywcs.WCS(hdr)
+
+    ysize, xsize = img.shape
+
+    xc_new = (xsize - 1) / 2.
+    yc_new = (ysize - 1) / 2.
+
+    shape = img.shape
+    if xc is None:
+        xc = shape[1] / 2.0
+    if yc is None:
+        yc = shape[0] / 2.0
+
+    #do the actual rotation
+    A = transform.makeCenteredRotation(angle, (xc, yc))
+    imgrot = transform.Image(img, A)
+
+    #update astrometry
+    theta = np.deg2rad(angle)
+    rot_mat = np.matrix([[np.cos(theta), np.sin(theta)],
+        [-np.sin(theta), np.cos(theta)]])
+
+    #WCS info
+    crpix = wcs.wcs.crpix
+    cd = wcs.wcs.cd
+
+    ncrpix = (rot_mat.T * (crpix - 1 - np.matrix([xc, yc])).T + 1).T
+
+    if pivot:
+        ncrpix = np.array([xc, yc]) + ncrpix
+    else:
+        ncrpix = np.array([xc_new, yc_new]) + ncrpix
+
+    hdr['CRPIX1'] = ncrpix[0, 0]
+    hdr['CRPIX2'] = ncrpix[0, 1]
+
+    newcd = np.asmatrix(cd) * rot_mat
+    hdr['CD1_1'] = newcd[0, 0]
+    hdr['CD1_2'] = newcd[0, 1]
+    hdr['CD2_1'] = newcd[1, 0]
+    hdr['CD2_2'] = newcd[1, 1]
+
+    #crota = np.rad2deg(np.arctan(newcd[1,0], newcd[1,1]))
+    #hdr['CROTA1'] = crota
+    #hdr['CROTA2'] = crota
+
+    return imgrot, hdr
+
+
 if __name__ == "__main__":
     file = 'frame-r-004145-5-0083.fits'
     hrebin(file, 4096, 2978, output='rebinned.fits')

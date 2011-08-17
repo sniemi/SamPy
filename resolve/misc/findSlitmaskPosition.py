@@ -18,15 +18,15 @@ the moment three spectra are recorded simultaneously.
 :version: 0.1
 
 :todo:
- 1. Download SDSS image based on the RA and DEC of the spectrum
- 2. supersample the SDSS image, preserve WCS information [DONE]
- 3. develop a fitting routine that is not pixel based so that subpixel shifts can happen
- 4. add another correlation based minimalization and compare to chi**2
+ 1. Fix the rebinning algorithm so that it conserves flux!
+ 2. Rotations might not work with the slit mask???
+ 3. supersample the SDSS image, preserve WCS information [DONE]
+ 4. develop a fitting routine that is not pixel based so that subpixel shifts can happen [DONE, see above]
  5. write the derived RA and DEC information to the spectra FITS header
  6. append the derived RA and DEC and some other information to sqlite db
  7. remove some of the dependences
  8. one could cut a smaller area from the supersampled image to which the fit is done
-
+ 9. Download SDSS image based on the RA and DEC of the spectrum
 """
 import sys
 import ConfigParser
@@ -85,30 +85,50 @@ class FindSlitmaskPosition():
 
     def _generateSlitProfile(self, spectrum, hdr):
         """
-        :todo: this is just a dummy now, in the future this should convolve
-               the given 2D spectrum with a system throughput curve
+        Generates a slit profile by convolving the spectrum with a filter transmission curve.
+
+        :param: spectrum, 2D spectral image
+        :param: hdr, header of the spectral image
+
+        :note: reading in the filter file has been hardcoded, this may be a problem
+
+        :return: flux at a given point in the slit
+        :rtype: ndarray
         """
         #read the filter information
-        filter = np.loadtxt(self.direct['filterfile'])
+        filter = np.loadtxt(self.direct['filterfile'], usecols=(1, 2))
         wave = filter[:,0]
-        thr = filter[:,0]
-        #normalize
-        if np.max(thr) > 1:
+        thr = filter[:,1]
+        
+        #normalize if the throughput is more than unity
+        if np.max(thr) > 1.0:
             thr /= np.max(thr)
 
+        npix = spectrum.shape[1]
         #get wave info, note one could use WCS for this
-        crval = hdr['CRAVAL1']
+        crval = hdr['CRVAL1']
         crpix = hdr['CRPIX1']
+        delta = hdr['CD1_1']
 
-        #go through the spectrum line by line
-        out = []
-        for i, line in enumerate(spectrum):
-            wave = 
-            res = flux.convolveSpectrum(wave, flux, wave, throughput)
-            out.append(res['flux'])
+        if 'LIN' in hdr['CTYPE1']:
+            if crpix < 0:
+                xps = np.arange(0, npix-crpix+1)*delta + crval
+                xps = xps[-crpix+1:]
+            elif crpix > 0:
+                raise NotImplementedError, 'crpix > 0 not implemented yet'
+            else:
+                xps = np.arange(0, npix)*delta + crval
 
-        return np.asarray(out)
-    
+            #go through the spectrum line by line
+            out = []
+            for i, f in enumerate(spectrum):
+                res = flux.convolveSpectrum(xps, f, wave, thr)
+                out.append(res['flux'])
+
+            return np.asarray(out)
+
+        else:
+            raise NotImplementedError, 'non linear spectrum scaling not implemented yet'
 
 
     def _processSlitfiles(self):
@@ -173,7 +193,7 @@ class FindSlitmaskPosition():
         self.direct['WCS'] = pywcs.WCS(hdrR)
 
         #get the plate scale from the header
-        self.direct['platescale'] = hdrS['BSCALE']
+        self.direct['platescale'] /= self.direct['factor']
 
         if self.debug:
             print '\ndirect:'
@@ -197,6 +217,7 @@ class FindSlitmaskPosition():
         offsetb = self.config.getfloat(self.section, 'offsetbetween')
         binning = self.config.getint(self.section, 'binning')
         platescaleS = self.config.getfloat(self.section, 'platescaleSpectra')
+        platescaleD = self.config.getfloat(self.section, 'platescaleDirect')
         factor = self.config.getfloat(self.section, 'supersample')
         names = list(self.config.get(self.section, 'names').strip().split(','))
         names = [name.strip() for name in names]
@@ -222,12 +243,14 @@ class FindSlitmaskPosition():
         self.direct['filterfile'] = filtercurve
         self.direct['postageTolerance'] = postageTolerance
         self.direct['factor'] = factor
+        self.direct['platescale'] = platescaleD
 
         #fitting related
         self.fitting['xrange'] = self.config.getint(self.section, 'xrange')
         self.fitting['xstep'] = self.config.getint(self.section, 'xstep')
         self.fitting['yrange'] = self.config.getint(self.section, 'yrange')
         self.fitting['ystep'] = self.config.getint(self.section, 'ystep')
+        self.fitting['method'] = self.config.get(self.section, 'fittingMethod')
         try:
             self.fitting['rotation'] = self.config.getfloat(self.section, 'rotation')
             self.rotation = True
@@ -269,7 +292,7 @@ class FindSlitmaskPosition():
         """
         Very simple script to plot an image of the galaxy
 
-        :todo: remove the hardcoded limits for the plots
+        :todo: remove the hardcoded limits from the plots and figure out how to do log scaling!
         """
         tol = np.floor(self.direct['postageTolerance'] / self.direct['platescale'])
         xp = self.direct['xposition']
@@ -302,7 +325,7 @@ class FindSlitmaskPosition():
         grat = annim.Graticule()
         grat.setp_gratline(wcsaxis=0, linestyle=':')
         grat.setp_gratline(wcsaxis=1, linestyle=':')
-        units = r'ADUs'
+        units = r'nanomaggies'
         colbar = annim.Colorbar(fontsize=7)
         colbar.set_label(label=units, fontsize=14)
         annim.plot()
@@ -340,7 +363,7 @@ class FindSlitmaskPosition():
 
         fig = plt.figure(1)
         ax = fig.add_subplot(111)
-        ax.imshow(np.log10(self.direct['rotatedImage']), origin='lower')
+        ax.imshow(np.log10(self.direct['rotatedImage'].copy()), origin='lower')
 
         for slit in self.slits.values():
             patch = patches.Rectangle(slit['xy'],
@@ -367,16 +390,31 @@ class FindSlitmaskPosition():
         """
         fig = plt.figure(1)
         ax = fig.add_subplot(111)
-        ax.imshow(np.log10(interpolation.rotate(self.direct['rotatedImage'], self.result['rotation'], reshape=False)),
-                  origin='lower')
+        tmp = self.result['FinalImage'].copy()
+        #msk = tmp < 0.0
+        #tmp[~msk] = np.log10(tmp[~msk])
+        #tmp[msk] = 0.0
+        ax.imshow(np.log10(tmp), origin='lower')
+        del tmp
 
         #slits
         for slit in self.slits.values():
-            patch = patches.Rectangle((slit['xy'][0] + self.result['x'],
-                                       slit['xy'][1] + self.result['y']),
-                                       slit['xmax']-slit['xmin'],
-                                       slit['ymax']-slit['ymin'],
-                                       fill=False)
+            w = slit['width']
+            h = slit['height']
+            if slit['name'] == 'mid':
+                patch = patches.Rectangle((self.result['xcenter'] - w/2.,
+                                           self.result['ycenter'] - h/2.),
+                                           w, h, fill=False)
+            elif slit['name'] == 'low':
+                patch = patches.Rectangle((self.result['xcenter'] - w/2.- self.direct['xshiftSky'],
+                                           self.result['ycenter'] - h/2.- self.direct['yshiftSky']),
+                                           w, h, fill=False)
+            elif slit['name'] == 'up':
+                patch = patches.Rectangle((self.result['xcenter'] - w/2. + self.direct['xshiftSky'],
+                                           self.result['ycenter'] - h/2. + self.direct['yshiftSky']),
+                                           w, h, fill=False)
+
+
             #t2 = matplotlib.transforms.Affine2D().rotate_deg(self.result['rotation']) + ax.transData
             #patch.set_transform(t2)
             ax.add_patch(patch)
@@ -442,8 +480,6 @@ class FindSlitmaskPosition():
         :note: this is a very slow algorithm because of the insanely many nested
                for loops...
 
-        :todo: maybe change the rotaion method??
-
         :rtype: dictionary
         """
         #generates a model array from the slit values, takes into account potential
@@ -484,24 +520,27 @@ class FindSlitmaskPosition():
         yran = range(-self.fitting['yrange'], self.fitting['yrange'], self.fitting['ystep'])
 
         out = []
-        chmin = 1e40
         corrmin = -1e10
         cm = 1e30
-        dir = model * 0.0 - 1e4
+        dir = model * 0.0 - 1e10
+        di2 = model * 0.0 - 1e10
 
         #loop over a range of rotations, x and y positions around the nominal position and record x, y and chisquare
         for r in rotations:
             if self.rotation:
                 if r != 0.0:
-                    d = interpolation.rotate(origimage, r, reshape=False)
+                    #d = interpolation.rotate(origimage, r, reshape=False)
+                    d, hdrR = modify.hrot2(origimage, self.direct['rotatedHeader'], r, xc=None, yc=None)
                 else:
                     d = origimage.copy()
+                    hdrR = self.direct['rotatedHeader']
             else:
                 d = self.direct['rotatedImage'].copy()
+                hdrR = self.direct['rotatedHeader']
 
             if self.normalize:
                 d /= np.max(d)
-                d *= 3.0
+                d *= 3.361
 
             for x in xran:
                 for y in yran:
@@ -531,34 +570,46 @@ class FindSlitmaskPosition():
                     tmp = [r, x, y, chisq[0], chisq[0] / s['pixels'], chisq[1], corr]
                     out.append(tmp)
 
-                    #save the dirdata of the minimum chisqr
                     if chisq[0] < cm:
                         cm = chisq[0]
-                        chmin = dirdat
                         minpos = tmp
                         dir = dirdata
+                        img = d
+                        hdr = hdrR
 
                     if corr > corrmin:
                         corrmin = corr
                         minpos2 = tmp
+                        dir2 = dirdata
 
                     if self.debug:
                         print r, x, y, chisq[0] / s['pixels'], chisq[1], corr
 
-        #calculate the centres
-        xc = self.direct['xposition'] + minpos[1]
-        yc = self.direct['yposition'] + minpos[2]
         #save results
         self.result['outputs'] = out
-        self.result['chiMinData'] = chmin
         self.result['minimaPosition'] = minpos
-        self.result['rotation'] = minpos[0]
-        self.result['x'] = minpos[1]
-        self.result['y'] = minpos[2]
-        self.result['bestfit'] = dir
-        self.result['xcenter'] = xc
-        self.result['ycenter'] = yc
-        self.result['pvalue'] = minpos[5]
+        self.result['FinalImage'] = img
+        self.result['FinalHeader'] = hdr
+        self.result['WCS'] = pywcs.WCS(hdr)
+        #choose the method
+        if 'chi' in self.fitting['method']:
+            self.result['rotation'] = minpos[0]
+            self.result['x'] = minpos[1]
+            self.result['y'] = minpos[2]
+            self.result['bestfit'] = dir
+            self.result['xcenter'] = self.direct['xposition'] + minpos[1]
+            self.result['ycenter'] = self.direct['yposition'] + minpos[2]
+            self.result['pvalue'] = minpos[5]
+        elif 'corr' in self.fitting['method']:
+            self.result['rotation'] = minpos2[0]
+            self.result['x'] = minpos2[1]
+            self.result['y'] = minpos2[2]
+            self.result['bestfit'] = dir2
+            self.result['xcenter'] = self.direct['xposition'] + minpos2[1]
+            self.result['ycenter'] = self.direct['yposition'] + minpos2[2]
+            self.result['pvalue'] = minpos2[5]
+        else:
+            raise NotImplementedError, 'This minimalization method has not yet been implemented...'
 
         if self.debug:
             print minpos
@@ -582,12 +633,8 @@ class FindSlitmaskPosition():
 
     def _plotMinimalization(self):
         """
-        Generates a two dimensional map of the minimalization
-        for each slit separately.
-
-        :note: When fitting rotation all rotations are plotted on
-               top, so the plot may not be that useful.
-
+        Plots a two dimensional map of the minimalization.
+        Also plots the best fit model and the spectroscopic data profiles.
         """
         #minima profiles
         fig = plt.figure(1)
@@ -602,10 +649,12 @@ class FindSlitmaskPosition():
 
         #minima map
         data = self.result['outputs']
-        d = np.asarray([[x[1], x[2], x[4]] for x in data])
-        plt.scatter(d[:, 0],
-                    d[:, 1],
-                    c=1. / d[:, 2],
+        d = np.asarray([[x[0], x[1], x[2], x[4]] for x in data])
+        msk = d[:, 0] == self.result['rotation']
+        plt.title('Chisq Minimalization Map: Rotation = %.2f' % self.result['rotation'])
+        plt.scatter(d[:, 1][msk],
+                    d[:, 2][msk],
+                    c=1. / d[:, 3][msk],
                     s=20,
                     cmap=cm.get_cmap('jet'),
                     edgecolor='none',
@@ -614,28 +663,61 @@ class FindSlitmaskPosition():
         plt.ylim(-self.fitting['yrange'], self.fitting['yrange'])
         plt.xlabel('X [pixels]')
         plt.ylabel('Y [pixels]')
-        plt.savefig('MinimaMap.png')
+        plt.savefig('MinimaMapChisq.png')
         plt.close()
+
+        #minima map2
+        d = np.asarray([[x[1], x[2], x[6]] for x in data])
+        plt.title('Correlation Minimalization Map: Rotation = %.2f' % self.result['rotation'])
+        plt.scatter(d[:, 0][msk],
+                    d[:, 1][msk],
+                    c=d[:, 2][msk],
+                    s=20,
+                    cmap=cm.get_cmap('jet'),
+                    edgecolor='none',
+                    alpha=0.2)
+        plt.xlim(-self.fitting['xrange'], self.fitting['xrange'])
+        plt.ylim(-self.fitting['yrange'], self.fitting['yrange'])
+        plt.xlabel('X [pixels]')
+        plt.ylabel('Y [pixels]')
+        plt.savefig('MinimaMapCorr.png')
+        plt.close()
+
 
 
     def _outputMinima(self):
         """
-        Outputs the results to a file and also the screen if  debug = True.
+        Outputs the results to a file and also to the screen.
         """
-        str = '{0:.2f}\t{1:.0f}\t{2:.0f}\t{3:.0f}\t{4:.0f}\t{5:.2f}\t\t{6:.2f}\n'.format(self.result['rotation'],
-                                                                                         self.result['xcenter'],
-                                                                                         self.result['ycenter'],
-                                                                                         self.result['x'],
-                                                                                         self.result['y'],
-                                                                                         self.result['minimaPosition'][3],
-                                                                                         self.result['minimaPosition'][4])
+        if 'chi' in self.fitting['method']:
+            str = '{0:.2f}\t{1:.0f}\t{2:.0f}\t{3:.0f}\t{4:.0f}\t{5:.2f}\t\t{6:.2f}\n'.format(self.result['rotation'],
+                                                                                             self.result['xcenter'],
+                                                                                             self.result['ycenter'],
+                                                                                             self.result['x'],
+                                                                                             self.result['y'],
+                                                                                             self.result['minimaPosition'][3],
+                                                                                             self.result['minimaPosition'][4])
+        elif 'corr' in self.fitting['method']:
+            str = '{0:.2f}\t{1:.0f}\t{2:.0f}\t{3:.0f}\t{4:.0f}\t{5:.5f}\n'.format(self.result['rotation'],
+                                                                                  self.result['xcenter'],
+                                                                                  self.result['ycenter'],
+                                                                                  self.result['x'],
+                                                                                  self.result['y'],
+                                                                                  self.result['minimaPosition'][6])
+        else:
+            raise NotImplementedError, 'This minimalization method has not yet been implemented...'
 
         fh1 = open('min.txt', 'a')
         fh1.write(str)
         fh1.close()
 
         if self.debug:
-            print '\n\nr \t x \t y \txoff \tyoff \tchi**2   reduced chi**2'
+            if 'chi' in self.fitting['method']:
+                print '\n\nr \t x \t y \txoff \tyoff \tchi**2   reduced chi**2'
+            elif 'corr' in self.fitting['method']:
+                print '\n\nr \t x \t y \txoff \tyoff \tcorrelation coefficient'
+            else:
+                raise NotImplementedError, 'This minimalization method has not yet been implemented...'
             print str
             print '\nInitial RA and DEC (of the centre of the centre slit)'
             print astCoords.decimal2hms(self.result['RAinit'], ':'), astCoords.decimal2dms(self.result['DECinit'], ':')
@@ -653,12 +735,6 @@ class FindSlitmaskPosition():
         Calculates sky coordinates for the slits.
         Generates a footprint as well and outputs a DS9 region file.
         """
-        img, hdr = modify.hrot('rotated.fits', self.result['rotation'],
-                               xc=None, yc=None, output='fittedRotated.fits')
-        self.result['WCS'] = pywcs.WCS(hdr)
-        #self.result['FinalImage'] = img
-        self.result['FinalHeader'] = hdr
-
         #calculate the RA and DEC of the centre of the centre slit
         pixels = np.array([[self.result['xcenter'], self.result['ycenter']], ], np.float_)
         sky = self.result['WCS'].wcs_pix2sky(pixels, 1)

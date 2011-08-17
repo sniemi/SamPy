@@ -18,6 +18,9 @@ def convolveSpectrum(wave, flux, wave2, throughput):
     Convolve a spectrum through a filter to obtain flux.
     Returns also the effective wavelength of the flux distribution.
 
+    :note: if the spectrum is shorter in wavelength than the filter transmittance
+           curve, then sets the outside range values to zeros
+
     :param: wave, wavelength of the spectrum
     :param: flux, flux of the spectrum
     :param: wave2, wavelgnth of the filter
@@ -37,9 +40,9 @@ def convolveSpectrum(wave, flux, wave2, throughput):
     wgrid = np.unique(wgrid)
 
     #interpolate ion the new grid
-    f = i.interp1d(wave, flux)
+    f = i.interp1d(wave, flux, bounds_error=False, fill_value=0.0)
     fluxg = f(wgrid)
-    f = i.interp1d(wave2, throughput)
+    f = i.interp1d(wave2, throughput, bounds_error=False, fill_value=0.0)
     frelg = f(wgrid)
 
     #calculate the effective flux through the filter
