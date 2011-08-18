@@ -16,7 +16,7 @@ the moment three spectra are recorded simultaneously.
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
 
-:version: 0.2
+:version: 0.3
 
 :todo:
  1. Fix the rebinning algorithm so that it conserves flux!
@@ -71,8 +71,6 @@ class FindSlitmaskPosition():
 
         self._readConfigs()
         self._processConfigs()
-        self._processSlitfiles()
-        self._processDirectImage()
 
 
     def _readConfigs(self):
@@ -157,9 +155,10 @@ class FindSlitmaskPosition():
         """
         Processes the given Direct Image file.
         This method performs several tasks:
-         * 1. supersamples the original image by a given factor
-         * 2. rotates the image by a -POSANGLE
-         * 3. gets the plate scale from the rotated header
+         * 1. trims the image (optional, depends on self.cutout)
+         * 2. supersamples the original image by a given factor
+         * 3. rotates the image by a -POSANGLE
+         * 4. gets the plate scale from the rotated header
 
         :param: ext, FITS extension
         :param: factor, the supersampling factor
@@ -171,11 +170,31 @@ class FindSlitmaskPosition():
         fh.close()
         self.direct['originalImage'] = img
 
+        #cut out a region
+        if self.cutout:
+            ra = self.slits['mid']['header0']['RA']
+            dec = self.slits['mid']['header0']['DEC']
+            ra = astCoords.hms2decimal(ra, ':')
+            dec = astCoords.dms2decimal(dec, ':')
+            wcs = pywcs.WCS(self.direct['originalHeader0'])
+            pix = wcs.wcs_sky2pix(np.array([[ra, dec],]), 1)
+            xmid = pix[0,0]
+            ymid = pix[0,1]
+            xstart = int(xmid - self.direct['xsize'] / 2.)
+            xstop = int(xmid + self.direct['xsize'] / 2.)
+            ystart = int(ymid - self.direct['ysize'] / 2.)
+            ystop = int(ymid + self.direct['ysize'] / 2.)
+            imgT, hdrT = modify.hextract(self.dirfile, xstart, xstop, ystart, ystop)
+            shape = imgT.shape
+            file = 'resized.fits'
+        else:
+            shape = img.shape
+            file = self.dirfile
+
         #super sample
-        shape = img.shape
         xnew = int(shape[1] * self.direct['factor'])
         ynew = int(shape[0] * self.direct['factor'])
-        imgS, hdrS = modify.hrebin(self.dirfile, xnew, ynew)
+        imgS, hdrS = modify.hrebin(file, xnew, ynew)
         self.direct['xnew'] = xnew
         self.direct['ynew'] = ynew
         self.direct['supersampledImage'] = imgS
@@ -220,6 +239,9 @@ class FindSlitmaskPosition():
         names = [name.strip() for name in names]
         filtercurve = self.config.get(self.section, 'throughputfile')
         postageTolerance = self.config.getfloat(self.section, 'postageTolerance')
+        xsize = self.config.getfloat(self.section, 'xsize')
+        ysize = self.config.getfloat(self.section, 'ysize')
+        self.cutout = self.config.getboolean(self.section, 'cutout')
 
         for f, n, w, h, t in zip(self.spectra, names, widths, heights, thrs):
             self.slits[n] = {'widthSky': w,
@@ -241,6 +263,8 @@ class FindSlitmaskPosition():
         self.direct['postageTolerance'] = postageTolerance
         self.direct['factor'] = factor
         self.direct['platescale'] = platescaleD
+        self.direct['xsize'] = xsize
+        self.direct['ysize'] = ysize
 
         #fitting related
         self.fitting['xrange'] = self.config.getint(self.section, 'xrange')
@@ -268,7 +292,7 @@ class FindSlitmaskPosition():
             
     def _calculatePosition(self):
         """
-        This method can be used to calculate the WCS values.\\
+        This method can be used to calculate the WCS values.
         """
         #get RA and DEC from the header
         ra = self.slits['mid']['header0']['RA']
@@ -525,8 +549,6 @@ class FindSlitmaskPosition():
         out = []
         corrmin = -1e10
         cm = 1e30
-        dir = model * 0.0 - 1e10
-        di2 = model * 0.0 - 1e10
 
         #loop over a range of rotations, x and y positions
         for r in rotations:
@@ -543,7 +565,6 @@ class FindSlitmaskPosition():
 
             if self.normalize:
                 d /= np.max(d)
-                d *= 3.361
 
             for x in xran:
                 for y in yran:
@@ -877,6 +898,8 @@ class FindSlitmaskPosition():
         """
         Driver function, runs all required steps.
         """
+        self._processSlitfiles()
+        self._processDirectImage()
         self._calculatePosition()
         self._generateSlitMask()
         self._plotGalaxy()

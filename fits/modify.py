@@ -11,7 +11,7 @@ FITS file modifications such as rebinning and rotation with the WCS being update
 
 :version: 0.1
 """
-import os
+import os, datetime
 import pyfits as pf
 import numpy as np
 import pywcs
@@ -104,6 +104,7 @@ def hrebin(imagefile, newx, newy, output='rebinned.fits', ext=0, total=False):
     #write out a new FITS file
     hdu = pf.PrimaryHDU(oldimg)
     hdu.header = oldhdr
+    hdu.header.add_history('Updated: %s' % datetime.datetime.isoformat(datetime.datetime.now()))
     if os.path.isfile(output):
         os.remove(output)
     hdu.writeto(output)
@@ -177,6 +178,7 @@ def hrot(imagefile, angle, xc=None, yc=None, ext=0, output='rotated.fits', pivot
     #write out a new FITS file
     hdu = pf.PrimaryHDU(imgrot)
     hdu.header = hdr
+    hdu.header.add_history('Updated: %s' % datetime.datetime.isoformat(datetime.datetime.now()))
     if os.path.isfile(output):
         os.remove(output)
     hdu.writeto(output)
@@ -243,6 +245,74 @@ def hrot2(img, hdr, angle, xc=None, yc=None, pivot=False):
     #hdr['CROTA2'] = crota
 
     return imgrot, hdr
+
+
+def hextract(imagefile, xstart, xstop, ystart, ystop, ext=0, output='resized.fits'):
+    """
+    Extract a subimage from an array and update astrometry in FITS header.
+
+    :param: imagefile: name of the FITS file
+    :param: xstart: first X pixel to extract
+    :param: xstop: last X pixel to extract
+    :param: ystart: first Y pixel to extract
+    :param: ystop: last Y pixel to extract
+    :param: ext, FITS file extension
+    """
+    #read in the file
+    fh = pf.open(imagefile)
+    hdr = fh[ext].header
+    img = fh[ext].data
+    fh.close()
+
+    ysize, xsize = img.shape
+
+    if xstart > xstop or ystart > ystop:
+        print 'hextract: ERROR - the last pixel before the first pixel'
+        return None
+
+    if ystop > ysize:
+        print 'hextract: ERROR - the requested ystop value larger than the image array'
+        print ysize, ystop
+        ystop = -2
+
+
+    if xstop > xsize:
+        print 'hextract: ERROR - the requested xstop value larger than the image array'
+        print xsize, xstop
+        xstop = -2
+
+    #new dimensions
+    if xstop > 0:
+        naxis1 = xstop - xstart + 1
+    else:
+        naxis1 = xsize - xstart + 1
+
+
+    if ystop > 0:
+        naxis2 = ystop - xstart + 1
+    else:
+        naxis2 = ysize - xstart + 1
+
+    newimg = img[ystart:ystop+1, xstart:xstop+1]
+
+    hdr['NAXIS1'] = naxis1
+    hdr['NAXIS2'] = naxis2
+
+    hdr['CRPIX1'] -= xstart
+    hdr['CRPIX2'] -= ystart
+
+    hdr.add_comment('Original image size was %i by %i' % (xsize, ysize))
+
+    #write out a new FITS file
+    hdu = pf.PrimaryHDU(newimg)
+    hdu.header = hdr
+    hdu.header.add_history('Updated: %s' % datetime.datetime.isoformat(datetime.datetime.now()))
+    if os.path.isfile(output):
+        os.remove(output)
+    hdu.writeto(output)
+
+    return newimg, hdr
+
 
 
 if __name__ == "__main__":
