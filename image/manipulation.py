@@ -29,7 +29,7 @@ def frebin(image, nsout, nlout=1, total=False):
                    Otherwise they will be the average.
 
     :return: binned array
-    rtype: ndarray
+    :rtype: ndarray
     """
     shape = image.shape
     if nlout != 1:

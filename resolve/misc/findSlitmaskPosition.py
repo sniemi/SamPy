@@ -11,11 +11,12 @@ the moment three spectra are recorded simultaneously.
 :requires: astLib
 :requires: pywcs (this could also be replated with Kapteyn)
 :requires: Kapteyn Python package
+:requires: Python 2.6 or newer
 
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
 
-:version: 0.1
+:version: 0.2
 
 :todo:
  1. Fix the rebinning algorithm so that it conserves flux!
@@ -28,16 +29,14 @@ the moment three spectra are recorded simultaneously.
  8. one could cut a smaller area from the supersampled image to which the fit is done
  9. Download SDSS image based on the RA and DEC of the spectrum
 """
-import sys
+import os, sys, datetime
 import ConfigParser
 from optparse import OptionParser
-import matplotlib
 import pywcs
-import pyfits as PF
+import pyfits as pf
 import numpy as np
 from astLib import astCoords
 import scipy.stats as stats
-import scipy.ndimage.interpolation as interpolation
 from kapteyn import wcs, positions, maputils
 from matplotlib import pyplot as plt
 import matplotlib.patches as patches
@@ -47,6 +46,7 @@ import SamPy.smnIO.read
 import SamPy.image.manipulation as m
 import SamPy.fits.modify as modify
 import SamPy.astronomy.fluxes as flux
+import SamPy.sandbox.odict as o
 
 
 class FindSlitmaskPosition():
@@ -59,7 +59,7 @@ class FindSlitmaskPosition():
         """
         Constructor
         """
-        self.slits = {}
+        self.slits = o.OrderedDict()
         self.sky = {}
         self.direct = {}
         self.fitting = {}
@@ -137,7 +137,7 @@ class FindSlitmaskPosition():
         """
         #load images
         for slit in self.slits:
-            fh = PF.open(self.slits[slit]['file'], ignore_missing_end=True)
+            fh = pf.open(self.slits[slit]['file'], ignore_missing_end=True)
             self.slits[slit]['header0'] = fh[0].header
             slitimage = fh[0].data
             fh.close()
@@ -165,7 +165,7 @@ class FindSlitmaskPosition():
         :param: factor, the supersampling factor
         """
         #load images
-        fh = PF.open(self.dirfile)
+        fh = pf.open(self.dirfile)
         self.direct['originalHeader0'] = fh[ext].header
         img = fh[ext].data
         fh.close()
@@ -191,6 +191,7 @@ class FindSlitmaskPosition():
 
         #WCS info
         self.direct['WCS'] = pywcs.WCS(hdrR)
+        #self.direct['WCS'] = wcs.Projection(hdrR)
 
         #get the plate scale from the header
         self.direct['platescale'] /= self.direct['factor']
@@ -202,11 +203,7 @@ class FindSlitmaskPosition():
 
     def _processConfigs(self):
         """
-        Process configuration information and produce a dictionary
-        describing slits.
-
-        :todo: replace platescale d with header keyword BSCALE
-
+        Process configuration information and produce a dictionary describing slits.
         """
         self.spectra = list(self.config.get(self.section, 'spectra').strip().split(','))
         self.dirfile = self.config.get(self.section, 'directimage')
@@ -226,9 +223,9 @@ class FindSlitmaskPosition():
 
         for f, n, w, h, t in zip(self.spectra, names, widths, heights, thrs):
             self.slits[n] = {'widthSky': w,
-                             #'widthPixels': w / platescaleS / binning,
+                             'widthPixels': w / platescaleS / binning,
                              'heightSky': h,
-                             #'heightPixels': h / platescaleS / binning,
+                             'heightPixels': h / platescaleS / binning,
                              'throughput': 1. / t,
                              'binning': binning,
                              'file': f,
@@ -283,6 +280,12 @@ class FindSlitmaskPosition():
         self.direct['yposition'] = int(pix[0,1])
         self.result['RAinit'] = ra
         self.result['DECinit'] = dec
+
+#        pix = self.direct['WCS'].toworld([[ra, dec],])
+#        self.direct['xposition'] = int(pix[0,0])
+#        self.direct['yposition'] = int(pix[0,1])
+#        self.result['RAinit'] = ra
+#        self.result['DECinit'] = dec
 
         if self.debug:
             print self.direct['xposition'], self.direct['yposition']
@@ -525,7 +528,7 @@ class FindSlitmaskPosition():
         dir = model * 0.0 - 1e10
         di2 = model * 0.0 - 1e10
 
-        #loop over a range of rotations, x and y positions around the nominal position and record x, y and chisquare
+        #loop over a range of rotations, x and y positions
         for r in rotations:
             if self.rotation:
                 if r != 0.0:
@@ -591,9 +594,11 @@ class FindSlitmaskPosition():
         self.result['FinalImage'] = img
         self.result['FinalHeader'] = hdr
         self.result['WCS'] = pywcs.WCS(hdr)
+        #self.result['WCS'] = wcs.Projection(hdr)
         #choose the method
         if 'chi' in self.fitting['method']:
             self.result['rotation'] = minpos[0]
+            self.result['posangle'] = minpos[0] + self.slits['mid']['POSANGLE']
             self.result['x'] = minpos[1]
             self.result['y'] = minpos[2]
             self.result['bestfit'] = dir
@@ -602,6 +607,7 @@ class FindSlitmaskPosition():
             self.result['pvalue'] = minpos[5]
         elif 'corr' in self.fitting['method']:
             self.result['rotation'] = minpos2[0]
+            self.result['posangle'] = minpos[0] + self.slits['mid']['POSANGLE']
             self.result['x'] = minpos2[1]
             self.result['y'] = minpos2[2]
             self.result['bestfit'] = dir2
@@ -684,7 +690,6 @@ class FindSlitmaskPosition():
         plt.close()
 
 
-
     def _outputMinima(self):
         """
         Outputs the results to a file and also to the screen.
@@ -733,13 +738,115 @@ class FindSlitmaskPosition():
     def _calculateSkyCoords(self):
         """
         Calculates sky coordinates for the slits.
-        Generates a footprint as well and outputs a DS9 region file.
+        Resamples the direct image pixels back to the
+        slit image pixels. Takes the average in x-direction
+        which is assumed to be the across the slit, so that
+        the sky coordinates are at the centre of the slit
+        in this direction.
         """
         #calculate the RA and DEC of the centre of the centre slit
-        pixels = np.array([[self.result['xcenter'], self.result['ycenter']], ], np.float_)
-        sky = self.result['WCS'].wcs_pix2sky(pixels, 1)
+        centre = np.array([[self.result['xcenter'], self.result['ycenter']], ], np.float_)
+        sky = self.result['WCS'].wcs_pix2sky(centre, 1)
         self.result['RA'] = sky[0][0]
         self.result['DEC'] = sky[0][1]
+
+#        centre = [[self.result['xcenter'], self.result['ycenter']], ]
+#        sky = self.result['WCS'].toworld(centre, 1)
+#        self.result['RA'] = sky[0][0]
+#        self.result['DEC'] = sky[0][1]
+
+        #each slit pixels
+        for key, value in self.slits.items():
+            ymin = value['ymin'] + self.result['y']
+            ymax = value['ymax'] + self.result['y']
+            y = np.arange(ymin, ymax)
+            #y is now sampled to the supersampled direct image
+            #what we ultimately need is the coordinates
+            #for slit pixels...
+            resample = value['pixels']
+            ybin = m.frebin(y, resample, total=True)
+
+            #for x, given that it is the slit width
+            #we need the mean value
+            xmin = value['xmin'] + self.result['x']
+            xmax = value['xmax'] + self.result['x']
+            mean = np.mean(np.array([xmin, xmax]))
+            #x = np.zeros(len(y)) + mean
+            xbin = np.zeros(len(ybin)) + mean
+
+            pixels = []
+            for a, b in zip(xbin, ybin):
+                pixels.append([a, b])
+            pixels = np.asanyarray(pixels)
+            sky = self.result['WCS'].wcs_pix2sky(pixels,  1)
+            #sky = self.result['WCS'].toworld(pixels)
+
+            self.slits[key]['coordinates'] = sky
+
+            #RA and DEC of the centre of the slit
+            centre = np.array([[mean, (ymax+ymin)/2.], ])
+            sky = self.result['WCS'].wcs_pix2sky(centre, 1)
+            self.slits[key]['RA'] = sky[0][0]
+            self.slits[key]['DEC'] = sky[0][1]
+
+            if self.debug:
+                print self.slits[key]['RA'], self.slits[key]['DEC']
+
+
+    def _writeDS9region(self):
+        """
+        Writes a ds9 region file. The region file contains small
+        boxes for each slit pixel.
+        """
+        fh = open('slitsFittedPositions.reg', 'w')
+        fh.write('#File written by findSlitmaskPosition.py on %s\n' \
+                 % datetime.datetime.isoformat(datetime.datetime.now()))
+        fh.write('global color=green width=1\n')
+        for slit, value in self.slits.items():
+            for RA, DEC in value['coordinates']:
+                fh.write('fk5; point %f %f # point=box 3\n' % (RA, DEC))
+
+        fh.close()
+
+
+    def _makeFinalFITS(self):
+        """
+        Combines the tree separate FITS files to
+        a single file where each slice is a separate
+        header.
+        """
+        ext = 0
+        output = 'final.fits'
+        if os.path.isfile(output):
+            os.remove(output)
+
+        #make a new FITS file
+        ofd = pf.HDUList(pf.PrimaryHDU())
+
+        for slit, value in self.slits.items():
+            #old data
+            fh = pf.open(value['file'])
+            data = fh[ext].data
+            hdr = fh[ext].header
+
+            #new image HDU
+            hdu = pf.ImageHDU(data=data, header=hdr)
+
+            #update header
+            hdu.header.update('SNAME', value['name'], 'Name of the slit')
+            hdu.header.update('RA2', value['RA'], 'Fitted RA at the centre of the slit in degrees')
+            hdu.header.update('DEC2', value['DEC'], 'Fitted DEC at the centre of the slit in degrees')
+            hdu.header.update('PSANGLE2', self.result['posangle'], 'Fitted position angle')
+            hdu.header.update('PSCALE', self.sky['platescaleSpectra']*value['binning'],
+                              'plate scale in arcsec per pixel')
+            hdu.header.add_history('Original File: %s' % value['file'])
+            hdu.header.add_history('Updated: %s' % datetime.datetime.isoformat(datetime.datetime.now()))
+            #hdu.verify('fix')
+            
+            ofd.append(hdu)
+            
+        #write the actual file
+        ofd.writeto(output, output_verify='ignore')
 
 
     def _pickleVars(self):
@@ -766,7 +873,6 @@ class FindSlitmaskPosition():
             del tmp1
 
 
-
     def run(self):
         """
         Driver function, runs all required steps.
@@ -781,7 +887,9 @@ class FindSlitmaskPosition():
         self._plotMinimalization()
         self._plotFinalSlitPositions()
         self._outputMinima()
-        self._pickleVars()
+        self._writeDS9region()
+        self._makeFinalFITS()   
+        #self._pickleVars()
 
 
 def processArgs(printHelp=False):
