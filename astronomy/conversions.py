@@ -1,4 +1,4 @@
-'''
+"""
 Some functions for astronomy related unit conversions.
 
 :requires: NumPy
@@ -8,12 +8,27 @@ Some functions for astronomy related unit conversions.
 
 :author: Sami Niemi
 :contact: sniemi@unc.edu
-'''
+"""
+import math
 import numpy as np
 from cosmocalc import cosmocalc
 
+
+def nanomaggiesToJansky(nanomaggies):
+    """
+    Converts nanomaggies, used for example in SDSS imaging,
+    to Janskys.
+
+    :param: nanomaggies, can either be a number of a NumPy array
+
+    :return: Janskys
+    :rtype: either a float or ndarray
+    """
+    return nanomaggies * 3.361e-6
+
+
 def janskyToMagnitude(jansky):
-    '''
+    """
     Converts Janskys to AB magnitudes.
 
     :note: Can be used with SQLite3 database.
@@ -21,12 +36,12 @@ def janskyToMagnitude(jansky):
     :param jansky: can either be a number or a NumPy array
 
     :return: either a float or NumPy array
-    '''
+    """
     return 8.9 - 2.5 * np.log10(jansky)
 
 
 def ABMagnitudeToJansky(ABmagnitude):
-    '''
+    """
     Converts AB magnitudes to Janskys.
 
     :note: Can be used with SQLite3 database.
@@ -34,23 +49,23 @@ def ABMagnitudeToJansky(ABmagnitude):
     :param ABmagnitude: can be either a number or a NumPy array
 
     :return: either a float or NumPy array
-    '''
+    """
     return 10 ** ((23.9 - ABmagnitude) / 2.5) / 1e6
 
 
 def arcminSquaredToSteradians(arcmin2):
-    '''
+    """
     Converts arcmin**2 to steradians.
 
     :param arcmin2: arcmin**2
 
     :return: steradians
-    '''
-    return arcmin2 / ((180 / np.pi) ** 2 * 60 * 60)
+    """
+    return arcmin2 / ((180 / np.pi)**2 * 60 * 60)
 
 
 def arcminSquaredToSolidAnge(arcmin2):
-    '''
+    """
     Converts arcmin**2 to solid angle.
     Calls arcminSqauredToSteradians to
     convert arcmin**2 to steradians and
@@ -59,13 +74,13 @@ def arcminSquaredToSolidAnge(arcmin2):
     :param arcmin2: arcmin**2
 
     :return: solid angle
-    '''
+    """
     return arcminSquaredToSteradians(arcmin2) / 4. / np.pi
 
 
 def comovingVolume(arcmin2, zmin, zmax,
                    H0=70, WM=0.28):
-    '''
+    """
     Calculates the comoving volume between two redshifts when
     the sky survey has covered arcmin**2 region.
 
@@ -77,7 +92,7 @@ def comovingVolume(arcmin2, zmin, zmax,
 
     :return: comoving volume between zmin and zmax of arcmin2
             solid angle in Mpc**3
-    '''
+    """
     front = cosmocalc(zmin, H0, WM)['VCM_Gpc3']
     back = cosmocalc(zmax, H0, WM)['VCM_Gpc3']
     volume = (back - front) * 1e9 * arcminSquaredToSolidAnge(arcmin2)
@@ -85,20 +100,20 @@ def comovingVolume(arcmin2, zmin, zmax,
 
 
 def Luminosity(abs_mag):
-    '''
+    """
     Converts AB magnitudes to luminosities in L_sun
 
     :param abs_mag: AB magnitude of the object
 
     :return: luminosity
-    '''
-    return 10.0 ** ((4.85 - abs_mag) / 2.5)
+    """
+    return 10.0**((4.85 - abs_mag) / 2.5)
 
 
 def get_flat_flambda_dmag(plambda, plambda_ref):
-    '''                                                                                                             
+    """                                                                                                             
     Compute the differential AB-mag for an object flat in f_lambda                                                   
-    '''
+    """
     # compute mag_AB for an object at the desired wavelength                                                         
     mag1 = get_magAB_from_flambda(1.0e-17, plambda)
 
@@ -106,23 +121,21 @@ def get_flat_flambda_dmag(plambda, plambda_ref):
     mag2 = get_magAB_from_flambda(1.0e-17, plambda_ref)
 
     # return the mag difference                                                                                      
-    return (mag1 - mag2)
+    return mag1 - mag2
 
 
 def get_magAB_from_flambda(flambda, wlength):
-    '''                                                                                                             
+    """                                                                                                             
     Converts a mag_AB value at a wavelength to f_lambda                                                              
                                                                                                                      
-    :param flambda: mag_AB value
+    :param: flambda: mag_AB value
     :type flambda: float
-    :param wlength: wavelength value [nm]
+    :param: wlength: wavelength value [nm]
     :type wlength: float
                                                                                                                      
     :return: the mag_AB value
     :rtype: float
-    '''
-    import math
-
+    """
     # transform from flambda to fnue                                                                                 
     fnu = (wlength * wlength) / 2.99792458e+16 * flambda
 
@@ -134,25 +147,38 @@ def get_magAB_from_flambda(flambda, wlength):
 
 
 def redshiftFromScale(scale):
-    '''
+    """
     Converts a scale factor to redshift.
-    '''
+
+    :param: scale, can be a float or ndarray
+
+    :return: redshift
+    :rtype: float or ndarray
+    """
     return 1. / scale - 1.
 
 
 def scaleFromRedshift(redshift):
-    '''
+    """
     Converts a redshift to a scale factor.
-    '''
+
+    :param: redshift, can be a float or ndarray
+
+    :return: scale factor
+    :rtype: float or ndarray
+    """
     return 1. / (redshift + 1.)
 
 
 def convertSphericalToCartesian(r, theta, phi):
-    '''
-    Converts Spherical coordiantes to Cartesian.
-    Returns a dictionary.
+    """
+    Converts Spherical coordinates to Cartesian ones.
+
     http://mathworld.wolfram.com/SphericalCoordinates.html
-    '''
+
+    :return: x, y, z
+    :rtype: dictionary
+    """
     x = r * np.sin(phi) * np.cos(theta)
     y = r * np.sin(phi) * np.sin(theta)
     z = r * np.cos(phi)
@@ -162,7 +188,7 @@ def convertSphericalToCartesian(r, theta, phi):
 
 
 def RAandDECfromStandardCoordinates(data):
-    '''
+    """
     Converts Standard Coordinates on tangent plane
     to RA and DEC on the sky.
     data dictionary must also contain the CD matrix.
@@ -176,7 +202,7 @@ def RAandDECfromStandardCoordinates(data):
 
     :param data (dictionary): should contain standard coordinates X, Y,
     RA and DEC of the centre point, and the CD matrix.
-    '''
+    """
     out = {}
     xi = (data['CD'][0, 0] * data['X']) + (data['CD'][0, 1] * data['Y'])
     eta = (data['CD'][1, 0] * data['X']) + (data['CD'][1, 1] * data['Y'])
@@ -199,7 +225,7 @@ def RAandDECfromStandardCoordinates(data):
 def angularDiameterDistance(z,
                             H0=70,
                             WM=0.28):
-    '''
+    """
     The angular diameter distance DA is defined as the ratio of
     an object's physical transverse size to its angular size
     (in radians). It is used to convert angular separations in
@@ -207,11 +233,17 @@ def angularDiameterDistance(z,
     is famous for not increasing indefinitely as z to inf; it turns
     over at z about 1 and thereafter more distant objects actually
     appear larger in angular size.
-    '''
+    """
     return cosmocalc(z, H0, WM)['DA']
 
 
 def degTodms(ideg):
+    """
+    Converts degrees to degrees:minutes:seconds
+
+    :return: degrees:minutes:seconds
+    :rtype: string
+    """
     if (ideg < 0):
         s = -1
     else:
@@ -229,6 +261,12 @@ def degTodms(ideg):
 
 
 def degTohms(ideg):
+    """
+    Converts degrees to hours:minutes:seconds
+
+    :return: hours:minutes:seconds
+    :rtype: string
+    """
     ihours = ideg / 15.
     hours = int(ihours) + 0.
     m = 60. * (ihours - hours)
@@ -239,8 +277,24 @@ def degTohms(ideg):
 
 
 def cot(x):
-    return (1. / np.tan(x))
+    """
+    1 / tan(x)
+
+    :param: x, either a float or ndarray
+
+    :return: cotangent
+    :rtype: float or ndarray
+    """
+    return 1. / np.tan(x)
 
 
 def arccot(x):
-    return (np.arctan(1. / x))
+    """
+    arctan(1. / x)
+
+    :param: x, either a float or ndarray
+
+    :return: arcuscotangent
+    :rtype: float or ndarray
+    """
+    return np.arctan(1. / x)

@@ -10,9 +10,9 @@ This script can be used to flux calibrate an image slicer 2D spectra to SDSS one
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
 
-:version: 0.1
+:version: 0.2
 """
-import sys, datetime
+import os, sys, datetime
 import ConfigParser
 from optparse import OptionParser
 import pyfits as pf
@@ -92,9 +92,10 @@ class calibrateToSDSS():
         self.fitting['slitPixels'] = self.fitting['FiberDiameter'] / \
                                      self.fitting['platescale'] / \
                                      self.fitting['binning']
+        self.fitting['slitPix2'] = int(self.fitting['slitPixels'] / 2.)
         self.fitting['boosting'] = self.fitting['FiberArea'] / \
-                                   (self.fitting['width'] *  \
-                                   np.floor(self.fitting['slitPixels']))
+                                   (self.fitting['width'] *
+                                    self.fitting['slitPix2'] * 2.)
 
 
     def _deriveObservedSpectra(self):
@@ -102,10 +103,8 @@ class calibrateToSDSS():
         Derives a 1D spectral from the 2D input data.
         """
         y = self.fitting['ycenter']
-        ymod = int(np.round(self.fitting['slitPixels']/2.))
-        self.fitting['obsSpectrum'] = np.sum(
-                                             self.fitting['obsData'][y-ymod: y+ymod+1, :],
-                                             axis=0) *\
+        ymod = self.fitting['slitPix2']
+        self.fitting['obsSpectrum'] = np.sum(self.fitting['obsData'][y-ymod:y+ymod+1, :], axis=0)*\
                                       self.fitting['boosting']
         
         self.fitting['obsSpectraConvolved'] = filt.gaussian_filter1d(self.fitting['obsSpectrum'],
@@ -131,6 +130,7 @@ class calibrateToSDSS():
         Generates a mask in which Halpha and some other lines have been removed
         :todo: This is now hard coded, make something better...
         """
+        #TODO: remove the hardcoded lines
         halph = [6660, 6757]
         msk = ~((self.fitting['obsWavelengths'] >= halph[0]) & (self.fitting['obsWavelengths'] <= halph[1])) & \
               ~((self.fitting['obsWavelengths'] >= 6004) & (self.fitting['obsWavelengths'] <= 6042))
@@ -231,6 +231,8 @@ class calibrateToSDSS():
             hdu.add_history('Pixel values modified by fluxCalibrateToSDSS.py (SMN)')
             hdu.add_history('Updated: %s' % datetime.datetime.isoformat(datetime.datetime.now()))
 
+            if os.path.isfile(new):
+                os.remove(new)
             fh.writeto(new, output_verify='ignore')
             fh.close()
             

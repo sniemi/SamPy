@@ -16,17 +16,17 @@ the moment three spectra are recorded simultaneously.
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
 
-:version: 0.3
+:version: 0.4
 
 :todo:
- 1. Fix the rebinning algorithm so that it conserves flux!
+ 1. Fix the rebinning algorithm so that it conserves flux [DONE]
  2. Rotations might not work with the slit mask???
  3. supersample the SDSS image, preserve WCS information [DONE]
  4. develop a fitting routine that is not pixel based so that subpixel shifts can happen [DONE, see above]
- 5. write the derived RA and DEC information to the spectra FITS header
+ 5. write the derived RA and DEC information to the spectra FITS header [DONE]
  6. append the derived RA and DEC and some other information to sqlite db
  7. remove some of the dependences
- 8. one could cut a smaller area from the supersampled image to which the fit is done
+ 8. one could cut a smaller area from the supersampled image to which the fit is done [DONE]
  9. Download SDSS image based on the RA and DEC of the spectrum
 """
 import os, sys, datetime
@@ -47,6 +47,7 @@ import SamPy.image.manipulation as m
 import SamPy.fits.modify as modify
 import SamPy.astronomy.fluxes as flux
 import SamPy.sandbox.odict as o
+import SamPy.astronomy.conversions as convert
 
 
 class FindSlitmaskPosition():
@@ -117,11 +118,20 @@ class FindSlitmaskPosition():
             else:
                 xps = np.arange(0, npix)*delta + crval
 
+            minwave = np.min(xps)
+            maxwave = np.max(xps)
+            width = maxwave - minwave
+
             #go through the spectrum line by line
             out = []
             for i, f in enumerate(spectrum):
                 res = flux.convolveSpectrum(xps, f, wave, thr)
-                out.append(res['flux'])
+                #convert to Jansky
+                #TODO: ad hoc 5e3 term, need to do this right!!!
+                tmp = res['flux'] / (2.99792458e18 / width) / (1e-23) * 4e3
+                if tmp < 0.0:
+                    tmp = 0.0
+                out.append(tmp)
 
             return np.asarray(out)
 
@@ -207,6 +217,14 @@ class FindSlitmaskPosition():
         self.direct['rotatedImage'] = imgR
         self.direct['rotatedHeader'] = hdrR
         self.direct['rotatedFile'] = 'rotated.fits'
+
+        #convert the images from nanomaggies to Janskys and remove values < 0.0
+        self.direct['originalImage'] = convert.nanomaggiesToJansky(self.direct['originalImage'])
+        #self.direct['originalImage'][self.direct['originalImage'] < 0.0] = 0.0
+        self.direct['supersampledImage'] = convert.nanomaggiesToJansky(self.direct['supersampledImage'])
+        #self.direct['supersampledImage'][self.direct['supersampledImage'] < 0.0] = 0.0
+        self.direct['rotatedImage'] = convert.nanomaggiesToJansky(self.direct['rotatedImage'])
+        #self.direct['rotatedImage'][self.direct['rotatedImage'] < 0.0] = 0.0
 
         #WCS info
         self.direct['WCS'] = pywcs.WCS(hdrR)
@@ -514,7 +532,7 @@ class FindSlitmaskPosition():
         model = np.array([])
         for vals in self.slits.values():
             #must rebin/interpolate to the right scale
-            new = m.frebin(vals['profile'], int(vals['height']))
+            new = m.frebin(vals['profile'], int(vals['height']))#, total=True)
             model = np.append(model, new)
             self.fitting[vals['name']] = new
 
