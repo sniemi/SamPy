@@ -1,6 +1,7 @@
-"""Beautiful Soup
-Elixir and Tonic
-"The Screen-Scraper's Friend"
+"""
+Beautiful Soup parses a (possibly invalid) XML or HTML document into a tree representation.
+It provides methods and Pythonic idioms that make it easy to navigate, search, and modify the tree.
+
 http://www.crummy.com/software/BeautifulSoup/
 
 Beautiful Soup parses a (possibly invalid) XML or HTML document into a
@@ -74,7 +75,6 @@ PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
 LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE, DAMMIT.
-
 """
 from __future__ import generators
 

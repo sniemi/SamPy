@@ -1,6 +1,7 @@
-'''
-This Python script calculates photometry from ACS files. The
-class can be used to run calacs for calibrating the raw data.
+"""
+This Python script calculates photometry from ACS files.
+
+The class can be used to run calacs for calibrating the raw data.
 The class contains also a simple interface for STractor that
 can be used to find locations of stars in the image.
 
@@ -11,7 +12,7 @@ can be used to find locations of stars in the image.
 :history: 02/10/09 Initial Version
 
 :version: 1.0
-'''
+"""
 import pyraf
 from pyraf import iraf as I
 from pyraf.iraf import stsdas as S
@@ -20,9 +21,9 @@ __author__ = 'Sami-Matias Niemi'
 __version__ = "1.0"
 
 class ACSPhotometry():
-    '''
+    """
      A class to do ACS photometry.
-     '''
+     """
     #Note: could be cleaned from all useless self declarations.
 
     def __init__(self, path, out):
@@ -33,51 +34,48 @@ class ACSPhotometry():
 
 
     def omitPhotcorr(self, file):
-        '''
-          This function will change PHOTCORR keyword value to OMIT in the header
-          of given file. The file can contain wildcards i.e. multiple files can
-          be given on one command..
-          '''
-
+        """
+        This function will change PHOTCORR keyword value to OMIT in the header
+        of given file. The file can contain wildcards i.e. multiple files can
+        be given on one command..
+        """
         I.hedit(file, fields='PHOTCORR', value='omit', verify='no', show='no')
 
     def runCalACS(self, file):
-        '''
-          Runs calacs for the given file. Uses the default parameters.
-          '''
-
+        """
+        Runs calacs for the given file. Uses the default parameters.
+        """
         S.hst()
         S.hst.acs()
         S.hst.acs.calacs(file)
 
     def gStat(self, file):
-        '''
-          Calculates statistics from given image. Extension must be given
-          on filename e.g. file.fits[1]
-          Returns:
-          All statistics given by IRAF task gstat.
-          '''
-
+        """
+        Calculates statistics from given image. Extension must be given
+        on filename e.g. file.fits[1]
+        Returns:
+        All statistics given by IRAF task gstat.
+        """
         stat = S.gstat(file, fields='doall', Stdout=1)
         return stat
 
     def hdiff(self, file1, file2):
-        '''
+        """
           Compares headers from two files with hdiff.
 
           :returns: The differences found.
-          '''
+          """
 
         hdiff = S.hdiff(file1, file2, Stdout=1)
         return hdiff
 
     def queryKeywords(self, file, keywords):
-        '''
+        """
           Queries keywords from header. Can be used to get e.g. exposure times
           from multiple raw files with wildcard in file name.
 
           :returns: Queried keywords
-          '''
+          """
         self.file = file
         self.keywords = keywords
 
@@ -85,8 +83,8 @@ class ACSPhotometry():
         return keyw
 
     def getBandpar(self, configuration):
-        '''
-          '''
+        """
+          """
         self.conf = configuration
         #example configuration = 'acs,wfc1,f435w'
 
@@ -98,11 +96,11 @@ class ACSPhotometry():
         return bands
 
     def calculateZeropoint(self, photflam):
-        '''
+        """
           Calculates the zeropoint from a given header keyword photflam value.
 
           :returns: the zeropoint value
-          '''
+          """
         import math
 
         self.photflam = photflam
@@ -111,22 +109,22 @@ class ACSPhotometry():
         return zp
 
     def getSize(self, file):
-        '''
+        """
           This function can be used to get the size of the image. It actually
           returns a simple information found from the image header, however,
           when parsed correctly the image size is available.
-          '''
+          """
         self.file = file
 
         head = I.imheader(self.file, Stdout=1)
         return head
 
     def doImcalc(self, input, output, operation):
-        '''
+        """
           Simple interface for IRAF task imcalc. Can be used for simple
           arithmetic operations between images. This could be rewritten with
           PyFits and NumPy to give broader selection of operations.
-          '''
+          """
         self.input = input
         self.output = output
         self.operation = operation
@@ -134,35 +132,35 @@ class ACSPhotometry():
         I.imcalc(self.input, self.output, self.operation)
 
     def displayDS9(self, image, buffer):
-        '''
+        """
           Displays the given image on DS9. The function requires that
           the DS9 is already running. In the future this should be changed.
-          '''
+          """
         I.display(image, buffer)
 
     def markStars(self, data, buffer):
-        '''
+        """
           Can be used to show an overlapping image on DS9 buffer. The data is taken
           from the a table; containing x and y coordinates.  Uses a fixed size for the
           points.
-          '''
+          """
         I.tvmark(buffer, data, mark='point', nx=0, ny=0, points=0.5, color=204)
 
     def interactiveImexam(self, image, frame):
-        '''
+        """
           Can be used to call interactive IRAF task imexam for a given frame. DS9 must be
           running and a right frame should be given.
-          '''
+          """
         I.imexam(image, frame=frame)
 
     def doPhotometryACS(self, file, inputcoords, apertures, zeropoint, bgsigma, skyann, skydann):
-        '''
+        """
           This function can be used to do photometry from a given image. Input parameters
           can be varied, however, the task assumes that photometry is done from an ACS
           image and the exposure time is found from the header of the file.
           Object recentering is done with centroid algorithm and shifts up to 6 pixels are
           possible. For skyfitting algorithm mode is adopted.
-          '''
+          """
         #load packages, should supress the output
         I.digiphot()
         I.apphot()
@@ -177,45 +175,45 @@ class ACSPhotometry():
         I.phot(file, coords=inputcoords, verify='no', verbose='no')
 
     def getMeaningfulColumns(self, input, columns, output):
-        '''
+        """
           Uses IRAF task tdump for parsing columns from a table.
-          '''
+          """
         I.tdump(input, colum=columns, datafil=output)
 
     def mergeTables(self, merged, output):
-        '''
+        """
           Can be used to merge multiple tables together.
-          '''
+          """
         I.tmerge(merged, output, option='merge')
 
     def changeColumn(self, table, column, name, fmt, unit):
-        '''
+        """
           Changes the column name and format that IRAF supports. Also unit can be
           set. Verbose output has been supressed.
-          '''
+          """
         I.tchcol(table, column, name, newfmt=fmt, newunit=unit, verbose='no')
 
     def calculateac05(self, input, column, operation, outputfmt):
-        '''
+        """
           Can be used to calculate the ac05 (from 3 pix to 10pix) aperture correction.
           Uses IRAF task tcalc, and adds the calculated values as a new column at the
           end of the table.
-          '''
+          """
         I.tcalc(input, column, operation, colfmt=outputfmt)
 
     def correctMagnitude(self, input, column, operation, outputfmt):
-        '''
+        """
           Essentially the same as calculateac05 function.
-          '''
+          """
         I.tcalc(input, column, operation, colfmt=outputfmt)
 
 
 def useSextractor(input):
-    '''
+    """
      Very simple interface for running sextractor for given image. Does not return
      anything to the Python program. This function is superseded by the class:
      'SexTractor' class written by Sami-Matias Niemi for the Nordic Optical Telescope.
-     '''
+     """
     import os
 
     command = 'sex %s' % input
@@ -358,7 +356,7 @@ if __name__ == '__main__':
 
     #now the very ugly part. Should be rewritten...
     table = 'phot_all.tab'
-    unit = '''""'''
+    unit = """"""""
     ph.changeColumn(table, 'c1', 'x_435', '%8.6g', unit)
     ph.changeColumn(table, 'c2', 'y_435', '%8.6g', unit)
     ph.changeColumn(table, 'c3', 'sky_435', '%6.5g', unit)
@@ -391,7 +389,7 @@ if __name__ == '__main__':
     for line in info:
         number = line[0][1:4]
         column = number + '_apcor'
-        operation = '''"mag3_''' + number + '-mag10_' + number + '''"'''
+        operation = """"mag3_''' + number + '-mag10_' + number + """""""
         ph.calculateac05(table, column, operation, '%6.5g')
 
     #lets get ac05 and AC05 corrected magnitudes
@@ -409,7 +407,7 @@ if __name__ == '__main__':
         if number == '814':
             ac05 = 0.18
             AC05 = 0.087
-        operation = '''"mag3_''' + number + '-' + str(ac05) + '-' + str(AC05) + '''"'''
+        operation = """"mag3_''' + number + '-' + str(ac05) + '-' + str(AC05) + """""""
         ph.correctMagnitude(table, column, operation, '%7.6g')
 
     log.close()

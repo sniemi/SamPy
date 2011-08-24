@@ -25,6 +25,7 @@ def combineFiles(files, outputfile):
     print 'The content of {0:d} files were combined to a single file'.format(i)
     fh.close()
 
+
 def cPickleDumpDictionary(dictionary, output):
     '''
     Dumps a dictionary of data to a cPickled file

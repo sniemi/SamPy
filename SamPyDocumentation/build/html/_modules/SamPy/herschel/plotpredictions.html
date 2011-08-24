@@ -103,7 +103,7 @@
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">reds</span> <span class="ow">in</span> <span class="n">redshifts</span><span class="p">:</span>
-        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.mstardot, FIR.spire250_obs*1000</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.mstardot, FIR.pacs160_obs*1000</span>
 <span class="s">                from FIR, galprop where</span>
 <span class="s">                </span><span class="si">%s</span><span class="s"> and</span>
 <span class="s">                FIR.gal_id = galprop.gal_id and</span>
@@ -141,7 +141,7 @@
         <span class="c">#                           report = True)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fluxlimit</span><span class="p">),</span> <span class="n">ls</span><span class="o">=</span><span class="s">&#39;:&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">)</span>
-    <span class="c">#label = &#39;$S_{250} =$ %.1f mJy&#39; % fluxlimit)</span>
+    <span class="c">#label = &#39;$S_{160} =$ %.1f mJy&#39; % fluxlimit)</span>
 
     <span class="k">if</span> <span class="n">obs</span><span class="p">:</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="s">&#39;/Users/sammy/Dropbox/Research/Herschel/LaceySFRs.txt&#39;</span><span class="p">)</span>
@@ -162,7 +162,7 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">msk5</span><span class="p">][:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="n">msk5</span><span class="p">][:,</span> <span class="mi">2</span><span class="p">],</span>
                 <span class="s">&#39;y--&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s">&#39;$\mathrm{L10:}\ z = 4.0$&#39;</span><span class="p">)</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{250} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{160} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(\dot{M}_{\star} \ [M_{\odot}\mathrm{yr}^{-1}])$&#39;</span><span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
@@ -185,7 +185,7 @@
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">reds</span> <span class="ow">in</span> <span class="n">redshifts</span><span class="p">:</span>
-        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.mstardot, galprop.mstar, FIR.spire250_obs</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.mstardot, galprop.mstar, FIR.pacs160_obs</span>
 <span class="s">                from FIR, galprop where</span>
 <span class="s">                </span><span class="si">%s</span><span class="s"> and</span>
 <span class="s">                FIR.gal_id = galprop.gal_id and</span>
@@ -217,10 +217,10 @@
                     <span class="n">label</span><span class="o">=</span><span class="s">&#39;$z = </span><span class="si">%.1f</span><span class="s">$&#39;</span> <span class="o">%</span> <span class="n">zz</span><span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fluxlimit</span><span class="p">),</span> <span class="n">ls</span><span class="o">=</span><span class="s">&#39;:&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">)</span>
-    <span class="c">#label = &#39;$S_{250} =$ %.1f mJy&#39; % fluxlimit)</span>
+    <span class="c">#label = &#39;$S_{160} =$ %.1f mJy&#39; % fluxlimit)</span>
 
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{250} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{160} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">r&#39;$\log_{10} \left (\frac{\dot{M}_{\star}}{M_{\star}} \ [\mathrm{yr}^{-1}] \right )$&#39;</span><span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
@@ -240,7 +240,7 @@
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">reds</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">redshifts</span><span class="p">):</span>
-        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.mstar, FIR.spire250_obs*1000</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.mstar, FIR.pacs160_obs*1000</span>
 <span class="s">                from FIR, galprop where</span>
 <span class="s">                </span><span class="si">%s</span><span class="s"> and</span>
 <span class="s">                FIR.gal_id = galprop.gal_id and</span>
@@ -273,7 +273,7 @@
 
     <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fluxlimit</span><span class="p">),</span> <span class="n">ls</span><span class="o">=</span><span class="s">&#39;:&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">)</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{250} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{160} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(M_{\star} \ [M_{\odot}])$&#39;</span><span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
@@ -286,14 +286,14 @@
 <div class="viewcode-block" id="plot_Lbol"><a class="viewcode-back" href="../../../SamPy.herschel.html#SamPy.herschel.plotpredictions.plot_Lbol">[docs]</a><span class="k">def</span> <span class="nf">plot_Lbol</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">redshifts</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span>
               <span class="n">xmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mf">2.3</span><span class="p">,</span> <span class="n">fluxlimit</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Plots SPIRE 250 flux versus bolometric luminosity</span>
+<span class="sd">    Plots pacs 160 flux versus bolometric luminosity</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="c">#figure</span>
     <span class="n">fig</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">reds</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">redshifts</span><span class="p">):</span>
-        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select FIR.L_bol, FIR.spire250_obs</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select FIR.L_bol, FIR.pacs160_obs</span>
 <span class="s">                from FIR where </span><span class="si">%s</span><span class="s"> and FIR.L_bol &gt; 0 and FIR.L_bol &lt; 1e8&#39;&#39;&#39;</span> <span class="o">%</span> <span class="n">reds</span>
         <span class="c">#tmp</span>
         <span class="n">tmp</span> <span class="o">=</span> <span class="n">reds</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
@@ -322,7 +322,7 @@
 
     <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fluxlimit</span><span class="p">),</span> <span class="n">ls</span><span class="o">=</span><span class="s">&#39;:&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">)</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{250} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{160} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(L_{\mathrm{bol}} \ [L_{\odot}])$&#39;</span><span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
@@ -334,14 +334,14 @@
 <div class="viewcode-block" id="plot_Ldust"><a class="viewcode-back" href="../../../SamPy.herschel.html#SamPy.herschel.plotpredictions.plot_Ldust">[docs]</a><span class="k">def</span> <span class="nf">plot_Ldust</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">redshifts</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span>
               <span class="n">xmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mf">2.3</span><span class="p">,</span> <span class="n">fluxlimit</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Plots SPIRE 250 flux versus dust luminosity</span>
+<span class="sd">    Plots pacs 160 flux versus dust luminosity</span>
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="c">#figure</span>
     <span class="n">fig</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">reds</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">redshifts</span><span class="p">):</span>
-        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select FIR.L_dust, FIR.spire250_obs</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select FIR.L_dust, FIR.pacs160_obs</span>
 <span class="s">                from FIR where </span><span class="si">%s</span><span class="s"> and FIR.L_dust &gt; 0 and FIR.L_dust &lt; 1e8&#39;&#39;&#39;</span> <span class="o">%</span> <span class="n">reds</span>
         <span class="c">#tmp</span>
         <span class="n">tmp</span> <span class="o">=</span> <span class="n">reds</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
@@ -370,7 +370,7 @@
 
     <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fluxlimit</span><span class="p">),</span> <span class="n">ls</span><span class="o">=</span><span class="s">&#39;:&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">)</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{250} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{160} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(L_{\mathrm{dust}} \ [L_{\odot}])$&#39;</span><span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
@@ -390,7 +390,7 @@
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">reds</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">redshifts</span><span class="p">):</span>
-        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.mcold, FIR.spire250_obs*1000</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.mcold, FIR.pacs160_obs*1000</span>
 <span class="s">                from FIR, galprop where</span>
 <span class="s">                </span><span class="si">%s</span><span class="s"> and</span>
 <span class="s">                FIR.gal_id = galprop.gal_id and</span>
@@ -423,7 +423,7 @@
 
     <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fluxlimit</span><span class="p">),</span> <span class="n">ls</span><span class="o">=</span><span class="s">&#39;:&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">)</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{250} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{160} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(M_{\mathrm{coldgas}} \ [M_{\odot}])$&#39;</span><span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
@@ -443,7 +443,7 @@
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">reds</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">redshifts</span><span class="p">):</span>
-        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.mcold - galprop.mstar, FIR.spire250_obs*1000</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.mcold - galprop.mstar, FIR.pacs160_obs*1000</span>
 <span class="s">                from FIR, galprop where</span>
 <span class="s">                </span><span class="si">%s</span><span class="s"> and</span>
 <span class="s">                FIR.gal_id = galprop.gal_id and</span>
@@ -476,7 +476,7 @@
 
     <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fluxlimit</span><span class="p">),</span> <span class="n">ls</span><span class="o">=</span><span class="s">&#39;:&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">)</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{250} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{160} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">r&#39;$\log_{10} \left ( \frac{M_{\mathrm{coldgas}}}{M_{\star}} \right )$&#39;</span><span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
@@ -496,7 +496,7 @@
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">reds</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">redshifts</span><span class="p">):</span>
-        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.mstar_burst, FIR.spire250_obs*1000</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.mstar_burst, FIR.pacs160_obs*1000</span>
 <span class="s">                from FIR, galprop where</span>
 <span class="s">                </span><span class="si">%s</span><span class="s"> and</span>
 <span class="s">                FIR.gal_id = galprop.gal_id and</span>
@@ -530,7 +530,7 @@
 
     <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fluxlimit</span><span class="p">),</span> <span class="n">ls</span><span class="o">=</span><span class="s">&#39;:&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">)</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{250} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{160} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">r&#39;$\log_{10} ( M_{\mathrm{starburst}})$&#39;</span><span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
@@ -550,7 +550,7 @@
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">reds</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">redshifts</span><span class="p">):</span>
-        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.zstar, FIR.spire250_obs*1000</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.zstar, FIR.pacs160_obs*1000</span>
 <span class="s">                from FIR, galprop where</span>
 <span class="s">                </span><span class="si">%s</span><span class="s"> and</span>
 <span class="s">                FIR.gal_id = galprop.gal_id and</span>
@@ -583,7 +583,7 @@
 
     <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fluxlimit</span><span class="p">),</span> <span class="n">ls</span><span class="o">=</span><span class="s">&#39;:&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">)</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{250} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{160} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;$Z_{\star}$&#39;</span><span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
@@ -603,7 +603,7 @@
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">reds</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">redshifts</span><span class="p">):</span>
-        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.mstar_burst - galprop.mstar, FIR.spire250_obs*1000</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.mstar_burst - galprop.mstar, FIR.pacs160_obs*1000</span>
 <span class="s">                from FIR, galprop where</span>
 <span class="s">                </span><span class="si">%s</span><span class="s"> and</span>
 <span class="s">                FIR.gal_id = galprop.gal_id and</span>
@@ -636,7 +636,7 @@
 
     <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fluxlimit</span><span class="p">),</span> <span class="n">ls</span><span class="o">=</span><span class="s">&#39;:&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">)</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{250} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{160} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">r&#39;$\log_{10} \left ( \frac{M_{starbust}}{M_{\star}} \right )$&#39;</span><span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
@@ -656,7 +656,7 @@
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">reds</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">redshifts</span><span class="p">):</span>
-        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.mBH, FIR.spire250_obs*1000</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.mBH, FIR.pacs160_obs*1000</span>
 <span class="s">                from FIR, galprop where</span>
 <span class="s">                </span><span class="si">%s</span><span class="s"> and</span>
 <span class="s">                FIR.gal_id = galprop.gal_id and</span>
@@ -689,7 +689,7 @@
 
     <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fluxlimit</span><span class="p">),</span> <span class="n">ls</span><span class="o">=</span><span class="s">&#39;:&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">)</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{250} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{160} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(M_{BH} \ [M_{\odot}])$&#39;</span><span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
@@ -699,8 +699,8 @@
     <span class="n">P</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_folder</span> <span class="o">+</span> <span class="s">&#39;BHmass.ps&#39;</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="plot_DMmass"><a class="viewcode-back" href="../../../SamPy.herschel.html#SamPy.herschel.plotpredictions.plot_DMmass">[docs]</a><span class="k">def</span> <span class="nf">plot_DMmass</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">reshifts</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span>
-                <span class="n">xmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">fluxlimit</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+<div class="viewcode-block" id="plot_DMmass"><a class="viewcode-back" href="../../../SamPy.herschel.html#SamPy.herschel.plotpredictions.plot_DMmass">[docs]</a><span class="k">def</span> <span class="nf">plot_DMmass</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">redshifts</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span>
+                <span class="n">xmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mf">2.5</span><span class="p">,</span> <span class="n">fluxlimit</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Plots </span>
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -728,12 +728,13 @@
 
         <span class="c">#percentiles</span>
         <span class="n">xmaxb</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">xd</span><span class="p">)</span>
-        <span class="n">nxbins</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">12</span> <span class="o">*</span> <span class="p">(</span><span class="n">xmaxb</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">))</span>
+        <span class="n">nxbins</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">9</span> <span class="o">*</span> <span class="p">(</span><span class="n">xmaxb</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">))</span>
         <span class="n">xbin_midd</span><span class="p">,</span> <span class="n">y50d</span><span class="p">,</span> <span class="n">y16d</span><span class="p">,</span> <span class="n">y84d</span> <span class="o">=</span> <span class="n">dm</span><span class="o">.</span><span class="n">percentile_bins</span><span class="p">(</span><span class="n">xd</span><span class="p">,</span>
                                                          <span class="n">yd</span><span class="p">,</span>
                                                          <span class="n">xmin</span><span class="p">,</span>
                                                          <span class="n">xmaxb</span><span class="p">,</span>
-                                                         <span class="n">nxbins</span><span class="o">=</span><span class="n">nxbins</span><span class="p">)</span>
+                                                         <span class="n">nxbins</span><span class="o">=</span><span class="n">nxbins</span><span class="p">,</span>
+                                                         <span class="n">limit</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
         <span class="n">msk</span> <span class="o">=</span> <span class="n">y50d</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">10</span>
         <span class="n">add</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s">&#39;0.0</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">xbin_midd</span><span class="p">[</span><span class="n">msk</span><span class="p">]</span> <span class="o">+</span> <span class="n">add</span><span class="p">,</span> <span class="n">y50d</span><span class="p">[</span><span class="n">msk</span><span class="p">],</span>
@@ -746,13 +747,13 @@
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(M_{\mathrm{dm}} \ [M_{\odot}])$&#39;</span><span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mf">11.0</span><span class="p">,</span> <span class="mf">13.0</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mf">10.98</span><span class="p">,</span> <span class="mf">13.3</span><span class="p">)</span>
 
     <span class="n">P</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s">&#39;lower right&#39;</span><span class="p">)</span>
     <span class="n">P</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_folder</span> <span class="o">+</span> <span class="s">&#39;DMmass.ps&#39;</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="plot_Age"><a class="viewcode-back" href="../../../SamPy.herschel.html#SamPy.herschel.plotpredictions.plot_Age">[docs]</a><span class="k">def</span> <span class="nf">plot_Age</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">reshifts</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span>
+<div class="viewcode-block" id="plot_Age"><a class="viewcode-back" href="../../../SamPy.herschel.html#SamPy.herschel.plotpredictions.plot_Age">[docs]</a><span class="k">def</span> <span class="nf">plot_Age</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">redshifts</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span>
              <span class="n">xmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mf">2.1</span><span class="p">,</span> <span class="n">fluxlimit</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Plots </span>
@@ -762,7 +763,7 @@
     <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">reds</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">redshifts</span><span class="p">):</span>
-        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.meanage, FIR.spire250_obs*1000</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select galprop.meanage, FIR.pacs160_obs*1000</span>
 <span class="s">                from FIR, galprop where</span>
 <span class="s">                </span><span class="si">%s</span><span class="s"> and</span>
 <span class="s">                FIR.gal_id = galprop.gal_id and</span>
@@ -795,7 +796,7 @@
 
     <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fluxlimit</span><span class="p">),</span> <span class="n">ls</span><span class="o">=</span><span class="s">&#39;:&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">)</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{250} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{160} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;Mean Age [Gyr]&#39;</span><span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
@@ -830,20 +831,20 @@
     <span class="c">#loop over all the redshifts</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">reds</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">redshifts</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">obs</span><span class="p">:</span>
-            <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select FIR.spire250_obs, galprop.tmerge, galprop.tmajmerge</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select FIR.pacs160_obs, galprop.tmerge, galprop.tmajmerge</span>
 <span class="s">                    from FIR, galprop where</span>
 <span class="s">                    </span><span class="si">%s</span><span class="s"> and</span>
-<span class="s">                    FIR.spire250_obs &gt; 5e-4 and</span>
-<span class="s">                    FIR.spire250_obs &lt; 1e6 and</span>
+<span class="s">                    FIR.pacs160_obs &gt; 5e-4 and</span>
+<span class="s">                    FIR.pacs160_obs &lt; 1e6 and</span>
 <span class="s">                    FIR.gal_id = galprop.gal_id and</span>
 <span class="s">                    FIR.halo_id = galprop.halo_id</span>
 <span class="s">                    &#39;&#39;&#39;</span> <span class="o">%</span> <span class="n">reds</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select FIR.spire250, galprop.tmerge, galprop.tmajmerge</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select FIR.pacs160, galprop.tmerge, galprop.tmajmerge</span>
 <span class="s">                    from FIR, galprop where</span>
 <span class="s">                    </span><span class="si">%s</span><span class="s"> and</span>
-<span class="s">                    FIR.spire250 &gt; 8.8 and</span>
-<span class="s">                    FIR.spire250 &lt; 13.0 and</span>
+<span class="s">                    FIR.pacs160 &gt; 8.8 and</span>
+<span class="s">                    FIR.pacs160 &lt; 13.0 and</span>
 <span class="s">                    FIR.gal_id = galprop.gal_id and</span>
 <span class="s">                    FIR.halo_id = galprop.halo_id</span>
 <span class="s">                    &#39;&#39;&#39;</span> <span class="o">%</span> <span class="n">reds</span>
@@ -907,11 +908,11 @@
         <span class="n">ax4</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fluxlimit</span><span class="p">),</span> <span class="n">ls</span><span class="o">=</span><span class="s">&#39;:&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">)</span>
         <span class="c">#labels</span>
     <span class="k">if</span> <span class="n">obs</span><span class="p">:</span>
-        <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{250} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
-        <span class="n">ax4</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{250} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{160} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
+        <span class="n">ax4</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{160} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(L_{250} \ [L_{\odot}])$&#39;</span><span class="p">)</span>
-        <span class="n">ax4</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(L_{250} \ [L_{\odot}])$&#39;</span><span class="p">)</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(L_{160} \ [L_{\odot}])$&#39;</span><span class="p">)</span>
+        <span class="n">ax4</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(L_{160} \ [L_{\odot}])$&#39;</span><span class="p">)</span>
     <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;$\mathrm{Merger\ Fraction}$&#39;</span><span class="p">)</span>
     <span class="n">ax3</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;$\mathrm{Merger\ Fraction}$&#39;</span><span class="p">)</span>
     <span class="n">ax2</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([])</span>
@@ -958,7 +959,7 @@
     <span class="n">P</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_folder</span> <span class="o">+</span> <span class="n">outname</span> <span class="o">+</span> <span class="nb">type</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="plot_mergerfraction2"><a class="viewcode-back" href="../../../SamPy.herschel.html#SamPy.herschel.plotpredictions.plot_mergerfraction2">[docs]</a><span class="k">def</span> <span class="nf">plot_mergerfraction2</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">reshifts</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span> <span class="n">outname</span><span class="p">,</span>
+<div class="viewcode-block" id="plot_mergerfraction2"><a class="viewcode-back" href="../../../SamPy.herschel.html#SamPy.herschel.plotpredictions.plot_mergerfraction2">[docs]</a><span class="k">def</span> <span class="nf">plot_mergerfraction2</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">redshifts</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span> <span class="n">outname</span><span class="p">,</span>
                          <span class="n">xmin</span><span class="o">=-</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mf">2.3</span><span class="p">,</span> <span class="n">fluxlimit</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
                          <span class="n">png</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">mergetimelimit</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
                          <span class="n">xbin</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
@@ -983,20 +984,20 @@
     <span class="c">#loop over all the redshifts</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">reds</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">redshifts</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">obs</span><span class="p">:</span>
-            <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select FIR.spire250_obs, galprop.tmerge, galprop.tmajmerge</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select FIR.pacs160_obs, galprop.tmerge, galprop.tmajmerge</span>
 <span class="s">                    from FIR, galprop where</span>
 <span class="s">                    </span><span class="si">%s</span><span class="s"> and</span>
-<span class="s">                    FIR.spire250_obs &gt; 5e-4 and</span>
-<span class="s">                    FIR.spire250_obs &lt; 1e6 and</span>
+<span class="s">                    FIR.pacs160_obs &gt; 5e-4 and</span>
+<span class="s">                    FIR.pacs160_obs &lt; 1e6 and</span>
 <span class="s">                    FIR.gal_id = galprop.gal_id and</span>
 <span class="s">                    FIR.halo_id = galprop.halo_id</span>
 <span class="s">                    &#39;&#39;&#39;</span> <span class="o">%</span> <span class="n">reds</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select FIR.spire250, galprop.tmerge, galprop.tmajmerge</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select FIR.pacs160, galprop.tmerge, galprop.tmajmerge</span>
 <span class="s">                    from FIR, galprop where</span>
 <span class="s">                    </span><span class="si">%s</span><span class="s"> and</span>
-<span class="s">                    FIR.spire250 &gt; 8.8 and</span>
-<span class="s">                    FIR.spire250 &lt; 13.0 and</span>
+<span class="s">                    FIR.pacs160 &gt; 8.8 and</span>
+<span class="s">                    FIR.pacs160 &lt; 13.0 and</span>
 <span class="s">                    FIR.gal_id = galprop.gal_id and</span>
 <span class="s">                    FIR.halo_id = galprop.halo_id</span>
 <span class="s">                    &#39;&#39;&#39;</span> <span class="o">%</span> <span class="n">reds</span>
@@ -1063,11 +1064,11 @@
         <span class="n">ax4</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">fluxlimit</span><span class="p">),</span> <span class="n">ls</span><span class="o">=</span><span class="s">&#39;:&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s">&#39;green&#39;</span><span class="p">)</span>
         <span class="c">#labels</span>
     <span class="k">if</span> <span class="n">obs</span><span class="p">:</span>
-        <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{250} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
-        <span class="n">ax4</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{250} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{160} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
+        <span class="n">ax4</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(S_{160} \ [\mathrm{mJy}])$&#39;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(L_{250} \ [L_{\odot}])$&#39;</span><span class="p">)</span>
-        <span class="n">ax4</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(L_{250} \ [L_{\odot}])$&#39;</span><span class="p">)</span>
+        <span class="n">ax3</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(L_{160} \ [L_{\odot}])$&#39;</span><span class="p">)</span>
+        <span class="n">ax4</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;$\log_{10}(L_{160} \ [L_{\odot}])$&#39;</span><span class="p">)</span>
     <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;$\mathrm{Merger\ Fraction}$&#39;</span><span class="p">)</span>
     <span class="n">ax3</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;$\mathrm{Merger\ Fraction}$&#39;</span><span class="p">)</span>
     <span class="n">ax2</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([])</span>
@@ -1120,7 +1121,7 @@
     <span class="c">#constants</span>
     <span class="c">#path = hm + &#39;/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/&#39;</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">hm</span> <span class="o">+</span> <span class="s">&#39;/Research/Herschel/runs/big_volume/&#39;</span>
-    <span class="n">out_folder</span> <span class="o">=</span> <span class="n">hm</span> <span class="o">+</span> <span class="s">&#39;/Dropbox/Research/Herschel/plots/predictions/big/&#39;</span>
+    <span class="n">out_folder</span> <span class="o">=</span> <span class="n">hm</span> <span class="o">+</span> <span class="s">&#39;/Dropbox/Research/Herschel/plots/predictions/big/250/&#39;</span>
     <span class="n">db</span> <span class="o">=</span> <span class="s">&#39;sams.db&#39;</span>
 
     <span class="n">redshifts</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;FIR.z &gt; 0.1 and FIR.z &lt; 0.3&#39;</span><span class="p">,</span>
@@ -1128,29 +1129,26 @@
                  <span class="s">&#39;FIR.z &gt; 0.9 and FIR.z &lt; 1.1&#39;</span><span class="p">,</span>
                  <span class="s">&#39;FIR.z &gt; 1.9 and FIR.z &lt; 2.1&#39;</span><span class="p">,</span>
                  <span class="s">&#39;FIR.z &gt; 2.9 and FIR.z &lt; 3.1&#39;</span><span class="p">,</span>
-                 <span class="s">&#39;FIR.z &gt; 3.9 and FIR.z &lt; 4.1&#39;</span><span class="p">]</span>
+                 <span class="s">&#39;FIR.z &gt; 3.8 and FIR.z &lt; 4.2&#39;</span><span class="p">]</span>
 
     <span class="k">print</span> <span class="s">&#39;Begin plotting&#39;</span>
     <span class="k">print</span> <span class="s">&#39;Input DB: &#39;</span><span class="p">,</span> <span class="n">path</span> <span class="o">+</span> <span class="n">db</span>
     <span class="k">print</span> <span class="s">&#39;Output folder: &#39;</span><span class="p">,</span> <span class="n">out_folder</span>
 
     <span class="c">#These plots are in the paper</span>
-    <span class="c">#plot_sfrs(path, db, redshifts, out_folder)</span>
+<span class="c">#    plot_sfrs(path, db, redshifts, out_folder, obs=False)</span>
+<span class="c">#    plot_mergerfraction2(path, db, redshifts, out_folder, &#39;MergeFractions&#39;,</span>
+<span class="c">#                         xbin = [10,8,7,7,5,5], png = False, neverMerged = True)</span>
+<span class="c">#    plot_stellarmass(path, db, redshifts, out_folder)</span>
+<span class="c">#    plot_coldgas(path, db, redshifts, out_folder)</span>
+<span class="c">#    plot_ssfr(path, db, redshifts, out_folder)</span>
+<span class="c">#    plot_Lbol(path, db, redshifts, out_folder)</span>
+<span class="c">#    plot_Ldust(path, db, redshifts, out_folder)</span>
 
-    <span class="c">#plot_mergerfraction2(path, db, redshifts, out_folder, &#39;MergeFractions&#39;,</span>
-    <span class="c">#                     xbin = [10,8,9,7,5,5], png = False, neverMerged = True)</span>
-    <span class="c">#    plot_stellarmass(path, db, redshifts, out_folder)</span>
-    <span class="c">#    plot_coldgas(path, db, redshifts, out_folder)</span>
-
-
-    <span class="c">#These plots were in the paper</span>
-    <span class="c">#    plot_ssfr(path, db, redshifts, out_folder)</span>
-
+    <span class="n">plot_DMmass</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">redshifts</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">)</span>
 
 
     <span class="c">#TEST plots</span>
-    <span class="n">plot_Lbol</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">redshifts</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">)</span>
-    <span class="n">plot_Ldust</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">redshifts</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">)</span>
 <span class="c">#    plot_mergerfraction(path, db, redshifts, out_folder, &#39;MergeFractions&#39;,</span>
 <span class="c">#                        xbin = [10,8,9,7,5,5], png = False)</span>
 <span class="c">#    plot_sfrs(path, db, redshifts, out_folder, obs = True)</span>
@@ -1158,7 +1156,6 @@
 <span class="c">#    plot_metallicity(path, db, redshifts, out_folder)</span>
 <span class="c">#    plot_starburst(path, db, redshifts, out_folder)</span>
 <span class="c">#    plot_BHmass(path, db, redshifts, out_folder)</span>
-<span class="c">#    plot_DMmass(path, db, redshifts, out_folder)</span>
 <span class="c">#    plot_Age(path, db, redshifts, out_folder)</span>
 <span class="c">#    plot_burstmass(path, db, redshifts, out_folder)</span>
 <span class="c">#    plot_mergerfraction(path, db, redshifts, out_folder, &#39;Merge&#39;)</span>
@@ -1189,7 +1186,6 @@
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

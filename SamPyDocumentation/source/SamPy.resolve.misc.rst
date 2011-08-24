@@ -20,10 +20,34 @@ SamPy.resolve.misc
     :undoc-members:
     :show-inheritance:
 
+:mod:`findSlitmaskPosition` Module
+----------------------------------
+
+.. automodule:: SamPy.resolve.misc.findSlitmaskPosition
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 :mod:`findslits` Module
 -----------------------
 
 .. automodule:: SamPy.resolve.misc.findslits
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`findSlitsDirectImage` Module
+----------------------------------
+
+.. automodule:: SamPy.resolve.misc.findSlitsDirectImage
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+:mod:`fluxCalibrateToSDSS` Module
+----------------------------------
+
+.. automodule:: SamPy.resolve.misc.fluxCalibrateToSDSS
     :members:
     :undoc-members:
     :show-inheritance:

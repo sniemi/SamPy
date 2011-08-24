@@ -100,10 +100,9 @@
 <h1>parsing Package<a class="headerlink" href="#parsing-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-SamPy.parsing.BeautifulSoup">
 <span id="beautifulsoup-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">BeautifulSoup</span></tt> Module<a class="headerlink" href="#module-SamPy.parsing.BeautifulSoup" title="Permalink to this headline">¶</a></h2>
-<p>Beautiful Soup
-Elixir and Tonic
-&#8220;The Screen-Scraper&#8217;s Friend&#8221;
-<a class="reference external" href="http://www.crummy.com/software/BeautifulSoup/">http://www.crummy.com/software/BeautifulSoup/</a></p>
+<p>Beautiful Soup parses a (possibly invalid) XML or HTML document into a tree representation.
+It provides methods and Pythonic idioms that make it easy to navigate, search, and modify the tree.</p>
+<p><a class="reference external" href="http://www.crummy.com/software/BeautifulSoup/">http://www.crummy.com/software/BeautifulSoup/</a></p>
 <p>Beautiful Soup parses a (possibly invalid) XML or HTML document into a
 tree representation. It provides methods and Pythonic idioms that make
 it easy to navigate, search, and modify the tree.</p>
@@ -171,7 +170,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE, DAMMIT.</p>
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.BeautifulSOAP">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">BeautifulSOAP</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x104d5fe88&gt;</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#BeautifulSOAP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulSOAP" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">BeautifulSOAP</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x10c21c328&gt;</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#BeautifulSOAP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulSOAP" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup" title="SamPy.parsing.BeautifulSoup.BeautifulStoneSoup"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.BeautifulStoneSoup</span></tt></a></p>
 <p>This class will push a tag with only a single string child into
 the tag&#8217;s parent as an attribute. The attribute&#8217;s name is the tag
@@ -269,7 +268,7 @@ document from the beginning.</p>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.BeautifulStoneSoup">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">BeautifulStoneSoup</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x104d5fe88&gt;</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#BeautifulStoneSoup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">BeautifulStoneSoup</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x10c21c328&gt;</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#BeautifulStoneSoup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.Tag" title="SamPy.parsing.BeautifulSoup.Tag"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.Tag</span></tt></a></p>
 <p>This class contains the basic parser and search code. It defines
 a parser that knows nothing about tag behavior except for the
@@ -693,13 +692,13 @@ that created it.</p>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.RobustXMLParser">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">RobustXMLParser</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x104d5fe88&gt;</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#RobustXMLParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.RobustXMLParser" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">RobustXMLParser</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x10c21c328&gt;</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#RobustXMLParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.RobustXMLParser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup" title="SamPy.parsing.BeautifulSoup.BeautifulStoneSoup"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.BeautifulStoneSoup</span></tt></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.SimplifyingSOAPParser">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">SimplifyingSOAPParser</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x104d5fe88&gt;</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#SimplifyingSOAPParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.SimplifyingSOAPParser" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">SimplifyingSOAPParser</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x10c21c328&gt;</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#SimplifyingSOAPParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.SimplifyingSOAPParser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.BeautifulSOAP" title="SamPy.parsing.BeautifulSoup.BeautifulSOAP"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.BeautifulSOAP</span></tt></a></p>
 </dd></dl>
 
@@ -940,7 +939,6 @@ to determine whether or not something is stringlike.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

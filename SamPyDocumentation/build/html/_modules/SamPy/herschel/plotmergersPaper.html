@@ -280,6 +280,105 @@
                <span class="n">shadow</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">fancybox</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">markerscale</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
     <span class="n">P</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_folder</span> <span class="o">+</span> <span class="n">output</span><span class="p">)</span>
 </div>
+<div class="viewcode-block" id="plotMergerFractionsMultiplot2"><a class="viewcode-back" href="../../../SamPy.herschel.html#SamPy.herschel.plotmergersPaper.plotMergerFractionsMultiplot2">[docs]</a><span class="k">def</span> <span class="nf">plotMergerFractionsMultiplot2</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="p">,</span>
+                                  <span class="n">output</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span>
+                                  <span class="n">mergetimelimit</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+                                  <span class="n">ymin</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mf">1.1</span><span class="p">,</span>
+                                  <span class="n">xmin</span><span class="o">=-</span><span class="mf">1.9</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mf">4.15</span><span class="p">,</span>
+                                  <span class="n">xbins</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">ybins</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span>
+                                  <span class="n">title</span><span class="o">=</span><span class="s">&#39;Simulated Galaxies&#39;</span><span class="p">,</span>
+                                  <span class="n">size</span><span class="o">=</span><span class="mf">4.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">):</span>
+    <span class="c">#get data, all galaxies</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">sq</span><span class="o">.</span><span class="n">get_data_sqliteSMNfunctions</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">db</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">f775w</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">f850lp</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">uvcolor</span> <span class="o">=</span> <span class="n">f775w</span> <span class="o">-</span> <span class="n">f850lp</span>
+    <span class="n">tmerge</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">tmajor</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">]</span>
+
+    <span class="c">#masks for simulated galaxies</span>
+    <span class="n">nomergeMask</span> <span class="o">=</span> <span class="n">tmerge</span> <span class="o">&lt;</span> <span class="mf">0.0</span>
+    <span class="n">majorsMask</span> <span class="o">=</span> <span class="p">(</span><span class="n">tmajor</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">tmajor</span> <span class="o">&lt;=</span> <span class="n">mergetimelimit</span><span class="p">)</span>
+    <span class="n">majorsMask2</span> <span class="o">=</span> <span class="p">(</span><span class="n">tmajor</span> <span class="o">&gt;</span> <span class="n">mergetimelimit</span><span class="p">)</span>
+    <span class="n">mergersMask</span> <span class="o">=</span> <span class="p">(</span><span class="n">tmerge</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">tmerge</span> <span class="o">&lt;=</span> <span class="n">mergetimelimit</span><span class="p">)</span> <span class="o">&amp;</span>\
+                  <span class="p">(</span><span class="n">majorsMask</span> <span class="o">==</span> <span class="bp">False</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">majorsMask2</span> <span class="o">==</span> <span class="bp">False</span><span class="p">)</span>
+    <span class="n">mergersMask2</span> <span class="o">=</span> <span class="p">(</span><span class="n">nomergeMask</span> <span class="o">==</span> <span class="bp">False</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">majorsMask</span> <span class="o">==</span> <span class="bp">False</span><span class="p">)</span> <span class="o">&amp;</span>\
+                   <span class="p">(</span><span class="n">mergersMask</span> <span class="o">==</span> <span class="bp">False</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">majorsMask2</span> <span class="o">==</span> <span class="bp">False</span><span class="p">)</span>
+
+    <span class="c">#KDE</span>
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">M</span><span class="o">.</span><span class="n">AnaKDE</span><span class="p">([</span><span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">nomergeMask</span><span class="p">]),</span> <span class="n">uvcolor</span><span class="p">[</span><span class="n">nomergeMask</span><span class="p">]])</span>
+    <span class="n">x_vec</span><span class="p">,</span> <span class="n">y_vec</span><span class="p">,</span> <span class="n">zm</span><span class="p">,</span> <span class="n">lvls</span><span class="p">,</span> <span class="n">d0</span><span class="p">,</span> <span class="n">d1</span> <span class="o">=</span> <span class="n">mu</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">xbins</span><span class="p">),</span>
+                                                <span class="n">N</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">,</span> <span class="n">ybins</span><span class="p">),</span>
+                                                <span class="n">return_data</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="c">#make the figure</span>
+    <span class="c">#fig = P.figure()</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">P</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">0.09</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mf">0.08</span><span class="p">,</span>
+                        <span class="n">right</span><span class="o">=</span><span class="mf">0.93</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
+                        <span class="n">wspace</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
+    <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
+    <span class="c">#make contours</span>
+    <span class="n">lv</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.015</span><span class="p">,</span> <span class="mf">0.95</span> <span class="o">*</span> <span class="n">N</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">zm</span><span class="p">),</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="n">cont</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">x_vec</span><span class="p">,</span> <span class="n">y_vec</span><span class="p">,</span> <span class="n">zm</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+                       <span class="n">levels</span><span class="o">=</span><span class="n">lv</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s">&#39;black&#39;</span><span class="p">)</span>
+    <span class="n">cont</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">x_vec</span><span class="p">,</span> <span class="n">y_vec</span><span class="p">,</span> <span class="n">zm</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span>
+                       <span class="n">levels</span><span class="o">=</span><span class="n">lv</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="s">&#39;black&#39;</span><span class="p">)</span>
+
+    <span class="c">#plot scatters</span>
+    <span class="n">s2</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">majorsMask</span><span class="p">]),</span> <span class="n">uvcolor</span><span class="p">[</span><span class="n">majorsMask</span><span class="p">],</span>
+                     <span class="n">s</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mf">1000.</span> <span class="o">*</span> <span class="n">tmajor</span><span class="p">[</span><span class="n">majorsMask</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span>
+                     <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;jet&#39;</span><span class="p">),</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s">&#39;none&#39;</span><span class="p">,</span>
+                     <span class="n">label</span><span class="o">=</span><span class="s">&#39;Major Merger: $T \leq </span><span class="si">%.0f</span><span class="s">$ Myr&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">mergetimelimit</span> <span class="o">*</span> <span class="mf">1000.</span><span class="p">),</span>
+                     <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">s2</span> <span class="o">=</span> <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">majorsMask</span><span class="p">]),</span> <span class="n">uvcolor</span><span class="p">[</span><span class="n">majorsMask</span><span class="p">],</span>
+                     <span class="n">s</span><span class="o">=</span><span class="n">size</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mf">1000.</span> <span class="o">*</span> <span class="n">tmajor</span><span class="p">[</span><span class="n">majorsMask</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s">&#39;o&#39;</span><span class="p">,</span>
+                     <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;jet&#39;</span><span class="p">),</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s">&#39;none&#39;</span><span class="p">,</span>
+                     <span class="n">visible</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">s4</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">mergersMask</span><span class="p">]),</span> <span class="n">uvcolor</span><span class="p">[</span><span class="n">mergersMask</span><span class="p">],</span>
+                     <span class="n">s</span><span class="o">=</span><span class="n">size</span> <span class="o">*</span> <span class="mf">1.8</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mf">1000.</span> <span class="o">*</span> <span class="n">tmerge</span><span class="p">[</span><span class="n">mergersMask</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s">&#39;^&#39;</span><span class="p">,</span>
+                     <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;jet&#39;</span><span class="p">),</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s">&#39;none&#39;</span><span class="p">,</span>
+                     <span class="n">label</span><span class="o">=</span><span class="s">&#39;Minor Merger: $T \leq </span><span class="si">%.0f</span><span class="s">$ Myr&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">mergetimelimit</span> <span class="o">*</span> <span class="mf">1000.</span><span class="p">),</span>
+                     <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="n">s4</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">N</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">mergersMask</span><span class="p">]),</span> <span class="n">uvcolor</span><span class="p">[</span><span class="n">mergersMask</span><span class="p">],</span>
+                     <span class="n">s</span><span class="o">=</span><span class="n">size</span> <span class="o">*</span> <span class="mf">1.8</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mf">1000.</span> <span class="o">*</span> <span class="n">tmerge</span><span class="p">[</span><span class="n">mergersMask</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s">&#39;^&#39;</span><span class="p">,</span>
+                     <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s">&#39;jet&#39;</span><span class="p">),</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s">&#39;none&#39;</span><span class="p">,</span>
+                     <span class="n">visible</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+    <span class="c">#color bars</span>
+    <span class="n">c1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">s2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="n">c2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">s4</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span> <span class="n">shrink</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
+    <span class="n">c1</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;Time since latest merger [Myr]&#39;</span><span class="p">)</span>
+    <span class="n">c2</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s">&#39;Time since latest merger [Myr]&#39;</span><span class="p">)</span>
+    <span class="c">#plot dividing line</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">N</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">])</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">-</span> <span class="mf">2.4</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s">&#39;g--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.8</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s">&#39;g--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">1.8</span><span class="p">)</span>
+
+    <span class="c">#add annotate</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.04</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span>
+           <span class="n">horizontalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">verticalalignment</span><span class="o">=</span><span class="s">&#39;center&#39;</span><span class="p">,</span>
+           <span class="n">transform</span><span class="o">=</span><span class="n">ax1</span><span class="o">.</span><span class="n">transAxes</span><span class="p">)</span>
+    <span class="c">#labels</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">ylabel</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">xlabel</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([])</span>
+    <span class="c">#limits</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
+    <span class="c">#legend and save</span>
+    <span class="n">ax1</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">scatterpoints</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+               <span class="n">shadow</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">fancybox</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">markerscale</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s">&#39;upper left&#39;</span><span class="p">,</span> <span class="n">scatterpoints</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+               <span class="n">shadow</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">fancybox</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">markerscale</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">P</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">out_folder</span> <span class="o">+</span> <span class="n">output</span><span class="p">)</span>
+</div>
 <span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
     <span class="c">#find the home directory, because the output is to dropbox </span>
     <span class="c">#and my user name is not always the same, this hack is required.</span>
@@ -408,14 +507,59 @@
     <span class="c">#                                 mergetimelimit = 0.25, alpha = 0.4, ch = 2,</span>
     <span class="c">#                                 title = &#39;$S_{250} &gt; 10^{-4} \ \mathrm{Jy}$&#39;)</span>
     <span class="c">###############################################################################</span>
-    <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select FIR.spire250_obs / FIR.irac_ch2_obs,</span>
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs / FIR.irac_ch2_obs,</span>
+<span class="c">#                galphotdust.f775w, galphotdust.f850lp,</span>
+<span class="c">#                galprop.tmerge, galprop.tmajmerge</span>
+<span class="c">#                from FIR, galprop, galphotdust where</span>
+<span class="c">#                FIR.z &gt;= 2.0 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 5e-3 and</span>
+<span class="c">#                FIR.z &lt; 4.0 and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="c">#                galphotdust.f775w_obs &lt; 50 and</span>
+<span class="c">#                galphotdust.f850lp_obs &lt; 50 and</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                FIR.gal_id = galphotdust.gal_id and</span>
+<span class="c">#                FIR.halo_id = galphotdust.halo_id</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    xlab = r&#39;$\log_{10}\left ( \frac{S_{250}}{S_{4.5}} \right )$&#39;</span>
+<span class="c">#    ylab = r&#39;$\mathrm{F775W} - \mathrm{F850lp}$&#39;</span>
+<span class="c">#    plotMergerFractionsMultiplot(query, xlab, ylab, &#39;ColorMergerPaper6&#39; + type,</span>
+<span class="c">#                                 out_folder, obs, xmin=1.5, size=30, xmax=3.8,</span>
+<span class="c">#                                 mergetimelimit=0.25, alpha=0.5, ch=2,</span>
+<span class="c">#                                 title=&#39;Simulated Galaxies: $S_{250} &gt; 5 \ \mathrm{mJy}$&#39;)</span>
+<span class="c">#    ###############################################################################</span>
+<span class="c">#    #This is what the paper has now</span>
+<span class="c">#    query = &#39;&#39;&#39;select FIR.spire250_obs / FIR.irac_ch2_obs,</span>
+<span class="c">#                galphotdust.f775w, galphotdust.f850lp,</span>
+<span class="c">#                galprop.tmerge, galprop.tmajmerge</span>
+<span class="c">#                from FIR, galprop, galphotdust where</span>
+<span class="c">#                FIR.z &gt;= 2.0 and</span>
+<span class="c">#                FIR.spire250_obs &gt; 5e-3 and</span>
+<span class="c">#                FIR.z &lt; 4.0 and</span>
+<span class="c">#                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="c">#                galphotdust.f775w_obs &lt; 50 and</span>
+<span class="c">#                galphotdust.f850lp_obs &lt; 50 and</span>
+<span class="c">#                FIR.gal_id = galprop.gal_id and</span>
+<span class="c">#                FIR.halo_id = galprop.halo_id and</span>
+<span class="c">#                FIR.gal_id = galphotdust.gal_id and</span>
+<span class="c">#                FIR.halo_id = galphotdust.halo_id</span>
+<span class="c">#                &#39;&#39;&#39;</span>
+<span class="c">#    xlab = r&#39;$\log_{10}\left ( \frac{S_{250}}{S_{4.5}} \right )$&#39;</span>
+<span class="c">#    ylab = r&#39;$\mathrm{F775W} - \mathrm{F850lp}$&#39;</span>
+<span class="c">#    plotMergerFractionsMultiplot2(query, xlab, ylab, &#39;ColorMergerPaper7&#39;+type,</span>
+<span class="c">#                                  out_folder, xmin=1.9, size=40, xmax=4.0,</span>
+<span class="c">#                                  mergetimelimit=0.25, alpha=0.5,</span>
+<span class="c">#                                  title=&#39;Simulated Galaxies: $S_{250} &gt; 5 \ \mathrm{mJy}$&#39;)</span>
+
+    <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select FIR.pacs160_obs / FIR.irac_ch2_obs,</span>
 <span class="s">                galphotdust.f775w, galphotdust.f850lp,</span>
 <span class="s">                galprop.tmerge, galprop.tmajmerge</span>
 <span class="s">                from FIR, galprop, galphotdust where</span>
 <span class="s">                FIR.z &gt;= 2.0 and</span>
-<span class="s">                FIR.spire250_obs &gt; 5e-3 and</span>
+<span class="s">                FIR.pacs160_obs &gt; 5e-3 and</span>
 <span class="s">                FIR.z &lt; 4.0 and</span>
-<span class="s">                FIR.spire250_obs &lt; 1e6 and</span>
+<span class="s">                FIR.pacs160_obs &lt; 1e6 and</span>
 <span class="s">                galphotdust.f775w_obs &lt; 50 and</span>
 <span class="s">                galphotdust.f850lp_obs &lt; 50 and</span>
 <span class="s">                FIR.gal_id = galprop.gal_id and</span>
@@ -423,13 +567,13 @@
 <span class="s">                FIR.gal_id = galphotdust.gal_id and</span>
 <span class="s">                FIR.halo_id = galphotdust.halo_id</span>
 <span class="s">                &#39;&#39;&#39;</span>
-    <span class="n">xlab</span> <span class="o">=</span> <span class="s">r&#39;$\log_{10}\left ( \frac{S_{250}}{S_{4.5}} \right )$&#39;</span>
+    <span class="n">xlab</span> <span class="o">=</span> <span class="s">r&#39;$\log_{10}\left ( \frac{S_{160}}{S_{4.5}} \right )$&#39;</span>
     <span class="n">ylab</span> <span class="o">=</span> <span class="s">r&#39;$\mathrm{F775W} - \mathrm{F850lp}$&#39;</span>
-    <span class="n">plotMergerFractionsMultiplot</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">xlab</span><span class="p">,</span> <span class="n">ylab</span><span class="p">,</span> <span class="s">&#39;ColorMergerPaper6&#39;</span> <span class="o">+</span> <span class="nb">type</span><span class="p">,</span>
-                                 <span class="n">out_folder</span><span class="p">,</span> <span class="n">obs</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mf">3.8</span><span class="p">,</span>
-                                 <span class="n">mergetimelimit</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">ch</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-                                 <span class="n">title</span><span class="o">=</span><span class="s">&#39;Simulated Galaxies: $S_{250} &gt; 5 \ \mathrm{mJy}$&#39;</span><span class="p">)</span>
-    <span class="c">###############################################################################</span>
+    <span class="n">plotMergerFractionsMultiplot2</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">xlab</span><span class="p">,</span> <span class="n">ylab</span><span class="p">,</span> <span class="s">&#39;ColorMergerPaper8&#39;</span><span class="o">+</span><span class="nb">type</span><span class="p">,</span>
+                                  <span class="n">out_folder</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="mf">1.9</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span>
+                                  <span class="n">mergetimelimit</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                                  <span class="n">title</span><span class="o">=</span><span class="s">&#39;Simulated Galaxies: $S_{160} &gt; 5 \ \mathrm{mJy}$&#39;</span><span class="p">)</span>
+
     <span class="k">print</span> <span class="s">&#39;All done&#39;</span>
 </pre></div>
 
@@ -455,7 +599,6 @@
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

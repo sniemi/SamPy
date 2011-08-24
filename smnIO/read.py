@@ -1,13 +1,9 @@
 '''
-Reading Data
-============
+This file contains some helper functions to parse different data files.
 
-This file contains some helper functions to
-parse different data files.
-
-:author : Sami-Matias Niemi
-:contact : sniemi@unc.edu
-:version : 0.1
+:author: Sami-Matias Niemi
+:contact: sniemi@unc.edu
+:version: 0.1
 
 :requires: NumPy
 :requires: SamPy.astronomy.basics
@@ -26,9 +22,9 @@ def readBolshoiDMfile(filename, column, no_phantoms):
     dark matter halo masses from files produced from
     the merger trees of the Bolshoi simulation.
 
-    :param filename: name of the file
-    :param column: which column to grep
-    :param no_phantoms: which dark matter mass to read
+    :param: filename: name of the file
+    :param: column: which column to grep
+    :param: no_phantoms: which dark matter mass to read
 
     :type filename: string
     :type column: int
@@ -50,7 +46,7 @@ def readBolshoiDMfile(filename, column, no_phantoms):
     return np.array(out)
 
 
-def GFBasicData(path, AB=True):
+def GFBasicData(path):
     '''
     Reads Rachel's SAMs output data.
     If AB = True then the function converts

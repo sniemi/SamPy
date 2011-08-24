@@ -18,7 +18,7 @@ def polynomial5(x, p0, p1, p2, p3, p4):
     """
     5th order polynomial
     """
-    return p0 * x + p1 * x**2 + p2 * x**3 + p3 * x**4 + p4 * x**5
+    return p0 * x + p1 * x ** 2 + p2 * x ** 3 + p3 * x ** 4 + p4 * x ** 5
 
 
 def _gaussianMoments2D(data):

@@ -22,7 +22,10 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="SamPy v0.1 documentation" href="index.html" /> 
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="astronomy Package" href="SamPy.astronomy.html" />
+    <link rel="next" title="SamPy.astronomy.datamanipulation" href="SamPy.astronomy.datamanipulation.html" />
+    <link rel="prev" title="SamPy.astronomy.blackholes" href="SamPy.astronomy.blackholes.html" /> 
   </head>
   <body>
 
@@ -38,9 +41,17 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.datamanipulation.html" title="SamPy.astronomy.datamanipulation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.blackholes.html" title="SamPy.astronomy.blackholes"
+             accesskey="P">previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
- 
+
+          <li><a href="SamPy.html" >SamPy Package</a> &raquo;</li>
+          <li><a href="SamPy.astronomy.html" accesskey="U">astronomy Package</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -54,6 +65,12 @@
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.astronomy.blackholes.html"
+                        title="previous chapter">SamPy.astronomy.blackholes</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.astronomy.datamanipulation.html"
+                        title="next chapter">SamPy.astronomy.datamanipulation</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/SamPy.astronomy.conversions.txt"
@@ -84,7 +101,7 @@
 <h1>SamPy.astronomy.conversions<a class="headerlink" href="#sampy-astronomy-conversions" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-SamPy.astronomy.conversions">
 <span id="conversions-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">conversions</span></tt> Module<a class="headerlink" href="#module-SamPy.astronomy.conversions" title="Permalink to this headline">¶</a></h2>
-<p>Some functions for astronomy related unit conversions.</p>
+<p>Functions to do Astronomy related unit conversions.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -97,7 +114,7 @@
 </tr>
 <tr class="field"><th class="field-name">author:</th><td class="field-body">Sami Niemi</td>
 </tr>
-<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a></td>
+<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:sniemi&#37;&#52;&#48;unc&#46;edu">sniemi<span>&#64;</span>unc<span>&#46;</span>edu</a></td>
 </tr>
 </tbody>
 </table>
@@ -187,7 +204,20 @@ appear larger in angular size.</p>
 <dl class="function">
 <dt id="SamPy.astronomy.conversions.arccot">
 <tt class="descclassname">SamPy.astronomy.conversions.</tt><tt class="descname">arccot</tt><big>(</big><em>x</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/conversions.html#arccot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.conversions.arccot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>arctan(1. / x)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">x, either a float or ndarray</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">arcuscotangent</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">float or ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="SamPy.astronomy.conversions.arcminSquaredToSolidAnge">
@@ -261,25 +291,69 @@ solid angle in Mpc**3</p>
 <dl class="function">
 <dt id="SamPy.astronomy.conversions.convertSphericalToCartesian">
 <tt class="descclassname">SamPy.astronomy.conversions.</tt><tt class="descname">convertSphericalToCartesian</tt><big>(</big><em>r</em>, <em>theta</em>, <em>phi</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/conversions.html#convertSphericalToCartesian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.conversions.convertSphericalToCartesian" title="Permalink to this definition">¶</a></dt>
-<dd><p>Converts Spherical coordiantes to Cartesian.
-Returns a dictionary.
-<a class="reference external" href="http://mathworld.wolfram.com/SphericalCoordinates.html">http://mathworld.wolfram.com/SphericalCoordinates.html</a></p>
+<dd><p>Converts Spherical coordinates to Cartesian ones.</p>
+<p><a class="reference external" href="http://mathworld.wolfram.com/SphericalCoordinates.html">http://mathworld.wolfram.com/SphericalCoordinates.html</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">x, y, z</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">dictionary</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="SamPy.astronomy.conversions.cot">
 <tt class="descclassname">SamPy.astronomy.conversions.</tt><tt class="descname">cot</tt><big>(</big><em>x</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/conversions.html#cot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.conversions.cot" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>1 / tan(x)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">x, either a float or ndarray</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">cotangent</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">float or ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="SamPy.astronomy.conversions.degTodms">
 <tt class="descclassname">SamPy.astronomy.conversions.</tt><tt class="descname">degTodms</tt><big>(</big><em>ideg</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/conversions.html#degTodms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.conversions.degTodms" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Converts degrees to degrees:minutes:seconds</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">degrees:minutes:seconds</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="SamPy.astronomy.conversions.degTohms">
 <tt class="descclassname">SamPy.astronomy.conversions.</tt><tt class="descname">degTohms</tt><big>(</big><em>ideg</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/conversions.html#degTohms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.conversions.degTohms" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Converts degrees to hours:minutes:seconds</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">hours:minutes:seconds</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="SamPy.astronomy.conversions.get_flat_flambda_dmag">
@@ -295,17 +369,13 @@ Returns a dictionary.
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>flambda</strong> (<em>float</em>) &#8211; mag_AB value</li>
-<li><strong>wlength</strong> (<em>float</em>) &#8211; wavelength value [nm]</li>
-</ul>
-</td>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">flambda: mag_AB value</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the mag_AB value</p>
-</td>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">wlength: wavelength value [nm]</td>
 </tr>
-<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
-</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">the mag_AB value</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">float</td>
 </tr>
 </tbody>
 </table>
@@ -335,15 +405,58 @@ Returns a dictionary.
 </dd></dl>
 
 <dl class="function">
+<dt id="SamPy.astronomy.conversions.nanomaggiesToJansky">
+<tt class="descclassname">SamPy.astronomy.conversions.</tt><tt class="descname">nanomaggiesToJansky</tt><big>(</big><em>nanomaggies</em><big>)</big><a class="headerlink" href="#SamPy.astronomy.conversions.nanomaggiesToJansky" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts nanomaggies, used for example in SDSS imaging,
+to Janskys.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">nanomaggies, can either be a number of a NumPy array</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">Janskys</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">either a float or ndarray</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="SamPy.astronomy.conversions.redshiftFromScale">
 <tt class="descclassname">SamPy.astronomy.conversions.</tt><tt class="descname">redshiftFromScale</tt><big>(</big><em>scale</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/conversions.html#redshiftFromScale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.conversions.redshiftFromScale" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a scale factor to redshift.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">scale, can be a float or ndarray</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">redshift</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">float or ndarray</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="SamPy.astronomy.conversions.scaleFromRedshift">
 <tt class="descclassname">SamPy.astronomy.conversions.</tt><tt class="descname">scaleFromRedshift</tt><big>(</big><em>redshift</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/conversions.html#scaleFromRedshift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.conversions.scaleFromRedshift" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts a redshift to a scale factor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">redshift, can be a float or ndarray</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">scale factor</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">float or ndarray</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -364,14 +477,21 @@ Returns a dictionary.
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.datamanipulation.html" title="SamPy.astronomy.datamanipulation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.blackholes.html" title="SamPy.astronomy.blackholes"
+             >previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
- 
+
+          <li><a href="SamPy.html" >SamPy Package</a> &raquo;</li>
+          <li><a href="SamPy.astronomy.html" >astronomy Package</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

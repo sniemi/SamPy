@@ -1,4 +1,4 @@
-'''
+"""
 Utilities for parseing SExtractor files
 
 H. Ferguson - revised 4/23/03 to promote ints to floats if a value
@@ -30,7 +30,7 @@ v6.0 - V. Laidler: added rw_catalog class, reworked internals to avoid
            column name clashes
 v7.0 - S.-M. Niemi: some modifications
 v7.1 - S.-M. Niemi: now supports string columns
-'''
+"""
 
 __version__ = '7.1'
 __author = 'Henry C. Ferguson, STScI'
@@ -40,40 +40,39 @@ import numpy as N
 import os, sys
 
 class se_catalog(object):
-    """ Read a SExtractor-style catalog. 
-        Usage: c=se_catalog(catalog,readfile=True,preserve_case=False)
-        Will read the catalog and return an object c, whose attributes are 
-        arrays containing the data. For example, c.mag_auto contains the 
-        mag_auto values.
-        Arguments:
-        catalog -- The input SExtractor catalog. 
-        readfile -- True means read the data. False means return the 
-           object without reading the data. The lines from the catalog
-           are returned as a list of ascii strings c.l. Useful if you want
-           to do some special parsing of some sort. 
-        preserve_case -- default (False) converts column names to lower case
+    """ Read a SExtractor-style catalog.
+    Usage: c=se_catalog(catalog,readfile=True,preserve_case=False)
+    Will read the catalog and return an object c, whose attributes are
+    arrays containing the data. For example, c.mag_auto contains the
+    mag_auto values.
+    Arguments:
+    catalog -- The input SExtractor catalog.
+    readfile -- True means read the data. False means return the
+    object without reading the data. The lines from the catalog
+    are returned as a list of ascii strings c.l. Useful if you want
+    to do some special parsing of some sort.
+    preserve_case -- default (False) converts column names to lower case
 
-        The input catalog MUST have a header with the SExtractor format:
-           # 1 ID comment
-           # 2 ALPHA_J200 another comment
-        That is, first column is the comment symbol #, second column is
-        the column number, third column is the column name, and the rest
-        of the line is a comment. SExtractor allows "vectors" to be identified
-        only by the first column...e.g.
-           # 12 FLUX_APER
-           # 20 FLUXERR_APER 
-        the missing columns are all aperture fluxes through different
-        apertures. These will be read into attributes:
-           c.flux_aper   # The first one
-           c.flux_aper_1 # the second one, and so on
+    The input catalog MUST have a header with the SExtractor format:
+    # 1 ID comment
+    # 2 ALPHA_J200 another comment
+    That is, first column is the comment symbol #, second column is
+    the column number, third column is the column name, and the rest
+    of the line is a comment. SExtractor allows "vectors" to be identified
+    only by the first column...e.g.
+    # 12 FLUX_APER
+    # 20 FLUXERR_APER
+    the missing columns are all aperture fluxes through different
+    apertures. These will be read into attributes:
+    c.flux_aper   # The first one
+    c.flux_aper_1 # the second one, and so on
 
-        The case of aperture radii is a bit nasty, since these only
-        appear in the SExtractor configuration file. Use parseconfig()
-        to read that file.
+    The case of aperture radii is a bit nasty, since these only
+    appear in the SExtractor configuration file. Use parseconfig()
+    to read that file.
     """
 
     def __init__(self, cfile, readfile=True, preserve_case=False):
-
         (self._d, self._l, self._ncolumns, self._header) = initcat(cfile,
                                                                    preserve_case=preserve_case)
         self._fname = cfile
@@ -163,7 +162,7 @@ class se_catalog(object):
                     t = type(1.e99)
             else:
                 t = type('string')
-            #print k, t
+                #print k, t
             self._type[k] = t
 
 
@@ -272,7 +271,7 @@ def parseconfig_se(cfile):
                     if a[i][0] == '#':
                         maxi = i
                         break
-                    # Turn comma-separated lists into python lists
+                        # Turn comma-separated lists into python lists
                 entry = []
                 for e in a[1:maxi]:
                     if string.find(e, ','):
@@ -310,7 +309,7 @@ def initcat(catfile, preserve_case=False):
                     for c in range(previous_column + 1, col):
                         column_name = previous_key + "_%d" % (c - previous_column)
                         hdict[column_name] = c
-                    # Update this column in the dictionary
+                        # Update this column in the dictionary
                 if (preserve_case):
                     column_name = a[2]
                 else:

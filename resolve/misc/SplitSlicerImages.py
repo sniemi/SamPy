@@ -1,4 +1,4 @@
-'''
+"""
 Splits image slicer FITS files to separate file, one for each slice.
 Adds some information to the FITS header.
 
@@ -11,7 +11,7 @@ Adds some information to the FITS header.
 
 :todo: Make a command line argument reader; file id and y cuts (y1 & y2)
 
-'''
+"""
 import glob as g
 import pyfits as pf
 import SamPy.log.Logger as lg
@@ -19,28 +19,28 @@ import SamPy.log.Logger as lg
 __author__ = 'Sami-Matias Niemi'
 
 class SplitSlicerImages():
-    '''
+    """
     This class can be used to split slicer images to separate files.
-    '''
+    """
 
     def __init__(self, logfile='splitting.log'):
-        '''
+        """
         Init
-        '''
+        """
         #set up logger
         self.logfile = logfile
         self.log = lg.setUpLogger(self.logfile)
 
 
     def _replicateHeader(self, hdu, input):
-        '''
+        """
         Update a header
 
         :note: this loses comments, should not be used
 
         :param: hdu, the header to be updated
         :param: input, input header which is being replicated to hdu
-        '''
+        """
         keyrejlist = ['SIMPLE', 'BITPIX', 'NAXIS', 'NAXIS1', 'NAXIS2', 'NAXIS3', 'EXTEND']
         keycopylist = [k for k in input.items() if k[0] not in keyrejlist]
 
@@ -49,7 +49,7 @@ class SplitSlicerImages():
 
 
     def findFiles(self, identifier='Ne'):
-        '''
+        """
         Finds all .fits files that have the identifier in them.
         Uses wild cards on both sides of the identifier.
         Requires that the file ends with .fits
@@ -58,7 +58,7 @@ class SplitSlicerImages():
 
         :return: a list of files matching the identifier
         :rtype: list
-        '''
+        """
         self.identifier = identifier
 
         self.files = g.glob('*{0:>s}*.fits'.format(self.identifier))
@@ -75,7 +75,7 @@ class SplitSlicerImages():
 
 
     def splitFiles(self, filelist=None, ext=0, splity=[215, 456], id='slice'):
-        '''
+        """
         Splits all the FITS files in the filelist to three separate files
         one for each slicer.
 
@@ -83,7 +83,7 @@ class SplitSlicerImages():
         :param: ext, extension of the fits file
         :param: splity, y pixel values for splitting
         :param: id, name identifier for each slice
-        '''
+        """
         if filelist == None:
             filelist = self.files
 
@@ -128,11 +128,11 @@ class SplitSlicerImages():
 
         
     def _outputFileLists(self, idef=['slice1', 'slice2', 'slice3']):
-        '''
+        """
         Generates file lists for each slice.
 
         :note: this is poorly written...
-        '''
+        """
         for id in idef:
             out = id+'filelist'
             fh = open(out, 'w')

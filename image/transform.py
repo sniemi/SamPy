@@ -7,7 +7,7 @@ Image transformation functions.
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
 
-:version: 0,1
+:version: 0.1
 """
 import numpy
 from scipy.ndimage import interpolation

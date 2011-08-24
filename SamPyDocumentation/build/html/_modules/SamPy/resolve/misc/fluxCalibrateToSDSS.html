@@ -1,0 +1,389 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.resolve.misc.fluxCalibrateToSDSS &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.resolve.misc.fluxCalibrateToSDSS</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This script can be used to flux calibrate an image slicer 2D spectra to SDSS one (of the same target).</span>
+
+<span class="sd">:requires: PyfITS</span>
+<span class="sd">:requires: NumPy</span>
+<span class="sd">:requires: SciPy</span>
+<span class="sd">:requires: matplotlib</span>
+<span class="sd">:requires: SamPy</span>
+
+<span class="sd">:author: Sami-Matias Niemi</span>
+<span class="sd">:contact: sniemi@unc.edu</span>
+
+<span class="sd">:version: 0.2</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">ConfigParser</span>
+<span class="kn">from</span> <span class="nn">optparse</span> <span class="kn">import</span> <span class="n">OptionParser</span>
+<span class="kn">import</span> <span class="nn">pyfits</span> <span class="kn">as</span> <span class="nn">pf</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.ndimage.filters</span> <span class="kn">as</span> <span class="nn">filt</span>
+<span class="kn">import</span> <span class="nn">scipy.interpolate</span> <span class="kn">as</span> <span class="nn">interpolate</span>
+<span class="c">#import scipy.optimize as optimize</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">SamPy.fits.basics</span> <span class="kn">as</span> <span class="nn">basics</span>
+<span class="kn">import</span> <span class="nn">SamPy.fitting.fits</span> <span class="kn">as</span> <span class="nn">ff</span>
+
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Sami-Matias Niemi&#39;</span>
+
+
+<div class="viewcode-block" id="calibrateToSDSS"><a class="viewcode-back" href="../../../../SamPy.resolve.misc.html#SamPy.resolve.misc.fluxCalibrateToSDSS.calibrateToSDSS">[docs]</a><span class="k">class</span> <span class="nc">calibrateToSDSS</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class can be used to flux calibrate an image</span>
+<span class="sd">    slicer 2D spectra to SDSS one (of the same target).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configfile</span><span class="p">,</span> <span class="n">debug</span><span class="p">,</span> <span class="n">section</span><span class="o">=</span><span class="s">&#39;DEFAULT&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">configfile</span> <span class="o">=</span> <span class="n">configfile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">section</span> <span class="o">=</span> <span class="n">section</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="n">debug</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span> <span class="o">=</span> <span class="p">{}</span>
+
+
+    <span class="k">def</span> <span class="nf">_readConfigs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reads the config file information using configParser.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">ConfigParser</span><span class="o">.</span><span class="n">RawConfigParser</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">readfp</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">configfile</span><span class="p">))</span>
+
+
+    <span class="k">def</span> <span class="nf">_processConfigs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Process configuration information and produce a dictionary describing slits.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;sigma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">getfloat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="p">,</span> <span class="s">&#39;sigma&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;ycenter&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="p">,</span> <span class="s">&#39;ycenter&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;width&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">getfloat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="p">,</span> <span class="s">&#39;width&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;platescale&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">getfloat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="p">,</span> <span class="s">&#39;platescale&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;binning&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="p">,</span> <span class="s">&#39;binning&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;FiberDiameter&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">getfloat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="p">,</span> <span class="s">&#39;fiberDiameter&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;sdss&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="p">,</span> <span class="s">&#39;SDSSspectrum&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;observed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="p">,</span> <span class="s">&#39;observedspectrum&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;order&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="p">,</span> <span class="s">&#39;order&#39;</span><span class="p">)</span>
+
+        <span class="n">names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">section</span><span class="p">,</span> <span class="s">&#39;update&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;update&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">name</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">names</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Configuration parameters:&#39;</span>
+            <span class="k">print</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span>
+
+
+    <span class="k">def</span> <span class="nf">_loadData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads the FITS files</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;sdssData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;sdss&#39;</span><span class="p">])[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;SDSSflux&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;sdssData&#39;</span><span class="p">][</span><span class="s">&#39;FLUX&#39;</span><span class="p">]</span><span class="o">*</span><span class="mf">1e-17</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;SDSSwave&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;sdssData&#39;</span><span class="p">][</span><span class="s">&#39;WAVELENGTH&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;observed&#39;</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsHeader&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;observed&#39;</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">header</span>
+
+
+    <span class="k">def</span> <span class="nf">_calculateArea</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the fiber area and the ratio.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;FiberArea&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;FiberDiameter&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;slitPixels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;FiberDiameter&#39;</span><span class="p">]</span> <span class="o">/</span> \
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;platescale&#39;</span><span class="p">]</span> <span class="o">/</span> \
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;binning&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;slitPix2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;slitPixels&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;boosting&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;FiberArea&#39;</span><span class="p">]</span> <span class="o">/</span> \
+                                   <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;width&#39;</span><span class="p">]</span> <span class="o">*</span>
+                                    <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;slitPix2&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">2.</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_deriveObservedSpectra</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Derives a 1D spectral from the 2D input data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;ycenter&#39;</span><span class="p">]</span>
+        <span class="n">ymod</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;slitPix2&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsSpectrum&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsData&#39;</span><span class="p">][</span><span class="n">y</span><span class="o">-</span><span class="n">ymod</span><span class="p">:</span><span class="n">y</span><span class="o">+</span><span class="n">ymod</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span>\
+                                      <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;boosting&#39;</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsSpectraConvolved&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">filt</span><span class="o">.</span><span class="n">gaussian_filter1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsSpectrum&#39;</span><span class="p">],</span>
+                                                                     <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;sigma&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsWavelengths&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">basics</span><span class="o">.</span><span class="n">getWavelengths</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;observed&#39;</span><span class="p">],</span>
+                                                               <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsSpectraConvolved&#39;</span><span class="p">]))</span>
+
+
+    <span class="k">def</span> <span class="nf">_calculateDifference</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the difference between the derived observed and SDSS spectra.</span>
+<span class="sd">        Interpolates the SDSS spectra to the same wavelength scale.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">interp</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;SDSSwave&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;SDSSflux&#39;</span><span class="p">])</span>
+        <span class="n">newflux</span> <span class="o">=</span> <span class="n">interp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsWavelengths&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;spectraRatio&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsSpectraConvolved&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">newflux</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;interpFlux&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">newflux</span>
+
+
+    <span class="k">def</span> <span class="nf">_generateMask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a mask in which Halpha and some other lines have been removed</span>
+<span class="sd">        :todo: This is now hard coded, make something better...</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c">#TODO: remove the hardcoded lines</span>
+        <span class="n">halph</span> <span class="o">=</span> <span class="p">[</span><span class="mi">6660</span><span class="p">,</span> <span class="mi">6757</span><span class="p">]</span>
+        <span class="n">msk</span> <span class="o">=</span> <span class="o">~</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsWavelengths&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">halph</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsWavelengths&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">halph</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="o">&amp;</span> \
+              <span class="o">~</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsWavelengths&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">6004</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsWavelengths&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">6042</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;mask&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">msk</span>
+
+
+    <span class="k">def</span> <span class="nf">_fitSmoothFunction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Fits a smooth function to the spectra ratio.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c">#with NumPy polyfit</span>
+        <span class="n">fx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">poly1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsWavelengths&#39;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;mask&#39;</span><span class="p">]],</span>
+                                  <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;spectraRatio&#39;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;mask&#39;</span><span class="p">]],</span>
+                                  <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;order&#39;</span><span class="p">]))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;fit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fx</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsWavelengths&#39;</span><span class="p">])</span>
+        <span class="c">#with scipy curvefit</span>
+        <span class="c">#popt, pconv = optimize.curve_fit(ff.polynomial5,</span>
+        <span class="c">#                                 self.fitting[&#39;obsWavelengths&#39;][self.fitting[&#39;mask&#39;]],</span>
+        <span class="c">#                                 self.fitting[&#39;spectraRatio&#39;][self.fitting[&#39;mask&#39;]])</span>
+        <span class="c">#self.fitting[&#39;fit2&#39;] = ff.polynomial5(self.fitting[&#39;obsWavelengths&#39;], *popt)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">Fitting parameters:&#39;</span>
+            <span class="k">print</span> <span class="n">fx</span>
+            <span class="c">#print popt</span>
+
+
+    <span class="k">def</span> <span class="nf">_generatePlots</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate some plots showing the fit and the spectra.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c">#first</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;SDSSwave&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;SDSSflux&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s">&#39;SDSS&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsWavelengths&#39;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;mask&#39;</span><span class="p">]],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsSpectraConvolved&#39;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;mask&#39;</span><span class="p">]],</span>
+                <span class="n">label</span><span class="o">=</span><span class="s">&#39;Convolved and Masked&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsWavelengths&#39;</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsSpectrum&#39;</span><span class="p">]</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;fit&#39;</span><span class="p">],</span>
+                <span class="n">label</span><span class="o">=</span><span class="s">&#39;Fitted Spectra&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;Flux [erg/cm**2/s/AA]&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;Wavelength [AA]&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">3800</span><span class="p">,</span> <span class="mi">9200</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">shadow</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">fancybox</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&#39;Spectra.pdf&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">5450</span><span class="p">,</span> <span class="mi">6950</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&#39;SpectraZoomed.pdf&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="c">#second</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsWavelengths&#39;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;mask&#39;</span><span class="p">]],</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;spectraRatio&#39;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;mask&#39;</span><span class="p">]],</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+                   <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Observed Spectra / SDSS (masked)&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsWavelengths&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;fit&#39;</span><span class="p">],</span> <span class="s">&#39;r-&#39;</span><span class="p">,</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="s">&#39;Fit&#39;</span><span class="p">)</span>
+        <span class="c">#ax.plot(self.fitting[&#39;obsWavelengths&#39;], self.fitting[&#39;fit2&#39;], &#39;g-&#39;,</span>
+        <span class="c">#        label = &#39;Fit2&#39;)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;Ratio&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;Wavelength [AA]&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">shadow</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">fancybox</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">numpoints</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s">&#39;Fitting.pdf&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+    <span class="k">def</span> <span class="nf">_outputSensitivity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Outputs the sensitivity to a file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;sensitivity.txt&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&#39;#Wavelength sensitivity</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsWavelengths&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;fit&#39;</span><span class="p">]):</span>
+            <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+
+    <span class="k">def</span> <span class="nf">_updateFITSfiles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the FITS files. Interpolates the fitted ratio function if</span>
+<span class="sd">        the wavelength scale of the file to be updated is different.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c">#must interpolate the fitted function to right wavelength scale</span>
+        <span class="n">interp</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;obsWavelengths&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;fit&#39;</span><span class="p">])</span>
+        <span class="c">#loop over the files to be updated.</span>
+        <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fitting</span><span class="p">[</span><span class="s">&#39;update&#39;</span><span class="p">]:</span>
+            <span class="n">fh</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="nb">file</span><span class="p">)</span>
+            <span class="n">hdu</span> <span class="o">=</span> <span class="n">fh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">header</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">fh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+
+            <span class="n">ft</span> <span class="o">=</span> <span class="n">interp</span><span class="p">(</span><span class="n">basics</span><span class="o">.</span><span class="n">getWavelengths</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">,:])))</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">line</span> <span class="o">/</span> <span class="n">ft</span>
+            <span class="n">new</span> <span class="o">=</span> <span class="nb">file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.fits&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;senscalib.fits&#39;</span>
+
+            <span class="n">hdu</span><span class="o">.</span><span class="n">add_history</span><span class="p">(</span><span class="s">&#39;Original File: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="nb">file</span><span class="p">)</span>
+            <span class="n">hdu</span><span class="o">.</span><span class="n">add_history</span><span class="p">(</span><span class="s">&#39;Pixel values modified by fluxCalibrateToSDSS.py (SMN)&#39;</span><span class="p">)</span>
+            <span class="n">hdu</span><span class="o">.</span><span class="n">add_history</span><span class="p">(</span><span class="s">&#39;Updated: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()))</span>
+
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">new</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">new</span><span class="p">)</span>
+            <span class="n">fh</span><span class="o">.</span><span class="n">writeto</span><span class="p">(</span><span class="n">new</span><span class="p">,</span> <span class="n">output_verify</span><span class="o">=</span><span class="s">&#39;ignore&#39;</span><span class="p">)</span>
+            <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">File </span><span class="si">%s</span><span class="s"> updated and saved as </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">new</span><span class="p">)</span>
+
+                
+<div class="viewcode-block" id="calibrateToSDSS.run"><a class="viewcode-back" href="../../../../SamPy.resolve.misc.html#SamPy.resolve.misc.fluxCalibrateToSDSS.calibrateToSDSS.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Driver function, runs all required steps.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_readConfigs</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_processConfigs</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_loadData</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calculateArea</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_deriveObservedSpectra</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calculateDifference</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generateMask</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fitSmoothFunction</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_generatePlots</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_outputSensitivity</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_updateFITSfiles</span><span class="p">()</span>
+
+</div></div>
+<div class="viewcode-block" id="processArgs"><a class="viewcode-back" href="../../../../SamPy.resolve.misc.html#SamPy.resolve.misc.fluxCalibrateToSDSS.processArgs">[docs]</a><span class="k">def</span> <span class="nf">processArgs</span><span class="p">(</span><span class="n">printHelp</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Processes command line arguments</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">OptionParser</span><span class="p">()</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&#39;-c&#39;</span><span class="p">,</span> <span class="s">&#39;--configfile&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&#39;configfile&#39;</span><span class="p">,</span>
+                      <span class="n">help</span><span class="o">=</span><span class="s">&quot;Name of the configuration file&quot;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s">&quot;string&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&#39;-s&#39;</span><span class="p">,</span> <span class="s">&#39;--section&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&#39;section&#39;</span><span class="p">,</span>
+                      <span class="n">help</span><span class="o">=</span><span class="s">&quot;Name of the section of the config file&quot;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s">&quot;string&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s">&#39;-d&#39;</span><span class="p">,</span> <span class="s">&#39;--debug&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s">&#39;debug&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                      <span class="n">help</span><span class="o">=</span><span class="s">&#39;Debugging mode on&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">printHelp</span><span class="p">:</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">print_help</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">processArgs</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">configfile</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">processArgs</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">opts</span><span class="o">.</span><span class="n">section</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">calibrate</span> <span class="o">=</span> <span class="n">calibrateToSDSS</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">configfile</span><span class="p">,</span> <span class="n">opts</span><span class="o">.</span><span class="n">debug</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">calibrate</span> <span class="o">=</span> <span class="n">calibrateToSDSS</span><span class="p">(</span><span class="n">opts</span><span class="o">.</span><span class="n">configfile</span><span class="p">,</span> <span class="n">opts</span><span class="o">.</span><span class="n">debug</span><span class="p">,</span> <span class="n">opts</span><span class="o">.</span><span class="n">section</span><span class="p">)</span>
+
+    <span class="n">calibrate</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

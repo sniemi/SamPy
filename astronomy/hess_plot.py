@@ -4,10 +4,10 @@ generate a Hess plot.
 '''
 import numpy as N
 
-def hess_plot(xdata, ydata, weight, 
-              xmin, xmax, nxbins, 
+def hess_plot(xdata, ydata, weight,
+              xmin, xmax, nxbins,
               ymin, ymax, nybins,
-              pmax = 1.0, pmin = 0.1):
+              pmax=1.0, pmin=0.1):
     '''
     This function can be used to calculate a hess plot
     i.e. the conditional probability 2D histogram.
@@ -26,13 +26,13 @@ def hess_plot(xdata, ydata, weight,
     :return: 2D array, min, max
     '''
     #xbins
-    xbin = N.linspace(xmin, xmax, nxbins+1)
+    xbin = N.linspace(xmin, xmax, nxbins + 1)
     dx = xbin[1] - xbin[0]
-    xmids = xbin[:-1] + dx/2.
+    xmids = xbin[:-1] + dx / 2.
     #ybins
-    ybin = N.linspace(ymin, ymax, nybins+1)
+    ybin = N.linspace(ymin, ymax, nybins + 1)
     dy = ybin[1] - ybin[0]
-    ymids = ybin[:-1] + dy/2.
+    ymids = ybin[:-1] + dy / 2.
 
     yhist = N.zeros((nybins, nxbins))
     yhist_num = N.zeros((nybins, nxbins))
@@ -49,11 +49,11 @@ def hess_plot(xdata, ydata, weight,
                 if len(ydata[ymask]) > 0:
                     yhist[j, i] = N.sum(weight[ymask])
                     yhist_num[j, i] = len(ydata[ymask])
-    
+
     #conditional distributions in Mh bins                                                                        
     for i in range(nxbins):
         if nh[i] > 0.0:
-            yhist[:,i] /= nh[i]
+            yhist[:, i] /= nh[i]
 
     s = N.log10(pmax) - N.log10(yhist)
     smax = N.log10(pmax) - N.log10(pmin)
@@ -64,18 +64,19 @@ def hess_plot(xdata, ydata, weight,
 
     return s, smin, smax
 
-def hess_plot_old(xdata, ydata, weight, 
-                  xmin, xmax, nxbins, 
+
+def hess_plot_old(xdata, ydata, weight,
+                  xmin, xmax, nxbins,
                   ymin, ymax, nybins,
-                  pmax = 1.0, pmin = 0.1):
+                  pmax=1.0, pmin=0.1):
     '''
     :note: obsolete, do not use this version!
     '''
     dx = (xmax - xmin) / float(nxbins)
-    mbin = xmin + (N.arange(nxbins))*dx + dx/2.
+    mbin = xmin + (N.arange(nxbins)) * dx + dx / 2.
 
     dy = (ymax - ymin) / float(nybins)
-    ybin = ymin + (N.arange(nybins))*dy + dy/2.
+    ybin = ymin + (N.arange(nybins)) * dy + dy / 2.
 
     yhist = N.zeros((nybins, nxbins))
 
@@ -87,18 +88,18 @@ def hess_plot_old(xdata, ydata, weight,
 
     #this should be rewritten...                                                                                 
     for i in range(len(xdata)):
-        imbin = int(N.floor((xdata[i] - xmin)/dx))
+        imbin = int(N.floor((xdata[i] - xmin) / dx))
         if imbin >= 0 and imbin < nxbins:
             nh[imbin] = nh[imbin] + weight[i]
-            iy = int(N.floor((ydata[i] - ymin)/dy))
+            iy = int(N.floor((ydata[i] - ymin) / dy))
             if iy >= 0 and iy < nybins:
                 yhist[iy, imbin] = yhist[iy, imbin] + weight[i]
                 yhist_num[iy, imbin] = yhist_num[iy, imbin] + 1
-    
+
     #conditional distributions in Mh bins                                                                        
     for i in range(nxbins):
         if nh[i] > 0.0:
-            yhist[:,i] /= nh[i]
+            yhist[:, i] /= nh[i]
 
     s = N.log10(pmax) - N.log10(yhist)
     smax = N.log10(pmax) - N.log10(pmin)
@@ -123,11 +124,17 @@ if __name__ == '__main__':
     path = hm + '/Dropbox/Research/Herschel/runs/reds_zero/'
     db = 'sams.db'
 
-    bulge = 0.4; pmin = 0.05; pmax = 1.0
-    xbin1 = 15; ybin1 = 15
-    xbin2 = 15; ybin2 = 15
-    xmin1 = 7.9; xmax1 = 11.7 
-    ymin = 0.1; ymax = 10
+    bulge = 0.4;
+    pmin = 0.05;
+    pmax = 1.0
+    xbin1 = 15;
+    ybin1 = 15
+    xbin2 = 15;
+    ybin2 = 15
+    xmin1 = 7.9;
+    xmax1 = 11.7
+    ymin = 0.1;
+    ymax = 10
 
     query1 = '''select galprop.mstar, galprop.r_disk, Pow10(galprop.mbulge - galprop.mstar)
                 from FIR, galprop where
@@ -142,21 +149,21 @@ if __name__ == '__main__':
     #get data
     data = N.array(sq.get_data_sqlitePowerTen(path, db, query1))
     #slice the data
-    disks = data[:,2] <= bulge
-    xd1 = data[:,0][disks]
-    yd1 = data[:,1][disks]
+    disks = data[:, 2] <= bulge
+    xd1 = data[:, 0][disks]
+    yd1 = data[:, 1][disks]
     #old algorithm
-    so1, somin1, somax1 = hess_plot_old(xd1, yd1, N.ones(len(xd1)), 
-                                        xmin1, xmax1, xbin1, 
+    so1, somin1, somax1 = hess_plot_old(xd1, yd1, N.ones(len(xd1)),
+                                        xmin1, xmax1, xbin1,
                                         ymin, ymax, ybin1,
-                                        pmax = pmax, pmin = pmin)
+                                        pmax=pmax, pmin=pmin)
 
     #new algorithm
-    sn1, snmin1, snmax1 = hess_plot(xd1, yd1, N.ones(len(xd1)), 
-                                    xmin1, xmax1, xbin1, 
+    sn1, snmin1, snmax1 = hess_plot(xd1, yd1, N.ones(len(xd1)),
+                                    xmin1, xmax1, xbin1,
                                     ymin, ymax, ybin1,
-                                    pmax = pmax, pmin = pmin)
-    
+                                    pmax=pmax, pmin=pmin)
+
     print somin1 == snmin1
     print
     print somax1 == snmax1

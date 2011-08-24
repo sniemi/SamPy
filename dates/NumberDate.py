@@ -1,29 +1,32 @@
-'''
+"""
 This simple module can be used to convert a day number to a human readable date.
-The file functions also as a standalone script which can be called from the
-command line.
+
+:note: the file functions also as a standalone script which can be called from the
+       command line.
 
 :history: Sep 9 2009; Initial Version 0.1
 
 :author: Sami-Matias Niemi
 :contact: niemi@stsci.edu
-'''
+
+:version: 0.1
+"""
 import datetime, sys
 
 __author__ = 'Sami-Matias Niemi'
 __version__ = '0.1'
 
 def dayNumber(day, verbose=True):
-    '''
+    """
     This simple function converts a given integer to
     the date of the current year.
     
     :param: number of the day
-    :ptype: int
+    :type: int
 
     :return: date
     :rtype: python datetime
-    '''
+    """
     currentYear = datetime.datetime.today().year
     date = datetime.datetime.strptime(str(currentYear) + day, '%Y%j')
 
@@ -37,7 +40,7 @@ if __name__ == "__main__":
         print 'Usage:'
         print '\tNumberDate day_number'
         sys.exit(-9)
-    
+
     if int(sys.argv[1]) > 366 or int(sys.argv[1]) < 1:
         print 'You gave an invalid day number, please use day_number = [1,366]'
         sys.exit(-8)

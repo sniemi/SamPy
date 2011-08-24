@@ -59,9 +59,9 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">cos Package</a><ul>
-<li><a class="reference internal" href="#cosnuvcalib-module"><tt class="docutils literal"><span class="pre">COSNUVCalib</span></tt> Module</a></li>
-<li><a class="reference internal" href="#plot-all-get-module"><tt class="docutils literal"><span class="pre">plot_all_GET</span></tt> Module</a></li>
-<li><a class="reference internal" href="#reading-module"><tt class="docutils literal"><span class="pre">reading</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.cos.COSNUVCalib"><tt class="docutils literal"><span class="pre">COSNUVCalib</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.cos.plot_all_GET"><tt class="docutils literal"><span class="pre">plot_all_GET</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.cos.reading"><tt class="docutils literal"><span class="pre">reading</span></tt> Module</a></li>
 </ul>
 </li>
 </ul>
@@ -100,14 +100,121 @@
             
   <div class="section" id="cos-package">
 <h1>cos Package<a class="headerlink" href="#cos-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="cosnuvcalib-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">COSNUVCalib</span></tt> Module<a class="headerlink" href="#cosnuvcalib-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.cos.COSNUVCalib">
+<span id="cosnuvcalib-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">COSNUVCalib</span></tt> Module<a class="headerlink" href="#module-SamPy.cos.COSNUVCalib" title="Permalink to this headline">¶</a></h2>
+<p>Calculates pixels shifts between two COS NUV spectra.</p>
+<dl class="docutils">
+<dt>ABOUT:</dt>
+<dd>This script can be used to determine the shift (in pixels) of one
+spectrum with respect to another. The cross correlation between
+S1 and S2 is determined and a non-linear fit to the peak of the
+correlation is used to determine the exact offset.</dd>
+<dt>CONTAINS:</dt>
+<dd>&#8216;SpectrumOffset&#8217; and &#8216;get_NUV_PSA_WCA&#8217; functions.</dd>
+<dt>DEPENDS:</dt>
+<dd><blockquote class="first">
+Python 2.5 (not 3.0 compatible)</blockquote>
+<p class="last">PyFits
+NumArray (for boxcar smoothing)
+NumPy (could be written without)</p>
+</dd>
+<dt>AUTHOR:</dt>
+<dd>Sami-Matias Niemi for STScI, 01/26/2009</dd>
+<dt>HISTORY:</dt>
+<dd>01/26/09: Initial Release, version 0.1</dd>
+</dl>
+<dl class="function">
+<dt id="SamPy.cos.COSNUVCalib.SpectrumOffset">
+<tt class="descclassname">SamPy.cos.COSNUVCalib.</tt><tt class="descname">SpectrumOffset</tt><big>(</big><em>s1</em>, <em>s2</em>, <em>ishift=0</em>, <em>width=15</em>, <em>i1=0</em>, <em>i2=0</em><big>)</big><a class="reference internal" href="_modules/SamPy/cos/COSNUVCalib.html#SpectrumOffset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.cos.COSNUVCalib.SpectrumOffset" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function calculates the shift (in pixels) of one spectrum
+with respect to another. The cross correlation between spectrum1
+and spectrum2 is determed and a non-linear fit to the peak of
+the correlation is used to determine the exact offset.</p>
+<p>input:
+s1 - spectrum1, a list
+s2 - spectrum2, a list</p>
+<p>optional input:
+ishift - guess of the intial shift in pixels, int
+width - width of the search area in pixels, int
+i1 - spectrum starting point in pixels, int
+i2 - spectrum ending point in pixels, int</p>
+<p>returns:
+a list with offset and correlations in every bin</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.cos.COSNUVCalib.get_NUV_PSA_WCA">
+<tt class="descclassname">SamPy.cos.COSNUVCalib.</tt><tt class="descname">get_NUV_PSA_WCA</tt><big>(</big><em>psalist</em>, <em>wcalist</em>, <em>scale=False</em>, <em>width=512</em>, <em>ishift=1</em>, <em>extrakeys=False</em>, <em>debug=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/cos/COSNUVCalib.html#get_NUV_PSA_WCA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.cos.COSNUVCalib.get_NUV_PSA_WCA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does a cross-correlation between a pair of x1d files
+containing the PSA and WCA spectra for the same
+central wavelegth.</p>
+<p>input:
+psalist - a list containing filenames of the x1d spectra for the PSA
+wcalist - a list containing filenames of the x1d spectra for the WCA</p>
+<p>optional input:
+scale - whether wca spectrum is multiplied with boxcar smoothing factor of the</p>
+<blockquote>
+ratio between psa and wca spectrum</blockquote>
+<p>ishift - guess of the intial shift in pixels, int
+width - width of the search area in pixels, int
+returns:
+a list with central wavelengths, stripes, and calculated offset values.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.cos.COSNUVCalib.plotOffsets">
+<tt class="descclassname">SamPy.cos.COSNUVCalib.</tt><tt class="descname">plotOffsets</tt><big>(</big><em>results</em><big>)</big><a class="reference internal" href="_modules/SamPy/cos/COSNUVCalib.html#plotOffsets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.cos.COSNUVCalib.plotOffsets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.cos.COSNUVCalib.writeOutput">
+<tt class="descclassname">SamPy.cos.COSNUVCalib.</tt><tt class="descname">writeOutput</tt><big>(</big><em>filename</em>, <em>data</em>, <em>header</em>, <em>separator=' '</em><big>)</big><a class="reference internal" href="_modules/SamPy/cos/COSNUVCalib.html#writeOutput"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.cos.COSNUVCalib.writeOutput" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function can be used to write tabular data to a file with
+selected separator</p>
+</dd></dl>
+
 </div>
-<div class="section" id="plot-all-get-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">plot_all_GET</span></tt> Module<a class="headerlink" href="#plot-all-get-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.cos.plot_all_GET">
+<span id="plot-all-get-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">plot_all_GET</span></tt> Module<a class="headerlink" href="#module-SamPy.cos.plot_all_GET" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="SamPy.cos.plot_all_GET.findDifferentRatios">
+<tt class="descclassname">SamPy.cos.plot_all_GET.</tt><tt class="descname">findDifferentRatios</tt><big>(</big><em>dict</em><big>)</big><a class="reference internal" href="_modules/SamPy/cos/plot_all_GET.html#findDifferentRatios"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.cos.plot_all_GET.findDifferentRatios" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.cos.plot_all_GET.fromJulian">
+<tt class="descclassname">SamPy.cos.plot_all_GET.</tt><tt class="descname">fromJulian</tt><big>(</big><em>j</em><big>)</big><a class="reference internal" href="_modules/SamPy/cos/plot_all_GET.html#fromJulian"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.cos.plot_all_GET.fromJulian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts Julian Date to human readable format
+&#64;return: human readable date and time</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.cos.plot_all_GET.mylinearregression">
+<tt class="descclassname">SamPy.cos.plot_all_GET.</tt><tt class="descname">mylinearregression</tt><big>(</big><em>x</em>, <em>y</em>, <em>confidence_level=95</em>, <em>show_plots=False</em>, <em>report=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/cos/plot_all_GET.html#mylinearregression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.cos.plot_all_GET.mylinearregression" title="Permalink to this definition">¶</a></dt>
+<dd><p>function to calculate simple linear regression
+inputs: x,y-data pairs and a confidence level (in percent)
+outputs: slope = b1, intercept = b0 its confidence intervals
+and R (+squared)</p>
+</dd></dl>
+
 </div>
-<div class="section" id="reading-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">reading</span></tt> Module<a class="headerlink" href="#reading-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.cos.reading">
+<span id="reading-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">reading</span></tt> Module<a class="headerlink" href="#module-SamPy.cos.reading" title="Permalink to this headline">¶</a></h2>
+<p>Routines useful for dealing with cos spectra.</p>
+<dl class="function">
+<dt id="SamPy.cos.reading.readx1d">
+<tt class="descclassname">SamPy.cos.reading.</tt><tt class="descname">readx1d</tt><big>(</big><em>filename</em><big>)</big><a class="reference internal" href="_modules/SamPy/cos/reading.html#readx1d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.cos.reading.readx1d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read an x1d format spectrum from calcos.</p>
+<p>For the output spectra:</p>
+<p>wa = wavelengths (Angstroms)
+fl = flux
+er = 1 sigma error in flux
+dq = data quality, &gt; 0 means bad for some reason
+gr = gross count rate, gross counts / (exposure time in s)
+bg = background count rate
+net = (gr - bg) / eps, where eps is the flat fielding.</p>
+</dd></dl>
+
 </div>
 </div>
 
@@ -140,7 +247,6 @@
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

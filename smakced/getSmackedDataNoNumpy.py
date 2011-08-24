@@ -24,6 +24,7 @@ class Smakced():
     '''
     A Class related to SMAKCED collaboration wiki page.
     '''
+
     def __init__(self, url, table):
         '''
         Constructor
@@ -67,16 +68,16 @@ class Smakced():
             cols = tr.findAll('td')
             hdr = tr.findAll('th')
             for th in hdr:
-                tmp = str(th.find(text = True))
+                tmp = str(th.find(text=True))
                 x = tmp.replace('&nbsp;', '')
-                line.append(x)    
+                line.append(x)
             for td in cols:
-                tmp = str(td.find(text = True))
+                tmp = str(td.find(text=True))
                 x = tmp.replace('&nbsp;', '')
                 line.append(x)
             result.append(line)
-        return result        
-    
+        return result
+
     def writeToFile(self, data, output):
         '''
         Writes an html page that contains tables to a file
@@ -89,7 +90,7 @@ class Smakced():
         the getData method
         :param output: name of the output file
         '''
-        g = open(output,'w')
+        g = open(output, 'w')
         soup = BeautifulSoup(''.join(data))
         t = soup.findAll('table')
         for table in t:
@@ -100,16 +101,16 @@ class Smakced():
                 hdr = tr.findAll('th')
                 for th in hdr:
                     try:
-                        g.write(th.find(text = True))
+                        g.write(th.find(text=True))
                         g.write(',')
-                    except: pass        
+                    except: pass
                 for td in cols:
                     try:
-                        g.write(td.find(text = True))
+                        g.write(td.find(text=True))
                         g.write(',')
                     except: pass
                 g.write("\n")
-        g.close()        
+        g.close()
 
 if __name__ == '__main__':
     '''
@@ -118,14 +119,14 @@ if __name__ == '__main__':
     #table address
     smackedurl = 'http://smakced.pbworks.com'
     tableName1 = '/Virgo1'
-    
+
     #class instance
     SM1 = Smakced(smackedurl, tableName1)
     #download data
     data = SM1.getData()
     #parse table
     table = SM1.parseTable(data)
-    
+
     #data limitations, only objects that are marked
     #to be observed at NOT2010 i.e. SMN targets
     maskedData = [line for line in table if line[6] == 'NOT2010']
@@ -139,21 +140,21 @@ if __name__ == '__main__':
     dump.writerow(table[0])
     dump.writerows(maskedData)
     output.close()
-    
+
     #make NOT TCS compatible object list file
     output = open('NOTobjectlist.txt', 'w')
     for line in maskedData:
-        str  = 'VCC' + line[0].split()[0] + ' ' + line[8].replace(' ', ':') 
+        str = 'VCC' + line[0].split()[0] + ' ' + line[8].replace(' ', ':')
         str += ' ' + line[9].replace(' ', ':')
         str += ' 2000 0 0 ' + line[13]
         output.write(str + '\n')
-    output.close()    
-    
+    output.close()
+
     #make a file that can be pasted to the visibility plot software
     output = open('visibility_plot.txt', 'w')
     for line in maskedData:
-        str  = 'VCC' + line[0].split()[0] + ' ' + line[8] + ' ' + line[9]
+        str = 'VCC' + line[0].split()[0] + ' ' + line[8] + ' ' + line[9]
         output.write(str + '\n')
     output.close()
-    
+
     print 'All done...'

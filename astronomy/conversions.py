@@ -1,5 +1,5 @@
 """
-Some functions for astronomy related unit conversions.
+Functions to do Astronomy related unit conversions.
 
 :requires: NumPy
 :requires: cosmocalc (http://cxc.harvard.edu/contrib/cosmocalc/)
@@ -61,7 +61,7 @@ def arcminSquaredToSteradians(arcmin2):
 
     :return: steradians
     """
-    return arcmin2 / ((180 / np.pi)**2 * 60 * 60)
+    return arcmin2 / ((180 / np.pi) ** 2 * 60 * 60)
 
 
 def arcminSquaredToSolidAnge(arcmin2):
@@ -107,7 +107,7 @@ def Luminosity(abs_mag):
 
     :return: luminosity
     """
-    return 10.0**((4.85 - abs_mag) / 2.5)
+    return 10.0 ** ((4.85 - abs_mag) / 2.5)
 
 
 def get_flat_flambda_dmag(plambda, plambda_ref):

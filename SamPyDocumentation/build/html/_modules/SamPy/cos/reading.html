@@ -1,0 +1,149 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.cos.reading &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.cos.reading</h1><div class="highlight"><pre>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Routines useful for dealing with cos spectra.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pyfits</span>
+
+<div class="viewcode-block" id="readx1d"><a class="viewcode-back" href="../../../SamPy.cos.html#SamPy.cos.reading.readx1d">[docs]</a><span class="k">def</span> <span class="nf">readx1d</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Read an x1d format spectrum from calcos.</span>
+
+<span class="sd">    For the output spectra:</span>
+<span class="sd">    </span>
+<span class="sd">    wa = wavelengths (Angstroms)</span>
+<span class="sd">    fl = flux</span>
+<span class="sd">    er = 1 sigma error in flux</span>
+<span class="sd">    dq = data quality, &gt; 0 means bad for some reason</span>
+<span class="sd">    gr = gross count rate, gross counts / (exposure time in s)</span>
+<span class="sd">    bg = background count rate</span>
+<span class="sd">    net = (gr - bg) / eps, where eps is the flat fielding.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">vnum</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">4</span><span class="p">:</span><span class="mi">6</span><span class="p">])</span>
+    <span class="n">fh</span> <span class="o">=</span> <span class="n">pyfits</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">hd</span> <span class="o">=</span> <span class="n">fh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">header</span>
+    <span class="n">optelem</span> <span class="o">=</span> <span class="n">hd</span><span class="p">[</span><span class="s">&#39;OPT_ELEM&#39;</span><span class="p">]</span>
+    <span class="n">cwa</span> <span class="o">=</span> <span class="n">hd</span><span class="p">[</span><span class="s">&#39;CENTRWV&#39;</span><span class="p">]</span>
+    <span class="n">exptime</span> <span class="o">=</span> <span class="n">fh</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s">&#39;EXPTIME&#39;</span><span class="p">]</span>
+
+    <span class="n">keys</span> <span class="o">=</span> <span class="s">&#39;WAVELENGTH FLUX ERROR DQ GROSS NET BACKGROUND&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="s">&#39;wa,fl,er,dq,gr,net,bg&#39;</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">fh</span><span class="p">[</span><span class="s">&#39;SCI&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+    <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">vals</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">]</span>
+    <span class="n">isort</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">)):</span>
+        <span class="n">vals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">isort</span><span class="p">]</span>
+    <span class="n">sp1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rec</span><span class="o">.</span><span class="n">fromarrays</span><span class="p">(</span><span class="n">vals</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="n">names</span><span class="p">)</span>
+
+    <span class="n">vals</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">]</span>
+    <span class="n">isort</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">vals</span><span class="p">)):</span>
+        <span class="n">vals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">vals</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">isort</span><span class="p">]</span>
+    <span class="n">sp2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rec</span><span class="o">.</span><span class="n">fromarrays</span><span class="p">(</span><span class="n">vals</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="n">names</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">sp1</span><span class="o">.</span><span class="n">wa</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">sp2</span><span class="o">.</span><span class="n">wa</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="n">info1</span> <span class="o">=</span> <span class="n">vnum</span><span class="p">,</span> <span class="n">optelem</span><span class="p">,</span> <span class="n">cwa</span><span class="p">,</span> <span class="s">&#39;FUVB&#39;</span><span class="p">,</span> <span class="n">exptime</span>
+        <span class="n">info2</span> <span class="o">=</span> <span class="n">vnum</span><span class="p">,</span> <span class="n">optelem</span><span class="p">,</span> <span class="n">cwa</span><span class="p">,</span> <span class="s">&#39;FUVA&#39;</span><span class="p">,</span> <span class="n">exptime</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">info2</span> <span class="o">=</span> <span class="n">vnum</span><span class="p">,</span> <span class="n">optelem</span><span class="p">,</span> <span class="n">cwa</span><span class="p">,</span> <span class="s">&#39;FUVB&#39;</span><span class="p">,</span> <span class="n">exptime</span>
+        <span class="n">info1</span> <span class="o">=</span> <span class="n">vnum</span><span class="p">,</span> <span class="n">optelem</span><span class="p">,</span> <span class="n">cwa</span><span class="p">,</span> <span class="s">&#39;FUVA&#39;</span><span class="p">,</span> <span class="n">exptime</span>
+        
+    <span class="k">return</span> <span class="p">[</span><span class="n">sp1</span><span class="p">,</span> <span class="n">sp2</span><span class="p">],</span> <span class="p">[</span><span class="n">info1</span><span class="p">,</span> <span class="n">info2</span><span class="p">]</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

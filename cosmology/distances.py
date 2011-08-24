@@ -1,4 +1,4 @@
-'''
+"""
 Functions related cosmology such as diameter and proper motion distances.
 
 Plot some distance measures versus redshift and omega_M.
@@ -7,17 +7,17 @@ Plot some distance measures versus redshift and omega_M.
 :requires: cosmocalc
 
 :author: Sami-Matias Niemi
-'''
+"""
 import sys
 import numpy
 import matplotlib.pyplot as pylab
 import matplotlib.cm as cm
 import cosmolopy.distance as cd
-import cosmolopy.constants as cc
+#import cosmolopy.constants as cc
 from cosmocalc import cosmocalc
 
 def getDiameterDistances(data, redshift=0):
-    '''
+    """
     Calculates a diameter distance in kpc / arc seconds
     from data for all unique redshifts. The redshift
     keyword indicates the column of redshifts.
@@ -29,7 +29,7 @@ def getDiameterDistances(data, redshift=0):
 
     :return: diameter distances
     :rtype: dictionary
-    '''
+    """
     out = {}
     for x in set(data[:, redshift]):
         out[x] = cosmocalc(x, 71.0, 0.28)['PS_kpc'] #in kpc / arc seconds
@@ -37,10 +37,9 @@ def getDiameterDistances(data, redshift=0):
 
 
 def plot_DM(filename):
-    '''
+    """
     The dimensionless proper motion distance DM/DH.
-    '''
-
+    """
     # Set up an array of redshift values.
     dz = 0.1
     z = numpy.arange(0., 10. + 1.1 * dz, dz)
@@ -67,10 +66,9 @@ def plot_DM(filename):
 
 
 def plot_DA(filename):
-    '''
+    """
     The dimensionless angular diameter distance DA/DH.
-    '''
-
+    """
     # Set up an array of redshift values.
     dz = 0.1
     z = numpy.arange(0., 10. + dz, dz)
@@ -97,9 +95,9 @@ def plot_DA(filename):
 
 
 def plot_dist(z, dz, om, dom, dist, dh, name, mathname, filename=None):
-    '''
+    """
     Make a 2-D plot of a distance versus redshift (x) and matter density (y).
-    '''
+    """
     # Grid of redshift and matter density values.
     x, y = numpy.meshgrid(z, om)
     pylab.figure()
@@ -128,10 +126,9 @@ def plot_dist(z, dz, om, dom, dist, dh, name, mathname, filename=None):
 
 
 def plot_dist_ony(z, dz, om, dom, dist, dh, name, mathname, filename=None):
-    '''
+    """
     Make a 2-D plot of matter density versus redshift (x) and distance (y)
-    '''
-
+    """
     dist = dist / dh
     z = z * numpy.ones(dist.shape)
     om = om * numpy.ones(dist.shape)

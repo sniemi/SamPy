@@ -1,4 +1,4 @@
-'''
+"""
 Provices matching for a list of RAs and DECs.
 
 :requires: astLib.astCoords
@@ -8,7 +8,7 @@ Provices matching for a list of RAs and DECs.
 :contact: sniemi@unc.edu
 
 :version: 0.1
-'''
+"""
 import math
 import numpy as np
 from numpy.core.records import fromarrays
@@ -22,7 +22,7 @@ DEG_PER_ASEC = DEG_PER_AMIN / 60.   # degrees per arcsec
 RAD_PER_DEG = math.pi / 180.             # radians per degree
 
 def match(ra1, dec1, ra2, dec2, tol, allmatches=False):
-    '''
+    """
     Given two sets of numpy arrays of ra,dec and a tolerance tol
     (float), returns an array of integers with the same length as the
     first input array.  If integer > 0, it is the index of the closest
@@ -38,7 +38,7 @@ def match(ra1, dec1, ra2, dec2, tol, allmatches=False):
     Note to get the indices of objects in ra2, dec2 without a match:
     imatch = match(ra1, dec1, ra2, dec2, 2.)
     inomatch = numpy.setdiff1d(np.arange(len(ra2)), set(imatch))
-    '''
+    """
 
     #ra1, ra2, dec1, dec2 = map(np.asarray, (ra1, ra2, dec1, dec2))
 
@@ -58,7 +58,7 @@ def match(ra1, dec1, ra2, dec2, tol, allmatches=False):
     for ra, dec in zip(ra1, dec1):
         #slower but more accurate
         RA_LIM = LIM / np.cos(dec * RAD_PER_DEG)
-        
+
         i1 = sra2.searchsorted(ra - RA_LIM)
         i2 = i1 + sra2[i1:].searchsorted(ra + RA_LIM)
         close = []
@@ -81,7 +81,7 @@ def match(ra1, dec1, ra2, dec2, tol, allmatches=False):
                 if min_dist < LIM:
                     match.append((isorted[jmin], min_dist))
                     continue
-                # otherwise no match
+                    # otherwise no match
             match.append((-1, -1))
         else:
             # append all the matching objects
@@ -108,7 +108,7 @@ def match(ra1, dec1, ra2, dec2, tol, allmatches=False):
 
 
 def indmatch(ra1, dec1, ra2, dec2, tol, one=True):
-    '''
+    """
     Finds objects in ra1, dec1 that have a matching object in ra2,dec2
     within tol arcsec.
 
@@ -118,7 +118,7 @@ def indmatch(ra1, dec1, ra2, dec2, tol, one=True):
 
     :param: one, whether one-to-one mapping should be done
 
-    '''
+    """
     m = match(ra1, dec1, ra2, dec2, tol)
     c = m.ind > -1
     i1 = c.nonzero()[0]
@@ -136,7 +136,7 @@ def indmatch(ra1, dec1, ra2, dec2, tol, one=True):
                                                 ra1[keeps], dec1[keeps])
                 smaller = np.argmin(dists)
                 delete = tmp[tmp != tmp[smaller]]
-                i1 = np.delete(i1 ,delete)
+                i1 = np.delete(i1, delete)
                 i2 = np.delete(i2, delete)
                 dl += len(delete)
         print 'removed %i double matches, left the closest match' % dl

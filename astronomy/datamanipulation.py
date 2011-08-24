@@ -1,4 +1,4 @@
-'''
+"""
 A random collection of functions for data manipulation.
 
 :requires: NumPy
@@ -8,28 +8,27 @@ A random collection of functions for data manipulation.
 
 :author: Sami-Matias Niemi
 :contact: niemi@stsci.edu
-'''
+"""
 import numpy as N
 import scipy.stats as ss
 
 def percentile_bins(xdata, ydata, xmin, xmax,
                     nxbins=15, log=False,
                     limit=6):
-    '''
-    Computes median and 16 and 84 percentiles of y-data in bins in x
+    """
+    Computes median and 16 and 84 percentiles of y-data in bins in x.
 
-    :param xdata: numpy array of xdata
-    :param ydata: numpy arrya of ydata
-    :param xmax: maximumx value of x that data are binned to
-    :param xmin: minimum value of x that data are binned to
-    :param nxbins: number of bins in x
-    :param log: if True, xbins are logarithmically spaced, else linearly
-    :param limit: the minimum number of values in a bin for which the
+    :param: xdata: numpy array of xdata
+    :param: ydata: numpy arrya of ydata
+    :param: xmax: maximumx value of x that data are binned to
+    :param: xmin: minimum value of x that data are binned to
+    :param: nxbins: number of bins in x
+    :param: log: if True, xbins are logarithmically spaced, else linearly
+    :param: limit: the minimum number of values in a bin for which the
                 median and percentiles are returned for.
 
-    :return: mid points of the bins, median, 16 per cent percentile, and
-    84 per cent percentile.
-    '''
+    :return: mid points of the bins, median, 16 per cent percentile, and 84 per cent percentile.
+    """
     if log:
         xbin = N.logspace(xmin, xmax, nxbins)
     else:
@@ -51,18 +50,17 @@ def percentile_bins(xdata, ydata, xmin, xmax,
 
 
 def average_bins(xdata, ydata, xmin, xmax, nxbins=15):
-    '''
+    """
     Computes mean and 16 and 84 percentiles of y-data in bins in x
 
-    :param xdata: numpy array of xdata
-    :param ydata: numpy arrya of ydata
-    :param xmax: maximumx value of x that data are binned to
-    :param xmin: minimum value of x that data are binned to
-    :param nxbins: number of bins in x
+    :param: xdata: numpy array of xdata
+    :param: ydata: numpy arrya of ydata
+    :param: xmax: maximumx value of x that data are binned to
+    :param: xmin: minimum value of x that data are binned to
+    :param: nxbins: number of bins in x
 
-    :return: mid points of the bins, mean, 16 per cent percentile, and
-    84 per cent percentile.
-    '''
+    :return: mid points of the bins, mean, 16 per cent percentile, and 84 per cent percentile.
+    """
     xbin = N.linspace(xmin, xmax, nxbins)
     nbin = len(xbin) - 1
     xbin_mid = N.zeros(nbin)
@@ -182,13 +180,13 @@ def binAndReturnFractions(x,
 
 
 def rollingAverage(x):
-    '''
+    """
     Returns the average between the cells of a list.
 
-    :param x: a Python list of values
+    :param: x: a Python list of values
 
     :return: a NumPy array of averages
-    '''
+    """
     out = []
     for i, a in enumerate(x):
         if i < len(x) - 1:
@@ -198,10 +196,9 @@ def rollingAverage(x):
 
 
 def movingAverage(x, n, type='simple'):
-    '''
-    compute an n period moving average.
-    type is 'simple' | 'exponential'
-    '''
+    """
+    compute an n period moving average, type is 'simple' | 'exponential'
+    """
     x = N.asarray(x)
     if type == 'simple':
         weights = N.ones(n)

@@ -71,6 +71,8 @@
             
   <h1>Source code for SamPy.bolshoi.collecthalomasses</h1><div class="highlight"><pre>
 <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Collects dark matter halo information from Bolshoi merger tree files.</span>
+
 <span class="sd">This one uses parallel python:</span>
 <span class="sd">http://www.parallelpython.com</span>
 <span class="sd">&#39;&#39;&#39;</span>
@@ -129,21 +131,26 @@
     <span class="n">ncpus</span> <span class="o">=</span> <span class="mi">6</span>
     
     <span class="c">#inpute merger tree files</span>
-    <span class="n">inputs</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">&#39;/Users/niemi/Desktop/Research/Bolshoi/bolshoi_isotrees/*.dat&#39;</span><span class="p">)</span>
+    <span class="n">inputs</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">&#39;/Users/niemi/Desktop/Research/Bolshoi/bolshoi_newisotrees/*.dat&#39;</span><span class="p">)</span>
 
     <span class="c">#this is for Bolshoi&#39;s tree outputs</span>
     <span class="c">#scale : redshift</span>
-    <span class="n">times</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.9434</span><span class="p">:</span> <span class="mf">0.059995760017</span><span class="p">,</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.9973</span><span class="p">:</span> <span class="mf">0.00270730973629</span><span class="p">,</span>
              <span class="mf">0.9073</span><span class="p">:</span> <span class="mf">0.102171277417</span><span class="p">,</span>
-             <span class="mf">0.8324</span><span class="p">:</span> <span class="mf">0.201345506968</span><span class="p">,</span>
+             <span class="mf">0.8323</span><span class="p">:</span> <span class="mf">0.201489847411</span><span class="p">,</span>
              <span class="mf">0.7663</span><span class="p">:</span> <span class="mf">0.304971943103</span><span class="p">,</span>
-             <span class="mf">0.7124</span><span class="p">:</span> <span class="mf">0.403705783268</span><span class="p">,</span>
+             <span class="mf">0.7123</span><span class="p">:</span> <span class="mf">0.403902849923</span><span class="p">,</span>
              <span class="mf">0.6643</span><span class="p">:</span> <span class="mf">0.505343971097</span><span class="p">,</span>
              <span class="mf">0.6223</span><span class="p">:</span> <span class="mf">0.606941989394</span><span class="p">,</span>
-             <span class="mf">0.5864</span><span class="p">:</span> <span class="mf">0.705320600273</span><span class="p">,</span>
-             <span class="mf">0.5564</span><span class="p">:</span> <span class="mf">0.797268152408</span><span class="p">,</span>
+             <span class="mf">0.5863</span><span class="p">:</span> <span class="mf">0.705611461709</span><span class="p">,</span>
+             <span class="mf">0.5563</span><span class="p">:</span> <span class="mf">0.797591227755</span><span class="p">,</span>
              <span class="mf">0.5283</span><span class="p">:</span> <span class="mf">0.892863903085</span><span class="p">,</span>
-             <span class="mf">0.4984</span><span class="p">:</span> <span class="mf">1.00642054575</span><span class="p">}</span>
+             <span class="mf">0.4983</span><span class="p">:</span> <span class="mf">1.00682319888</span><span class="p">,</span>
+             <span class="mf">0.3303</span><span class="p">:</span> <span class="mf">2.02755071147</span><span class="p">,</span>
+             <span class="mf">0.2463</span><span class="p">:</span> <span class="mf">3.06008932197</span><span class="p">,</span>
+             <span class="mf">0.1983</span><span class="p">:</span> <span class="mf">4.04286434695</span><span class="p">,</span>
+             <span class="mf">0.1683</span><span class="p">:</span> <span class="mf">4.94177064765</span><span class="p">,</span>
+             <span class="mf">0.1443</span><span class="p">:</span> <span class="mf">5.93000693001</span><span class="p">}</span>
 
     <span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;mvir&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
                <span class="s">&#39;orig_mvir&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
@@ -199,7 +206,6 @@
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

@@ -275,7 +275,6 @@ def hextract(imagefile, xstart, xstop, ystart, ystop, ext=0, output='resized.fit
         print ysize, ystop
         ystop = -2
 
-
     if xstop > xsize:
         print 'hextract: ERROR - the requested xstop value larger than the image array'
         print xsize, xstop
@@ -287,13 +286,12 @@ def hextract(imagefile, xstart, xstop, ystart, ystop, ext=0, output='resized.fit
     else:
         naxis1 = xsize - xstart + 1
 
-
     if ystop > 0:
         naxis2 = ystop - xstart + 1
     else:
         naxis2 = ysize - xstart + 1
 
-    newimg = img[ystart:ystop+1, xstart:xstop+1]
+    newimg = img[ystart:ystop + 1, xstart:xstop + 1]
 
     hdr['NAXIS1'] = naxis1
     hdr['NAXIS2'] = naxis2
@@ -312,7 +310,6 @@ def hextract(imagefile, xstart, xstop, ystart, ystop, ext=0, output='resized.fit
     hdu.writeto(output)
 
     return newimg, hdr
-
 
 
 if __name__ == "__main__":

@@ -104,6 +104,7 @@
 <h1>fitting Package<a class="headerlink" href="#fitting-package" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-SamPy.fitting.SplineArtist">
 <span id="splineartist-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">SplineArtist</span></tt> Module<a class="headerlink" href="#module-SamPy.fitting.SplineArtist" title="Permalink to this headline">¶</a></h2>
+<p>Spline artist</p>
 <dl class="class">
 <dt id="SamPy.fitting.SplineArtist.SplineArtist">
 <em class="property">class </em><tt class="descclassname">SamPy.fitting.SplineArtist.</tt><tt class="descname">SplineArtist</tt><big>(</big><em>xdata</em>, <em>ydata</em>, <em>xrange</em>, <em>ylog=False</em>, <em>order=3</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/SplineArtist.html#SplineArtist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.SplineArtist.SplineArtist" title="Permalink to this definition">¶</a></dt>
@@ -146,12 +147,19 @@ q/Q quits the whole script!</p>
 </div>
 <div class="section" id="module-SamPy.fitting.SplineFitting">
 <span id="splinefitting-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">SplineFitting</span></tt> Module<a class="headerlink" href="#module-SamPy.fitting.SplineFitting" title="Permalink to this headline">¶</a></h2>
-<p>ABOUT:
-Example how to spline B-spline to fake data.</p>
-<p>DEPENDS:
-Python 2.5 or later (no 3.x compatible)
-NumPy
-SciPy</p>
+<p>Example how to spline B-spline to fake data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">Python 2.5 or later (no 3.x compatible)</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">NumPy</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">SciPy</td>
+</tr>
+</tbody>
+</table>
 <p>TESTED:
 Python 2.5.1
 NumPy: 1.4.0.dev7576
@@ -159,9 +167,18 @@ SciPy: 0.7.1
 matplotlib 1.0.svn</p>
 <p>HISTORY:
 Created on November 26, 2009</p>
-<p>VERSION:
-0.1: test release (SMN)</p>
-<p>&#64;author: Sami-Matias Niemi (<a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a>)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">version:</th><td class="field-body">0.1: test release (SMN)</td>
+</tr>
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:sniemi&#37;&#52;&#48;unc&#46;edu">sniemi<span>&#64;</span>unc<span>&#46;</span>edu</a></td>
+</tr>
+</tbody>
+</table>
 <dl class="class">
 <dt id="SamPy.fitting.SplineFitting.SplineFitting">
 <em class="property">class </em><tt class="descclassname">SamPy.fitting.SplineFitting.</tt><tt class="descname">SplineFitting</tt><big>(</big><em>xnodes</em>, <em>spline_order=3</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/SplineFitting.html#SplineFitting"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.SplineFitting.SplineFitting" title="Permalink to this definition">¶</a></dt>
@@ -230,41 +247,157 @@ Note that ynodes can then be a list of parameters.</p>
 </div>
 <div class="section" id="module-SamPy.fitting.fits">
 <span id="fits-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">fits</span></tt> Module<a class="headerlink" href="#module-SamPy.fitting.fits" title="Permalink to this headline">¶</a></h2>
+<p>Various functions can be fit to give data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:sniemi&#37;&#52;&#48;unc&#46;edu">sniemi<span>&#64;</span>unc<span>&#46;</span>edu</a></td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">NumPy</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">SciPy</td>
+</tr>
+<tr class="field"><th class="field-name">version:</th><td class="field-body">0.1</td>
+</tr>
+</tbody>
+</table>
 <dl class="function">
 <dt id="SamPy.fitting.fits.FindZeroDoubleExp">
 <tt class="descclassname">SamPy.fitting.fits.</tt><tt class="descname">FindZeroDoubleExp</tt><big>(</big><em>p</em>, <em>x0</em>, <em>yshift=0.0</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/fits.html#FindZeroDoubleExp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.fits.FindZeroDoubleExp" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Finds the zero point of a negative double exponential function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">roots</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="SamPy.fitting.fits.FindZeroSingleExp">
 <tt class="descclassname">SamPy.fitting.fits.</tt><tt class="descname">FindZeroSingleExp</tt><big>(</big><em>p</em>, <em>x0</em>, <em>yshift=0.0</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/fits.html#FindZeroSingleExp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.fits.FindZeroSingleExp" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Finds the zero point of a negative exponential function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">roots</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="SamPy.fitting.fits.FitDoubleExponent">
 <tt class="descclassname">SamPy.fitting.fits.</tt><tt class="descname">FitDoubleExponent</tt><big>(</big><em>xcorr</em>, <em>ycorr</em>, <em>initials</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/fits.html#FitDoubleExponent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.fits.FitDoubleExponent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fits a double exponential to data.
-&#64;return: corrfit</p>
+<dd><p>Fits a negative double exponential to data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">best fit, fit parameters</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="SamPy.fitting.fits.FitExponent">
-<tt class="descclassname">SamPy.fitting.fits.</tt><tt class="descname">FitExponent</tt><big>(</big><em>xcorr</em>, <em>ycorr</em>, <em>initials</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/fits.html#FitExponent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.fits.FitExponent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fits an exponential to data.</p>
+<tt class="descclassname">SamPy.fitting.fits.</tt><tt class="descname">FitExponent</tt><big>(</big><em>xdata</em>, <em>ydata</em>, <em>initials</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/fits.html#FitExponent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.fits.FitExponent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits a negative exponential to x and y data with an initial guess given by initials.
+The form of the exponential is:</p>
+<blockquote>
+p[0] + [1]*exp(-x*p[2])</blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">xdata</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">ydata</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">initials, initial parameter values</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.fitting.fits.Gaussian">
+<tt class="descclassname">SamPy.fitting.fits.</tt><tt class="descname">Gaussian</tt><big>(</big><em>ydata</em>, <em>xdata=None</em>, <em>initials=None</em><big>)</big><a class="headerlink" href="#SamPy.fitting.fits.Gaussian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits a single Gaussian to a given data.
+Uses scipy.optimize.leastsq for fitting.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">ydata, to which a Gaussian will be fitted to.</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">xdata, if not given uses np.arange</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">initials, initial guess for Gaussian parameters
+in order [amplitude, mean, sigma]</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">coefficients, best fit params, success</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">dictionary</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.fitting.fits.Gaussian2D">
+<tt class="descclassname">SamPy.fitting.fits.</tt><tt class="descname">Gaussian2D</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#SamPy.fitting.fits.Gaussian2D" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits a 2D Gaussian to a given data.
+Uses scipy.optimize.leastsq for fitting.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">data</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="SamPy.fitting.fits.PolyFit">
 <tt class="descclassname">SamPy.fitting.fits.</tt><tt class="descname">PolyFit</tt><big>(</big><em>x</em>, <em>y</em>, <em>order=1</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/fits.html#PolyFit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.fits.PolyFit" title="Permalink to this definition">¶</a></dt>
-<dd><p>Fits a polynomial to the data.
-&#64;return: 
-fitted y values, error of the fit</p>
+<dd><p>Fits a polynomial to the data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">fitted y values, error of the fit</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
 <dt id="SamPy.fitting.fits.doubleExponent">
-<tt class="descclassname">SamPy.fitting.fits.</tt><tt class="descname">doubleExponent</tt><big>(</big><em>x</em>, <em>p</em>, <em>yshift</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/fits.html#doubleExponent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.fits.doubleExponent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<tt class="descclassname">SamPy.fitting.fits.</tt><tt class="descname">doubleExponent</tt><big>(</big><em>x</em>, <em>p</em>, <em>shift</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/fits.html#doubleExponent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.fits.doubleExponent" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">x, data</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">p, parameters</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">shift, shift</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">double exponential with a given parameters and shift</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="function">
 <dt id="SamPy.fitting.fits.linearregression">
@@ -276,13 +409,34 @@ and R (+squared)</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="SamPy.fitting.fits.polynomial5">
+<tt class="descclassname">SamPy.fitting.fits.</tt><tt class="descname">polynomial5</tt><big>(</big><em>x</em>, <em>p0</em>, <em>p1</em>, <em>p2</em>, <em>p3</em>, <em>p4</em><big>)</big><a class="headerlink" href="#SamPy.fitting.fits.polynomial5" title="Permalink to this definition">¶</a></dt>
+<dd><p>5th order polynomial</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="SamPy.fitting.fits.singleExponent">
-<tt class="descclassname">SamPy.fitting.fits.</tt><tt class="descname">singleExponent</tt><big>(</big><em>x</em>, <em>p</em>, <em>yshift</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/fits.html#singleExponent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.fits.singleExponent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<tt class="descclassname">SamPy.fitting.fits.</tt><tt class="descname">singleExponent</tt><big>(</big><em>x</em>, <em>p</em>, <em>shift</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/fits.html#singleExponent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.fits.singleExponent" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">x, data</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">p, parameters</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">shift, shift</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">a single exponential with a given parameters and shift</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 </div>
 <div class="section" id="module-SamPy.fitting.weigtedFittingExample">
 <span id="weigtedfittingexample-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">weigtedFittingExample</span></tt> Module<a class="headerlink" href="#module-SamPy.fitting.weigtedFittingExample" title="Permalink to this headline">¶</a></h2>
+<p>Simple fitting example and how to take into account indicidual weights.</p>
 <dl class="function">
 <dt id="SamPy.fitting.weigtedFittingExample.first_order">
 <tt class="descclassname">SamPy.fitting.weigtedFittingExample.</tt><tt class="descname">first_order</tt><big>(</big><em>x</em>, <em>a0</em>, <em>a1</em><big>)</big><a class="reference internal" href="_modules/SamPy/fitting/weigtedFittingExample.html#first_order"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.fitting.weigtedFittingExample.first_order" title="Permalink to this definition">¶</a></dt>
@@ -358,7 +512,6 @@ takes a shape-tuple as the first argument, refer to
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

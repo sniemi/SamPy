@@ -18,7 +18,7 @@ import numpy as N
 #Note however that because the data is in Dropbox the absolute path
 #may not be the same. Thus the home directory is tracked using the HOME
 #environment variable
-observation_path = os.getenv('HOME')+'/Dropbox/Research/Observations/'
+observation_path = os.getenv('HOME') + '/Dropbox/Research/Observations/'
 
 def bellG():
     '''
@@ -35,8 +35,8 @@ def bellG():
     '''
     file = observation_path + 'bell/sdss2mass_lf/glf.out'
     data = N.loadtxt(file)
-    M = data[:,0]
-    phi = data[:,1]
-    phi_low = data[:,2]
-    phi_high = data[:,3]
+    M = data[:, 0]
+    phi = data[:, 1]
+    phi_low = data[:, 2]
+    phi_high = data[:, 3]
     return M, phi, phi_low, phi_high

@@ -62,7 +62,7 @@
 <li><a class="reference internal" href="#module-SamPy.grisms.extract_splitless"><tt class="docutils literal"><span class="pre">extract_splitless</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-SamPy.grisms.generateAssociationDB"><tt class="docutils literal"><span class="pre">generateAssociationDB</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-SamPy.grisms.overplot_sextractor"><tt class="docutils literal"><span class="pre">overplot_sextractor</span></tt> Module</a></li>
-<li><a class="reference internal" href="#prepare-slitless-module"><tt class="docutils literal"><span class="pre">prepare_slitless</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.grisms.prepare_slitless"><tt class="docutils literal"><span class="pre">prepare_slitless</span></tt> Module</a></li>
 </ul>
 </li>
 </ul>
@@ -238,8 +238,83 @@ matching should be sufficient.</p>
 <div class="section" id="module-SamPy.grisms.overplot_sextractor">
 <span id="overplot-sextractor-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">overplot_sextractor</span></tt> Module<a class="headerlink" href="#module-SamPy.grisms.overplot_sextractor" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="prepare-slitless-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">prepare_slitless</span></tt> Module<a class="headerlink" href="#prepare-slitless-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.grisms.prepare_slitless">
+<span id="prepare-slitless-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">prepare_slitless</span></tt> Module<a class="headerlink" href="#module-SamPy.grisms.prepare_slitless" title="Permalink to this headline">¶</a></h2>
+<p>Prepares HST data for aXe, runs multidrizzle and SExtractor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">summary:</th><td class="field-body">This script can be used to prepare data for aXe.</td>
+</tr>
+</tbody>
+</table>
+<p>The script will create a proper file structure for aXe,
+run multidrizzle for direct images, and finally run
+SourceExtractor on the drizzled direct images.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">note:</th><td class="field-body">This is really badly written, should make a class...</td>
+</tr>
+<tr class="field"><th class="field-name">warning:</th><td class="field-body">Not really tested...</td>
+</tr>
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi (<a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a>)</td>
+</tr>
+<tr class="field"><th class="field-name">version:</th><td class="field-body">0.1a</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="SamPy.grisms.prepare_slitless.find_direct_images">
+<tt class="descclassname">SamPy.grisms.prepare_slitless.</tt><tt class="descname">find_direct_images</tt><big>(</big><em>dict</em>, <em>column=0</em><big>)</big><a class="reference internal" href="_modules/SamPy/grisms/prepare_slitless.html#find_direct_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.grisms.prepare_slitless.find_direct_images" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pick out direct images from a dictionary (that could have been
+created using the &#8220;find_header_info&#8221; function). Assumes that all
+images whose filter names start with an &#8220;F&#8221; are direct images.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Rreturn :</th><td class="field-body">a list of filenames that are direct images.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.grisms.prepare_slitless.find_header_info">
+<tt class="descclassname">SamPy.grisms.prepare_slitless.</tt><tt class="descname">find_header_info</tt><big>(</big><em>input_files</em><big>)</big><a class="reference internal" href="_modules/SamPy/grisms/prepare_slitless.html#find_header_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.grisms.prepare_slitless.find_header_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find filter, date of the observation and exposure time information
+from the FITS header. Assumes that this information has been stored
+in the first extension header, like in case of HST.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">Returns a dictionary where each key is the filename and
+value is a list of filter, data-obs and exptime.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.grisms.prepare_slitless.fixSourceExtractorCatalogue">
+<tt class="descclassname">SamPy.grisms.prepare_slitless.</tt><tt class="descname">fixSourceExtractorCatalogue</tt><big>(</big><em>filter</em>, <em>pivot</em><big>)</big><a class="reference internal" href="_modules/SamPy/grisms/prepare_slitless.html#fixSourceExtractorCatalogue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.grisms.prepare_slitless.fixSourceExtractorCatalogue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.grisms.prepare_slitless.make_ds9_regions_file">
+<tt class="descclassname">SamPy.grisms.prepare_slitless.</tt><tt class="descname">make_ds9_regions_file</tt><big>(</big><em>inputfile</em>, <em>outputfile</em>, <em>size=10</em>, <em>xcolumn='x_image'</em>, <em>ycolumn='y_image'</em><big>)</big><a class="reference internal" href="_modules/SamPy/grisms/prepare_slitless.html#make_ds9_regions_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.grisms.prepare_slitless.make_ds9_regions_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.grisms.prepare_slitless.print_files">
+<tt class="descclassname">SamPy.grisms.prepare_slitless.</tt><tt class="descname">print_files</tt><big>(</big><em>headers</em><big>)</big><a class="reference internal" href="_modules/SamPy/grisms/prepare_slitless.html#print_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.grisms.prepare_slitless.print_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Outputs some basic information to the shell.</p>
+</dd></dl>
+
 </div>
 </div>
 
@@ -272,7 +347,6 @@ matching should be sufficient.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

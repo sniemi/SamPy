@@ -48,12 +48,12 @@ def convolveSpectrum(wave, flux, wave2, throughput):
     #calculate the effective flux through the filter
     feff = fluxg * frelg
     #effective wavelength
-    wff = integrate.trapz(wgrid*feff) / integrate.trapz(feff)
+    wff = integrate.trapz(wgrid * feff) / integrate.trapz(feff)
     #integrate the total flux
     flux = integrate.trapz(feff, wgrid) / integrate.trapz(frelg, wgrid)
 
-    output = {'effectiveFlux' : feff,
-              'effectiveWave' : wff,
+    output = {'effectiveFlux': feff,
+              'effectiveWave': wff,
               'flux': flux,
               'wave': wgrid}
     return output

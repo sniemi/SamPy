@@ -24,7 +24,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
     <link rel="up" title="astronomy Package" href="SamPy.astronomy.html" />
-    <link rel="next" title="SamPy.astronomy.differentialfunctions" href="SamPy.astronomy.differentialfunctions.html" /> 
+    <link rel="next" title="SamPy.astronomy.differentialfunctions" href="SamPy.astronomy.differentialfunctions.html" />
+    <link rel="prev" title="SamPy.astronomy.conversions" href="SamPy.astronomy.conversions.html" /> 
   </head>
   <body>
 
@@ -43,6 +44,9 @@
         <li class="right" >
           <a href="SamPy.astronomy.differentialfunctions.html" title="SamPy.astronomy.differentialfunctions"
              accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.conversions.html" title="SamPy.astronomy.conversions"
+             accesskey="P">previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
 
@@ -61,6 +65,9 @@
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.astronomy.conversions.html"
+                        title="previous chapter">SamPy.astronomy.conversions</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="SamPy.astronomy.differentialfunctions.html"
                         title="next chapter">SamPy.astronomy.differentialfunctions</a></p>
@@ -119,21 +126,20 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>xdata</strong> &#8211; numpy array of xdata</li>
-<li><strong>ydata</strong> &#8211; numpy arrya of ydata</li>
-<li><strong>xmax</strong> &#8211; maximumx value of x that data are binned to</li>
-<li><strong>xmin</strong> &#8211; minimum value of x that data are binned to</li>
-<li><strong>nxbins</strong> &#8211; number of bins in x</li>
-</ul>
-</td>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">xdata: numpy array of xdata</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">mid points of the bins, mean, 16 per cent percentile, and</p>
-</td>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">ydata: numpy arrya of ydata</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">xmax: maximumx value of x that data are binned to</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">xmin: minimum value of x that data are binned to</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">nxbins: number of bins in x</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">mid points of the bins, mean, 16 per cent percentile, and 84 per cent percentile.</td>
 </tr>
 </tbody>
 </table>
-<p>84 per cent percentile.</p>
 </dd></dl>
 
 <dl class="function">
@@ -159,36 +165,36 @@
 <dl class="function">
 <dt id="SamPy.astronomy.datamanipulation.movingAverage">
 <tt class="descclassname">SamPy.astronomy.datamanipulation.</tt><tt class="descname">movingAverage</tt><big>(</big><em>x</em>, <em>n</em>, <em>type='simple'</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/datamanipulation.html#movingAverage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.datamanipulation.movingAverage" title="Permalink to this definition">¶</a></dt>
-<dd><p>compute an n period moving average.
-type is &#8216;simple&#8217; | &#8216;exponential&#8217;</p>
+<dd><p>compute an n period moving average, type is &#8216;simple&#8217; | &#8216;exponential&#8217;</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="SamPy.astronomy.datamanipulation.percentile_bins">
 <tt class="descclassname">SamPy.astronomy.datamanipulation.</tt><tt class="descname">percentile_bins</tt><big>(</big><em>xdata</em>, <em>ydata</em>, <em>xmin</em>, <em>xmax</em>, <em>nxbins=15</em>, <em>log=False</em>, <em>limit=6</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/datamanipulation.html#percentile_bins"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.datamanipulation.percentile_bins" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes median and 16 and 84 percentiles of y-data in bins in x</p>
+<dd><p>Computes median and 16 and 84 percentiles of y-data in bins in x.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>xdata</strong> &#8211; numpy array of xdata</li>
-<li><strong>ydata</strong> &#8211; numpy arrya of ydata</li>
-<li><strong>xmax</strong> &#8211; maximumx value of x that data are binned to</li>
-<li><strong>xmin</strong> &#8211; minimum value of x that data are binned to</li>
-<li><strong>nxbins</strong> &#8211; number of bins in x</li>
-<li><strong>log</strong> &#8211; if True, xbins are logarithmically spaced, else linearly</li>
-<li><strong>limit</strong> &#8211; the minimum number of values in a bin for which the
-median and percentiles are returned for.</li>
-</ul>
-</td>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">xdata: numpy array of xdata</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">mid points of the bins, median, 16 per cent percentile, and</p>
-</td>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">ydata: numpy arrya of ydata</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">xmax: maximumx value of x that data are binned to</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">xmin: minimum value of x that data are binned to</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">nxbins: number of bins in x</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">log: if True, xbins are logarithmically spaced, else linearly</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">limit: the minimum number of values in a bin for which the
+median and percentiles are returned for.</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">mid points of the bins, median, 16 per cent percentile, and 84 per cent percentile.</td>
 </tr>
 </tbody>
 </table>
-<p>84 per cent percentile.</p>
 </dd></dl>
 
 <dl class="function">
@@ -199,13 +205,9 @@ median and percentiles are returned for.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x</strong> &#8211; a Python list of values</li>
-</ul>
-</td>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">x: a Python list of values</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">a NumPy array of averages</p>
-</td>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">a NumPy array of averages</td>
 </tr>
 </tbody>
 </table>
@@ -232,6 +234,9 @@ median and percentiles are returned for.</li>
         <li class="right" >
           <a href="SamPy.astronomy.differentialfunctions.html" title="SamPy.astronomy.differentialfunctions"
              >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.conversions.html" title="SamPy.astronomy.conversions"
+             >previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
 
@@ -241,7 +246,6 @@ median and percentiles are returned for.</li>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

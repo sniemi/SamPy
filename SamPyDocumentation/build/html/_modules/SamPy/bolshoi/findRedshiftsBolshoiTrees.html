@@ -1,0 +1,145 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.bolshoi.findRedshiftsBolshoiTrees &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.bolshoi.findRedshiftsBolshoiTrees</h1><div class="highlight"><pre>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">This little module can be used to find redshift information from N-body simulation data.</span>
+
+<span class="sd">:author: Sami-Niemi</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">glob</span> <span class="kn">as</span> <span class="nn">g</span>
+<span class="kn">import</span> <span class="nn">fileinput</span> <span class="kn">as</span> <span class="nn">f</span>
+<span class="c">#From Sami&#39;s repo</span>
+<span class="kn">import</span> <span class="nn">astronomy.conversions</span> <span class="kn">as</span> <span class="nn">conv</span>
+
+
+<div class="viewcode-block" id="FindRedshiftInfo"><a class="viewcode-back" href="../../../SamPy.bolshoi.html#SamPy.bolshoi.findRedshiftsBolshoiTrees.FindRedshiftInfo">[docs]</a><span class="k">def</span> <span class="nf">FindRedshiftInfo</span><span class="p">(</span><span class="n">files</span><span class="p">,</span> <span class="n">columns</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Finds redshift information from files when the column</span>
+<span class="sd">    information has been specified.</span>
+
+<span class="sd">    :param: files</span>
+<span class="sd">    :param: columns</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">scales</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c">#loop over files and save all the scales</span>
+    <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="nb">file</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;#&#39;</span><span class="p">):</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                <span class="n">scales</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="n">columns</span><span class="p">[</span><span class="s">&#39;scale&#39;</span><span class="p">]])</span>
+
+    <span class="c">#find out individual scales</span>
+    <span class="n">individuals</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">scales</span><span class="p">))</span>
+
+    <span class="c">#loop over the sorted scales</span>
+    <span class="k">for</span> <span class="n">scale</span> <span class="ow">in</span> <span class="n">individuals</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="k">print</span> <span class="n">scale</span><span class="p">,</span> <span class="n">conv</span><span class="o">.</span><span class="n">redshiftFromScale</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">scale</span><span class="p">))</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">&#39;/Users/niemi/Desktop/Research/Bolshoi/bolshoi_newisotrees/*.dat&#39;</span><span class="p">)</span>
+
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;mvir&#39;</span> <span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+               <span class="s">&#39;orig_mvir&#39;</span> <span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+               <span class="s">&#39;phantom&#39;</span> <span class="p">:</span> <span class="mi">8</span><span class="p">,</span>
+               <span class="s">&#39;scale&#39;</span><span class="p">:</span> <span class="mi">0</span>
+               <span class="p">}</span>
+
+    <span class="n">FindRedshiftInfo</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">columns</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

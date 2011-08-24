@@ -1,0 +1,214 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.resolve.misc.generateFileLists &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.resolve.misc.generateFileLists</h1><div class="highlight"><pre>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Contains a class that can be used to generate file lists from SOAR data</span>
+
+<span class="sd">:requires: pyFITS</span>
+<span class="sd">:requires: NumPy</span>
+
+<span class="sd">:author: Sami-Matias Niemi</span>
+<span class="sd">:contact: sniemi@unc.edu</span>
+
+<span class="sd">:version: 0.1</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">glob</span> <span class="kn">as</span> <span class="nn">g</span>
+<span class="kn">import</span> <span class="nn">pyfits</span> <span class="kn">as</span> <span class="nn">pf</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Sami-Matias Niemi&#39;</span>
+
+<div class="viewcode-block" id="SOARFileLists"><a class="viewcode-back" href="../../../../SamPy.resolve.misc.html#SamPy.resolve.misc.generateFileLists.SOARFileLists">[docs]</a><span class="k">class</span> <span class="nc">SOARFileLists</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Generates different file lists</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">idef</span><span class="o">=</span><span class="s">&#39;.fits&#39;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Init</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;./&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ext</span> <span class="o">=</span> <span class="n">ext</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idef</span> <span class="o">=</span> <span class="n">idef</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">allFiles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_findAllFiles</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_findAllFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Returns a list of all files that are located in</span>
+<span class="sd">        the path and have the idef identifier.</span>
+
+<span class="sd">        :rtype: list</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">g</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;*&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">idef</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SOARFileLists.findParams"><a class="viewcode-back" href="../../../../SamPy.resolve.misc.html#SamPy.resolve.misc.generateFileLists.SOARFileLists.findParams">[docs]</a>    <span class="k">def</span> <span class="nf">findParams</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;PARAM20&#39;</span><span class="p">,</span> <span class="s">&#39;PARAM21&#39;</span><span class="p">,</span> <span class="s">&#39;PARAM22&#39;</span><span class="p">]):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Reads header keywords from each FITS file.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span>
+        <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">allFiles</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">hdr</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">ignore_missing_end</span><span class="o">=</span><span class="bp">True</span><span class="p">)[</span><span class="bp">self</span><span class="o">.</span><span class="n">ext</span><span class="p">]</span><span class="o">.</span><span class="n">header</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&#39;Cannot read file </span><span class="si">%s</span><span class="s">, will skip...&#39;</span> <span class="o">%</span> <span class="nb">file</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hdr</span><span class="p">[</span><span class="n">param</span><span class="p">])</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="s">&#39;Cannot find </span><span class="si">%s</span><span class="s"> from </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="nb">file</span><span class="p">)</span>
+            <span class="n">out</span><span class="p">[</span><span class="nb">file</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span>
+            <span class="n">array</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">file</span><span class="p">,]</span> <span class="o">+</span> <span class="n">tmp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fileInfo</span> <span class="o">=</span> <span class="n">out</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">arrayInformation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileInfo</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">arrayInformation</span>
+</div>
+<div class="viewcode-block" id="SOARFileLists.printFileInfo"><a class="viewcode-back" href="../../../../SamPy.resolve.misc.html#SamPy.resolve.misc.generateFileLists.SOARFileLists.printFileInfo">[docs]</a>    <span class="k">def</span> <span class="nf">printFileInfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fileInfo</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Prints file information to the screen</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">fileInfo</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fileInfo</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">findParams</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileInfo</span><span class="p">:</span>
+            <span class="k">print</span> <span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileInfo</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="SOARFileLists.saveFileInfo"><a class="viewcode-back" href="../../../../SamPy.resolve.misc.html#SamPy.resolve.misc.generateFileLists.SOARFileLists.saveFileInfo">[docs]</a>    <span class="k">def</span> <span class="nf">saveFileInfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s">&#39;fileinfo.txt&#39;</span><span class="p">,</span> <span class="n">fileInfo</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Saves file information to a file</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">fileInfo</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fileInfo</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">findParams</span><span class="p">()</span>
+
+        <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileInfo</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">key</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span>
+            <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileInfo</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                <span class="n">tmp</span> <span class="o">+=</span> <span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+            <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">tmp</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+        <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="SOARFileLists.separateByParams"><a class="viewcode-back" href="../../../../SamPy.resolve.misc.html#SamPy.resolve.misc.generateFileLists.SOARFileLists.separateByParams">[docs]</a>    <span class="k">def</span> <span class="nf">separateByParams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+
+<span class="sd">        :note: this only works when the three default params have been used</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">vls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arrayInformation</span><span class="p">)</span>
+        <span class="n">binnings</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">vls</span><span class="p">[:,</span><span class="mi">3</span><span class="p">])</span>
+        <span class="n">ycuts</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">vls</span><span class="p">[:,</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">xcuts</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">vls</span><span class="p">[:,</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="nb">bin</span> <span class="ow">in</span> <span class="n">binnings</span><span class="p">:</span>
+            <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">&#39;filelistbin&#39;</span> <span class="o">+</span> <span class="nb">bin</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">vls</span><span class="p">[</span><span class="n">vls</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="nb">bin</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">:</span>
+                <span class="n">tmp2</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\t</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span>
+                <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">tmp2</span><span class="p">)</span>
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="n">SOARFileLists</span><span class="p">()</span>
+    <span class="n">fi</span><span class="p">,</span> <span class="n">fa</span> <span class="o">=</span> <span class="n">files</span><span class="o">.</span><span class="n">findParams</span><span class="p">()</span>
+    <span class="n">files</span><span class="o">.</span><span class="n">saveFileInfo</span><span class="p">()</span>
+    <span class="n">files</span><span class="o">.</span><span class="n">separateByParams</span><span class="p">()</span>
+    
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

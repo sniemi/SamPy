@@ -25,10 +25,10 @@ Subpackages
     SamPy.parsing
     SamPy.pca
     SamPy.plot
+    SamPy.resolve
     SamPy.sandbox
     SamPy.smakced
     SamPy.smnIO
     SamPy.statistics
     SamPy.stis
-    SamPy.resolve
     SamPy.wrapper

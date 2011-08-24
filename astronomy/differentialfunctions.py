@@ -1,4 +1,4 @@
-'''
+"""
 Functions to calculate differential functions.
 
 These functions can be used to calculate for example
@@ -11,19 +11,19 @@ functions etc.
 
 :author: Sami-Matias Niemi
 :contact: niemi@stsci.edu
-'''
+"""
 import numpy as N
 
 def diffFunctionLogBinning(data, column=0, log=False,
                            wgth=None, mmax=15.5, mmin=9.0,
                            nbins=35, h=0.7, volume=250, nvols=1,
                            verbose=False):
-    '''
+    """
     Calculates a differential function from data.
     Uses NumPy to calculate a histogram and then divides.
     each bin value with the length of the bin.
     The log binning refers to 10 based log, i.e. log10(data)
-    '''
+    """
     #get the number of items in data
     if len(N.shape(data)) == 1:
         ngal = len(data)
@@ -70,13 +70,14 @@ def diff_function_log_binning(data, column=0, log=False,
                               wgth=None, mmax=15.5, mmin=9.0,
                               nbins=35, h=0.7, volume=250, nvols=1,
                               verbose=False):
-    '''
+    """
     Calculates a differential function from data.
+
     :warning: One should not use this, unless the number of
-    systems for each bin is used. One should use diffFunctionLogBinning
-    instead, which is probably faster as it uses NumPy.histogram
-    rathrer than my own algorithm.
-    '''
+              systems for each bin is used. One should use diffFunctionLogBinning
+              instead, which is probably faster as it uses NumPy.histogram
+              rathrer than my own algorithm.
+    """
     #get the number of items in data
     if len(N.shape(data)) == 1:
         ngal = len(data)
@@ -140,12 +141,12 @@ def mass_function(data, column=0, log=False,
                   wght=None, mmin=9.0, mmax=15.0,
                   nbins=35, h=0.7, volume=250,
                   nvols=1, verbose=False):
-    '''
+    """
     Calculates a mass function from data.
     Returns differential mass function and bins:
     dN / dlnM
     :TODO: add calculating the cumulative mass function.
-    '''
+    """
     #if log have been taken from the data or not
     if not log:
         if len(data.shape) > 1:
@@ -202,7 +203,7 @@ def stellarMassFunction(data,
                         nvols=8, verbose=False,
                         early_type_galaxies=0.4,
                         central_galaxy_id=1):
-    '''
+    """
     Calculates a stellar mass function from data. Calculates
     stellar mass functions for all galaxies, early- and late-types
     and central galaxies separately.
@@ -215,7 +216,7 @@ def stellarMassFunction(data,
 
     :return: output
     :rtype: dictionary
-    '''
+    """
     #get number of galaxies
     ngal = len(data['stellar_mass'])
 

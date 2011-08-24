@@ -71,7 +71,6 @@
             
   <h1>Source code for SamPy.herschel.plotFluxRedshiftDistribution</h1><div class="highlight"><pre>
 <span class="kn">import</span> <span class="nn">matplotlib</span>
-
 <span class="n">matplotlib</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s">&#39;Agg&#39;</span><span class="p">)</span>
 <span class="n">matplotlib</span><span class="o">.</span><span class="n">rc</span><span class="p">(</span><span class="s">&#39;text&#39;</span><span class="p">,</span> <span class="n">usetex</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;font.size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">17</span>
@@ -82,7 +81,7 @@
 <span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;legend.handlelength&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;xtick.major.size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
 <span class="n">matplotlib</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;ytick.major.size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">matplotlib.ticker</span> <span class="kn">import</span> <span class="n">MultipleLocator</span><span class="p">,</span> <span class="n">NullFormatter</span>
@@ -198,7 +197,7 @@
                       <span class="n">hatch</span><span class="o">=</span><span class="s">&#39;x&#39;</span><span class="p">)</span>
     <span class="c">#set legend of x histogram</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="n">x1</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">x2</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span>
-               <span class="p">(</span><span class="s">&#39;All Galaxies&#39;</span><span class="p">,</span> <span class="s">r&#39;$S_{250}&gt; 5\ \mathrm{mJy}$&#39;</span><span class="p">),</span>
+               <span class="p">(</span><span class="s">&#39;All Galaxies&#39;</span><span class="p">,</span> <span class="s">r&#39;$S_{160}&gt; 5\ \mathrm{mJy}$&#39;</span><span class="p">),</span>
                <span class="n">shadow</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
                <span class="n">fancybox</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
                <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">1.34</span><span class="p">),</span>
@@ -243,26 +242,34 @@
 </div>
 <div class="viewcode-block" id="plotFluxRedshiftDistribution"><a class="viewcode-back" href="../../../SamPy.herschel.html#SamPy.herschel.plotFluxRedshiftDistribution.plotFluxRedshiftDistribution">[docs]</a><span class="k">def</span> <span class="nf">plotFluxRedshiftDistribution</span><span class="p">(</span><span class="n">path</span><span class="p">,</span>
                                  <span class="n">database</span><span class="p">,</span>
-                                 <span class="n">out_folder</span><span class="p">):</span>
-    <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select FIR.spire250_obs, FIR.z</span>
+                                 <span class="n">out_folder</span><span class="p">,</span>
+                                 <span class="n">band</span> <span class="o">=</span> <span class="s">&#39;spire250_obs&#39;</span><span class="p">):</span>
+    <span class="n">query</span> <span class="o">=</span> <span class="s">&#39;&#39;&#39;select FIR.</span><span class="si">%s</span><span class="s">, FIR.z</span>
 <span class="s">    from FIR where</span>
-<span class="s">    FIR.spire250_obs &gt; 1e-6 and</span>
+<span class="s">    FIR.</span><span class="si">%s</span><span class="s"> &gt; 1e-6 and</span>
 <span class="s">    FIR.z &gt;= 1.9 and</span>
 <span class="s">    FIR.z &lt; 4.1 and</span>
-<span class="s">    FIR.spire250_obs &lt; 1e5</span>
-<span class="s">    &#39;&#39;&#39;</span>
+<span class="s">    FIR.</span><span class="si">%s</span><span class="s"> &lt; 1e5</span>
+<span class="s">    &#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">band</span><span class="p">,</span> <span class="n">band</span><span class="p">,</span> <span class="n">band</span><span class="p">)</span>
     <span class="c">#get data</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">sqlite</span><span class="o">.</span><span class="n">get_data_sqlite</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
     <span class="c">#convert fluxes to mJy</span>
     <span class="n">flux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1e3</span><span class="p">)</span> <span class="c"># log of mJy</span>
     <span class="n">redshift</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
 
+    <span class="c">#get wavelength</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">wave</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">&#39;\d\d\d&#39;</span><span class="p">,</span> <span class="n">band</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">()</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="c">#pacs 70 has only two digits</span>
+        <span class="n">wave</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s">&#39;\d\d&#39;</span><span class="p">,</span> <span class="n">band</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">()</span>
+
     <span class="c">#xlabels</span>
     <span class="n">xlabel</span> <span class="o">=</span> <span class="s">r&#39;$z$&#39;</span>
-    <span class="n">ylabel</span> <span class="o">=</span> <span class="s">r&#39;$\log_{10} ( S_{250} \ [\mathrm{mJy}] )$&#39;</span>
+    <span class="n">ylabel</span> <span class="o">=</span> <span class="s">r&#39;$\log_{10} ( S_{</span><span class="si">%s</span><span class="s">} \ [\mathrm{mJy}] )$&#39;</span> <span class="o">%</span> <span class="n">wave</span>
 
     <span class="c">#output folder and file name</span>
-    <span class="n">output</span> <span class="o">=</span> <span class="s">&quot;{0:&gt;s}FluxRedshiftDist.png&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">out_folder</span><span class="p">)</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">FluxRedshiftDist</span><span class="si">%s</span><span class="s">.png&quot;</span><span class="o">%</span> <span class="p">(</span><span class="n">out_folder</span><span class="p">,</span> <span class="n">wave</span><span class="p">)</span>
 
     <span class="c">#generate the plot</span>
     <span class="n">scatterHistograms</span><span class="p">(</span><span class="n">redshift</span><span class="p">,</span>
@@ -282,7 +289,8 @@
     <span class="n">database</span> <span class="o">=</span> <span class="s">&#39;sams.db&#39;</span>
     <span class="n">out_folder</span> <span class="o">=</span> <span class="n">hm</span> <span class="o">+</span> <span class="s">&#39;/Dropbox/Research/Herschel/plots/flux_dist/&#39;</span>
 
-    <span class="n">plotFluxRedshiftDistribution</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">)</span>
+    <span class="c">#plotFluxRedshiftDistribution(path, database, out_folder)</span>
+    <span class="n">plotFluxRedshiftDistribution</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">out_folder</span><span class="p">,</span> <span class="n">band</span><span class="o">=</span><span class="s">&#39;pacs160_obs&#39;</span><span class="p">)</span>
 </pre></div>
 
           </div>
@@ -307,7 +315,6 @@
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.7.
     </div>
   </body>
 </html>

@@ -1,4 +1,4 @@
-'''
+"""
 Helper functions related to baryonic constrains such as mass functions.
 
 :requires: NumPy
@@ -6,10 +6,10 @@ Helper functions related to baryonic constrains such as mass functions.
 :version: 0.1
 
 :author: Sami-Matias Niemi
-:contact: niemi@stsci.edu
-'''
+:contact: sniemi@unc.edu
+"""
 import os
-import numpy as N
+import numpy as np
 
 #This should be global, as all observational data are in the same place
 #Note however that because the data is in Dropbox the absolute path
@@ -19,9 +19,9 @@ observation_path = os.getenv('HOME') + '/Dropbox/Research/Observations/'
 
 
 def BellBaryonicMassFunction(h=0.7):
-    '''
+    """
     G-derived baryonic mass function using default gas
-    Schecter Function fit parameters
+    Schechter Function fit parameters
     phi* M* Alpha j  (next line formal errors)
     real errors are probably systematic: see Bell et al. 2003 for
     guidance (the errors depend on passband and/or stellar mass)
@@ -29,14 +29,14 @@ def BellBaryonicMassFunction(h=0.7):
       0.000857033    0.0448084    0.0552834  1.45862e+07
     Then we present the V/V_max data points; x   phi  phi-1sig  phi+1sig
 
-    :param h: Hubble parameter
+    :param: h: Hubble parameter
     :type h: float
 
     :note: In Chabrier IMF.
-    '''
-    data = N.loadtxt(observation_path + 'bell/sdss2mass_lf/barymf1.out')
-    m = data[:, 0] - 2.0 * N.log10(h) - 0.15
+    """
+    data = np.loadtxt(observation_path + 'bell/sdss2mass_lf/barymf1.out')
+    m = data[:, 0] - 2.0 * np.log10(h) - 0.15
     phi = data[:, 1] * h ** 3
     phi_low = data[:, 2] * h ** 3
     phi_high = data[:, 3] * h ** 3
-    return m, N.log10(phi), N.log10(phi_low), N.log10(phi_high)
+    return m, np.log10(phi), np.log10(phi_low), np.log10(phi_high)

@@ -5,6 +5,9 @@ Basic image manipulation algorithms such as Gaussian smoothing and free rebinnin
 :requires: SciPy
 
 :author: Sami-Matias Niemi
+:contact: sniemi@unc.edu
+
+:version: 0.1
 """
 import numpy as np
 import scipy.signal as s

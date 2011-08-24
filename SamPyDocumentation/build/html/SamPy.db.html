@@ -63,8 +63,8 @@
 <li><a class="reference internal" href="#module-SamPy.db.MSdata"><tt class="docutils literal"><span class="pre">MSdata</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-SamPy.db.MySQLdbSMN"><tt class="docutils literal"><span class="pre">MySQLdbSMN</span></tt> Module</a></li>
 <li><a class="reference internal" href="#insertsamtablestomysql-module"><tt class="docutils literal"><span class="pre">insertSAMTablesToMySQL</span></tt> Module</a></li>
-<li><a class="reference internal" href="#insertsamtablestosqlite-module"><tt class="docutils literal"><span class="pre">insertSAMTablesToSQLite</span></tt> Module</a></li>
-<li><a class="reference internal" href="#sqlite-module"><tt class="docutils literal"><span class="pre">sqlite</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.db.insertSAMTablesToSQLite"><tt class="docutils literal"><span class="pre">insertSAMTablesToSQLite</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.db.sqlite"><tt class="docutils literal"><span class="pre">sqlite</span></tt> Module</a></li>
 </ul>
 </li>
 </ul>
@@ -141,6 +141,9 @@ Returns the fetched data as an array.</p>
 </div>
 <div class="section" id="module-SamPy.db.MSdata">
 <span id="msdata-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">MSdata</span></tt> Module<a class="headerlink" href="#module-SamPy.db.MSdata" title="Permalink to this headline">¶</a></h2>
+<p>This file contains MillenniumData -class. It can be used  to fetch data from the Millennium Simulation database.</p>
+<p>File also contains a small example.</p>
+<p>Complains to Sami-Matias Niemi (<a class="reference external" href="mailto:sami&#37;&#52;&#48;not&#46;iac&#46;es">sami<span>&#64;</span>not<span>&#46;</span>iac<span>&#46;</span>es</a>)!</p>
 <dl class="class">
 <dt id="SamPy.db.MSdata.MillenniumData">
 <em class="property">class </em><tt class="descclassname">SamPy.db.MSdata.</tt><tt class="descname">MillenniumData</tt><big>(</big><em>sql</em><big>)</big><a class="reference internal" href="_modules/SamPy/db/MSdata.html#MillenniumData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.db.MSdata.MillenniumData" title="Permalink to this definition">¶</a></dt>
@@ -191,11 +194,219 @@ SQL.</p>
 <div class="section" id="insertsamtablestomysql-module">
 <h2><tt class="xref py py-mod docutils literal"><span class="pre">insertSAMTablesToMySQL</span></tt> Module<a class="headerlink" href="#insertsamtablestomysql-module" title="Permalink to this headline">¶</a></h2>
 </div>
-<div class="section" id="insertsamtablestosqlite-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">insertSAMTablesToSQLite</span></tt> Module<a class="headerlink" href="#insertsamtablestosqlite-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.db.insertSAMTablesToSQLite">
+<span id="insertsamtablestosqlite-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">insertSAMTablesToSQLite</span></tt> Module<a class="headerlink" href="#module-SamPy.db.insertSAMTablesToSQLite" title="Permalink to this headline">¶</a></h2>
+<p>This module contains a function that can be used to
+generate an SQLite3 database from ascii files.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a></td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="SamPy.db.insertSAMTablesToSQLite.generateSQLiteDBfromSAMTables">
+<tt class="descclassname">SamPy.db.insertSAMTablesToSQLite.</tt><tt class="descname">generateSQLiteDBfromSAMTables</tt><big>(</big><em>output='sams.db'</em>, <em>fileidentifier='*.dat'</em><big>)</big><a class="reference internal" href="_modules/SamPy/db/insertSAMTablesToSQLite.html#generateSQLiteDBfromSAMTables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.db.insertSAMTablesToSQLite.generateSQLiteDBfromSAMTables" title="Permalink to this definition">¶</a></dt>
+<dd><p>This little function can be used to generate an
+SQLite3 database from Rachel&#8217;s GF output.</p>
+<p>The script will make a table out from each ascii 
+output file. The halo_id and gal_id columns of
+each table are indexed for faster table joining.
+Each index is names as table_id, albeit there
+should be no need to know the name of the index.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>output</strong> (<em>string</em>) &#8211; name of the output file</li>
+<li><strong>fileidentifier</strong> (<em>string</em>) &#8211; string how to identify input data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
-<div class="section" id="sqlite-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">sqlite</span></tt> Module<a class="headerlink" href="#sqlite-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.db.sqlite">
+<span id="sqlite-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">sqlite</span></tt> Module<a class="headerlink" href="#module-SamPy.db.sqlite" title="Permalink to this headline">¶</a></h2>
+<p>This file contains SQLite3 related functions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">NumPy</td>
+</tr>
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+<tr class="field"><th class="field-name">version:</th><td class="field-body">0.1</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="SamPy.db.sqlite.SSFR">
+<tt class="descclassname">SamPy.db.sqlite.</tt><tt class="descname">SSFR</tt><big>(</big><em>mstardot</em>, <em>mstar</em><big>)</big><a class="reference internal" href="_modules/SamPy/db/sqlite.html#SSFR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.db.sqlite.SSFR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log_10(value1 / 10**value2)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Note :</th><td class="field-body">This function can be passed on to slite3 connection</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">mstardot: star formation rate</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">mstar: stellar mass in log10(M_solar)</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">specific star formation rate in Gyr**-1</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.db.sqlite.generateSQLString">
+<tt class="descclassname">SamPy.db.sqlite.</tt><tt class="descname">generateSQLString</tt><big>(</big><em>columns</em>, <em>format</em>, <em>start</em><big>)</big><a class="reference internal" href="_modules/SamPy/db/sqlite.html#generateSQLString"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.db.sqlite.generateSQLString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an SQL string from two vectors that
+describe the name of the column and the format.
+Can be used to assist when generating a string
+to create a new table.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.db.sqlite.get_data_sqlite">
+<tt class="descclassname">SamPy.db.sqlite.</tt><tt class="descname">get_data_sqlite</tt><big>(</big><em>path</em>, <em>db</em>, <em>query</em><big>)</big><a class="reference internal" href="_modules/SamPy/db/sqlite.html#get_data_sqlite"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.db.sqlite.get_data_sqlite" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function can be used to pull out data from an slite3 database. Output is given as
+a numpy array for ease of further processing.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">path: path to the db file, should end with /</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">db: name of the database file</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">query: query to be performed</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">numpy array of data</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.db.sqlite.get_data_sqlitePowerTen">
+<tt class="descclassname">SamPy.db.sqlite.</tt><tt class="descname">get_data_sqlitePowerTen</tt><big>(</big><em>path</em>, <em>db</em>, <em>query</em><big>)</big><a class="reference internal" href="_modules/SamPy/db/sqlite.html#get_data_sqlitePowerTen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.db.sqlite.get_data_sqlitePowerTen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run an SQL query to a database with a custom made function &#8220;toPowerTen&#8221;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">path: path to the SQLite3 database</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">db: name of the SQLite3 database</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">query: valid SQL query</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">all data in a NumPy array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.db.sqlite.get_data_sqliteSMNfunctions">
+<tt class="descclassname">SamPy.db.sqlite.</tt><tt class="descname">get_data_sqliteSMNfunctions</tt><big>(</big><em>path</em>, <em>db</em>, <em>query</em><big>)</big><a class="reference internal" href="_modules/SamPy/db/sqlite.html#get_data_sqliteSMNfunctions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.db.sqlite.get_data_sqliteSMNfunctions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run an SQL query to a database with custom made functions &#8220;toPowerTen&#8221; and &#8220;janskyToMagnitude&#8221;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">path: path to the SQLite3 database</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">db: name of the SQLite3 database</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">query: valid SQL query</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">all data in a NumPy array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.db.sqlite.parseASCIITitle">
+<tt class="descclassname">SamPy.db.sqlite.</tt><tt class="descname">parseASCIITitle</tt><big>(</big><em>filename</em>, <em>strip=True</em><big>)</big><a class="reference internal" href="_modules/SamPy/db/sqlite.html#parseASCIITitle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.db.sqlite.parseASCIITitle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a single line ascii information.
+If strip=True then will remove all dots and replace them with
+empty spaces.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">filename: name of the file to processed</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">strip: a flag whether dots should be stripped from the name</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.db.sqlite.parseColumnNamesSAMTables">
+<tt class="descclassname">SamPy.db.sqlite.</tt><tt class="descname">parseColumnNamesSAMTables</tt><big>(</big><em>filename</em>, <em>commentchar='#'</em>, <em>colnumber=2</em><big>)</big><a class="reference internal" href="_modules/SamPy/db/sqlite.html#parseColumnNamesSAMTables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.db.sqlite.parseColumnNamesSAMTables" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse column names from a text file that follows
+SExtractor format, i.e., columns are specified in
+the beginning of the file. Each column are specified
+in a single line that starts with a comment charachter.
+The line assumed to follow the following format:
+# number name
+For example:
+# 1 the_first_column.
+In the case of the example, the function would return
+a list [&#8216;the_first_column&#8217;,].</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.db.sqlite.toLogTen">
+<tt class="descclassname">SamPy.db.sqlite.</tt><tt class="descname">toLogTen</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="_modules/SamPy/db/sqlite.html#toLogTen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.db.sqlite.toLogTen" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Note :</th><td class="field-body">This function can be passed on to slite3 connection</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">value: can either be a number or a NumPy array</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">Log_10(value)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.db.sqlite.toPowerTen">
+<tt class="descclassname">SamPy.db.sqlite.</tt><tt class="descname">toPowerTen</tt><big>(</big><em>value</em><big>)</big><a class="reference internal" href="_modules/SamPy/db/sqlite.html#toPowerTen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.db.sqlite.toPowerTen" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Note :</th><td class="field-body">This function can be passed on to slite3 connection</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">value: can either be a number or a NumPy array</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body">10**value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 </div>
 
@@ -228,7 +439,6 @@ SQL.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

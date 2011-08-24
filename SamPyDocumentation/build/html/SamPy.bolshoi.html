@@ -59,13 +59,13 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">bolshoi Package</a><ul>
-<li><a class="reference internal" href="#collecthalomasses-module"><tt class="docutils literal"><span class="pre">collecthalomasses</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.bolshoi.collecthalomasses"><tt class="docutils literal"><span class="pre">collecthalomasses</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-SamPy.bolshoi.collecthalomassesThreading"><tt class="docutils literal"><span class="pre">collecthalomassesThreading</span></tt> Module</a></li>
-<li><a class="reference internal" href="#findredshiftsbolshoitrees-module"><tt class="docutils literal"><span class="pre">findRedshiftsBolshoiTrees</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.bolshoi.findRedshiftsBolshoiTrees"><tt class="docutils literal"><span class="pre">findRedshiftsBolshoiTrees</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-SamPy.bolshoi.generateTestPlots"><tt class="docutils literal"><span class="pre">generateTestPlots</span></tt> Module</a></li>
-<li><a class="reference internal" href="#plotmassratios-module"><tt class="docutils literal"><span class="pre">plotMassRatios</span></tt> Module</a></li>
-<li><a class="reference internal" href="#plotdarkmattermf-module"><tt class="docutils literal"><span class="pre">plotdarkmattermf</span></tt> Module</a></li>
-<li><a class="reference internal" href="#plotstellarmf-module"><tt class="docutils literal"><span class="pre">plotstellarmf</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.bolshoi.plotMassRatios"><tt class="docutils literal"><span class="pre">plotMassRatios</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.bolshoi.plotdarkmattermf"><tt class="docutils literal"><span class="pre">plotdarkmattermf</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.bolshoi.plotstellarmf"><tt class="docutils literal"><span class="pre">plotstellarmf</span></tt> Module</a></li>
 <li><a class="reference internal" href="#randomizesubhaloposition-module"><tt class="docutils literal"><span class="pre">randomizeSubhaloPosition</span></tt> Module</a></li>
 </ul>
 </li>
@@ -105,8 +105,30 @@
             
   <div class="section" id="bolshoi-package">
 <h1>bolshoi Package<a class="headerlink" href="#bolshoi-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="collecthalomasses-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">collecthalomasses</span></tt> Module<a class="headerlink" href="#collecthalomasses-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.bolshoi.collecthalomasses">
+<span id="collecthalomasses-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">collecthalomasses</span></tt> Module<a class="headerlink" href="#module-SamPy.bolshoi.collecthalomasses" title="Permalink to this headline">¶</a></h2>
+<p>Collects dark matter halo information from Bolshoi merger tree files.</p>
+<p>This one uses parallel python:
+<a class="reference external" href="http://www.parallelpython.com">http://www.parallelpython.com</a></p>
+<dl class="function">
+<dt id="SamPy.bolshoi.collecthalomasses.findDMhaloes">
+<tt class="descclassname">SamPy.bolshoi.collecthalomasses.</tt><tt class="descname">findDMhaloes</tt><big>(</big><em>file</em>, <em>times</em>, <em>columns</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/collecthalomasses.html#findDMhaloes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.collecthalomasses.findDMhaloes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all dark matter haloes from a given file
+that are in self.times. Capture the data
+that are specified in self.columns.
+Returns a dictionary where each key is a single
+time. Each line of data is a string so it&#8217;s easy
+to write out to a file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.bolshoi.collecthalomasses.writeOutput">
+<tt class="descclassname">SamPy.bolshoi.collecthalomasses.</tt><tt class="descname">writeOutput</tt><big>(</big><em>data</em>, <em>file</em>, <em>times</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/collecthalomasses.html#writeOutput"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.collecthalomasses.writeOutput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the output data to ascii files.
+Each time step is recorded to a single file.
+The filename will contain the output <em>redshift</em></p>
+</dd></dl>
+
 </div>
 <div class="section" id="module-SamPy.bolshoi.collecthalomassesThreading">
 <span id="collecthalomassesthreading-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">collecthalomassesThreading</span></tt> Module<a class="headerlink" href="#module-SamPy.bolshoi.collecthalomassesThreading" title="Permalink to this headline">¶</a></h2>
@@ -164,8 +186,34 @@ The filename will contain the output <em>redshift</em></p>
 </dd></dl>
 
 </div>
-<div class="section" id="findredshiftsbolshoitrees-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">findRedshiftsBolshoiTrees</span></tt> Module<a class="headerlink" href="#findredshiftsbolshoitrees-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.bolshoi.findRedshiftsBolshoiTrees">
+<span id="findredshiftsbolshoitrees-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">findRedshiftsBolshoiTrees</span></tt> Module<a class="headerlink" href="#module-SamPy.bolshoi.findRedshiftsBolshoiTrees" title="Permalink to this headline">¶</a></h2>
+<p>This little module can be used to find redshift information from N-body simulation data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Niemi</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="SamPy.bolshoi.findRedshiftsBolshoiTrees.FindRedshiftInfo">
+<tt class="descclassname">SamPy.bolshoi.findRedshiftsBolshoiTrees.</tt><tt class="descname">FindRedshiftInfo</tt><big>(</big><em>files</em>, <em>columns</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/findRedshiftsBolshoiTrees.html#FindRedshiftInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.findRedshiftsBolshoiTrees.FindRedshiftInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds redshift information from files when the column
+information has been specified.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">files</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">columns</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 <div class="section" id="module-SamPy.bolshoi.generateTestPlots">
 <span id="generatetestplots-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">generateTestPlots</span></tt> Module<a class="headerlink" href="#module-SamPy.bolshoi.generateTestPlots" title="Permalink to this headline">¶</a></h2>
@@ -258,14 +306,119 @@ and label you wish to use for the files.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="plotmassratios-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">plotMassRatios</span></tt> Module<a class="headerlink" href="#plotmassratios-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.bolshoi.plotMassRatios">
+<span id="plotmassratios-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">plotMassRatios</span></tt> Module<a class="headerlink" href="#module-SamPy.bolshoi.plotMassRatios" title="Permalink to this headline">¶</a></h2>
+<p>Plots stellar to dark matter halo mass ratios from Bolshoi and compares the results to Peter&#8217;s curves.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="SamPy.bolshoi.plotMassRatios.main">
+<tt class="descclassname">SamPy.bolshoi.plotMassRatios.</tt><tt class="descname">main</tt><big>(</big><em>redshifts</em>, <em>path</em>, <em>database</em>, <em>output_folder</em>, <em>outfile</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/plotMassRatios.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.plotMassRatios.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Driver function, call this with a path to the data,
+and label you wish to use for the files.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.bolshoi.plotMassRatios.stellarHaloMFRatio">
+<tt class="descclassname">SamPy.bolshoi.plotMassRatios.</tt><tt class="descname">stellarHaloMFRatio</tt><big>(</big><em>path</em>, <em>database</em>, <em>redshifts</em>, <em>output_folder</em>, <em>outfile</em>, <em>xmin=10.0</em>, <em>xmax=14.4</em>, <em>ymin=-3</em>, <em>ymax=-1</em>, <em>nbins=15</em>, <em>h=0.7</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/plotMassRatios.html#stellarHaloMFRatio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.plotMassRatios.stellarHaloMFRatio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots stellar to dark matter halo mass ratios as a function of redshift.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.bolshoi.plotMassRatios.stellarHaloMFRatioMultiPanel">
+<tt class="descclassname">SamPy.bolshoi.plotMassRatios.</tt><tt class="descname">stellarHaloMFRatioMultiPanel</tt><big>(</big><em>path</em>, <em>database</em>, <em>redshifts</em>, <em>output_folder</em>, <em>outfile</em>, <em>xmin=10.0</em>, <em>xmax=14.4</em>, <em>ymin=-3</em>, <em>ymax=-1</em>, <em>nbins=15</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/plotMassRatios.html#stellarHaloMFRatioMultiPanel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.plotMassRatios.stellarHaloMFRatioMultiPanel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots stellar to dark matter halo mass ratios as a function of redshift.</p>
+</dd></dl>
+
 </div>
-<div class="section" id="plotdarkmattermf-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">plotdarkmattermf</span></tt> Module<a class="headerlink" href="#plotdarkmattermf-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.bolshoi.plotdarkmattermf">
+<span id="plotdarkmattermf-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">plotdarkmattermf</span></tt> Module<a class="headerlink" href="#module-SamPy.bolshoi.plotdarkmattermf" title="Permalink to this headline">¶</a></h2>
+<p>Plots a dark matter halo mass function at different
+redshifts. Input data are from the Bolshoi simulation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="SamPy.bolshoi.plotdarkmattermf.compareGalpropzToBolshoiTrees">
+<tt class="descclassname">SamPy.bolshoi.plotdarkmattermf.</tt><tt class="descname">compareGalpropzToBolshoiTrees</tt><big>(</big><em>analyticalData</em>, <em>BolshoiTrees</em>, <em>redshifts</em>, <em>h</em>, <em>outputdir</em>, <em>nvols=18</em>, <em>no_phantoms=True</em>, <em>galid=True</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/plotdarkmattermf.html#compareGalpropzToBolshoiTrees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.plotdarkmattermf.compareGalpropzToBolshoiTrees" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.bolshoi.plotdarkmattermf.plotDMMFfromGalpropz">
+<tt class="descclassname">SamPy.bolshoi.plotdarkmattermf.</tt><tt class="descname">plotDMMFfromGalpropz</tt><big>(</big><em>redshift</em>, <em>h</em>, <em>*data</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/plotdarkmattermf.html#plotDMMFfromGalpropz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.plotdarkmattermf.plotDMMFfromGalpropz" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.bolshoi.plotdarkmattermf.plotDMMFfromGalpropzAnalytical2">
+<tt class="descclassname">SamPy.bolshoi.plotdarkmattermf.</tt><tt class="descname">plotDMMFfromGalpropzAnalytical2</tt><big>(</big><em>redshift</em>, <em>h</em>, <em>*data</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/plotdarkmattermf.html#plotDMMFfromGalpropzAnalytical2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.plotdarkmattermf.plotDMMFfromGalpropzAnalytical2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.bolshoi.plotdarkmattermf.plot_mass_function">
+<tt class="descclassname">SamPy.bolshoi.plotdarkmattermf.</tt><tt class="descname">plot_mass_function</tt><big>(</big><em>redshift</em>, <em>h</em>, <em>no_phantoms</em>, <em>*data</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/plotdarkmattermf.html#plot_mass_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.plotdarkmattermf.plot_mass_function" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="SamPy.bolshoi.plotdarkmattermf.plot_mass_functionAnalytical2">
+<tt class="descclassname">SamPy.bolshoi.plotdarkmattermf.</tt><tt class="descname">plot_mass_functionAnalytical2</tt><big>(</big><em>redshift</em>, <em>h</em>, <em>no_phantoms</em>, <em>*data</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/plotdarkmattermf.html#plot_mass_functionAnalytical2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.plotdarkmattermf.plot_mass_functionAnalytical2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
-<div class="section" id="plotstellarmf-module">
-<h2><tt class="xref py py-mod docutils literal"><span class="pre">plotstellarmf</span></tt> Module<a class="headerlink" href="#plotstellarmf-module" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-SamPy.bolshoi.plotstellarmf">
+<span id="plotstellarmf-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">plotstellarmf</span></tt> Module<a class="headerlink" href="#module-SamPy.bolshoi.plotstellarmf" title="Permalink to this headline">¶</a></h2>
+<p>A few functions to plot stellar mass functions from SAM runs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+<tr class="field"><th class="field-name">version:</th><td class="field-body">0.1</td>
+</tr>
+<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a></td>
+</tr>
+</tbody>
+</table>
+<dl class="function">
+<dt id="SamPy.bolshoi.plotstellarmf.main">
+<tt class="descclassname">SamPy.bolshoi.plotstellarmf.</tt><tt class="descname">main</tt><big>(</big><em>redshifts</em>, <em>path</em>, <em>database</em>, <em>output_folder</em>, <em>outfile</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/plotstellarmf.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.plotstellarmf.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Driver function, call this with a path to the data,
+and label you wish to use for the files.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.bolshoi.plotstellarmf.stellarmassfuncSinglePlot">
+<tt class="descclassname">SamPy.bolshoi.plotstellarmf.</tt><tt class="descname">stellarmassfuncSinglePlot</tt><big>(</big><em>path</em>, <em>database</em>, <em>redshifts</em>, <em>output_folder</em>, <em>outfile</em>, <em>mmin=8.0</em>, <em>nbins=30</em>, <em>nvolumes=15</em>, <em>lowlim=-4.9</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/plotstellarmf.html#stellarmassfuncSinglePlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.plotstellarmf.stellarmassfuncSinglePlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots a stellar mass function and compares to observational data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Note :</th><td class="field-body">this function is horribly written, there several loops that
+are not really needed.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.bolshoi.plotstellarmf.stellarmassfunc_plot">
+<tt class="descclassname">SamPy.bolshoi.plotstellarmf.</tt><tt class="descname">stellarmassfunc_plot</tt><big>(</big><em>path</em>, <em>database</em>, <em>redshifts</em>, <em>output_folder</em>, <em>outfile</em>, <em>mmax=12.5</em>, <em>mmin=8.0</em>, <em>nbins=30</em>, <em>nvolumes=15</em>, <em>lowlim=-4.9</em><big>)</big><a class="reference internal" href="_modules/SamPy/bolshoi/plotstellarmf.html#stellarmassfunc_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.bolshoi.plotstellarmf.stellarmassfunc_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots stellar mass functions as a function of redshift.
+Compares to observations.</p>
+</dd></dl>
+
 </div>
 <div class="section" id="randomizesubhaloposition-module">
 <h2><tt class="xref py py-mod docutils literal"><span class="pre">randomizeSubhaloPosition</span></tt> Module<a class="headerlink" href="#randomizesubhaloposition-module" title="Permalink to this headline">¶</a></h2>
@@ -301,7 +454,6 @@ and label you wish to use for the files.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

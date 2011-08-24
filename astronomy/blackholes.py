@@ -1,4 +1,4 @@
-'''
+"""
 Observational constrains related to black hole masses in galaxies.
 
 :requires: NumPy
@@ -6,10 +6,10 @@ Observational constrains related to black hole masses in galaxies.
 :version: 0.1
 
 :author: Sami-Matias Niemi
-:contact: niemi@stsci.edu
-'''
+:contact: sniemi@unc.edu
+"""
 import os
-import numpy as N
+import numpy as np
 
 #This should be global, as all observational data are in the same place
 #Note however that because the data is in Dropbox the absolute path
@@ -18,23 +18,26 @@ import numpy as N
 observation_path = os.getenv('HOME') + '/Dropbox/Research/Observations/'
 
 def MassesHaeringRix():
-    '''
+    """
     The full data file contains:
-    Galaxy Type M_{bh} mbherrp mbherrm mbhexp Ref sigma
-    L_{bulge} \Upsilon M_bulge Ref dist
+    Galaxy Type :math:'M_{bh}' mbherrp mbherrm mbhexp Ref sigma
+
+    .. math::  L_{bulge} \Upsilon M_bulge Ref dist
+
     :return: bulge mass, black hole mass, ellipticals, spirals, S0s
-    '''
+    """
     file = observation_path + 'haering_rix/table1.dat'
-    data = N.loadtxt(file, comments=';')
-    m_bulge = N.log10(data[:, 10])
-    m_bh = N.log10(data[:, 2] * data[:, 5])
+    data = np.loadtxt(file, comments=';')
+    m_bulge = np.log10(data[:, 10])
+    m_bh = np.log10(data[:, 2] * data[:, 5])
     ellip = data[:, 1] == 0
     s0 = data[:, 1] == 1
     spiral = data[:, 1] == 2
     return m_bulge, m_bh, ellip, spiral, s0
 
+
 def MarconiMassFunction(const=0.362216):
-    '''
+    """
     Marconi et al. BHMF -- columns:
     (1)  Log_{10}[ M_bh / M_sun ]
     (2)  Log_{10}[-1sigma phi(M_bh)]
@@ -47,10 +50,10 @@ def MarconiMassFunction(const=0.362216):
           Log_{10}[Phi] given below
     (4)  log_{10}[+1sigma phi(M_bh)]
 
-    :param constant (float): ?
-    '''
+    :param: constant (float): ?
+    """
     file = observation_path + 'phopkins/rachel_bhmf_data.dat'
-    data = N.loadtxt(file, comments=';')
+    data = np.loadtxt(file, comments=';')
     phi_low = data[:, 1] + const
     phi_med = data[:, 2] + const
     phi_high = data[:, 3] + const

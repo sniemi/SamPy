@@ -1,4 +1,7 @@
-import matplotlib 
+"""
+Generates a plot with filter throughputs.
+"""
+import matplotlib
 matplotlib.use('PDF')
 #matplotlib.use('Agg')
 matplotlib.rc('xtick', labelsize=18) 
@@ -14,7 +17,6 @@ matplotlib.rcParams['legend.fontsize'] = 11
 import matplotlib.transforms 
 from mpl_toolkits.axes_grid.inset_locator import inset_axes
 from mpl_toolkits.axes_grid.inset_locator import mark_inset
-
 import pylab as P
 import glob as g
 import numpy as N

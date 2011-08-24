@@ -22,7 +22,10 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="SamPy v0.1 documentation" href="index.html" /> 
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="resolve Package" href="SamPy.resolve.html" />
+    <link rel="next" title="sandbox Package" href="SamPy.sandbox.html" />
+    <link rel="prev" title="SamPy.resolve.catalogs" href="SamPy.resolve.catalogs.html" /> 
   </head>
   <body>
 
@@ -38,9 +41,17 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.sandbox.html" title="sandbox Package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.resolve.catalogs.html" title="SamPy.resolve.catalogs"
+             accesskey="P">previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
- 
+
+          <li><a href="SamPy.html" >SamPy Package</a> &raquo;</li>
+          <li><a href="SamPy.resolve.html" accesskey="U">resolve Package</a> &raquo;</li> 
       </ul>
     </div>
 
@@ -51,13 +62,22 @@
 <li><a class="reference internal" href="#">SamPy.resolve.misc</a><ul>
 <li><a class="reference internal" href="#module-SamPy.resolve.misc.basicReduction"><tt class="docutils literal"><span class="pre">basicReduction</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-SamPy.resolve.misc.combine"><tt class="docutils literal"><span class="pre">combine</span></tt> Module</a></li>
+<li><a class="reference internal" href="#findslitmaskposition-module"><tt class="docutils literal"><span class="pre">findSlitmaskPosition</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-SamPy.resolve.misc.findslits"><tt class="docutils literal"><span class="pre">findslits</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.resolve.misc.findSlitsDirectImage"><tt class="docutils literal"><span class="pre">findSlitsDirectImage</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.resolve.misc.fluxCalibrateToSDSS"><tt class="docutils literal"><span class="pre">fluxCalibrateToSDSS</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-SamPy.resolve.misc.generateFileLists"><tt class="docutils literal"><span class="pre">generateFileLists</span></tt> Module</a></li>
 <li><a class="reference internal" href="#module-SamPy.resolve.misc.SplitSlicerImages"><tt class="docutils literal"><span class="pre">SplitSlicerImages</span></tt> Module</a></li>
 </ul>
 </li>
 </ul>
 
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.resolve.catalogs.html"
+                        title="previous chapter">SamPy.resolve.catalogs</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.sandbox.html"
+                        title="next chapter">sandbox Package</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/SamPy.resolve.misc.txt"
@@ -342,6 +362,9 @@ in the filelist.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="findslitmaskposition-module">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">findSlitmaskPosition</span></tt> Module<a class="headerlink" href="#findslitmaskposition-module" title="Permalink to this headline">¶</a></h2>
+</div>
 <div class="section" id="module-SamPy.resolve.misc.findslits">
 <span id="findslits-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">findslits</span></tt> Module<a class="headerlink" href="#module-SamPy.resolve.misc.findslits" title="Permalink to this headline">¶</a></h2>
 <p>Fits slit image to a direct image to find x and y positions.</p>
@@ -585,6 +608,221 @@ Draws a rectangle around each slit.</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-SamPy.resolve.misc.findSlitsDirectImage">
+<span id="findslitsdirectimage-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">findSlitsDirectImage</span></tt> Module<a class="headerlink" href="#module-SamPy.resolve.misc.findSlitsDirectImage" title="Permalink to this headline">¶</a></h2>
+<p>Fits slit positions to a direct image to find sky positions and a rotation angle.
+Fits all three slits separately to recover their position on the sky.
+All Inputs should be given in a configuration file, only command line argument
+needed is the name of the configuration file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">SamPy</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">PyFITS</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">NumPy</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">matplotlib</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">SciPy</td>
+</tr>
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:sniemi&#37;&#52;&#48;unc&#46;edu">sniemi<span>&#64;</span>unc<span>&#46;</span>edu</a></td>
+</tr>
+<tr class="field"><th class="field-name">version:</th><td class="field-body">0.2</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage">
+<em class="property">class </em><tt class="descclassname">SamPy.resolve.misc.findSlitsDirectImage.</tt><tt class="descname">FindSlitPositionsInDirectImage</tt><big>(</big><em>configfile</em>, <em>debug</em>, <em>section='DEFAULT'</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findSlitsDirectImage.html#FindSlitPositionsInDirectImage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class can be used to find slit positions in a direct image.
+It fits the slits separately to recover their sky positions.</p>
+<dl class="method">
+<dt id="SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.approxSkyPosition">
+<tt class="descname">approxSkyPosition</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findSlitsDirectImage.html#FindSlitPositionsInDirectImage.approxSkyPosition"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.approxSkyPosition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an approximated sky position for slits.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Note :</th><td class="field-body">this works only if the slits have the same width</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.fitSlitsToDirectImage">
+<tt class="descname">fitSlitsToDirectImage</tt><big>(</big><em>normalize=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findSlitsDirectImage.html#FindSlitPositionsInDirectImage.fitSlitsToDirectImage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.fitSlitsToDirectImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits slits to a direct image to recover their position an orientation.</p>
+<p>By default the counts are not normalized to a peak count, but this can
+be controlled using the optional keyword normalize.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Note :</th><td class="field-body">this is a very slow algorithm because of the insanely many nested
+for loops...</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">dictionary</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.fitSlitsToDirectImage2">
+<tt class="descname">fitSlitsToDirectImage2</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findSlitsDirectImage.html#FindSlitPositionsInDirectImage.fitSlitsToDirectImage2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.fitSlitsToDirectImage2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits slits to a direct image to recover their position an orientation.</p>
+<p>By default the counts are not normalized to a peak count, but this can
+be controlled using the optional keyword normalize.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Note :</th><td class="field-body">this is a very slow algorithm because of the insanely many nested
+for loops...</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body">dictionary</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.generateSlitImages">
+<tt class="descname">generateSlitImages</tt><big>(</big><em>output='slits'</em>, <em>type='.pdf'</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findSlitsDirectImage.html#FindSlitPositionsInDirectImage.generateSlitImages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.generateSlitImages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates diagnostic plots from slit image.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.outputMinima">
+<tt class="descname">outputMinima</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findSlitsDirectImage.html#FindSlitPositionsInDirectImage.outputMinima"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.outputMinima" title="Permalink to this definition">¶</a></dt>
+<dd><p>Outputs the results to a file and also the screen if  debug = True.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.outputShiftedImage">
+<tt class="descname">outputShiftedImage</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findSlitsDirectImage.html#FindSlitPositionsInDirectImage.outputShiftedImage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.outputShiftedImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Outputs a FITS file in which the slits have been shifted
+to the best fitted positions.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.overPlotSlits">
+<tt class="descname">overPlotSlits</tt><big>(</big><em>output='overplottedOriginalsLog'</em>, <em>type='.pdf'</em>, <em>logscale=True</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findSlitsDirectImage.html#FindSlitPositionsInDirectImage.overPlotSlits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.overPlotSlits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overplot the slits to image data. Will overplot both the original slit
+positions and the best fitted position. Will also plot residuals.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Note :</th><td class="field-body">it looks lie the fitted slit positions are in a wrong place in the
+image. Maybe the patch.set_transform is not working as I assume...</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">output, output file name</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">type</td>
+</tr>
+<tr class="field"><th class="field-name">Param :</th><td class="field-body">logscale, whether a log10 should be taken from the image data</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.pickleVars">
+<tt class="descname">pickleVars</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findSlitsDirectImage.html#FindSlitPositionsInDirectImage.pickleVars"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.pickleVars" title="Permalink to this definition">¶</a></dt>
+<dd><p>This simple method pickles all important variables</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.plotMinimalization">
+<tt class="descname">plotMinimalization</tt><big>(</big><em>output='minima'</em>, <em>type='.png'</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findSlitsDirectImage.html#FindSlitPositionsInDirectImage.plotMinimalization"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.plotMinimalization" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a two dimensional map of the minimalization
+for each slit separately.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Note :</th><td class="field-body">When fitting rotation all rotations are plotted on
+top, so the plot may not be that useful.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findSlitsDirectImage.html#FindSlitPositionsInDirectImage.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Driver function, runs all required steps.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.writeDS9RegionFile">
+<tt class="descname">writeDS9RegionFile</tt><big>(</big><em>output='slits.reg'</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findSlitsDirectImage.html#FindSlitPositionsInDirectImage.writeDS9RegionFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.writeDS9RegionFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes a DS9 region file for all the slits.
+Draws a rectangle around each slit.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.resolve.misc.findSlitsDirectImage.processArgs">
+<tt class="descclassname">SamPy.resolve.misc.findSlitsDirectImage.</tt><tt class="descname">processArgs</tt><big>(</big><em>printHelp=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/findSlitsDirectImage.html#processArgs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.findSlitsDirectImage.processArgs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes command line arguments</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-SamPy.resolve.misc.fluxCalibrateToSDSS">
+<span id="fluxcalibratetosdss-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">fluxCalibrateToSDSS</span></tt> Module<a class="headerlink" href="#module-SamPy.resolve.misc.fluxCalibrateToSDSS" title="Permalink to this headline">¶</a></h2>
+<p>This script can be used to flux calibrate an image slicer 2D spectra to SDSS one (of the same target).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">PyfITS</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">NumPy</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">SciPy</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">matplotlib</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">SamPy</td>
+</tr>
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:sniemi&#37;&#52;&#48;unc&#46;edu">sniemi<span>&#64;</span>unc<span>&#46;</span>edu</a></td>
+</tr>
+<tr class="field"><th class="field-name">version:</th><td class="field-body">0.2</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="SamPy.resolve.misc.fluxCalibrateToSDSS.calibrateToSDSS">
+<em class="property">class </em><tt class="descclassname">SamPy.resolve.misc.fluxCalibrateToSDSS.</tt><tt class="descname">calibrateToSDSS</tt><big>(</big><em>configfile</em>, <em>debug</em>, <em>section='DEFAULT'</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/fluxCalibrateToSDSS.html#calibrateToSDSS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.fluxCalibrateToSDSS.calibrateToSDSS" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class can be used to flux calibrate an image
+slicer 2D spectra to SDSS one (of the same target).</p>
+<dl class="method">
+<dt id="SamPy.resolve.misc.fluxCalibrateToSDSS.calibrateToSDSS.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/fluxCalibrateToSDSS.html#calibrateToSDSS.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.fluxCalibrateToSDSS.calibrateToSDSS.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Driver function, runs all required steps.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="SamPy.resolve.misc.fluxCalibrateToSDSS.processArgs">
+<tt class="descclassname">SamPy.resolve.misc.fluxCalibrateToSDSS.</tt><tt class="descname">processArgs</tt><big>(</big><em>printHelp=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/fluxCalibrateToSDSS.html#processArgs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.fluxCalibrateToSDSS.processArgs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes command line arguments</p>
+</dd></dl>
+
+</div>
 <div class="section" id="module-SamPy.resolve.misc.generateFileLists">
 <span id="generatefilelists-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">generateFileLists</span></tt> Module<a class="headerlink" href="#module-SamPy.resolve.misc.generateFileLists" title="Permalink to this headline">¶</a></h2>
 <p>Contains a class that can be used to generate file lists from SOAR data</p>
@@ -607,7 +845,9 @@ Draws a rectangle around each slit.</p>
 <dl class="class">
 <dt id="SamPy.resolve.misc.generateFileLists.SOARFileLists">
 <em class="property">class </em><tt class="descclassname">SamPy.resolve.misc.generateFileLists.</tt><tt class="descname">SOARFileLists</tt><big>(</big><em>path=None</em>, <em>ext=0</em>, <em>idef='.fits'</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/generateFileLists.html#SOARFileLists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.generateFileLists.SOARFileLists" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generates different file lists</p>
+<dd><p>Generates several different file lists based on different
+identifiers. This class can be useful when reducing data
+with IRAF which requires different file lists as input.</p>
 <dl class="method">
 <dt id="SamPy.resolve.misc.generateFileLists.SOARFileLists.findParams">
 <tt class="descname">findParams</tt><big>(</big><em>params=['PARAM20', 'PARAM21', 'PARAM22']</em><big>)</big><a class="reference internal" href="_modules/SamPy/resolve/misc/generateFileLists.html#SOARFileLists.findParams"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.resolve.misc.generateFileLists.SOARFileLists.findParams" title="Permalink to this definition">¶</a></dt>
@@ -727,14 +967,21 @@ one for each slicer.</p>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.sandbox.html" title="sandbox Package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.resolve.catalogs.html" title="SamPy.resolve.catalogs"
+             >previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
- 
+
+          <li><a href="SamPy.html" >SamPy Package</a> &raquo;</li>
+          <li><a href="SamPy.resolve.html" >resolve Package</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2011, Sami-Matias Niemi.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.5.
     </div>
   </body>
 </html>

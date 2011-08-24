@@ -1,0 +1,248 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.resolve.misc.SplitSlicerImages &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="../../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="../../../../index.html" />
+    <link rel="up" title="Module code" href="../../../index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for SamPy.resolve.misc.SplitSlicerImages</h1><div class="highlight"><pre>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Splits image slicer FITS files to separate file, one for each slice.</span>
+<span class="sd">Adds some information to the FITS header.</span>
+
+<span class="sd">:requires: pyFITS</span>
+
+<span class="sd">:author: Sami-Matias Niemi</span>
+<span class="sd">:contact: sniemi@unc.edu</span>
+
+<span class="sd">:version: 0.1</span>
+
+<span class="sd">:todo: Make a command line argument reader; file id and y cuts (y1 &amp; y2)</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="kn">import</span> <span class="nn">glob</span> <span class="kn">as</span> <span class="nn">g</span>
+<span class="kn">import</span> <span class="nn">pyfits</span> <span class="kn">as</span> <span class="nn">pf</span>
+<span class="kn">import</span> <span class="nn">SamPy.log.Logger</span> <span class="kn">as</span> <span class="nn">lg</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s">&#39;Sami-Matias Niemi&#39;</span>
+
+<div class="viewcode-block" id="SplitSlicerImages"><a class="viewcode-back" href="../../../../SamPy.resolve.misc.html#SamPy.resolve.misc.SplitSlicerImages.SplitSlicerImages">[docs]</a><span class="k">class</span> <span class="nc">SplitSlicerImages</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    This class can be used to split slicer images to separate files.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">logfile</span><span class="o">=</span><span class="s">&#39;splitting.log&#39;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Init</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c">#set up logger</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span> <span class="o">=</span> <span class="n">logfile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="n">lg</span><span class="o">.</span><span class="n">setUpLogger</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_replicateHeader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hdu</span><span class="p">,</span> <span class="nb">input</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Update a header</span>
+
+<span class="sd">        :note: this loses comments, should not be used</span>
+
+<span class="sd">        :param: hdu, the header to be updated</span>
+<span class="sd">        :param: input, input header which is being replicated to hdu</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">keyrejlist</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;SIMPLE&#39;</span><span class="p">,</span> <span class="s">&#39;BITPIX&#39;</span><span class="p">,</span> <span class="s">&#39;NAXIS&#39;</span><span class="p">,</span> <span class="s">&#39;NAXIS1&#39;</span><span class="p">,</span> <span class="s">&#39;NAXIS2&#39;</span><span class="p">,</span> <span class="s">&#39;NAXIS3&#39;</span><span class="p">,</span> <span class="s">&#39;EXTEND&#39;</span><span class="p">]</span>
+        <span class="n">keycopylist</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">input</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">keyrejlist</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">com</span> <span class="ow">in</span> <span class="n">keycopylist</span><span class="p">:</span>
+            <span class="n">hdu</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">input</span><span class="p">[</span><span class="n">k</span><span class="p">])</span><span class="c">#, comment=str(com))</span>
+
+
+<div class="viewcode-block" id="SplitSlicerImages.findFiles"><a class="viewcode-back" href="../../../../SamPy.resolve.misc.html#SamPy.resolve.misc.SplitSlicerImages.SplitSlicerImages.findFiles">[docs]</a>    <span class="k">def</span> <span class="nf">findFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">identifier</span><span class="o">=</span><span class="s">&#39;Ne&#39;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Finds all .fits files that have the identifier in them.</span>
+<span class="sd">        Uses wild cards on both sides of the identifier.</span>
+<span class="sd">        Requires that the file ends with .fits</span>
+
+<span class="sd">        :param: identifier: to match files</span>
+
+<span class="sd">        :return: a list of files matching the identifier</span>
+<span class="sd">        :rtype: list</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">identifier</span> <span class="o">=</span> <span class="n">identifier</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">files</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s">&#39;*{0:&gt;s}*.fits&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">identifier</span><span class="p">))</span>
+
+        <span class="n">numb</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">numb</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Did not find any files, will exit&#39;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="s">&#39;Did not find any files, will exit&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Found {0:d} frames...&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">numb</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span>
+
+</div>
+<div class="viewcode-block" id="SplitSlicerImages.splitFiles"><a class="viewcode-back" href="../../../../SamPy.resolve.misc.html#SamPy.resolve.misc.SplitSlicerImages.SplitSlicerImages.splitFiles">[docs]</a>    <span class="k">def</span> <span class="nf">splitFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filelist</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">splity</span><span class="o">=</span><span class="p">[</span><span class="mi">215</span><span class="p">,</span> <span class="mi">456</span><span class="p">],</span> <span class="nb">id</span><span class="o">=</span><span class="s">&#39;slice&#39;</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Splits all the FITS files in the filelist to three separate files</span>
+<span class="sd">        one for each slicer.</span>
+
+<span class="sd">        :param: fileslist, a list of files to be split</span>
+<span class="sd">        :param: ext, extension of the fits file</span>
+<span class="sd">        :param: splity, y pixel values for splitting</span>
+<span class="sd">        :param: id, name identifier for each slice</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">filelist</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">filelist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span>
+
+        <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="n">filelist</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="nb">file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;.fits&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">fh</span> <span class="o">=</span> <span class="n">pf</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="nb">file</span><span class="p">,</span> <span class="n">ignore_missing_end</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="c">#primary header</span>
+            <span class="n">prihdr</span> <span class="o">=</span> <span class="n">fh</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">header</span>
+
+            <span class="c">#data</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">fh</span><span class="p">[</span><span class="n">ext</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+            <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">fh</span><span class="p">[</span><span class="n">ext</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">splity</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">out</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="nb">id</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;.fits&#39;</span>
+                    <span class="n">prihdr</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;SLICE&#39;</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s">&#39;int 1,2,3 describing the slice&#39;</span><span class="p">)</span>
+                    <span class="n">prihdr</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;YCUT&#39;</span><span class="p">,</span> <span class="s">&#39;[0:</span><span class="si">%i</span><span class="s">)&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">comment</span><span class="o">=</span><span class="s">&#39;y coordinates of the cut&#39;</span><span class="p">)</span>
+                    <span class="n">pf</span><span class="o">.</span><span class="n">writeto</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">data</span><span class="p">[:</span><span class="n">y</span><span class="p">,</span> <span class="p">:],</span> <span class="n">prihdr</span><span class="p">,</span> <span class="n">output_verify</span><span class="o">=</span><span class="s">&#39;ignore&#39;</span><span class="p">)</span>
+                    <span class="c">#make a note to the log</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Writing file </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">out</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">out</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="nb">id</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;.fits&#39;</span>
+                    <span class="n">prihdr</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;SLICE&#39;</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s">&#39;int 1,2,3 describing the slice&#39;</span><span class="p">)</span>
+                    <span class="n">prihdr</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;YCUT&#39;</span><span class="p">,</span> <span class="s">&#39;[</span><span class="si">%i</span><span class="s">:</span><span class="si">%i</span><span class="s">)&#39;</span><span class="o">%</span> <span class="p">(</span><span class="n">splity</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span><span class="p">),</span> <span class="n">comment</span><span class="o">=</span><span class="s">&#39;y coordinates of the cut&#39;</span><span class="p">)</span>
+                    <span class="n">pf</span><span class="o">.</span><span class="n">writeto</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">splity</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">y</span><span class="p">,</span> <span class="p">:],</span> <span class="n">prihdr</span><span class="p">,</span> <span class="n">output_verify</span><span class="o">=</span><span class="s">&#39;ignore&#39;</span><span class="p">)</span>
+                    <span class="c">#make a note to the log</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Writing file </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">out</span><span class="p">)</span>
+
+            <span class="c">#the last slice</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s">&#39;.&#39;</span> <span class="o">+</span> <span class="nb">id</span> <span class="o">+</span> <span class="s">&#39;3.fits&#39;</span>
+            <span class="n">prihdr</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;SLICE&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">comment</span><span class="o">=</span><span class="s">&#39;int 1,2,3 describing the slice&#39;</span><span class="p">)</span>
+            <span class="n">prihdr</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#39;YCUT&#39;</span><span class="p">,</span> <span class="s">&#39;[</span><span class="si">%i</span><span class="s">:</span><span class="si">%i</span><span class="s">]&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[:,</span><span class="mi">0</span><span class="p">])),</span> <span class="n">comment</span><span class="o">=</span><span class="s">&#39;y coordinates of the cut&#39;</span><span class="p">)</span>
+            <span class="n">pf</span><span class="o">.</span><span class="n">writeto</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">y</span><span class="p">:,</span> <span class="p">:],</span> <span class="n">prihdr</span><span class="p">,</span> <span class="n">output_verify</span><span class="o">=</span><span class="s">&#39;ignore&#39;</span><span class="p">)</span>
+            <span class="c">#make a log note</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Writing file </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">out</span><span class="p">)</span>
+
+            <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_outputFileLists</span><span class="p">()</span>
+
+        </div>
+    <span class="k">def</span> <span class="nf">_outputFileLists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idef</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;slice1&#39;</span><span class="p">,</span> <span class="s">&#39;slice2&#39;</span><span class="p">,</span> <span class="s">&#39;slice3&#39;</span><span class="p">]):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Generates file lists for each slice.</span>
+
+<span class="sd">        :note: this is poorly written...</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">for</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">idef</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="nb">id</span><span class="o">+</span><span class="s">&#39;filelist&#39;</span>
+            <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="nb">file</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">:</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="nb">file</span><span class="p">[:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="nb">id</span>
+                <span class="n">fh</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">tmp</span><span class="o">+</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+            <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Writing </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">out</span><span class="p">)</span>
+
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">split</span> <span class="o">=</span> <span class="n">SplitSlicerImages</span><span class="p">()</span>
+    <span class="n">split</span><span class="o">.</span><span class="n">findFiles</span><span class="p">(</span><span class="n">identifier</span><span class="o">=</span><span class="s">&#39;ftbz*.Ne&#39;</span><span class="p">)</span>
+    <span class="n">split</span><span class="o">.</span><span class="n">splitFiles</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../../index.html">home</a>|&nbsp;</li>
+        <li><a href="../../../../search.html">search</a>|&nbsp;</li>
+
+          <li><a href="../../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>
