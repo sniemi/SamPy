@@ -4,7 +4,7 @@ Functions to do Astronomy related unit conversions.
 :requires: NumPy
 :requires: cosmocalc (http://cxc.harvard.edu/contrib/cosmocalc/)
 
-:version: 0.11
+:version: 0.12
 
 :author: Sami Niemi
 :contact: sniemi@unc.edu
@@ -14,12 +14,24 @@ import numpy as np
 from cosmocalc import cosmocalc
 
 
+def angstromToHertz(A):
+    """
+    Converts Angstroms to Hertz.
+
+    :param: A, angstrom, can either be a float or NumPy array
+
+    :return: Hertz
+    :rtype: float or ndarray, depending on the input
+    """
+    return 2.99792458e18 / A
+
+
 def nanomaggiesToJansky(nanomaggies):
     """
     Converts nanomaggies, used for example in SDSS imaging,
     to Janskys.
 
-    :param: nanomaggies, can either be a number of a NumPy array
+    :param: nanomaggies, can either be a float of a NumPy array
 
     :return: Janskys
     :rtype: either a float or ndarray
@@ -33,7 +45,7 @@ def janskyToMagnitude(jansky):
 
     :note: Can be used with SQLite3 database.
 
-    :param jansky: can either be a number or a NumPy array
+    :param jansky: can either be a float or a NumPy array
 
     :return: either a float or NumPy array
     """

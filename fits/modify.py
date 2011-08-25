@@ -25,7 +25,6 @@ def hrebin(imagefile, newx, newy, output='rebinned.fits', ext=0, total=False):
     Based on IDL routine hrebin.pro, but removed some functionality
 
     :todo: remove the pywcs dependency
-    :todo: there might be something wrong how the surface brightness is conserved
 
     :param: imagefile: name of the FITS file to be rebinned
     :param: newx:  size of the new image in the X direction, integer scalar
@@ -35,6 +34,8 @@ def hrebin(imagefile, newx, newy, output='rebinned.fits', ext=0, total=False):
 
     :return: None or updated img and hdr
     """
+    #todo: remove the pywcs dependency
+    #todo: add a routine for exact rebinning, now done with the same
     fh = pf.open(imagefile)
     oldhdr = fh[ext].header
     oldimg = fh[ext].data

@@ -39,7 +39,7 @@ def convolveSpectrum(wave, flux, wave2, throughput):
     wgrid.sort()
     wgrid = np.unique(wgrid)
 
-    #interpolate ion the new grid
+    #interpolate on the new grid
     f = i.interp1d(wave, flux, bounds_error=False, fill_value=0.0)
     fluxg = f(wgrid)
     f = i.interp1d(wave2, throughput, bounds_error=False, fill_value=0.0)

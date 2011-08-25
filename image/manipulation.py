@@ -69,9 +69,9 @@ def frebin(image, nsout, nlout=1, total=False):
             result[i] = np.sum(image[istart:istop + 1]) - frac1 * image[istart] - frac2 * image[istop]
 
         if total:
-            return result / (float(sbox) * lbox)
-        else:
             return result
+        else:
+            return result / (float(sbox) * lbox)
     else:
         #2D case, first bin in second dimension
         temp = np.zeros((nlout, ns))

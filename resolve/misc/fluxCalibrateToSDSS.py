@@ -10,7 +10,7 @@ This script can be used to flux calibrate an image slicer 2D spectra to SDSS one
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
 
-:version: 0.2
+:version: 0.3
 """
 import os, sys, datetime
 import ConfigParser
@@ -19,11 +19,11 @@ import pyfits as pf
 import numpy as np
 import scipy.ndimage.filters as filt
 import scipy.interpolate as interpolate
-#import scipy.optimize as optimize
 from matplotlib import pyplot as plt
 import SamPy.fits.basics as basics
 import SamPy.fitting.fits as ff
-
+import SamPy.image.manipulation as m
+#import scipy.optimize as optimize
 
 __author__ = 'Sami-Matias Niemi'
 
@@ -87,6 +87,8 @@ class calibrateToSDSS():
     def _calculateArea(self):
         """
         Calculates the fiber area and the ratio.
+
+        :note: I doesn't necessarily need the boosting factor, it could be removed.
         """
         self.fitting['FiberArea'] = np.pi*(self.fitting['FiberDiameter'] / 2.)**2
         self.fitting['slitPixels'] = self.fitting['FiberDiameter'] / \
@@ -118,9 +120,18 @@ class calibrateToSDSS():
         """
         Calculates the difference between the derived observed and SDSS spectra.
         Interpolates the SDSS spectra to the same wavelength scale.
+
+        :todo: figure out the interpolation
+
         """
-        interp = interpolate.interp1d(self.fitting['SDSSwave'], self.fitting['SDSSflux'])
-        newflux = interp(self.fitting['obsWavelengths'])
+        #TODO: figure out the interpolation
+        #interp = interpolate.interp1d(self.fitting['SDSSwave'], self.fitting['SDSSflux'])
+        #newflux = interp(self.fitting['obsWavelengths'])
+        ms = (self.fitting['SDSSwave'] >= np.min(self.fitting['obsWavelengths'])) &\
+             (self.fitting['SDSSwave'] <= np.max(self.fitting['obsWavelengths']))
+        newflux = m.frebin(self.fitting['SDSSflux'][ms],
+                           len(self.fitting['obsSpectraConvolved']))#, total=True)
+
         self.fitting['spectraRatio'] = self.fitting['obsSpectraConvolved'] / newflux
         self.fitting['interpFlux'] = newflux
 
@@ -133,7 +144,8 @@ class calibrateToSDSS():
         #TODO: remove the hardcoded lines
         halph = [6660, 6757]
         msk = ~((self.fitting['obsWavelengths'] >= halph[0]) & (self.fitting['obsWavelengths'] <= halph[1])) & \
-              ~((self.fitting['obsWavelengths'] >= 6004) & (self.fitting['obsWavelengths'] <= 6042))
+              ~((self.fitting['obsWavelengths'] >= 6004) & (self.fitting['obsWavelengths'] <= 6042)) & \
+              ~((self.fitting['obsWavelengths'] >= 6040) & (self.fitting['obsWavelengths'] <= 6068))
         self.fitting['mask'] = msk
 
 

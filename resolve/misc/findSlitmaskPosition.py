@@ -16,7 +16,7 @@ the moment three spectra are recorded simultaneously.
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
 
-:version: 0.4
+:version: 0.5
 
 :todo:
  1. Fix the rebinning algorithm so that it conserves flux [DONE]
@@ -120,15 +120,17 @@ class FindSlitmaskPosition():
 
             minwave = np.min(xps)
             maxwave = np.max(xps)
-            width = maxwave - minwave
+            deltal = maxwave - minwave
+            #width = convert.angstromToHertz(minwave) - convert.angstromToHertz(maxwave)
 
             #go through the spectrum line by line
             out = []
             for i, f in enumerate(spectrum):
                 res = flux.convolveSpectrum(xps, f, wave, thr)
-                #convert to Jansky
-                #TODO: ad hoc 5e3 term, need to do this right!!!
-                tmp = res['flux'] / (2.99792458e18 / width) / (1e-23) * 4e3
+                #convert to micro Jansky
+                tmp = res['flux'] * deltal**2 * 3.3356409e4 * 1e6
+                #tmp = res['flux'] / width * 1e23
+
                 if tmp < 0.0:
                     tmp = 0.0
                 out.append(tmp)
@@ -167,12 +169,15 @@ class FindSlitmaskPosition():
         This method performs several tasks:
          * 1. trims the image (optional, depends on self.cutout)
          * 2. supersamples the original image by a given factor
-         * 3. rotates the image by a -POSANGLE
+         * 3. rotates the image by a POSANGLE
          * 4. gets the plate scale from the rotated header
 
         :param: ext, FITS extension
         :param: factor, the supersampling factor
         """
+        #set rotation
+        self.direct['rotation'] = self.slits['mid']['POSANGLE']
+
         #load images
         fh = pf.open(self.dirfile)
         self.direct['originalHeader0'] = fh[ext].header
@@ -202,28 +207,37 @@ class FindSlitmaskPosition():
             file = self.dirfile
 
         #super sample
-        xnew = int(shape[1] * self.direct['factor'])
-        ynew = int(shape[0] * self.direct['factor'])
-        imgS, hdrS = modify.hrebin(file, xnew, ynew)
-        self.direct['xnew'] = xnew
-        self.direct['ynew'] = ynew
-        self.direct['supersampledImage'] = imgS
-        self.direct['supersampledHeader'] = hdrS
-        self.direct['supersampledFile'] = 'rebinned.fits'
+        if self.direct['factor'] != 1:
+            xnew = int(shape[1] * self.direct['factor'])
+            ynew = int(shape[0] * self.direct['factor'])
+            imgS, hdrS = modify.hrebin(file, xnew, ynew, total=True)
+            self.direct['xnew'] = xnew
+            self.direct['ynew'] = ynew
+            self.direct['supersampledImage'] = imgS
+            self.direct['supersampledHeader'] = hdrS
+            self.direct['supersampledFile'] = 'rebinned.fits'
+        else:
+            self.direct['xnew'] = int(shape[1])
+            self.direct['ynew'] = int(shape[0])
+            self.direct['supersampledImage'] = img
+            self.direct['supersampledHeader'] = self.direct['originalHeader0']
+            self.direct['supersampledFile'] = self.dirfile
 
-        #make the rotation to the supersampled image
-        self.direct['rotation'] = self.slits['mid']['POSANGLE']
-        imgR, hdrR = modify.hrot('rebinned.fits', self.direct['rotation'], xc=None, yc=None)
+        #make a rotation
+        imgR, hdrR = modify.hrot(self.direct['supersampledFile'],
+                                 self.direct['rotation'],
+                                 xc=None,
+                                 yc=None)
         self.direct['rotatedImage'] = imgR
         self.direct['rotatedHeader'] = hdrR
         self.direct['rotatedFile'] = 'rotated.fits'
 
-        #convert the images from nanomaggies to Janskys and remove values < 0.0
-        self.direct['originalImage'] = convert.nanomaggiesToJansky(self.direct['originalImage'])
+        #convert the images from nanomaggies to micro Janskys and remove values < 0.0
+        self.direct['originalImage'] = convert.nanomaggiesToJansky(self.direct['originalImage']) * 1e6
         #self.direct['originalImage'][self.direct['originalImage'] < 0.0] = 0.0
-        self.direct['supersampledImage'] = convert.nanomaggiesToJansky(self.direct['supersampledImage'])
+        self.direct['supersampledImage'] = convert.nanomaggiesToJansky(self.direct['supersampledImage']) * 1e6
         #self.direct['supersampledImage'][self.direct['supersampledImage'] < 0.0] = 0.0
-        self.direct['rotatedImage'] = convert.nanomaggiesToJansky(self.direct['rotatedImage'])
+        self.direct['rotatedImage'] = convert.nanomaggiesToJansky(self.direct['rotatedImage']) * 1e6
         #self.direct['rotatedImage'][self.direct['rotatedImage'] < 0.0] = 0.0
 
         #WCS info
@@ -531,8 +545,8 @@ class FindSlitmaskPosition():
         #throughput of a slit
         model = np.array([])
         for vals in self.slits.values():
-            #must rebin/interpolate to the right scale
-            new = m.frebin(vals['profile'], int(vals['height']))#, total=True)
+            #must rebin/interpolate to the right scale, conserve surface flux
+            new = m.frebin(vals['profile'], int(vals['height']), total=True)
             model = np.append(model, new)
             self.fitting[vals['name']] = new
 
@@ -671,6 +685,7 @@ class FindSlitmaskPosition():
             ax.plot(self.fitting[slit], label=slit)
         plt.xlim(0, ax.get_xlim()[1])
         plt.ylim(0, ax.get_ylim()[1])
+        plt.ylabel('Flux [mJy]')
         plt.legend(shadow=True, fancybox=True, loc='best')
         plt.savefig('ModelProfile.pdf')
         plt.close()
@@ -689,6 +704,7 @@ class FindSlitmaskPosition():
         plt.legend(shadow=True, fancybox=True, loc='best')
         plt.xlim(0, ax.get_xlim()[1])
         plt.ylim(0, ax.get_ylim()[1])
+        plt.ylabel('Flux [mJy]')
         plt.savefig('MinimaProfile.pdf')
         plt.close()
 
@@ -803,7 +819,7 @@ class FindSlitmaskPosition():
             #what we ultimately need is the coordinates
             #for slit pixels...
             resample = value['pixels']
-            ybin = m.frebin(y, resample, total=True)
+            ybin = m.frebin(y, resample)
 
             #for x, given that it is the slit width
             #we need the mean value
