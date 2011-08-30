@@ -61,7 +61,7 @@ def generateIRAFcopy(scis, arcs, matches, x=[15, 80], out='modifyArcs.cl'):
     fh.close()
 
 
-def findClosestArcs(scis, arcs, tol=5):
+def findClosestArcs(scis, arcs, tol=8):
     """
     Tries to match science frames with arcs
     that have been taken close in time.
@@ -89,14 +89,15 @@ def findClosestArcs(scis, arcs, tol=5):
                 newnumbb = snumb - t
                 for a in arcs[i]:
                     anumb = int(a.split('.')[0][-4:])
-                    if newnumba == anumb:
+                    if newnumba == anumb and len(matcha) < 1:
                         #one could also check the header
                         #to make sure that this is right
                         matcha = a
-                    if newnumbb == anumb:
+                    if newnumbb == anumb and len(matchb) < 1:
+                        #one could also check the header
+                        #to make sure that this is right
                         matchb = a
             out[s] = [matcha, matchb]
-        #print out
     return out
 
 

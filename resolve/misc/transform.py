@@ -1,5 +1,5 @@
 """
-Transforms science data using IRAF.
+Transforms science data to either linear or log scale using IRAF and arc files for dispersion solution.
 Performs both linear and logarithmic transformations.
 The script calls IRAF from the command line as follows::
 
