@@ -1,16 +1,36 @@
 """
+Combines FITS images using the imcombine IRAF task.
+
+The script calls IRAF from the command line as follows::
+
+  cl -0 < command_file.cl
+
+:author: Sami-Matias Niemi
+:contact: sniemi@unc.edu
+
+:version: 0.1
 """
 import glob as g
 import os
 
+
 def chunks(l, n):
-    """ Yield successive n-sized chunks from l.
+    """
+    Yield successive n-sized chunks from l.
     """
     for i in xrange(0, len(l), n):
-        yield l[i:i+n]
+        yield l[i:i + n]
+
 
 def writeCommand(data, outputfile, outfileid='lin'):
     """
+    Writes an IRAF command file.
+
+    :param: data,
+    :param: outputfile, name of the output file
+    :param: outfileid, id either lin or log
+
+    :return: None
     """
     comp = data[0].split('.')
     tm = []
@@ -25,19 +45,20 @@ def writeCommand(data, outputfile, outfileid='lin'):
         if (tmp[1] == comp[1]) & (tmp[2] == comp[2]):
             tm.append(file)
         else:
-            output = tmp[1]+tmp[2]
+            output = tmp[1] + tmp[2]
             fls = ''
             for x in tm:
                 fls += x + ', '
             str = 'imcombine input="%s" output=%s%s ' % (fls[:-2], outfileid, output)
-            str += 'combine=median reject=avsigclip scale=none lthresh=-1000\n\n' 
+            str += 'combine=median reject=avsigclip scale=none lthresh=-1000\n\n'
             fh.write(str)
             tm = [file, ]
             comp = tmp
-    
+
     fh.write('logout')
     fh.close()
 
+    
 if __name__ == '__main__':
     #lin files
     files = g.glob('str_lin*RS*.fits')
