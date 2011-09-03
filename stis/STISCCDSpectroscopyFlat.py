@@ -1,4 +1,4 @@
-'''
+"""
 Creates STIS Spectroscopic pixel-to-pixel flat fields from RAW data.
 Uses spline fits after dust motes, bad pixels, etc. have been masked
 to fit and to remove the low frequency structure. The data are divided
@@ -39,9 +39,8 @@ VERSION HISTORY:
 :contact: niemi@stsci.edu
 
 :todo: For improved median filter, one could use scipy.ndimage.filters.median_filter
-'''
+"""
 import matplotlib
-
 matplotlib.use('PDF')
 matplotlib.rcParams['legend.fontsize'] = 9
 import pyfits as PF
@@ -61,32 +60,32 @@ __author__ = 'Sami-Matias Niemi'
 __version__ = '0.5'
 
 class Findfiles:
-    '''
+    """
     Finds all files that are suitable for making a STIS CCD
     spectroscopy flat field. Searches from input directory
     all files that math the extension.
-    '''
+    """
 
     def __init__(self, input, output, extension='_raw'):
-        '''
+        """
         Note that the detector (CCD) and optical element (G430M)
         has been hard coded to the self.obsmode dictionary.
         :param input: an input directory
         :param output: an output directory
         :param extension: an extension that used used to identify files  
-        '''
+        """
         self.input = input
         self.output = output
         self.extension = extension
         self.obsmode = {'DETECTOR': 'CCD', 'OPT_ELEM': 'G430M'}
 
     def obsMode(self, filelist):
-        '''
+        """
         Checks that the observation mode matches.
         Uses the hard coded self.obsmode dictionary.
         :param filelist: a list of file names to be tested.
         :return: a list of file names that are of right obsmode.  
-        '''
+        """
         ok = True
         out = []
         for file in filelist:
@@ -99,12 +98,12 @@ class Findfiles:
         return out
 
     def gain(self, filelist, value):
-        '''
+        """
         Checks that gain equals the given value.
         :param filelist: a list of file names to be tested
         :param value: a gain value that the gain have to match
         :return: a list of file names that match the gain value
-        '''
+        """
         out = []
         for file in filelist:
             hdr = PF.open(self.input + file)[0].header
@@ -113,13 +112,13 @@ class Findfiles:
         return out
 
     def apertureFilter(self, filelist, aperture='50CCD', filter='Clear'):
-        '''
+        """
         Checks that the aperture and filer matches the given ones.
         :param filelist: a list of file names to be tested.
         :param aperture: an aperture that the tested file must match.
         :param filter: a filter that the tested file must match.
         :return: a list of file names that match the aperture and filter.
-        '''
+        """
         #another possibility could be:
         #APER_FOV= '50x50           '   / aperture field of view
         out = []
@@ -131,12 +130,12 @@ class Findfiles:
         return out
 
     def cenwave(self, filelist, cenwave=5216):
-        '''
+        """
         Checks that the central wavelength matches.
         :param filelist: a list of file names to be tested.
         :param cenwave: a central wavelength that the test file must match.
         :return a list of file names that match the aperture and filter.
-        '''
+        """
         out = []
         for file in filelist:
             hdr = PF.open(self.input + file)[0].header
@@ -145,7 +144,7 @@ class Findfiles:
         return out
 
     def slitwheelPos(self, filelist, positions, nominal, tolerance=1):
-        '''
+        """
         Finds and matches all slit wheel positions present in files listed in
         the filelist variable.
         :param filelist: a list of file names to be tested.
@@ -153,7 +152,7 @@ class Findfiles:
         :param nominal: the nominal slit wheel position.      
         :param tolerance: tolerance of slit wheel steps.
         :return: dictionary of slit wheel positions and file names  
-        '''
+        """
         #find all OSWABPS
         tmp = []
         pos = {}
@@ -168,12 +167,12 @@ class Findfiles:
         return pos
 
     def writeToASCIIFile(self, data, outputfile, header=''):
-        '''
+        """
         Writes file lists to an ASCII file. Each line contains one filename.
         :param data: data that is written to the ascii file.
         :param outputfile: the name of the output file.
         :param header: header that is included to the beginning of the ascii file.
-        '''
+        """
         try:
             file = open(self.input + outputfile, 'w')
         except:
@@ -187,28 +186,28 @@ class Findfiles:
 
 
 class PrepareFiles:
-    '''
+    """
     Prepares files; modified header keywords.
-    '''
+    """
 
     def __init__(self, input, output):
-        '''
+        """
         Note that switches dictionary has been hard coded.
         It currently only changes the CRCORR keyword.
         :param input: an input directory
         :param output: an output directory
-        '''
+        """
         self.input = input
         self.output = output
         self.switches = {'CRCORR': 'PERFORM'}
 
     def changeKeywords(self, filelist):
-        '''
+        """
         Modifies header keywords of FITS files.
         Switches self.switches keywords.
         :param filelist: a list of filenames 
         :todo: This will now crash if the keyword is not present...
-        '''
+        """
         for file in filelist:
             fh = PF.open(file, 'update')
             hdr0 = fh[0].header
@@ -218,21 +217,21 @@ class PrepareFiles:
 
 
 class MakeFlat:
-    '''
+    """
     This class can be used to generate a pixel-to-pixel flat field 
     from given data files.
-    '''
+    """
 
     def __init__(self, input, output):
-        '''
+        """
         :param input: an input directory
         :param output: an output directory  
-        '''
+        """
         self.input = input
         self.output = output
 
     def _plot50(self, flat, xcen, ycen, rad, fname):
-        '''
+        """
         This function can be used to plot flat file images where
         dust motes have been circled. Will save the output figure
         to fname.pdf.
@@ -240,7 +239,7 @@ class MakeFlat:
         :param xcen: a list of x central coordinates for dust motes
         :param ycen: a list of y central coordinates for dust motes
         :param rad: a list of radius for dust motest   
-        '''
+        """
 
         ax = PL.subplot(111)
         b = PL.gca()
@@ -264,7 +263,7 @@ class MakeFlat:
         PL.close()
 
     def _plotFit(self, xpx, img, fit, good, i, xnod, ynod, fitynods, tmp, file, column=True):
-        '''
+        """
         Plot Spline fit and the data for comparison for ith row or column.
         Will also plot median filtered data for columns. The plot is saved 
         to file_tmp_Fit.pdf
@@ -279,7 +278,7 @@ class MakeFlat:
         :param tmp: median filtered count values
         :param file: the name of the file that is being plotted
         :param column: Boolean to define whether this is a column or row fit plot        
-        '''
+        """
 
         fig = PL.figure()
         #P.title(file)
@@ -331,7 +330,7 @@ class MakeFlat:
         PL.close()
 
     def _badspot(self, mask, opt_elem):
-        '''
+        """
         Loads SMNdust.stis file that holds information about dust speck
         locations and sizes. It will return a mask where all dust motes
         have been marked. The function can be used for both L and M-modes
@@ -342,7 +341,7 @@ class MakeFlat:
         areas such as dust motes that should not be used for fitting.
         :param opt_elem: optical element that was used; L or M -mode
         :return: updated mask, x_centre, y_centre, radius of dust specks
-        '''
+        """
         # mask indices
         y, x = N.indices(mask.shape)
 
@@ -373,7 +372,7 @@ class MakeFlat:
         return mask, xcen, ycen, rad
 
     def _fitfunc(self, x, ynodes):
-        '''
+        """
         The function that is being fitted.
         This can be changed to whatever function if needed.
         Note that ynodes can then be a list of parameters.
@@ -384,11 +383,11 @@ class MakeFlat:
         :param ynodes: y position of the nodes
 
         :return: 1-D evaluated B-spline value at x.
-        '''
+        """
         return I.splev(x, I.splrep(self.xnodes, ynodes, k=3))
 
     def _errfunc(self, ynodes, x, y):
-        '''
+        """
         Error function; simply _fitfunction - ydata
 
         :param ynodes: y position of the nodes to be evaluated
@@ -396,11 +395,11 @@ class MakeFlat:
         :param y: y positions
 
         :return: Spline evaluated y positions - ydata
-        '''
+        """
         return self._fitfunc(x, ynodes) - y
 
     def _splinefitScipy(self, x, y, ynodes, xnodes):
-        '''
+        """
         Return the point which minimizes the sum of squares of M (non-linear)
         equations in N unknowns given a starting estimate, x0, using a
         modification of the Levenberg-Marquardt algorithm.
@@ -411,12 +410,12 @@ class MakeFlat:
         :param xnodes:
 
         :return: fitted parameters, error/success message
-        '''
+        """
         self.xnodes = xnodes
         return O.leastsq(self._errfunc, ynodes, args=(x, y))
 
     def _cspline(self, x, y, t):
-        '''
+        """
         Uses interpolation to find the B-spline representation of 1-D curve.
 
         :param x: x position
@@ -424,13 +423,13 @@ class MakeFlat:
         :param t: position in which to evaluate the B-spline
         
         :return: interpolated y position of the B-sline
-        '''
+        """
         tck = I.splrep(x, y)
         y2 = I.splev(t, tck)
         return y2
 
     def _writeCombinedFits(self, flat, err, dq, head, template, raws, output):
-        '''
+        """
         Writes the combined flat field FITS to a file.
         Uses old reference files as a template.
         :param flat: flat field array
@@ -440,7 +439,7 @@ class MakeFlat:
         :param template: template file to be used
         :param raws: list of raw file names that were used to create the flat
         :param output: name of the output file      
-        '''
+        """
         #output = self.output + output  
         fh = PF.open(template)
 
@@ -515,7 +514,7 @@ class MakeFlat:
         print '%s has been written...' % output
 
     def _writeMakeFITS(self, file, flat, err, eps, sm, i, output):
-        '''
+        """
         Writes the output to a FITS file. This is an intermediate product
         so the header is not CDBS compatible.
         :param file: the name of the file that is being used as a template
@@ -525,7 +524,7 @@ class MakeFlat:
         :param sm: total number of images
         :param i: total number of observations
         :param output: name of the output file name  
-        '''
+        """
         output = self.output + output
 
         ifd = PF.open(file)
@@ -602,11 +601,11 @@ class MakeFlat:
             ofd.writeto(output + 'SMN.fits')
 
     def _doStats(self, data, mode):
-        '''
+        """
         Calculates and prints out some basic statistics from the given data.
         :param data: data array from which the statistics is being calculated.
         :param mode: a string related to the mode (L/M)s
-        '''
+        """
         #whole data
         std = N.std(data)
         mean = N.mean(data - 1.)
@@ -631,7 +630,7 @@ class MakeFlat:
         print '%15s%15.5f%16.6f%14.6f' % ('Centre', means + 1., stds, rmss)
 
     def _fitflat(self, hdr, img, mask, nodes, col=False, nomed=False, file='name'):
-        '''
+        """
         Creates spline fitted flat field array and masked image.
         Uses img for the data and nodes for the number of nodes.
         This function can be used to fit both column and row direction.
@@ -644,7 +643,7 @@ class MakeFlat:
         :param nomed: boolean, median (True) or no median filtering (False, default)
         :param file: the name of the plot file 
         :return: Spline fitted data, img / fit, mask
-        '''
+        """
 
         s = N.shape(img)
         nx = s[0]
@@ -738,25 +737,25 @@ class MakeFlat:
 
 
     def crreject(self, filelist):
-        '''
+        """
         Runs CalSTIS for each file in the file list.
         Uses default settings.
         :param filelist: list of files being run through CalSTIS.
-        '''
+        """
         for file in filelist:
             stis.calstis(file)
 
     def combine(self, filelist, output, crsigmas='20'):
-        '''
+        """
         Combines all files in filelist using ocrreject PyRAF task.
         :param filelist: filelist being processed 
         :param output:  output list
         :param crsigmas: cosmic ray rejection sigma clipping value
-        '''
+        """
         stis.ocrreject(filelist, output=output, crsigmas=crsigmas)
 
     def make50CDD(self, files, colnodes=25, rownodes=13):
-        '''
+        """
         Makes a flat field from all files that has been taken with clear
         aperture (50CCD). Each input file will write an output FITS file.
         Makes also plots out from the data that has been fitted and masked
@@ -766,7 +765,7 @@ class MakeFlat:
         :param rownodes: the number of nodes used for row fits (default = 13)  
         :summary: Creates a flat field
         :todo: rewrite away from IDL
-        '''
+        """
         files = [self.output + x for x in files]
 
         for i, file in enumerate(files):
@@ -802,8 +801,8 @@ class MakeFlat:
 
             onemsk[:, 0] = 0                   # general STIS bad 1st and last col
             onemsk[:, 1023] = 0
-            onemsk[994:1024,:] = 0            # "vignetted" at top indep of slit pos.
-            onemsk[0,:] = 0                   # first row
+            onemsk[994:1024, :] = 0            # "vignetted" at top indep of slit pos.
+            onemsk[0, :] = 0                   # first row
             onemsk[0:5, 253:259] = 0           # 99feb4 hole made vert stripe at bott.
             onemsk[14:16, 768:770] = 0         # ... for D2 G230LB, 50CCD
 
@@ -884,7 +883,7 @@ class MakeFlat:
             self._writeMakeFITS(file, flat, err, eps, sm, i, fname[i])
 
     def make52X2(self, files, slitpos, colnodes=13, rownodes=13):
-        '''
+        """
         Makes a flat field from all files that has been taken with a long slit
         in the light path (52x2). Each input file will write an output FITS file.
         Makes also plots out from the data that has been fitted and masked
@@ -898,7 +897,7 @@ class MakeFlat:
         :summary: Creates a flat field
 
         :todo: rewrite away from IDL. Get rid off the hard coded file names
-        '''
+        """
         files = [self.output + x for x in files]
 
         for i, file in enumerate(files):
@@ -1044,7 +1043,7 @@ class MakeFlat:
             self._writeMakeFITS(file, flat, err, eps, sm, i, fname[i])
 
     def CombineFinalFlatS(self, list, headerl, headerm, raws):
-        '''
+        """
         Combines all idicidual images to form a single combined flat field for 
         each given mode. Handles flux, error and data quality arrays. Images are
         combined using weights for each pixel that are calculated using the error
@@ -1058,7 +1057,7 @@ class MakeFlat:
         :param headerl: a header for the l-mode combined image
         :param headerm: a header for the m-mode combined image
         :param raws: list of raw file names that were used to create the flat
-        '''
+        """
         #hard coded value
         siglim = 5
 
@@ -1104,7 +1103,7 @@ class MakeFlat:
                     igg = N.where(N.abs(fluxall[iy, ix, ig] - center) < siglim * std)
                     if len(igg[0]) >= 1:
                         cov = N.where(((flagsall[iy, ix, :] == 0) & (errorall[iy, ix, :] > 0.0)) & (
-                        N.abs(fluxall[iy, ix, :] - center) < siglim * std))
+                            N.abs(fluxall[iy, ix, :] - center) < siglim * std))
                         added_flux[iy, ix] = N.sum(fluxall[iy, ix, cov] / errorall[iy, ix, cov] ** 2) / N.sum(
                             1. / errorall[iy, ix, cov] ** 2)
                         added_error[iy, ix] = N.sqrt(1. / N.sum(1. / errorall[iy, ix, cov] ** 2))
@@ -1161,11 +1160,11 @@ class MakeFlat:
         self._doStats(flat_m, 'M-mode Flat')
 
     def MakeCopies(self):
-        '''
+        """
         Copies newly created p-flat files over to a new directory and
         names the new files appropriately which are appropriate for CDBS
         delivery.
-        '''
+        """
         outdir = './final/'
 
         try:
@@ -1199,10 +1198,10 @@ class MakeFlat:
 
 
 def process_args(just_print_help=False):
-    '''
+    """
     Processes and parses the command line arguments.
     Will also print help and the version of the script if requested.
-    '''
+    """
     from optparse import OptionParser
 
     usage = 'usage: %prog [options]'
@@ -1240,20 +1239,20 @@ def process_args(just_print_help=False):
 
 
 def checkZeroArguments(opts):
-    '''
+    """
     Checks if no command line arguments were given.
     :param opts: option parser instance. 
     :requires: True or False
-    '''
+    """
     for x in opts.__dict__:
         if opts.__dict__[x] is not None:
             return True
     return False
 
 if __name__ == '__main__':
-    '''
+    """
     The main program starts here.
-    '''
+    """
     #HARDCODED values:
     slitpos = [-7300, -3640, 0, 3640, 7300]     #slit wheel positions
 

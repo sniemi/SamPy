@@ -23,9 +23,8 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
-    <link rel="up" title="SamPy Package" href="SamPy.html" />
-    <link rel="next" title="statistics Package" href="SamPy.statistics.html" />
-    <link rel="prev" title="smakced Package" href="SamPy.smakced.html" /> 
+    <link rel="next" title="SamPy.smnIO.findFiles" href="SamPy.smnIO.findFiles.html" />
+    <link rel="prev" title="SamPy.smakced.getSmackedDataNoNumpy" href="SamPy.smakced.getSmackedDataNoNumpy.html" /> 
   </head>
   <body>
 
@@ -42,38 +41,25 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="SamPy.statistics.html" title="statistics Package"
+          <a href="SamPy.smnIO.findFiles.html" title="SamPy.smnIO.findFiles"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="SamPy.smakced.html" title="smakced Package"
+          <a href="SamPy.smakced.getSmackedDataNoNumpy.html" title="SamPy.smakced.getSmackedDataNoNumpy"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
-
-          <li><a href="SamPy.html" accesskey="U">SamPy Package</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">smnIO Package</a><ul>
-<li><a class="reference internal" href="#module-SamPy.smnIO.IO"><tt class="docutils literal"><span class="pre">IO</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-SamPy.smnIO.findFiles"><tt class="docutils literal"><span class="pre">findFiles</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-SamPy.smnIO.read"><tt class="docutils literal"><span class="pre">read</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-SamPy.smnIO.sextutils"><tt class="docutils literal"><span class="pre">sextutils</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-SamPy.smnIO.write"><tt class="docutils literal"><span class="pre">write</span></tt> Module</a></li>
-</ul>
-</li>
-</ul>
-
   <h4>Previous topic</h4>
-  <p class="topless"><a href="SamPy.smakced.html"
-                        title="previous chapter">smakced Package</a></p>
+  <p class="topless"><a href="SamPy.smakced.getSmackedDataNoNumpy.html"
+                        title="previous chapter">SamPy.smakced.getSmackedDataNoNumpy</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="SamPy.statistics.html"
-                        title="next chapter">statistics Package</a></p>
+  <p class="topless"><a href="SamPy.smnIO.findFiles.html"
+                        title="next chapter">SamPy.smnIO.findFiles</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/SamPy.smnIO.txt"
@@ -102,452 +88,26 @@
             
   <div class="section" id="smnio-package">
 <h1>smnIO Package<a class="headerlink" href="#smnio-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-SamPy.smnIO.IO">
-<span id="io-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">IO</span></tt> Module<a class="headerlink" href="#module-SamPy.smnIO.IO" title="Permalink to this headline">¶</a></h2>
-<p>IO class for COS instrument handbook plotting.
-Can be used to read FITS image and tabular data.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
 <tbody valign="top">
-<tr class="field"><th class="field-name">date:</th><td class="field-body">Created on Mar 18, 2009</td>
+<tr><td><a class="reference internal" href="SamPy.smnIO.findFiles.html#module-SamPy.smnIO.findFiles" title="SamPy.smnIO.findFiles"><tt class="xref py py-obj docutils literal"><span class="pre">findFiles</span></tt></a></td>
+<td>The functions of this module can be used to find files.</td>
 </tr>
-<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+<tr><td><a class="reference internal" href="SamPy.smnIO.IO.html#module-SamPy.smnIO.IO" title="SamPy.smnIO.IO"><tt class="xref py py-obj docutils literal"><span class="pre">IO</span></tt></a></td>
+<td>IO class for COS instrument handbook plotting.</td>
 </tr>
-<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a></td>
+<tr><td><a class="reference internal" href="SamPy.smnIO.read.html#module-SamPy.smnIO.read" title="SamPy.smnIO.read"><tt class="xref py py-obj docutils literal"><span class="pre">read</span></tt></a></td>
+<td>This file contains some helper functions to parse different data files.</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.smnIO.write.html#module-SamPy.smnIO.write" title="SamPy.smnIO.write"><tt class="xref py py-obj docutils literal"><span class="pre">write</span></tt></a></td>
+<td>This file contains functions that can be used to store data</td>
 </tr>
 </tbody>
 </table>
-<dl class="class">
-<dt id="SamPy.smnIO.IO.COSHBIO">
-<em class="property">class </em><tt class="descclassname">SamPy.smnIO.IO.</tt><tt class="descname">COSHBIO</tt><big>(</big><em>path</em>, <em>output</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.IO.COSHBIO" title="Permalink to this definition">¶</a></dt>
-<dd><p>IO class for COS instrument handbook plotting.
-Can be used to read FITS image and tabular data as well as ASCII data.
-As the path of the files is given in the constructor, this is only useful
-if the data is in same folder... (should be changed?)</p>
-<dl class="method">
-<dt id="SamPy.smnIO.IO.COSHBIO.ASCIITable">
-<tt class="descname">ASCIITable</tt><big>(</big><em>file</em>, <em>comment='#'</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.IO.COSHBIO.ASCIITable" title="Permalink to this definition">¶</a></dt>
-<dd><p>A simple function for reading data from a file into a table.
-Comment lines and empty lines are skipped.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="SamPy.smnIO.IO.COSHBIO.FITSImage">
-<tt class="descname">FITSImage</tt><big>(</big><em>file</em>, <em>extension</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.IO.COSHBIO.FITSImage" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads FITS image data to an array.
-Returns data as a NumPy array.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="SamPy.smnIO.IO.COSHBIO.FITSTable">
-<tt class="descname">FITSTable</tt><big>(</big><em>file</em>, <em>extension=1</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.IO.COSHBIO.FITSTable" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads FITS table to an array...
-Returns data as a numpy array</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="SamPy.smnIO.IO.COSHBIO.Header">
-<tt class="descname">Header</tt><big>(</big><em>file</em>, <em>extension</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.IO.COSHBIO.Header" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.smnIO.IO.COSHBIO.HeaderKeyword">
-<tt class="descname">HeaderKeyword</tt><big>(</big><em>file</em>, <em>extension</em>, <em>keyword</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.IO.COSHBIO.HeaderKeyword" title="Permalink to this definition">¶</a></dt>
-<dd><p>A simple function to pull out a header keyword value.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="SamPy.smnIO.IO.COSHBIO.writeToASCIIFile">
-<tt class="descname">writeToASCIIFile</tt><big>(</big><em>data</em>, <em>outputfile</em>, <em>header=''</em>, <em>separator=' '</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.IO.COSHBIO.writeToASCIIFile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Writes data to an ASCII file.</p>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-SamPy.smnIO.findFiles">
-<span id="findfiles-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">findFiles</span></tt> Module<a class="headerlink" href="#module-SamPy.smnIO.findFiles" title="Permalink to this headline">¶</a></h2>
-<p>The functions of this module can be used to find files.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
-</tr>
-<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a></td>
-</tr>
-</tbody>
-</table>
-<dl class="function">
-<dt id="SamPy.smnIO.findFiles.findFitsFiles">
-<tt class="descclassname">SamPy.smnIO.findFiles.</tt><tt class="descname">findFitsFiles</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.smnIO.findFiles.findFitsFiles" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a list of FITS files in the current working directory.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">a list of FITS files</td>
-</tr>
-<tr class="field"><th class="field-name">Return type:</th><td class="field-body">list</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
-<div class="section" id="module-SamPy.smnIO.read">
-<span id="read-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">read</span></tt> Module<a class="headerlink" href="#module-SamPy.smnIO.read" title="Permalink to this headline">¶</a></h2>
-<p>This file contains some helper functions to parse different data files.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
-</tr>
-<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:sniemi&#37;&#52;&#48;unc&#46;edu">sniemi<span>&#64;</span>unc<span>&#46;</span>edu</a></td>
-</tr>
-<tr class="field"><th class="field-name">version:</th><td class="field-body">0.1</td>
-</tr>
-<tr class="field"><th class="field-name">requires:</th><td class="field-body">NumPy</td>
-</tr>
-<tr class="field"><th class="field-name">requires:</th><td class="field-body">SamPy.astronomy.basics</td>
-</tr>
-<tr class="field"><th class="field-name">requires:</th><td class="field-body">SamPy.smnIO.sexutils</td>
-</tr>
-</tbody>
-</table>
-<dl class="function">
-<dt id="SamPy.smnIO.read.GFBasicData">
-<tt class="descclassname">SamPy.smnIO.read.</tt><tt class="descname">GFBasicData</tt><big>(</big><em>path</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.read.GFBasicData" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads Rachel&#8217;s SAMs output data.
-If AB = True then the function converts
-Johnson U, B, V, and K bands to Vega system.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Note :</th><td class="field-body"><p class="first">This is really ineffective way of reading in
-data and should be used only when a rather
-small simulation is being processed.</p>
-</td>
-</tr>
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>path</strong> (<em>string</em>) &#8211; path in which the files are located</li>
-<li><strong>AB</strong> (<em>boolean</em>) &#8211; whether Johnson U, B, V, and K bands are converted to Vega system or not.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.smnIO.read.cPickledData">
-<tt class="descclassname">SamPy.smnIO.read.</tt><tt class="descname">cPickledData</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.read.cPickledData" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads in cPickled data and returns it</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.smnIO.read.readBolshoiDMfile">
-<tt class="descclassname">SamPy.smnIO.read.</tt><tt class="descname">readBolshoiDMfile</tt><big>(</big><em>filename</em>, <em>column</em>, <em>no_phantoms</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.read.readBolshoiDMfile" title="Permalink to this definition">¶</a></dt>
-<dd><p>This little helper function can be used to read
-dark matter halo masses from files produced from
-the merger trees of the Bolshoi simulation.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Param :</th><td class="field-body">filename: name of the file</td>
-</tr>
-<tr class="field"><th class="field-name">Param :</th><td class="field-body">column: which column to grep</td>
-</tr>
-<tr class="field"><th class="field-name">Param :</th><td class="field-body">no_phantoms: which dark matter mass to read</td>
-</tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">dark matter halo masses</td>
-</tr>
-<tr class="field"><th class="field-name">Return type:</th><td class="field-body">NumPy array</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
-<div class="section" id="module-SamPy.smnIO.sextutils">
-<span id="sextutils-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">sextutils</span></tt> Module<a class="headerlink" href="#module-SamPy.smnIO.sextutils" title="Permalink to this headline">¶</a></h2>
-<p>Utilities for parseing SExtractor files</p>
-<p>H. Ferguson - revised 4/23/03 to promote ints to floats if a value
-with a decimal point appears somewhere in the column originally thought
-to be integers</p>
-<p>v2.1 - fails gracefully when the catalog has no sources
-v3.0 - added gettypes to return column types</p>
-<blockquote>
-<ul class="simple">
-<li>create new column names when they are not explictly in the header</li>
-</ul>
-</blockquote>
-<p>v4.0 - added gettypes to return column types
-v4.1 - uses numarray by default
-v4.2 - delete attributed &#8216;l&#8217; (input lines from catalog) before returning
-v4.3 - 1/11/06Added less-offensive alias se_catalog() == sextractor()
-v4.4hf-1/21/06 Fixed bug in creating extra column names when last is a vector
-v4.4vl - V. Laidler added new methods:</p>
-<blockquote>
-<blockquote>
-__len__ returns number of objects in catalog
-__iter__ returns the index of the next row in the catalog
-line(self,i) returns a constructed string containing the ith line
-buildheader returns a constructed header from the hdict</blockquote>
-<dl class="docutils">
-<dt>Added new attribute self.header: contains the header as read in</dt>
-<dd>from the catalog.</dd>
-<dt>Lines that start with &#8216;#&#8217; but are not followed by an integer are</dt>
-<dd>now assumed to be comment lines, which are added to the
-header but otherwise skipped.</dd>
-</dl>
-</blockquote>
-<p>v4.5 - V. Laidler removed Numeric dependence
-v4.6 - V. Laidler converted to numpy
-v5.0 - 7/5/07 Numpy conversion
-v6.0 - V. Laidler: added rw_catalog class, reworked internals to avoid</p>
-<blockquote>
-column name clashes</blockquote>
-<p>v7.0 - S.-M. Niemi: some modifications
-v7.1 - S.-M. Niemi: now supports string columns</p>
-<dl class="function">
-<dt id="SamPy.smnIO.sextutils.getcol">
-<tt class="descclassname">SamPy.smnIO.sextutils.</tt><tt class="descname">getcol</tt><big>(</big><em>col</em>, <em>lines</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.sextutils.getcol" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a column from a SExtractor catalog. Determine the type
-(integer, float, string) and return either an array of that
-type (Int32, Float64) or a list of strings</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.smnIO.sextutils.getcols">
-<tt class="descclassname">SamPy.smnIO.sextutils.</tt><tt class="descname">getcols</tt><big>(</big><em>d</em>, <em>l</em>, <em>*args</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.sextutils.getcols" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get multiple columns from SExtractor list using getcol()</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.smnIO.sextutils.getcolvalues">
-<tt class="descclassname">SamPy.smnIO.sextutils.</tt><tt class="descname">getcolvalues</tt><big>(</big><em>col</em>, <em>coltype</em>, <em>colentries</em>, <em>colzero=False</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.sextutils.getcolvalues" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a column from a SExtractor catalog. Determine the type
-(integer, float, string) and return either an array of that
-type (Int32, Float64) or a list of strings</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.smnIO.sextutils.getfloats">
-<tt class="descclassname">SamPy.smnIO.sextutils.</tt><tt class="descname">getfloats</tt><big>(</big><em>col</em>, <em>lines</em>, <em>values</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.sextutils.getfloats" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="SamPy.smnIO.sextutils.getints">
-<tt class="descclassname">SamPy.smnIO.sextutils.</tt><tt class="descname">getints</tt><big>(</big><em>col</em>, <em>lines</em>, <em>values</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.sextutils.getints" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="SamPy.smnIO.sextutils.getstrings">
-<tt class="descclassname">SamPy.smnIO.sextutils.</tt><tt class="descname">getstrings</tt><big>(</big><em>col</em>, <em>lines</em>, <em>values</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.sextutils.getstrings" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="SamPy.smnIO.sextutils.initcat">
-<tt class="descclassname">SamPy.smnIO.sextutils.</tt><tt class="descname">initcat</tt><big>(</big><em>catfile</em>, <em>preserve_case=False</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.sextutils.initcat" title="Permalink to this definition">¶</a></dt>
-<dd><p>parseheader &#8211; reads the header of a SExtractor catalog file and
-returns a dictionary of parameter names and column numbers.
-Also returns a list of lines containing the data.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.smnIO.sextutils.invert_dict">
-<tt class="descclassname">SamPy.smnIO.sextutils.</tt><tt class="descname">invert_dict</tt><big>(</big><em>d</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.sextutils.invert_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Generate a new dictionary with the key/value relationship inverted</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.smnIO.sextutils.parseconfig_se">
-<tt class="descclassname">SamPy.smnIO.sextutils.</tt><tt class="descname">parseconfig_se</tt><big>(</big><em>cfile</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.sextutils.parseconfig_se" title="Permalink to this definition">¶</a></dt>
-<dd><p>parseconfig &#8211; read a SExtractor .sex file and return a dictionary
-of options &amp; values. Comments are ignored.</p>
-</dd></dl>
-
-<dl class="class">
-<dt id="SamPy.smnIO.sextutils.rw_catalog">
-<em class="property">class </em><tt class="descclassname">SamPy.smnIO.sextutils.</tt><tt class="descname">rw_catalog</tt><big>(</big><em>fname</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.sextutils.rw_catalog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#SamPy.smnIO.sextutils.se_catalog" title="SamPy.smnIO.sextutils.se_catalog"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.smnIO.sextutils.se_catalog</span></tt></a></p>
-<p>Extend the se_catalog class to support adding new columns,
-and writing out the new version.</p>
-<dl class="method">
-<dt id="SamPy.smnIO.sextutils.rw_catalog.addcolumn">
-<tt class="descname">addcolumn</tt><big>(</big><em>input_colname</em>, <em>coldata</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.sextutils.rw_catalog.addcolumn" title="Permalink to this definition">¶</a></dt>
-<dd><p>coldata must be a 1d numarray of the correct length</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="SamPy.smnIO.sextutils.rw_catalog.addemptycolumn">
-<tt class="descname">addemptycolumn</tt><big>(</big><em>input_colname</em>, <em>coltype</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.sextutils.rw_catalog.addemptycolumn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Defines a new column &amp; updates all the bookkeeping, but
-does not actually fill in the data.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="SamPy.smnIO.sextutils.rw_catalog.line">
-<tt class="descname">line</tt><big>(</big><em>rownum</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.sextutils.rw_catalog.line" title="Permalink to this definition">¶</a></dt>
-<dd><p>Construct a new line as to be printed out</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="SamPy.smnIO.sextutils.rw_catalog.printme">
-<tt class="descname">printme</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.smnIO.sextutils.rw_catalog.printme" title="Permalink to this definition">¶</a></dt>
-<dd><p>Like writeto, but for sys.stdout</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="SamPy.smnIO.sextutils.rw_catalog.writeto">
-<tt class="descname">writeto</tt><big>(</big><em>outname</em>, <em>clobber=False</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.sextutils.rw_catalog.writeto" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="SamPy.smnIO.sextutils.se_catalog">
-<em class="property">class </em><tt class="descclassname">SamPy.smnIO.sextutils.</tt><tt class="descname">se_catalog</tt><big>(</big><em>cfile</em>, <em>readfile=True</em>, <em>preserve_case=False</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.sextutils.se_catalog" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>Read a SExtractor-style catalog.
-Usage: c=se_catalog(catalog,readfile=True,preserve_case=False)
-Will read the catalog and return an object c, whose attributes are
-arrays containing the data. For example, c.mag_auto contains the
-mag_auto values.
-Arguments:
-catalog &#8211; The input SExtractor catalog.
-readfile &#8211; True means read the data. False means return the
-object without reading the data. The lines from the catalog
-are returned as a list of ascii strings c.l. Useful if you want
-to do some special parsing of some sort.
-preserve_case &#8211; default (False) converts column names to lower case</p>
-<p>The input catalog MUST have a header with the SExtractor format:
-# 1 ID comment
-# 2 ALPHA_J200 another comment
-That is, first column is the comment symbol #, second column is
-the column number, third column is the column name, and the rest
-of the line is a comment. SExtractor allows &#8220;vectors&#8221; to be identified
-only by the first column...e.g.
-# 12 FLUX_APER
-# 20 FLUXERR_APER
-the missing columns are all aperture fluxes through different
-apertures. These will be read into attributes:
-c.flux_aper   # The first one
-c.flux_aper_1 # the second one, and so on</p>
-<p>The case of aperture radii is a bit nasty, since these only
-appear in the SExtractor configuration file. Use parseconfig()
-to read that file.</p>
-<dl class="method">
-<dt id="SamPy.smnIO.sextutils.se_catalog.buildheader">
-<tt class="descname">buildheader</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.smnIO.sextutils.se_catalog.buildheader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reconstruct the header from the header dictionary.
-This might be useful if only a few columns were selected
-from the file; otherwise just use the &#8216;header&#8217; attribute.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="SamPy.smnIO.sextutils.se_catalog.getcol">
-<tt class="descname">getcol</tt><big>(</big><em>col</em>, <em>offset=0</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.sextutils.se_catalog.getcol" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.smnIO.sextutils.se_catalog.getcols">
-<tt class="descname">getcols</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.sextutils.se_catalog.getcols" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.smnIO.sextutils.se_catalog.gettypes">
-<tt class="descname">gettypes</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.smnIO.sextutils.se_catalog.gettypes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.smnIO.sextutils.se_catalog.line">
-<tt class="descname">line</tt><big>(</big><em>i</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.sextutils.se_catalog.line" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns an assembled line of this catalog suitable for writing.
-Except it doesn&#8217;t really, if we modified the individual columns...</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="SamPy.smnIO.sextutils.sextractor">
-<em class="property">class </em><tt class="descclassname">SamPy.smnIO.sextutils.</tt><tt class="descname">sextractor</tt><big>(</big><em>cfile</em>, <em>readfile=True</em>, <em>preserve_case=False</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.sextutils.sextractor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#SamPy.smnIO.sextutils.se_catalog" title="SamPy.smnIO.sextutils.se_catalog"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.smnIO.sextutils.se_catalog</span></tt></a></p>
-<p>Read SExtractor catalog...just an alias for se_catalog</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.smnIO.sextutils.writeheader">
-<tt class="descclassname">SamPy.smnIO.sextutils.</tt><tt class="descname">writeheader</tt><big>(</big><em>fh</em>, <em>colnames</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.sextutils.writeheader" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write an SExtractor-style header to an open file handle.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>fh</strong> (<em>file</em>) &#8211; file handle</li>
-<li><strong>colnames</strong> (<em>list</em>) &#8211; list of column names</li>
-</ul>
-</td>
-</tr>
-<tr class="field"><th class="field-name">Todo :</th><td class="field-body"><p class="first">add space checking to colnames</p>
-</td>
-</tr>
-<tr class="field"><th class="field-name">Todo :</th><td class="field-body"><p class="first">permit passing a filename?</p>
-</td>
-</tr>
-<tr class="field"><th class="field-name">Todo :</th><td class="field-body"><p class="first last">handle comments</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
-<div class="section" id="module-SamPy.smnIO.write">
-<span id="write-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">write</span></tt> Module<a class="headerlink" href="#module-SamPy.smnIO.write" title="Permalink to this headline">¶</a></h2>
-<p>This file contains functions that can be used to store data</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
-</tr>
-</tbody>
-</table>
-<dl class="function">
-<dt id="SamPy.smnIO.write.cPickleDumpDictionary">
-<tt class="descclassname">SamPy.smnIO.write.</tt><tt class="descname">cPickleDumpDictionary</tt><big>(</big><em>dictionary</em>, <em>output</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.write.cPickleDumpDictionary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dumps a dictionary of data to a cPickled file</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Param :</th><td class="field-body">dictionary, a Python data container does not have to be a dictionary</td>
-</tr>
-<tr class="field"><th class="field-name">Param :</th><td class="field-body">output, name of the output file</td>
-</tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">None</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.smnIO.write.combineFiles">
-<tt class="descclassname">SamPy.smnIO.write.</tt><tt class="descname">combineFiles</tt><big>(</big><em>files</em>, <em>outputfile</em><big>)</big><a class="headerlink" href="#SamPy.smnIO.write.combineFiles" title="Permalink to this definition">¶</a></dt>
-<dd><p>Combines the content of all files that are listed
-in the files list to a single file named outputfile.
-Iterates over the input files line-by-line to save
-memory.</p>
-</dd></dl>
-
-</div>
 </div>
 
 
@@ -566,15 +126,14 @@ memory.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="SamPy.statistics.html" title="statistics Package"
+          <a href="SamPy.smnIO.findFiles.html" title="SamPy.smnIO.findFiles"
              >next</a> |</li>
         <li class="right" >
-          <a href="SamPy.smakced.html" title="smakced Package"
+          <a href="SamPy.smakced.getSmackedDataNoNumpy.html" title="SamPy.smakced.getSmackedDataNoNumpy"
              >previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
-
-          <li><a href="SamPy.html" >SamPy Package</a> &raquo;</li> 
+ 
       </ul>
     </div>
     <div class="footer">

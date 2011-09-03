@@ -1,7 +1,5 @@
-'''
-DESCRIPTION:
-Combines the Phase Retrieval software results, produces plots
-and calculates focus with and without breathing correction. 
+"""
+Combines the Phase Retrieval software results, produces plots and calculates focus with and without breathing correction.
 
 USAGE:
 python PhaseRetResults.py
@@ -17,7 +15,7 @@ Created on Dec 17, 2009
 :todo: maybe introduce sigma clipping to the means?
 :todo: how the legend has been implemented is really dirty,
         it should be done better.
-'''
+"""
 import matplotlib
 matplotlib.rc('text', usetex=True)
 matplotlib.use('PDF')
@@ -40,10 +38,10 @@ class PhaseRetResults():
         self.str = str
 
     def _fromJulian(self, j):
-        '''
+        """
         Converts Modified Julian days to human readable format
         :return: human readable date and time
-        '''
+        """
         days = j - 40587 # From Jan 1 1900
         sec = days * 86400.0
         return time.gmtime(sec)
@@ -61,8 +59,8 @@ class PhaseRetResults():
         return N.array([N.array(jul), N.array(flat)])
 
     def readResults(self, file):
-        '''
-        '''
+        """
+        """
         x, y = -999, -999
 
         fh = open(file)
@@ -95,8 +93,8 @@ class PhaseRetResults():
         return tmp
 
     def plotStars(self, file, ext, xpos, ypos, rad=25):
-        '''
-        '''
+        """
+        """
         if ext == 1: chip = 2
         if ext == 4: chip = 1
 

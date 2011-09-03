@@ -1,7 +1,5 @@
 """
-Pulls out data from the SMAKCED wiki page
-and parses it into a NumPy array, which is
-easy to sort and manipulate.
+Pulls out data from the SMAKCED wiki page and parses it into a NumPy array, which is easy to sort and manipulate.
 
 :requires: NumPy
 :requires: BeautifulSoup
@@ -28,9 +26,9 @@ class Smakced():
         """
         Constructor
 
-        :param: url: url address of the page
+        :param url: url address of the page
         :type url: string
-        :param: table: name of the table
+        :param table: name of the table
         :type table: string
         """
         self.url = url
@@ -54,7 +52,7 @@ class Smakced():
         Note that table number has been hard coded.
         The SMAKCED wiki page returns several "tables".
         
-        :param: data: data that has been retrieved with the getData method
+        :param data: data that has been retrieved with the getData method
 
         :return: array containing table entries
         """
@@ -86,8 +84,8 @@ class Smakced():
         
         :note: This method is untested.
         
-        :param: data: data that has been retrieved with the getData method
-        :param: output: name of the output file
+        :param data: data that has been retrieved with the getData method
+        :param output: name of the output file
         """
         g = open(output, 'w')
         soup = BeautifulSoup(''.join(data))

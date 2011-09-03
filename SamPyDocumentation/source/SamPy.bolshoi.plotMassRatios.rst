@@ -8,7 +8,8 @@ SamPy.bolshoi.plotMassRatios
    .. rubric:: Functions
 
    .. autosummary::
-   
+      :toctree:
+
       main
       stellarHaloMFRatio
       stellarHaloMFRatioMultiPanel
@@ -20,7 +21,8 @@ SamPy.bolshoi.plotMassRatios
    .. rubric:: Classes
 
    .. autosummary::
-   
+      :toctree:
+
       MultipleLocator
       NullFormatter
    

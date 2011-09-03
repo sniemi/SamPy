@@ -2,12 +2,14 @@
 IO class for COS instrument handbook plotting.
 Can be used to read FITS image and tabular data.
 
+:requires: PyFITS
+:requires: NumPy
+
 :date: Created on Mar 18, 2009
 
 :author: Sami-Matias Niemi
 :contact: niemi@stsci.edu
 """
-
 import pyfits as PF
 import numpy as N
 

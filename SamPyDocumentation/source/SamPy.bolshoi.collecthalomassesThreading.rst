@@ -8,7 +8,8 @@ SamPy.bolshoi.collecthalomassesThreading
    .. rubric:: Functions
 
    .. autosummary::
-   
+      :toctree:
+
       combineFiles
       findDMDriver
       writeOutput
@@ -20,7 +21,8 @@ SamPy.bolshoi.collecthalomassesThreading
    .. rubric:: Classes
 
    .. autosummary::
-   
+      :toctree:
+
       findDMhaloes
    
    

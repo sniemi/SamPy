@@ -8,7 +8,8 @@ SamPy.astronomy.fluxes
    .. rubric:: Functions
 
    .. autosummary::
-   
+      :toctree:
+
       convolveSpectrum
    
    

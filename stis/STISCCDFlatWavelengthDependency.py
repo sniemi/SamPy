@@ -1,23 +1,26 @@
-'''
+"""
+To study the STIS CCD flat field wavelength dependency.
+
 :date: Created on Dec 8, 2009
 :author: Sami-Matias Niemi
-'''
+"""
 import numpy as N
 
 def RMS(data):
-    '''
+    """
     Returns the root-mean-square of the given data.
-    '''
-    return N.sqrt(N.mean(data)**2 + N.std(data)**2)
+    """
+    return N.sqrt(N.mean(data) ** 2 + N.std(data) ** 2)
+
 
 def CombineFlat(self, filelist):
-    '''
+    """
     Combines created images to form a final flats.
-    '''
+    """
     #hard coded value
     siglim = 5
     list = filelist
-    
+
     nimage = len(list)
 
     #make zero arrays
@@ -25,7 +28,7 @@ def CombineFlat(self, filelist):
     added_error = N.zeros((1024, 1024))
     added_dq = N.zeros((1024, 1024))
     weights = N.zeros((1024, 1024))
-            
+
     fluxall = N.zeros((1024, 1024, nimage))
     errorall = N.zeros((1024, 1024, nimage))
     flagsall = N.zeros((1024, 1024, nimage))
@@ -36,35 +39,38 @@ def CombineFlat(self, filelist):
         errorin = fh[2].data
         flagsin = fh[3].data
         fh.close()
-        
+
         if i > 1: flagsin[225:801, 180] = flagsin[225:801, 180] + 1024
-        
-        fluxall[:,:,i] = fluxin.copy()
-        errorall[:,:,i] = errorin.copy()
-        flagsall[:,:,i] = flagsin.copy()
+
+        fluxall[:, :, i] = fluxin.copy()
+        errorall[:, :, i] = errorin.copy()
+        flagsall[:, :, i] = flagsin.copy()
 
     for ix in range(1024):
         for iy in range(1024):
             added_dq[iy, ix] = N.min(flagsall[iy, ix, :])
-            ig = N.where((flagsall[iy, ix, :] == 0) & (errorall[iy, ix,:] > 0.0))
+            ig = N.where((flagsall[iy, ix, :] == 0) & (errorall[iy, ix, :] > 0.0))
             if len(ig[0]) <= 0:
                 added_flux[iy, ix] = 1.
-                added_error[iy,ix] = 0.1
+                added_error[iy, ix] = 0.1
             elif len(ig[0]) <= 2:
-                added_flux[iy,ix] = N.sum(fluxall[iy,ix,ig]/errorall[iy,ix,ig]**2)/N.sum(1./errorall[iy,ix,ig]**2)
-                added_error[iy,ix] = N.sqrt(1./N.sum(1./errorall[iy,ix,ig]**2))
+                added_flux[iy, ix] = N.sum(fluxall[iy, ix, ig] / errorall[iy, ix, ig] ** 2) / N.sum(
+                    1. / errorall[iy, ix, ig] ** 2)
+                added_error[iy, ix] = N.sqrt(1. / N.sum(1. / errorall[iy, ix, ig] ** 2))
             else:
-                center = N.median(fluxall[iy,ix,ig])
-                std = N.max(errorall[iy,ix,ig])
-                igg = N.where(N.abs(fluxall[iy,ix,ig] - center) < siglim*std)
+                center = N.median(fluxall[iy, ix, ig])
+                std = N.max(errorall[iy, ix, ig])
+                igg = N.where(N.abs(fluxall[iy, ix, ig] - center) < siglim * std)
                 if len(igg[0]) >= 1:
-                    cov = N.where(((flagsall[iy, ix, :] == 0) & (errorall[iy, ix,:] > 0.0)) & (N.abs(fluxall[iy,ix,:] - center) < siglim*std))
-                    added_flux[iy,ix] = N.sum(fluxall[iy,ix,cov]/errorall[iy,ix,cov]**2)/N.sum(1./errorall[iy,ix,cov]**2)
-                    added_error[iy,ix] = N.sqrt(1./N.sum(1./errorall[iy,ix,cov]**2))
+                    cov = N.where(((flagsall[iy, ix, :] == 0) & (errorall[iy, ix, :] > 0.0)) & (
+                    N.abs(fluxall[iy, ix, :] - center) < siglim * std))
+                    added_flux[iy, ix] = N.sum(fluxall[iy, ix, cov] / errorall[iy, ix, cov] ** 2) / N.sum(
+                        1. / errorall[iy, ix, cov] ** 2)
+                    added_error[iy, ix] = N.sqrt(1. / N.sum(1. / errorall[iy, ix, cov] ** 2))
                 else:
-                    added_flux[iy,ix] = center
-                    added_error[iy,ix] = std
-    
+                    added_flux[iy, ix] = center
+                    added_error[iy, ix] = std
+
     #low and med res copies
     flat_l = added_flux.copy()
     flat_m = added_flux.copy()
@@ -74,14 +80,14 @@ def CombineFlat(self, filelist):
     dq_m = added_dq.copy()
 
     # flag and patch dust motes (dq=1024)                                                                                                                                  
-    m_mote = N.ones((1024,1024), dtype = N.int)
-    l_mote = N.ones((1024,1024), dtype = N.int)
+    m_mote = N.ones((1024, 1024), dtype=N.int)
+    l_mote = N.ones((1024, 1024), dtype=N.int)
     l_mote, xlcen, ylcen, radl = self._badspot(l_mote, 'G430L')
     m_mote, xmcen, ymcen, radm = self._badspot(m_mote, 'G430M')
-    
+
     # since basic flats are from m mode data, have to also replace area covered by                                                                                         
     # m-mode motes with "good" l mode data to produce l mode pflat.                                                                                                        
-    l_mote_ext = l_mote*m_mote
+    l_mote_ext = l_mote * m_mote
 
     # flag dust motes with 1024                                                                                                                                            
     dq_l[l_mote_ext == 0] = dq_l[l_mote_ext == 0] + 1024
@@ -97,13 +103,13 @@ def CombineFlat(self, filelist):
     # write individual extensions of low and high disp file
     templ = '/grp/hst/cdbs/oref/n491401ho_pfl.fits' #
     tempm = '/grp/hst/cdbs/oref/n491401ko_pfl.fits' #'n491401eo_pfl.fits'
-    self._writeCombinedFits(flat_l, err_l, dq_l, headerl, templ, raws, self.output + 'coadd_comb_reject_l.fits')          
+    self._writeCombinedFits(flat_l, err_l, dq_l, headerl, templ, raws, self.output + 'coadd_comb_reject_l.fits')
     self._writeCombinedFits(flat_m, err_m, dq_m, headerm, tempm, raws, self.output + 'coadd_comb_reject_m.fits')
 
     #make some extra plots
     self._plot50(flat_l, xlcen, ylcen, radl, 'coadd_comb_reject_l')
     self._plot50(flat_m, xmcen, ymcen, radm, 'coadd_comb_reject_m')
-    
+
     #print out some information
     print '\nSTDEV of L-mode flat is %f' % N.std(flat_l)
     #print 'while the mean and the stardard error are %f and %f, respectively.' % (N.mean(flat_l),  Mstats.stderr(flat_l))
@@ -116,13 +122,13 @@ if __name__ == '__main__':
     #read in file lists
     cleanG1 = open('g430m_50ccd_gain1_crj.txt').readlines()
     cleanG4 = open('g430m_50ccd_gain4_crj.txt').readlines()
-    
+
     sl0 = open('g430m_52x2_crj.txt').readlines()
     slm3 = open('g430m_52x2m3640_crj.txt').readlines()
     slp3 = open('g430m_52x2p3640_crj.txt').readlines()
     slm7 = open('g430m_52x2m7300_crj.txt').readlines()
     slp7 = open('g430m_52x2p7300_crj.txt').readlines()
-    
+
     flat50G1 = out + 'ppG430M_50CCD_gain1_flat.fits'
     flat50G4 = out + 'ppG430M_50CCD_gain4_flat.fits'
     

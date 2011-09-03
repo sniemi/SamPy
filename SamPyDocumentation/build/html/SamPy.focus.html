@@ -23,9 +23,8 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
-    <link rel="up" title="SamPy Package" href="SamPy.html" />
-    <link rel="next" title="grisms Package" href="SamPy.grisms.html" />
-    <link rel="prev" title="fitting Package" href="SamPy.fitting.html" /> 
+    <link rel="next" title="SamPy.focus.collect_focus" href="SamPy.focus.collect_focus.html" />
+    <link rel="prev" title="SamPy.fitting.weightedFittingExample.third_order" href="SamPy.fitting.weightedFittingExample.third_order.html" /> 
   </head>
   <body>
 
@@ -42,44 +41,25 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="SamPy.grisms.html" title="grisms Package"
+          <a href="SamPy.focus.collect_focus.html" title="SamPy.focus.collect_focus"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="SamPy.fitting.html" title="fitting Package"
+          <a href="SamPy.fitting.weightedFittingExample.third_order.html" title="SamPy.fitting.weightedFittingExample.third_order"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
-
-          <li><a href="SamPy.html" accesskey="U">SamPy Package</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">focus Package</a><ul>
-<li><a class="reference internal" href="#module-SamPy.focus.ACSImageExtensionerTinyTim"><tt class="docutils literal"><span class="pre">ACSImageExtensionerTinyTim</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-SamPy.focus.FocusModel"><tt class="docutils literal"><span class="pre">FocusModel</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-SamPy.focus.FocusPlots"><tt class="docutils literal"><span class="pre">FocusPlots</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-SamPy.focus.HSTfocus"><tt class="docutils literal"><span class="pre">HSTfocus</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-SamPy.focus.PhaseretrievalresultsTinyTim"><tt class="docutils literal"><span class="pre">PhaseretrievalresultsTinyTim</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-SamPy.focus.PhaseretrievalresultsTinyTimACS"><tt class="docutils literal"><span class="pre">PhaseretrievalresultsTinyTimACS</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-SamPy.focus.WFC3ImageExtensioner"><tt class="docutils literal"><span class="pre">WFC3ImageExtensioner</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-SamPy.focus.WFC3ImageExtensionerTinyTim"><tt class="docutils literal"><span class="pre">WFC3ImageExtensionerTinyTim</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-SamPy.focus.collect_focus"><tt class="docutils literal"><span class="pre">collect_focus</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-SamPy.focus.phaseretrievalresults"><tt class="docutils literal"><span class="pre">phaseretrievalresults</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-SamPy.focus.plotextractionboxdata"><tt class="docutils literal"><span class="pre">plotextractionboxdata</span></tt> Module</a></li>
-</ul>
-</li>
-</ul>
-
   <h4>Previous topic</h4>
-  <p class="topless"><a href="SamPy.fitting.html"
-                        title="previous chapter">fitting Package</a></p>
+  <p class="topless"><a href="SamPy.fitting.weightedFittingExample.third_order.html"
+                        title="previous chapter">SamPy.fitting.weightedFittingExample.third_order</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="SamPy.grisms.html"
-                        title="next chapter">grisms Package</a></p>
+  <p class="topless"><a href="SamPy.focus.collect_focus.html"
+                        title="next chapter">SamPy.focus.collect_focus</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/SamPy.focus.txt"
@@ -108,508 +88,33 @@
             
   <div class="section" id="focus-package">
 <h1>focus Package<a class="headerlink" href="#focus-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-SamPy.focus.ACSImageExtensionerTinyTim">
-<span id="acsimageextensionertinytim-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">ACSImageExtensionerTinyTim</span></tt> Module<a class="headerlink" href="#module-SamPy.focus.ACSImageExtensionerTinyTim" title="Permalink to this headline">¶</a></h2>
-<p>Created on March 7, 2011</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
+<p>HST focus related functions and methods.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
 <tbody valign="top">
-<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+<tr><td><a class="reference internal" href="SamPy.focus.collect_focus.html#module-SamPy.focus.collect_focus" title="SamPy.focus.collect_focus"><tt class="xref py py-obj docutils literal"><span class="pre">collect_focus</span></tt></a></td>
+<td>Collects focus measurement results and outputs them to files, one for each instrument and chip.</td>
 </tr>
-<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a></td>
+<tr><td><a class="reference internal" href="SamPy.focus.FocusPlots.html#module-SamPy.focus.FocusPlots" title="SamPy.focus.FocusPlots"><tt class="xref py py-obj docutils literal"><span class="pre">FocusPlots</span></tt></a></td>
+<td>Creates few different plots from the focus data.</td>
 </tr>
-<tr class="field"><th class="field-name">version:</th><td class="field-body">0.1</td>
+<tr><td><a class="reference internal" href="SamPy.focus.HSTfocus.html#module-SamPy.focus.HSTfocus" title="SamPy.focus.HSTfocus"><tt class="xref py py-obj docutils literal"><span class="pre">HSTfocus</span></tt></a></td>
+<td>Functions related to HST focus such as mirror move dates.</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.focus.phaseretrievalresults.html#module-SamPy.focus.phaseretrievalresults" title="SamPy.focus.phaseretrievalresults"><tt class="xref py py-obj docutils literal"><span class="pre">phaseretrievalresults</span></tt></a></td>
+<td>Combines the Phase Retrieval software results, produces plots and calculates focus with and without breathing correction.</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.focus.PhaseretrievalresultsTinyTim.html#module-SamPy.focus.PhaseretrievalresultsTinyTim" title="SamPy.focus.PhaseretrievalresultsTinyTim"><tt class="xref py py-obj docutils literal"><span class="pre">PhaseretrievalresultsTinyTim</span></tt></a></td>
+<td>TinyTim model PSF phase retrieval results.</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.focus.PhaseretrievalresultsTinyTimACS.html#module-SamPy.focus.PhaseretrievalresultsTinyTimACS" title="SamPy.focus.PhaseretrievalresultsTinyTimACS"><tt class="xref py py-obj docutils literal"><span class="pre">PhaseretrievalresultsTinyTimACS</span></tt></a></td>
+<td>TinyTim model PSF phase retrieval results.</td>
 </tr>
 </tbody>
 </table>
-<dl class="function">
-<dt id="SamPy.focus.ACSImageExtensionerTinyTim.parse_parameterfile">
-<tt class="descclassname">SamPy.focus.ACSImageExtensionerTinyTim.</tt><tt class="descname">parse_parameterfile</tt><big>(</big><em>file='./complete_results/parameters.txt'</em><big>)</big><a class="headerlink" href="#SamPy.focus.ACSImageExtensionerTinyTim.parse_parameterfile" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-SamPy.focus.FocusModel">
-<span id="focusmodel-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">FocusModel</span></tt> Module<a class="headerlink" href="#module-SamPy.focus.FocusModel" title="Permalink to this headline">¶</a></h2>
-<p>User Interface for Focus Monitor</p>
-<dl class="class">
-<dt id="SamPy.focus.FocusModel.FocusMenu">
-<em class="property">class </em><tt class="descclassname">SamPy.focus.FocusModel.</tt><tt class="descname">FocusMenu</tt><a class="headerlink" href="#SamPy.focus.FocusModel.FocusMenu" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<dl class="method">
-<dt id="SamPy.focus.FocusModel.FocusMenu.ChooseDate">
-<tt class="descname">ChooseDate</tt><big>(</big><em>event</em><big>)</big><a class="headerlink" href="#SamPy.focus.FocusModel.FocusMenu.ChooseDate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.focus.FocusModel.FocusMenu.CreateForm">
-<tt class="descname">CreateForm</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.focus.FocusModel.FocusMenu.CreateForm" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.focus.FocusModel.FocusMenu.Finish">
-<tt class="descname">Finish</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.focus.FocusModel.FocusMenu.Finish" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.focus.FocusModel.FocusMenu.GetDate">
-<tt class="descname">GetDate</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.focus.FocusModel.FocusMenu.GetDate" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.focus.FocusModel.FocusMenu.GetTimes">
-<tt class="descname">GetTimes</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.focus.FocusModel.FocusMenu.GetTimes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.focus.FocusModel.FocusMenu.Show">
-<tt class="descname">Show</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.focus.FocusModel.FocusMenu.Show" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.focus.FocusModel.FocusMenu.StartGraph">
-<tt class="descname">StartGraph</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.focus.FocusModel.FocusMenu.StartGraph" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.FocusModel.comparison">
-<tt class="descclassname">SamPy.focus.FocusModel.</tt><tt class="descname">comparison</tt><big>(</big><em>camera</em>, <em>date</em><big>)</big><a class="headerlink" href="#SamPy.focus.FocusModel.comparison" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.FocusModel.fromJulian">
-<tt class="descclassname">SamPy.focus.FocusModel.</tt><tt class="descname">fromJulian</tt><big>(</big><em>j</em><big>)</big><a class="headerlink" href="#SamPy.focus.FocusModel.fromJulian" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.FocusModel.graph">
-<tt class="descclassname">SamPy.focus.FocusModel.</tt><tt class="descname">graph</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.focus.FocusModel.graph" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.FocusModel.measured">
-<tt class="descclassname">SamPy.focus.FocusModel.</tt><tt class="descname">measured</tt><big>(</big><em>camera</em>, <em>testDate</em><big>)</big><a class="headerlink" href="#SamPy.focus.FocusModel.measured" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extract focus measurements</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.FocusModel.modelled">
-<tt class="descclassname">SamPy.focus.FocusModel.</tt><tt class="descname">modelled</tt><big>(</big><em>camera</em>, <em>date</em>, <em>startTime</em>, <em>stopTime</em><big>)</big><a class="headerlink" href="#SamPy.focus.FocusModel.modelled" title="Permalink to this definition">¶</a></dt>
-<dd><p>Date in form of a string: month day  year. Times as 15:33 - 24 hour clock</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.FocusModel.toJulian">
-<tt class="descclassname">SamPy.focus.FocusModel.</tt><tt class="descname">toJulian</tt><big>(</big><em>year</em>, <em>month</em>, <em>day</em><big>)</big><a class="headerlink" href="#SamPy.focus.FocusModel.toJulian" title="Permalink to this definition">¶</a></dt>
-<dd><p>Use time functions</p>
-</dd></dl>
-
-</div>
-<div class="section" id="module-SamPy.focus.FocusPlots">
-<span id="focusplots-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">FocusPlots</span></tt> Module<a class="headerlink" href="#module-SamPy.focus.FocusPlots" title="Permalink to this headline">¶</a></h2>
-<p>DESCRIPTION:
-Creates few different plots from the focus data.</p>
-<p>USAGE:
-python focusPlots.py</p>
-<p>HISTORY:
-Created on Sep 10, 2009
-Added to the repository on Dec 3, 2010</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
-</tr>
-<tr class="field"><th class="field-name">todo:</th><td class="field-body"></td>
-</tr>
-</tbody>
-</table>
-<ol class="arabic simple">
-<li>change focus trend since mirror move to two x axis mode (one with date)</li>
-<li>Create a new plot: all focus data since last mirror move, fit functions</li>
-</ol>
-<dl class="function">
-<dt id="SamPy.focus.FocusPlots.FocusTrend">
-<tt class="descclassname">SamPy.focus.FocusPlots.</tt><tt class="descname">FocusTrend</tt><big>(</big><em>xmin</em>, <em>xmax</em>, <em>title</em>, <em>type</em>, <em>input_folder</em>, <em>output_folder</em>, <em>output='FocusTrend'</em><big>)</big><a class="headerlink" href="#SamPy.focus.FocusPlots.FocusTrend" title="Permalink to this definition">¶</a></dt>
-<dd><p>Plots Focus trend since given minimum J-L date (mxin).
-xmax is used to limit the fit.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.FocusPlots.FocusTrendNoBreathing">
-<tt class="descclassname">SamPy.focus.FocusPlots.</tt><tt class="descname">FocusTrendNoBreathing</tt><big>(</big><em>xmin</em>, <em>xmax</em>, <em>title</em>, <em>type</em>, <em>input_folder</em>, <em>output_folder</em>, <em>output='FocusTrend'</em><big>)</big><a class="headerlink" href="#SamPy.focus.FocusPlots.FocusTrendNoBreathing" title="Permalink to this definition">¶</a></dt>
-<dd><p>Plots Focus trend since given minimum J-L date (mxin).
-Uses data that has not been breathing corrected.
-xmax is used to limit the fit.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.FocusPlots.FocusTrendRemoveLatestMovement">
-<tt class="descclassname">SamPy.focus.FocusPlots.</tt><tt class="descname">FocusTrendRemoveLatestMovement</tt><big>(</big><em>xmin</em>, <em>xmax</em>, <em>title</em>, <em>type</em>, <em>input_folder</em>, <em>output_folder</em>, <em>output='FocusTrendUptoDate'</em><big>)</big><a class="headerlink" href="#SamPy.focus.FocusPlots.FocusTrendRemoveLatestMovement" title="Permalink to this definition">¶</a></dt>
-<dd><p>&#64;param xmin: minimum Modified Julian Date to be plotted
-&#64;param xmax: maximum Modified Julian Date to be used for the fits
-&#64;param title: title of the plot
-&#64;param output: name of the output file</p>
-<p>Plots Focus trend since xmin while taking into account the last mirror move.
-The latest mirror move is subtracted from all the previous data.
-Straight line and an exponential are fitted to the all data since xmin.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.FocusPlots.FocusTrendRemoveLatestMovementNoBreathing">
-<tt class="descclassname">SamPy.focus.FocusPlots.</tt><tt class="descname">FocusTrendRemoveLatestMovementNoBreathing</tt><big>(</big><em>xmin</em>, <em>xmax</em>, <em>title</em>, <em>type</em>, <em>input_folder</em>, <em>output_folder</em>, <em>output='FocusTrendUptoDateNoBreathing'</em><big>)</big><a class="headerlink" href="#SamPy.focus.FocusPlots.FocusTrendRemoveLatestMovementNoBreathing" title="Permalink to this definition">¶</a></dt>
-<dd><p>&#64;param xmin: minimum Modified Julian Date to be plotted
-&#64;param xmax: maximum Modified Julian Date to be used for the fits
-&#64;param title: title of the plot
-&#64;param output: name of the output file</p>
-<p>Plots Focus trend since xmin while taking into account the last mirror move.
-The latest mirror move is subtracted from all the previous data.
-Straight line and an exponential are fitted to the all data since xmin.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.FocusPlots.FocusTrendRemoveLatestMovementNoBreathingOffset">
-<tt class="descclassname">SamPy.focus.FocusPlots.</tt><tt class="descname">FocusTrendRemoveLatestMovementNoBreathingOffset</tt><big>(</big><em>xmin</em>, <em>xmax</em>, <em>title</em>, <em>type</em>, <em>input_folder</em>, <em>output_folder</em>, <em>output='FocusTrendUptoDateNoBreathingOffset'</em><big>)</big><a class="headerlink" href="#SamPy.focus.FocusPlots.FocusTrendRemoveLatestMovementNoBreathingOffset" title="Permalink to this definition">¶</a></dt>
-<dd><p>&#64;param xmin: minimum Modified Julian Date to be plotted
-&#64;param xmax: maximum Modified Julian Date to be used for the fits
-&#64;param title: title of the plot
-&#64;param output: name of the output file</p>
-<p>Plots Focus trend since xmin while taking into account the last mirror move.
-The latest mirror move is subtracted from all the previous data.
-Straight line and an exponential are fitted to the all data since xmin.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.FocusPlots.FocusTrendRemoveLatestMovementOffset">
-<tt class="descclassname">SamPy.focus.FocusPlots.</tt><tt class="descname">FocusTrendRemoveLatestMovementOffset</tt><big>(</big><em>xmin</em>, <em>xmax</em>, <em>title</em>, <em>type</em>, <em>input_folder</em>, <em>output_folder</em>, <em>output='FocusTrendUptoDateOffset'</em>, <em>WFC3offset=0.5</em><big>)</big><a class="headerlink" href="#SamPy.focus.FocusPlots.FocusTrendRemoveLatestMovementOffset" title="Permalink to this definition">¶</a></dt>
-<dd><p>&#64;param xmin: minimum Modified Julian Date to be plotted
-&#64;param xmax: maximum Modified Julian Date to be used for the fits
-&#64;param title: title of the plot
-&#64;param output: name of the output file</p>
-<p>Plots Focus trend since xmin while taking into account the last mirror move.
-The latest mirror move is subtracted from all the previous data.
-Straight line and an exponential are fitted to the all data since xmin.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.FocusPlots.FocusTrendSinceDayZero">
-<tt class="descclassname">SamPy.focus.FocusPlots.</tt><tt class="descname">FocusTrendSinceDayZero</tt><big>(</big><em>title</em>, <em>output</em>, <em>input_folder</em>, <em>output_folder</em>, <em>stepFunction=False</em>, <em>filename='AllData.txt'</em>, <em>endday=8100</em><big>)</big><a class="headerlink" href="#SamPy.focus.FocusPlots.FocusTrendSinceDayZero" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.FocusPlots.FocusTrendSinceDayZeroDates">
-<tt class="descclassname">SamPy.focus.FocusPlots.</tt><tt class="descname">FocusTrendSinceDayZeroDates</tt><big>(</big><em>title</em>, <em>output</em>, <em>input_folder</em>, <em>output_folder</em>, <em>stepFunction=False</em>, <em>filename='AllData.txt'</em><big>)</big><a class="headerlink" href="#SamPy.focus.FocusPlots.FocusTrendSinceDayZeroDates" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.FocusPlots.FocusTrendSinceDayZeroDates2">
-<tt class="descclassname">SamPy.focus.FocusPlots.</tt><tt class="descname">FocusTrendSinceDayZeroDates2</tt><big>(</big><em>output</em>, <em>input_folder</em>, <em>output_folder</em>, <em>filename='AllData.txt'</em><big>)</big><a class="headerlink" href="#SamPy.focus.FocusPlots.FocusTrendSinceDayZeroDates2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Plots the overall focus trend since the HST launch. Will not plot errors as they
-are smaller or similar size to the markers.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.FocusPlots.FocusTrendSinceDayZeroOLD">
-<tt class="descclassname">SamPy.focus.FocusPlots.</tt><tt class="descname">FocusTrendSinceDayZeroOLD</tt><big>(</big><em>title</em>, <em>output</em>, <em>input_folder</em>, <em>output_folder</em>, <em>filename='comp2009allfocus.txt'</em><big>)</big><a class="headerlink" href="#SamPy.focus.FocusPlots.FocusTrendSinceDayZeroOLD" title="Permalink to this definition">¶</a></dt>
-<dd><p>&#64;deprecated: This function is no longer used. Please see the other two functions.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.FocusPlots.confocality">
-<tt class="descclassname">SamPy.focus.FocusPlots.</tt><tt class="descname">confocality</tt><big>(</big><em>type</em>, <em>input_folder</em>, <em>output_folder</em><big>)</big><a class="headerlink" href="#SamPy.focus.FocusPlots.confocality" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a plot where WFC3 UVIS focus is compared to ACS WFC.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.FocusPlots.findMaxAndPair">
-<tt class="descclassname">SamPy.focus.FocusPlots.</tt><tt class="descname">findMaxAndPair</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#SamPy.focus.FocusPlots.findMaxAndPair" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-SamPy.focus.HSTfocus">
-<span id="hstfocus-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">HSTfocus</span></tt> Module<a class="headerlink" href="#module-SamPy.focus.HSTfocus" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="SamPy.focus.HSTfocus.MirrorMoves">
-<tt class="descclassname">SamPy.focus.HSTfocus.</tt><tt class="descname">MirrorMoves</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.focus.HSTfocus.MirrorMoves" title="Permalink to this definition">¶</a></dt>
-<dd><p>HST Secondary mirror moves and amounts.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.HSTfocus.MirrorMovesInHSTTime">
-<tt class="descclassname">SamPy.focus.HSTfocus.</tt><tt class="descname">MirrorMovesInHSTTime</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.focus.HSTfocus.MirrorMovesInHSTTime" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-SamPy.focus.PhaseretrievalresultsTinyTim">
-<span id="phaseretrievalresultstinytim-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">PhaseretrievalresultsTinyTim</span></tt> Module<a class="headerlink" href="#module-SamPy.focus.PhaseretrievalresultsTinyTim" title="Permalink to this headline">¶</a></h2>
-<p>HISTORY:
-Created on March 3, 2011</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
-</tr>
-<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a></td>
-</tr>
-<tr class="field"><th class="field-name">version:</th><td class="field-body">0.1</td>
-</tr>
-</tbody>
-</table>
-<dl class="class">
-<dt id="SamPy.focus.PhaseretrievalresultsTinyTim.TinyTimResults">
-<em class="property">class </em><tt class="descclassname">SamPy.focus.PhaseretrievalresultsTinyTim.</tt><tt class="descname">TinyTimResults</tt><big>(</big><em>cameras</em>, <em>str</em><big>)</big><a class="headerlink" href="#SamPy.focus.PhaseretrievalresultsTinyTim.TinyTimResults" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">focus.phaseretrievalresults.PhaseRetResults</span></tt></p>
-<p>Expansion to PhaseRetResults class</p>
-<dl class="method">
-<dt id="SamPy.focus.PhaseretrievalresultsTinyTim.TinyTimResults.findRealFocus">
-<tt class="descname">findRealFocus</tt><big>(</big><em>file</em><big>)</big><a class="headerlink" href="#SamPy.focus.PhaseretrievalresultsTinyTim.TinyTimResults.findRealFocus" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.focus.PhaseretrievalresultsTinyTim.TinyTimResults.plotFocusDifference">
-<tt class="descname">plotFocusDifference</tt><big>(</big><em>input</em>, <em>title</em>, <em>abs=False</em><big>)</big><a class="headerlink" href="#SamPy.focus.PhaseretrievalresultsTinyTim.TinyTimResults.plotFocusDifference" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.focus.PhaseretrievalresultsTinyTim.TinyTimResults.plotFocusFieldPosition">
-<tt class="descname">plotFocusFieldPosition</tt><big>(</big><em>input</em>, <em>title</em><big>)</big><a class="headerlink" href="#SamPy.focus.PhaseretrievalresultsTinyTim.TinyTimResults.plotFocusFieldPosition" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-SamPy.focus.PhaseretrievalresultsTinyTimACS">
-<span id="phaseretrievalresultstinytimacs-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">PhaseretrievalresultsTinyTimACS</span></tt> Module<a class="headerlink" href="#module-SamPy.focus.PhaseretrievalresultsTinyTimACS" title="Permalink to this headline">¶</a></h2>
-<p>HISTORY:
-Created on March 3, 2011</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
-</tr>
-<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a></td>
-</tr>
-<tr class="field"><th class="field-name">version:</th><td class="field-body">0.1</td>
-</tr>
-</tbody>
-</table>
-<dl class="class">
-<dt id="SamPy.focus.PhaseretrievalresultsTinyTimACS.TinyTimResults">
-<em class="property">class </em><tt class="descclassname">SamPy.focus.PhaseretrievalresultsTinyTimACS.</tt><tt class="descname">TinyTimResults</tt><big>(</big><em>cameras</em>, <em>str</em><big>)</big><a class="headerlink" href="#SamPy.focus.PhaseretrievalresultsTinyTimACS.TinyTimResults" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#SamPy.focus.phaseretrievalresults.PhaseRetResults" title="SamPy.focus.phaseretrievalresults.PhaseRetResults"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.focus.phaseretrievalresults.PhaseRetResults</span></tt></a></p>
-<p>Expansion to PhaseRetResults class</p>
-<dl class="method">
-<dt id="SamPy.focus.PhaseretrievalresultsTinyTimACS.TinyTimResults.findRealFocus">
-<tt class="descname">findRealFocus</tt><big>(</big><em>file</em><big>)</big><a class="headerlink" href="#SamPy.focus.PhaseretrievalresultsTinyTimACS.TinyTimResults.findRealFocus" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.focus.PhaseretrievalresultsTinyTimACS.TinyTimResults.plotFocusDifference">
-<tt class="descname">plotFocusDifference</tt><big>(</big><em>input</em>, <em>title</em><big>)</big><a class="headerlink" href="#SamPy.focus.PhaseretrievalresultsTinyTimACS.TinyTimResults.plotFocusDifference" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.focus.PhaseretrievalresultsTinyTimACS.TinyTimResults.plotFocusFieldPosition">
-<tt class="descname">plotFocusFieldPosition</tt><big>(</big><em>input</em>, <em>title</em><big>)</big><a class="headerlink" href="#SamPy.focus.PhaseretrievalresultsTinyTimACS.TinyTimResults.plotFocusFieldPosition" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-SamPy.focus.WFC3ImageExtensioner">
-<span id="wfc3imageextensioner-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">WFC3ImageExtensioner</span></tt> Module<a class="headerlink" href="#module-SamPy.focus.WFC3ImageExtensioner" title="Permalink to this headline">¶</a></h2>
-<p>Created on Apr 15, 2010</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
-</tr>
-<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a></td>
-</tr>
-<tr class="field"><th class="field-name">version:</th><td class="field-body">0.1</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section" id="module-SamPy.focus.WFC3ImageExtensionerTinyTim">
-<span id="wfc3imageextensionertinytim-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">WFC3ImageExtensionerTinyTim</span></tt> Module<a class="headerlink" href="#module-SamPy.focus.WFC3ImageExtensionerTinyTim" title="Permalink to this headline">¶</a></h2>
-<p>Created on March 3, 2011</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
-</tr>
-<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a></td>
-</tr>
-<tr class="field"><th class="field-name">version:</th><td class="field-body">0.1</td>
-</tr>
-</tbody>
-</table>
-<dl class="function">
-<dt id="SamPy.focus.WFC3ImageExtensionerTinyTim.parse_parameterfile">
-<tt class="descclassname">SamPy.focus.WFC3ImageExtensionerTinyTim.</tt><tt class="descname">parse_parameterfile</tt><big>(</big><em>file='./complete_results/parameters.txt'</em><big>)</big><a class="headerlink" href="#SamPy.focus.WFC3ImageExtensionerTinyTim.parse_parameterfile" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-SamPy.focus.collect_focus">
-<span id="collect-focus-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">collect_focus</span></tt> Module<a class="headerlink" href="#module-SamPy.focus.collect_focus" title="Permalink to this headline">¶</a></h2>
-<p>Collects focus measurement results and outputs them
-to files, one for each instrument and chip.</p>
-<p>This is so horribly written that it should be redone 
-completely from scratch. There are Python tuples, lists
-and NumPy arrays, and they are all badly mixed.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
-</tr>
-<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a></td>
-</tr>
-<tr class="field"><th class="field-name">organization:</th><td class="field-body">Space Telescope Science Insitute</td>
-</tr>
-<tr class="field"><th class="field-name">version:</th><td class="field-body">0.1</td>
-</tr>
-<tr class="field"><th class="field-name">todo:</th><td class="field-body">improve documentation</td>
-</tr>
-</tbody>
-</table>
-<dl class="function">
-<dt id="SamPy.focus.collect_focus.append_to_FocusModel">
-<tt class="descclassname">SamPy.focus.collect_focus.</tt><tt class="descname">append_to_FocusModel</tt><big>(</big><em>inputfile</em>, <em>outputfile</em>, <em>path</em><big>)</big><a class="headerlink" href="#SamPy.focus.collect_focus.append_to_FocusModel" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function appends new measurements to existing data
-files that are read by e.g. Colin&#8217;s focustool.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Param :</th><td class="field-body">inputfile: Name of the input data file that
-potentially contains new data.</td>
-</tr>
-<tr class="field"><th class="field-name">Param :</th><td class="field-body">outputfile: Name of the output dat file to which
-new data are appended to.</td>
-</tr>
-<tr class="field"><th class="field-name">Param :</th><td class="field-body">path: Path from where the outputfile can be found.</td>
-</tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">Boolean indicating if new data were identified.</td>
-</tr>
-<tr class="field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.collect_focus.findZernikes">
-<tt class="descclassname">SamPy.focus.collect_focus.</tt><tt class="descname">findZernikes</tt><big>(</big><em>files</em>, <em>instrument='WFC3'</em>, <em>file_instrument='i'</em><big>)</big><a class="headerlink" href="#SamPy.focus.collect_focus.findZernikes" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.collect_focus.main">
-<tt class="descclassname">SamPy.focus.collect_focus.</tt><tt class="descname">main</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.focus.collect_focus.main" title="Permalink to this definition">¶</a></dt>
-<dd><p>Driver of collect_focus.py</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.collect_focus.modList">
-<tt class="descclassname">SamPy.focus.collect_focus.</tt><tt class="descname">modList</tt><big>(</big><em>data</em>, <em>dtype={'names': ('file'</em>, <em>'cam'</em>, <em>'date'</em>, <em>'MJD'</em>, <em>'Focus')</em>, <em>'formats': ('|S12'</em>, <em>'|S8'</em>, <em>'|S12'</em>, <em>'&lt;f8'</em>, <em>'&lt;f8')}</em>, <em>filecol='file'</em><big>)</big><a class="headerlink" href="#SamPy.focus.collect_focus.modList" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.collect_focus.writeOutput">
-<tt class="descclassname">SamPy.focus.collect_focus.</tt><tt class="descname">writeOutput</tt><big>(</big><em>data</em>, <em>outputfile</em>, <em>chip</em>, <em>header='#file camera date mjd focus error\n'</em><big>)</big><a class="headerlink" href="#SamPy.focus.collect_focus.writeOutput" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
-<div class="section" id="module-SamPy.focus.phaseretrievalresults">
-<span id="phaseretrievalresults-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">phaseretrievalresults</span></tt> Module<a class="headerlink" href="#module-SamPy.focus.phaseretrievalresults" title="Permalink to this headline">¶</a></h2>
-<p>DESCRIPTION:
-Combines the Phase Retrieval software results, produces plots
-and calculates focus with and without breathing correction.</p>
-<p>USAGE:
-python PhaseRetResults.py</p>
-<p>HISTORY:
-Created on Dec 17, 2009</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
-</tr>
-<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a></td>
-</tr>
-<tr class="field"><th class="field-name">version:</th><td class="field-body">0.91</td>
-</tr>
-<tr class="field"><th class="field-name">todo:</th><td class="field-body">maybe introduce sigma clipping to the means?</td>
-</tr>
-<tr class="field"><th class="field-name">todo:</th><td class="field-body">how the legend has been implemented is really dirty,
-it should be done better.</td>
-</tr>
-</tbody>
-</table>
-<dl class="class">
-<dt id="SamPy.focus.phaseretrievalresults.PhaseRetResults">
-<em class="property">class </em><tt class="descclassname">SamPy.focus.phaseretrievalresults.</tt><tt class="descname">PhaseRetResults</tt><big>(</big><em>cameras</em>, <em>str</em><big>)</big><a class="headerlink" href="#SamPy.focus.phaseretrievalresults.PhaseRetResults" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="SamPy.focus.phaseretrievalresults.PhaseRetResults.findFiles">
-<tt class="descname">findFiles</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#SamPy.focus.phaseretrievalresults.PhaseRetResults.findFiles" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.focus.phaseretrievalresults.PhaseRetResults.plotFocus">
-<tt class="descname">plotFocus</tt><big>(</big><em>chip1</em>, <em>chip2</em>, <em>brdata=</em><span class="optional">[</span><span class="optional">]</span>, <em>noBreathing=False</em><big>)</big><a class="headerlink" href="#SamPy.focus.phaseretrievalresults.PhaseRetResults.plotFocus" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.focus.phaseretrievalresults.PhaseRetResults.plotStars">
-<tt class="descname">plotStars</tt><big>(</big><em>file</em>, <em>ext</em>, <em>xpos</em>, <em>ypos</em>, <em>rad=25</em><big>)</big><a class="headerlink" href="#SamPy.focus.phaseretrievalresults.PhaseRetResults.plotStars" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.focus.phaseretrievalresults.PhaseRetResults.readBreathing">
-<tt class="descname">readBreathing</tt><big>(</big><em>file</em><big>)</big><a class="headerlink" href="#SamPy.focus.phaseretrievalresults.PhaseRetResults.readBreathing" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.focus.phaseretrievalresults.PhaseRetResults.readResults">
-<tt class="descname">readResults</tt><big>(</big><em>file</em><big>)</big><a class="headerlink" href="#SamPy.focus.phaseretrievalresults.PhaseRetResults.readResults" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="module-SamPy.focus.plotextractionboxdata">
-<span id="plotextractionboxdata-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">plotextractionboxdata</span></tt> Module<a class="headerlink" href="#module-SamPy.focus.plotextractionboxdata" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
-</tr>
-</tbody>
-</table>
-<dl class="function">
-<dt id="SamPy.focus.plotextractionboxdata.parse_data">
-<tt class="descclassname">SamPy.focus.plotextractionboxdata.</tt><tt class="descname">parse_data</tt><big>(</big><em>file</em>, <em>mjd=2</em>, <em>focus=6</em><big>)</big><a class="headerlink" href="#SamPy.focus.plotextractionboxdata.parse_data" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.plotextractionboxdata.plot_extractionbox_comparison">
-<tt class="descclassname">SamPy.focus.plotextractionboxdata.</tt><tt class="descname">plot_extractionbox_comparison</tt><big>(</big><em>data</em>, <em>breathing</em>, <em>outdir</em><big>)</big><a class="headerlink" href="#SamPy.focus.plotextractionboxdata.plot_extractionbox_comparison" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="function">
-<dt id="SamPy.focus.plotextractionboxdata.read_breathing">
-<tt class="descclassname">SamPy.focus.plotextractionboxdata.</tt><tt class="descname">read_breathing</tt><big>(</big><em>file</em><big>)</big><a class="headerlink" href="#SamPy.focus.plotextractionboxdata.read_breathing" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</div>
 </div>
 
 
@@ -628,15 +133,14 @@ it should be done better.</td>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="SamPy.grisms.html" title="grisms Package"
+          <a href="SamPy.focus.collect_focus.html" title="SamPy.focus.collect_focus"
              >next</a> |</li>
         <li class="right" >
-          <a href="SamPy.fitting.html" title="fitting Package"
+          <a href="SamPy.fitting.weightedFittingExample.third_order.html" title="SamPy.fitting.weightedFittingExample.third_order"
              >previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
-
-          <li><a href="SamPy.html" >SamPy Package</a> &raquo;</li> 
+ 
       </ul>
     </div>
     <div class="footer">

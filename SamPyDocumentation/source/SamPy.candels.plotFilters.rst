@@ -8,7 +8,8 @@ SamPy.candels.plotFilters
    .. rubric:: Functions
 
    .. autosummary::
-   
+      :toctree:
+
       inset_axes
       main
       main2
@@ -22,7 +23,8 @@ SamPy.candels.plotFilters
    .. rubric:: Classes
 
    .. autosummary::
-   
+      :toctree:
+
       InsetPosition
    
    

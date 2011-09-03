@@ -38,7 +38,8 @@ def find_header_info(input_files):
         out[f] = [hdr['FILTER'], hdr['DATE-OBS'], hdr['EXPTIME']]
     return out
 
-def find_direct_images(dict, column = 0):
+
+def find_direct_images(dict, column=0):
     '''
     Pick out direct images from a dictionary (that could have been
     created using the "find_header_info" function). Assumes that all
@@ -52,6 +53,7 @@ def find_direct_images(dict, column = 0):
             out.append(key)
     return out
 
+
 def print_files(headers):
     '''
     Outputs some basic information to the shell.
@@ -63,10 +65,11 @@ def print_files(headers):
             st += '%20s' % a
         print st
 
+
 def fixSourceExtractorCatalogue(filter, pivot):
-    data = open(filter+'.cat', 'r').readlines()
-    s.move(filter+'.cat', filter+'.cat.backup')
-    out = open(filter+'.cat', 'w')
+    data = open(filter + '.cat', 'r').readlines()
+    s.move(filter + '.cat', filter + '.cat.backup')
+    out = open(filter + '.cat', 'w')
     for line in data:
         if 'MAG_AUTO' in line:
             out.write(line.replace('MAG_AUTO', 'MAG_' + pivot))
@@ -75,14 +78,14 @@ def fixSourceExtractorCatalogue(filter, pivot):
 
 
 def make_ds9_regions_file(inputfile, outputfile,
-                          size = 10, 
-                          xcolumn = 'x_image', ycolumn='y_image'):
+                          size=10,
+                          xcolumn='x_image', ycolumn='y_image'):
     '''
     '''
 
-    data = su.se_catalog(inputfile+'.cat')
-    xarray = eval('data.'+xcolumn)
-    yarray = eval('data.'+ycolumn)
+    data = su.se_catalog(inputfile + '.cat')
+    xarray = eval('data.' + xcolumn)
+    yarray = eval('data.' + ycolumn)
 
     out = open(outputfile, 'w')
     for x, y in zip(xarray, yarray):
@@ -91,7 +94,6 @@ def make_ds9_regions_file(inputfile, outputfile,
     out.close()
 
 if __name__ == '__main__':
-
     ###############################################################
     #input parameters, should be read from a file
     #Change these if needed
@@ -100,7 +102,7 @@ if __name__ == '__main__':
     input = './nov2010/'
 
     #output directory
-    out =  './reduced/'
+    out = './reduced/'
 
     #AxE confs
     confs = '/Users/niemi/Desktop/Grisms/confs/'
@@ -143,26 +145,26 @@ if __name__ == '__main__':
     #copy files to save
     for f in ins:
         tmp = os.path.split(f)[1]
-        if not os.path.isfile('./save/'+tmp):
-            s.copy('../'+f, './save/')
+        if not os.path.isfile('./save/' + tmp):
+            s.copy('../' + f, './save/')
 
     #find direct image files
     directs = find_direct_images(ins_headers)
 
     #copy config files to right place
-    for f in g.glob(confs+'*'):
+    for f in g.glob(confs + '*'):
         tmp = os.path.split(f)[1]
-        if not os.path.isfile('./CONF/'+tmp):
+        if not os.path.isfile('./CONF/' + tmp):
             s.copy(f, './CONF/')
 
     #copy direct images to ../IMDRIZZLE
     for f in directs:
         tmp = os.path.split(f)[1]
-        if not os.path.isfile('./IMDRIZZLE/'+tmp):
-            s.copy('./save/'+f, './IMDRIZZLE/')
+        if not os.path.isfile('./IMDRIZZLE/' + tmp):
+            s.copy('./save/' + f, './IMDRIZZLE/')
 
     # find all filters
-    filters =  set([ins_headers[x][0] for x in ins_headers])
+    filters = set([ins_headers[x][0] for x in ins_headers])
 
     #change directory to ../IMDRIZZLE
     os.chdir('./IMDRIZZLE')
@@ -181,37 +183,37 @@ if __name__ == '__main__':
                 if os.path.isfile(f):
                     'print file %s exists, will not overwrite' % f
                 else:
-                     #run to ins files
-                    ins =''
+                #run to ins files
+                    ins = ''
                     for x in tmp:
                         ins += x + ','
-                    stsdas.multidrizzle(ins[:-1], output=f, final_rot = 'INDEF')
+                    stsdas.multidrizzle(ins[:-1], output=f, final_rot='INDEF')
                     multiout.append(f)
 
     #copy the source extractor confs
-    for f in g.glob(sconfs+'*.*'):
+    for f in g.glob(sconfs + '*.*'):
         s.copy(f, '.')
 
     #solate the science and weight extensions of the co-added images
     for f in multiout:
-        if os.path.isfile(f+'_drz_sci.fits'):
+        if os.path.isfile(f + '_drz_sci.fits'):
             print 'Will copy old *drz_sci.fits to tmp'
-            s.move(f+'_drz_sci.fits', f+'_drz_sci_tmp.fits')
-        if os.path.isfile(f+'_drz_wht.fits'):
+            s.move(f + '_drz_sci.fits', f + '_drz_sci_tmp.fits')
+        if os.path.isfile(f + '_drz_wht.fits'):
             print 'Will copy old *drz_wht.fits to tmp'
-            s.move(f+'_drz_wht.fits', f+'_drz_wht_tmp.fits')
+            s.move(f + '_drz_wht.fits', f + '_drz_wht_tmp.fits')
 
-        iraf.imcopy(f+'_drz.fits[SCI]', f+'_drz_sci.fits')
-        iraf.imcopy(f+'_drz.fits[WHT]', f+'_drz_wht.fits')
+        iraf.imcopy(f + '_drz.fits[SCI]', f + '_drz_sci.fits')
+        iraf.imcopy(f + '_drz.fits[WHT]', f + '_drz_wht.fits')
 
     #run source xtractor
     for f in filters:
         if f.startswith('F'):
             mg = filterInformation[f][0]
-            cmd = 'sex -c default.sex -WEIGHTIMAGE '+f+'_drz.fits[WHT] '
+            cmd = 'sex -c default.sex -WEIGHTIMAGE ' + f + '_drz.fits[WHT] '
             cmd += '-MAG_ZEROPOINT ' + str(mg)
-            cmd += ' -CATALOG_NAME '+f+'.cat '
-            cmd += ' '+f+'_drz_sci.fits'
+            cmd += ' -CATALOG_NAME ' + f + '.cat '
+            cmd += ' ' + f + '_drz_sci.fits'
             print cmd
             os.system(cmd)
 
@@ -224,7 +226,7 @@ if __name__ == '__main__':
     #make ds9 region files
     for f in filters:
         if f.startswith('F'):
-            make_ds9_regions_file(f, f+'.reg', size = 10)
+            make_ds9_regions_file(f, f + '.reg', size=10)
 
     #all done
     print 'Preparations done...'

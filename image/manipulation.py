@@ -24,12 +24,12 @@ def frebin(image, nsout, nlout=1, total=False):
 
     :note: modelled after the IDL code frebin.pro, so this may not be the fastest solution
 
-    :param: image: input image, 1-d or 2-d ndarray
-    :param: nsout: number of samples in the output image, numeric scalar
-    :param: nlout: number of lines (ydir) in the output image, numeric scalar
-    :param: total: Use of the total conserves surface flux. If True, the output pixels
-                   will be the sum of pixels within the appropriate box of the input image.
-                   Otherwise they will be the average.
+    :param image: input image, 1-d or 2-d ndarray
+    :param nsout: number of samples in the output image, numeric scalar
+    :param nlout: number of lines (ydir) in the output image, numeric scalar
+    :param total: Use of the total conserves surface flux. If True, the output pixels
+                  will be the sum of pixels within the appropriate box of the input image.
+                  Otherwise they will be the average.
 
     :return: binned array
     :rtype: ndarray
@@ -137,8 +137,7 @@ def congrid(a, newdims, method='linear', centre=False, minusone=False):
 
     method:
     neighbour - closest value from original data
-    nearest and linear - uses n x 1-D interpolations using
-                         scipy.interpolate.interp1d
+    nearest and linear - uses n x 1-D interpolations using scipy.interpolate.interp1d
     (see Numerical Recipes for validity of use of n 1-D interpolations)
     spline - uses ndimage.map_coordinates
 

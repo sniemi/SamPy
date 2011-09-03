@@ -1,10 +1,7 @@
-'''
-Pulls out data from the SMAKCED wiki page
-and parses it into an array that is simple
-to manipulate and output.
+"""
+Pulls out data from the SMAKCED wiki page and parses it into an array that is simple to manipulate and output.
 
 :requires: BeautifulSoup
-
 
 HISTORY:
 Created on Mar 26, 2010 (version 0.1)
@@ -13,7 +10,7 @@ Removed NumPy dependency April 2, 2010 (version 0.2)
 :version: 0.2
 
 :author: Sami-Matias Niemi
-'''
+"""
 import urllib2, csv
 from parsing.BeautifulSoup import BeautifulSoup
 
@@ -21,34 +18,34 @@ __author__ = 'Sami-Matias Niemi'
 __version__ = '0.2'
 
 class Smakced():
-    '''
+    """
     A Class related to SMAKCED collaboration wiki page.
-    '''
+    """
 
     def __init__(self, url, table):
-        '''
+        """
         Constructor
 
         :param url: url address of the page
         :param table: name of the table
-        '''
+        """
         self.url = url
         self.table = table
         self.address = self.url + self.table
 
     def getData(self):
-        '''
+        """
         Retrieve data from the SMAKCED web page.
         
         :return: retrieved raw data
-        '''
+        """
         hand = urllib2.urlopen(self.address)
         data = hand.readlines()
         hand.close()
         return data
 
     def parseTable(self, data):
-        '''
+        """
         Parses html table data using BeautifulSoup.
         Note that table number has been hard coded.
         The SMAKCED wiki page returns several "tables".
@@ -56,7 +53,7 @@ class Smakced():
         :param data: data that has been retrieved with the getData method
 
         :return: array containing table entries
-        '''
+        """
         tablenumber = 3
         result = []
         soup = BeautifulSoup(''.join(data))
@@ -79,17 +76,16 @@ class Smakced():
         return result
 
     def writeToFile(self, data, output):
-        '''
+        """
         Writes an html page that contains tables to a file
         in ascii format.
         Uses BeautifulSoup for parsing tables.
         
         :note: This method is untested.
         
-        :param data: data that has been retrieved with
-        the getData method
+        :param data: data that has been retrieved with the getData method
         :param output: name of the output file
-        '''
+        """
         g = open(output, 'w')
         soup = BeautifulSoup(''.join(data))
         t = soup.findAll('table')
@@ -113,9 +109,9 @@ class Smakced():
         g.close()
 
 if __name__ == '__main__':
-    '''
+    """
     Run when the script is run from the command line.
-    '''
+    """
     #table address
     smackedurl = 'http://smakced.pbworks.com'
     tableName1 = '/Virgo1'

@@ -1,7 +1,9 @@
-#!/usr/bin/env python
-# -*- encoding: utf-8 -*-
-#MySQLdbSMN class has been designed to make the localhost MySQL db connection easier.
-#
+"""
+Connects to the localhost MySQL db.
+
+:author: Sami-Matias Niemi
+:version: 0.1
+"""
 
 class MySQLdbSMN():
     def __init__(self, sql, database):

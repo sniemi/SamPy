@@ -8,7 +8,8 @@ SamPy.bolshoi.testLightcone
    .. rubric:: Functions
 
    .. autosummary::
-   
+      :toctree:
+
       diff_function
       plotAllLuminosityFunctions
       plotFluxRedshiftDistribution
@@ -27,7 +28,8 @@ SamPy.bolshoi.testLightcone
    .. rubric:: Classes
 
    .. autosummary::
-   
+      :toctree:
+
       FormatStrFormatter
       LogLocator
       MultipleLocator

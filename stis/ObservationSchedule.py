@@ -1,14 +1,11 @@
-'''
-ABOUT:
-         This script can be used to parse instrument specific
-         observations from SMS messages. It can also be used to
-         generate memory dump schedule from the SMS. 
-         
-         The script can automatically email generated schedules
-         to a given email address.
+"""
+This script can be used to parse instrument specific observations from SMS messages. It can also be used to generate memory dump schedule from the SMS.
 
-         The calendar and SMS status can be found from:
-         http://www.stsci.edu/reports/spss-status.html
+The script can automatically email generated schedules
+to a given email address.
+
+The calendar and SMS status can be found from:
+http://www.stsci.edu/reports/spss-status.html
 
 USAGE:   
          python ObservationSchedule.py [flags]
@@ -34,7 +31,7 @@ HISTORY:
          Nov 20 2009: Version 0.2 (added email sending option)
 
 :author: Sami-Matias Niemi (niemi@stsci.edu) for STScI
-'''
+"""
 
 __author__ = 'Sami-Matias Niemi'
 __version__ = '0.2'
@@ -76,8 +73,8 @@ def checkZeroArguments(opts):
 
 
 def DaystoDates(input):
-    '''
-    '''
+    """
+    """
     import datetime
 
     year = datetime.datetime.today().year
@@ -91,8 +88,8 @@ def DaystoDates(input):
 
 
 def DaystoDates2(input):
-    '''
-    '''
+    """
+    """
     import datetime
 
     year = datetime.datetime.today().year
@@ -165,10 +162,10 @@ def findTitle(input):
 
 
 def SendEmail(instrument, sms, files, mailto):
-    '''
+    """
     This function sends an email to mailto address and attaches
     all files in files list to the message.
-    '''
+    """
     import commands, os
     import smtplib
     from email.mime.text import MIMEText
@@ -210,9 +207,9 @@ def SendEmail(instrument, sms, files, mailto):
 
 
 if __name__ == '__main__':
-    '''
+    """
     Main program. 
-    '''
+    """
     import sys
     import urllib2
 

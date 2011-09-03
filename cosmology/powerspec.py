@@ -1,14 +1,15 @@
-'''
+"""
 Power spectrum related functions.
-'''
-
+"""
 import numpy as np
 
 def growth_func(z, Om, Ol, Ok=0):
     """
-    The growth function
+    The growth function.
 
-    P(k,z) = 2*pi^2 * norm_z0 * pfunc * growth_func(z)**2 
+    .. math::
+
+       P(k,z) = 2*\\pi^{2} * norm_z0 * pfunc * growth_func(z)^{2}
     """
     D0 = 2.5*Om / (Om**(4./7) - Ol + (1 + 0.5*Om)*(1 + Ol/70.))
     
@@ -26,8 +27,7 @@ def growth_func(z, Om, Ol, Ok=0):
 def cdm_corr_z2p5(rvals, fudge=4.9, sigma8 = 0.809, omegam = 0.272,
                   omegal = 0.728):
     """
-    Return the dark matter correlation function at separations given
-    by rvals at z=2.5
+    Return the dark matter correlation function at separations given by rvals at z=2.5
 
     rvals in h^-1 Mpc
     """

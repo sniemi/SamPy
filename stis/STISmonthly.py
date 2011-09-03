@@ -1,37 +1,39 @@
-'''
+"""
 A script to pull out information from ZEPPO for STIS MSM montly monitoring.
 
 :date: Created on Mar 23, 2009
 
 :author: Sami-Matias Niemi
-'''
+"""
 
 __author__ = 'Sami-Matias Niemi'
 __version__ = '1.0'
 
 def getMonth():
-    '''
+    """
     Returns a date 4 weeks ago from today.
-    '''
+    """
     import datetime
-    
+
     date = datetime.date.today()
     delta = datetime.timedelta(weeks=-4)
-    
+
     return (date + delta)
 
+
 def saveDataToFile(filename, data):
-    '''
+    """
     Prints data to a file.
-    '''
+    """
     output = open(filename, 'w')
-    
-    hdr1 = '''Axis1      Axis2    Aperture  Slit    Date        Configuration  Spec. Elem.  Wavel.  Data Set  Target     Prop\n''' 
-    hdr2 = ('-'*9 + ' ')*3 + '-'*4 + '   ' + '-'*11 + ' ' + '-'*15 + ' ' + '-'*22 + ' ' + '-'*4 + ' ' + '-'*11 + ' ' + '-'*15 +'\n'
-    
+
+    hdr1 = """Axis1      Axis2    Aperture  Slit    Date        Configuration  Spec. Elem.  Wavel.  Data Set  Target     Prop\n"""
+    hdr2 = (
+           '-' * 9 + ' ') * 3 + '-' * 4 + '   ' + '-' * 11 + ' ' + '-' * 15 + ' ' + '-' * 22 + ' ' + '-' * 4 + ' ' + '-' * 11 + ' ' + '-' * 15 + '\n'
+
     output.write(hdr1)
     output.write(hdr2)
-    
+
     for line in data:
         tmp = ''
         for cell in line:
@@ -43,24 +45,24 @@ def saveDataToFile(filename, data):
 
 
 if __name__ == '__main__':
-    '''
+    """
     A script to pull out information from ZEPPO for STIS MSM monitor.
-    '''   
+    """
     import DB
     import datetime
-    
+
     #Change these accordingly
     server = 'ZEPPO'
     user = 'yourusername'
     passwd = 'yourpasswd'
     database = 'dadsops'
     outputfile = 'output.test'
-    
+
     #Lets get the date 4 weeks ago from today...
     lastmonth = getMonth()
-    
+
     #SQL statement, change this
-    sql = '''select 
+    sql = """select 
     st.ssa_shifta1,
     st.ssa_shifta2,
     s.sci_aper_1234,
@@ -93,7 +95,7 @@ if __name__ == '__main__':
     (s.sci_spec_1234 = 'G140L' and s.sci_central_wavelength = 1425) or
     (s.sci_spec_1234 = 'G140M' and s.sci_central_wavelength = 1222) or
     (s.sci_spec_1234 = 'G140M' and s.sci_central_wavelength = 1272))
-    order by st.ssa_expend'''
+    order by st.ssa_expend"""
     #and s.sci_start_time > %s
     #order by st.ssa_expend''' % lastmonth
     

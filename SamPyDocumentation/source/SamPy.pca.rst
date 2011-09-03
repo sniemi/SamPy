@@ -1,11 +1,9 @@
 pca Package
 ===========
 
-:mod:`SMNpca` Module
---------------------
+.. currentmodule:: SamPy.pca
 
-.. automodule:: SamPy.pca.SMNpca
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. autosummary::
+   :toctree:
 
+   SMNpca

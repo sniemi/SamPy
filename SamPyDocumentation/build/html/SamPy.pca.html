@@ -23,8 +23,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
-    <link rel="up" title="SamPy Package" href="SamPy.html" />
-    <link rel="next" title="plot Package" href="SamPy.plot.html" />
+    <link rel="next" title="SamPy.pca.SMNpca" href="SamPy.pca.SMNpca.html" />
     <link rel="prev" title="parsing Package" href="SamPy.parsing.html" /> 
   </head>
   <body>
@@ -42,34 +41,25 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="SamPy.plot.html" title="plot Package"
+          <a href="SamPy.pca.SMNpca.html" title="SamPy.pca.SMNpca"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="SamPy.parsing.html" title="parsing Package"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
-
-          <li><a href="SamPy.html" accesskey="U">SamPy Package</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">pca Package</a><ul>
-<li><a class="reference internal" href="#module-SamPy.pca.SMNpca"><tt class="docutils literal"><span class="pre">SMNpca</span></tt> Module</a></li>
-</ul>
-</li>
-</ul>
-
   <h4>Previous topic</h4>
   <p class="topless"><a href="SamPy.parsing.html"
                         title="previous chapter">parsing Package</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="SamPy.plot.html"
-                        title="next chapter">plot Package</a></p>
+  <p class="topless"><a href="SamPy.pca.SMNpca.html"
+                        title="next chapter">SamPy.pca.SMNpca</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/SamPy.pca.txt"
@@ -98,140 +88,17 @@
             
   <div class="section" id="pca-package">
 <h1>pca Package<a class="headerlink" href="#pca-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-SamPy.pca.SMNpca">
-<span id="smnpca-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">SMNpca</span></tt> Module<a class="headerlink" href="#module-SamPy.pca.SMNpca" title="Permalink to this headline">¶</a></h2>
-<p>This Python module contains principle component analysis (PCA).
-It is SMN&#8217;s adaptation and no guarantees for correct results
-are made. So do not complain to me if it does not work ;-)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
 <tbody valign="top">
-<tr class="field"><th class="field-name">requires:</th><td class="field-body">NumPy</td>
-</tr>
-<tr class="field"><th class="field-name">requires:</th><td class="field-body">matplotlib (only the visualisation part)</td>
-</tr>
-<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
-</tr>
-<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a></td>
-</tr>
-<tr class="field"><th class="field-name">date:</th><td class="field-body">14/11/08 Initial Version</td>
-</tr>
-<tr class="field"><th class="field-name">version:</th><td class="field-body">0.1a</td>
+<tr><td><a class="reference internal" href="SamPy.pca.SMNpca.html#module-SamPy.pca.SMNpca" title="SamPy.pca.SMNpca"><tt class="xref py py-obj docutils literal"><span class="pre">SMNpca</span></tt></a></td>
+<td>This Python module contains principle component analysis (PCA).</td>
 </tr>
 </tbody>
 </table>
-<dl class="class">
-<dt id="SamPy.pca.SMNpca.SMNpca">
-<em class="property">class </em><tt class="descclassname">SamPy.pca.SMNpca.</tt><tt class="descname">SMNpca</tt><big>(</big><em>inputMatrix</em>, <em>stdnorm=False</em><big>)</big><a class="headerlink" href="#SamPy.pca.SMNpca.SMNpca" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class calculates the principle component analysis (PCA).</p>
-<p>First PC is direction of the maximum variance from origin. Subsequent PCs are orthogonal
-to 1st PC and describe maximum residual variance. Eigenvector cells are coefficients of 
-the corresponding principal component.</p>
-<p>Data input must be a matrix where rows are dimensions/variables and columns
-are measurements/observations.</p>
-<p>Optional argument stdnorm refers to standard deviation normalisation.
-A PCA without dividing by the standard deviation is an eigenanalysis of the covariance matrix, 
-and a PCA in which you divide by the standard deviation is an eigenanalysis of the correlation matrix.</p>
-<p>Output is...</p>
-<dl class="method">
-<dt id="SamPy.pca.SMNpca.SMNpca.Cov">
-<tt class="descname">Cov</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.pca.SMNpca.SMNpca.Cov" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.pca.SMNpca.SMNpca.DisplayAxisVariation">
-<tt class="descname">DisplayAxisVariation</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.pca.SMNpca.SMNpca.DisplayAxisVariation" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.pca.SMNpca.SMNpca.DisplayCov">
-<tt class="descname">DisplayCov</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.pca.SMNpca.SMNpca.DisplayCov" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.pca.SMNpca.SMNpca.DisplayEigenvalues">
-<tt class="descname">DisplayEigenvalues</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.pca.SMNpca.SMNpca.DisplayEigenvalues" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.pca.SMNpca.SMNpca.DisplayEigenvectors">
-<tt class="descname">DisplayEigenvectors</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.pca.SMNpca.SMNpca.DisplayEigenvectors" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.pca.SMNpca.SMNpca.DisplayFeatureMatrix">
-<tt class="descname">DisplayFeatureMatrix</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.pca.SMNpca.SMNpca.DisplayFeatureMatrix" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.pca.SMNpca.SMNpca.DisplayMajorComponentData">
-<tt class="descname">DisplayMajorComponentData</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.pca.SMNpca.SMNpca.DisplayMajorComponentData" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.pca.SMNpca.SMNpca.DisplayNewData">
-<tt class="descname">DisplayNewData</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.pca.SMNpca.SMNpca.DisplayNewData" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.pca.SMNpca.SMNpca.Eigenvalues">
-<tt class="descname">Eigenvalues</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.pca.SMNpca.SMNpca.Eigenvalues" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.pca.SMNpca.SMNpca.Eigenvectors">
-<tt class="descname">Eigenvectors</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.pca.SMNpca.SMNpca.Eigenvectors" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.pca.SMNpca.SMNpca.FeatureMatrix">
-<tt class="descname">FeatureMatrix</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.pca.SMNpca.SMNpca.FeatureMatrix" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.pca.SMNpca.SMNpca.MajorComponentData">
-<tt class="descname">MajorComponentData</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.pca.SMNpca.SMNpca.MajorComponentData" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.pca.SMNpca.SMNpca.VisualisePCAtoFileIn2D">
-<tt class="descname">VisualisePCAtoFileIn2D</tt><big>(</big><em>data</em>, <em>filename</em><big>)</big><a class="headerlink" href="#SamPy.pca.SMNpca.SMNpca.VisualisePCAtoFileIn2D" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.pca.SMNpca.SMNpca.VisualisePCAtoFileIn3D">
-<tt class="descname">VisualisePCAtoFileIn3D</tt><big>(</big><em>data</em>, <em>filename</em><big>)</big><a class="headerlink" href="#SamPy.pca.SMNpca.SMNpca.VisualisePCAtoFileIn3D" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.pca.SMNpca.SMNpca.doPCA">
-<tt class="descname">doPCA</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.pca.SMNpca.SMNpca.doPCA" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.pca.SMNpca.SMNpca.evalues">
-<tt class="descname">evalues</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.pca.SMNpca.SMNpca.evalues" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.pca.SMNpca.SMNpca.evectors">
-<tt class="descname">evectors</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.pca.SMNpca.SMNpca.evectors" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.pca.SMNpca.SMNpca.featureMatrix">
-<tt class="descname">featureMatrix</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.pca.SMNpca.SMNpca.featureMatrix" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="SamPy.pca.SMNpca.SMNpca.principleComponent">
-<tt class="descname">principleComponent</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.pca.SMNpca.SMNpca.principleComponent" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</div>
 </div>
 
 
@@ -250,15 +117,14 @@ and a PCA in which you divide by the standard deviation is an eigenanalysis of t
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="SamPy.plot.html" title="plot Package"
+          <a href="SamPy.pca.SMNpca.html" title="SamPy.pca.SMNpca"
              >next</a> |</li>
         <li class="right" >
           <a href="SamPy.parsing.html" title="parsing Package"
              >previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
-
-          <li><a href="SamPy.html" >SamPy Package</a> &raquo;</li> 
+ 
       </ul>
     </div>
     <div class="footer">

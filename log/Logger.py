@@ -1,5 +1,5 @@
 """
-Log creating functions.
+These functions can be used for logging information.
 
 :author: Sami-Matias Niemi
 

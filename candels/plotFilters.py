@@ -1,5 +1,5 @@
 """
-Generates a plot with filter throughputs.
+Generates a plot with filter throughputs for CANDELS collaboration.
 """
 import matplotlib
 matplotlib.use('PDF')

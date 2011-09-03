@@ -1,27 +1,25 @@
-'''
+"""
 Calculates pixels shifts between two COS NUV spectra.
 
-ABOUT:
-	This script can be used to determine the shift (in pixels) of one
-	spectrum with respect to another. The cross correlation between
-	S1 and S2 is determined and a non-linear fit to the peak of the
-	correlation is used to determine the exact offset.
+This script can be used to determine the shift (in pixels) of one
+spectrum with respect to another. The cross correlation between
+S1 and S2 is determined and a non-linear fit to the peak of the
+correlation is used to determine the exact offset.
 
-CONTAINS:
-	'SpectrumOffset' and 'get_NUV_PSA_WCA' functions.
+:requires: Python 2.5 (not 3.0 compatible)
+:requires: PyFits
+:requires: NumArray (for boxcar smoothing)
+:requires: NumPy (could be written without)
 
-DEPENDS:
-	Python 2.5 (not 3.0 compatible)
-   PyFits
-   NumArray (for boxcar smoothing)
-   NumPy (could be written without)
+:author: Sami-Matias Niemi for STScI, 01/26/2009
 
-AUTHOR:
-	Sami-Matias Niemi for STScI, 01/26/2009
-
-HISTORY:
-	01/26/09: Initial Release, version 0.1
-'''
+:history: 01/26/09: Initial Release, version 0.1
+"""
+import math
+import numpy as N
+import sys
+import pyfits as pf
+import pylab as P
 
 __author__ = 'Sami-Matias Niemi'
 __version__ = 0.1
@@ -29,15 +27,17 @@ __version__ = 0.1
 #This is a helper function. Code adapted from the orignal IDL code:
 #http://www.astro.washington.edu/docs/idl/cgi-bin/getpro/library43.html?HRS_OFFSET
 def SpectrumOffset(s1, s2, ishift=0, width=15, i1=0, i2=0):
-    '''
+    """
      This function calculates the shift (in pixels) of one spectrum
      with respect to another. The cross correlation between spectrum1
      and spectrum2 is determed and a non-linear fit to the peak of
      the correlation is used to determine the exact offset.
 
      input:
-     s1 - spectrum1, a list
-     s2 - spectrum2, a list
+     :param s1: the first spectrum
+     :type s1: ndarray
+     :param s2: the second spectrum
+     :type s2: ndarray
 
      optional input:
      ishift - guess of the intial shift in pixels, int
@@ -47,10 +47,7 @@ def SpectrumOffset(s1, s2, ishift=0, width=15, i1=0, i2=0):
 
      returns:
      a list with offset and correlations in every bin
-     '''
-    import math
-    import numpy as N
-
+     """
     approx = long(ishift + 100000.5) - 100000
 
     ns = len(s1)
@@ -120,10 +117,9 @@ def SpectrumOffset(s1, s2, ishift=0, width=15, i1=0, i2=0):
 
 
 def writeOutput(filename, data, header, separator=' '): #frmt
-    '''
-     This function can be used to write tabular data to a file with
-     selected separator
-     '''
+    """
+     This function can be used to write tabular data to a file with selected separator.
+     """
     output = open(filename, 'w')
 
     output.write(header)
@@ -138,10 +134,8 @@ def writeOutput(filename, data, header, separator=' '): #frmt
 
 
 def get_NUV_PSA_WCA(psalist, wcalist, scale=False, width=512, ishift=1, extrakeys=False, debug=False):
-    '''
-     Does a cross-correlation between a pair of x1d files
-     containing the PSA and WCA spectra for the same
-     central wavelegth.
+    """
+     Does a cross-correlation between a pair of x1d files  containing the PSA and WCA spectra for the same central wavelegth.
 
      input:
      psalist - a list containing filenames of the x1d spectra for the PSA
@@ -155,10 +149,7 @@ def get_NUV_PSA_WCA(psalist, wcalist, scale=False, width=512, ishift=1, extrakey
      returns:
      a list with central wavelengths, stripes, and calculated offset values.
 
-     '''
-    import sys
-    import pyfits as pf
-
+     """
     if scale: from numarray.convolve import boxcar as bc
     if extrakeys: import glob
 
@@ -270,8 +261,6 @@ def get_NUV_PSA_WCA(psalist, wcalist, scale=False, width=512, ishift=1, extrakey
 
 
 def plotOffsets(results):
-    import pylab as P
-
     nuva = []
     nuvb = []
     nuvc = []

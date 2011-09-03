@@ -1,6 +1,5 @@
-'''
-Collects focus measurement results and outputs them
-to files, one for each instrument and chip.
+"""
+Collects focus measurement results and outputs them to files, one for each instrument and chip.
 
 This is so horribly written that it should be redone 
 completely from scratch. There are Python tuples, lists
@@ -12,7 +11,7 @@ and NumPy arrays, and they are all badly mixed.
 :version: 0.1
 
 :todo: improve documentation
-'''
+"""
 import numpy as N
 import glob as G
 
@@ -89,7 +88,7 @@ def writeOutput(data, outputfile, chip,
 
 
 def append_to_FocusModel(inputfile, outputfile, path):
-    '''
+    """
     This function appends new measurements to existing data
     files that are read by e.g. Colin's focustool.
 
@@ -101,7 +100,7 @@ def append_to_FocusModel(inputfile, outputfile, path):
 
     :return: Boolean indicating if new data were identified.
     :rtype: boolean
-    '''
+    """
     #boolean to control whether new data have been found
     #if True, then the new data will be appended to the
     #outputfile
@@ -118,7 +117,7 @@ def append_to_FocusModel(inputfile, outputfile, path):
             if float(line.split()[3]) > oMJD:
                 newData = True
                 break
-    #New data available, an update is required.
+        #New data available, an update is required.
     if newData:
         #file handler
         fh = open(path + outputfile, 'a')
@@ -136,9 +135,9 @@ def append_to_FocusModel(inputfile, outputfile, path):
 
 
 def main():
-    '''
+    """
     Driver of collect_focus.py
-    '''
+    """
     #note that the input directory is hardcoded and should be changed every year!
     input_folder = '/grp/hst/OTA/focus/Data/prop12398/'
     output_folder = '/grp/hst/OTA/focus/source/FocusModel/'

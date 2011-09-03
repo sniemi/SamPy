@@ -3,8 +3,7 @@ Extremely simple script that prints out a FITS header to stdout.
 
 Defaults to the 0th extension if not specified.
 
-Accepts wildcard in the name, but then the filename must be
-given inside quote marks i.e. "*.fits"
+Accepts wildcard in the name, but then the filename must be given inside quote marks i.e. "*.fits"
 
 :date: Mar 27, 2009
 :author: Sami-Matias Niemi
@@ -20,9 +19,9 @@ def containsAny(str, set):
     """
     Checks if a given string contains any of the characters in a given set.
 
-    :param: str: input string
+    :param str: input string
     :type str: string
-    :param: set: set if characters
+    :param set: set if characters
     :type set: string
 
     :rtype: boolean
@@ -36,9 +35,9 @@ def containsAll(str, set):
     """
     Checks if a given string contains all characters in a given set.
 
-    :param: str: input string
+    :param str: input string
     :type: string
-    :param: set: set if characters
+    :param set: set if characters
     :type: string
 
     :rtype: boolean

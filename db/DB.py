@@ -13,7 +13,7 @@ class DBSMN():
     for Sybase and MySQL database. A new class instance must be
     initialised for every server/database combination.
     """
-    
+
     def __init__(self, sql, user, password, database, address):
         """
         Init

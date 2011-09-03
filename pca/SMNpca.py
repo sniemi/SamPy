@@ -1,10 +1,11 @@
 """
 This Python module contains principle component analysis (PCA).
+
 It is SMN's adaptation and no guarantees for correct results
 are made. So do not complain to me if it does not work ;-)
 
 :requires: NumPy
-:requires: matplotlib (only the visualisation part)
+:requires: matplotlib
 
 :author: Sami-Matias Niemi
 :contact: niemi@stsci.edu

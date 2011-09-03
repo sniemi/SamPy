@@ -17,12 +17,18 @@ def toJulian(year, month, day, hour, minute, timezone='UTC'):
 
     :note: The function uses Python's inbuilt time module.
 
-    :param: year: year
-    :param: month: month
-    :param: day: days
-    :param: hour: hours
-    :param: minute: minutes
-    :param: timezone: Timezone, default is UTC
+    :param year: year
+    :param year: int or float
+    :param month: month
+    :param month: int or float
+    :param day: days
+    :param day: int or float
+    :param hour: hours
+    :type hour: int or float
+    :param minute: minutes
+    :type minute: int or float
+    :param timezone: Timezone, default is UTC
+    :type timezone: string
 
     :return: Modified Julian Date
     :rtype: float
@@ -52,7 +58,7 @@ def toJulian2(date):
 
 def fromJulian(j):
     """
-    Converts Modified Julian days to human readable format
+    Converts Modified Julian days to human readable format.
 
     :return: human readable date and time
     """
@@ -63,8 +69,7 @@ def fromJulian(j):
 
 def fromHSTDeployment(julian):
     """
-    Returns the number of days that has passed since the
-    deployment of the Hubble Space Telescope.
+    Returns the number of days that has passed since the deployment of the Hubble Space Telescope.
 
     :return: number of days since HST was deployed (24 Apr 1990)
     """

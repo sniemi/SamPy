@@ -26,11 +26,11 @@ def hrebin(imagefile, newx, newy, output='rebinned.fits', ext=0, total=False):
 
     :todo: remove the pywcs dependency
 
-    :param: imagefile: name of the FITS file to be rebinned
-    :param: newx:  size of the new image in the X direction, integer scalar
-    :param: newy: size of the new image in the Y direction, integer scalar
-    :param: output: Name of the outputfile or None
-    :param: ext: the FITS extension of the header and data
+    :param imagefile: name of the FITS file to be rebinned
+    :param newx:  size of the new image in the X direction, integer scalar
+    :param newy: size of the new image in the Y direction, integer scalar
+    :param output: Name of the outputfile or None
+    :param ext: the FITS extension of the header and data
 
     :return: None or updated img and hdr
     """
@@ -117,10 +117,10 @@ def hrot(imagefile, angle, xc=None, yc=None, ext=0, output='rotated.fits', pivot
     """
     Rotate an image and create new FITS header with updated astrometry.
 
-    param: imagefile: name of the FITS file to be rotated
-    param: angle: rotation angle, in degrees
-    param: xc: X Center of rotation (None for center of image)
-    param: yc: Y Center of rotation (None for center of image)
+    param imagefile: name of the FITS file to be rotated
+    param angle: rotation angle, in degrees
+    param xc: X Center of rotation (None for center of image)
+    param yc: Y Center of rotation (None for center of image)
 
     :return: rotated_image, rotated_header
     """
@@ -191,11 +191,11 @@ def hrot2(img, hdr, angle, xc=None, yc=None, pivot=False):
     """
     Rotate an image and updates the FITS header with updated astrometry.
 
-    param: img: image as a ndarray
-    param: hdr: PyFITS header instance
-    param: xc: X Center of rotation (None for center of image)
-    param: yc: Y Center of rotation (None for center of image)
-    param: angle: rotation angle, in degrees
+    param img: image as a ndarray
+    param hdr: PyFITS header instance
+    param xc: X Center of rotation (None for center of image)
+    param yc: Y Center of rotation (None for center of image)
+    param angle: rotation angle, in degrees
 
     :return: rotated_image, rotated_header
     """
@@ -252,12 +252,12 @@ def hextract(imagefile, xstart, xstop, ystart, ystop, ext=0, output='resized.fit
     """
     Extract a subimage from an array and update astrometry in FITS header.
 
-    :param: imagefile: name of the FITS file
-    :param: xstart: first X pixel to extract
-    :param: xstop: last X pixel to extract
-    :param: ystart: first Y pixel to extract
-    :param: ystop: last Y pixel to extract
-    :param: ext, FITS file extension
+    :param imagefile: name of the FITS file
+    :param xstart: first X pixel to extract
+    :param xstop: last X pixel to extract
+    :param ystart: first Y pixel to extract
+    :param ystop: last Y pixel to extract
+    :param ext, FITS file extension
     """
     #read in the file
     fh = pf.open(imagefile)

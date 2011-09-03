@@ -3,7 +3,7 @@ This file contains MillenniumData -class. It can be used  to fetch data from the
 
 File also contains a small example.
 
-Complains to Sami-Matias Niemi (sami@not.iac.es)!
+:author: Sami-Matias Niemi (sami@not.iac.es)!
 """
 import os
 
@@ -13,6 +13,7 @@ class MillenniumData():
     Input for the constructor is SQL query to be performed. Syntax must be valid
     SQL.  
     """
+
     def __init__(self, sql):
         self.user = 'sniemi'
         self.passwd = 'XB48D682'

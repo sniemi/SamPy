@@ -1,8 +1,8 @@
-'''
+"""
 Example script how to match rows with SQL.
 
 :author: Sami-Matias Niemi
-'''
+"""
 
 if __name__ == '__main__':
     import sqlite3
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     conn.commit()
 
     #query to pull out the data where halo_id matches but gal_id is different
-    query = '''select l1.redshift, l1.ra, l1.dec, l1.halo_id, l1.gal_id, galprop.foo from lightcone l1
+    query = """select l1.redshift, l1.ra, l1.dec, l1.halo_id, l1.gal_id, galprop.foo from lightcone l1
                inner join galprop using (halo_id, gal_id)
                inner join
                (
@@ -77,7 +77,7 @@ if __name__ == '__main__':
                )
                using (halo_id, gal_id)
                where l1.redshift > 0.03
-               '''
+               """
 
     #get data back
     cursor.execute(query)
@@ -118,11 +118,11 @@ if __name__ == '__main__':
     print
 
     cursor.execute('CREATE TABLE newTable (h1, g1, h2, g2, foo)')
-    newqu = '''INSERT INTO newTable
+    newqu = """INSERT INTO newTable
                SELECT l1.halo_id, l1.gal_id, galprop.halo_id, galprop.gal_id, galprop.foo
                FROM lightcone l1
                INNER JOIN galprop USING (halo_id, gal_id)
-               '''
+               """
     cursor.execute(newqu)
     conn.commit()
     cursor.execute('select * from newTable')

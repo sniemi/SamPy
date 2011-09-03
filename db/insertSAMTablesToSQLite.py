@@ -1,19 +1,17 @@
-'''
-This module contains a function that can be used to
-generate an SQLite3 database from ascii files.
+"""
+This module contains a function that can be used to generate an SQLite3 database from ascii files.
 
 :author: Sami-Matias Niemi
 :contact: niemi@stsci.edu
-'''
+"""
 import sqlite3
 import glob as g
-#From Sami's repo
-import log.Logger as lg
-import db.sqlite
+import SamPy.log.Logger as lg
+import SamPy.db.sqlite
 
 def generateSQLiteDBfromSAMTables(output='sams.db',
                                   fileidentifier='*.dat'):
-    '''
+    """
     This little function can be used to generate an
     SQLite3 database from Rachel's GF output.
     
@@ -27,7 +25,7 @@ def generateSQLiteDBfromSAMTables(output='sams.db',
     :param fileidentifier: string how to identify input data
     :type output: string
     :type fileidentifier: string
-    '''
+    """
     #find all files
     files = g.glob(fileidentifier)
     #create a Connection object that represents the database

@@ -12,7 +12,8 @@ SamPy.fitting.SplineFitting
    .. rubric:: Classes
 
    .. autosummary::
-   
+      :toctree:
+
       SplineFitting
    
    

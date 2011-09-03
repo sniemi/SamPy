@@ -8,61 +8,78 @@ This file contains SQLite3 related functions.
 """
 import sqlite3
 import re
-import numpy as N
-import astronomy.conversions as conv
+import numpy as np
+import SamPy.astronomy.conversions as conv
 
 
 def toPowerTen(value):
     """
+    Raises the given value to a power of ten.
+
     :note: This function can be passed on to slite3 connection
 
-    :param: value: can either be a number or a NumPy array
+    :param value: data
+    :type value: float or ndarray
 
-    :return: 10**value
+    :return: :math:`10^{value}`
     """
-    return N.power(10, value)
+    return np.power(10, value)
 
 
 def toLogTen(value):
     """
+    Takes the 10th base logarithm of the given value.
+
     :note: This function can be passed on to slite3 connection
 
-    :param: value: can either be a number or a NumPy array
+    :param value: data
+    :type value: float or ndarray
 
-    :return: Log_10(value)
+    :return: :math: `\\log_{10} (value)`
     """
-    return N.Log10(value)
+    return np.Log10(value)
 
 
 def SSFR(mstardot, mstar):
     """
-    Log_10(value1 / 10**value2)
+    Calculates the specific star formation rate from a given (SAM) data.
+
+    .. math::
+
+       \\log_{10} \\left ( \\frac {value1}{10^{value2}} \\right )
 
     :note: This function can be passed on to slite3 connection
 
-    :param: mstardot: star formation rate
-    :param: mstar: stellar mass in log10(M_solar)
+    :param mstardot: star formation rate
+    :type mstardot: float or ndarray
+    :param mstar: stellar mass in :math:`\\log_{10}(M_{\\mathrm{solar}})`
+    :type mstar: float or ndarray
 
-    :return: specific star formation rate in Gyr**-1
+    :return: specific star formation rate in :math:`\\mathrm{Gyr}^{-1}`
+    :rtype: float or ndarray
     """
-    return N.log10(mstardot / 10 ** mstar)
+    return np.log10(mstardot / 10 ** mstar)
 
 
 def get_data_sqlitePowerTen(path, db, query):
     """
     Run an SQL query to a database with a custom made function "toPowerTen".
 
-    :param: path: path to the SQLite3 database
-    :param: db: name of the SQLite3 database
-    :param: query: valid SQL query
+    :param path: path to the SQLite3 database
+    :type path: string
+    :param db: name of the SQLite3 database
+    :type db: string
+    :param query: valid SQL query
+    :type query: string
 
-    :return: all data in a NumPy array   
+    :return: all requested data
+    :rtype: ndarray
     """
     conn = sqlite3.connect(path + db)
     conn.create_function('Pow10', 1, toPowerTen)
     c = conn.cursor()
     c.execute(query)
-    data = N.array(c.fetchall())
+    data = np.array(c.fetchall())
     c.close()
     return data
 
@@ -71,11 +88,15 @@ def get_data_sqliteSMNfunctions(path, db, query):
     """
     Run an SQL query to a database with custom made functions "toPowerTen" and "janskyToMagnitude".
 
-    :param: path: path to the SQLite3 database
-    :param: db: name of the SQLite3 database
-    :param: query: valid SQL query
-
-    :return: all data in a NumPy array
+    :param path: path to the SQLite3 database
+    :type path: string
+    :param db: name of the SQLite3 database
+    :type db: string
+    :param query: valid SQL query
+    :type query: string
+    
+    :return: all requested data
+    :rtype: ndarray
     """
     conn = sqlite3.connect(path + db)
     conn.create_function('janskyToMagnitude', 1, conv.janskyToMagnitude)
@@ -84,26 +105,30 @@ def get_data_sqliteSMNfunctions(path, db, query):
     conn.create_function('SSFR', 2, SSFR)
     c = conn.cursor()
     c.execute(query)
-    data = N.array(c.fetchall())
+    data = np.array(c.fetchall())
     c.close()
     return data
 
 
 def get_data_sqlite(path, db, query):
     """
-    This function can be used to pull out data from an slite3 database. Output is given as
-    a numpy array for ease of further processing.
+    This function can be used to pull out data from an slite3 database.
+    Output is given as a numpy array for ease of further processing.
 
-    :param: path: path to the db file, should end with /
-    :param: db: name of the database file
-    :param: query: query to be performed
+    :param path: path to the SQLite3 database
+    :type path: string
+    :param db: name of the SQLite3 database
+    :type db: string
+    :param query: valid SQL query
+    :type query: string
 
-    :return: numpy array of data 
+    :return: all requested data
+    :rtype: ndarray
     """
     conn = sqlite3.connect(path + db)
     c = conn.cursor()
     c.execute(query)
-    data = N.array(c.fetchall())
+    data = np.array(c.fetchall())
     c.close()
     return data
 
@@ -143,8 +168,10 @@ def parseASCIITitle(filename,
     If strip=True then will remove all dots and replace them with
     empty spaces.
 
-    :param: filename: name of the file to processed
-    :param: strip: a flag whether dots should be stripped from the name
+    :param filename: name of the file to processed
+    :type filename: string
+    :param strip: a flag whether dots should be stripped from the name
+    :type strip: boolean
 
     :rtype: list
     """

@@ -23,9 +23,8 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
-    <link rel="up" title="SamPy Package" href="SamPy.html" />
-    <link rel="next" title="parsing Package" href="SamPy.parsing.html" />
-    <link rel="prev" title="image Package" href="SamPy.image.html" /> 
+    <link rel="next" title="SamPy.log.Logger" href="SamPy.log.Logger.html" />
+    <link rel="prev" title="SamPy.image.transform.makeCenteredRotation" href="SamPy.image.transform.makeCenteredRotation.html" /> 
   </head>
   <body>
 
@@ -42,34 +41,25 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="SamPy.parsing.html" title="parsing Package"
+          <a href="SamPy.log.Logger.html" title="SamPy.log.Logger"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="SamPy.image.html" title="image Package"
+          <a href="SamPy.image.transform.makeCenteredRotation.html" title="SamPy.image.transform.makeCenteredRotation"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
-
-          <li><a href="SamPy.html" accesskey="U">SamPy Package</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">log Package</a><ul>
-<li><a class="reference internal" href="#module-SamPy.log.Logger"><tt class="docutils literal"><span class="pre">Logger</span></tt> Module</a></li>
-</ul>
-</li>
-</ul>
-
   <h4>Previous topic</h4>
-  <p class="topless"><a href="SamPy.image.html"
-                        title="previous chapter">image Package</a></p>
+  <p class="topless"><a href="SamPy.image.transform.makeCenteredRotation.html"
+                        title="previous chapter">SamPy.image.transform.makeCenteredRotation</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="SamPy.parsing.html"
-                        title="next chapter">parsing Package</a></p>
+  <p class="topless"><a href="SamPy.log.Logger.html"
+                        title="next chapter">SamPy.log.Logger</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/SamPy.log.txt"
@@ -98,51 +88,17 @@
             
   <div class="section" id="log-package">
 <h1>log Package<a class="headerlink" href="#log-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-SamPy.log.Logger">
-<span id="logger-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">Logger</span></tt> Module<a class="headerlink" href="#module-SamPy.log.Logger" title="Permalink to this headline">¶</a></h2>
-<p>Log creating functions.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
 <tbody valign="top">
-<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
-</tr>
-<tr class="field"><th class="field-name">version:</th><td class="field-body">0.3</td>
+<tr><td><a class="reference internal" href="SamPy.log.Logger.html#module-SamPy.log.Logger" title="SamPy.log.Logger"><tt class="xref py py-obj docutils literal"><span class="pre">Logger</span></tt></a></td>
+<td>These functions can be used for logging information.</td>
 </tr>
 </tbody>
 </table>
-<dl class="class">
-<dt id="SamPy.log.Logger.SimpleLogger">
-<em class="property">class </em><tt class="descclassname">SamPy.log.Logger.</tt><tt class="descname">SimpleLogger</tt><big>(</big><em>filename</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#SamPy.log.Logger.SimpleLogger" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>A simple class to create a log file or print the information on screen.</p>
-<dl class="method">
-<dt id="SamPy.log.Logger.SimpleLogger.write">
-<tt class="descname">write</tt><big>(</big><em>text</em><big>)</big><a class="headerlink" href="#SamPy.log.Logger.SimpleLogger.write" title="Permalink to this definition">¶</a></dt>
-<dd><p>Writes text either to file or screen.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.log.Logger.setUpLogger">
-<tt class="descclassname">SamPy.log.Logger.</tt><tt class="descname">setUpLogger</tt><big>(</big><em>log_filename</em>, <em>loggername='logger'</em><big>)</big><a class="headerlink" href="#SamPy.log.Logger.setUpLogger" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets up a logger.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Param :</th><td class="field-body">log_filename: name of the file to save the log.</td>
-</tr>
-<tr class="field"><th class="field-name">Param :</th><td class="field-body">loggername: name of the logger</td>
-</tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">logger instance</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
 </div>
 
 
@@ -161,15 +117,14 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="SamPy.parsing.html" title="parsing Package"
+          <a href="SamPy.log.Logger.html" title="SamPy.log.Logger"
              >next</a> |</li>
         <li class="right" >
-          <a href="SamPy.image.html" title="image Package"
+          <a href="SamPy.image.transform.makeCenteredRotation.html" title="SamPy.image.transform.makeCenteredRotation"
              >previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
-
-          <li><a href="SamPy.html" >SamPy Package</a> &raquo;</li> 
+ 
       </ul>
     </div>
     <div class="footer">

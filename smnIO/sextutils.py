@@ -1,35 +1,37 @@
 """
-Utilities for parseing SExtractor files
+Utilities for parseing SExtractor files.
 
 H. Ferguson - revised 4/23/03 to promote ints to floats if a value
 with a decimal point appears somewhere in the column originally thought
 to be integers
 
-v2.1 - fails gracefully when the catalog has no sources
-v3.0 - added gettypes to return column types
-      - create new column names when they are not explictly in the header
-v4.0 - added gettypes to return column types
-v4.1 - uses numarray by default
-v4.2 - delete attributed 'l' (input lines from catalog) before returning
-v4.3 - 1/11/06Added less-offensive alias se_catalog() == sextractor()
-v4.4hf-1/21/06 Fixed bug in creating extra column names when last is a vector
-v4.4vl - V. Laidler added new methods:
-           __len__ returns number of objects in catalog
-           __iter__ returns the index of the next row in the catalog
-           line(self,i) returns a constructed string containing the ith line
-           buildheader returns a constructed header from the hdict
-        Added new attribute self.header: contains the header as read in
-           from the catalog.
-        Lines that start with '#' but are not followed by an integer are
-           now assumed to be comment lines, which are added to the
-           header but otherwise skipped.
-v4.5 - V. Laidler removed Numeric dependence
-v4.6 - V. Laidler converted to numpy
-v5.0 - 7/5/07 Numpy conversion
-v6.0 - V. Laidler: added rw_catalog class, reworked internals to avoid
-           column name clashes
-v7.0 - S.-M. Niemi: some modifications
-v7.1 - S.-M. Niemi: now supports string columns
+version::
+
+    v2.1 - fails gracefully when the catalog has no sources
+    v3.0 - added gettypes to return column types
+          - create new column names when they are not explictly in the header
+    v4.0 - added gettypes to return column types
+    v4.1 - uses numarray by default
+    v4.2 - delete attributed 'l' (input lines from catalog) before returning
+    v4.3 - 1/11/06Added less-offensive alias se_catalog() == sextractor()
+    v4.4hf-1/21/06 Fixed bug in creating extra column names when last is a vector
+    v4.4vl - V. Laidler added new methods:
+               __len__ returns number of objects in catalog
+               __iter__ returns the index of the next row in the catalog
+               line(self,i) returns a constructed string containing the ith line
+               buildheader returns a constructed header from the hdict
+            Added new attribute self.header: contains the header as read in
+               from the catalog.
+            Lines that start with '#' but are not followed by an integer are
+               now assumed to be comment lines, which are added to the
+               header but otherwise skipped.
+    v4.5 - V. Laidler removed Numeric dependence
+    v4.6 - V. Laidler converted to numpy
+    v5.0 - 7/5/07 Numpy conversion
+    v6.0 - V. Laidler: added rw_catalog class, reworked internals to avoid
+               column name clashes
+    v7.0 - S.-M. Niemi: some modifications
+    v7.1 - S.-M. Niemi: now supports string columns
 """
 
 __version__ = '7.1'
@@ -40,7 +42,8 @@ import numpy as N
 import os, sys
 
 class se_catalog(object):
-    """ Read a SExtractor-style catalog.
+    """
+    Read a SExtractor-style catalog.
     Usage: c=se_catalog(catalog,readfile=True,preserve_case=False)
     Will read the catalog and return an object c, whose attributes are
     arrays containing the data. For example, c.mag_auto contains the
@@ -111,15 +114,19 @@ class se_catalog(object):
             return k
 
     def line(self, i):
-        """ Returns an assembled line of this catalog suitable for writing.
-        Except it doesn't really, if we modified the individual columns..."""
+        """
+        Returns an assembled line of this catalog suitable for writing.
+        Except it doesn't really, if we modified the individual columns
+        """
         ans = '    '.join(self._colentries[i]) + '\n'
         return ans
 
     def buildheader(self):
-        """ Reconstruct the header from the header dictionary.
+        """
+        Reconstruct the header from the header dictionary.
         This might be useful if only a few columns were selected
-        from the file; otherwise just use the 'header' attribute. """
+        from the file; otherwise just use the 'header' attribute.
+        """
 
         lines = {}
         for k in self._d:

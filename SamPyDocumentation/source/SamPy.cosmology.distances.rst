@@ -8,7 +8,8 @@ SamPy.cosmology.distances
    .. rubric:: Functions
 
    .. autosummary::
-   
+      :toctree:
+
       cosmocalc
       getDiameterDistances
       plot_DA

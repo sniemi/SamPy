@@ -21,8 +21,11 @@ def dayNumber(day, verbose=True):
     This simple function converts a given integer to
     the date of the current year.
     
-    :param: number of the day
-    :type: int
+    :param day: number of the day
+    :type day: int
+
+    :param verbose: whether to print or not debug information
+    :type verbose: boolean
 
     :return: date
     :rtype: python datetime

@@ -1,3 +1,6 @@
+"""
+Functions to inserts dat ato MySQL db.
+"""
 import MySQLdb as M
 #import pymysql as M
 import glob as g

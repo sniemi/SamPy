@@ -1,4 +1,4 @@
-'''
+"""
 This file contains some helper functions to parse different data files.
 
 :author: Sami-Matias Niemi
@@ -8,7 +8,7 @@ This file contains some helper functions to parse different data files.
 :requires: NumPy
 :requires: SamPy.astronomy.basics
 :requires: SamPy.smnIO.sexutils
-'''
+"""
 import SamPy.smnIO.sextutils as su
 import SamPy.astronomy.basics
 import numpy as np
@@ -17,14 +17,14 @@ import cPickle
 __author__ = 'Sami-Matias Niemi'
 
 def readBolshoiDMfile(filename, column, no_phantoms):
-    '''
+    """
     This little helper function can be used to read
     dark matter halo masses from files produced from
     the merger trees of the Bolshoi simulation.
 
-    :param: filename: name of the file
-    :param: column: which column to grep
-    :param: no_phantoms: which dark matter mass to read
+    :param filename: name of the file
+    :param column: which column to grep
+    :param no_phantoms: which dark matter mass to read
 
     :type filename: string
     :type column: int
@@ -32,7 +32,7 @@ def readBolshoiDMfile(filename, column, no_phantoms):
 
     :return: dark matter halo masses
     :rtype: NumPy array
-    '''
+    """
     out = []
     fh = open(filename, 'r')
     line = fh.readline()
@@ -47,7 +47,7 @@ def readBolshoiDMfile(filename, column, no_phantoms):
 
 
 def GFBasicData(path):
-    '''
+    """
     Reads Rachel's SAMs output data.
     If AB = True then the function converts
     Johnson U, B, V, and K bands to Vega system.
@@ -62,8 +62,8 @@ def GFBasicData(path):
     :type path: string
     :type AB: boolean
 
-    '''
-    AB = astronomy.basics.JohnsonToABmagnitudes()
+    """
+    AB = SamPy.astronomy.basics.JohnsonToABmagnitudes()
 
     print 'Reading files from {0:>s}'.format(path)
 
@@ -101,9 +101,9 @@ def GFBasicData(path):
 
 
 def cPickledData(filename):
-    '''
+    """
     Reads in cPickled data and returns it
-    '''
+    """
     inp = open(filename)
     out = cPickle.load(inp)
     return out

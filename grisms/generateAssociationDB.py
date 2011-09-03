@@ -1,7 +1,5 @@
-'''
-This little script can be used to generate a cPickled
-association database that is in the format that the PHLAG
-grism pipeline developed by ECF will understand.
+"""
+This little script can be used to generate a cPickled association database that is in the format that the PHLAG grism pipeline developed by ECF will understand.
 
 The script looks all FITS files in the current working
 directory and tries to generate the association database
@@ -14,8 +12,8 @@ datasets have been hand picked.
 
 This script should not be used unless its limitations
 have been understood!
-'''
-import smnIO.findFiles as f
+"""
+import SamPy.smnIO.findFiles as f
 import pyfits as pf
 import cPickle
 
@@ -24,8 +22,8 @@ __version__ = 0.01
 
 
 def createAssociationDB(grism, direct, match,
-                        output ='ACSTEST.db'):
-    '''
+                        output='ACSTEST.db'):
+    """
     Email from Martin Kuemmel concerning the format:
 
     * Each association (see listing below contains two main entries, the
@@ -88,10 +86,10 @@ def createAssociationDB(grism, direct, match,
     ('J6FL7YIDQ', 500.0, 0.97062910394576651),
     ('J6FL8YKRQ', 500.0, 1.011511942107943),
     ('J8WQ91E7Q', 500.0, 0.89063763040941479)]})
-    '''
+    """
     dc = {}
     for i, key in enumerate(match):
-        nm = 'ACSTEST%i' %(i+1)
+        nm = 'ACSTEST%i' % (i + 1)
         tmp = []
         for value in match[key]:
             tmp.append((value.split('_')[0].upper(),
@@ -102,9 +100,9 @@ def createAssociationDB(grism, direct, match,
         dirdata = {}
         #this next one fakes and puts the same file twice!
         dirdata[direct[key][1]] = [(key.split('_')[0].upper(),
-                                   direct[key][0], 1.0),
-                                   (key.split('_')[0].upper(),
-                                   direct[key][0], 1.0)]
+                                    direct[key][0], 1.0),
+            (key.split('_')[0].upper(),
+             direct[key][0], 1.0)]
 
         dc[nm] = (tmp, dirdata)
 
@@ -115,14 +113,14 @@ def createAssociationDB(grism, direct, match,
 
 
 def findGrismImages(filelist):
-    '''
+    """
     Finds all direct and grism images from a
     given filelist. Will pull out some information
     such as exposure time and filter from the header.
     Will also record RA and DEC, this could potentially
     be used to calculate the overlap and is currently
     used to match images later.
-    '''
+    """
     direct = {}
     grism = {}
     for file in filelist:
@@ -145,8 +143,9 @@ def findGrismImages(filelist):
                            hdr0['DEC_TARG']]
     return direct, grism
 
+
 def matchDirectImageToGrismImage(direct, grism):
-    '''
+    """
     Matches direct images to grism images in an extremely
     dummy way. Will just check that either RA or DEC are
     equal. This can potentially lead to crazy results as
@@ -159,12 +158,12 @@ def matchDirectImageToGrismImage(direct, grism):
     to find the closest matches. However, for the testing
     that will be performed in April 2011 this dummy way of
     matching should be sufficient.
-    '''
+    """
     match = {}
     for key1 in direct:
         for key2 in grism:
-            if direct[key1][2] == grism[key2][2] or \
-                direct[key1][3] == grism[key2][3]:
+            if direct[key1][2] == grism[key2][2] or\
+               direct[key1][3] == grism[key2][3]:
                 #found the exact same coordinates
                 #in reality this matching wouldn't
                 #be enough as there might be offset
@@ -176,13 +175,14 @@ def matchDirectImageToGrismImage(direct, grism):
                     match[key1] = [key2, ]
     return match
 
+
 def makeDirectImageDictionary(direct, match):
-    '''
+    """
     Generates a dictionary from the direct image information.
     This dictionary is in the format that ECF used to make
     their association db, so it is more or less ready to be
     pickled. For details, see the comment in createAssociationDB.
-    '''
+    """
     out = {}
     tmp = []
     for key in match:
@@ -191,25 +191,26 @@ def makeDirectImageDictionary(direct, match):
         coverage = 1.0
         tmp.append((key.split('_')[0].upper(),
                     direct[key][0], coverage))
-    #this assumes that all direct images use the same
+        #this assumes that all direct images use the same
     #filter. As this may not be the case, the filters
     #should be matched as well to be on the safe side
     out[direct[direct.keys()[0]][1]] = tmp
     return out
 
+
 def makeGrismImageList(grism, match):
-    '''
+    """
     Generates a list of grism images. This list is in the
     format that ECF used to make their association db, so it
     is more or less ready to be pickled. For details,
     see the comment in createAssociationDB.
-    '''
+    """
     out = []
     for file in grism:
         for key in match:
             if file in match[key]:
                 direct = key.split('_')[0].upper()
-        #this should be calculated, but we can now
+            #this should be calculated, but we can now
         #assume that the direct image and grism image
         #are with the same pointing
         distance = 0.0
@@ -218,7 +219,7 @@ def makeGrismImageList(grism, match):
                     direct,
                     distance))
     return out
-    
+
 
 if __name__ == '__main__':
     #find all the FITS files in the current working dir

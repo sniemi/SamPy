@@ -1,19 +1,22 @@
 """
 This script provides a quick way of combining fits files
 
-:usage: reduce.py [-n] [-m] [-a] [-f] <file list or name> [-o] <output file>
-        where:
-                [-m] median combine
-                [-a] average combine
-                [-f] combines given files
-                [-o] name of the output file
-                [-n] uses NumPy and PyFits rather than Pyraf
+:usage::
+
+    reduce.py [-n] [-m] [-a] [-f] <file list or name> [-o] <output file>
+            where:
+                    [-m] median combine
+                    [-a] average combine
+                    [-f] combines given files
+                    [-o] name of the output file
+                    [-n] uses NumPy and PyFits rather than Pyraf
+
+:requires: PyFITS
 
 :date: 26/11/2008 Initial Release
 
 :author: Sami-Matias Niemi
 :contact: niemi@stsci.edu
-
 """
 from optparse import OptionParser
 import pyfits

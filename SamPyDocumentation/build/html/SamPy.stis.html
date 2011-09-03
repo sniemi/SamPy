@@ -23,8 +23,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
-    <link rel="up" title="SamPy Package" href="SamPy.html" />
-    <link rel="next" title="wrapper Package" href="SamPy.wrapper.html" />
+    <link rel="next" title="SamPy.stis.ObservationSchedule" href="SamPy.stis.ObservationSchedule.html" />
     <link rel="prev" title="statistics Package" href="SamPy.statistics.html" /> 
   </head>
   <body>
@@ -42,37 +41,25 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="SamPy.wrapper.html" title="wrapper Package"
+          <a href="SamPy.stis.ObservationSchedule.html" title="SamPy.stis.ObservationSchedule"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="SamPy.statistics.html" title="statistics Package"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
-
-          <li><a href="SamPy.html" accesskey="U">SamPy Package</a> &raquo;</li> 
+ 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">stis Package</a><ul>
-<li><a class="reference internal" href="#module-SamPy.stis.STISCCDFlatWavelengthDependency"><tt class="docutils literal"><span class="pre">STISCCDFlatWavelengthDependency</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-SamPy.stis.STISCCDImagingFlats"><tt class="docutils literal"><span class="pre">STISCCDImagingFlats</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-SamPy.stis.STISCCDSpectroscopyFlat"><tt class="docutils literal"><span class="pre">STISCCDSpectroscopyFlat</span></tt> Module</a></li>
-<li><a class="reference internal" href="#module-SamPy.stis.STISmonthly"><tt class="docutils literal"><span class="pre">STISmonthly</span></tt> Module</a></li>
-</ul>
-</li>
-</ul>
-
   <h4>Previous topic</h4>
   <p class="topless"><a href="SamPy.statistics.html"
                         title="previous chapter">statistics Package</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="SamPy.wrapper.html"
-                        title="next chapter">wrapper Package</a></p>
+  <p class="topless"><a href="SamPy.stis.ObservationSchedule.html"
+                        title="next chapter">SamPy.stis.ObservationSchedule</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/SamPy.stis.txt"
@@ -101,366 +88,23 @@
             
   <div class="section" id="stis-package">
 <h1>stis Package<a class="headerlink" href="#stis-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-SamPy.stis.STISCCDFlatWavelengthDependency">
-<span id="stisccdflatwavelengthdependency-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">STISCCDFlatWavelengthDependency</span></tt> Module<a class="headerlink" href="#module-SamPy.stis.STISCCDFlatWavelengthDependency" title="Permalink to this headline">¶</a></h2>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
 <tbody valign="top">
-<tr class="field"><th class="field-name">date:</th><td class="field-body">Created on Dec 8, 2009</td>
+<tr><td><a class="reference internal" href="SamPy.stis.ObservationSchedule.html#module-SamPy.stis.ObservationSchedule" title="SamPy.stis.ObservationSchedule"><tt class="xref py py-obj docutils literal"><span class="pre">ObservationSchedule</span></tt></a></td>
+<td>This script can be used to parse instrument specific observations from SMS messages. It can also be used to generate memory dump schedule from the SMS.</td>
 </tr>
-<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+<tr><td><a class="reference internal" href="SamPy.stis.STISCCDImagingFlats.html#module-SamPy.stis.STISCCDImagingFlats" title="SamPy.stis.STISCCDImagingFlats"><tt class="xref py py-obj docutils literal"><span class="pre">STISCCDImagingFlats</span></tt></a></td>
+<td>Plots ratios between STIS CCD imaging flats.</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.stis.STISCCDSpectroscopyFlat.html#module-SamPy.stis.STISCCDSpectroscopyFlat" title="SamPy.stis.STISCCDSpectroscopyFlat"><tt class="xref py py-obj docutils literal"><span class="pre">STISCCDSpectroscopyFlat</span></tt></a></td>
+<td>Creates STIS Spectroscopic pixel-to-pixel flat fields from RAW data.</td>
 </tr>
 </tbody>
 </table>
-<dl class="function">
-<dt id="SamPy.stis.STISCCDFlatWavelengthDependency.CombineFlat">
-<tt class="descclassname">SamPy.stis.STISCCDFlatWavelengthDependency.</tt><tt class="descname">CombineFlat</tt><big>(</big><em>self</em>, <em>filelist</em><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDFlatWavelengthDependency.CombineFlat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Combines created images to form a final flats.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.stis.STISCCDFlatWavelengthDependency.RMS">
-<tt class="descclassname">SamPy.stis.STISCCDFlatWavelengthDependency.</tt><tt class="descname">RMS</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDFlatWavelengthDependency.RMS" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the root-mean-square of the given data.</p>
-</dd></dl>
-
-</div>
-<div class="section" id="module-SamPy.stis.STISCCDImagingFlats">
-<span id="stisccdimagingflats-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">STISCCDImagingFlats</span></tt> Module<a class="headerlink" href="#module-SamPy.stis.STISCCDImagingFlats" title="Permalink to this headline">¶</a></h2>
-<p>ABOUT:
-Plots ratios between STIS CCD imaging flats.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">requires:</th><td class="field-body">NumPy</td>
-</tr>
-<tr class="field"><th class="field-name">requires:</th><td class="field-body">PyFITS</td>
-</tr>
-<tr class="field"><th class="field-name">requires:</th><td class="field-body">matplotlib</td>
-</tr>
-</tbody>
-</table>
-<p>TESTED:
-Python 2.5.1
-NumPy: 1.4.0.dev7576
-PyFITS: 2.2.2
-matplotlib 1.0.svn</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">date:</th><td class="field-body">Created on November 18, 2009</td>
-</tr>
-<tr class="field"><th class="field-name">version:</th><td class="field-body">0.15: test release (SMN)</td>
-</tr>
-<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi (<a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a>)</td>
-</tr>
-</tbody>
-</table>
-<dl class="function">
-<dt id="SamPy.stis.STISCCDImagingFlats.Idetifiers">
-<tt class="descclassname">SamPy.stis.STISCCDImagingFlats.</tt><tt class="descname">Idetifiers</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDImagingFlats.Idetifiers" title="Permalink to this definition">¶</a></dt>
-<dd><p>0th extension header keywords.
-Used to select and pair FITS files.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.stis.STISCCDImagingFlats.ImStats">
-<tt class="descclassname">SamPy.stis.STISCCDImagingFlats.</tt><tt class="descname">ImStats</tt><big>(</big><em>im1</em>, <em>im2</em>, <em>scale</em><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDImagingFlats.ImStats" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates some basic image statistics from 
-two images given.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">ratio, image1 mean, image1 std, ratio mean</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
-<div class="section" id="module-SamPy.stis.STISCCDSpectroscopyFlat">
-<span id="stisccdspectroscopyflat-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">STISCCDSpectroscopyFlat</span></tt> Module<a class="headerlink" href="#module-SamPy.stis.STISCCDSpectroscopyFlat" title="Permalink to this headline">¶</a></h2>
-<p>Creates STIS Spectroscopic pixel-to-pixel flat fields from RAW data.
-Uses spline fits after dust motes, bad pixels, etc. have been masked
-to fit and to remove the low frequency structure. The data are divided
-by each fit to normalize the data before it is combined and co-added with
-appropriate weighting of flux errors.</p>
-<p>Both 50CCD and 52x2 data can be used. For 52x2 row fitting is not
-done currently due to emission lines in the lamp spectrum.</p>
-<p>For more information see STIS ISR 1999-06 by Bohlin and TIR 2010 by Niemi.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">requires:</th><td class="field-body">Python 2.5 or later (not 3.x compatible however)</td>
-</tr>
-<tr class="field"><th class="field-name">requires:</th><td class="field-body">NumPy</td>
-</tr>
-<tr class="field"><th class="field-name">requires:</th><td class="field-body">PyFITS</td>
-</tr>
-<tr class="field"><th class="field-name">requires:</th><td class="field-body">SciPy</td>
-</tr>
-<tr class="field"><th class="field-name">requires:</th><td class="field-body">matplotlib</td>
-</tr>
-</tbody>
-</table>
-<p>TESTED:
-Python 2.5.4
-NumPy 1.4.0.dev7576
-SciPy
-PyFITS 2.2.2
-matplotlib 1.0.svn</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">date:</th><td class="field-body">created on November 23, 2009</td>
-</tr>
-<tr class="field"><th class="field-name">version:</th><td class="field-body">0.6</td>
-</tr>
-</tbody>
-</table>
-<p>VERSION HISTORY:
-0.1: testing version (SMN)
-0.2: test release (SMN)
-0.3: first full working version (SMN)
-0.4: modified FITS output to comply with CDBS rules (SMN)
-0.5: improved documentation (SMN)
-0.6: fixed and imporved _badspot function (SMN)</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
-</tr>
-<tr class="field"><th class="field-name">organization:</th><td class="field-body">STScI</td>
-</tr>
-<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a></td>
-</tr>
-<tr class="field"><th class="field-name">todo:</th><td class="field-body">For improved median filter, one could use scipy.ndimage.filters.median_filter</td>
-</tr>
-</tbody>
-</table>
-<dl class="class">
-<dt id="SamPy.stis.STISCCDSpectroscopyFlat.Findfiles">
-<em class="property">class </em><tt class="descclassname">SamPy.stis.STISCCDSpectroscopyFlat.</tt><tt class="descname">Findfiles</tt><big>(</big><em>input</em>, <em>output</em>, <em>extension='_raw'</em><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDSpectroscopyFlat.Findfiles" title="Permalink to this definition">¶</a></dt>
-<dd><p>Finds all files that are suitable for making a STIS CCD
-spectroscopy flat field. Searches from input directory
-all files that math the extension.</p>
-<dl class="method">
-<dt id="SamPy.stis.STISCCDSpectroscopyFlat.Findfiles.apertureFilter">
-<tt class="descname">apertureFilter</tt><big>(</big><em>filelist</em>, <em>aperture='50CCD'</em>, <em>filter='Clear'</em><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDSpectroscopyFlat.Findfiles.apertureFilter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks that the aperture and filer matches the given ones.
-:param filelist: a list of file names to be tested.
-:param aperture: an aperture that the tested file must match.
-:param filter: a filter that the tested file must match.
-:return: a list of file names that match the aperture and filter.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="SamPy.stis.STISCCDSpectroscopyFlat.Findfiles.cenwave">
-<tt class="descname">cenwave</tt><big>(</big><em>filelist</em>, <em>cenwave=5216</em><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDSpectroscopyFlat.Findfiles.cenwave" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks that the central wavelength matches.
-:param filelist: a list of file names to be tested.
-:param cenwave: a central wavelength that the test file must match.
-:return a list of file names that match the aperture and filter.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="SamPy.stis.STISCCDSpectroscopyFlat.Findfiles.gain">
-<tt class="descname">gain</tt><big>(</big><em>filelist</em>, <em>value</em><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDSpectroscopyFlat.Findfiles.gain" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks that gain equals the given value.
-:param filelist: a list of file names to be tested
-:param value: a gain value that the gain have to match
-:return: a list of file names that match the gain value</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="SamPy.stis.STISCCDSpectroscopyFlat.Findfiles.obsMode">
-<tt class="descname">obsMode</tt><big>(</big><em>filelist</em><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDSpectroscopyFlat.Findfiles.obsMode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks that the observation mode matches.
-Uses the hard coded self.obsmode dictionary.
-:param filelist: a list of file names to be tested.
-:return: a list of file names that are of right obsmode.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="SamPy.stis.STISCCDSpectroscopyFlat.Findfiles.slitwheelPos">
-<tt class="descname">slitwheelPos</tt><big>(</big><em>filelist</em>, <em>positions</em>, <em>nominal</em>, <em>tolerance=1</em><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDSpectroscopyFlat.Findfiles.slitwheelPos" title="Permalink to this definition">¶</a></dt>
-<dd><p>Finds and matches all slit wheel positions present in files listed in
-the filelist variable.
-:param filelist: a list of file names to be tested.
-:param positions: a list of positions that are used for matching.
-:param nominal: the nominal slit wheel position.      
-:param tolerance: tolerance of slit wheel steps.
-:return: dictionary of slit wheel positions and file names</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="SamPy.stis.STISCCDSpectroscopyFlat.Findfiles.writeToASCIIFile">
-<tt class="descname">writeToASCIIFile</tt><big>(</big><em>data</em>, <em>outputfile</em>, <em>header=''</em><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDSpectroscopyFlat.Findfiles.writeToASCIIFile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Writes file lists to an ASCII file. Each line contains one filename.
-:param data: data that is written to the ascii file.
-:param outputfile: the name of the output file.
-:param header: header that is included to the beginning of the ascii file.</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="SamPy.stis.STISCCDSpectroscopyFlat.MakeFlat">
-<em class="property">class </em><tt class="descclassname">SamPy.stis.STISCCDSpectroscopyFlat.</tt><tt class="descname">MakeFlat</tt><big>(</big><em>input</em>, <em>output</em><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDSpectroscopyFlat.MakeFlat" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class can be used to generate a pixel-to-pixel flat field 
-from given data files.</p>
-<dl class="method">
-<dt id="SamPy.stis.STISCCDSpectroscopyFlat.MakeFlat.CombineFinalFlatS">
-<tt class="descname">CombineFinalFlatS</tt><big>(</big><em>list</em>, <em>headerl</em>, <em>headerm</em>, <em>raws</em><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDSpectroscopyFlat.MakeFlat.CombineFinalFlatS" title="Permalink to this definition">¶</a></dt>
-<dd><p>Combines all idicidual images to form a single combined flat field for 
-each given mode. Handles flux, error and data quality arrays. Images are
-combined using weights for each pixel that are calculated using the error
-arrays. Will take into account the only the pixels that has not been
-flagged in the data quality array.
-This function will also call other functions to calculate some basic
-statistics and to create some plots from the combined image.
-For L-modes the dust have to pasted from another file. Will use the one
-that is in the CDBS: /grp/hst/cdbs/oref/k2910262o_pfl.fits.
-:param list: a list of files to be combined
-:param headerl: a header for the l-mode combined image
-:param headerm: a header for the m-mode combined image
-:param raws: list of raw file names that were used to create the flat</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="SamPy.stis.STISCCDSpectroscopyFlat.MakeFlat.MakeCopies">
-<tt class="descname">MakeCopies</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDSpectroscopyFlat.MakeFlat.MakeCopies" title="Permalink to this definition">¶</a></dt>
-<dd><p>Copies newly created p-flat files over to a new directory and
-names the new files appropriately which are appropriate for CDBS
-delivery.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="SamPy.stis.STISCCDSpectroscopyFlat.MakeFlat.combine">
-<tt class="descname">combine</tt><big>(</big><em>filelist</em>, <em>output</em>, <em>crsigmas='20'</em><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDSpectroscopyFlat.MakeFlat.combine" title="Permalink to this definition">¶</a></dt>
-<dd><p>Combines all files in filelist using ocrreject PyRAF task.
-:param filelist: filelist being processed 
-:param output:  output list
-:param crsigmas: cosmic ray rejection sigma clipping value</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="SamPy.stis.STISCCDSpectroscopyFlat.MakeFlat.crreject">
-<tt class="descname">crreject</tt><big>(</big><em>filelist</em><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDSpectroscopyFlat.MakeFlat.crreject" title="Permalink to this definition">¶</a></dt>
-<dd><p>Runs CalSTIS for each file in the file list.
-Uses default settings.
-:param filelist: list of files being run through CalSTIS.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="SamPy.stis.STISCCDSpectroscopyFlat.MakeFlat.make50CDD">
-<tt class="descname">make50CDD</tt><big>(</big><em>files</em>, <em>colnodes=25</em>, <em>rownodes=13</em><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDSpectroscopyFlat.MakeFlat.make50CDD" title="Permalink to this definition">¶</a></dt>
-<dd><p>Makes a flat field from all files that has been taken with clear
-aperture (50CCD). Each input file will write an output FITS file.
-Makes also plots out from the data that has been fitted and masked
-that can be used to check the results for any failed spline fits, etc.
-:param files: a list of file names that are being used 
-:param colnodes: the number of nodes used of column fits (default = 25)
-:param rownodes: the number of nodes used for row fits (default = 13)  
-:summary: Creates a flat field
-:todo: rewrite away from IDL</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="SamPy.stis.STISCCDSpectroscopyFlat.MakeFlat.make52X2">
-<tt class="descname">make52X2</tt><big>(</big><em>files</em>, <em>slitpos</em>, <em>colnodes=13</em>, <em>rownodes=13</em><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDSpectroscopyFlat.MakeFlat.make52X2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Makes a flat field from all files that has been taken with a long slit
-in the light path (52x2). Each input file will write an output FITS file.
-Makes also plots out from the data that has been fitted and masked
-that can be used to check the results for any failed spline fits, etc.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>files</strong> &#8211; a list of file names that are being used</li>
-<li><strong>slitpos</strong> &#8211; a list of slit positions that correspond to each file</li>
-<li><strong>colnodes</strong> &#8211; the number of nodes used of column fits (default = 13)</li>
-<li><strong>rownodes</strong> &#8211; the number of nodes used for row fits (default = 13)</li>
-</ul>
-</td>
-</tr>
-<tr class="field"><th class="field-name">Summary :</th><td class="field-body"><p class="first">Creates a flat field</p>
-</td>
-</tr>
-<tr class="field"><th class="field-name">Todo :</th><td class="field-body"><p class="first last">rewrite away from IDL. Get rid off the hard coded file names</p>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="SamPy.stis.STISCCDSpectroscopyFlat.PrepareFiles">
-<em class="property">class </em><tt class="descclassname">SamPy.stis.STISCCDSpectroscopyFlat.</tt><tt class="descname">PrepareFiles</tt><big>(</big><em>input</em>, <em>output</em><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDSpectroscopyFlat.PrepareFiles" title="Permalink to this definition">¶</a></dt>
-<dd><p>Prepares files; modified header keywords.</p>
-<dl class="method">
-<dt id="SamPy.stis.STISCCDSpectroscopyFlat.PrepareFiles.changeKeywords">
-<tt class="descname">changeKeywords</tt><big>(</big><em>filelist</em><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDSpectroscopyFlat.PrepareFiles.changeKeywords" title="Permalink to this definition">¶</a></dt>
-<dd><p>Modifies header keywords of FITS files.
-Switches self.switches keywords.
-:param filelist: a list of filenames 
-:todo: This will now crash if the keyword is not present...</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.stis.STISCCDSpectroscopyFlat.checkZeroArguments">
-<tt class="descclassname">SamPy.stis.STISCCDSpectroscopyFlat.</tt><tt class="descname">checkZeroArguments</tt><big>(</big><em>opts</em><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDSpectroscopyFlat.checkZeroArguments" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks if no command line arguments were given.
-:param opts: option parser instance. 
-:requires: True or False</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.stis.STISCCDSpectroscopyFlat.process_args">
-<tt class="descclassname">SamPy.stis.STISCCDSpectroscopyFlat.</tt><tt class="descname">process_args</tt><big>(</big><em>just_print_help=False</em><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDSpectroscopyFlat.process_args" title="Permalink to this definition">¶</a></dt>
-<dd><p>Processes and parses the command line arguments.
-Will also print help and the version of the script if requested.</p>
-</dd></dl>
-
-</div>
-<div class="section" id="module-SamPy.stis.STISmonthly">
-<span id="stismonthly-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">STISmonthly</span></tt> Module<a class="headerlink" href="#module-SamPy.stis.STISmonthly" title="Permalink to this headline">¶</a></h2>
-<p>A script to pull out information from ZEPPO for STIS MSM montly monitoring.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">date:</th><td class="field-body">Created on Mar 23, 2009</td>
-</tr>
-<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
-</tr>
-</tbody>
-</table>
-<dl class="function">
-<dt id="SamPy.stis.STISmonthly.getMonth">
-<tt class="descclassname">SamPy.stis.STISmonthly.</tt><tt class="descname">getMonth</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.stis.STISmonthly.getMonth" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a date 4 weeks ago from today.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.stis.STISmonthly.saveDataToFile">
-<tt class="descclassname">SamPy.stis.STISmonthly.</tt><tt class="descname">saveDataToFile</tt><big>(</big><em>filename</em>, <em>data</em><big>)</big><a class="headerlink" href="#SamPy.stis.STISmonthly.saveDataToFile" title="Permalink to this definition">¶</a></dt>
-<dd><p>Prints data to a file.</p>
-</dd></dl>
-
-</div>
 </div>
 
 
@@ -479,15 +123,14 @@ Will also print help and the version of the script if requested.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="SamPy.wrapper.html" title="wrapper Package"
+          <a href="SamPy.stis.ObservationSchedule.html" title="SamPy.stis.ObservationSchedule"
              >next</a> |</li>
         <li class="right" >
           <a href="SamPy.statistics.html" title="statistics Package"
              >previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
-
-          <li><a href="SamPy.html" >SamPy Package</a> &raquo;</li> 
+ 
       </ul>
     </div>
     <div class="footer">

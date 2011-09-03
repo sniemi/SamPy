@@ -8,7 +8,8 @@ SamPy.bolshoi.plotstellarmf
    .. rubric:: Functions
 
    .. autosummary::
-   
+      :toctree:
+
       main
       stellarmassfuncSinglePlot
       stellarmassfunc_plot
@@ -20,7 +21,8 @@ SamPy.bolshoi.plotstellarmf
    .. rubric:: Classes
 
    .. autosummary::
-   
+      :toctree:
+
       FormatStrFormatter
       LogLocator
       MultipleLocator

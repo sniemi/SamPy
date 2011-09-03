@@ -8,7 +8,8 @@ SamPy.astronomy.ACSPhotometry
    .. rubric:: Functions
 
    .. autosummary::
-   
+      :toctree:
+
       useSextractor
    
    
@@ -18,7 +19,8 @@ SamPy.astronomy.ACSPhotometry
    .. rubric:: Classes
 
    .. autosummary::
-   
+      :toctree:
+
       ACSPhotometry
    
    

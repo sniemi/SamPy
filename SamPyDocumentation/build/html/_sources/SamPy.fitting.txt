@@ -7,6 +7,6 @@ fitting Package
    :toctree:
 
    fits
-   SPlineArtist
+   SplineArtist
    SplineFitting
    weightedFittingExample

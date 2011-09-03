@@ -1,19 +1,11 @@
 smakced Package
 ===============
 
-:mod:`getSmackedData` Module
-----------------------------
 
-.. automodule:: SamPy.smakced.getSmackedData
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. currentmodule:: SamPy.smakced
 
-:mod:`getSmackedDataNoNumpy` Module
------------------------------------
+.. autosummary::
+   :toctree:
 
-.. automodule:: SamPy.smakced.getSmackedDataNoNumpy
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   getSmackedData
+   getSmackedDataNoNumpy

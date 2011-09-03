@@ -10,7 +10,7 @@ import pyfits as PF
 import numpy as N
 import glob as g
 
-def parse_parameterfile(file = './complete_results/parameters.txt'):
+def parse_parameterfile(file='./complete_results/parameters.txt'):
     out = {}
     #read data
     pdata = open(file).readlines()
@@ -33,7 +33,6 @@ def parse_parameterfile(file = './complete_results/parameters.txt'):
 
 
 if __name__ == '__main__':
-
     # file assignment
     file = 'result00.fits'
     output = 'iTinyTimPSF.fits'
@@ -49,6 +48,7 @@ if __name__ == '__main__':
     except:
         print 'Cannot open template file %s' % template
         import sys
+
         sys.exit('Will exit now')
 
     #find all suitable wfc3 files
@@ -91,21 +91,21 @@ if __name__ == '__main__':
     ystart = int(round(ystart))
 
     #assign the data to the temp array to a right place
-    tempdata[-ystart: y - ystart, -xstart: x - xstart] = 1e5*data
+    tempdata[-ystart: y - ystart, -xstart: x - xstart] = 1e5 * data
 
     #check which chip was used
     if 'UVIS1' in apert:
         #is in extension 4!
         #this is so horrible solution... arggggggh
-        hdu = PF.PrimaryHDU(header = hd0)
-        hdu1 = PF.ImageHDU(data = N.zeros((1,1), dtype = N.float64), header = hd0, name='SCI')
-        hdu2 = PF.ImageHDU(data = N.zeros((1,1), dtype = N.float64), header = hd0, name='SCI')
-        hdu3 = PF.ImageHDU(data = N.zeros((1,1), dtype = N.float64), header = hd0, name='SCI')
-        hdu4 = PF.ImageHDU(data = tempdata, header = hd0, name='SCI')
+        hdu = PF.PrimaryHDU(header=hd0)
+        hdu1 = PF.ImageHDU(data=N.zeros((1, 1), dtype=N.float64), header=hd0, name='SCI')
+        hdu2 = PF.ImageHDU(data=N.zeros((1, 1), dtype=N.float64), header=hd0, name='SCI')
+        hdu3 = PF.ImageHDU(data=N.zeros((1, 1), dtype=N.float64), header=hd0, name='SCI')
+        hdu4 = PF.ImageHDU(data=tempdata, header=hd0, name='SCI')
         thdulist = PF.HDUList([hdu, hdu1, hdu2, hdu3, hdu4])
     elif 'UVIS2' in apert:
-        hdu = PF.PrimaryHDU(header = hd0)
-        hdu1 = PF.ImageHDU(data = tempdata, header = hd0, name='SCI')
+        hdu = PF.PrimaryHDU(header=hd0)
+        hdu1 = PF.ImageHDU(data=tempdata, header=hd0, name='SCI')
         thdulist = PF.HDUList([hdu, hdu1])
     else: print 'Error with file %s' % file
 

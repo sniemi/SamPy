@@ -8,7 +8,8 @@ SamPy.fitting.fits
    .. rubric:: Functions
 
    .. autosummary::
-   
+      :toctree:
+
       FindZeroDoubleExp
       FindZeroSingleExp
       FitDoubleExponent

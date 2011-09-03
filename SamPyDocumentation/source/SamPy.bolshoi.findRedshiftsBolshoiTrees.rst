@@ -8,7 +8,8 @@ SamPy.bolshoi.findRedshiftsBolshoiTrees
    .. rubric:: Functions
 
    .. autosummary::
-   
+      :toctree:
+
       FindRedshiftInfo
    
    

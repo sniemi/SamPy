@@ -1,21 +1,22 @@
-'''
-Created on Jan 20, 2010
+"""
+Convolution related functions.
+
+:requires: NumPy
 
 :author: Sami-Matias Niemi
-'''
-
+"""
 import math as m
 from numpy.fft import fft2, ifft2
 
 def Convolve(image1, image2, MinPad=True, pad=True):
-    '''
+    """
     Convolves image1 with image2.
 
     :param image1: 2D image array
     :param image2: 2D image array
     :param MinPad: whether to use minimal padding
     :param pad: whether to pad the array
-    '''
+    """
     #The size of the images:
     r1, c1 = image1.shape
     r2, c2 = image2.shape

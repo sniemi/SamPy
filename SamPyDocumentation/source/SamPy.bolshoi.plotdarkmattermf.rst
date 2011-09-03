@@ -8,7 +8,8 @@ SamPy.bolshoi.plotdarkmattermf
    .. rubric:: Functions
 
    .. autosummary::
-   
+      :toctree:
+
       compareGalpropzToBolshoiTrees
       plotDMMFfromGalpropz
       plotDMMFfromGalpropzAnalytical2

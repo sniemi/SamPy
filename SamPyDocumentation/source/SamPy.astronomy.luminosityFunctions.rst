@@ -8,7 +8,8 @@ SamPy.astronomy.luminosityFunctions
    .. rubric:: Functions
 
    .. autosummary::
-   
+      :toctree:
+
       bellG
    
    

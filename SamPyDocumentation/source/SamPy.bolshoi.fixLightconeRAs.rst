@@ -8,7 +8,8 @@ SamPy.bolshoi.fixLightconeRAs
    .. rubric:: Functions
 
    .. autosummary::
-   
+      :toctree:
+
       fixLigconeRAs
    
    

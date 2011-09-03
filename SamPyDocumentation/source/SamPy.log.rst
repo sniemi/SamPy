@@ -1,11 +1,9 @@
 log Package
 ===========
 
-:mod:`Logger` Module
---------------------
+.. currentmodule:: SamPy.log
 
-.. automodule:: SamPy.log.Logger
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. autosummary::
+   :toctree:
 
+   Logger

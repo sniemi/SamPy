@@ -1,11 +1,9 @@
 wrapper Package
 ===============
 
-:mod:`gf` Module
-----------------
+.. currentmodule:: SamPy.wrapper
 
-.. automodule:: SamPy.wrapper.gf
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. autosummary::
+   :toctree:
 
+   gf

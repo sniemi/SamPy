@@ -8,7 +8,8 @@ SamPy.image.manipulation
    .. rubric:: Functions
 
    .. autosummary::
-   
+      :toctree:
+
       blurImage
       congrid
       frebin

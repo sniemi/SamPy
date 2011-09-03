@@ -1,18 +1,19 @@
-'''
-Created on Apr 15, 2010
+"""
+Expands WFC3 subarray image and embeds it to a full frame image to probive correct header information.
+
+:requires: PyFITS
+:requires: NumPy
 
 :author: Sami-Matias Niemi
 :contact: niemi@stsci.edu
 
 :version: 0.1
-'''
-
+"""
 import pyfits as PF
 import numpy as N
 import glob as g
 
 if __name__ == '__main__':
-
     #try to open the template, will exit if not possible
     #One could change this, actually don't need the data, just the shape...
     template = '/grp/hst/OTA/focus/Data/prop11877/visit09-jan2010/ibcy09usq_flt.fits'
@@ -22,6 +23,7 @@ if __name__ == '__main__':
     except:
         print 'Cannot open template file %s' % template
         import sys
+
         sys.exit('Will exit now')
 
     #find all suitable wfc3 files
@@ -58,7 +60,7 @@ if __name__ == '__main__':
         #check which chip was used
         if 'UVIS1' in apert:
             uvis1.append(file)
-            hdu = PF.ImageHDU(data = tempdata, header = hd, name='SCI')
+            hdu = PF.ImageHDU(data=tempdata, header=hd, name='SCI')
             fh.append(hdu)
         elif 'UVIS2' in apert:
             uvis2.append(file)

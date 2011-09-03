@@ -1,26 +1,12 @@
 cos Package
 ===========
 
-:mod:`COSNUVCalib` Module
---------------------------
+Cosmic Origins Spectrograph Package.
 
-.. automodule:: SamPy.cos.COSNUVCalib
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. currentmodule:: SamPy.cos
 
-:mod:`plot_all_GET` Module
---------------------------
+.. autosummary::
+   :toctree:
 
-.. automodule:: SamPy.cos.plot_all_GET
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-:mod:`reading` Module
---------------------------
-
-.. automodule:: SamPy.cos.reading
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   COSNUVCalib
+   reading
