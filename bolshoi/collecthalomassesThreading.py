@@ -14,6 +14,7 @@ class findDMhaloes(t.Thread):
     Threaded way of finding dark matter haloes from
     Bolshoi isotree files.
     '''
+
     def __init__(self,
                  queue,
                  times):
@@ -57,9 +58,9 @@ class findDMhaloes(t.Thread):
                             string = '%f %f %f\n' % (a, b, c)
                             #save the string to dictionary
                             if output.has_key(key):
-                                output[key] += [string,]
+                                output[key] += [string, ]
                             else:
-                                output[key] = [string,]
+                                output[key] = [string, ]
             fh.close()
             writeOutput(output, file, self.times)
         except:
@@ -78,6 +79,7 @@ class findDMhaloes(t.Thread):
             #signals to queue job is done
             self.queue.task_done()
 
+
 def findDMDriver(input_files,
                  times,
                  cores=6):
@@ -91,11 +93,12 @@ def findDMDriver(input_files,
         th = findDMhaloes(queue, times)
         th.setDaemon(True)
         th.start()
-    #populate queue with data
+        #populate queue with data
     for file in input_files:
         queue.put(file)
-    #wait on the queue until everything has been processed
+        #wait on the queue until everything has been processed
     queue.join()
+
 
 def writeOutput(data, file, times):
     '''
@@ -111,6 +114,7 @@ def writeOutput(data, file, times):
         for line in d[key]:
             fh.write(line)
         fh.close()
+
 
 def combineFiles(files, outputfile):
     '''
@@ -130,7 +134,7 @@ def combineFiles(files, outputfile):
 if __name__ == '__main__':
     #number of cores to use
     cores = 6
-    
+
     #inpute merger tree files
     inputs = g.glob('/Users/niemi/Desktop/Research/Bolshoi/bolshoi_isotrees/*.dat')
 

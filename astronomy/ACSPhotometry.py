@@ -1,8 +1,8 @@
 """
-This Python script calculates photometry from ACS files.
+This Python script calculates HST ACS WFC photometry.
 
 The class can be used to run calacs for calibrating the raw data.
-The class contains also a simple interface for STractor that
+The class contains also a simple interface for SExtractor that
 can be used to find locations of stars in the image.
 
 :depends: PyRAF
@@ -13,6 +13,7 @@ can be used to find locations of stars in the image.
 
 :version: 1.0
 """
+import os
 import pyraf
 from pyraf import iraf as I
 from pyraf.iraf import stsdas as S
@@ -214,14 +215,12 @@ def useSextractor(input):
      anything to the Python program. This function is superseded by the class:
      'SexTractor' class written by Sami-Matias Niemi for the Nordic Optical Telescope.
      """
-    import os
-
     command = 'sex %s' % input
     os.system(command)
 
 if __name__ == '__main__':
     import glob as G
-    import Photometry as P
+    #import Photometry as P
 
     verbose = False
     doAll = False

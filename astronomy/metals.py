@@ -24,7 +24,7 @@ def gallazzi(h=0.7):
     n.b. masses in file are for H0=70 so no scaling is required
     if using Hubble constant 70.
 
-    :param: h: Hubble parameter to scale to
+    :param h: Hubble parameter to scale to
     :type h: float
 
     return: Stellar masses

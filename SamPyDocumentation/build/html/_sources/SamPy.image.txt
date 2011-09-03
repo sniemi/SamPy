@@ -1,11 +1,12 @@
 image Package
 =============
 
-:mod:`ImageConvolution` Module
-------------------------------
+.. currentmodule:: SamPy.image
 
-.. automodule:: SamPy.image.ImageConvolution
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. autosummary::
+   :toctree:
+
+   ImageConvolution
+   manipulation
+   transform
 

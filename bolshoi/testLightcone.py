@@ -6,6 +6,7 @@ generated using Rachel's SAM.
 :contact: niemi@stsci.edu
 '''
 import matplotlib
+
 matplotlib.use('Agg')
 matplotlib.rc('text', usetex=True)
 matplotlib.rcParams['font.size'] = 16
@@ -98,7 +99,7 @@ def plot_luminosityfunction(path, database, redshifts,
     ptot = P.Rectangle((0, 0), 1, 1, fc='#728FCE')
     sline = '%i$\sigma$ errors' % sigma
     P.legend((mtot, ptot), ('All Galaxies', sline), loc='lower left',
-             scatterpoints=1, fancybox=True, shadow=True)
+                         scatterpoints=1, fancybox=True, shadow=True)
 
     #redshift limited plots
     for i, red in enumerate(redshifts):
@@ -461,12 +462,12 @@ def scatterHistograms(xdata,
                       hatch='x')
     #set legend of x histogram
     plt.legend((x1[2][0], x2[2][0]),
-               ('All Galaxies', r'$S_{250}> 5\ \mathrm{mJy}$'),
-               shadow=False,
-               fancybox=False,
-               bbox_to_anchor=(0.01, 1.34),
-               loc=2,
-               borderaxespad=0.)
+        ('All Galaxies', r'$S_{250}> 5\ \mathrm{mJy}$'),
+                                   shadow=False,
+                                   fancybox=False,
+                                   bbox_to_anchor=(0.01, 1.34),
+                                   loc=2,
+                                   borderaxespad=0.)
     #make y histogram
     axHisty.hist(ydata,
                  bins=ybins,
@@ -770,14 +771,14 @@ def plot_number_counts(path, database, band, redshifts,
         p = P.Rectangle((0, 0), 1, 1, fc='#728FCE', alpha=0.2)
         sline = '%i$\sigma$ errors' % sigma
         P.legend((z0, p, b0[0], a0),
-                 ('Our Model', sline, 'Berta et al. 2010', 'Altieri et al. 2010'),
-                 'lower left')
+            ('Our Model', sline, 'Berta et al. 2010', 'Altieri et al. 2010'),
+                                   'lower left')
     if 'spire' in band:
         p = P.Rectangle((0, 0), 1, 1, fc='#728FCE', alpha=0.2)
         sline = '%i$\sigma$ errors' % sigma
         P.legend((z0, p, g0[0], c0),
-                 ('Our Model', sline, 'Glenn et al. 2010', 'Clements et al. 2010'),
-                 'lower left')
+            ('Our Model', sline, 'Glenn et al. 2010', 'Clements et al. 2010'),
+                                   'lower left')
 
     #redshift limited plots
     for i, red in enumerate(redshifts):
@@ -940,7 +941,7 @@ def plot_number_counts(path, database, band, redshifts,
         if i == 1:
             axs.set_ylabel(
                 r'$\frac{\mathrm{d}N(S_{%s})}{\mathrm{d}S_{%s}} \times S_{%s}^{2.5} \quad [\mathrm{deg}^{-2} \ \mathrm{mJy}^{1.5}]$' % (
-                wave, wave, wave))
+                    wave, wave, wave))
 
     #save figure
     P.savefig(out_folder + 'numbercounts_%s.pdf' % band)
@@ -1115,14 +1116,14 @@ def plot_number_counts2(path, database, band, redshifts,
         p = P.Rectangle((0, 0), 1, 1, fc='#728FCE', alpha=0.2)
         sline = '%i$\sigma$ errors' % sigma
         P.legend((z0, p, b0[0], a0),
-                 ('Our Model', sline, 'Berta et al. 2010', 'Altieri et al. 2010'),
-                 'lower left')
+            ('Our Model', sline, 'Berta et al. 2010', 'Altieri et al. 2010'),
+                                   'lower left')
     if 'spire' in band:
         p = P.Rectangle((0, 0), 1, 1, fc='#728FCE', alpha=0.2)
         sline = '%i$\sigma$ errors' % sigma
         P.legend((z0, p, g0[0], c0),
-                 ('Our Model', sline, 'Glenn et al. 2010', 'Clements et al. 2010'),
-                 'lower left')
+            ('Our Model', sline, 'Glenn et al. 2010', 'Clements et al. 2010'),
+                                   'lower left')
 
     #redshift limited plots
     for i, red in enumerate(redshifts):
@@ -1302,11 +1303,12 @@ def plot_number_counts2(path, database, band, redshifts,
         if i == 1:
             axs.set_ylabel(
                 r'$\frac{\mathrm{d}N(S_{%s})}{\mathrm{d}S_{%s}} \times S_{%s}^{2.5} \quad [\mathrm{deg}^{-2} \ \mathrm{mJy}^{1.5}]$' % (
-                wave, wave, wave))
+                    wave, wave, wave))
             axs.yaxis.set_label_coords(-0.11, 1.0)
-        #save figure
+            #save figure
     P.savefig(out_folder + 'numbercounts_%s.pdf' % band)
     P.close()
+
 
 def plotTemplateComparison(band, redshifts,
                            ymin=10 ** 3, ymax=2 * 10 ** 6,
@@ -1638,7 +1640,7 @@ def plotTemplateComparison(band, redshifts,
                 if i == 1:
                     axs.set_ylabel(
                         r'$\frac{\mathrm{d}N(S_{%s})}{\mathrm{d}S_{%s}} \times S_{%s}^{2.5} \quad [\mathrm{deg}^{-2} \ \mathrm{mJy}^{1.5}]$' % (
-                        wave, wave, wave))
+                            wave, wave, wave))
 
             if 'spire' in band:
                 #remove unnecessary ticks and add units
@@ -1652,20 +1654,20 @@ def plotTemplateComparison(band, redshifts,
                 if i == 1:
                     axs.set_ylabel(
                         r'$\frac{\mathrm{d}N(S_{%s})}{\mathrm{d}S_{%s}} \times S_{%s}^{2.5} \quad [\mathrm{deg}^{-2} \ \mathrm{mJy}^{1.5}]$' % (
-                        wave, wave, wave))
+                            wave, wave, wave))
                     axs.yaxis.set_label_coords(-0.11, 1.0)
 
         if p == path[-1]:
             if 'pacs100' in band or 'pacs160' in band:
                 sline = '%i$\sigma$ errors' % sigma
                 P.legend((sss[0], sss[1], sss[2], b0[0], a0[0]), #, gds),
-                         (ttle[0], ttle[1], ttle[2], 'Berta et al. 2010', 'Altieri et al. 2010'), #, 'GOODS-N'),
-                         'upper right', shadow=True, fancybox=True, numpoints=1)
+                    (ttle[0], ttle[1], ttle[2], 'Berta et al. 2010', 'Altieri et al. 2010'), #, 'GOODS-N'),
+                                                               'upper right', shadow=True, fancybox=True, numpoints=1)
             if 'spire' in band:
                 sline = '%i$\sigma$ errors' % sigma
                 P.legend((sss[0], sss[1], sss[2], g0[0], c0[0]), #, gds),
-                         (ttle[0], ttle[1], ttle[2], 'Glenn et al. 2010', 'Clements et al. 2010'), #, 'GOODS-N'),
-                         'upper right', shadow=True, fancybox=True, numpoints=1)
+                    (ttle[0], ttle[1], ttle[2], 'Glenn et al. 2010', 'Clements et al. 2010'), #, 'GOODS-N'),
+                                                               'upper right', shadow=True, fancybox=True, numpoints=1)
 
     #save figure
     P.savefig(out_folder + 'numbercountComparison_%s.pdf' % band)
@@ -1673,7 +1675,7 @@ def plotTemplateComparison(band, redshifts,
 
 
 def plotNumberCounts(path, database, out_folder):
-    area = 1. / (39./60*42./60.) # area of the simulation
+    area = 1. / (39. / 60 * 42. / 60.) # area of the simulation
 
     obs_data = os.getenv('HOME') + '/Dropbox/Research/Herschel/obs_data/'
     goods = hm + '/Dropbox/Research/Herschel/obs_data/goodsh_goodsn_allbands_z2-4.cat'

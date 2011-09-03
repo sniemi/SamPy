@@ -7,6 +7,7 @@ observational constrains are also performed.
 :contact : niemi@stsci.edu
 '''
 import matplotlib
+
 matplotlib.rc('text', usetex=True)
 matplotlib.rc('xtick', labelsize=12)
 matplotlib.rc('axes', linewidth=1.2)
@@ -895,6 +896,6 @@ if __name__ == '__main__':
     #input data
     path = '/Users/niemi/Desktop/Research/run/newtree1/'
     db = 'sams.db'
-    
+
     #call the driver
     main(path, db)

@@ -22,7 +22,7 @@ def diffFunctionLogBinning(data, column=0, log=False,
     Calculates a differential function from data.
     Uses NumPy to calculate a histogram and then divides.
     each bin value with the length of the bin.
-    The log binning refers to 10 based log, i.e. log10(data)
+    The log binning refers to 10 based log, i.e. "math"`\\log_{10}(data)`
     """
     #get the number of items in data
     if len(N.shape(data)) == 1:
@@ -76,7 +76,7 @@ def diff_function_log_binning(data, column=0, log=False,
     :warning: One should not use this, unless the number of
               systems for each bin is used. One should use diffFunctionLogBinning
               instead, which is probably faster as it uses NumPy.histogram
-              rathrer than my own algorithm.
+              rather than my own algorithm.
     """
     #get the number of items in data
     if len(N.shape(data)) == 1:
@@ -208,11 +208,11 @@ def stellarMassFunction(data,
     stellar mass functions for all galaxies, early- and late-types
     and central galaxies separately.
 
-    :param: data, it should in the following format:
-            data['stellar_mass'] = []
-            data['bulge_mass'] = []
-            data['galaxy_id'] = []
-    :dtype: dictionary
+    :param data: should in the following format:
+                 data['stellar_mass'] = []
+                 data['bulge_mass'] = []
+                 data['galaxy_id'] = []
+    :type data: dictionary
 
     :return: output
     :rtype: dictionary

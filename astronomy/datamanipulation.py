@@ -1,5 +1,5 @@
 """
-A random collection of functions for data manipulation.
+A (random) collection of functions for data manipulation.
 
 :requires: NumPy
 :requires: SciPy
@@ -7,7 +7,7 @@ A random collection of functions for data manipulation.
 :version: 0.1
 
 :author: Sami-Matias Niemi
-:contact: niemi@stsci.edu
+:contact: sniemi@unc.edu
 """
 import numpy as N
 import scipy.stats as ss
@@ -18,13 +18,13 @@ def percentile_bins(xdata, ydata, xmin, xmax,
     """
     Computes median and 16 and 84 percentiles of y-data in bins in x.
 
-    :param: xdata: numpy array of xdata
-    :param: ydata: numpy arrya of ydata
-    :param: xmax: maximumx value of x that data are binned to
-    :param: xmin: minimum value of x that data are binned to
-    :param: nxbins: number of bins in x
-    :param: log: if True, xbins are logarithmically spaced, else linearly
-    :param: limit: the minimum number of values in a bin for which the
+    :param xdata: numpy array of xdata
+    :param ydata: numpy arrya of ydata
+    :param xmax: maximumx value of x that data are binned to
+    :param xmin: minimum value of x that data are binned to
+    :param nxbins: number of bins in x
+    :param log: if True, xbins are logarithmically spaced, else linearly
+    :param limit: the minimum number of values in a bin for which the
                 median and percentiles are returned for.
 
     :return: mid points of the bins, median, 16 per cent percentile, and 84 per cent percentile.
@@ -53,11 +53,11 @@ def average_bins(xdata, ydata, xmin, xmax, nxbins=15):
     """
     Computes mean and 16 and 84 percentiles of y-data in bins in x
 
-    :param: xdata: numpy array of xdata
-    :param: ydata: numpy arrya of ydata
-    :param: xmax: maximumx value of x that data are binned to
-    :param: xmin: minimum value of x that data are binned to
-    :param: nxbins: number of bins in x
+    :param xdata: numpy array of xdata
+    :param ydata: numpy arrya of ydata
+    :param xmax: maximumx value of x that data are binned to
+    :param xmin: minimum value of x that data are binned to
+    :param nxbins: number of bins in x
 
     :return: mid points of the bins, mean, 16 per cent percentile, and 84 per cent percentile.
     """
@@ -79,6 +79,16 @@ def average_bins(xdata, ydata, xmin, xmax, nxbins=15):
 
 
 def binned_average(xdata, ydata, xbins, step):
+    """
+    Calculates a binned average from data
+
+    :param xdata: x vector
+    :param ydata: y vector
+    :param xbins: a vector of x bins
+    :param step: size of the step
+
+    :return: binned average values
+    """
     x = []
     y = []
     yerr = []
@@ -183,7 +193,7 @@ def rollingAverage(x):
     """
     Returns the average between the cells of a list.
 
-    :param: x: a Python list of values
+    :param x: a Python list of values
 
     :return: a NumPy array of averages
     """

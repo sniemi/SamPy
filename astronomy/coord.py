@@ -1,5 +1,5 @@
 """
-Provices matching for a list of RAs and DECs.
+Provides matching for a list of RAs and DECs.
 
 :requires: astLib.astCoords
 :requires: NumPy
@@ -117,7 +117,6 @@ def indmatch(ra1, dec1, ra2, dec2, tol, one=True):
     objects.
 
     :param: one, whether one-to-one mapping should be done
-
     """
     m = match(ra1, dec1, ra2, dec2, tol)
     c = m.ind > -1
@@ -145,7 +144,8 @@ def indmatch(ra1, dec1, ra2, dec2, tol, one=True):
 
 
 def unique_radec(ra, dec, tol):
-    """ Find unique ras and decs in a list of coordinates.
+    """
+    Find unique ras and decs in a list of coordinates.
 
     RA and Dec must be array sof the same length, and in degrees.
 
@@ -159,15 +159,6 @@ def unique_radec(ra, dec, tol):
 
     The matching algorithm is confusing, but hopefully correct and not too
     slow. Potential for improvement...
-
-    Example
-    -------
-
-    >>> ra,dec = np.loadtxt('radec.txt.gz', unpack=1)
-    >>> iunique, iextra = unique_radec(ra,dec,2)
-    >>> iknown, extraknown = np.loadtxt('radec_known.txt.gz', unpack=1)
-    >>> np.allclose(iunique, iknown)
-    >>> np.allclose(iextra, extraknown)
     """
     matches = match(ra, dec, ra, dec, tol, allmatches=True)
     imatchflat = []

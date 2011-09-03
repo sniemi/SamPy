@@ -1,13 +1,13 @@
-SamPy.astronomy.luminosityFunctionss
-====================================
+SamPy.astronomy.luminosityFunctions
+===================================
 
 .. currentmodule:: SamPy.astronomy
 
 
-:mod:`luminosityFunctionss` Module
-----------------------------------
+:mod:`luminosityFunctions` Module
+---------------------------------
 
-.. automodule:: SamPy.astronomy.luminosityFunctionss
+.. automodule:: SamPy.astronomy.luminosityFunctions
     :members:
     :undoc-members:
     :show-inheritance:

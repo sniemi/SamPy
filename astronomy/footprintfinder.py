@@ -1,40 +1,39 @@
-#! /bin/env python
+"""
+This program finds the footprint of the illuminated of a fits image on the sky.
+This footprint is a polygon in pixel (and WCS) coordinates for each chip.
 
-# This program finds the footprint of the illuminated of a fits image on the sky. This 
-# footprint is a polygon in pixel (and WCS) coordinates for each chip.
-#
-# The input fits images images can 
-#   - be composed of multiple chips
-#   - be concave or convex
-#   - have non-straight outlines
-#   - have bad/masked pixels
-#   - have holes
-#   - holes with islands in them
-# 
-# There is one main free parameter to the code:
-#   - -t/--tolerance specifies the maximum distance an illuminated pixel can have from the polygon 
-#     footprint.
-#
-# Requirements: 
-#   - pyfits
-#   - pylab (included in matplotlib. matplotlib requires numpy)
-#
-# Author: Felix Stoehr, ST-ECF, 2008
-#
-# Summary of the algorithm used:
-#   1) find pixels that are on the image border 
-#   2) create a tree for fast searches and put the pixels from 1 in there (python dictionary)
-#   3) find groups of pixels (i.e. to separate different chips)
-#   4) for each group with more than a threshold number of pixels
-#      5) select the starting corner (lower left corner)
-#      6) get group pixels ordered clockwise by having "the right hand on the wall"
-#      7) fit a polygon to the border pixels given a tolerance threshold using Douglas&Puecker
-#      8) identify if one footprint is in an other
-#      9) compute footprint heirarchy
-#     10) write output file and convert the polygon pixel values to sky coordinates
-#
+The input fits images images can
+   - be composed of multiple chips
+   - be concave or convex
+   - have non-straight outlines
+   - have bad/masked pixels
+   - have holes
+   - holes with islands in them
 
-# ----------------------------------------------------------------------------------------
+There is one main free parameter to the code:
+   - -t/--tolerance specifies the maximum distance an illuminated pixel can have from the polygon
+     footprint.
+
+Requirements:
+   - pyfits
+   - pylab (included in matplotlib. matplotlib requires numpy)
+
+Author: Felix Stoehr, ST-ECF, 2008
+
+Summary of the algorithm used:
+   1) find pixels that are on the image border
+   2) create a tree for fast searches and put the pixels from 1 in there (python dictionary)
+   3) find groups of pixels (i.e. to separate different chips)
+   4) for each group with more than a threshold number of pixels
+      5) select the starting corner (lower left corner)
+      6) get group pixels ordered clockwise by having "the right hand on the wall"
+      7) fit a polygon to the border pixels given a tolerance threshold using Douglas&Puecker
+      8) identify if one footprint is in an other
+      9) compute footprint heirarchy
+     10) write output file and convert the polygon pixel values to sky coordinates
+
+"""
+
 
 def main(arguments):
 

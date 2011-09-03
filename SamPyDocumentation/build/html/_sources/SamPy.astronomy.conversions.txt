@@ -1,14 +1,41 @@
 SamPy.astronomy.conversions
 ===========================
 
-.. currentmodule:: SamPy.astronomy
-
-
-:mod:`conversions` Module
--------------------------
-
 .. automodule:: SamPy.astronomy.conversions
-    :members:
-    :undoc-members:
-    :show-inheritance:
-    
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      ABMagnitudeToJansky
+      Luminosity
+      RAandDECfromStandardCoordinates
+      angstromToHertz
+      angularDiameterDistance
+      arccot
+      arcminSquaredToSolidAnge
+      arcminSquaredToSteradians
+      comovingVolume
+      convertSphericalToCartesian
+      cosmocalc
+      cot
+      degTodms
+      degTohms
+      get_flat_flambda_dmag
+      get_magAB_from_flambda
+      janskyToMagnitude
+      nanomaggiesToJansky
+      redshiftFromScale
+      scaleFromRedshift
+   
+   
+
+   
+   
+   
+
+   
+   
+   

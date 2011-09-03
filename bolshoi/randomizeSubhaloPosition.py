@@ -43,7 +43,7 @@ def plotRandomization():
 
     #plot the random points
     ax.scatter(rd['x'], rd['y'], rd['z'],
-               color = 'red')
+               color='red')
     #project them on the bottom
     ax.scatter(rd['x'], rd['y'],
                zs=min, zdir='z')
@@ -57,10 +57,10 @@ def plotRandomization():
 
     plt.show()
 
+
 def plotTestRandmizer(size,
                       rds,
                       fudge=1.1):
-
     rd = conv.convertSphericalToCartesian(size,
                                           rds['theta'],
                                           rds['phi'])
@@ -72,9 +72,9 @@ def plotTestRandmizer(size,
     #generate a sphere
     u = np.linspace(0, 2 * np.pi, 100)
     v = np.linspace(0, np.pi, 100)
-    x = size*np.outer(np.cos(u), np.sin(v))
-    y = size*np.outer(np.sin(u), np.sin(v))
-    z = size*np.outer(np.ones(np.size(u)), np.cos(v))
+    x = size * np.outer(np.cos(u), np.sin(v))
+    y = size * np.outer(np.sin(u), np.sin(v))
+    z = size * np.outer(np.ones(np.size(u)), np.cos(v))
     #plot it as a wire frame
     ax.plot_wireframe(x, y, z,
                       rstride=6,
@@ -82,28 +82,28 @@ def plotTestRandmizer(size,
                       color='k')
 
     #plot main galaxy
-    ax.scatter([0,], [0,], [0,], color = 'magenta',
-               label = 'Main Galaxy')
+    ax.scatter([0, ], [0, ], [0, ], color='magenta',
+                    label='Main Galaxy')
     #plot the random points
     ax.scatter(rd['x'], rd['y'], rd['z'],
-               color = 'red',
-               label = 'Subhalo Galaxy')
+               color='red',
+               label='Subhalo Galaxy')
     #project them on the bottom
     ax.scatter(rd['x'], rd['y'],
-               zs=-size*fudge, zdir='z',
-               label = 'Projection')
+               zs=-size * fudge, zdir='z',
+               label='Projection')
     #project them on the back
     ax.scatter(rd['x'], rd['z'],
-               size*fudge, zdir='y',
-               label = 'Projection')
+               size * fudge, zdir='y',
+               label='Projection')
     #project them on the left
     ax.scatter(rd['y'], rd['z'],
-               -size*fudge, zdir='x',
-               label = 'Projection')
+               -size * fudge, zdir='x',
+               label='Projection')
 
-    ax.set_xlim3d(-size*fudge, size*fudge)
-    ax.set_ylim3d(-size*fudge, size*fudge)
-    ax.set_zlim3d(-size*fudge, size*fudge)
+    ax.set_xlim3d(-size * fudge, size * fudge)
+    ax.set_ylim3d(-size * fudge, size * fudge)
+    ax.set_zlim3d(-size * fudge, size * fudge)
 
     ax.set_xlabel('x = line-of-sight [kpc]')
     ax.set_ylabel('y = X = -RA [kpc]')
@@ -115,7 +115,6 @@ def plotTestRandmizer(size,
 
 
 def testRandomizer():
-
     #calculate a test case
     conversion = 0.000277777778 # degree to arcsecond
     #random distance between z = 0 and 5
@@ -147,7 +146,7 @@ def testRandomizer():
     # is aligned with DEC. The origin of this system is at the tangent point
     # in the dark matter halo.
     # Poor man's solution to the problem would be:
-    new_ra = ra_main - (rd['y'][0]/np.cos(rd['z'][0]))
+    new_ra = ra_main - (rd['y'][0] / np.cos(rd['z'][0]))
     new_dec = dec_main + rd['z'][0]
     # However, this only works if one is away from the pole.
     # More general solution can be derived using spherical geometry:
@@ -161,7 +160,7 @@ def testRandomizer():
 
 
     #print the output
-    print 'Redshift of the galaxy is %.3f while the subhaloes distance is %0.2f kpc'% (z, physical_distance)
+    print 'Redshift of the galaxy is %.3f while the subhaloes distance is %0.2f kpc' % (z, physical_distance)
     print '\nCoordinates of the main halo galaxy are (RA and DEC):'
     print '%.7f  %.7f' % (ra_main, dec_main)
     print astCoords.decimal2hms(ra_main, ':'), astCoords.decimal2dms(dec_main, ':')
@@ -174,9 +173,9 @@ def testRandomizer():
     #print 'Shift in RA and DEC [degrees]:'
     #print  rd['y'][0], (rd['z'][0]/np.cos(rd['z'][0]))
     print '\nShift in RA and DEC [seconds]:'
-    print  -rd['y'][0]/np.cos(rd['z'][0])/conversion, rd['z'][0]/conversion
+    print  -rd['y'][0] / np.cos(rd['z'][0]) / conversion, rd['z'][0] / conversion
     print 'or again with the better method:'
-    print (result['RA'] - ra_main)/conversion, (result['DEC'] - dec_main)/conversion
+    print (result['RA'] - ra_main) / conversion, (result['DEC'] - dec_main) / conversion
     #print '\nDistance inferred from the coordinates vs the real distance vs x'
     #print np.sqrt((rd['y'][0]/conversion)**2 + ((rd['z'][0]/np.cos(rd['z'][0]))/conversion)**2) * dd1, \
     #      physical_distance, rd['x'][0]
@@ -185,7 +184,6 @@ def testRandomizer():
     plotTestRandmizer(physical_distance, rds)
 
 if __name__ == '__main__':
-
     #plotRandomization()
 
     testRandomizer()

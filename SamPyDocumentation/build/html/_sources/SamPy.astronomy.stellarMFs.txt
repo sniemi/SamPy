@@ -1,13 +1,30 @@
 SamPy.astronomy.stellarMFs
 ==========================
 
-.. currentmodule:: SamPy.astronomy
-
-
-:mod:`stellarMFs` Module
-------------------------
-
 .. automodule:: SamPy.astronomy.stellarMFs
-    :members:
-    :undoc-members:
-    :show-inheritance:
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      bellG
+      bellK
+      fstarBehroozi
+      fstarBen
+      highRedshiftMFs
+      mstar_bell
+      mstar_lin
+      panter
+      stellarMfs
+   
+   
+
+   
+   
+   
+
+   
+   
+   

@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
     <link rel="up" title="astronomy Package" href="SamPy.astronomy.html" />
-    <link rel="next" title="SamPy.astronomy.luminosityFunctionss" href="SamPy.astronomy.luminosityFunctionss.html" />
+    <link rel="next" title="SamPy.astronomy.luminosityFunctions" href="SamPy.astronomy.luminosityFunctions.html" />
     <link rel="prev" title="SamPy.astronomy.gasmasses" href="SamPy.astronomy.gasmasses.html" /> 
   </head>
   <body>
@@ -42,7 +42,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="SamPy.astronomy.luminosityFunctionss.html" title="SamPy.astronomy.luminosityFunctionss"
+          <a href="SamPy.astronomy.luminosityFunctions.html" title="SamPy.astronomy.luminosityFunctions"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="SamPy.astronomy.gasmasses.html" title="SamPy.astronomy.gasmasses"
@@ -50,27 +50,18 @@
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
 
-          <li><a href="SamPy.html" >SamPy Package</a> &raquo;</li>
           <li><a href="SamPy.astronomy.html" accesskey="U">astronomy Package</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">SamPy.astronomy.hess_plot</a><ul>
-<li><a class="reference internal" href="#module-SamPy.astronomy.hess_plot"><tt class="docutils literal"><span class="pre">hess_plot</span></tt> Module</a></li>
-</ul>
-</li>
-</ul>
-
   <h4>Previous topic</h4>
   <p class="topless"><a href="SamPy.astronomy.gasmasses.html"
                         title="previous chapter">SamPy.astronomy.gasmasses</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="SamPy.astronomy.luminosityFunctionss.html"
-                        title="next chapter">SamPy.astronomy.luminosityFunctionss</a></p>
+  <p class="topless"><a href="SamPy.astronomy.luminosityFunctions.html"
+                        title="next chapter">SamPy.astronomy.luminosityFunctions</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/SamPy.astronomy.hess_plot.txt"
@@ -97,56 +88,46 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="sampy-astronomy-hess-plot">
-<h1>SamPy.astronomy.hess_plot<a class="headerlink" href="#sampy-astronomy-hess-plot" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-SamPy.astronomy.hess_plot">
-<span id="hess-plot-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">hess_plot</span></tt> Module<a class="headerlink" href="#module-SamPy.astronomy.hess_plot" title="Permalink to this headline">¶</a></h2>
-<p>This file contains a function that can be used to 
-generate a Hess plot.</p>
-<dl class="function">
-<dt id="SamPy.astronomy.hess_plot.hess_plot">
-<tt class="descclassname">SamPy.astronomy.hess_plot.</tt><tt class="descname">hess_plot</tt><big>(</big><em>xdata</em>, <em>ydata</em>, <em>weight</em>, <em>xmin</em>, <em>xmax</em>, <em>nxbins</em>, <em>ymin</em>, <em>ymax</em>, <em>nybins</em>, <em>pmax=1.0</em>, <em>pmin=0.1</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/hess_plot.html#hess_plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.hess_plot.hess_plot" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function can be used to calculate a hess plot
-i.e. the conditional probability 2D histogram.</p>
+  <div class="section" id="module-SamPy.astronomy.hess_plot">
+<span id="sampy-astronomy-hess-plot"></span><h1>SamPy.astronomy.hess_plot<a class="headerlink" href="#module-SamPy.astronomy.hess_plot" title="Permalink to this headline">¶</a></h1>
+<p>This file contains a function that can be used to generate a Hess plot.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>xdata</strong> &#8211; 1D NumPy array containing data in x dim.</li>
-<li><strong>ydata</strong> &#8211; 1D NumPy array containing data in y dim.</li>
-<li><strong>weight</strong> &#8211; 1D NumPy array containing weight for
-each data point</li>
-<li><strong>xmin</strong> &#8211; a minimum x value to be considered</li>
-<li><strong>xmax</strong> &#8211; a maximum x value to be considered</li>
-<li><strong>nxbins</strong> &#8211; the number of bins in x dim.</li>
-<li><strong>nybins</strong> &#8211; the number of bins in y dim.</li>
-<li><strong>pmax</strong> &#8211; 1.0</li>
-<li><strong>pmin</strong> &#8211; 0.1</li>
-</ul>
-</td>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">NumPy</td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">2D array, min, max</p>
-</td>
+<tr class="field"><th class="field-name">version:</th><td class="field-body">0.1</td>
+</tr>
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a></td>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.astronomy.hess_plot.hess_plot_old">
-<tt class="descclassname">SamPy.astronomy.hess_plot.</tt><tt class="descname">hess_plot_old</tt><big>(</big><em>xdata</em>, <em>ydata</em>, <em>weight</em>, <em>xmin</em>, <em>xmax</em>, <em>nxbins</em>, <em>ymin</em>, <em>ymax</em>, <em>nybins</em>, <em>pmax=1.0</em>, <em>pmin=0.1</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/hess_plot.html#hess_plot_old"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.hess_plot.hess_plot_old" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
+<p class="rubric">Functions</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">hess_plot</span></tt>(xdata,&nbsp;ydata,&nbsp;weight,&nbsp;xmin,&nbsp;xmax,&nbsp;...)</td>
+<td>This function can be used to calculate a hess plot i.e.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">hess_plot_old</span></tt>(xdata,&nbsp;ydata,&nbsp;weight,&nbsp;xmin,&nbsp;...)</td>
+<td><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Note :</th><td class="field-body">obsolete, do not use this version!</td>
+<tr class="field"><th class="field-name">note:</th><td class="field-body">obsolete, do not use this version!</td>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-</div>
+</td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
@@ -165,7 +146,7 @@ each data point</li>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="SamPy.astronomy.luminosityFunctionss.html" title="SamPy.astronomy.luminosityFunctionss"
+          <a href="SamPy.astronomy.luminosityFunctions.html" title="SamPy.astronomy.luminosityFunctions"
              >next</a> |</li>
         <li class="right" >
           <a href="SamPy.astronomy.gasmasses.html" title="SamPy.astronomy.gasmasses"
@@ -173,7 +154,6 @@ each data point</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
 
-          <li><a href="SamPy.html" >SamPy Package</a> &raquo;</li>
           <li><a href="SamPy.astronomy.html" >astronomy Package</a> &raquo;</li> 
       </ul>
     </div>

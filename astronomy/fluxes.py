@@ -1,5 +1,5 @@
 """
-Functions related astronomical fluxes.
+Functions related to deriving astronomical fluxes.
 
 :requires: NumPy
 :requires: SciPy
@@ -21,10 +21,17 @@ def convolveSpectrum(wave, flux, wave2, throughput):
     :note: if the spectrum is shorter in wavelength than the filter transmittance
            curve, then sets the outside range values to zeros
 
-    :param: wave, wavelength of the spectrum
-    :param: flux, flux of the spectrum
-    :param: wave2, wavelgnth of the filter
-    :param: throughput, normalized throughput of the filter
+    :param wave: wavelength of the spectrum
+    :type wave: ndarray
+    :param flux: flux of the spectrum
+    :type flux: ndarray
+    :param wave2: wavelength of the filter
+    :type wave2: ndarray
+    :param throughput: normalized throughput of the filter
+    :tpye throughput: ndarray
+
+    :return: effective flux, effective wavelength, flux and wavelength grid
+    :rtype: dictionary
     """
     min = np.min(wave2)
     max = np.max(wave2)

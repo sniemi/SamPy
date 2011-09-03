@@ -1,13 +1,29 @@
 SamPy.astronomy.datamanipulation
 ================================
 
-.. currentmodule:: SamPy.astronomy
-
-
-:mod:`datamanipulation` Module
-------------------------------
-
 .. automodule:: SamPy.astronomy.datamanipulation
-    :members:
-    :undoc-members:
-    :show-inheritance:
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      average_bins
+      binAndReturnFractions
+      binAndReturnMergerFractions
+      binAndReturnMergerFractions2
+      binned_average
+      movingAverage
+      percentile_bins
+      rollingAverage
+   
+   
+
+   
+   
+   
+
+   
+   
+   

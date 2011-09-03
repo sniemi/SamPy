@@ -4,6 +4,7 @@ Plots stellar to dark matter halo mass ratios from Bolshoi and compares the resu
 :author: Sami-Matias Niemi
 '''
 import matplotlib
+
 matplotlib.rc('text', usetex=True)
 matplotlib.rcParams['font.size'] = 15
 matplotlib.rc('xtick', labelsize=14)

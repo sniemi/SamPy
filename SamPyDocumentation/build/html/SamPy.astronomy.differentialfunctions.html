@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
     <link rel="up" title="astronomy Package" href="SamPy.astronomy.html" />
-    <link rel="next" title="SamPy.astronomy.gasmasses" href="SamPy.astronomy.gasmasses.html" />
+    <link rel="next" title="SamPy.astronomy.fluxes" href="SamPy.astronomy.fluxes.html" />
     <link rel="prev" title="SamPy.astronomy.datamanipulation" href="SamPy.astronomy.datamanipulation.html" /> 
   </head>
   <body>
@@ -42,7 +42,7 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="SamPy.astronomy.gasmasses.html" title="SamPy.astronomy.gasmasses"
+          <a href="SamPy.astronomy.fluxes.html" title="SamPy.astronomy.fluxes"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="SamPy.astronomy.datamanipulation.html" title="SamPy.astronomy.datamanipulation"
@@ -50,27 +50,18 @@
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
 
-          <li><a href="SamPy.html" >SamPy Package</a> &raquo;</li>
           <li><a href="SamPy.astronomy.html" accesskey="U">astronomy Package</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">SamPy.astronomy.differentialfunctions</a><ul>
-<li><a class="reference internal" href="#module-SamPy.astronomy.differentialfunctions"><tt class="docutils literal"><span class="pre">differentialfunctions</span></tt> Module</a></li>
-</ul>
-</li>
-</ul>
-
   <h4>Previous topic</h4>
   <p class="topless"><a href="SamPy.astronomy.datamanipulation.html"
                         title="previous chapter">SamPy.astronomy.datamanipulation</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="SamPy.astronomy.gasmasses.html"
-                        title="next chapter">SamPy.astronomy.gasmasses</a></p>
+  <p class="topless"><a href="SamPy.astronomy.fluxes.html"
+                        title="next chapter">SamPy.astronomy.fluxes</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="_sources/SamPy.astronomy.differentialfunctions.txt"
@@ -97,10 +88,8 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="sampy-astronomy-differentialfunctions">
-<h1>SamPy.astronomy.differentialfunctions<a class="headerlink" href="#sampy-astronomy-differentialfunctions" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-SamPy.astronomy.differentialfunctions">
-<span id="differentialfunctions-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">differentialfunctions</span></tt> Module<a class="headerlink" href="#module-SamPy.astronomy.differentialfunctions" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="module-SamPy.astronomy.differentialfunctions">
+<span id="sampy-astronomy-differentialfunctions"></span><h1>SamPy.astronomy.differentialfunctions<a class="headerlink" href="#module-SamPy.astronomy.differentialfunctions" title="Permalink to this headline">¶</a></h1>
 <p>Functions to calculate differential functions.</p>
 <p>These functions can be used to calculate for example
 luminosity functions, stellar and dark matter halo
@@ -119,67 +108,27 @@ functions etc.</p>
 </tr>
 </tbody>
 </table>
-<dl class="function">
-<dt id="SamPy.astronomy.differentialfunctions.diffFunctionLogBinning">
-<tt class="descclassname">SamPy.astronomy.differentialfunctions.</tt><tt class="descname">diffFunctionLogBinning</tt><big>(</big><em>data</em>, <em>column=0</em>, <em>log=False</em>, <em>wgth=None</em>, <em>mmax=15.5</em>, <em>mmin=9.0</em>, <em>nbins=35</em>, <em>h=0.7</em>, <em>volume=250</em>, <em>nvols=1</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/differentialfunctions.html#diffFunctionLogBinning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.differentialfunctions.diffFunctionLogBinning" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates a differential function from data.
-Uses NumPy to calculate a histogram and then divides.
-each bin value with the length of the bin.
-The log binning refers to 10 based log, i.e. log10(data)</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.astronomy.differentialfunctions.diff_function_log_binning">
-<tt class="descclassname">SamPy.astronomy.differentialfunctions.</tt><tt class="descname">diff_function_log_binning</tt><big>(</big><em>data</em>, <em>column=0</em>, <em>log=False</em>, <em>wgth=None</em>, <em>mmax=15.5</em>, <em>mmin=9.0</em>, <em>nbins=35</em>, <em>h=0.7</em>, <em>volume=250</em>, <em>nvols=1</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/differentialfunctions.html#diff_function_log_binning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.differentialfunctions.diff_function_log_binning" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates a differential function from data.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
+<p class="rubric">Functions</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
 <tbody valign="top">
-<tr class="field"><th class="field-name">Warning :</th><td class="field-body">One should not use this, unless the number of
-systems for each bin is used. One should use diffFunctionLogBinning
-instead, which is probably faster as it uses NumPy.histogram
-rathrer than my own algorithm.</td>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">diffFunctionLogBinning</span></tt>(data[,&nbsp;column,&nbsp;log,&nbsp;...])</td>
+<td>Calculates a differential function from data.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">diff_function_log_binning</span></tt>(data[,&nbsp;column,&nbsp;...])</td>
+<td>Calculates a differential function from data.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">mass_function</span></tt>(data[,&nbsp;column,&nbsp;log,&nbsp;wght,&nbsp;...])</td>
+<td>Calculates a mass function from data.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">stellarMassFunction</span></tt>(data[,&nbsp;wght,&nbsp;mmin,&nbsp;...])</td>
+<td>Calculates a stellar mass function from data.</td>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.astronomy.differentialfunctions.mass_function">
-<tt class="descclassname">SamPy.astronomy.differentialfunctions.</tt><tt class="descname">mass_function</tt><big>(</big><em>data</em>, <em>column=0</em>, <em>log=False</em>, <em>wght=None</em>, <em>mmin=9.0</em>, <em>mmax=15.0</em>, <em>nbins=35</em>, <em>h=0.7</em>, <em>volume=250</em>, <em>nvols=1</em>, <em>verbose=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/differentialfunctions.html#mass_function"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.differentialfunctions.mass_function" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates a mass function from data.
-Returns differential mass function and bins:
-dN / dlnM
-:TODO: add calculating the cumulative mass function.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.astronomy.differentialfunctions.stellarMassFunction">
-<tt class="descclassname">SamPy.astronomy.differentialfunctions.</tt><tt class="descname">stellarMassFunction</tt><big>(</big><em>data</em>, <em>wght=None</em>, <em>mmin=None</em>, <em>mmax=None</em>, <em>nbins=40</em>, <em>h=0.7</em>, <em>volume=50</em>, <em>nvols=8</em>, <em>verbose=False</em>, <em>early_type_galaxies=0.4</em>, <em>central_galaxy_id=1</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/differentialfunctions.html#stellarMassFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.differentialfunctions.stellarMassFunction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculates a stellar mass function from data. Calculates
-stellar mass functions for all galaxies, early- and late-types
-and central galaxies separately.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Param :</th><td class="field-body">data, it should in the following format:
-data[&#8216;stellar_mass&#8217;] = []
-data[&#8216;bulge_mass&#8217;] = []
-data[&#8216;galaxy_id&#8217;] = []</td>
-</tr>
-<tr class="field"><th class="field-name">Dtype :</th><td class="field-body">dictionary</td>
-</tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">output</td>
-</tr>
-<tr class="field"><th class="field-name">Return type:</th><td class="field-body">dictionary</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
 </div>
 
 
@@ -198,7 +147,7 @@ data[&#8216;galaxy_id&#8217;] = []</td>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="SamPy.astronomy.gasmasses.html" title="SamPy.astronomy.gasmasses"
+          <a href="SamPy.astronomy.fluxes.html" title="SamPy.astronomy.fluxes"
              >next</a> |</li>
         <li class="right" >
           <a href="SamPy.astronomy.datamanipulation.html" title="SamPy.astronomy.datamanipulation"
@@ -206,7 +155,6 @@ data[&#8216;galaxy_id&#8217;] = []</td>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
 
-          <li><a href="SamPy.html" >SamPy Package</a> &raquo;</li>
           <li><a href="SamPy.astronomy.html" >astronomy Package</a> &raquo;</li> 
       </ul>
     </div>

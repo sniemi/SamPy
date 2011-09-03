@@ -1,5 +1,5 @@
 """
-Various functions can be fit to give data.
+Various functions which can be fitted to given data.
 
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
@@ -52,7 +52,7 @@ def Gaussian2D(data):
     Fits a 2D Gaussian to a given data.
     Uses scipy.optimize.leastsq for fitting.
 
-    :param: data
+    :param data: data
     '''
     params = _gaussianMoments2D(data)
     errfunc = lambda p: np.ravel(_gaussian2D(*p)(*np.indices(data.shape)) - data)
@@ -65,10 +65,9 @@ def Gaussian(ydata, xdata=None, initials=None):
     Fits a single Gaussian to a given data.
     Uses scipy.optimize.leastsq for fitting.
 
-    :param: ydata, to which a Gaussian will be fitted to.
-    :param: xdata, if not given uses np.arange
-    :param: initials, initial guess for Gaussian parameters
-            in order [amplitude, mean, sigma]
+    :param ydata: to which a Gaussian will be fitted to.
+    :param xdata: if not given uses np.arange
+    :param initials: initial guess for Gaussian parameters in order [amplitude, mean, sigma]
 
     :return: coefficients, best fit params, success
     :rtype: dictionary
@@ -199,9 +198,9 @@ def FitExponent(xdata, ydata, initials):
 
       p[0] + [1]*exp(-x*p[2])
 
-    :param: xdata
-    :param: ydata
-    :param: initials, initial parameter values
+    :param xdata: x vector
+    :param ydata: y vector
+    :param initials: initial parameter values
     """
     fitfunc = lambda p, x: p[0] + p[1] * scipy.exp(-x * p[2])
     errfunc = lambda p, x, y: fitfunc(p, x) - y
@@ -216,9 +215,9 @@ def FitExponent(xdata, ydata, initials):
 
 def doubleExponent(x, p, shift):
     """
-    :param: x, data
-    :param: p, parameters
-    :param: shift, shift
+    :param x: data
+    :param p: parameters
+    :param shift: shift
 
     :return: double exponential with a given parameters and shift
     """
@@ -227,9 +226,9 @@ def doubleExponent(x, p, shift):
 
 def singleExponent(x, p, shift):
     """
-    :param: x, data
-    :param: p, parameters
-    :param: shift, shift
+    :param x: data
+    :param p: parameters
+    :param shift: shift
 
     :return: a single exponential with a given parameters and shift
     """

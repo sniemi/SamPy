@@ -1,19 +1,10 @@
 cosmology Package
 =================
 
-:mod:`cc` Module
-----------------
+.. currentmodule:: SamPy.cosmology
 
-.. automodule:: SamPy.cosmology.cc
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. autosummary::
+   :toctree:
 
-:mod:`distances` Module
------------------------
-
-.. automodule:: SamPy.cosmology.distances
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   distances
+   powerspec

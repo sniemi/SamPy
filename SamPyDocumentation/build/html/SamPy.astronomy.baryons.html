@@ -25,7 +25,7 @@
     <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
     <link rel="up" title="astronomy Package" href="SamPy.astronomy.html" />
     <link rel="next" title="SamPy.astronomy.basics" href="SamPy.astronomy.basics.html" />
-    <link rel="prev" title="SamPy.astronomy.stellarMFs" href="SamPy.astronomy.stellarMFs.html" /> 
+    <link rel="prev" title="SamPy.astronomy.ACSPhotometry" href="SamPy.astronomy.ACSPhotometry.html" /> 
   </head>
   <body>
 
@@ -45,29 +45,20 @@
           <a href="SamPy.astronomy.basics.html" title="SamPy.astronomy.basics"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="SamPy.astronomy.stellarMFs.html" title="SamPy.astronomy.stellarMFs"
+          <a href="SamPy.astronomy.ACSPhotometry.html" title="SamPy.astronomy.ACSPhotometry"
              accesskey="P">previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
 
-          <li><a href="SamPy.html" >SamPy Package</a> &raquo;</li>
           <li><a href="SamPy.astronomy.html" accesskey="U">astronomy Package</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">SamPy.astronomy.baryons</a><ul>
-<li><a class="reference internal" href="#module-SamPy.astronomy.baryons"><tt class="docutils literal"><span class="pre">baryons</span></tt> Module</a></li>
-</ul>
-</li>
-</ul>
-
   <h4>Previous topic</h4>
-  <p class="topless"><a href="SamPy.astronomy.stellarMFs.html"
-                        title="previous chapter">SamPy.astronomy.stellarMFs</a></p>
+  <p class="topless"><a href="SamPy.astronomy.ACSPhotometry.html"
+                        title="previous chapter">SamPy.astronomy.ACSPhotometry</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="SamPy.astronomy.basics.html"
                         title="next chapter">SamPy.astronomy.basics</a></p>
@@ -97,10 +88,8 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="sampy-astronomy-baryons">
-<h1>SamPy.astronomy.baryons<a class="headerlink" href="#sampy-astronomy-baryons" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-SamPy.astronomy.baryons">
-<span id="baryons-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">baryons</span></tt> Module<a class="headerlink" href="#module-SamPy.astronomy.baryons" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="module-SamPy.astronomy.baryons">
+<span id="sampy-astronomy-baryons"></span><h1>SamPy.astronomy.baryons<a class="headerlink" href="#module-SamPy.astronomy.baryons" title="Permalink to this headline">¶</a></h1>
 <p>Helper functions related to baryonic constrains such as mass functions.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -116,33 +105,18 @@
 </tr>
 </tbody>
 </table>
-<dl class="function">
-<dt id="SamPy.astronomy.baryons.BellBaryonicMassFunction">
-<tt class="descclassname">SamPy.astronomy.baryons.</tt><tt class="descname">BellBaryonicMassFunction</tt><big>(</big><em>h=0.7</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/baryons.html#BellBaryonicMassFunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.baryons.BellBaryonicMassFunction" title="Permalink to this definition">¶</a></dt>
-<dd><p>G-derived baryonic mass function using default gas
-Schechter Function fit parameters
-phi* M* Alpha j  (next line formal errors)
-real errors are probably systematic: see Bell et al. 2003 for
-guidance (the errors depend on passband and/or stellar mass)</p>
-<blockquote>
-<blockquote>
-0.0105038      10.7236     -1.22776  6.65221e+08</blockquote>
-<p>0.000857033    0.0448084    0.0552834  1.45862e+07</p>
-</blockquote>
-<p>Then we present the V/V_max data points; x   phi  phi-1sig  phi+1sig</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
+<p class="rubric">Functions</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
 <tbody valign="top">
-<tr class="field"><th class="field-name">Param :</th><td class="field-body">h: Hubble parameter</td>
-</tr>
-<tr class="field"><th class="field-name">Note :</th><td class="field-body">In Chabrier IMF.</td>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">BellBaryonicMassFunction</span></tt>([h])</td>
+<td>G-derived baryonic mass function using default gas.</td>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-</div>
 </div>
 
 
@@ -164,12 +138,11 @@ guidance (the errors depend on passband and/or stellar mass)</p>
           <a href="SamPy.astronomy.basics.html" title="SamPy.astronomy.basics"
              >next</a> |</li>
         <li class="right" >
-          <a href="SamPy.astronomy.stellarMFs.html" title="SamPy.astronomy.stellarMFs"
+          <a href="SamPy.astronomy.ACSPhotometry.html" title="SamPy.astronomy.ACSPhotometry"
              >previous</a> |</li>
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
 
-          <li><a href="SamPy.html" >SamPy Package</a> &raquo;</li>
           <li><a href="SamPy.astronomy.html" >astronomy Package</a> &raquo;</li> 
       </ul>
     </div>

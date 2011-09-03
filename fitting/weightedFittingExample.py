@@ -1,5 +1,5 @@
 """
-Simple fitting example and how to take into account indicidual weights.
+Simple fitting example and how to take into account individual weights.
 """
 from scipy.optimize.minpack import curve_fit
 import numpy as np

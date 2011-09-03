@@ -20,19 +20,24 @@ observation_path = os.getenv('HOME') + '/Dropbox/Research/Observations/'
 
 def BellBaryonicMassFunction(h=0.7):
     """
-    G-derived baryonic mass function using default gas
-    Schechter Function fit parameters
-    phi* M* Alpha j  (next line formal errors)
-    real errors are probably systematic: see Bell et al. 2003 for
-    guidance (the errors depend on passband and/or stellar mass)
-        0.0105038      10.7236     -1.22776  6.65221e+08
-      0.000857033    0.0448084    0.0552834  1.45862e+07
-    Then we present the V/V_max data points; x   phi  phi-1sig  phi+1sig
+    G-derived baryonic mass function using default gas.
 
-    :param: h: Hubble parameter
+    Schechter Function fit parameters::
+
+        phi* M* Alpha j  (next line formal errors)
+        real errors are probably systematic: see Bell et al. 2003 for
+        guidance (the errors depend on passband and/or stellar mass)
+        0.0105038      10.7236     -1.22776  6.65221e+08
+        0.000857033    0.0448084    0.0552834  1.45862e+07
+        Then we present the V/V_max data points; x   phi  phi-1sig  phi+1sig
+
+    :param h: Hubble parameter
     :type h: float
 
     :note: In Chabrier IMF.
+
+    :return: baryonic mass function parameters
+    :rtype: list
     """
     data = np.loadtxt(observation_path + 'bell/sdss2mass_lf/barymf1.out')
     m = data[:, 0] - 2.0 * np.log10(h) - 0.15

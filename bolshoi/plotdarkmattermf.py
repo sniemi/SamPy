@@ -67,7 +67,7 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
         if b > 10 ** -6:
             break
     ax1.annotate('$z \sim %.1f$' % redshift,
-            (0.98 * a, 3 * 10 ** -6), size='x-small')
+        (0.98 * a, 3 * 10 ** -6), size='x-small')
 
     #Analytical MFs
     #0th column: log10 of mass (Msolar, NOT Msolar/h)
@@ -94,7 +94,7 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
         yPS = N.interp(mbin0, xPS, yPS)
         #make the plot
         ax2.annotate('$z \sim %.1f$' % redshift,
-                (1.5 * 10 ** 9, 1.05), xycoords='data',
+            (1.5 * 10 ** 9, 1.05), xycoords='data',
                      size=10)
         ax2.axhline(1.0, color='b')
         ax2.plot(mbin0, mf0 / yST, 'b-')
@@ -116,7 +116,7 @@ def plot_mass_function(redshift, h, no_phantoms, *data):
     ax2.set_ylabel(r'$\frac{\mathrm{Bolshoi}}{\mathrm{Model}}$')
 
     ax1.legend((bolshoi, sh, ps),
-            ('Bolshoi', 'Sheth-Tormen', 'Press-Schecter'),
+        ('Bolshoi', 'Sheth-Tormen', 'Press-Schecter'),
                                 shadow=True, fancybox=True,
                                 numpoints=1)
 
@@ -162,7 +162,7 @@ def plot_mass_functionAnalytical2(redshift, h, no_phantoms, *data):
         if b > 10 ** -6:
             break
     ax1.annotate('$z \sim %.1f$' % redshift,
-            (0.98 * a, 3 * 10 ** -6), size='x-small')
+        (0.98 * a, 3 * 10 ** -6), size='x-small')
 
     #Analytical MFs
     xST = dt['Sheth-Tormen'][0]
@@ -189,7 +189,7 @@ def plot_mass_functionAnalytical2(redshift, h, no_phantoms, *data):
         #yPS = N.interp(mbin0, xPS, yPS)
         #make the plot
         ax2.annotate('$z \sim %.0f$' % redshift,
-                (1.5 * 10 ** 9, 1.05), xycoords='data',
+            (1.5 * 10 ** 9, 1.05), xycoords='data',
                      size=10)
         ax2.axhline(1.0, color='b')
         ax2.plot(xST, mfintST / yST, 'b-')
@@ -213,7 +213,7 @@ def plot_mass_functionAnalytical2(redshift, h, no_phantoms, *data):
     ax2.set_ylabel(r'$\frac{\mathrm{Bolshoi}}{\mathrm{Model}}$')
 
     ax1.legend((bolshoi, sh, ps),
-            ('Bolshoi', 'Sheth-Tormen', 'Press-Schecter'),
+        ('Bolshoi', 'Sheth-Tormen', 'Press-Schecter'),
                                 shadow=True, fancybox=True,
                                 numpoints=1)
 
@@ -272,7 +272,7 @@ def plotDMMFfromGalpropz(redshift, h, *data):
         if b > 10 ** -6:
             break
     ax1.annotate('$z \sim %.0f$' % redshift,
-            (0.98 * a, 3 * 10 ** -7), size='x-small')
+        (0.98 * a, 3 * 10 ** -7), size='x-small')
 
     #Analytical MFs
     #0th column: log10 of mass (Msolar, NOT Msolar/h)
@@ -299,7 +299,7 @@ def plotDMMFfromGalpropz(redshift, h, *data):
         yPSint = N.interp(mbin0, xPS, yPS)
         #make the plot
         ax2.annotate('$z \sim %.0f$' % redshift,
-                (1.5 * 10 ** 9, 1.05), xycoords='data',
+            (1.5 * 10 ** 9, 1.05), xycoords='data',
                      size=10)
         ax2.axhline(1.0, color='b')
         ax2.plot(mbin0, mf0 / ySTint, 'b-')
@@ -321,7 +321,7 @@ def plotDMMFfromGalpropz(redshift, h, *data):
     ax2.set_ylabel(r'$\frac{\mathrm{galpropz.dat}}{\mathrm{Model}}$')
 
     ax1.legend((bolshoi, sh, ps),
-            ('Bolshoi', 'Sheth-Tormen', 'Press-Schecter'),
+        ('Bolshoi', 'Sheth-Tormen', 'Press-Schecter'),
                                 shadow=True, fancybox=True,
                                 numpoints=1)
 
@@ -381,7 +381,7 @@ def plotDMMFfromGalpropzAnalytical2(redshift, h, *data):
         if b > 10 ** -5:
             break
     ax1.annotate('$z \sim %.0f$' % redshift,
-            (0.98 * a, 3 * 10 ** -6), size='x-small')
+        (0.98 * a, 3 * 10 ** -6), size='x-small')
 
     #Analytical MFs
     xST = dt['Sheth-Tormen'][0]
@@ -407,7 +407,7 @@ def plotDMMFfromGalpropzAnalytical2(redshift, h, *data):
         #yPS = N.interp(mbin0, xPS, yPS)
         #make the plot
         ax2.annotate('$z \sim %.0f$' % redshift,
-                (1.5 * 10 ** 9, 1.05), xycoords='data',
+            (1.5 * 10 ** 9, 1.05), xycoords='data',
                      size=10)
         ax2.axhline(1.0, color='b')
         ax2.plot(xST, mfintST / yST, 'b-')
@@ -431,7 +431,7 @@ def plotDMMFfromGalpropzAnalytical2(redshift, h, *data):
     ax2.set_ylabel(r'$\frac{\mathrm{galpropz.dat}}{\mathrm{Model}}$')
 
     ax1.legend((bolshoi, sh, ps),
-            ('Bolshoi', 'Sheth-Tormen', 'Press-Schecter'),
+        ('Bolshoi', 'Sheth-Tormen', 'Press-Schecter'),
                                 shadow=True, fancybox=True,
                                 numpoints=1)
 
@@ -557,13 +557,13 @@ def compareGalpropzToBolshoiTrees(analyticalData,
             if b > 10 ** -5:
                 break
         ax1.annotate('$z \sim {0:.2f}$'.format(redsh),
-                (0.6 * a, 3 * 10 ** -6), size='x-small')
+            (0.6 * a, 3 * 10 ** -6), size='x-small')
 
         #plot the residuals
         if redsh < 1.5:
             #make the plot
             ax2.annotate('$z \sim {0:.2f}$'.format(redsh),
-                    (1.5 * 10 ** 9, 1.05), xycoords='data',
+                (1.5 * 10 ** 9, 1.05), xycoords='data',
                          size=10)
             ax2.axhline(1.0, color='k')
             msk = mf0SAM / mf0Bolshoi > 0
@@ -587,7 +587,7 @@ def compareGalpropzToBolshoiTrees(analyticalData,
     ax2.set_ylabel(r'$\frac{\mathrm{galpropz.dat}}{\mathrm{IsoTree}}$')
 
     ax1.legend((sh, bolshoiax, samax),
-            ('Sheth-Tormen', 'Bolshoi', 'galpropz'),
+        ('Sheth-Tormen', 'Bolshoi', 'galpropz'),
                                      shadow=True, fancybox=True,
                                      numpoints=1)
 

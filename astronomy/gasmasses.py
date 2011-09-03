@@ -21,6 +21,10 @@ def gasFractionKannappan(chabrier=True):
     """
     Gas fraction fitting function from Kannappan et al.
     using either the Chabrier (default) or diet Salpeter IMF.
+
+    :param chabrier: whether to convert to Chabrier IMF or not.
+    :type chabriere: boolean
+
     """
     mstar = N.array([8.75, 9.25, 9.75, 10.25, 10.75, 11.25, 11.75])
     log_gs = N.array([0.2, 0.0, -0.1, -0.4, -0.7, -0.8, -0.85])
@@ -33,10 +37,14 @@ def gasFractionKannappan(chabrier=True):
 
 def HIMassFunctionZwaan(mbin, H0=70.0):
     """
-    Observed HI mass function.
-    Zwaan et al.
+    Observed HI mass function FROM Zwaan et al.
 
-    :param: mbin: bins in log10(masses)
+    :param mbin: bins in log10(masses)
+    :type mbin: ndarray
+    :param H0: Hubble constant
+    :type H0: float
+
+    :return: theta
     """
     mstar = 9.8 - 2.0 * N.log10(H0 / 75.0)
     alpha = -1.37
@@ -49,13 +57,14 @@ def HIMassFunctionZwaan(mbin, H0=70.0):
 def HIMassFunctionBell(h=0.7):
     """
     HI mass function (predicted using default technique)
-    Schecter Function fit parameters
-    phi* M* Alpha j  (next line formal errors)
-    real errors are probably systematic: see Bell et al.\ 2003 for
-    guidance (the errors depend on passband and/or stellar mass)
-    0.0142750      9.67205     -1.42495  1.03937e+08
-    0.00612444     0.154853     0.205068  1.64674e+07
-    Then we present the V/V_max data points; x   phi  phi-1sig  phi+1sig
+    Schecter Function fit parameters::
+
+        phi* M* Alpha j  (next line formal errors)
+        real errors are probably systematic: see Bell et al.\ 2003 for
+        guidance (the errors depend on passband and/or stellar mass)
+        0.0142750      9.67205     -1.42495  1.03937e+08
+        0.00612444     0.154853     0.205068  1.64674e+07
+        Then we present the V/V_max data points; x   phi  phi-1sig  phi+1sig
     """
     file = observation_path + 'bell/sdss2mass_lf/himf.out'
     data = N.loadtxt(file)
@@ -69,6 +78,12 @@ def HIMassFunctionBell(h=0.7):
 def H2MassFunctionBell(h=0.7):
     """
     H2 mass function from Bell et al.
+
+    :param h: Hubble constant
+    :type h: float
+
+    :return: :math:`H_{II}` mass function parameters
+    :rtype: list
     """
     file = observation_path + 'bell/sdss2mass_lf/h2mf.out'
     data = N.loadtxt(file)

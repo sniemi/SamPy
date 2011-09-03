@@ -1,5 +1,7 @@
 """
-Created on Thu Nov 26 22:00:20 2009 
+2D Spline fitting example
+
+Created on Thu Nov 26 22:00:20 2009
 
 Author: josef-pktd and scipy mailinglist example 
 """

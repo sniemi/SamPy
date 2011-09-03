@@ -1,14 +1,20 @@
-'''
-This file contains a function that can be used to 
-generate a Hess plot.
-'''
+"""
+This file contains a function that can be used to generate a Hess plot.
+
+:requires: NumPy
+
+:version: 0.1
+
+:author: Sami-Matias Niemi
+:contact: niemi@stsci.edu
+"""
 import numpy as N
 
 def hess_plot(xdata, ydata, weight,
               xmin, xmax, nxbins,
               ymin, ymax, nybins,
               pmax=1.0, pmin=0.1):
-    '''
+    """
     This function can be used to calculate a hess plot
     i.e. the conditional probability 2D histogram.
 
@@ -24,7 +30,7 @@ def hess_plot(xdata, ydata, weight,
     :param pmin: 0.1
 
     :return: 2D array, min, max
-    '''
+    """
     #xbins
     xbin = N.linspace(xmin, xmax, nxbins + 1)
     dx = xbin[1] - xbin[0]
@@ -69,9 +75,9 @@ def hess_plot_old(xdata, ydata, weight,
                   xmin, xmax, nxbins,
                   ymin, ymax, nybins,
                   pmax=1.0, pmin=0.1):
-    '''
+    """
     :note: obsolete, do not use this version!
-    '''
+    """
     dx = (xmax - xmin) / float(nxbins)
     mbin = xmin + (N.arange(nxbins)) * dx + dx / 2.
 
@@ -111,10 +117,10 @@ def hess_plot_old(xdata, ydata, weight,
     return s, smin, smax
 
 if __name__ == '__main__':
-    '''
+    """
     This is just to test that the new Hess and old Hess
     function results agree
-    '''
+    """
     import db.sqlite as sq
     import os
     #find the home directory, because the output is to dropbox 
@@ -136,7 +142,7 @@ if __name__ == '__main__':
     ymin = 0.1;
     ymax = 10
 
-    query1 = '''select galprop.mstar, galprop.r_disk, Pow10(galprop.mbulge - galprop.mstar)
+    query1 = """select galprop.mstar, galprop.r_disk, Pow10(galprop.mbulge - galprop.mstar)
                 from FIR, galprop where
                 FIR.z >= 2.0 and
                 FIR.z < 4.0 and
@@ -145,7 +151,7 @@ if __name__ == '__main__':
                 galprop.tmerge > 0.5 and
                 FIR.spire250_obs > 1e-15 and
                 FIR.spire250_obs < 1e6
-                '''
+                """
     #get data
     data = N.array(sq.get_data_sqlitePowerTen(path, db, query1))
     #slice the data

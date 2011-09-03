@@ -5,6 +5,7 @@ redshifts. Input data are from the Bolshoi simulation.
 :author: Sami-Matias Niemi
 '''
 import matplotlib
+
 matplotlib.rc('text', usetex=True)
 matplotlib.rcParams['font.size'] = 14
 matplotlib.rc('xtick', labelsize=14)
@@ -65,7 +66,7 @@ def plotMassFunction(simus, sheth, outdir, h, simuPath, simuDB,
         BoshoiData = io.readBolshoiDMfile(file, 0, noPhantoms)
 
         #calculate the mass functions from the Bolshoi data
-        mbin0, mf0 = df.diffFunctionLogBinning(BoshoiData/h,
+        mbin0, mf0 = df.diffFunctionLogBinning(BoshoiData / h,
                                                nbins=35,
                                                h=h,
                                                mmin=1e9,
@@ -78,13 +79,13 @@ def plotMassFunction(simus, sheth, outdir, h, simuPath, simuDB,
         #d/dM (log10(M)) = 1 / (M*ln(10))
         mf0 *= 1. / (mbin0 * N.log(10))
         #put mass back to power
-        mbin0 = 10**mbin0
+        mbin0 = 10 ** mbin0
 
         #get the SAMs data
         #if round(redshift, 2) < 0.08:
         if i < 1:
             query = '''select mhalo from galprop where galprop.gal_id = 1'''
-            GalpropData = 10**db.sqlite.get_data_sqlite(simuPath, simuDB, query)
+            GalpropData = 10 ** db.sqlite.get_data_sqlite(simuPath, simuDB, query)
         else:
             query = '''select mhalo from galpropz where 
                        galpropz.zgal > {0:f} and galpropz.zgal < {1:f} and
@@ -105,10 +106,10 @@ def plotMassFunction(simus, sheth, outdir, h, simuPath, simuDB,
         #dN/dM = dN/dlog10(M) * dlog10(M)/dM
         #d/dM (log10(M)) = 1 / (M*ln(10))
         mf0SAM *= 1. / (mbin0SAM * N.log(10))
-        mbin0SAM = 10**mbin0SAM
+        mbin0SAM = 10 ** mbin0SAM
 
         #start a figure
-        fig = P.figure(figsize=(10,10))
+        fig = P.figure(figsize=(10, 10))
         ax1 = fig.add_axes(rect2)  #left, bottom, width, height
         ax2 = fig.add_axes(rect1)
 
@@ -124,7 +125,7 @@ def plotMassFunction(simus, sheth, outdir, h, simuPath, simuDB,
         #2nd column: (dn/dM)*dM, per Mpc^3 (NOT h^3/Mpc^3)
         logging.debug(sheth[i])
         dt = N.loadtxt(sheth[i])
-        xST = 10**dt[:, 0]
+        xST = 10 ** dt[:, 0]
         yST = dt[:, 2] * fudge
         sh = ax1.plot(xST, yST, 'b-', lw=1.3)
 
@@ -159,8 +160,8 @@ def plotMassFunction(simus, sheth, outdir, h, simuPath, simuDB,
         ax2.set_ylabel(r'$\frac{\mathrm{Bolshoi}}{\mathrm{Model}}$')
 
         ax1.legend((bolshoi, samax, sh),
-                   ('Bolshoi', 'galpropz', 'Sheth-Tormen'),
-                   shadow=True, fancybox=True, numpoints=1)
+            ('Bolshoi', 'galpropz', 'Sheth-Tormen'),
+                                       shadow=True, fancybox=True, numpoints=1)
 
         P.savefig(outdir + 'DMMF{0:d}.png'.format(i))
         P.close()

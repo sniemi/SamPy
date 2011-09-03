@@ -6,15 +6,18 @@ astronomy Package
 .. autosummary::
    :toctree:
 
+   ACSPhotometry
    baryons
    basics
    blackholes
    conversions
+   coord
    datamanipulation
    differentialfunctions
+   fluxes
    gasmasses
    hess_plot
-   luminosityFunctionss
+   luminosityFunctions
    metals
    randomizers
    stellarMFs

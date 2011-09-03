@@ -1,11 +1,9 @@
 candels Package
 ===============
 
-:mod:`plotFilters` Module
--------------------------
+.. currentmodule:: SamPy.candels
 
-.. automodule:: SamPy.candels.plotFilters
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. autosummary::
+   :toctree:
 
+    plotFilters

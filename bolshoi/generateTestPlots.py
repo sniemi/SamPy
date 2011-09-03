@@ -1,11 +1,11 @@
-'''
+"""
 This script can be used to generate some basic plots
 from Rachel's SAM. In these plots comparisons to
 observational constrains are also performed.
 
 :author : Sami-Matias Niemi
 :contact : niemi@stsci.edu
-'''
+"""
 import matplotlib
 matplotlib.rc('text', usetex=True)
 matplotlib.rc('xtick', labelsize=12)
@@ -30,7 +30,6 @@ import scipy.stats as ss
 import glob
 import shutil
 import os
-#Imports from Sami's repo
 import smnIO.read as read
 import astronomy.stellarMFs as stellarMFs
 import astronomy.metals as metallicity
@@ -39,9 +38,9 @@ import astronomy.blackholes as bh
 import astronomy.baryons as baryons
 
 def perc_bin(xbin, xdata, ydata):
-    '''
+    """
     Compute median and 16 and 8 percentiles of y-data in bins in x
-    '''
+    """
     #xbin.sort
     nbin = len(xbin) - 1
     xbin_mid = N.zeros(nbin)
@@ -61,11 +60,11 @@ def perc_bin(xbin, xdata, ydata):
 
 
 def fstar_plot(prop, output='fstar.png'):
-    '''
+    """
     Stellar mass to halo mass ratio as a function of halo mass.
     This plot differs slightly from the one in the Somerville 2008:
     the plot in the paper is the fraction of baryons in stars. 
-    '''
+    """
     mfit = 10. + N.arange(50) * 0.1
     mbin = 10.7 + N.arange(25) * 0.2
 
@@ -83,7 +82,7 @@ def fstar_plot(prop, output='fstar.png'):
     mbin_mid, fs_sat_50, fs_sat_10, fs_sat_90 = perc_bin(mbin, prop.mhalo[sat], fs_halo[sat])
 
     #begin figure
-    fig = P.figure(figsize=(12,12))
+    fig = P.figure(figsize=(12, 12))
     ax = fig.add_subplot(111)
     #ax.plot(prop.mhalo, prop.mstar)
     ax.scatter(prop.mhalo[central], N.log10(fs_halo[central]),
@@ -134,9 +133,9 @@ def fstar_plot(prop, output='fstar.png'):
 
 def massfunc_plot(halos, props, mmax=12.5, mmin=5.0, nbins=30, output='SMN',
                   nvolumes=15):
-    '''
+    """
     Plots stellar mass functions, cold gas mass functions, & BH MF
-    '''
+    """
     #files
     path_BH = '/Users/niemi/Desktop/Research/IDL/obs/phopkins/'
     #BH_file = path_BH + 'rachel_bhmf_data.dat'
@@ -185,7 +184,7 @@ def massfunc_plot(halos, props, mmax=12.5, mmin=5.0, nbins=30, output='SMN',
             if props.gal_id[i] == 1:
                 if ibin >= 0 and ibin < nbins:
                     mf_star_central[ibin] += halos.weight[ihalo]
-            #bulge mass
+                    #bulge mass
         ibin = int(N.floor((props.mbulge[i] - mmin) / dm))
         if ibin >= 0 and ibin < nbins:
             mf_bulge[ibin] += halos.weight[ihalo]
@@ -289,7 +288,8 @@ def massfunc_plot(halos, props, mmax=12.5, mmin=5.0, nbins=30, output='SMN',
     ax.set_xlim(8.0, 12.5)
     ax.set_ylim(-5.0, -0.25)
     ax.set_xlabel(r'$\log_{10} M_{baryons} \quad [M_{\odot}]$')
-    ax.set_ylabel(r'$\frac{\log_{10} \mathrm{d}N}{\mathrm{d}\log M_{baryons}} \quad [\mathrm{Mpc}^{-3} \mathrm{dex}^{-1}]$')
+    ax.set_ylabel(
+        r'$\frac{\log_{10} \mathrm{d}N}{\mathrm{d}\log M_{baryons}} \quad [\mathrm{Mpc}^{-3} \mathrm{dex}^{-1}]$')
     #small ticks
     m = ax.get_yticks()[1] - ax.get_yticks()[0]
     yminorLocator = MultipleLocator(m / 5)
@@ -339,11 +339,11 @@ def gasfrac_hess(mstar, fgas, weight, label, output,
                  mmin=8.5, mmax=11.7, nmbins=16,
                  fgasmin=0.0, fgasmax=1.0, nfbins=10,
                  pmax=1.0, pmin=0.01):
-    '''
+    """
     Plot _conditional_ distribution of gas fraction vs. stellar mass.
     Ported from an IDL code, should be cleaned.
     Most likely N.zeros are not needed
-    '''
+    """
     #n.b. mbin and fgasbin are the bin CENTERS
     dm = (mmax - mmin) / nmbins
     mbin = mmin + (N.arange(nmbins)) * dm + dm / 2.0
@@ -427,9 +427,9 @@ def gasfrac_hess(mstar, fgas, weight, label, output,
 
 
 def ssfr_plot(halos, prop, mask, output, typ='.pdf'):
-    '''
+    """
     Specific starformation rate plots.
-    '''
+    """
 
     wgal = halos.weight[prop.halo_id]
 
@@ -443,9 +443,9 @@ def ssfrhess_sam(mstar, ssfr, weight, output,
                  mmin=9.027, dm=0.309, nmbins=11,
                  ssfrmin=-13.0, ssfrmax=-8.5, nssfrbins=24,
                  ssfr_cut=-11.1, pmax=0.5, pmin=1e-5):
-    '''
+    """
     log ssfr in yr
-    '''
+    """
     mmax = mmin + dm * nmbins
     fpass = N.zeros(nmbins)
 
@@ -582,9 +582,9 @@ def gasfrac_sam_cent(halos, prop,
 
 
 def fix(x):
-    '''
+    """
     IDL function.
-    '''
+    """
     return int(N.floor(x))
 
 
@@ -700,7 +700,7 @@ def mbh_hess(mbulge, mbh, weight, ymin, ymax, nybins,
             iy = fix((mbh[i] - ymin) / dy)
             if iy >= 0 and iy < nybins:
                 yhist[iy, imbin] += weight[i]
-        #conditional distributions in Mh bins
+                #conditional distributions in Mh bins
     for i in range(nmbins):
         pm = N.sum(yhist[:, i])
         if pm > 0:
@@ -784,10 +784,10 @@ def mhb(h, p, obs, label):
 
 
 def main(path, label):
-    '''
+    """
     Driver function, call this with a path to the data,
     and label you wish to use for the files.
-    '''
+    """
     #paths
     obs_data = "{0:>s}/Dropbox/Research/Observations/".format(os.getenv('HOME'))
 

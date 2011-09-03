@@ -6,6 +6,7 @@ A few functions to plot stellar mass functions from SAM runs.
 :contact: niemi@stsci.edu
 '''
 import matplotlib
+
 matplotlib.rc('text', usetex=True)
 matplotlib.rcParams['font.size'] = 15
 matplotlib.rc('xtick', labelsize=14)
@@ -183,7 +184,7 @@ def stellarmassfuncSinglePlot(path, database, redshifts,
     #plot the different redshifts
     for ii, redshift in enumerate(redshifts):
         #make the figure and axes instance
-        fig = P.figure(figsize=(10,10))
+        fig = P.figure(figsize=(10, 10))
         ax = fig.add_subplot(111)
 
         #make the observational plots
@@ -203,7 +204,7 @@ def stellarmassfuncSinglePlot(path, database, redshifts,
                             label=label)
         if i > 1:
             for i, key in enumerate(sorted(highred.iterkeys())):
-                if key != 'stellar_mass' and i == ii-2:
+                if key != 'stellar_mass' and i == ii - 2:
                     ax.errorbar(highred['stellar_mass'],
                                 highred[key][0],
                                 yerr=[highred[key][1], highred[key][1]],

@@ -1,22 +1,22 @@
-'''
+"""
 Collects dark matter halo information from Bolshoi merger tree files.
 
 This one uses parallel python:
 http://www.parallelpython.com
-'''
+"""
 import glob as g
 import pp
 import smnIO.write as write
 
 def findDMhaloes(file, times, columns):
-    '''
+    """
     Find all dark matter haloes from a given file
     that are in self.times. Capture the data
     that are specified in self.columns.
     Returns a dictionary where each key is a single
     time. Each line of data is a string so it's easy
     to write out to a file.
-    '''
+    """
     output = {}
     print 'Now processing file {0:>s}\n'.format(file)
     fh = open(file, 'r')
@@ -37,12 +37,13 @@ def findDMhaloes(file, times, columns):
                         output[key] = [string, ]
     return output
 
+
 def writeOutput(data, file, times):
-    '''
+    """
     Writes the output data to ascii files.
     Each time step is recorded to a single file.
     The filename will contain the output *redshift*
-    '''
+    """
     print 'Outputting data from %s' % file
     print 'File contains {0:d} timesteps'.format(len(data.keys()))
     for key in data:
@@ -57,7 +58,7 @@ def writeOutput(data, file, times):
 if __name__ == '__main__':
     #number of cores to use
     ncpus = 6
-    
+
     #inpute merger tree files
     inputs = g.glob('/Users/niemi/Desktop/Research/Bolshoi/bolshoi_newisotrees/*.dat')
 
@@ -93,7 +94,7 @@ if __name__ == '__main__':
     print 'Processing with', jobServer.get_ncpus(), 'workers'
 
     #submits jobs
-    jobs = [(input, jobServer.submit(findDMhaloes,(input, times, columns))) for input in inputs]
+    jobs = [(input, jobServer.submit(findDMhaloes, (input, times, columns))) for input in inputs]
 
     #write the output of each job
     for input, job in jobs:

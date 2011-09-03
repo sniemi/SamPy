@@ -37,10 +37,10 @@ def FindRedshiftInfo(files, columns):
 if __name__ == '__main__':
     files = g.glob('/Users/niemi/Desktop/Research/Bolshoi/bolshoi_newisotrees/*.dat')
 
-    columns = {'mvir' : 9,
-               'orig_mvir' : 10,
-               'phantom' : 8,
+    columns = {'mvir': 9,
+               'orig_mvir': 10,
+               'phantom': 8,
                'scale': 0
-               }
+    }
 
     FindRedshiftInfo(files[0], columns)

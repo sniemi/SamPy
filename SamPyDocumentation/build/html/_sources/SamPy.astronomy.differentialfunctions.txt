@@ -1,13 +1,25 @@
 SamPy.astronomy.differentialfunctions
 =====================================
 
-.. currentmodule:: SamPy.astronomy
-
-
-:mod:`differentialfunctions` Module
------------------------------------
-
 .. automodule:: SamPy.astronomy.differentialfunctions
-    :members:
-    :undoc-members:
-    :show-inheritance:
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+   
+      diffFunctionLogBinning
+      diff_function_log_binning
+      mass_function
+      stellarMassFunction
+   
+   
+
+   
+   
+   
+
+   
+   
+   

@@ -1,4 +1,4 @@
-'''
+"""
 Different luminosity functions.
 
 :requires: NumPy
@@ -10,7 +10,7 @@ Different luminosity functions.
 
 :warning: This has never been tested!
 :todo: add more LFs. There are for example several more from the Bell.
-'''
+"""
 import os
 import numpy as N
 
@@ -22,14 +22,16 @@ observation_path = os.getenv('HOME') + '/Dropbox/Research/Observations/'
 
 def bellG():
     '''
-    G-band LF for all galaxies
-    Schecter Function fit parameters
-    phi* M* Alpha j  (next line formal errors)
-    real errors are probably systematic: see Bell et al.\ 2003 for
-    guidance (the errors depend on passband and/or stellar mass)
-    0.0172471     -19.7320     -1.02577  1.57122e+08
-    0.000552186    0.0264740    0.0249926  2.29536e+06
-    Then we present the V/V_max data points; x   phi  phi-1sig  phi+1sig
+    G-band LF for all galaxies.
+
+    Schechter Function fit parameters::
+
+        phi* M* Alpha j  (next line formal errors)
+        real errors are probably systematic: see Bell et al.\ 2003 for
+        guidance (the errors depend on passband and/or stellar mass)
+        0.0172471     -19.7320     -1.02577  1.57122e+08
+        0.000552186    0.0264740    0.0249926  2.29536e+06
+        Then we present the V/V_max data points; x   phi  phi-1sig  phi+1sig
 
     :return: absolute magnitude, phi, phi_lo, phi_high
     '''

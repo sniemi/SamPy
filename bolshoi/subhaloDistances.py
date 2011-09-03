@@ -1,4 +1,4 @@
-'''
+"""
 Find subhalo galaxy distances from the main halo as a function of redshift, halo mass, etc.
 
 :requires: astLib.astCoords
@@ -7,8 +7,9 @@ Find subhalo galaxy distances from the main halo as a function of redshift, halo
 
 :author: Sami-Matias Niemi
 :cotact: niemi@stsci.edu
-'''
+"""
 import matplotlib
+
 matplotlib.use('Agg')
 matplotlib.rc('text', usetex=True)
 matplotlib.rcParams['font.size'] = 17
@@ -22,17 +23,15 @@ import pylab as P
 import numpy as N
 import astLib.astCoords as Coords
 import os
-#From SamPy
 import db.sqlite as sq
 import smnIO.write as wr
-import smnIO.read as read
 import astronomy.datamanipulation as dm
 import cosmology.distances as dist
 
 def mkRedshiftPlot(x, y, outFolder):
-    '''
+    """
     Generate a redshift plot
-    '''
+    """
     aa = []
     bb = []
 
@@ -64,10 +63,11 @@ def mkRedshiftPlot(x, y, outFolder):
     P.savefig(outFolder + 'test.png')
     P.close()
 
+
 def mkMassPlot(x, y, outFolder):
-    '''
+    """
     Generate a mass plot
-    '''
+    """
     aa = []
     bb = []
 
@@ -100,11 +100,12 @@ def mkMassPlot(x, y, outFolder):
 
     P.savefig(outFolder + 'test2.png')
 
+
 def findValues(data, group=3):
-    '''
+    """
     Finds redshift and physical distance from raw data.
     Data are first grouped by group=3 column
-    '''
+    """
     conversion = 0.000277777778 # degree to arcsecond
 
     ddist = dist.getDiameterDistances(data)
@@ -155,7 +156,7 @@ def getAndProcessData(home, outfile='SubDists2.pkl'):
     db = 'sams.db'
 
     #SQL query where all the magic happens
-    query = '''select l1.redshift, l1.ra, l1.dec, l1.halo_id, l1.gal_id, l1.mhalo from testing l1
+    query = """select l1.redshift, l1.ra, l1.dec, l1.halo_id, l1.gal_id, l1.mhalo from testing l1
                inner join
                (
                select l2.halo_id, l2.gal_id from testing l2 where
@@ -167,7 +168,7 @@ def getAndProcessData(home, outfile='SubDists2.pkl'):
                using (halo_id, gal_id) where
                l1.redshift > 0.1 and
                l1.redshift < 6.0
-               '''
+               """
 
     #pull out data
     data = sq.get_data_sqliteSMNfunctions(path, db, query)
@@ -181,8 +182,10 @@ def getAndProcessData(home, outfile='SubDists2.pkl'):
 
     return grouped
 
+
 def quickTest(home):
     from cosmocalc import cosmocalc
+
     path = home + '/Research/CANDELS/goodsn/'
     db = 'sams.db'
 
@@ -234,8 +237,8 @@ if __name__ == '__main__':
     #mkRedshiftPlot(grouped['redshift'],
     #               grouped['physical_distance'],
     #               outFolder)
-#    mkMassPlot(grouped['mhalo'],
-#               grouped['physical_distance'],
-#               outFolder)
+    #    mkMassPlot(grouped['mhalo'],
+    #               grouped['physical_distance'],
+    #               outFolder)
 
     quickTest(hm)

@@ -3,7 +3,7 @@ This module contains basic information of different subjects often needed in ast
 
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
-:version: 0.01
+:version: 0.1
 """
 
 __author__ = 'Sami-Matias Niemi'

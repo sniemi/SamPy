@@ -50,21 +50,12 @@
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
 
-          <li><a href="SamPy.html" >SamPy Package</a> &raquo;</li>
           <li><a href="SamPy.astronomy.html" accesskey="U">astronomy Package</a> &raquo;</li> 
       </ul>
     </div>
 
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">SamPy.astronomy.stellarMFs</a><ul>
-<li><a class="reference internal" href="#module-SamPy.astronomy.stellarMFs"><tt class="docutils literal"><span class="pre">stellarMFs</span></tt> Module</a></li>
-</ul>
-</li>
-</ul>
-
   <h4>Previous topic</h4>
   <p class="topless"><a href="SamPy.astronomy.randomizers.html"
                         title="previous chapter">SamPy.astronomy.randomizers</a></p>
@@ -97,10 +88,8 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="sampy-astronomy-stellarmfs">
-<h1>SamPy.astronomy.stellarMFs<a class="headerlink" href="#sampy-astronomy-stellarmfs" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-SamPy.astronomy.stellarMFs">
-<span id="stellarmfs-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">stellarMFs</span></tt> Module<a class="headerlink" href="#module-SamPy.astronomy.stellarMFs" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="module-SamPy.astronomy.stellarMFs">
+<span id="sampy-astronomy-stellarmfs"></span><h1>SamPy.astronomy.stellarMFs<a class="headerlink" href="#module-SamPy.astronomy.stellarMFs" title="Permalink to this headline">¶</a></h1>
 <p>Different stellar mass functions.
 Some are based on observational data while others are fitting functions.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -118,149 +107,66 @@ Some are based on observational data while others are fitting functions.</p>
 </tbody>
 </table>
 <p>:contact : <a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a></p>
-<dl class="function">
-<dt id="SamPy.astronomy.stellarMFs.bellG">
-<tt class="descclassname">SamPy.astronomy.stellarMFs.</tt><tt class="descname">bellG</tt><big>(</big><em>h=0.7</em>, <em>chabrier=True</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/stellarMFs.html#bellG"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.stellarMFs.bellG" title="Permalink to this definition">¶</a></dt>
-<dd><p>G-band derived stellar mass function for all galaxies
-Schecter Function fit parameters
-phi* M* Alpha j  (next line formal errors)
-real errors are probably systematic: see Bell et al.2003 for
-guidance (the errors depend on passband and/or stellar mass)
-0.0101742      10.7003     -1.10350  5.46759e+08
-0.000512733    0.0154157    0.0239414  1.06609e+07
-Then we present the V/V_max data points; x   phi  phi-1sig  phi+1sig
-Convert to h (default = 0.7) and Chabrier IMF.</p>
-<table class="docutils field-list" frame="void" rules="none">
+<p class="rubric">Functions</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">bellG</span></tt>([h,&nbsp;chabrier])</td>
+<td>G-band derived stellar mass function for all galaxies</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">bellK</span></tt>([h,&nbsp;chabrier])</td>
+<td>K-band derived stellar mass function for all galaxies</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">fstarBehroozi</span></tt>()</td>
+<td>Stellar mass to halo mass ratio as a function of halo mass.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">fstarBen</span></tt>(mh,&nbsp;m1,&nbsp;f0,&nbsp;beta,&nbsp;gamma)</td>
+<td>Stellar mass to halo mass ratio as a function of halo mass.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">highRedshiftMFs</span></tt>()</td>
+<td>Stellar mass functions from Valentino Gonzalez et al. arXiv:1008.3901v2</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">mstar_bell</span></tt>([h,&nbsp;chabrier])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>h</strong> &#8211; the Hubble parameter (default h = 0.7)</li>
-<li><strong>chabrier</strong> &#8211; whether or not to convert to Chabrier IMF (default = True)</li>
-</ul>
+<tr class="field"><th class="field-name">warning:</th><td class="field-body">Data are missing??</td>
+</tr>
+</tbody>
+</table>
 </td>
 </tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">log10(stellar mass), log10(phi), log10(phi_low), log10(phi_high)</p>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">mstar_lin</span></tt>([h])</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">warning:</th><td class="field-body">The observation file is missing. Do not use!</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">panter</span></tt>()</td>
+<td>This function returns Benjamin Panter&#8217;s stellar mass function from:</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">stellarMfs</span></tt>()</td>
+<td><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">io.sexutils</td>
+</tr>
+</tbody>
+</table>
 </td>
 </tr>
 </tbody>
 </table>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.astronomy.stellarMFs.bellK">
-<tt class="descclassname">SamPy.astronomy.stellarMFs.</tt><tt class="descname">bellK</tt><big>(</big><em>h=0.7</em>, <em>chabrier=True</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/stellarMFs.html#bellK"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.stellarMFs.bellK" title="Permalink to this definition">¶</a></dt>
-<dd><p>K-band derived stellar mass function for all galaxies
-Schecter Function fit parameters
-phi* M* Alpha j  (next line formal errors)
-real errors are probably systematic: see Bell et al.2003 for
-guidance (the errors depend on passband and/or stellar mass)
-0.0132891      10.6269    -0.856790  5.26440e+08
-0.000586424    0.0144582    0.0422601  1.18873e+07
-Then we present the V/V_max data points; x   phi  phi-1sig  phi+1sig
-Convert to h (default = 0.7) and Chabrier IMF.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Param :</th><td class="field-body">h: the Hubble parameter (default h = 0.7)</td>
-</tr>
-<tr class="field"><th class="field-name">Param :</th><td class="field-body">chabrier: whether or not to convert to Chabrier IMF (default = True)</td>
-</tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">log10(stellar mass), log10(phi), log10(phi_low), log10(phi_high)</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.astronomy.stellarMFs.fstarBehroozi">
-<tt class="descclassname">SamPy.astronomy.stellarMFs.</tt><tt class="descname">fstarBehroozi</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/stellarMFs.html#fstarBehroozi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.stellarMFs.fstarBehroozi" title="Permalink to this definition">¶</a></dt>
-<dd><p>Stellar mass to halo mass ratio as a function of halo mass.
-Data from Behroozi et al. ???</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.astronomy.stellarMFs.fstarBen">
-<tt class="descclassname">SamPy.astronomy.stellarMFs.</tt><tt class="descname">fstarBen</tt><big>(</big><em>mh</em>, <em>m1</em>, <em>f0</em>, <em>beta</em>, <em>gamma</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/stellarMFs.html#fstarBen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.stellarMFs.fstarBen" title="Permalink to this definition">¶</a></dt>
-<dd><p>Stellar mass to halo mass ratio as a function of halo mass.
-Fitting function from Moster et al.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.astronomy.stellarMFs.highRedshiftMFs">
-<tt class="descclassname">SamPy.astronomy.stellarMFs.</tt><tt class="descname">highRedshiftMFs</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/stellarMFs.html#highRedshiftMFs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.stellarMFs.highRedshiftMFs" title="Permalink to this definition">¶</a></dt>
-<dd><p>Stellar mass functions from Valentino Gonzalez et al. arXiv:1008.3901v2
-:note: These values probably use the Salpeter IMF. If so we should then subtract 0.25 dex from log(m*) to go to Chabrier.
-Table 1</p>
-<blockquote>
-log10 (dN/dlog10 (M/M_sun)/Mpc3 )</blockquote>
-<p>log10(M/M_sun)         3.8    err     5.0    err      5.9   err     6.8    err</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">high-redshift stellar mass functions from Gonzalez. et al (2011) paper</td>
-</tr>
-<tr class="field"><th class="field-name">Return type:</th><td class="field-body">dictionary</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.astronomy.stellarMFs.mstar_bell">
-<tt class="descclassname">SamPy.astronomy.stellarMFs.</tt><tt class="descname">mstar_bell</tt><big>(</big><em>h=0.7</em>, <em>chabrier=True</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/stellarMFs.html#mstar_bell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.stellarMFs.mstar_bell" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Warning :</th><td class="field-body">Data are missing??</td>
-</tr>
-</tbody>
-</table>
-<p>Stellar mass function from bell et al. (H0=100).
-Convert to Chabrier IMF.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.astronomy.stellarMFs.mstar_lin">
-<tt class="descclassname">SamPy.astronomy.stellarMFs.</tt><tt class="descname">mstar_lin</tt><big>(</big><em>h=0.7</em><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/stellarMFs.html#mstar_lin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.stellarMFs.mstar_lin" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Warning :</th><td class="field-body">The observation file is missing. Do not use!</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.astronomy.stellarMFs.panter">
-<tt class="descclassname">SamPy.astronomy.stellarMFs.</tt><tt class="descname">panter</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/stellarMFs.html#panter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.stellarMFs.panter" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function returns Benjamin Panter&#8217;s stellar mass function from:
-<a class="reference external" href="http://www.blackwell-synergy.com/doi/pdf/10.1111/j.1365-2966.2007.11909.x">http://www.blackwell-synergy.com/doi/pdf/10.1111/j.1365-2966.2007.11909.x</a>
-It uses the DR3 data with the BC03 models and a Chabrier IMF.
-:return:</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="SamPy.astronomy.stellarMFs.stellarMfs">
-<tt class="descclassname">SamPy.astronomy.stellarMFs.</tt><tt class="descname">stellarMfs</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/astronomy/stellarMFs.html#stellarMfs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.astronomy.stellarMFs.stellarMfs" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field"><th class="field-name">Requires :</th><td class="field-body">io.sexutils</td>
-</tr>
-<tr class="field"><th class="field-name">Returns:</th><td class="field-body">sexutils instance to MFs data file.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</div>
 </div>
 
 
@@ -287,7 +193,6 @@ It uses the DR3 data with the BC03 models and a Chabrier IMF.
         <li><a href="index.html">home</a>|&nbsp;</li>
         <li><a href="search.html">search</a>|&nbsp;</li>
 
-          <li><a href="SamPy.html" >SamPy Package</a> &raquo;</li>
           <li><a href="SamPy.astronomy.html" >astronomy Package</a> &raquo;</li> 
       </ul>
     </div>

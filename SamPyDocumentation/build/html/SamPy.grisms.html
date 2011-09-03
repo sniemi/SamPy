@@ -106,7 +106,7 @@
 <p>This script can be used to run aXe.</p>
 <dl class="function">
 <dt id="SamPy.grisms.extract_splitless.generate_input_image_list">
-<tt class="descclassname">SamPy.grisms.extract_splitless.</tt><tt class="descname">generate_input_image_list</tt><big>(</big><em>filter</em>, <em>grism</em><big>)</big><a class="reference internal" href="_modules/SamPy/grisms/extract_splitless.html#generate_input_image_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.grisms.extract_splitless.generate_input_image_list" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SamPy.grisms.extract_splitless.</tt><tt class="descname">generate_input_image_list</tt><big>(</big><em>filter</em>, <em>grism</em><big>)</big><a class="headerlink" href="#SamPy.grisms.extract_splitless.generate_input_image_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Format : [name of grism image] [object catalogue] [name of direct image]
 &#64;todo: this is not robust and may find wrong images!!! Should be redone!</p>
 </dd></dl>
@@ -129,7 +129,7 @@ datasets have been hand picked.</p>
 have been understood!</p>
 <dl class="function">
 <dt id="SamPy.grisms.generateAssociationDB.createAssociationDB">
-<tt class="descclassname">SamPy.grisms.generateAssociationDB.</tt><tt class="descname">createAssociationDB</tt><big>(</big><em>grism</em>, <em>direct</em>, <em>match</em>, <em>output='ACSTEST.db'</em><big>)</big><a class="reference internal" href="_modules/SamPy/grisms/generateAssociationDB.html#createAssociationDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.grisms.generateAssociationDB.createAssociationDB" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SamPy.grisms.generateAssociationDB.</tt><tt class="descname">createAssociationDB</tt><big>(</big><em>grism</em>, <em>direct</em>, <em>match</em>, <em>output='ACSTEST.db'</em><big>)</big><a class="headerlink" href="#SamPy.grisms.generateAssociationDB.createAssociationDB" title="Permalink to this definition">¶</a></dt>
 <dd><p>Email from Martin Kuemmel concerning the format:</p>
 <ul class="simple">
 <li>Each association (see listing below contains two main entries, the
@@ -190,7 +190,7 @@ Martin</p>
 
 <dl class="function">
 <dt id="SamPy.grisms.generateAssociationDB.findGrismImages">
-<tt class="descclassname">SamPy.grisms.generateAssociationDB.</tt><tt class="descname">findGrismImages</tt><big>(</big><em>filelist</em><big>)</big><a class="reference internal" href="_modules/SamPy/grisms/generateAssociationDB.html#findGrismImages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.grisms.generateAssociationDB.findGrismImages" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SamPy.grisms.generateAssociationDB.</tt><tt class="descname">findGrismImages</tt><big>(</big><em>filelist</em><big>)</big><a class="headerlink" href="#SamPy.grisms.generateAssociationDB.findGrismImages" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds all direct and grism images from a
 given filelist. Will pull out some information
 such as exposure time and filter from the header.
@@ -201,7 +201,7 @@ used to match images later.</p>
 
 <dl class="function">
 <dt id="SamPy.grisms.generateAssociationDB.makeDirectImageDictionary">
-<tt class="descclassname">SamPy.grisms.generateAssociationDB.</tt><tt class="descname">makeDirectImageDictionary</tt><big>(</big><em>direct</em>, <em>match</em><big>)</big><a class="reference internal" href="_modules/SamPy/grisms/generateAssociationDB.html#makeDirectImageDictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.grisms.generateAssociationDB.makeDirectImageDictionary" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SamPy.grisms.generateAssociationDB.</tt><tt class="descname">makeDirectImageDictionary</tt><big>(</big><em>direct</em>, <em>match</em><big>)</big><a class="headerlink" href="#SamPy.grisms.generateAssociationDB.makeDirectImageDictionary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a dictionary from the direct image information.
 This dictionary is in the format that ECF used to make
 their association db, so it is more or less ready to be
@@ -210,7 +210,7 @@ pickled. For details, see the comment in createAssociationDB.</p>
 
 <dl class="function">
 <dt id="SamPy.grisms.generateAssociationDB.makeGrismImageList">
-<tt class="descclassname">SamPy.grisms.generateAssociationDB.</tt><tt class="descname">makeGrismImageList</tt><big>(</big><em>grism</em>, <em>match</em><big>)</big><a class="reference internal" href="_modules/SamPy/grisms/generateAssociationDB.html#makeGrismImageList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.grisms.generateAssociationDB.makeGrismImageList" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SamPy.grisms.generateAssociationDB.</tt><tt class="descname">makeGrismImageList</tt><big>(</big><em>grism</em>, <em>match</em><big>)</big><a class="headerlink" href="#SamPy.grisms.generateAssociationDB.makeGrismImageList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generates a list of grism images. This list is in the
 format that ECF used to make their association db, so it
 is more or less ready to be pickled. For details,
@@ -219,7 +219,7 @@ see the comment in createAssociationDB.</p>
 
 <dl class="function">
 <dt id="SamPy.grisms.generateAssociationDB.matchDirectImageToGrismImage">
-<tt class="descclassname">SamPy.grisms.generateAssociationDB.</tt><tt class="descname">matchDirectImageToGrismImage</tt><big>(</big><em>direct</em>, <em>grism</em><big>)</big><a class="reference internal" href="_modules/SamPy/grisms/generateAssociationDB.html#matchDirectImageToGrismImage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.grisms.generateAssociationDB.matchDirectImageToGrismImage" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SamPy.grisms.generateAssociationDB.</tt><tt class="descname">matchDirectImageToGrismImage</tt><big>(</big><em>direct</em>, <em>grism</em><big>)</big><a class="headerlink" href="#SamPy.grisms.generateAssociationDB.matchDirectImageToGrismImage" title="Permalink to this definition">¶</a></dt>
 <dd><p>Matches direct images to grism images in an extremely
 dummy way. Will just check that either RA or DEC are
 equal. This can potentially lead to crazy results as
@@ -268,7 +268,7 @@ SourceExtractor on the drizzled direct images.</p>
 </table>
 <dl class="function">
 <dt id="SamPy.grisms.prepare_slitless.find_direct_images">
-<tt class="descclassname">SamPy.grisms.prepare_slitless.</tt><tt class="descname">find_direct_images</tt><big>(</big><em>dict</em>, <em>column=0</em><big>)</big><a class="reference internal" href="_modules/SamPy/grisms/prepare_slitless.html#find_direct_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.grisms.prepare_slitless.find_direct_images" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SamPy.grisms.prepare_slitless.</tt><tt class="descname">find_direct_images</tt><big>(</big><em>dict</em>, <em>column=0</em><big>)</big><a class="headerlink" href="#SamPy.grisms.prepare_slitless.find_direct_images" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pick out direct images from a dictionary (that could have been
 created using the &#8220;find_header_info&#8221; function). Assumes that all
 images whose filter names start with an &#8220;F&#8221; are direct images.</p>
@@ -284,7 +284,7 @@ images whose filter names start with an &#8220;F&#8221; are direct images.</p>
 
 <dl class="function">
 <dt id="SamPy.grisms.prepare_slitless.find_header_info">
-<tt class="descclassname">SamPy.grisms.prepare_slitless.</tt><tt class="descname">find_header_info</tt><big>(</big><em>input_files</em><big>)</big><a class="reference internal" href="_modules/SamPy/grisms/prepare_slitless.html#find_header_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.grisms.prepare_slitless.find_header_info" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SamPy.grisms.prepare_slitless.</tt><tt class="descname">find_header_info</tt><big>(</big><em>input_files</em><big>)</big><a class="headerlink" href="#SamPy.grisms.prepare_slitless.find_header_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find filter, date of the observation and exposure time information
 from the FITS header. Assumes that this information has been stored
 in the first extension header, like in case of HST.</p>
@@ -301,17 +301,17 @@ value is a list of filter, data-obs and exptime.</td>
 
 <dl class="function">
 <dt id="SamPy.grisms.prepare_slitless.fixSourceExtractorCatalogue">
-<tt class="descclassname">SamPy.grisms.prepare_slitless.</tt><tt class="descname">fixSourceExtractorCatalogue</tt><big>(</big><em>filter</em>, <em>pivot</em><big>)</big><a class="reference internal" href="_modules/SamPy/grisms/prepare_slitless.html#fixSourceExtractorCatalogue"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.grisms.prepare_slitless.fixSourceExtractorCatalogue" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SamPy.grisms.prepare_slitless.</tt><tt class="descname">fixSourceExtractorCatalogue</tt><big>(</big><em>filter</em>, <em>pivot</em><big>)</big><a class="headerlink" href="#SamPy.grisms.prepare_slitless.fixSourceExtractorCatalogue" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="SamPy.grisms.prepare_slitless.make_ds9_regions_file">
-<tt class="descclassname">SamPy.grisms.prepare_slitless.</tt><tt class="descname">make_ds9_regions_file</tt><big>(</big><em>inputfile</em>, <em>outputfile</em>, <em>size=10</em>, <em>xcolumn='x_image'</em>, <em>ycolumn='y_image'</em><big>)</big><a class="reference internal" href="_modules/SamPy/grisms/prepare_slitless.html#make_ds9_regions_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.grisms.prepare_slitless.make_ds9_regions_file" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SamPy.grisms.prepare_slitless.</tt><tt class="descname">make_ds9_regions_file</tt><big>(</big><em>inputfile</em>, <em>outputfile</em>, <em>size=10</em>, <em>xcolumn='x_image'</em>, <em>ycolumn='y_image'</em><big>)</big><a class="headerlink" href="#SamPy.grisms.prepare_slitless.make_ds9_regions_file" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
 <dt id="SamPy.grisms.prepare_slitless.print_files">
-<tt class="descclassname">SamPy.grisms.prepare_slitless.</tt><tt class="descname">print_files</tt><big>(</big><em>headers</em><big>)</big><a class="reference internal" href="_modules/SamPy/grisms/prepare_slitless.html#print_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.grisms.prepare_slitless.print_files" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SamPy.grisms.prepare_slitless.</tt><tt class="descname">print_files</tt><big>(</big><em>headers</em><big>)</big><a class="headerlink" href="#SamPy.grisms.prepare_slitless.print_files" title="Permalink to this definition">¶</a></dt>
 <dd><p>Outputs some basic information to the shell.</p>
 </dd></dl>
 

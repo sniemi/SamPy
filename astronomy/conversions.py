@@ -4,7 +4,7 @@ Functions to do Astronomy related unit conversions.
 :requires: NumPy
 :requires: cosmocalc (http://cxc.harvard.edu/contrib/cosmocalc/)
 
-:version: 0.12
+:version: 0.2
 
 :author: Sami Niemi
 :contact: sniemi@unc.edu
@@ -18,7 +18,8 @@ def angstromToHertz(A):
     """
     Converts Angstroms to Hertz.
 
-    :param: A, angstrom, can either be a float or NumPy array
+    :param A: wavelength in angstroms
+    :type A: float or ndarray
 
     :return: Hertz
     :rtype: float or ndarray, depending on the input
@@ -26,17 +27,17 @@ def angstromToHertz(A):
     return 2.99792458e18 / A
 
 
-def nanomaggiesToJansky(nanomaggies):
+def nanomaggiesToJansky(nanomaggie):
     """
-    Converts nanomaggies, used for example in SDSS imaging,
-    to Janskys.
+    Converts nanomaggies, used for example in SDSS imaging, to Janskys.
 
-    :param: nanomaggies, can either be a float of a NumPy array
+    :param nanomaggie: nanomaggie of the object
+    :type nanomaggie: float or ndarray
 
     :return: Janskys
     :rtype: either a float or ndarray
     """
-    return nanomaggies * 3.361e-6
+    return nanomaggie * 3.361e-6
 
 
 def janskyToMagnitude(jansky):
@@ -45,7 +46,8 @@ def janskyToMagnitude(jansky):
 
     :note: Can be used with SQLite3 database.
 
-    :param jansky: can either be a float or a NumPy array
+    :param jansky: janskys of the object
+    :type jansky: float or ndarray
 
     :return: either a float or NumPy array
     """
@@ -58,7 +60,8 @@ def ABMagnitudeToJansky(ABmagnitude):
 
     :note: Can be used with SQLite3 database.
 
-    :param ABmagnitude: can be either a number or a NumPy array
+    :param ABmagnitude: AB-magnitude of the object
+    :type ABmagnitude: float or ndarray
 
     :return: either a float or NumPy array
     """
@@ -67,9 +70,10 @@ def ABMagnitudeToJansky(ABmagnitude):
 
 def arcminSquaredToSteradians(arcmin2):
     """
-    Converts arcmin**2 to steradians.
+    Converts :math:`arcmin^{2}` to steradians.
 
-    :param arcmin2: arcmin**2
+    :param arcmin2: :math:`arcmin^{2}`
+    :type arcmin2: float or ndarray
 
     :return: steradians
     """
@@ -78,12 +82,13 @@ def arcminSquaredToSteradians(arcmin2):
 
 def arcminSquaredToSolidAnge(arcmin2):
     """
-    Converts arcmin**2 to solid angle.
-    Calls arcminSqauredToSteradians to
-    convert arcmin**2 to steradians and
-    then divides this with 4pi.
+    Converts :math:`arcmin^{2}` to solid angle.
 
-    :param arcmin2: arcmin**2
+    Calls arcminSqauredToSteradians to convert :math:`arcmin^{2}`
+    to steradians and then divides this with :math:`4\\Pi`.
+
+    :param arcmin2: :math:`arcmin^{2}`
+    :type arcmin2: float or ndarray
 
     :return: solid angle
     """
@@ -94,9 +99,9 @@ def comovingVolume(arcmin2, zmin, zmax,
                    H0=70, WM=0.28):
     """
     Calculates the comoving volume between two redshifts when
-    the sky survey has covered arcmin**2 region.
+    the sky survey has covered :math:`arcmin^{2}` region.
 
-    :param arcmin2: area on the sky in arcmin**2
+    :param arcmin2: area on the sky in :math:`arcmin^{2}`
     :param zmin: redshift of the front part of the volume
     :param zmax: redshift of the back part of the volume
     :param H0: Value of the Hubble constant
@@ -113,18 +118,25 @@ def comovingVolume(arcmin2, zmin, zmax,
 
 def Luminosity(abs_mag):
     """
-    Converts AB magnitudes to luminosities in L_sun
+    Converts AB magnitudes to luminosities in :math:`L_{sun}`
 
     :param abs_mag: AB magnitude of the object
+    :type abs_mag: float or ndarray
 
     :return: luminosity
+    :rtype: float or ndarray
     """
     return 10.0 ** ((4.85 - abs_mag) / 2.5)
 
 
 def get_flat_flambda_dmag(plambda, plambda_ref):
     """                                                                                                             
-    Compute the differential AB-mag for an object flat in f_lambda                                                   
+    Compute the differential AB-mag for an object flat in f_lambda.
+
+    :param plambda: value of the plambda
+    :param plambda_ref: reference value
+
+    :return: magnitude difference
     """
     # compute mag_AB for an object at the desired wavelength                                                         
     mag1 = get_magAB_from_flambda(1.0e-17, plambda)
@@ -138,11 +150,11 @@ def get_flat_flambda_dmag(plambda, plambda_ref):
 
 def get_magAB_from_flambda(flambda, wlength):
     """                                                                                                             
-    Converts a mag_AB value at a wavelength to f_lambda                                                              
+    Converts a mag_AB value at a wavelength to f_lambda.
                                                                                                                      
-    :param: flambda: mag_AB value
+    :param flambda: mag_AB value
     :type flambda: float
-    :param: wlength: wavelength value [nm]
+    :param wlength: wavelength value [nm]
     :type wlength: float
                                                                                                                      
     :return: the mag_AB value
@@ -162,7 +174,8 @@ def redshiftFromScale(scale):
     """
     Converts a scale factor to redshift.
 
-    :param: scale, can be a float or ndarray
+    :param scale: scale factor
+    :type scale: float or ndarray
 
     :return: redshift
     :rtype: float or ndarray
@@ -174,7 +187,8 @@ def scaleFromRedshift(redshift):
     """
     Converts a redshift to a scale factor.
 
-    :param: redshift, can be a float or ndarray
+    :param redshift: redshift of the object
+    :type redshift: float or ndarray
 
     :return: scale factor
     :rtype: float or ndarray
@@ -187,6 +201,13 @@ def convertSphericalToCartesian(r, theta, phi):
     Converts Spherical coordinates to Cartesian ones.
 
     http://mathworld.wolfram.com/SphericalCoordinates.html
+
+    :param r: radius
+    :type r: float or ndarray
+    :param theta: :math:`\\theta`
+    :type theta: float or ndarray
+    :param phi: :math:`\\phi`
+    :type phi: float or ndarray
 
     :return: x, y, z
     :rtype: dictionary
@@ -201,19 +222,28 @@ def convertSphericalToCartesian(r, theta, phi):
 
 def RAandDECfromStandardCoordinates(data):
     """
-    Converts Standard Coordinates on tangent plane
-    to RA and DEC on the sky.
+    Converts Standard Coordinates on tangent plane to RA and DEC on the sky.
     data dictionary must also contain the CD matrix.
     Full equations:
-    xi  = cdmatrix(0,0) * (x-crpix(0)) + cdmatrix(0,1)* (y - crpix(1))
-    eta = cdmatrix(1,0) * (x-crpix(0)) + cdmatrix(1,1)* (y - crpix(1))
-    then
-    ra = atan2(xi, cos(dec0)-eta*sin(dec0)) + ra0
-    dec = atan2(eta*cos(dec0)+sin(dec0),
-                sqrt((cos(dec0)-eta*sin(dec0))**2 + xi**2))
 
-    :param data (dictionary): should contain standard coordinates X, Y,
-    RA and DEC of the centre point, and the CD matrix.
+    .. math::
+
+       \\xi  & = cdmatrix(0,0) * (x - crpix(0)) + cdmatrix(0,1) * (y - crpix(1)) \\\\
+       \\eta & = cdmatrix(1,0) * (x - crpix(0)) + cdmatrix(1,1) * (y - crpix(1))
+
+    then
+
+    .. math::
+
+       ra  &= atan2(\\xi, \\cos(dec0) - \\eta * \\sin(dec0)) + ra0 \\\\
+       dec &= atan2(\\eta * \\cos(dec0) + \\sin(dec0),
+                \\sqrt{((\\cos(dec0) - \\eta * \\sin(dec0))^{2} + \\xi^{2})})
+
+    :param data: should contain standard coordinates X, Y, RA and DEC of the centre point, and the CD matrix.
+    :type data: dictionary
+
+    :return: RA and DEC
+    :rtype: dictionary
     """
     out = {}
     xi = (data['CD'][0, 0] * data['X']) + (data['CD'][0, 1] * data['Y'])
@@ -245,6 +275,16 @@ def angularDiameterDistance(z,
     is famous for not increasing indefinitely as z to inf; it turns
     over at z about 1 and thereafter more distant objects actually
     appear larger in angular size.
+
+    :param z: redshift
+    :type z: float
+    :param H0: value of the Hubble constant
+    :type H0: float
+    :param WM: :math:`\\Omega_{\\mathrm{matter}}`
+    :type WM: float
+
+    :return: angular diameter distance
+    :rtype: float
     """
     return cosmocalc(z, H0, WM)['DA']
 
@@ -252,6 +292,9 @@ def angularDiameterDistance(z,
 def degTodms(ideg):
     """
     Converts degrees to degrees:minutes:seconds
+
+    :param ideg: objects coordinate in degrees
+    :type ideg: float
 
     :return: degrees:minutes:seconds
     :rtype: string
@@ -276,6 +319,9 @@ def degTohms(ideg):
     """
     Converts degrees to hours:minutes:seconds
 
+    :param ideg: objects coordinates in degrees
+    :type ideg: float
+
     :return: hours:minutes:seconds
     :rtype: string
     """
@@ -290,9 +336,12 @@ def degTohms(ideg):
 
 def cot(x):
     """
-    1 / tan(x)
+    .. math::
+    
+       \\frac{1}{\\tan (x)}
 
-    :param: x, either a float or ndarray
+    :param x: value
+    :type x: float or ndarray
 
     :return: cotangent
     :rtype: float or ndarray
@@ -302,9 +351,12 @@ def cot(x):
 
 def arccot(x):
     """
-    arctan(1. / x)
+    .. math::
+    
+       arctan \\left ( \\frac{1}{x} \\right )
 
-    :param: x, either a float or ndarray
+    :param x: value
+    :type x: float or ndarray
 
     :return: arcuscotangent
     :rtype: float or ndarray

@@ -170,7 +170,7 @@ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE, DAMMIT.</p>
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.BeautifulSOAP">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">BeautifulSOAP</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x10c21c328&gt;</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#BeautifulSOAP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulSOAP" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">BeautifulSOAP</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x10b9b0738&gt;</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulSOAP" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup" title="SamPy.parsing.BeautifulSoup.BeautifulStoneSoup"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.BeautifulStoneSoup</span></tt></a></p>
 <p>This class will push a tag with only a single string child into
 the tag&#8217;s parent as an attribute. The attribute&#8217;s name is the tag
@@ -190,14 +190,14 @@ out.</p>
 know if you do. Mainly I like the name.</p>
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.BeautifulSOAP.popTag">
-<tt class="descname">popTag</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#BeautifulSOAP.popTag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulSOAP.popTag" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">popTag</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulSOAP.popTag" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.BeautifulSoup">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">BeautifulSoup</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#BeautifulSoup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulSoup" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">BeautifulSoup</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulSoup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup" title="SamPy.parsing.BeautifulSoup.BeautifulStoneSoup"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.BeautifulStoneSoup</span></tt></a></p>
 <p>This parser knows the following facts about HTML:</p>
 <ul>
@@ -258,7 +258,7 @@ try ICantBelieveItsBeautifulSoup, MinimalSoup, or
 BeautifulStoneSoup before writing your own subclass.</p>
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.BeautifulSoup.extractCharsetFromMeta">
-<tt class="descname">extractCharsetFromMeta</tt><big>(</big><em>attrs</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#BeautifulSoup.extractCharsetFromMeta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulSoup.extractCharsetFromMeta" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">extractCharsetFromMeta</tt><big>(</big><em>attrs</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulSoup.extractCharsetFromMeta" title="Permalink to this definition">¶</a></dt>
 <dd><p>Beautiful Soup can detect a charset included in a META tag,
 try to convert the document to that charset, and re-parse the
 document from the beginning.</p>
@@ -268,7 +268,7 @@ document from the beginning.</p>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.BeautifulStoneSoup">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">BeautifulStoneSoup</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x10c21c328&gt;</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#BeautifulStoneSoup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">BeautifulStoneSoup</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x10b9b0738&gt;</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.Tag" title="SamPy.parsing.BeautifulSoup.Tag"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.Tag</span></tt></a></p>
 <p>This class contains the basic parser and search code. It defines
 a parser that knows nothing about tag behavior except for the
@@ -285,121 +285,121 @@ or when BeautifulSoup makes an assumption counter to what you were
 expecting.</p>
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.endData">
-<tt class="descname">endData</tt><big>(</big><em>containerClass=&lt;class 'SamPy.parsing.BeautifulSoup.NavigableString'&gt;</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#BeautifulStoneSoup.endData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.endData" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">endData</tt><big>(</big><em>containerClass=&lt;class 'SamPy.parsing.BeautifulSoup.NavigableString'&gt;</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.endData" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.extractCharsetFromMeta">
-<tt class="descname">extractCharsetFromMeta</tt><big>(</big><em>attrs</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#BeautifulStoneSoup.extractCharsetFromMeta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.extractCharsetFromMeta" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">extractCharsetFromMeta</tt><big>(</big><em>attrs</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.extractCharsetFromMeta" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.handle_data">
-<tt class="descname">handle_data</tt><big>(</big><em>data</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#BeautifulStoneSoup.handle_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.handle_data" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle_data</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.handle_data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.isSelfClosingTag">
-<tt class="descname">isSelfClosingTag</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#BeautifulStoneSoup.isSelfClosingTag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.isSelfClosingTag" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">isSelfClosingTag</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.isSelfClosingTag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns true iff the given string is the name of a
 self-closing tag according to this parser.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.popTag">
-<tt class="descname">popTag</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#BeautifulStoneSoup.popTag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.popTag" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">popTag</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.popTag" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.pushTag">
-<tt class="descname">pushTag</tt><big>(</big><em>tag</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#BeautifulStoneSoup.pushTag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.pushTag" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">pushTag</tt><big>(</big><em>tag</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.pushTag" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.reset">
-<tt class="descname">reset</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#BeautifulStoneSoup.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.reset" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">reset</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.reset" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.unknown_endtag">
-<tt class="descname">unknown_endtag</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#BeautifulStoneSoup.unknown_endtag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.unknown_endtag" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">unknown_endtag</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.unknown_endtag" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.unknown_starttag">
-<tt class="descname">unknown_starttag</tt><big>(</big><em>name</em>, <em>attrs</em>, <em>selfClosing=0</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#BeautifulStoneSoup.unknown_starttag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.unknown_starttag" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">unknown_starttag</tt><big>(</big><em>name</em>, <em>attrs</em>, <em>selfClosing=0</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup.unknown_starttag" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.CData">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">CData</tt><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#CData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.CData" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">CData</tt><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.CData" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.NavigableString" title="SamPy.parsing.BeautifulSoup.NavigableString"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.NavigableString</span></tt></a></p>
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.CData.decodeGivenEventualEncoding">
-<tt class="descname">decodeGivenEventualEncoding</tt><big>(</big><em>eventualEncoding</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#CData.decodeGivenEventualEncoding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.CData.decodeGivenEventualEncoding" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">decodeGivenEventualEncoding</tt><big>(</big><em>eventualEncoding</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.CData.decodeGivenEventualEncoding" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.Comment">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">Comment</tt><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#Comment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Comment" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">Comment</tt><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Comment" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.NavigableString" title="SamPy.parsing.BeautifulSoup.NavigableString"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.NavigableString</span></tt></a></p>
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.Comment.decodeGivenEventualEncoding">
-<tt class="descname">decodeGivenEventualEncoding</tt><big>(</big><em>eventualEncoding</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#Comment.decodeGivenEventualEncoding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Comment.decodeGivenEventualEncoding" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">decodeGivenEventualEncoding</tt><big>(</big><em>eventualEncoding</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Comment.decodeGivenEventualEncoding" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.Declaration">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">Declaration</tt><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#Declaration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Declaration" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">Declaration</tt><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Declaration" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.NavigableString" title="SamPy.parsing.BeautifulSoup.NavigableString"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.NavigableString</span></tt></a></p>
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.Declaration.decodeGivenEventualEncoding">
-<tt class="descname">decodeGivenEventualEncoding</tt><big>(</big><em>eventualEncoding</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#Declaration.decodeGivenEventualEncoding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Declaration.decodeGivenEventualEncoding" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">decodeGivenEventualEncoding</tt><big>(</big><em>eventualEncoding</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Declaration.decodeGivenEventualEncoding" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.HTMLParserBuilder">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">HTMLParserBuilder</tt><big>(</big><em>soup</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#HTMLParserBuilder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.HTMLParserBuilder" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">HTMLParserBuilder</tt><big>(</big><em>soup</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.HTMLParserBuilder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">HTMLParser.HTMLParser</span></tt></p>
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_charref">
-<tt class="descname">handle_charref</tt><big>(</big><em>ref</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#HTMLParserBuilder.handle_charref"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_charref" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle_charref</tt><big>(</big><em>ref</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_charref" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handle character references as data.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_comment">
-<tt class="descname">handle_comment</tt><big>(</big><em>text</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#HTMLParserBuilder.handle_comment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_comment" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle_comment</tt><big>(</big><em>text</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_comment" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handle comments as Comment objects.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_data">
-<tt class="descname">handle_data</tt><big>(</big><em>content</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#HTMLParserBuilder.handle_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_data" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle_data</tt><big>(</big><em>content</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_decl">
-<tt class="descname">handle_decl</tt><big>(</big><em>data</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#HTMLParserBuilder.handle_decl"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_decl" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle_decl</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_decl" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handle DOCTYPEs and the like as Declaration objects.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_endtag">
-<tt class="descname">handle_endtag</tt><big>(</big><em>name</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#HTMLParserBuilder.handle_endtag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_endtag" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle_endtag</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_endtag" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_entityref">
-<tt class="descname">handle_entityref</tt><big>(</big><em>ref</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#HTMLParserBuilder.handle_entityref"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_entityref" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle_entityref</tt><big>(</big><em>ref</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_entityref" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handle entity references as data, possibly converting known
 HTML and/or XML entity references to the corresponding Unicode
 characters.</p>
@@ -407,7 +407,7 @@ characters.</p>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_pi">
-<tt class="descname">handle_pi</tt><big>(</big><em>text</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#HTMLParserBuilder.handle_pi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_pi" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle_pi</tt><big>(</big><em>text</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_pi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Handle a processing instruction as a ProcessingInstruction
 object, possibly one with a %SOUP-ENCODING% slot into which an
 encoding will be plugged later.</p>
@@ -415,12 +415,12 @@ encoding will be plugged later.</p>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_starttag">
-<tt class="descname">handle_starttag</tt><big>(</big><em>name</em>, <em>attrs</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#HTMLParserBuilder.handle_starttag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_starttag" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">handle_starttag</tt><big>(</big><em>name</em>, <em>attrs</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.HTMLParserBuilder.handle_starttag" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.HTMLParserBuilder.parse_declaration">
-<tt class="descname">parse_declaration</tt><big>(</big><em>i</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#HTMLParserBuilder.parse_declaration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.HTMLParserBuilder.parse_declaration" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">parse_declaration</tt><big>(</big><em>i</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.HTMLParserBuilder.parse_declaration" title="Permalink to this definition">¶</a></dt>
 <dd><p>Treat a bogus SGML declaration as raw data. Treat a CDATA
 declaration as a CData object.</p>
 </dd></dl>
@@ -429,7 +429,7 @@ declaration as a CData object.</p>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.ICantBelieveItsBeautifulSoup">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">ICantBelieveItsBeautifulSoup</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#ICantBelieveItsBeautifulSoup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.ICantBelieveItsBeautifulSoup" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">ICantBelieveItsBeautifulSoup</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.ICantBelieveItsBeautifulSoup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.BeautifulSoup" title="SamPy.parsing.BeautifulSoup.BeautifulSoup"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.BeautifulSoup</span></tt></a></p>
 <p>The BeautifulSoup class is oriented towards skipping over
 common HTML errors like unclosed tags. However, sometimes it makes
@@ -455,7 +455,7 @@ wouldn&#8217;t be.</p>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.MinimalSoup">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">MinimalSoup</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#MinimalSoup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.MinimalSoup" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">MinimalSoup</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.MinimalSoup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.BeautifulSoup" title="SamPy.parsing.BeautifulSoup.BeautifulSoup"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.BeautifulSoup</span></tt></a></p>
 <p>The MinimalSoup class is for parsing HTML that contains
 pathologically bad markup. It makes no assumptions about tag
@@ -468,34 +468,34 @@ or BeautifulSoup.</p>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.NavigableString">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">NavigableString</tt><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#NavigableString"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.NavigableString" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">NavigableString</tt><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.NavigableString" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">unicode</span></tt>, <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.PageElement" title="SamPy.parsing.BeautifulSoup.PageElement"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.PageElement</span></tt></a></p>
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.NavigableString.decodeGivenEventualEncoding">
-<tt class="descname">decodeGivenEventualEncoding</tt><big>(</big><em>eventualEncoding</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#NavigableString.decodeGivenEventualEncoding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.NavigableString.decodeGivenEventualEncoding" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">decodeGivenEventualEncoding</tt><big>(</big><em>eventualEncoding</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.NavigableString.decodeGivenEventualEncoding" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.NavigableString.encode">
-<tt class="descname">encode</tt><big>(</big><em>encoding='utf-8'</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#NavigableString.encode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.NavigableString.encode" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">encode</tt><big>(</big><em>encoding='utf-8'</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.NavigableString.encode" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.PageElement">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">PageElement</tt><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#PageElement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">PageElement</tt><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement" title="Permalink to this definition">¶</a></dt>
 <dd><p>Contains the navigational information for some part of the page
 (either a tag or a piece of text)</p>
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.PageElement.append">
-<tt class="descname">append</tt><big>(</big><em>tag</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#PageElement.append"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.append" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">append</tt><big>(</big><em>tag</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.append" title="Permalink to this definition">¶</a></dt>
 <dd><p>Appends the given tag to the contents of this tag.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.PageElement.extract">
-<tt class="descname">extract</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#PageElement.extract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.extract" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">extract</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.extract" title="Permalink to this definition">¶</a></dt>
 <dd><p>Destructively rips this element out of the tree.</p>
 </dd></dl>
 
@@ -529,124 +529,124 @@ criteria and appear before this Tag in the document.</p>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.PageElement.findAllNext">
-<tt class="descname">findAllNext</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>text=None</em>, <em>limit=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#PageElement.findAllNext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.findAllNext" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">findAllNext</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>text=None</em>, <em>limit=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.findAllNext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns all items that match the given criteria and appear
 after this Tag in the document.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.PageElement.findAllPrevious">
-<tt class="descname">findAllPrevious</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>text=None</em>, <em>limit=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#PageElement.findAllPrevious"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.findAllPrevious" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">findAllPrevious</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>text=None</em>, <em>limit=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.findAllPrevious" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns all items that match the given criteria and appear
 before this Tag in the document.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.PageElement.findNext">
-<tt class="descname">findNext</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>text=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#PageElement.findNext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.findNext" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">findNext</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>text=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.findNext" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the first item that matches the given criteria and
 appears after this Tag in the document.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.PageElement.findNextSibling">
-<tt class="descname">findNextSibling</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>text=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#PageElement.findNextSibling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.findNextSibling" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">findNextSibling</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>text=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.findNextSibling" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the closest sibling to this Tag that matches the
 given criteria and appears after this Tag in the document.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.PageElement.findNextSiblings">
-<tt class="descname">findNextSiblings</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>text=None</em>, <em>limit=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#PageElement.findNextSiblings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.findNextSiblings" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">findNextSiblings</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>text=None</em>, <em>limit=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.findNextSiblings" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the siblings of this Tag that match the given
 criteria and appear after this Tag in the document.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.PageElement.findParent">
-<tt class="descname">findParent</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#PageElement.findParent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.findParent" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">findParent</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.findParent" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the closest parent of this Tag that matches the given
 criteria.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.PageElement.findParents">
-<tt class="descname">findParents</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>limit=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#PageElement.findParents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.findParents" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">findParents</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>limit=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.findParents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the parents of this Tag that match the given
 criteria.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.PageElement.findPrevious">
-<tt class="descname">findPrevious</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>text=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#PageElement.findPrevious"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.findPrevious" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">findPrevious</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>text=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.findPrevious" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the first item that matches the given criteria and
 appears before this Tag in the document.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.PageElement.findPreviousSibling">
-<tt class="descname">findPreviousSibling</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>text=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#PageElement.findPreviousSibling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.findPreviousSibling" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">findPreviousSibling</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>text=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.findPreviousSibling" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the closest sibling to this Tag that matches the
 given criteria and appears before this Tag in the document.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.PageElement.findPreviousSiblings">
-<tt class="descname">findPreviousSiblings</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>text=None</em>, <em>limit=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#PageElement.findPreviousSiblings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.findPreviousSiblings" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">findPreviousSiblings</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>text=None</em>, <em>limit=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.findPreviousSiblings" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the siblings of this Tag that match the given
 criteria and appear before this Tag in the document.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.PageElement.insert">
-<tt class="descname">insert</tt><big>(</big><em>position</em>, <em>newChild</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#PageElement.insert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.insert" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">insert</tt><big>(</big><em>position</em>, <em>newChild</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.insert" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.PageElement.nextGenerator">
-<tt class="descname">nextGenerator</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#PageElement.nextGenerator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.nextGenerator" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">nextGenerator</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.nextGenerator" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.PageElement.nextSiblingGenerator">
-<tt class="descname">nextSiblingGenerator</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#PageElement.nextSiblingGenerator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.nextSiblingGenerator" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">nextSiblingGenerator</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.nextSiblingGenerator" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.PageElement.parentGenerator">
-<tt class="descname">parentGenerator</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#PageElement.parentGenerator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.parentGenerator" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">parentGenerator</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.parentGenerator" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.PageElement.previousGenerator">
-<tt class="descname">previousGenerator</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#PageElement.previousGenerator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.previousGenerator" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">previousGenerator</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.previousGenerator" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.PageElement.previousSiblingGenerator">
-<tt class="descname">previousSiblingGenerator</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#PageElement.previousSiblingGenerator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.previousSiblingGenerator" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">previousSiblingGenerator</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.previousSiblingGenerator" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.PageElement.replaceWith">
-<tt class="descname">replaceWith</tt><big>(</big><em>replaceWith</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#PageElement.replaceWith"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.replaceWith" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">replaceWith</tt><big>(</big><em>replaceWith</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.replaceWith" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.PageElement.setup">
-<tt class="descname">setup</tt><big>(</big><em>parent=None</em>, <em>previous=None</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#PageElement.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.setup" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">setup</tt><big>(</big><em>parent=None</em>, <em>previous=None</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.setup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets up the initial relations between this element and
 other elements.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.PageElement.substituteEncoding">
-<tt class="descname">substituteEncoding</tt><big>(</big><em>str</em>, <em>encoding=None</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#PageElement.substituteEncoding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.substituteEncoding" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">substituteEncoding</tt><big>(</big><em>str</em>, <em>encoding=None</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.substituteEncoding" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.PageElement.toEncoding">
-<tt class="descname">toEncoding</tt><big>(</big><em>s</em>, <em>encoding=None</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#PageElement.toEncoding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.toEncoding" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">toEncoding</tt><big>(</big><em>s</em>, <em>encoding=None</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.PageElement.toEncoding" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encodes an object to a string in some encoding, or to Unicode.
 .</p>
 </dd></dl>
@@ -655,18 +655,18 @@ other elements.</p>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.ProcessingInstruction">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">ProcessingInstruction</tt><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#ProcessingInstruction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.ProcessingInstruction" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">ProcessingInstruction</tt><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.ProcessingInstruction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.NavigableString" title="SamPy.parsing.BeautifulSoup.NavigableString"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.NavigableString</span></tt></a></p>
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.ProcessingInstruction.decodeGivenEventualEncoding">
-<tt class="descname">decodeGivenEventualEncoding</tt><big>(</big><em>eventualEncoding</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#ProcessingInstruction.decodeGivenEventualEncoding"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.ProcessingInstruction.decodeGivenEventualEncoding" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">decodeGivenEventualEncoding</tt><big>(</big><em>eventualEncoding</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.ProcessingInstruction.decodeGivenEventualEncoding" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.ResultSet">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">ResultSet</tt><big>(</big><em>source</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#ResultSet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.ResultSet" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">ResultSet</tt><big>(</big><em>source</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.ResultSet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">list</span></tt></p>
 <p>A ResultSet is just a list that keeps track of the SoupStrainer
 that created it.</p>
@@ -674,95 +674,95 @@ that created it.</p>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.RobustHTMLParser">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">RobustHTMLParser</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#RobustHTMLParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.RobustHTMLParser" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">RobustHTMLParser</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.RobustHTMLParser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.BeautifulSoup" title="SamPy.parsing.BeautifulSoup.BeautifulSoup"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.BeautifulSoup</span></tt></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.RobustInsanelyWackAssHTMLParser">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">RobustInsanelyWackAssHTMLParser</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#RobustInsanelyWackAssHTMLParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.RobustInsanelyWackAssHTMLParser" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">RobustInsanelyWackAssHTMLParser</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.RobustInsanelyWackAssHTMLParser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.MinimalSoup" title="SamPy.parsing.BeautifulSoup.MinimalSoup"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.MinimalSoup</span></tt></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.RobustWackAssHTMLParser">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">RobustWackAssHTMLParser</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#RobustWackAssHTMLParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.RobustWackAssHTMLParser" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">RobustWackAssHTMLParser</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.RobustWackAssHTMLParser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.ICantBelieveItsBeautifulSoup" title="SamPy.parsing.BeautifulSoup.ICantBelieveItsBeautifulSoup"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.ICantBelieveItsBeautifulSoup</span></tt></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.RobustXMLParser">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">RobustXMLParser</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x10c21c328&gt;</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#RobustXMLParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.RobustXMLParser" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">RobustXMLParser</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x10b9b0738&gt;</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.RobustXMLParser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.BeautifulStoneSoup" title="SamPy.parsing.BeautifulSoup.BeautifulStoneSoup"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.BeautifulStoneSoup</span></tt></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.SimplifyingSOAPParser">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">SimplifyingSOAPParser</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x10c21c328&gt;</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#SimplifyingSOAPParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.SimplifyingSOAPParser" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">SimplifyingSOAPParser</tt><big>(</big><em>markup=''</em>, <em>parseOnlyThese=None</em>, <em>fromEncoding=None</em>, <em>markupMassage=True</em>, <em>smartQuotesTo='xml'</em>, <em>convertEntities=None</em>, <em>selfClosingTags=None</em>, <em>isHTML=False</em>, <em>builder=&lt;class SamPy.parsing.BeautifulSoup.HTMLParserBuilder at 0x10b9b0738&gt;</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.SimplifyingSOAPParser" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.BeautifulSOAP" title="SamPy.parsing.BeautifulSoup.BeautifulSOAP"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.BeautifulSOAP</span></tt></a></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.SoupStrainer">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">SoupStrainer</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>text=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#SoupStrainer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.SoupStrainer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">SoupStrainer</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>text=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.SoupStrainer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Encapsulates a number of ways of matching a markup element (tag or
 text).</p>
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.SoupStrainer.search">
-<tt class="descname">search</tt><big>(</big><em>markup</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#SoupStrainer.search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.SoupStrainer.search" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">search</tt><big>(</big><em>markup</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.SoupStrainer.search" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.SoupStrainer.searchTag">
-<tt class="descname">searchTag</tt><big>(</big><em>markupName=None</em>, <em>markupAttrs={}</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#SoupStrainer.searchTag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.SoupStrainer.searchTag" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">searchTag</tt><big>(</big><em>markupName=None</em>, <em>markupAttrs={}</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.SoupStrainer.searchTag" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="exception">
 <dt id="SamPy.parsing.BeautifulSoup.StopParsing">
-<em class="property">exception </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">StopParsing</tt><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#StopParsing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.StopParsing" title="Permalink to this definition">¶</a></dt>
+<em class="property">exception </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">StopParsing</tt><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.StopParsing" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
 </dd></dl>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.Tag">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">Tag</tt><big>(</big><em>parser</em>, <em>name</em>, <em>attrs=None</em>, <em>parent=None</em>, <em>previous=None</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#Tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">Tag</tt><big>(</big><em>parser</em>, <em>name</em>, <em>attrs=None</em>, <em>parent=None</em>, <em>previous=None</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#SamPy.parsing.BeautifulSoup.PageElement" title="SamPy.parsing.BeautifulSoup.PageElement"><tt class="xref py py-class docutils literal"><span class="pre">SamPy.parsing.BeautifulSoup.PageElement</span></tt></a></p>
 <p>Represents a found HTML tag with its attributes and contents.</p>
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.Tag.childGenerator">
-<tt class="descname">childGenerator</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#Tag.childGenerator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.childGenerator" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">childGenerator</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.childGenerator" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.Tag.decode">
-<tt class="descname">decode</tt><big>(</big><em>prettyPrint=False</em>, <em>indentLevel=0</em>, <em>eventualEncoding='utf-8'</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#Tag.decode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.decode" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">decode</tt><big>(</big><em>prettyPrint=False</em>, <em>indentLevel=0</em>, <em>eventualEncoding='utf-8'</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.decode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a string or Unicode representation of this tag and
 its contents. To get Unicode, pass None for encoding.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.Tag.decodeContents">
-<tt class="descname">decodeContents</tt><big>(</big><em>prettyPrint=False</em>, <em>indentLevel=0</em>, <em>eventualEncoding='utf-8'</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#Tag.decodeContents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.decodeContents" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">decodeContents</tt><big>(</big><em>prettyPrint=False</em>, <em>indentLevel=0</em>, <em>eventualEncoding='utf-8'</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.decodeContents" title="Permalink to this definition">¶</a></dt>
 <dd><p>Renders the contents of this tag as a string in the given
 encoding. If encoding is None, returns a Unicode string..</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.Tag.decompose">
-<tt class="descname">decompose</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#Tag.decompose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.decompose" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">decompose</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.decompose" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recursively destroys the contents of this tree.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.Tag.encode">
-<tt class="descname">encode</tt><big>(</big><em>encoding='utf-8'</em>, <em>prettyPrint=False</em>, <em>indentLevel=0</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#Tag.encode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.encode" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">encode</tt><big>(</big><em>encoding='utf-8'</em>, <em>prettyPrint=False</em>, <em>indentLevel=0</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.encode" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.Tag.encodeContents">
-<tt class="descname">encodeContents</tt><big>(</big><em>encoding='utf-8'</em>, <em>prettyPrint=False</em>, <em>indentLevel=0</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#Tag.encodeContents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.encodeContents" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">encodeContents</tt><big>(</big><em>encoding='utf-8'</em>, <em>prettyPrint=False</em>, <em>indentLevel=0</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.encodeContents" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -780,19 +780,19 @@ same is true of the tag name.</p>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.Tag.fetchText">
-<tt class="descname">fetchText</tt><big>(</big><em>text=None</em>, <em>recursive=True</em>, <em>limit=None</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#Tag.fetchText"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.fetchText" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">fetchText</tt><big>(</big><em>text=None</em>, <em>recursive=True</em>, <em>limit=None</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.fetchText" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.Tag.find">
-<tt class="descname">find</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>recursive=True</em>, <em>text=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#Tag.find"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.find" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">find</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>recursive=True</em>, <em>text=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.find" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return only the first child of this Tag matching the given
 criteria.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.Tag.findAll">
-<tt class="descname">findAll</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>recursive=True</em>, <em>text=None</em>, <em>limit=None</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#Tag.findAll"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.findAll" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">findAll</tt><big>(</big><em>name=None</em>, <em>attrs={}</em>, <em>recursive=True</em>, <em>text=None</em>, <em>limit=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.findAll" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extracts a list of Tag objects that match the given
 criteria.  You can specify the name of the Tag and any
 attributes you want the Tag to have.</p>
@@ -832,12 +832,12 @@ criteria.</p>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.Tag.firstText">
-<tt class="descname">firstText</tt><big>(</big><em>text=None</em>, <em>recursive=True</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#Tag.firstText"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.firstText" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">firstText</tt><big>(</big><em>text=None</em>, <em>recursive=True</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.firstText" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.Tag.get">
-<tt class="descname">get</tt><big>(</big><em>key</em>, <em>default=None</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#Tag.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.get" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">get</tt><big>(</big><em>key</em>, <em>default=None</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.get" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the value of the &#8216;key&#8217; attribute for the tag, or
 the value given for &#8216;default&#8217; if it doesn&#8217;t have that
 attribute.</p>
@@ -845,43 +845,43 @@ attribute.</p>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.Tag.has_key">
-<tt class="descname">has_key</tt><big>(</big><em>key</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#Tag.has_key"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.has_key" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">has_key</tt><big>(</big><em>key</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.has_key" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.Tag.prettify">
-<tt class="descname">prettify</tt><big>(</big><em>encoding='utf-8'</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#Tag.prettify"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.prettify" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">prettify</tt><big>(</big><em>encoding='utf-8'</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.prettify" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.Tag.recursiveChildGenerator">
-<tt class="descname">recursiveChildGenerator</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#Tag.recursiveChildGenerator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.recursiveChildGenerator" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">recursiveChildGenerator</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.recursiveChildGenerator" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.Tag.renderContents">
-<tt class="descname">renderContents</tt><big>(</big><em>encoding='utf-8'</em>, <em>prettyPrint=False</em>, <em>indentLevel=0</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#Tag.renderContents"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.renderContents" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">renderContents</tt><big>(</big><em>encoding='utf-8'</em>, <em>prettyPrint=False</em>, <em>indentLevel=0</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.Tag.renderContents" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="SamPy.parsing.BeautifulSoup.UnicodeDammit">
-<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">UnicodeDammit</tt><big>(</big><em>markup</em>, <em>overrideEncodings=</em><span class="optional">[</span><span class="optional">]</span>, <em>smartQuotesTo='xml'</em>, <em>isHTML=False</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#UnicodeDammit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.UnicodeDammit" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">UnicodeDammit</tt><big>(</big><em>markup</em>, <em>overrideEncodings=</em><span class="optional">[</span><span class="optional">]</span>, <em>smartQuotesTo='xml'</em>, <em>isHTML=False</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.UnicodeDammit" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class for detecting the encoding of a <a href="#id1"><span class="problematic" id="id2">*</span></a>ML document and
 converting it to a Unicode string. If the source encoding is
 windows-1252, can replace MS smart quotes with their HTML or XML
 equivalents.</p>
 <dl class="method">
 <dt id="SamPy.parsing.BeautifulSoup.UnicodeDammit.find_codec">
-<tt class="descname">find_codec</tt><big>(</big><em>charset</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#UnicodeDammit.find_codec"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.UnicodeDammit.find_codec" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">find_codec</tt><big>(</big><em>charset</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.UnicodeDammit.find_codec" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="function">
 <dt id="SamPy.parsing.BeautifulSoup.buildTagMap">
-<tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">buildTagMap</tt><big>(</big><em>default</em>, <em>*args</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#buildTagMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.buildTagMap" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">buildTagMap</tt><big>(</big><em>default</em>, <em>*args</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.buildTagMap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Turns a list of maps, lists, or scalars into a single map.
 Used to build the SELF_CLOSING_TAGS, NESTABLE_TAGS, and
 NESTING_RESET_TAGS maps out of lists and partial maps.</p>
@@ -889,21 +889,21 @@ NESTING_RESET_TAGS maps out of lists and partial maps.</p>
 
 <dl class="function">
 <dt id="SamPy.parsing.BeautifulSoup.isList">
-<tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">isList</tt><big>(</big><em>l</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#isList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.isList" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">isList</tt><big>(</big><em>l</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.isList" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convenience method that works with all 2.x versions of Python
 to determine whether or not something is listlike.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="SamPy.parsing.BeautifulSoup.isString">
-<tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">isString</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#isString"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.isString" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">isString</tt><big>(</big><em>s</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.isString" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convenience method that works with all 2.x versions of Python
 to determine whether or not something is stringlike.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="SamPy.parsing.BeautifulSoup.sob">
-<tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">sob</tt><big>(</big><em>unicode</em>, <em>encoding</em><big>)</big><a class="reference internal" href="_modules/SamPy/parsing/BeautifulSoup.html#sob"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.sob" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">SamPy.parsing.BeautifulSoup.</tt><tt class="descname">sob</tt><big>(</big><em>unicode</em>, <em>encoding</em><big>)</big><a class="headerlink" href="#SamPy.parsing.BeautifulSoup.sob" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns either the given Unicode string or its encoding.</p>
 </dd></dl>
 

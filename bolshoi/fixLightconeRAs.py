@@ -14,7 +14,7 @@ def fixLigconeRAs(files):
     for filename in files:
         removeFile = True
         fh = open(filename, 'r')
-        out = open(filename+'_mod', 'w')
+        out = open(filename + '_mod', 'w')
         line = fh.readline()
         while line:
             if line.startswith('#'):
@@ -33,10 +33,10 @@ def fixLigconeRAs(files):
         out.close()
 
         if removeFile:
-            os.remove(filename+'_mod')
+            os.remove(filename + '_mod')
         else:
             print 'File {0:>s} was modified...'.format(filename)
-            
+
 
 if __name__ == '__main__':
     files = glob.glob('*/lightcone.dat')

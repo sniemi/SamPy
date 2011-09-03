@@ -1,5 +1,13 @@
 """
 Spline artist
+
+:author: Sami-Matias Niemi
+:contact: sniemi@unc.edu
+
+:requires: matplotlib
+:requires: SciPy
+
+:version: 0.1
 """
 import pylab as P
 import scipy.interpolate as I
