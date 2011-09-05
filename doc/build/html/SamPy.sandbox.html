@@ -1,0 +1,216 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sandbox Package &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="next" title="smakced Package" href="SamPy.smakced.html" />
+    <link rel="prev" title="SamPy.resolve.misc.transform" href="SamPy.resolve.misc.transform.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.smakced.html" title="smakced Package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.resolve.misc.transform.html" title="SamPy.resolve.misc.transform"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">sandbox Package</a><ul>
+<li><a class="reference internal" href="#module-SamPy.sandbox.MyTools"><tt class="docutils literal"><span class="pre">MyTools</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-SamPy.sandbox.simpleMultiprocessingExample"><tt class="docutils literal"><span class="pre">simpleMultiprocessingExample</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.resolve.misc.transform.html"
+                        title="previous chapter">SamPy.resolve.misc.transform</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.smakced.html"
+                        title="next chapter">smakced Package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.sandbox.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="sandbox-package">
+<h1>sandbox Package<a class="headerlink" href="#sandbox-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-SamPy.sandbox.MyTools">
+<span id="mytools-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">MyTools</span></tt> Module<a class="headerlink" href="#module-SamPy.sandbox.MyTools" title="Permalink to this headline">¶</a></h2>
+<p>&#64;requires: NumPy
+&#64;requires: SciPy
+&#64;requires: Pylab (at least 1.0.0)
+&#64;author: Carolin Villforth
+&#64;summary: A collection of General Useful Tools of all Trades</p>
+<dl class="class">
+<dt id="SamPy.sandbox.MyTools.AnaKDE">
+<em class="property">class </em><tt class="descclassname">SamPy.sandbox.MyTools.</tt><tt class="descname">AnaKDE</tt><big>(</big><em>input</em>, <em>InData=True</em>, <em>CFill=True</em>, <em>PlotData=False</em>, <em>levels=None</em><big>)</big><a class="headerlink" href="#SamPy.sandbox.MyTools.AnaKDE" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Tool for Analyzing Kernel Density Estimators (KDE)
+Interactive Plotting
+&#64;type input: data array/KDE
+&#64;type InData: True/False
+&#64;type CFill: True/False
+&#64;type PlotData: True/False
+&#64;type levels: None/List
+&#64;param input: Input Data, either a KDE or an array with the data.</p>
+<p>If data is input, InData needs to be set to True.</p>
+<p>If KDE is input, InData needs to be set to False.
+&#64;param InData: Defining Data Input Type (see input)
+&#64;param CFill: If True, filled contours will be plotted.</p>
+<p>If False, line contours will be plotted
+&#64;param PlotData: Overplot raw data points over contour?
+&#64;param levels: Define levels for contour plot (if None, pylab will create automatic levels)
+&#64;warning: This is not tested for nasty inputs!
+&#64;warning: No Exceptions are raised at any point
+&#64;todo: Create possibility for log-file output.</p>
+<dl class="method">
+<dt id="SamPy.sandbox.MyTools.AnaKDE.Info">
+<tt class="descname">Info</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.sandbox.MyTools.AnaKDE.Info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints out all current parameters</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.sandbox.MyTools.AnaKDE.OpenInteractive">
+<tt class="descname">OpenInteractive</tt><big>(</big><em>sampling=100</em><big>)</big><a class="headerlink" href="#SamPy.sandbox.MyTools.AnaKDE.OpenInteractive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Opens an Interactive Window for Evaluating the KDE
+&#64;type sampling: int
+&#64;param sampling: sampling for vector extraction (OBSOLETE????)
+&#64;warning: Open Only after a Contour has been created!</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.sandbox.MyTools.AnaKDE.RePlot">
+<tt class="descname">RePlot</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.sandbox.MyTools.AnaKDE.RePlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replots the Contour
+Use after changing parameters
+&#64;bug: Replot should not re-evaluate the KDE is x_vec and y_vec have not been updated!</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.sandbox.MyTools.AnaKDE.Update">
+<tt class="descname">Update</tt><big>(</big><em>x_vec=False</em>, <em>y_vec=False</em>, <em>CFill=-999</em>, <em>PlotData=-999</em>, <em>levels=False</em><big>)</big><a class="headerlink" href="#SamPy.sandbox.MyTools.AnaKDE.Update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update Class Parameters
+Use Replot to Create an updated plot, then open an interactive Session.
+All parameters as in Main Class</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SamPy.sandbox.MyTools.AnaKDE.contour">
+<tt class="descname">contour</tt><big>(</big><em>x_vec</em>, <em>y_vec</em>, <em>return_data=False</em><big>)</big><a class="headerlink" href="#SamPy.sandbox.MyTools.AnaKDE.contour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plotting a contour of the KDE
+See Class main for all input parameters
+&#64;type x_vec: array
+&#64;type y_vec: array
+&#64;param x_vec: X Vector along which KDE is evaluated
+&#64;param y_vec: Y Vector along which KDE is evaluated
+&#64;note: inherits parameters from main class 
+&#64;note: I am not quite sure what contour does on funny vectors (unqeually spaced.....)
+&#64;note: self.test is for veryfing that the x,y order is kept intact properly by contour (I believe its now in order)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-SamPy.sandbox.simpleMultiprocessingExample">
+<span id="simplemultiprocessingexample-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">simpleMultiprocessingExample</span></tt> Module<a class="headerlink" href="#module-SamPy.sandbox.simpleMultiprocessingExample" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="SamPy.sandbox.simpleMultiprocessingExample.aFunction">
+<tt class="descclassname">SamPy.sandbox.simpleMultiprocessingExample.</tt><tt class="descname">aFunction</tt><big>(</big><em>x</em><big>)</big><a class="headerlink" href="#SamPy.sandbox.simpleMultiprocessingExample.aFunction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.smakced.html" title="smakced Package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.resolve.misc.transform.html" title="SamPy.resolve.misc.transform"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

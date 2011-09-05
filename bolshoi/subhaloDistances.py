@@ -9,7 +9,6 @@ Find subhalo galaxy distances from the main halo as a function of redshift, halo
 :cotact: niemi@stsci.edu
 """
 import matplotlib
-
 matplotlib.use('Agg')
 matplotlib.rc('text', usetex=True)
 matplotlib.rcParams['font.size'] = 17

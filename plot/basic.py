@@ -1,8 +1,8 @@
-'''
+"""
 =======================
 Basic Plotting Routines
 =======================
-'''
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import NullFormatter
@@ -17,10 +17,9 @@ def scatterHistograms(xdata,
                       ylabel,
                       binwidth,
                       output):
-    '''
-    This functions generates a scatter plot and
-    projected histograms to both axes.
-    '''
+    """
+    This functions generates a scatter plot and projected histograms to both axes.
+    """
     nullfmt = NullFormatter() # no labels
 
     # definitions for the axes

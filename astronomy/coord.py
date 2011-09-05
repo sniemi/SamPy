@@ -14,13 +14,6 @@ import numpy as np
 from numpy.core.records import fromarrays
 import astLib.astCoords as astCoords
 
-DEG_PER_HR = 360. / 24.             # degrees per hour
-DEG_PER_MIN = DEG_PER_HR / 60.      # degrees per min
-DEG_PER_S = DEG_PER_MIN / 60.       # degrees per sec
-DEG_PER_AMIN = 1. / 60.             # degrees per arcmin
-DEG_PER_ASEC = DEG_PER_AMIN / 60.   # degrees per arcsec
-RAD_PER_DEG = math.pi / 180.             # radians per degree
-
 def match(ra1, dec1, ra2, dec2, tol, allmatches=False):
     """
     Given two sets of numpy arrays of ra,dec and a tolerance tol
@@ -39,9 +32,13 @@ def match(ra1, dec1, ra2, dec2, tol, allmatches=False):
     imatch = match(ra1, dec1, ra2, dec2, 2.)
     inomatch = numpy.setdiff1d(np.arange(len(ra2)), set(imatch))
     """
-
-    #ra1, ra2, dec1, dec2 = map(np.asarray, (ra1, ra2, dec1, dec2))
-
+    DEG_PER_HR = 360. / 24.             # degrees per hour
+    DEG_PER_MIN = DEG_PER_HR / 60.      # degrees per min
+    DEG_PER_S = DEG_PER_MIN / 60.       # degrees per sec
+    DEG_PER_AMIN = 1. / 60.             # degrees per arcmin
+    DEG_PER_ASEC = DEG_PER_AMIN / 60.   # degrees per arcsec
+    RAD_PER_DEG = math.pi / 180.        # radians per degree
+    
     isorted = ra2.argsort()
     sdec2 = dec2[isorted]
     sra2 = ra2[isorted]

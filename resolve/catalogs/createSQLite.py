@@ -1,28 +1,26 @@
-'''
-This module contains a function that can be used to
-generate an SQLite3 database from ascii files.
+"""
+This module contains a function that can be used to generate an SQLite3 database from ascii files.
 
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
-'''
+"""
 import sqlite3
 import glob as g
-#From Sami's repo
-import log.Logger as lg
-import db.sqlite
+import SamPy.log.Logger as lg
+import SamPy.db.sqlite
 
 def generateSQLiteDBfromASCII(output='catalogs.db',
                               fileidentifier='*.txt'):
-    '''
+    """
     The script will make a table out from each ascii
     output file.
 
-    :param: output: name of the output file
-    :param: fileidentifier: string how to identify input data
+    :param output: name of the output file
+    :param fileidentifier: string how to identify input data
 
-    :dtype output: string
-    :dtype fileidentifier: string
-    '''
+    :type output: string
+    :type fileidentifier: string
+    """
 
     #find all files
     files = g.glob(fileidentifier)
