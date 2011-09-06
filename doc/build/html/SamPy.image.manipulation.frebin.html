@@ -1,0 +1,164 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.image.manipulation.frebin &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="SamPy.image.manipulation" href="SamPy.image.manipulation.html" />
+    <link rel="next" title="SamPy.image.manipulation.gaussianKernel" href="SamPy.image.manipulation.gaussianKernel.html" />
+    <link rel="prev" title="SamPy.image.manipulation.congrid" href="SamPy.image.manipulation.congrid.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.image.manipulation.gaussianKernel.html" title="SamPy.image.manipulation.gaussianKernel"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.image.manipulation.congrid.html" title="SamPy.image.manipulation.congrid"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.image.html" >image Package</a> &raquo;</li>
+          <li><a href="SamPy.image.manipulation.html" accesskey="U">SamPy.image.manipulation</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.image.manipulation.congrid.html"
+                        title="previous chapter">SamPy.image.manipulation.congrid</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.image.manipulation.gaussianKernel.html"
+                        title="next chapter">SamPy.image.manipulation.gaussianKernel</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.image.manipulation.frebin.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="sampy-image-manipulation-frebin">
+<h1>SamPy.image.manipulation.frebin<a class="headerlink" href="#sampy-image-manipulation-frebin" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="SamPy.image.manipulation.frebin">
+<tt class="descclassname">SamPy.image.manipulation.</tt><tt class="descname">frebin</tt><big>(</big><em>image</em>, <em>nsout</em>, <em>nlout=1</em>, <em>total=False</em><big>)</big><a class="headerlink" href="#SamPy.image.manipulation.frebin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shrink or expand the size of an array an arbitary amount using interpolation.
+Conserves flux by ensuring that each input pixel is equally represented
+in the output array.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Todo :</th><td class="field-body"><p class="first">one could do the binning faster if old and new outputs are modulo 0</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Note :</th><td class="field-body"><p class="first">modelled after the IDL code frebin.pro, so this may not be the fastest solution</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>image</strong> &#8211; input image, 1-d or 2-d ndarray</li>
+<li><strong>nsout</strong> &#8211; number of samples in the output image, numeric scalar</li>
+<li><strong>nlout</strong> &#8211; number of lines (ydir) in the output image, numeric scalar</li>
+<li><strong>total</strong> &#8211; Use of the total conserves surface flux. If True, the output pixels
+will be the sum of pixels within the appropriate box of the input image.
+Otherwise they will be the average.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">binned array</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">ndarray</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.image.manipulation.gaussianKernel.html" title="SamPy.image.manipulation.gaussianKernel"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.image.manipulation.congrid.html" title="SamPy.image.manipulation.congrid"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.image.html" >image Package</a> &raquo;</li>
+          <li><a href="SamPy.image.manipulation.html" >SamPy.image.manipulation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

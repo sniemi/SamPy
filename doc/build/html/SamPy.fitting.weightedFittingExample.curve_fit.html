@@ -1,0 +1,180 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.fitting.weightedFittingExample.curve_fit &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="SamPy.fitting.weightedFittingExample" href="SamPy.fitting.weightedFittingExample.html" />
+    <link rel="next" title="SamPy.fitting.weightedFittingExample.first_order" href="SamPy.fitting.weightedFittingExample.first_order.html" />
+    <link rel="prev" title="SamPy.fitting.weightedFittingExample.third_order" href="SamPy.fitting.weightedFittingExample.third_order.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.fitting.weightedFittingExample.first_order.html" title="SamPy.fitting.weightedFittingExample.first_order"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.fitting.weightedFittingExample.third_order.html" title="SamPy.fitting.weightedFittingExample.third_order"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.fitting.html" >fitting Package</a> &raquo;</li>
+          <li><a href="SamPy.fitting.weightedFittingExample.html" accesskey="U">SamPy.fitting.weightedFittingExample</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.fitting.weightedFittingExample.third_order.html"
+                        title="previous chapter">SamPy.fitting.weightedFittingExample.third_order</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.fitting.weightedFittingExample.first_order.html"
+                        title="next chapter">SamPy.fitting.weightedFittingExample.first_order</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.fitting.weightedFittingExample.curve_fit.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="sampy-fitting-weightedfittingexample-curve-fit">
+<h1>SamPy.fitting.weightedFittingExample.curve_fit<a class="headerlink" href="#sampy-fitting-weightedfittingexample-curve-fit" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="SamPy.fitting.weightedFittingExample.curve_fit">
+<tt class="descclassname">SamPy.fitting.weightedFittingExample.</tt><tt class="descname">curve_fit</tt><big>(</big><em>f</em>, <em>xdata</em>, <em>ydata</em>, <em>p0=None</em>, <em>sigma=None</em>, <em>**kw</em><big>)</big><a class="headerlink" href="#SamPy.fitting.weightedFittingExample.curve_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Use non-linear least squares to fit a function, f, to data.</p>
+<p>Assumes <tt class="docutils literal"><span class="pre">ydata</span> <span class="pre">=</span> <span class="pre">f(xdata,</span> <span class="pre">*params)</span> <span class="pre">+</span> <span class="pre">eps</span></tt></p>
+<dl class="docutils">
+<dt>f <span class="classifier-delimiter">:</span> <span class="classifier">callable</span></dt>
+<dd>The model function, f(x, ...).  It must take the independent
+variable as the first argument and the parameters to fit as
+separate remaining arguments.</dd>
+<dt>xdata <span class="classifier-delimiter">:</span> <span class="classifier">An N-length sequence or an (k,N)-shaped array</span></dt>
+<dd>for functions with k predictors.
+The independent variable where the data is measured.</dd>
+<dt>ydata <span class="classifier-delimiter">:</span> <span class="classifier">N-length sequence</span></dt>
+<dd>The dependent data &#8212; nominally f(xdata, ...)</dd>
+<dt>p0 <span class="classifier-delimiter">:</span> <span class="classifier">None, scalar, or M-length sequence</span></dt>
+<dd>Initial guess for the parameters.  If None, then the initial
+values will all be 1 (if the number of parameters for the function
+can be determined using introspection, otherwise a ValueError
+is raised).</dd>
+<dt>sigma <span class="classifier-delimiter">:</span> <span class="classifier">None or N-length sequence</span></dt>
+<dd>If not None, it represents the standard-deviation of ydata.
+This vector, if given, will be used as weights in the
+least-squares problem.</dd>
+</dl>
+<dl class="docutils">
+<dt>popt <span class="classifier-delimiter">:</span> <span class="classifier">array</span></dt>
+<dd>Optimal values for the parameters so that the sum of the squared error
+of <tt class="docutils literal"><span class="pre">f(xdata,</span> <span class="pre">*popt)</span> <span class="pre">-</span> <span class="pre">ydata</span></tt> is minimized</dd>
+<dt>pcov <span class="classifier-delimiter">:</span> <span class="classifier">2d array</span></dt>
+<dd>The estimated covariance of popt.  The diagonals provide the variance
+of the parameter estimate.</dd>
+</dl>
+<p>The algorithm uses the Levenburg-Marquardt algorithm:
+scipy.optimize.leastsq. Additional keyword arguments are passed directly
+to that algorithm.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">curve_fit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">b</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">c</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">50</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">yn</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="mf">0.2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">popt</span><span class="p">,</span> <span class="n">pcov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">yn</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.fitting.weightedFittingExample.first_order.html" title="SamPy.fitting.weightedFittingExample.first_order"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.fitting.weightedFittingExample.third_order.html" title="SamPy.fitting.weightedFittingExample.third_order"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.fitting.html" >fitting Package</a> &raquo;</li>
+          <li><a href="SamPy.fitting.weightedFittingExample.html" >SamPy.fitting.weightedFittingExample</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

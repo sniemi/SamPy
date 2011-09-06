@@ -1,0 +1,170 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.image.manipulation &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="image Package" href="SamPy.image.html" />
+    <link rel="next" title="SamPy.image.manipulation.blurImage" href="SamPy.image.manipulation.blurImage.html" />
+    <link rel="prev" title="SamPy.image.ImageConvolution.ifft2" href="SamPy.image.ImageConvolution.ifft2.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.image.manipulation.blurImage.html" title="SamPy.image.manipulation.blurImage"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.image.ImageConvolution.ifft2.html" title="SamPy.image.ImageConvolution.ifft2"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.image.html" accesskey="U">image Package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.image.ImageConvolution.ifft2.html"
+                        title="previous chapter">SamPy.image.ImageConvolution.ifft2</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.image.manipulation.blurImage.html"
+                        title="next chapter">SamPy.image.manipulation.blurImage</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.image.manipulation.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-SamPy.image.manipulation">
+<span id="sampy-image-manipulation"></span><h1>SamPy.image.manipulation<a class="headerlink" href="#module-SamPy.image.manipulation" title="Permalink to this headline">¶</a></h1>
+<p>Basic image manipulation algorithms such as Gaussian smoothing and free rebinning.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">NumPy</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">SciPy</td>
+</tr>
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:sniemi&#37;&#52;&#48;unc&#46;edu">sniemi<span>&#64;</span>unc<span>&#46;</span>edu</a></td>
+</tr>
+<tr class="field"><th class="field-name">version:</th><td class="field-body">0.1</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Functions</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="SamPy.image.manipulation.blurImage.html#SamPy.image.manipulation.blurImage" title="SamPy.image.manipulation.blurImage"><tt class="xref py py-obj docutils literal"><span class="pre">blurImage</span></tt></a>(im,&nbsp;n[,&nbsp;ny])</td>
+<td>blurs the image by convolving with a gaussian kernel of typical</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.image.manipulation.congrid.html#SamPy.image.manipulation.congrid" title="SamPy.image.manipulation.congrid"><tt class="xref py py-obj docutils literal"><span class="pre">congrid</span></tt></a>(a,&nbsp;newdims[,&nbsp;method,&nbsp;centre,&nbsp;minusone])</td>
+<td>Arbitrary resampling of source array to new dimension sizes.</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.image.manipulation.frebin.html#SamPy.image.manipulation.frebin" title="SamPy.image.manipulation.frebin"><tt class="xref py py-obj docutils literal"><span class="pre">frebin</span></tt></a>(image,&nbsp;nsout[,&nbsp;nlout,&nbsp;total])</td>
+<td>Shrink or expand the size of an array an arbitary amount using interpolation.</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.image.manipulation.gaussianKernel.html#SamPy.image.manipulation.gaussianKernel" title="SamPy.image.manipulation.gaussianKernel"><tt class="xref py py-obj docutils literal"><span class="pre">gaussianKernel</span></tt></a>(size[,&nbsp;sizey])</td>
+<td>Returns a normalized 2D gauss kernel array for convolutions.</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.image.manipulation.rebin.html#SamPy.image.manipulation.rebin" title="SamPy.image.manipulation.rebin"><tt class="xref py py-obj docutils literal"><span class="pre">rebin</span></tt></a>(a,&nbsp;*args)</td>
+<td>rebin ndarray data into a smaller ndarray of the same rank whose dimensions</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.image.manipulation.rebinFactor.html#SamPy.image.manipulation.rebinFactor" title="SamPy.image.manipulation.rebinFactor"><tt class="xref py py-obj docutils literal"><span class="pre">rebinFactor</span></tt></a>(a,&nbsp;newshape)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.image.manipulation.blurImage.html" title="SamPy.image.manipulation.blurImage"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.image.ImageConvolution.ifft2.html" title="SamPy.image.ImageConvolution.ifft2"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.image.html" >image Package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

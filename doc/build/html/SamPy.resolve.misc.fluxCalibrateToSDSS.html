@@ -1,0 +1,166 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.resolve.misc.fluxCalibrateToSDSS &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="SamPy.resolve.misc" href="SamPy.resolve.misc.html" />
+    <link rel="next" title="SamPy.resolve.misc.generateFileLists" href="SamPy.resolve.misc.generateFileLists.html" />
+    <link rel="prev" title="SamPy.resolve.misc.findSlitsDirectImage" href="SamPy.resolve.misc.findSlitsDirectImage.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.resolve.misc.generateFileLists.html" title="SamPy.resolve.misc.generateFileLists"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.resolve.misc.findSlitsDirectImage.html" title="SamPy.resolve.misc.findSlitsDirectImage"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.resolve.html" >resolve Package</a> &raquo;</li>
+          <li><a href="SamPy.resolve.misc.html" accesskey="U">SamPy.resolve.misc</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.resolve.misc.findSlitsDirectImage.html"
+                        title="previous chapter">SamPy.resolve.misc.findSlitsDirectImage</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.resolve.misc.generateFileLists.html"
+                        title="next chapter">SamPy.resolve.misc.generateFileLists</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.resolve.misc.fluxCalibrateToSDSS.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-SamPy.resolve.misc.fluxCalibrateToSDSS">
+<span id="sampy-resolve-misc-fluxcalibratetosdss"></span><h1>SamPy.resolve.misc.fluxCalibrateToSDSS<a class="headerlink" href="#module-SamPy.resolve.misc.fluxCalibrateToSDSS" title="Permalink to this headline">¶</a></h1>
+<p>This script can be used to flux calibrate an image slicer 2D spectra to SDSS one (of the same target).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">PyfITS</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">NumPy</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">SciPy</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">matplotlib</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">SamPy</td>
+</tr>
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:sniemi&#37;&#52;&#48;unc&#46;edu">sniemi<span>&#64;</span>unc<span>&#46;</span>edu</a></td>
+</tr>
+<tr class="field"><th class="field-name">version:</th><td class="field-body">0.3</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="SamPy.resolve.misc.fluxCalibrateToSDSS.OptionParser.html#SamPy.resolve.misc.fluxCalibrateToSDSS.OptionParser" title="SamPy.resolve.misc.fluxCalibrateToSDSS.OptionParser"><tt class="xref py py-obj docutils literal"><span class="pre">OptionParser</span></tt></a>([usage,&nbsp;option_list,&nbsp;...])</td>
+<td>Class attributes:</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.resolve.misc.fluxCalibrateToSDSS.calibrateToSDSS.html#SamPy.resolve.misc.fluxCalibrateToSDSS.calibrateToSDSS" title="SamPy.resolve.misc.fluxCalibrateToSDSS.calibrateToSDSS"><tt class="xref py py-obj docutils literal"><span class="pre">calibrateToSDSS</span></tt></a>(configfile,&nbsp;debug[,&nbsp;section])</td>
+<td>This class can be used to flux calibrate an image</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.resolve.misc.generateFileLists.html" title="SamPy.resolve.misc.generateFileLists"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.resolve.misc.findSlitsDirectImage.html" title="SamPy.resolve.misc.findSlitsDirectImage"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.resolve.html" >resolve Package</a> &raquo;</li>
+          <li><a href="SamPy.resolve.misc.html" >SamPy.resolve.misc</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

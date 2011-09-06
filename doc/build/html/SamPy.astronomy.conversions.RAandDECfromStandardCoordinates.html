@@ -1,0 +1,161 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.astronomy.conversions.RAandDECfromStandardCoordinates &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="SamPy.astronomy.conversions" href="SamPy.astronomy.conversions.html" />
+    <link rel="next" title="SamPy.astronomy.conversions.angstromToHertz" href="SamPy.astronomy.conversions.angstromToHertz.html" />
+    <link rel="prev" title="SamPy.astronomy.conversions.Luminosity" href="SamPy.astronomy.conversions.Luminosity.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.conversions.angstromToHertz.html" title="SamPy.astronomy.conversions.angstromToHertz"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.conversions.Luminosity.html" title="SamPy.astronomy.conversions.Luminosity"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.astronomy.html" >astronomy Package</a> &raquo;</li>
+          <li><a href="SamPy.astronomy.conversions.html" accesskey="U">SamPy.astronomy.conversions</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.astronomy.conversions.Luminosity.html"
+                        title="previous chapter">SamPy.astronomy.conversions.Luminosity</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.astronomy.conversions.angstromToHertz.html"
+                        title="next chapter">SamPy.astronomy.conversions.angstromToHertz</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.astronomy.conversions.RAandDECfromStandardCoordinates.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="sampy-astronomy-conversions-raanddecfromstandardcoordinates">
+<h1>SamPy.astronomy.conversions.RAandDECfromStandardCoordinates<a class="headerlink" href="#sampy-astronomy-conversions-raanddecfromstandardcoordinates" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="SamPy.astronomy.conversions.RAandDECfromStandardCoordinates">
+<tt class="descclassname">SamPy.astronomy.conversions.</tt><tt class="descname">RAandDECfromStandardCoordinates</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#SamPy.astronomy.conversions.RAandDECfromStandardCoordinates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts Standard Coordinates on tangent plane to RA and DEC on the sky.
+data dictionary must also contain the CD matrix.
+Full equations:</p>
+<div class="math">
+<p><img src="_images/math/2a4930d128705ac88ba95f6000732c83ee9f48cf.png" alt="\xi  &amp; = cdmatrix(0,0) * (x - crpix(0)) + cdmatrix(0,1) * (y - crpix(1)) \\
+\eta &amp; = cdmatrix(1,0) * (x - crpix(0)) + cdmatrix(1,1) * (y - crpix(1))" /></p>
+</div><p>then</p>
+<div class="math">
+<p><img src="_images/math/33e58e71309f6e75592f670c0f758b58bcca3df5.png" alt="ra  &amp;= atan2(\xi, \cos(dec0) - \eta * \sin(dec0)) + ra0 \\
+dec &amp;= atan2(\eta * \cos(dec0) + \sin(dec0),
+         \sqrt{((\cos(dec0) - \eta * \sin(dec0))^{2} + \xi^{2})})" /></p>
+</div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> (<em>dictionary</em>) &#8211; should contain standard coordinates X, Y, RA and DEC of the centre point, and the CD matrix.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">RA and DEC</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dictionary</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.conversions.angstromToHertz.html" title="SamPy.astronomy.conversions.angstromToHertz"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.conversions.Luminosity.html" title="SamPy.astronomy.conversions.Luminosity"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.astronomy.html" >astronomy Package</a> &raquo;</li>
+          <li><a href="SamPy.astronomy.conversions.html" >SamPy.astronomy.conversions</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

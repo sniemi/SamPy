@@ -1,0 +1,223 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.stis.STISCCDSpectroscopyFlat &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="stis Package" href="SamPy.stis.html" />
+    <link rel="next" title="wrapper Package" href="SamPy.wrapper.html" />
+    <link rel="prev" title="SamPy.stis.STISCCDImagingFlats" href="SamPy.stis.STISCCDImagingFlats.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.wrapper.html" title="wrapper Package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.stis.STISCCDImagingFlats.html" title="SamPy.stis.STISCCDImagingFlats"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.stis.html" accesskey="U">stis Package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.stis.STISCCDImagingFlats.html"
+                        title="previous chapter">SamPy.stis.STISCCDImagingFlats</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.wrapper.html"
+                        title="next chapter">wrapper Package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.stis.STISCCDSpectroscopyFlat.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-SamPy.stis.STISCCDSpectroscopyFlat">
+<span id="sampy-stis-stisccdspectroscopyflat"></span><h1>SamPy.stis.STISCCDSpectroscopyFlat<a class="headerlink" href="#module-SamPy.stis.STISCCDSpectroscopyFlat" title="Permalink to this headline">¶</a></h1>
+<p>Creates STIS Spectroscopic pixel-to-pixel flat fields from RAW data.
+Uses spline fits after dust motes, bad pixels, etc. have been masked
+to fit and to remove the low frequency structure. The data are divided
+by each fit to normalize the data before it is combined and co-added with
+appropriate weighting of flux errors.</p>
+<p>Both 50CCD and 52x2 data can be used. For 52x2 row fitting is not
+done currently due to emission lines in the lamp spectrum.</p>
+<p>For more information see STIS ISR 1999-06 by Bohlin and TIR 2010 by Niemi.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">Python 2.5 or later (not 3.x compatible however)</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">NumPy</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">PyFITS</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">SciPy</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">matplotlib</td>
+</tr>
+</tbody>
+</table>
+<p>TESTED:
+Python 2.5.4
+NumPy 1.4.0.dev7576
+SciPy
+PyFITS 2.2.2
+matplotlib 1.0.svn</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">date:</th><td class="field-body">created on November 23, 2009</td>
+</tr>
+<tr class="field"><th class="field-name">version:</th><td class="field-body">0.6</td>
+</tr>
+</tbody>
+</table>
+<p>VERSION HISTORY:
+0.1: testing version (SMN)
+0.2: test release (SMN)
+0.3: first full working version (SMN)
+0.4: modified FITS output to comply with CDBS rules (SMN)
+0.5: improved documentation (SMN)
+0.6: fixed and imporved _badspot function (SMN)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+<tr class="field"><th class="field-name">organization:</th><td class="field-body">STScI</td>
+</tr>
+<tr class="field"><th class="field-name">contact:</th><td class="field-body"><a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a></td>
+</tr>
+<tr class="field"><th class="field-name">todo:</th><td class="field-body">For improved median filter, one could use scipy.ndimage.filters.median_filter</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Functions</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="SamPy.stis.STISCCDSpectroscopyFlat.checkZeroArguments.html#SamPy.stis.STISCCDSpectroscopyFlat.checkZeroArguments" title="SamPy.stis.STISCCDSpectroscopyFlat.checkZeroArguments"><tt class="xref py py-obj docutils literal"><span class="pre">checkZeroArguments</span></tt></a>(opts)</td>
+<td>Checks if no command line arguments were given.</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.stis.STISCCDSpectroscopyFlat.process_args.html#SamPy.stis.STISCCDSpectroscopyFlat.process_args" title="SamPy.stis.STISCCDSpectroscopyFlat.process_args"><tt class="xref py py-obj docutils literal"><span class="pre">process_args</span></tt></a>([just_print_help])</td>
+<td>Processes and parses the command line arguments.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="SamPy.stis.STISCCDSpectroscopyFlat.Circle.html#SamPy.stis.STISCCDSpectroscopyFlat.Circle" title="SamPy.stis.STISCCDSpectroscopyFlat.Circle"><tt class="xref py py-obj docutils literal"><span class="pre">Circle</span></tt></a>(xy,&nbsp;**kwargs[,&nbsp;radius])</td>
+<td>A circle patch.</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.stis.STISCCDSpectroscopyFlat.Findfiles.html#SamPy.stis.STISCCDSpectroscopyFlat.Findfiles" title="SamPy.stis.STISCCDSpectroscopyFlat.Findfiles"><tt class="xref py py-obj docutils literal"><span class="pre">Findfiles</span></tt></a>(input,&nbsp;output[,&nbsp;extension])</td>
+<td>Finds all files that are suitable for making a STIS CCD</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.stis.STISCCDSpectroscopyFlat.MakeFlat.html#SamPy.stis.STISCCDSpectroscopyFlat.MakeFlat" title="SamPy.stis.STISCCDSpectroscopyFlat.MakeFlat"><tt class="xref py py-obj docutils literal"><span class="pre">MakeFlat</span></tt></a>(input,&nbsp;output)</td>
+<td>This class can be used to generate a pixel-to-pixel flat field</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.stis.STISCCDSpectroscopyFlat.PrepareFiles.html#SamPy.stis.STISCCDSpectroscopyFlat.PrepareFiles" title="SamPy.stis.STISCCDSpectroscopyFlat.PrepareFiles"><tt class="xref py py-obj docutils literal"><span class="pre">PrepareFiles</span></tt></a>(input,&nbsp;output)</td>
+<td>Prepares files; modified header keywords.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.wrapper.html" title="wrapper Package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.stis.STISCCDImagingFlats.html" title="SamPy.stis.STISCCDImagingFlats"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.stis.html" >stis Package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

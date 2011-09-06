@@ -1,0 +1,142 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.image.transform.Image &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="SamPy.image.transform" href="SamPy.image.transform.html" />
+    <link rel="next" title="SamPy.image.transform.homogeneous" href="SamPy.image.transform.homogeneous.html" />
+    <link rel="prev" title="SamPy.image.transform.makeCenteredRotation" href="SamPy.image.transform.makeCenteredRotation.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.image.transform.homogeneous.html" title="SamPy.image.transform.homogeneous"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.image.transform.makeCenteredRotation.html" title="SamPy.image.transform.makeCenteredRotation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.image.html" >image Package</a> &raquo;</li>
+          <li><a href="SamPy.image.transform.html" accesskey="U">SamPy.image.transform</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.image.transform.makeCenteredRotation.html"
+                        title="previous chapter">SamPy.image.transform.makeCenteredRotation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.image.transform.homogeneous.html"
+                        title="next chapter">SamPy.image.transform.homogeneous</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.image.transform.Image.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="sampy-image-transform-image">
+<h1>SamPy.image.transform.Image<a class="headerlink" href="#sampy-image-transform-image" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="SamPy.image.transform.Image">
+<tt class="descclassname">SamPy.image.transform.</tt><tt class="descname">Image</tt><big>(</big><em>input</em>, <em>tform</em>, <em>output_range='same'</em><big>)</big><a class="headerlink" href="#SamPy.image.transform.Image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform the input image using a 3x3 transform.  The array tform should
+specify the 3x3 transform from input to output coordinates, a forward
+mapping.  This matrix needs to have an inverse.</p>
+<dl class="docutils">
+<dt>output_range should be one of:</dt>
+<dd>&#8220;same&#8221; - match the range from the input image
+&#8220;auto&#8221; - determine a range by applying the transform to the corners of the input image
+ndarray - a 2x2 numpy array like [(x1, y1), (x2, y2)]</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.image.transform.homogeneous.html" title="SamPy.image.transform.homogeneous"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.image.transform.makeCenteredRotation.html" title="SamPy.image.transform.makeCenteredRotation"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.image.html" >image Package</a> &raquo;</li>
+          <li><a href="SamPy.image.transform.html" >SamPy.image.transform</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

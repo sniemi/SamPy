@@ -1,0 +1,145 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.astronomy.differentialfunctions.diff_function_log_binning &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="SamPy.astronomy.differentialfunctions" href="SamPy.astronomy.differentialfunctions.html" />
+    <link rel="next" title="SamPy.astronomy.differentialfunctions.mass_function" href="SamPy.astronomy.differentialfunctions.mass_function.html" />
+    <link rel="prev" title="SamPy.astronomy.differentialfunctions.diffFunctionLogBinning" href="SamPy.astronomy.differentialfunctions.diffFunctionLogBinning.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.differentialfunctions.mass_function.html" title="SamPy.astronomy.differentialfunctions.mass_function"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.differentialfunctions.diffFunctionLogBinning.html" title="SamPy.astronomy.differentialfunctions.diffFunctionLogBinning"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.astronomy.html" >astronomy Package</a> &raquo;</li>
+          <li><a href="SamPy.astronomy.differentialfunctions.html" accesskey="U">SamPy.astronomy.differentialfunctions</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.astronomy.differentialfunctions.diffFunctionLogBinning.html"
+                        title="previous chapter">SamPy.astronomy.differentialfunctions.diffFunctionLogBinning</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.astronomy.differentialfunctions.mass_function.html"
+                        title="next chapter">SamPy.astronomy.differentialfunctions.mass_function</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.astronomy.differentialfunctions.diff_function_log_binning.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="sampy-astronomy-differentialfunctions-diff-function-log-binning">
+<h1>SamPy.astronomy.differentialfunctions.diff_function_log_binning<a class="headerlink" href="#sampy-astronomy-differentialfunctions-diff-function-log-binning" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="SamPy.astronomy.differentialfunctions.diff_function_log_binning">
+<tt class="descclassname">SamPy.astronomy.differentialfunctions.</tt><tt class="descname">diff_function_log_binning</tt><big>(</big><em>data</em>, <em>column=0</em>, <em>log=False</em>, <em>wgth=None</em>, <em>mmax=15.5</em>, <em>mmin=9.0</em>, <em>nbins=35</em>, <em>h=0.7</em>, <em>volume=250</em>, <em>nvols=1</em>, <em>verbose=False</em><big>)</big><a class="headerlink" href="#SamPy.astronomy.differentialfunctions.diff_function_log_binning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates a differential function from data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Warning :</th><td class="field-body">One should not use this, unless the number of
+systems for each bin is used. One should use diffFunctionLogBinning
+instead, which is probably faster as it uses NumPy.histogram
+rather than my own algorithm.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.differentialfunctions.mass_function.html" title="SamPy.astronomy.differentialfunctions.mass_function"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.differentialfunctions.diffFunctionLogBinning.html" title="SamPy.astronomy.differentialfunctions.diffFunctionLogBinning"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.astronomy.html" >astronomy Package</a> &raquo;</li>
+          <li><a href="SamPy.astronomy.differentialfunctions.html" >SamPy.astronomy.differentialfunctions</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

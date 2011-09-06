@@ -1,0 +1,144 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.bolshoi.plotdarkmatterMF2.plotMassFunction &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="SamPy.bolshoi.plotdarkmatterMF2" href="SamPy.bolshoi.plotdarkmatterMF2.html" />
+    <link rel="next" title="SamPy.bolshoi.plotMassRatios" href="SamPy.bolshoi.plotMassRatios.html" />
+    <link rel="prev" title="SamPy.bolshoi.plotdarkmatterMF2.plotMassFunction" href="" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.bolshoi.plotMassRatios.html" title="SamPy.bolshoi.plotMassRatios"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="#" title="SamPy.bolshoi.plotdarkmatterMF2.plotMassFunction"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.bolshoi.html" >bolshoi Package</a> &raquo;</li>
+          <li><a href="SamPy.bolshoi.plotdarkmatterMF2.html" accesskey="U">SamPy.bolshoi.plotdarkmatterMF2</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href=""
+                        title="previous chapter">SamPy.bolshoi.plotdarkmatterMF2.plotMassFunction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.bolshoi.plotMassRatios.html"
+                        title="next chapter">SamPy.bolshoi.plotMassRatios</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.bolshoi.plotdarkmatterMF2.plotMassFunction.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="sampy-bolshoi-plotdarkmattermf2-plotmassfunction">
+<h1>SamPy.bolshoi.plotdarkmatterMF2.plotMassFunction<a class="headerlink" href="#sampy-bolshoi-plotdarkmattermf2-plotmassfunction" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="SamPy.bolshoi.plotdarkmatterMF2.plotMassFunction">
+<tt class="descclassname">SamPy.bolshoi.plotdarkmatterMF2.</tt><tt class="descname">plotMassFunction</tt><big>(</big><em>simus</em>, <em>sheth</em>, <em>outdir</em>, <em>h</em>, <em>simuPath</em>, <em>simuDB</em>, <em>noPhantoms=True</em><big>)</big><a class="headerlink" href="#SamPy.bolshoi.plotdarkmatterMF2.plotMassFunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function plots dark matter halo mass functions from
+file(s) given in simus. The usual usage is that simus
+contain a list of file names. These files should contain
+dark matter halo masses derived from the Bolshoi isotree
+files.</p>
+<p>This function uses a fudge factor = 2.0 because
+Jenkins et al. paper
+(<a class="reference external" href="http://adsabs.harvard.edu/abs/2001MNRAS.321..372J">http://adsabs.harvard.edu/abs/2001MNRAS.321..372J</a>)
+has sqrt(2./pi) while
+Rachel&#8217;s code has 1/(sqrt(2*pi))
+The ratio of these two definitions is the fudge factor.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.bolshoi.plotMassRatios.html" title="SamPy.bolshoi.plotMassRatios"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="#" title="SamPy.bolshoi.plotdarkmatterMF2.plotMassFunction"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.bolshoi.html" >bolshoi Package</a> &raquo;</li>
+          <li><a href="SamPy.bolshoi.plotdarkmatterMF2.html" >SamPy.bolshoi.plotdarkmatterMF2</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

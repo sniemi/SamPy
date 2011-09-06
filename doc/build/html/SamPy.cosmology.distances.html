@@ -1,0 +1,167 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.cosmology.distances &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="cosmology Package" href="SamPy.cosmology.html" />
+    <link rel="next" title="SamPy.cosmology.distances.cosmocalc" href="SamPy.cosmology.distances.cosmocalc.html" />
+    <link rel="prev" title="SamPy.cosmology.powerspec.powerspec" href="SamPy.cosmology.powerspec.powerspec.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.cosmology.distances.cosmocalc.html" title="SamPy.cosmology.distances.cosmocalc"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.cosmology.powerspec.powerspec.html" title="SamPy.cosmology.powerspec.powerspec"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.cosmology.html" accesskey="U">cosmology Package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.cosmology.powerspec.powerspec.html"
+                        title="previous chapter">SamPy.cosmology.powerspec.powerspec</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.cosmology.distances.cosmocalc.html"
+                        title="next chapter">SamPy.cosmology.distances.cosmocalc</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.cosmology.distances.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-SamPy.cosmology.distances">
+<span id="sampy-cosmology-distances"></span><h1>SamPy.cosmology.distances<a class="headerlink" href="#module-SamPy.cosmology.distances" title="Permalink to this headline">¶</a></h1>
+<p>Functions related cosmology such as diameter and proper motion distances.</p>
+<p>Plot some distance measures versus redshift and omega_M.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">CosmoloPy</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">cosmocalc</td>
+</tr>
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Functions</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="SamPy.cosmology.distances.cosmocalc.html#SamPy.cosmology.distances.cosmocalc" title="SamPy.cosmology.distances.cosmocalc"><tt class="xref py py-obj docutils literal"><span class="pre">cosmocalc</span></tt></a>(z[,&nbsp;H0,&nbsp;WM,&nbsp;WV])</td>
+<td>Calculate useful values for the supplied cosmology.</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.cosmology.distances.getDiameterDistances.html#SamPy.cosmology.distances.getDiameterDistances" title="SamPy.cosmology.distances.getDiameterDistances"><tt class="xref py py-obj docutils literal"><span class="pre">getDiameterDistances</span></tt></a>(data[,&nbsp;redshift])</td>
+<td>Calculates a diameter distance in kpc / arc seconds from data for all unique redshifts.</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.cosmology.distances.plot_DA.html#SamPy.cosmology.distances.plot_DA" title="SamPy.cosmology.distances.plot_DA"><tt class="xref py py-obj docutils literal"><span class="pre">plot_DA</span></tt></a>(filename)</td>
+<td>The dimensionless angular diameter distance DA/DH.</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.cosmology.distances.plot_DM.html#SamPy.cosmology.distances.plot_DM" title="SamPy.cosmology.distances.plot_DM"><tt class="xref py py-obj docutils literal"><span class="pre">plot_DM</span></tt></a>(filename)</td>
+<td>The dimensionless proper motion distance DM/DH.</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.cosmology.distances.plot_dist.html#SamPy.cosmology.distances.plot_dist" title="SamPy.cosmology.distances.plot_dist"><tt class="xref py py-obj docutils literal"><span class="pre">plot_dist</span></tt></a>(z,&nbsp;dz,&nbsp;om,&nbsp;dom,&nbsp;dist,&nbsp;dh,&nbsp;name,&nbsp;...)</td>
+<td>Make a 2-D plot of a distance versus redshift (x) and matter density (y).</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.cosmology.distances.plot_dist_ony.html#SamPy.cosmology.distances.plot_dist_ony" title="SamPy.cosmology.distances.plot_dist_ony"><tt class="xref py py-obj docutils literal"><span class="pre">plot_dist_ony</span></tt></a>(z,&nbsp;dz,&nbsp;om,&nbsp;dom,&nbsp;dist,&nbsp;dh,&nbsp;...)</td>
+<td>Make a 2-D plot of matter density versus redshift (x) and distance (y)</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.cosmology.distances.cosmocalc.html" title="SamPy.cosmology.distances.cosmocalc"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.cosmology.powerspec.powerspec.html" title="SamPy.cosmology.powerspec.powerspec"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.cosmology.html" >cosmology Package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

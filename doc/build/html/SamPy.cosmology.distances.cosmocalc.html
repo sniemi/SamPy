@@ -1,0 +1,194 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.cosmology.distances.cosmocalc &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="SamPy.cosmology.distances" href="SamPy.cosmology.distances.html" />
+    <link rel="next" title="SamPy.cosmology.distances.getDiameterDistances" href="SamPy.cosmology.distances.getDiameterDistances.html" />
+    <link rel="prev" title="SamPy.cosmology.distances.plot_dist_ony" href="SamPy.cosmology.distances.plot_dist_ony.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.cosmology.distances.getDiameterDistances.html" title="SamPy.cosmology.distances.getDiameterDistances"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.cosmology.distances.plot_dist_ony.html" title="SamPy.cosmology.distances.plot_dist_ony"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.cosmology.html" >cosmology Package</a> &raquo;</li>
+          <li><a href="SamPy.cosmology.distances.html" accesskey="U">SamPy.cosmology.distances</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.cosmology.distances.plot_dist_ony.html"
+                        title="previous chapter">SamPy.cosmology.distances.plot_dist_ony</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.cosmology.distances.getDiameterDistances.html"
+                        title="next chapter">SamPy.cosmology.distances.getDiameterDistances</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.cosmology.distances.cosmocalc.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="sampy-cosmology-distances-cosmocalc">
+<h1>SamPy.cosmology.distances.cosmocalc<a class="headerlink" href="#sampy-cosmology-distances-cosmocalc" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="SamPy.cosmology.distances.cosmocalc">
+<tt class="descclassname">SamPy.cosmology.distances.</tt><tt class="descname">cosmocalc</tt><big>(</big><em>z</em>, <em>H0=71</em>, <em>WM=0.27</em>, <em>WV=None</em><big>)</big><a class="headerlink" href="#SamPy.cosmology.distances.cosmocalc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate useful values for the supplied cosmology.</p>
+<p>This routine returns a dictionary of values in the form <tt class="docutils literal"><span class="pre">&lt;name&gt;:</span> <span class="pre">&lt;value&gt;</span></tt>,
+where the values are supplied in &#8220;natural&#8221; units for cosmology, e.g. 1/H0.
+In addition various useful unit conversions are done and stored in the
+dictionary as <tt class="docutils literal"><span class="pre">&lt;name&gt;_&lt;unit&gt;:</span> <span class="pre">&lt;value&gt;</span></tt>.  E.g. angular size distance:</p>
+<div class="highlight-python"><pre>'DA': 0.38250549415474988,
+'DA_Gyr': 5.2678010166833023,
+'DA_Mpc': 1615.1022857909447,
+'DA_cm': 4.9836849147807571e+27</pre>
+</div>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cosmocalc</span> <span class="kn">import</span> <span class="n">cosmocalc</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">cosmocalc</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">H0</span><span class="o">=</span><span class="mi">75</span><span class="p">,</span> <span class="n">WM</span><span class="o">=.</span><span class="mi">25</span><span class="p">))</span>
+<span class="go">{&#39;DA&#39;: 0.39103776375786625,</span>
+<span class="go"> &#39;DA_Gyr&#39;: 5.0980896720325548,</span>
+<span class="go"> &#39;DA_Mpc&#39;: 1563.0689649039205,</span>
+<span class="go"> &#39;DA_cm&#39;: 4.8231268630387788e+27,</span>
+<span class="go"> &#39;DCMR&#39;: 1.564151055031465,</span>
+<span class="go"> &#39;DCMR_Gyr&#39;: 20.392358688130219,</span>
+<span class="go"> &#39;DCMR_Mpc&#39;: 6252.2758596156818,</span>
+<span class="go"> &#39;DCMR_cm&#39;: 1.9292507452155115e+28,</span>
+<span class="go"> &#39;DL&#39;: 6.25660422012586,</span>
+<span class="go"> &#39;DL_Gyr&#39;: 81.569434752520877,</span>
+<span class="go"> &#39;DL_Mpc&#39;: 25009.103438462727,</span>
+<span class="go"> &#39;DL_cm&#39;: 7.717002980862046e+28,</span>
+<span class="go"> &#39;DTT&#39;: 0.84826379084317027,</span>
+<span class="go"> &#39;DTT_Gyr&#39;: 11.059097795819358,</span>
+<span class="go"> &#39;H0&#39;: 75,</span>
+<span class="go"> &#39;PS_cm&#39;: 2.3383178917293232e+22,</span>
+<span class="go"> &#39;PS_kpc&#39;: 7.5779721961095019,</span>
+<span class="go"> &#39;VCM&#39;: 1.2756009121294902,</span>
+<span class="go"> &#39;VCM_Gpc3&#39;: 1023.7714254161302,</span>
+<span class="go"> &#39;WK&#39;: 0.0,</span>
+<span class="go"> &#39;WM&#39;: 0.25,</span>
+<span class="go"> &#39;WR&#39;: 7.4044444444444448e-05,</span>
+<span class="go"> &#39;WV&#39;: 0.74992595555555552,</span>
+<span class="go"> &#39;age&#39;: 1.0133755371756261,</span>
+<span class="go"> &#39;age_Gyr&#39;: 13.211714670004362,</span>
+<span class="go"> &#39;z&#39;: 3,</span>
+<span class="go"> &#39;zage&#39;: 0.16511174633245579,</span>
+<span class="go"> &#39;zage_Gyr&#39;: 2.1526168741850036}</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>z</strong> &#8211; redshift</li>
+<li><strong>H0</strong> &#8211; Hubble constant (default = 71)</li>
+<li><strong>WM</strong> &#8211; Omega matter (default = 0.27)</li>
+<li><strong>WV</strong> &#8211; Omega vacuum (default = 1.0 - WM - 0.4165/(H0*H0))</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dictionary of cosmology values (name_unit = value)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.cosmology.distances.getDiameterDistances.html" title="SamPy.cosmology.distances.getDiameterDistances"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.cosmology.distances.plot_dist_ony.html" title="SamPy.cosmology.distances.plot_dist_ony"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.cosmology.html" >cosmology Package</a> &raquo;</li>
+          <li><a href="SamPy.cosmology.distances.html" >SamPy.cosmology.distances</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

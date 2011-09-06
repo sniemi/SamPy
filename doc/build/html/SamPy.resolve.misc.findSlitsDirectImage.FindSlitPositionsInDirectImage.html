@@ -1,0 +1,161 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="sampy-resolve-misc-findslitsdirectimage-findslitpositionsindirectimage">
+<h1>SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage<a class="headerlink" href="#sampy-resolve-misc-findslitsdirectimage-findslitpositionsindirectimage" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage">
+<em class="property">class </em><tt class="descclassname">SamPy.resolve.misc.findSlitsDirectImage.</tt><tt class="descname">FindSlitPositionsInDirectImage</tt><big>(</big><em>configfile</em>, <em>debug</em>, <em>section='DEFAULT'</em><big>)</big><a class="headerlink" href="#SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class can be used to find slit positions in a direct image.
+It fits the slits separately to recover their sky positions.</p>
+<dl class="method">
+<dt id="SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>configfile</em>, <em>debug</em>, <em>section='DEFAULT'</em><big>)</big><a class="headerlink" href="#SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructor</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="#SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.__init__" title="SamPy.resolve.misc.findSlitsDirectImage.FindSlitPositionsInDirectImage.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">__init__</span></tt></a>(configfile,&nbsp;debug[,&nbsp;section])</td>
+<td>Constructor</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">approxSkyPosition</span></tt>()</td>
+<td>Generates an approximated sky position for slits.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">fitSlitsToDirectImage</span></tt>([normalize])</td>
+<td>Fits slits to a direct image to recover their position an orientation.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">fitSlitsToDirectImage2</span></tt>()</td>
+<td>Fits slits to a direct image to recover their position an orientation.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">generateSlitImages</span></tt>([output,&nbsp;type])</td>
+<td>Generates diagnostic plots from slit image.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">outputMinima</span></tt>()</td>
+<td>Outputs the results to a file and also the screen if  debug = True.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">outputShiftedImage</span></tt>()</td>
+<td>Outputs a FITS file in which the slits have been shifted</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">overPlotSlits</span></tt>([output,&nbsp;type,&nbsp;logscale])</td>
+<td>Overplot the slits to image data.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">pickleVars</span></tt>()</td>
+<td>This simple method pickles all important variables</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">plotMinimalization</span></tt>([output,&nbsp;type])</td>
+<td>Generates a two dimensional map of the minimalization for each slit separately.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">run</span></tt>()</td>
+<td>Driver function, runs all required steps.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">writeDS9RegionFile</span></tt>([output])</td>
+<td>Writes a DS9 region file for all the slits.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

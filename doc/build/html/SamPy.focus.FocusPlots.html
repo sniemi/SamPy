@@ -1,0 +1,217 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.focus.FocusPlots &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="focus Package" href="SamPy.focus.html" />
+    <link rel="next" title="SamPy.focus.FocusPlots.FocusTrend" href="SamPy.focus.FocusPlots.FocusTrend.html" />
+    <link rel="prev" title="SamPy.focus.collect_focus.writeOutput" href="SamPy.focus.collect_focus.writeOutput.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.focus.FocusPlots.FocusTrend.html" title="SamPy.focus.FocusPlots.FocusTrend"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.focus.collect_focus.writeOutput.html" title="SamPy.focus.collect_focus.writeOutput"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.focus.html" accesskey="U">focus Package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.focus.collect_focus.writeOutput.html"
+                        title="previous chapter">SamPy.focus.collect_focus.writeOutput</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.focus.FocusPlots.FocusTrend.html"
+                        title="next chapter">SamPy.focus.FocusPlots.FocusTrend</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.focus.FocusPlots.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-SamPy.focus.FocusPlots">
+<span id="sampy-focus-focusplots"></span><h1>SamPy.focus.FocusPlots<a class="headerlink" href="#module-SamPy.focus.FocusPlots" title="Permalink to this headline">¶</a></h1>
+<p>Creates few different plots from the focus data.</p>
+<p>HISTORY:
+Created on Sep 10, 2009
+Added to the repository on Dec 3, 2010</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">author:</th><td class="field-body"><p class="first">Sami-Matias Niemi</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">todo:</th><td class="field-body"><ol class="first last arabic simple">
+<li>change focus trend since mirror move to two x axis mode (one with date)</li>
+<li>Create a new plot: all focus data since last mirror move, fit functions</li>
+</ol>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Functions</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="SamPy.focus.FocusPlots.FocusTrend.html#SamPy.focus.FocusPlots.FocusTrend" title="SamPy.focus.FocusPlots.FocusTrend"><tt class="xref py py-obj docutils literal"><span class="pre">FocusTrend</span></tt></a>(xmin,&nbsp;xmax,&nbsp;title,&nbsp;type,&nbsp;...[,&nbsp;...])</td>
+<td>Plots Focus trend since given minimum J-L date (mxin).</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.focus.FocusPlots.FocusTrendNoBreathing.html#SamPy.focus.FocusPlots.FocusTrendNoBreathing" title="SamPy.focus.FocusPlots.FocusTrendNoBreathing"><tt class="xref py py-obj docutils literal"><span class="pre">FocusTrendNoBreathing</span></tt></a>(xmin,&nbsp;xmax,&nbsp;title,&nbsp;...)</td>
+<td>Plots Focus trend since given minimum J-L date (mxin).</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.focus.FocusPlots.FocusTrendRemoveLatestMovement.html#SamPy.focus.FocusPlots.FocusTrendRemoveLatestMovement" title="SamPy.focus.FocusPlots.FocusTrendRemoveLatestMovement"><tt class="xref py py-obj docutils literal"><span class="pre">FocusTrendRemoveLatestMovement</span></tt></a>(xmin,&nbsp;xmax,&nbsp;...)</td>
+<td>&#64;param xmin: minimum Modified Julian Date to be plotted</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.focus.FocusPlots.FocusTrendRemoveLatestMovementNoBreathing.html#SamPy.focus.FocusPlots.FocusTrendRemoveLatestMovementNoBreathing" title="SamPy.focus.FocusPlots.FocusTrendRemoveLatestMovementNoBreathing"><tt class="xref py py-obj docutils literal"><span class="pre">FocusTrendRemoveLatestMovementNoBreathing</span></tt></a>(...)</td>
+<td>&#64;param xmin: minimum Modified Julian Date to be plotted</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.focus.FocusPlots.FocusTrendRemoveLatestMovementNoBreathingOffset.html#SamPy.focus.FocusPlots.FocusTrendRemoveLatestMovementNoBreathingOffset" title="SamPy.focus.FocusPlots.FocusTrendRemoveLatestMovementNoBreathingOffset"><tt class="xref py py-obj docutils literal"><span class="pre">FocusTrendRemoveLatestMovementNoBreathingOffset</span></tt></a>(...)</td>
+<td>&#64;param xmin: minimum Modified Julian Date to be plotted</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.focus.FocusPlots.FocusTrendRemoveLatestMovementOffset.html#SamPy.focus.FocusPlots.FocusTrendRemoveLatestMovementOffset" title="SamPy.focus.FocusPlots.FocusTrendRemoveLatestMovementOffset"><tt class="xref py py-obj docutils literal"><span class="pre">FocusTrendRemoveLatestMovementOffset</span></tt></a>(xmin,&nbsp;...)</td>
+<td>&#64;param xmin: minimum Modified Julian Date to be plotted</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.focus.FocusPlots.FocusTrendSinceDayZero.html#SamPy.focus.FocusPlots.FocusTrendSinceDayZero" title="SamPy.focus.FocusPlots.FocusTrendSinceDayZero"><tt class="xref py py-obj docutils literal"><span class="pre">FocusTrendSinceDayZero</span></tt></a>(title,&nbsp;output,&nbsp;...[,&nbsp;...])</td>
+<td></td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.focus.FocusPlots.FocusTrendSinceDayZeroDates.html#SamPy.focus.FocusPlots.FocusTrendSinceDayZeroDates" title="SamPy.focus.FocusPlots.FocusTrendSinceDayZeroDates"><tt class="xref py py-obj docutils literal"><span class="pre">FocusTrendSinceDayZeroDates</span></tt></a>(title,&nbsp;output,&nbsp;...)</td>
+<td></td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.focus.FocusPlots.FocusTrendSinceDayZeroDates2.html#SamPy.focus.FocusPlots.FocusTrendSinceDayZeroDates2" title="SamPy.focus.FocusPlots.FocusTrendSinceDayZeroDates2"><tt class="xref py py-obj docutils literal"><span class="pre">FocusTrendSinceDayZeroDates2</span></tt></a>(output,&nbsp;...[,&nbsp;...])</td>
+<td>Plots the overall focus trend since the HST launch. Will not plot errors as they</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.focus.FocusPlots.FocusTrendSinceDayZeroOLD.html#SamPy.focus.FocusPlots.FocusTrendSinceDayZeroOLD" title="SamPy.focus.FocusPlots.FocusTrendSinceDayZeroOLD"><tt class="xref py py-obj docutils literal"><span class="pre">FocusTrendSinceDayZeroOLD</span></tt></a>(title,&nbsp;output,&nbsp;...)</td>
+<td>&#64;deprecated: This function is no longer used. Please see the other two functions.</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.focus.FocusPlots.confocality.html#SamPy.focus.FocusPlots.confocality" title="SamPy.focus.FocusPlots.confocality"><tt class="xref py py-obj docutils literal"><span class="pre">confocality</span></tt></a>(type,&nbsp;input_folder,&nbsp;output_folder)</td>
+<td>Creates a plot where WFC3 UVIS focus is compared to ACS WFC.</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.focus.FocusPlots.findMaxAndPair.html#SamPy.focus.FocusPlots.findMaxAndPair" title="SamPy.focus.FocusPlots.findMaxAndPair"><tt class="xref py py-obj docutils literal"><span class="pre">findMaxAndPair</span></tt></a>(data)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="SamPy.focus.FocusPlots.DateFormatter.html#SamPy.focus.FocusPlots.DateFormatter" title="SamPy.focus.FocusPlots.DateFormatter"><tt class="xref py py-obj docutils literal"><span class="pre">DateFormatter</span></tt></a>(fmt[,&nbsp;tz])</td>
+<td>Tick location is seconds since the epoch.</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.focus.FocusPlots.FormatStrFormatter.html#SamPy.focus.FocusPlots.FormatStrFormatter" title="SamPy.focus.FocusPlots.FormatStrFormatter"><tt class="xref py py-obj docutils literal"><span class="pre">FormatStrFormatter</span></tt></a>(fmt)</td>
+<td>Use a format string to format the tick</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.focus.FocusPlots.MonthLocator.html#SamPy.focus.FocusPlots.MonthLocator" title="SamPy.focus.FocusPlots.MonthLocator"><tt class="xref py py-obj docutils literal"><span class="pre">MonthLocator</span></tt></a>([bymonth,&nbsp;bymonthday,&nbsp;interval,&nbsp;tz])</td>
+<td>Make ticks on occurances of each month month, eg 1, 3, 12.</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.focus.FocusPlots.MultipleLocator.html#SamPy.focus.FocusPlots.MultipleLocator" title="SamPy.focus.FocusPlots.MultipleLocator"><tt class="xref py py-obj docutils literal"><span class="pre">MultipleLocator</span></tt></a>([base])</td>
+<td>Set a tick on every integer that is multiple of base in the</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.focus.FocusPlots.NullFormatter.html#SamPy.focus.FocusPlots.NullFormatter" title="SamPy.focus.FocusPlots.NullFormatter"><tt class="xref py py-obj docutils literal"><span class="pre">NullFormatter</span></tt></a></td>
+<td>Always return the empty string</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.focus.FocusPlots.YearLocator.html#SamPy.focus.FocusPlots.YearLocator" title="SamPy.focus.FocusPlots.YearLocator"><tt class="xref py py-obj docutils literal"><span class="pre">YearLocator</span></tt></a>([base,&nbsp;month,&nbsp;day,&nbsp;tz])</td>
+<td>Make ticks on a given day of each year that is a multiple of base.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.focus.FocusPlots.FocusTrend.html" title="SamPy.focus.FocusPlots.FocusTrend"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.focus.collect_focus.writeOutput.html" title="SamPy.focus.collect_focus.writeOutput"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.focus.html" >focus Package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

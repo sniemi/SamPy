@@ -1,0 +1,168 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.astronomy.ACSPhotometry &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="astronomy Package" href="SamPy.astronomy.html" />
+    <link rel="next" title="SamPy.astronomy.ACSPhotometry.useSextractor" href="SamPy.astronomy.ACSPhotometry.useSextractor.html" />
+    <link rel="prev" title="SamPy.astronomy.stellarMFs.stellarMfs" href="SamPy.astronomy.stellarMFs.stellarMfs.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.ACSPhotometry.useSextractor.html" title="SamPy.astronomy.ACSPhotometry.useSextractor"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.stellarMFs.stellarMfs.html" title="SamPy.astronomy.stellarMFs.stellarMfs"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.astronomy.html" accesskey="U">astronomy Package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.astronomy.stellarMFs.stellarMfs.html"
+                        title="previous chapter">SamPy.astronomy.stellarMFs.stellarMfs</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.astronomy.ACSPhotometry.useSextractor.html"
+                        title="next chapter">SamPy.astronomy.ACSPhotometry.useSextractor</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.astronomy.ACSPhotometry.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-SamPy.astronomy.ACSPhotometry">
+<span id="sampy-astronomy-acsphotometry"></span><h1>SamPy.astronomy.ACSPhotometry<a class="headerlink" href="#module-SamPy.astronomy.ACSPhotometry" title="Permalink to this headline">¶</a></h1>
+<p>This Python script calculates HST ACS WFC photometry.</p>
+<p>The class can be used to run calacs for calibrating the raw data.
+The class contains also a simple interface for SExtractor that
+can be used to find locations of stars in the image.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">depends:</th><td class="field-body">PyRAF</td>
+</tr>
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi, for STScI</td>
+</tr>
+<tr class="field"><th class="field-name">history:</th><td class="field-body">02/10/09 Initial Version</td>
+</tr>
+<tr class="field"><th class="field-name">version:</th><td class="field-body">1.0</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Functions</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="SamPy.astronomy.ACSPhotometry.useSextractor.html#SamPy.astronomy.ACSPhotometry.useSextractor" title="SamPy.astronomy.ACSPhotometry.useSextractor"><tt class="xref py py-obj docutils literal"><span class="pre">useSextractor</span></tt></a>(input)</td>
+<td>Very simple interface for running sextractor for given image.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Classes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="SamPy.astronomy.ACSPhotometry.ACSPhotometry.html#SamPy.astronomy.ACSPhotometry.ACSPhotometry" title="SamPy.astronomy.ACSPhotometry.ACSPhotometry"><tt class="xref py py-obj docutils literal"><span class="pre">ACSPhotometry</span></tt></a>(path,&nbsp;out)</td>
+<td>A class to do ACS photometry.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.ACSPhotometry.useSextractor.html" title="SamPy.astronomy.ACSPhotometry.useSextractor"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.stellarMFs.stellarMfs.html" title="SamPy.astronomy.stellarMFs.stellarMfs"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.astronomy.html" >astronomy Package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

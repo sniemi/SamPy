@@ -1,0 +1,154 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.astronomy.conversions.comovingVolume &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="SamPy.astronomy.conversions" href="SamPy.astronomy.conversions.html" />
+    <link rel="next" title="SamPy.astronomy.conversions.convertSphericalToCartesian" href="SamPy.astronomy.conversions.convertSphericalToCartesian.html" />
+    <link rel="prev" title="SamPy.astronomy.conversions.arcminSquaredToSteradians" href="SamPy.astronomy.conversions.arcminSquaredToSteradians.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.conversions.convertSphericalToCartesian.html" title="SamPy.astronomy.conversions.convertSphericalToCartesian"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.conversions.arcminSquaredToSteradians.html" title="SamPy.astronomy.conversions.arcminSquaredToSteradians"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.astronomy.html" >astronomy Package</a> &raquo;</li>
+          <li><a href="SamPy.astronomy.conversions.html" accesskey="U">SamPy.astronomy.conversions</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.astronomy.conversions.arcminSquaredToSteradians.html"
+                        title="previous chapter">SamPy.astronomy.conversions.arcminSquaredToSteradians</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.astronomy.conversions.convertSphericalToCartesian.html"
+                        title="next chapter">SamPy.astronomy.conversions.convertSphericalToCartesian</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.astronomy.conversions.comovingVolume.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="sampy-astronomy-conversions-comovingvolume">
+<h1>SamPy.astronomy.conversions.comovingVolume<a class="headerlink" href="#sampy-astronomy-conversions-comovingvolume" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="SamPy.astronomy.conversions.comovingVolume">
+<tt class="descclassname">SamPy.astronomy.conversions.</tt><tt class="descname">comovingVolume</tt><big>(</big><em>arcmin2</em>, <em>zmin</em>, <em>zmax</em>, <em>H0=70</em>, <em>WM=0.28</em><big>)</big><a class="headerlink" href="#SamPy.astronomy.conversions.comovingVolume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the comoving volume between two redshifts when
+the sky survey has covered <img class="math" src="_images/math/dc36c70974c93cd6105c3961c4719795524d7952.png" alt="arcmin^{2}"/> region.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>arcmin2</strong> &#8211; area on the sky in <img class="math" src="_images/math/dc36c70974c93cd6105c3961c4719795524d7952.png" alt="arcmin^{2}"/></li>
+<li><strong>zmin</strong> &#8211; redshift of the front part of the volume</li>
+<li><strong>zmax</strong> &#8211; redshift of the back part of the volume</li>
+<li><strong>H0</strong> &#8211; Value of the Hubble constant</li>
+<li><strong>WM</strong> &#8211; Value of the mass density</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">comoving volume between zmin and zmax of arcmin2
+solid angle in Mpc**3</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.conversions.convertSphericalToCartesian.html" title="SamPy.astronomy.conversions.convertSphericalToCartesian"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.astronomy.conversions.arcminSquaredToSteradians.html" title="SamPy.astronomy.conversions.arcminSquaredToSteradians"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.astronomy.html" >astronomy Package</a> &raquo;</li>
+          <li><a href="SamPy.astronomy.conversions.html" >SamPy.astronomy.conversions</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

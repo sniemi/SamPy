@@ -1,0 +1,145 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.cos.COSNUVCalib.get_NUV_PSA_WCA &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="SamPy.cos.COSNUVCalib" href="SamPy.cos.COSNUVCalib.html" />
+    <link rel="next" title="SamPy.cos.COSNUVCalib.plotOffsets" href="SamPy.cos.COSNUVCalib.plotOffsets.html" />
+    <link rel="prev" title="SamPy.cos.COSNUVCalib.SpectrumOffset" href="SamPy.cos.COSNUVCalib.SpectrumOffset.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.cos.COSNUVCalib.plotOffsets.html" title="SamPy.cos.COSNUVCalib.plotOffsets"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.cos.COSNUVCalib.SpectrumOffset.html" title="SamPy.cos.COSNUVCalib.SpectrumOffset"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.cos.html" >cos Package</a> &raquo;</li>
+          <li><a href="SamPy.cos.COSNUVCalib.html" accesskey="U">SamPy.cos.COSNUVCalib</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.cos.COSNUVCalib.SpectrumOffset.html"
+                        title="previous chapter">SamPy.cos.COSNUVCalib.SpectrumOffset</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.cos.COSNUVCalib.plotOffsets.html"
+                        title="next chapter">SamPy.cos.COSNUVCalib.plotOffsets</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.cos.COSNUVCalib.get_NUV_PSA_WCA.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="sampy-cos-cosnuvcalib-get-nuv-psa-wca">
+<h1>SamPy.cos.COSNUVCalib.get_NUV_PSA_WCA<a class="headerlink" href="#sampy-cos-cosnuvcalib-get-nuv-psa-wca" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="SamPy.cos.COSNUVCalib.get_NUV_PSA_WCA">
+<tt class="descclassname">SamPy.cos.COSNUVCalib.</tt><tt class="descname">get_NUV_PSA_WCA</tt><big>(</big><em>psalist</em>, <em>wcalist</em>, <em>scale=False</em>, <em>width=512</em>, <em>ishift=1</em>, <em>extrakeys=False</em>, <em>debug=False</em><big>)</big><a class="headerlink" href="#SamPy.cos.COSNUVCalib.get_NUV_PSA_WCA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Does a cross-correlation between a pair of x1d files  containing the PSA and WCA spectra for the same central wavelegth.</p>
+<p>input:
+psalist - a list containing filenames of the x1d spectra for the PSA
+wcalist - a list containing filenames of the x1d spectra for the WCA</p>
+<p>optional input:
+scale - whether wca spectrum is multiplied with boxcar smoothing factor of the</p>
+<blockquote>
+ratio between psa and wca spectrum</blockquote>
+<p>ishift - guess of the intial shift in pixels, int
+width - width of the search area in pixels, int
+returns:
+a list with central wavelengths, stripes, and calculated offset values.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.cos.COSNUVCalib.plotOffsets.html" title="SamPy.cos.COSNUVCalib.plotOffsets"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.cos.COSNUVCalib.SpectrumOffset.html" title="SamPy.cos.COSNUVCalib.SpectrumOffset"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.cos.html" >cos Package</a> &raquo;</li>
+          <li><a href="SamPy.cos.COSNUVCalib.html" >SamPy.cos.COSNUVCalib</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

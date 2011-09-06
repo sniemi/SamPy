@@ -1,0 +1,152 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.db.insertSAMTablesToSQLite.generateSQLiteDBfromSAMTables &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="SamPy.db.insertSAMTablesToSQLite" href="SamPy.db.insertSAMTablesToSQLite.html" />
+    <link rel="next" title="SamPy.db.MSdata" href="SamPy.db.MSdata.html" />
+    <link rel="prev" title="SamPy.db.insertSAMTablesToSQLite.generateSQLiteDBfromSAMTables" href="" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.db.MSdata.html" title="SamPy.db.MSdata"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="#" title="SamPy.db.insertSAMTablesToSQLite.generateSQLiteDBfromSAMTables"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.db.html" >db Package</a> &raquo;</li>
+          <li><a href="SamPy.db.insertSAMTablesToSQLite.html" accesskey="U">SamPy.db.insertSAMTablesToSQLite</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href=""
+                        title="previous chapter">SamPy.db.insertSAMTablesToSQLite.generateSQLiteDBfromSAMTables</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.db.MSdata.html"
+                        title="next chapter">SamPy.db.MSdata</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.db.insertSAMTablesToSQLite.generateSQLiteDBfromSAMTables.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="sampy-db-insertsamtablestosqlite-generatesqlitedbfromsamtables">
+<h1>SamPy.db.insertSAMTablesToSQLite.generateSQLiteDBfromSAMTables<a class="headerlink" href="#sampy-db-insertsamtablestosqlite-generatesqlitedbfromsamtables" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="SamPy.db.insertSAMTablesToSQLite.generateSQLiteDBfromSAMTables">
+<tt class="descclassname">SamPy.db.insertSAMTablesToSQLite.</tt><tt class="descname">generateSQLiteDBfromSAMTables</tt><big>(</big><em>output='sams.db'</em>, <em>fileidentifier='*.dat'</em><big>)</big><a class="headerlink" href="#SamPy.db.insertSAMTablesToSQLite.generateSQLiteDBfromSAMTables" title="Permalink to this definition">¶</a></dt>
+<dd><p>This little function can be used to generate an
+SQLite3 database from Rachel&#8217;s GF output.</p>
+<p>The script will make a table out from each ascii 
+output file. The halo_id and gal_id columns of
+each table are indexed for faster table joining.
+Each index is names as table_id, albeit there
+should be no need to know the name of the index.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>output</strong> (<em>string</em>) &#8211; name of the output file</li>
+<li><strong>fileidentifier</strong> (<em>string</em>) &#8211; string how to identify input data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.db.MSdata.html" title="SamPy.db.MSdata"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="#" title="SamPy.db.insertSAMTablesToSQLite.generateSQLiteDBfromSAMTables"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.db.html" >db Package</a> &raquo;</li>
+          <li><a href="SamPy.db.insertSAMTablesToSQLite.html" >SamPy.db.insertSAMTablesToSQLite</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

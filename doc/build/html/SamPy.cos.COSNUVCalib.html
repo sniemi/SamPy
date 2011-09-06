@@ -1,0 +1,170 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.cos.COSNUVCalib &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="cos Package" href="SamPy.cos.html" />
+    <link rel="next" title="SamPy.cos.COSNUVCalib.SpectrumOffset" href="SamPy.cos.COSNUVCalib.SpectrumOffset.html" />
+    <link rel="prev" title="SamPy.cos.reading.readx1d" href="SamPy.cos.reading.readx1d.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.cos.COSNUVCalib.SpectrumOffset.html" title="SamPy.cos.COSNUVCalib.SpectrumOffset"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.cos.reading.readx1d.html" title="SamPy.cos.reading.readx1d"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.cos.html" accesskey="U">cos Package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.cos.reading.readx1d.html"
+                        title="previous chapter">SamPy.cos.reading.readx1d</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.cos.COSNUVCalib.SpectrumOffset.html"
+                        title="next chapter">SamPy.cos.COSNUVCalib.SpectrumOffset</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.cos.COSNUVCalib.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-SamPy.cos.COSNUVCalib">
+<span id="sampy-cos-cosnuvcalib"></span><h1>SamPy.cos.COSNUVCalib<a class="headerlink" href="#module-SamPy.cos.COSNUVCalib" title="Permalink to this headline">¶</a></h1>
+<p>Calculates pixels shifts between two COS NUV spectra.</p>
+<p>This script can be used to determine the shift (in pixels) of one
+spectrum with respect to another. The cross correlation between
+S1 and S2 is determined and a non-linear fit to the peak of the
+correlation is used to determine the exact offset.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">Python 2.5 (not 3.0 compatible)</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">PyFits</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">NumArray (for boxcar smoothing)</td>
+</tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">NumPy (could be written without)</td>
+</tr>
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi for STScI, 01/26/2009</td>
+</tr>
+<tr class="field"><th class="field-name">history:</th><td class="field-body">01/26/09: Initial Release, version 0.1</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Functions</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="SamPy.cos.COSNUVCalib.SpectrumOffset.html#SamPy.cos.COSNUVCalib.SpectrumOffset" title="SamPy.cos.COSNUVCalib.SpectrumOffset"><tt class="xref py py-obj docutils literal"><span class="pre">SpectrumOffset</span></tt></a>(s1,&nbsp;s2[,&nbsp;ishift,&nbsp;width,&nbsp;i1,&nbsp;i2])</td>
+<td>This function calculates the shift (in pixels) of one spectrum with respect to another.</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.cos.COSNUVCalib.get_NUV_PSA_WCA.html#SamPy.cos.COSNUVCalib.get_NUV_PSA_WCA" title="SamPy.cos.COSNUVCalib.get_NUV_PSA_WCA"><tt class="xref py py-obj docutils literal"><span class="pre">get_NUV_PSA_WCA</span></tt></a>(psalist,&nbsp;wcalist[,&nbsp;scale,&nbsp;...])</td>
+<td>Does a cross-correlation between a pair of x1d files  containing the PSA and WCA spectra for the same central wavelegth.</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.cos.COSNUVCalib.plotOffsets.html#SamPy.cos.COSNUVCalib.plotOffsets" title="SamPy.cos.COSNUVCalib.plotOffsets"><tt class="xref py py-obj docutils literal"><span class="pre">plotOffsets</span></tt></a>(results)</td>
+<td></td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.cos.COSNUVCalib.writeOutput.html#SamPy.cos.COSNUVCalib.writeOutput" title="SamPy.cos.COSNUVCalib.writeOutput"><tt class="xref py py-obj docutils literal"><span class="pre">writeOutput</span></tt></a>(filename,&nbsp;data,&nbsp;header[,&nbsp;separator])</td>
+<td>This function can be used to write tabular data to a file with selected separator.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.cos.COSNUVCalib.SpectrumOffset.html" title="SamPy.cos.COSNUVCalib.SpectrumOffset"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.cos.reading.readx1d.html" title="SamPy.cos.reading.readx1d"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.cos.html" >cos Package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

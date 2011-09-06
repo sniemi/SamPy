@@ -1,0 +1,156 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.fitting.weightedFittingExample.rand &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="SamPy.fitting.weightedFittingExample" href="SamPy.fitting.weightedFittingExample.html" />
+    <link rel="next" title="SamPy.fitting.weightedFittingExample.second_order" href="SamPy.fitting.weightedFittingExample.second_order.html" />
+    <link rel="prev" title="SamPy.fitting.weightedFittingExample.first_order" href="SamPy.fitting.weightedFittingExample.first_order.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.fitting.weightedFittingExample.second_order.html" title="SamPy.fitting.weightedFittingExample.second_order"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.fitting.weightedFittingExample.first_order.html" title="SamPy.fitting.weightedFittingExample.first_order"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.fitting.html" >fitting Package</a> &raquo;</li>
+          <li><a href="SamPy.fitting.weightedFittingExample.html" accesskey="U">SamPy.fitting.weightedFittingExample</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.fitting.weightedFittingExample.first_order.html"
+                        title="previous chapter">SamPy.fitting.weightedFittingExample.first_order</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.fitting.weightedFittingExample.second_order.html"
+                        title="next chapter">SamPy.fitting.weightedFittingExample.second_order</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.fitting.weightedFittingExample.rand.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="sampy-fitting-weightedfittingexample-rand">
+<h1>SamPy.fitting.weightedFittingExample.rand<a class="headerlink" href="#sampy-fitting-weightedfittingexample-rand" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="SamPy.fitting.weightedFittingExample.rand">
+<tt class="descclassname">SamPy.fitting.weightedFittingExample.</tt><tt class="descname">rand</tt><big>(</big><big>)</big><a class="headerlink" href="#SamPy.fitting.weightedFittingExample.rand" title="Permalink to this definition">¶</a></dt>
+<dd><p>rand(d0, d1, ..., dn)</p>
+<p>Random values in a given shape.</p>
+<p>Create an array of the given shape and propagate it with
+random samples from a uniform distribution
+over <tt class="docutils literal"><span class="pre">[0,</span> <span class="pre">1)</span></tt>.</p>
+<dl class="docutils">
+<dt>d0, d1, ..., dn <span class="classifier-delimiter">:</span> <span class="classifier">int</span></dt>
+<dd>Shape of the output.</dd>
+</dl>
+<dl class="docutils">
+<dt>out <span class="classifier-delimiter">:</span> <span class="classifier">ndarray, shape <tt class="docutils literal"><span class="pre">(d0,</span> <span class="pre">d1,</span> <span class="pre">...,</span> <span class="pre">dn)</span></tt></span></dt>
+<dd>Random values.</dd>
+</dl>
+<p>random</p>
+<p>This is a convenience function. If you want an interface that
+takes a shape-tuple as the first argument, refer to
+<cite>random</cite>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">array([[ 0.14022471,  0.96360618],  #random</span>
+<span class="go">       [ 0.37601032,  0.25528411],  #random</span>
+<span class="go">       [ 0.49313049,  0.94909878]]) #random</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.fitting.weightedFittingExample.second_order.html" title="SamPy.fitting.weightedFittingExample.second_order"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.fitting.weightedFittingExample.first_order.html" title="SamPy.fitting.weightedFittingExample.first_order"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.fitting.html" >fitting Package</a> &raquo;</li>
+          <li><a href="SamPy.fitting.weightedFittingExample.html" >SamPy.fitting.weightedFittingExample</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,192 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.stis.ObservationSchedule &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" />
+    <link rel="up" title="stis Package" href="SamPy.stis.html" />
+    <link rel="next" title="SamPy.stis.STISCCDImagingFlats" href="SamPy.stis.STISCCDImagingFlats.html" />
+    <link rel="prev" title="SamPy.stis.STISCCDSpectroscopyFlat" href="SamPy.stis.STISCCDSpectroscopyFlat.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.stis.STISCCDImagingFlats.html" title="SamPy.stis.STISCCDImagingFlats"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.stis.STISCCDSpectroscopyFlat.html" title="SamPy.stis.STISCCDSpectroscopyFlat"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.stis.html" accesskey="U">stis Package</a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SamPy.stis.STISCCDSpectroscopyFlat.html"
+                        title="previous chapter">SamPy.stis.STISCCDSpectroscopyFlat</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SamPy.stis.STISCCDImagingFlats.html"
+                        title="next chapter">SamPy.stis.STISCCDImagingFlats</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.stis.ObservationSchedule.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-SamPy.stis.ObservationSchedule">
+<span id="sampy-stis-observationschedule"></span><h1>SamPy.stis.ObservationSchedule<a class="headerlink" href="#module-SamPy.stis.ObservationSchedule" title="Permalink to this headline">¶</a></h1>
+<p>This script can be used to parse instrument specific observations from SMS messages. It can also be used to generate memory dump schedule from the SMS.</p>
+<p>The script can automatically email generated schedules
+to a given email address.</p>
+<p>The calendar and SMS status can be found from:
+<a class="reference external" href="http://www.stsci.edu/reports/spss-status.html">http://www.stsci.edu/reports/spss-status.html</a></p>
+<dl class="docutils">
+<dt>USAGE:   </dt>
+<dd><p class="first">python ObservationSchedule.py [flags]
+where flags can be following
+-v : verbose mode on
+-s sms_number e.g. 09299
+-i instrument_name e.g. STIS
+-d dump_file e.g. 092297e3 
+-o output_file 
+-e email address e.g. <a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a></p>
+<p class="last">E.g python ObservationSchedule.py -i STIS -s 09229 -d 092297e3</p>
+</dd>
+<dt>DEPENDS:</dt>
+<dd>Python 2.5 (no 3.0 compatible)</dd>
+<dt>EXITSTA:  </dt>
+<dd><blockquote class="first">
+0: No errors</blockquote>
+<p class="last">-9: No command line flags given</p>
+</dd>
+<dt>HISTORY:</dt>
+<dd>Aug 17 2009: Initial Version 0.1
+Nov 20 2009: Version 0.2 (added email sending option)</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi (<a class="reference external" href="mailto:niemi&#37;&#52;&#48;stsci&#46;edu">niemi<span>&#64;</span>stsci<span>&#46;</span>edu</a>) for STScI</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Functions</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="SamPy.stis.ObservationSchedule.DaystoDates.html#SamPy.stis.ObservationSchedule.DaystoDates" title="SamPy.stis.ObservationSchedule.DaystoDates"><tt class="xref py py-obj docutils literal"><span class="pre">DaystoDates</span></tt></a>(input)</td>
+<td></td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.stis.ObservationSchedule.DaystoDates2.html#SamPy.stis.ObservationSchedule.DaystoDates2" title="SamPy.stis.ObservationSchedule.DaystoDates2"><tt class="xref py py-obj docutils literal"><span class="pre">DaystoDates2</span></tt></a>(input)</td>
+<td></td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.stis.ObservationSchedule.SendEmail.html#SamPy.stis.ObservationSchedule.SendEmail" title="SamPy.stis.ObservationSchedule.SendEmail"><tt class="xref py py-obj docutils literal"><span class="pre">SendEmail</span></tt></a>(instrument,&nbsp;sms,&nbsp;files,&nbsp;mailto)</td>
+<td>This function sends an email to mailto address and attaches</td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.stis.ObservationSchedule.checkZeroArguments.html#SamPy.stis.ObservationSchedule.checkZeroArguments" title="SamPy.stis.ObservationSchedule.checkZeroArguments"><tt class="xref py py-obj docutils literal"><span class="pre">checkZeroArguments</span></tt></a>(opts)</td>
+<td></td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.stis.ObservationSchedule.findTitle.html#SamPy.stis.ObservationSchedule.findTitle" title="SamPy.stis.ObservationSchedule.findTitle"><tt class="xref py py-obj docutils literal"><span class="pre">findTitle</span></tt></a>(input)</td>
+<td></td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.stis.ObservationSchedule.fixDumps.html#SamPy.stis.ObservationSchedule.fixDumps" title="SamPy.stis.ObservationSchedule.fixDumps"><tt class="xref py py-obj docutils literal"><span class="pre">fixDumps</span></tt></a>(input)</td>
+<td></td>
+</tr>
+<tr><td><a class="reference internal" href="SamPy.stis.ObservationSchedule.process_args.html#SamPy.stis.ObservationSchedule.process_args" title="SamPy.stis.ObservationSchedule.process_args"><tt class="xref py py-obj docutils literal"><span class="pre">process_args</span></tt></a>([just_print_help])</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SamPy.stis.STISCCDImagingFlats.html" title="SamPy.stis.STISCCDImagingFlats"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SamPy.stis.STISCCDSpectroscopyFlat.html" title="SamPy.stis.STISCCDSpectroscopyFlat"
+             >previous</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+
+          <li><a href="SamPy.stis.html" >stis Package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>

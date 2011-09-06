@@ -1,0 +1,458 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SamPy.stis.STISCCDSpectroscopyFlat.Circle &mdash; SamPy v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="SamPy v0.1 documentation" href="index.html" /> 
+  </head>
+  <body>
+
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+ 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/SamPy.stis.STISCCDSpectroscopyFlat.Circle.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="sampy-stis-stisccdspectroscopyflat-circle">
+<h1>SamPy.stis.STISCCDSpectroscopyFlat.Circle<a class="headerlink" href="#sampy-stis-stisccdspectroscopyflat-circle" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="SamPy.stis.STISCCDSpectroscopyFlat.Circle">
+<em class="property">class </em><tt class="descclassname">SamPy.stis.STISCCDSpectroscopyFlat.</tt><tt class="descname">Circle</tt><big>(</big><em>xy</em>, <em>radius=5</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDSpectroscopyFlat.Circle" title="Permalink to this definition">¶</a></dt>
+<dd><p>A circle patch.</p>
+<dl class="method">
+<dt id="SamPy.stis.STISCCDSpectroscopyFlat.Circle.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>xy</em>, <em>radius=5</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#SamPy.stis.STISCCDSpectroscopyFlat.Circle.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create true circle at center <em>xy</em> = (<em>x</em>, <em>y</em>) with given
+<em>radius</em>.  Unlike <tt class="xref py py-class docutils literal"><span class="pre">CirclePolygon</span></tt>
+which is a polygonal approximation, this uses Bézier splines
+and is much closer to a scale-free circle.</p>
+<dl class="docutils">
+<dt>Valid kwargs are:</dt>
+<dd>agg_filter: unknown
+alpha: float or None         
+animated: [True | False]         
+antialiased or aa: [True | False]  or None for default         
+axes: an <tt class="xref py py-class docutils literal"><span class="pre">Axes</span></tt> instance         
+clip_box: a <tt class="xref py py-class docutils literal"><span class="pre">matplotlib.transforms.Bbox</span></tt> instance         
+clip_on: [True | False]         
+clip_path: [ (<tt class="xref py py-class docutils literal"><span class="pre">Path</span></tt>,         <tt class="xref py py-class docutils literal"><span class="pre">Transform</span></tt>) |         <tt class="xref py py-class docutils literal"><span class="pre">Patch</span></tt> | None ]         
+color: matplotlib color spec
+contains: a callable function         
+edgecolor or ec: mpl color spec, or None for default, or &#8216;none&#8217; for no color         
+facecolor or fc: mpl color spec, or None for default, or &#8216;none&#8217; for no color         
+figure: a <tt class="xref py py-class docutils literal"><span class="pre">matplotlib.figure.Figure</span></tt> instance         
+fill: [True | False]         
+gid: an id string         
+hatch: [ &#8216;/&#8217; | &#8216;\&#8217; | &#8216;|&#8217; | &#8216;-&#8216; | &#8216;+&#8217; | &#8216;x&#8217; | &#8216;o&#8217; | &#8216;O&#8217; | &#8216;.&#8217; | &#8216;*&#8217; ]         
+label: any string         
+linestyle or ls: [&#8216;solid&#8217; | &#8216;dashed&#8217; | &#8216;dashdot&#8217; | &#8216;dotted&#8217;]         
+linewidth or lw: float or None for default         
+lod: [True | False]         
+path_effects: unknown
+picker: [None|float|boolean|callable]         
+rasterized: [True | False | None]         
+snap: unknown
+transform: <tt class="xref py py-class docutils literal"><span class="pre">Transform</span></tt> instance         
+url: a url string         
+visible: [True | False]         
+zorder: any number</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><a class="reference internal" href="#SamPy.stis.STISCCDSpectroscopyFlat.Circle.__init__" title="SamPy.stis.STISCCDSpectroscopyFlat.Circle.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">__init__</span></tt></a>(xy,&nbsp;**kwargs[,&nbsp;radius])</td>
+<td>Create true circle at center <em>xy</em> = (<em>x</em>, <em>y</em>) with given <em>radius</em>.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">add_callback</span></tt>(func)</td>
+<td>Adds a callback function that will be called whenever one of</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">contains</span></tt>(ev)</td>
+<td></td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">contains_point</span></tt>(point)</td>
+<td>Returns <em>True</em> if the given point is inside the path</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">convert_xunits</span></tt>(x)</td>
+<td>For artists in an axes, if the xaxis has units support,</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">convert_yunits</span></tt>(y)</td>
+<td>For artists in an axes, if the yaxis has units support,</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">draw</span></tt>(artist,&nbsp;renderer,&nbsp;*args,&nbsp;**kwargs)</td>
+<td>Draw the <tt class="xref py py-class docutils literal"><span class="pre">Patch</span></tt> to the given <em>renderer</em>.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">findobj</span></tt>([match])</td>
+<td>pyplot signature:</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_aa</span></tt>()</td>
+<td>Returns True if the <tt class="xref py py-class docutils literal"><span class="pre">Patch</span></tt> is to be drawn with antialiasing.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_agg_filter</span></tt>()</td>
+<td>return filter function to be used for agg filter</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_alpha</span></tt>()</td>
+<td>Return the alpha value used for blending - not supported on all</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_animated</span></tt>()</td>
+<td>Return the artist&#8217;s animated state</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_antialiased</span></tt>()</td>
+<td>Returns True if the <tt class="xref py py-class docutils literal"><span class="pre">Patch</span></tt> is to be drawn with antialiasing.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_axes</span></tt>()</td>
+<td>Return the <tt class="xref py py-class docutils literal"><span class="pre">Axes</span></tt> instance the artist</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_children</span></tt>()</td>
+<td>Return a list of the child :class:<a href="#id1"><span class="problematic" id="id2">`</span></a>Artist`s this</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_clip_box</span></tt>()</td>
+<td>Return artist clipbox</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_clip_on</span></tt>()</td>
+<td>Return whether artist uses clipping</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_clip_path</span></tt>()</td>
+<td>Return artist clip path</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_contains</span></tt>()</td>
+<td>Return the _contains test used by the artist, or <em>None</em> for default.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_data_transform</span></tt>()</td>
+<td></td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_ec</span></tt>()</td>
+<td>Return the edge color of the <tt class="xref py py-class docutils literal"><span class="pre">Patch</span></tt>.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_edgecolor</span></tt>()</td>
+<td>Return the edge color of the <tt class="xref py py-class docutils literal"><span class="pre">Patch</span></tt>.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_extents</span></tt>()</td>
+<td>Return a <tt class="xref py py-class docutils literal"><span class="pre">Bbox</span></tt> object defining</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_facecolor</span></tt>()</td>
+<td>Return the face color of the <tt class="xref py py-class docutils literal"><span class="pre">Patch</span></tt>.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_fc</span></tt>()</td>
+<td>Return the face color of the <tt class="xref py py-class docutils literal"><span class="pre">Patch</span></tt>.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_figure</span></tt>()</td>
+<td>Return the <tt class="xref py py-class docutils literal"><span class="pre">Figure</span></tt> instance the</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_fill</span></tt>()</td>
+<td>return whether fill is set</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_gid</span></tt>()</td>
+<td>Returns the group id</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_hatch</span></tt>()</td>
+<td>Return the current hatching pattern</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_label</span></tt>()</td>
+<td>Get the label used for this artist in the legend.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_linestyle</span></tt>()</td>
+<td>Return the linestyle.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_linewidth</span></tt>()</td>
+<td>Return the line width in points.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_ls</span></tt>()</td>
+<td>Return the linestyle.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_lw</span></tt>()</td>
+<td>Return the line width in points.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_patch_transform</span></tt>()</td>
+<td></td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_path</span></tt>()</td>
+<td>Return the vertices of the rectangle</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_path_effects</span></tt>()</td>
+<td></td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_picker</span></tt>()</td>
+<td>Return the picker object used by this artist</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_radius</span></tt>()</td>
+<td>return the radius of the circle</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_rasterized</span></tt>()</td>
+<td>return True if the artist is to be rasterized</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_snap</span></tt>()</td>
+<td>Returns the snap setting which may be:</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_transform</span></tt>()</td>
+<td>Return the <tt class="xref py py-class docutils literal"><span class="pre">Transform</span></tt> applied</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_transformed_clip_path_and_affine</span></tt>()</td>
+<td>Return the clip path with the non-affine part of its</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_url</span></tt>()</td>
+<td>Returns the url</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_verts</span></tt>()</td>
+<td>Return a copy of the vertices used in this patch</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_visible</span></tt>()</td>
+<td>Return the artist&#8217;s visiblity</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_window_extent</span></tt>([renderer])</td>
+<td></td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">get_zorder</span></tt>()</td>
+<td>Return the <tt class="xref py py-class docutils literal"><span class="pre">Artist</span></tt>&#8216;s zorder.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">have_units</span></tt>()</td>
+<td>Return <em>True</em> if units are set on the <em>x</em> or <em>y</em> axes</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">hitlist</span></tt>(event)</td>
+<td>List the children of the artist which contain the mouse event <em>event</em>.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">is_figure_set</span></tt>()</td>
+<td>Returns True if the artist is assigned to a</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">is_transform_set</span></tt>()</td>
+<td>Returns <em>True</em> if <tt class="xref py py-class docutils literal"><span class="pre">Artist</span></tt> has a transform explicitly</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">pchanged</span></tt>()</td>
+<td>Fire an event when property changed, calling all of the</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">pick</span></tt>(mouseevent)</td>
+<td>call signature:</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">pickable</span></tt>()</td>
+<td>Return <em>True</em> if <tt class="xref py py-class docutils literal"><span class="pre">Artist</span></tt> is pickable.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">properties</span></tt>()</td>
+<td>return a dictionary mapping property name -&gt; value for all Artist props</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">remove</span></tt>()</td>
+<td>Remove the artist from the figure if possible.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">remove_callback</span></tt>(oid)</td>
+<td>Remove a callback based on its <em>id</em>.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set</span></tt>(**kwargs)</td>
+<td>A tkstyle set command, pass <em>kwargs</em> to set properties</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_aa</span></tt>(aa)</td>
+<td>alias for set_antialiased</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_agg_filter</span></tt>(filter_func)</td>
+<td>set agg_filter fuction.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_alpha</span></tt>(alpha)</td>
+<td>Set the alpha tranparency of the patch.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_animated</span></tt>(b)</td>
+<td>Set the artist&#8217;s animation state.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_antialiased</span></tt>(aa)</td>
+<td>Set whether to use antialiased rendering</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_axes</span></tt>(axes)</td>
+<td>Set the <tt class="xref py py-class docutils literal"><span class="pre">Axes</span></tt> instance in which the</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_clip_box</span></tt>(clipbox)</td>
+<td>Set the artist&#8217;s clip <tt class="xref py py-class docutils literal"><span class="pre">Bbox</span></tt>.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_clip_on</span></tt>(b)</td>
+<td>Set whether artist uses clipping.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_clip_path</span></tt>(path[,&nbsp;transform])</td>
+<td>Set the artist&#8217;s clip path, which may be:</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_color</span></tt>(c)</td>
+<td>Set both the edgecolor and the facecolor.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_contains</span></tt>(picker)</td>
+<td>Replace the contains test used by this artist.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_ec</span></tt>(color)</td>
+<td>alias for set_edgecolor</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_edgecolor</span></tt>(color)</td>
+<td>Set the patch edge color</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_facecolor</span></tt>(color)</td>
+<td>Set the patch face color</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_fc</span></tt>(color)</td>
+<td>alias for set_facecolor</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_figure</span></tt>(fig)</td>
+<td>Set the <tt class="xref py py-class docutils literal"><span class="pre">Figure</span></tt> instance the artist</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_fill</span></tt>(b)</td>
+<td>Set whether to fill the patch</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_gid</span></tt>(gid)</td>
+<td>Sets the (group) id for the artist</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_hatch</span></tt>(hatch)</td>
+<td>Set the hatching pattern</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_label</span></tt>(s)</td>
+<td>Set the label to <em>s</em> for auto legend.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_linestyle</span></tt>(ls)</td>
+<td>Set the patch linestyle</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_linewidth</span></tt>(w)</td>
+<td>Set the patch linewidth in points</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_lod</span></tt>(on)</td>
+<td>Set Level of Detail on or off.  If on, the artists may examine</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_ls</span></tt>(ls)</td>
+<td>alias for set_linestyle</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_lw</span></tt>(lw)</td>
+<td>alias for set_linewidth</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_path_effects</span></tt>(path_effects)</td>
+<td>set path_effects, which should be a list of instances of</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_picker</span></tt>(picker)</td>
+<td>Set the epsilon for picking used by this artist</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_radius</span></tt>(radius)</td>
+<td>Set the radius of the circle</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_rasterized</span></tt>(rasterized)</td>
+<td>Force rasterized (bitmap) drawing in vector backend output.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_snap</span></tt>(snap)</td>
+<td>Sets the snap setting which may be:</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_transform</span></tt>(t)</td>
+<td>Set the <tt class="xref py py-class docutils literal"><span class="pre">Transform</span></tt> instance</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_url</span></tt>(url)</td>
+<td>Sets the url for the artist</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_visible</span></tt>(b)</td>
+<td>Set the artist&#8217;s visiblity.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">set_zorder</span></tt>(level)</td>
+<td>Set the zorder for the artist.</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">update</span></tt>(props)</td>
+<td>Update the properties of this <tt class="xref py py-class docutils literal"><span class="pre">Artist</span></tt> from the</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">update_from</span></tt>(other)</td>
+<td>Updates this <tt class="xref py py-class docutils literal"><span class="pre">Patch</span></tt> from the properties of <em>other</em>.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">fill</span></tt></td>
+<td>return whether fill is set</td>
+</tr>
+<tr><td><tt class="xref py py-obj docutils literal"><span class="pre">radius</span></tt></td>
+<td>return the radius of the circle</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="index.html">home</a>|&nbsp;</li>
+        <li><a href="search.html">search</a>|&nbsp;</li>
+ 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2011, Sami-Matias Niemi.
+    </div>
+  </body>
+</html>
