@@ -86,8 +86,10 @@ class FindSlitmaskPosition():
         """
         Generates a slit profile by convolving the spectrum with a filter transmission curve.
 
-        :param: spectrum, 2D spectral image
-        :param: hdr, header of the spectral image
+        :param spectrum: 2D spectral image
+        :type spectrum: ndarray
+        :param hdr: header of the spectral image
+        :type hdr: PyFITS header instance
 
         :note: reading in the filter file has been hardcoded, this may be a problem
 
@@ -129,7 +131,7 @@ class FindSlitmaskPosition():
                 res = flux.convolveSpectrum(xps, f, wave, thr)
                 #convert to micro Jansky
                 # TODO: double check this conversion to micro Janskys
-                tmp = res['flux'] * deltal**2 * 3.3356409e4 * 1e6 * 2.5
+                tmp = res['flux'] * deltal**2 * 3.3356409e4 * 1e6 * 7.0
                 #tmp = res['flux'] / width * 1e23
 
                 if tmp < 0.0:
@@ -173,8 +175,8 @@ class FindSlitmaskPosition():
          * 3. rotates the image by a -POSANGLE
          * 4. gets the plate scale from the rotated header
 
-        :param: ext, FITS extension
-        :param: factor, the supersampling factor
+        :param ext: FITS extension
+        :type ext: int
         """
         #load images
         fh = pf.open(self.dirfile)
@@ -807,11 +809,6 @@ class FindSlitmaskPosition():
         self.result['RA'] = sky[0][0]
         self.result['DEC'] = sky[0][1]
 
-#        centre = [[self.result['xcenter'], self.result['ycenter']], ]
-#        sky = self.result['WCS'].toworld(centre, 1)
-#        self.result['RA'] = sky[0][0]
-#        self.result['DEC'] = sky[0][1]
-
         #each slit pixels
         for key, value in self.slits.items():
             ymin = value['ymin'] + self.result['y']
@@ -840,6 +837,10 @@ class FindSlitmaskPosition():
 
             self.slits[key]['coordinates'] = sky
 
+            #record x and y in the slit frame
+            self.slits[key]['coordinatesX'] = np.ones(value['pixels'])
+            self.slits[key]['coordinatesY'] = np.arange(value['pixels']) + 1
+
             #RA and DEC of the centre of the slit
             centre = np.array([[mean, (ymax+ymin)/2.], ])
             sky = self.result['WCS'].wcs_pix2sky(centre, 1)
@@ -852,8 +853,7 @@ class FindSlitmaskPosition():
 
     def _writeDS9region(self):
         """
-        Writes a ds9 region file. The region file contains small
-        boxes for each slit pixel.
+        Writes a ds9 region file. The region file contains small boxes for each slit pixel.
         """
         fh = open('slitsFittedPositions.reg', 'w')
         fh.write('#File written by findSlitmaskPosition.py on %s\n' \
@@ -866,11 +866,24 @@ class FindSlitmaskPosition():
         fh.close()
 
 
+    def _writeOutputCoordinates(self):
+        """
+        Outputs coordinates for each pixel.
+        """
+        for slit, value in self.slits.items():
+            fh = open('%s_coordinates.txt' % slit, 'w')
+            fh.write('#File written by findSlitmaskPosition.py on %s\n' \
+                     % datetime.datetime.isoformat(datetime.datetime.now()))
+            fh.write('x\ty\tRA\tDEC\n')
+            for tmp1, x, y in zip(value['coordinates'], value['coordinatesX'], value['coordinatesY']):
+                fh.write('%i %i %f %f \n' % (x, y, tmp1[0], tmp1[1]))
+
+            fh.close()
+
+
     def _makeFinalFITS(self):
         """
-        Combines the tree separate FITS files to
-        a single file where each slice is a separate
-        header.
+        Combines the tree separate FITS files to a single file where each slice is a separate header.
         """
         ext = 0
         output = 'final.fits'
@@ -908,7 +921,7 @@ class FindSlitmaskPosition():
 
     def _pickleVars(self):
         """
-        This simple method pickles all important variables
+        This simple method pickles all important variables.
         """
         if self.debug:
             tmp1 = self.result.copy()
@@ -947,6 +960,7 @@ class FindSlitmaskPosition():
         self._plotFinalSlitPositions()
         self._outputMinima()
         self._writeDS9region()
+        self._writeOutputCoordinates()
         self._makeFinalFITS()   
         #self._pickleVars()
 

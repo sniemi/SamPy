@@ -10,15 +10,16 @@ Will also generate a plot showing the velocities for pixels.
 
 :version: 0.1
 """
-import numpy as np
-import SamPy.smnIO.write as write
-from matplotlib import pyplot as plt
 import csv
+import numpy as np
+from matplotlib import pyplot as plt
+import SamPy.smnIO.write as write
+import SamPy.sandbox.odict as o
 
 
 class emsaoVelocity():
     """
-    Class to parse emsao velocity information
+    Class to parse emsao velocity information.
     """
 
     def __init__(self, file='emsao.log'):
@@ -32,7 +33,7 @@ class emsaoVelocity():
         :return: velocity information
         :rtype: dictionary
         """
-        out = {}
+        out = o.OrderedDict()
         #read in data and loop over it
         data = open(self.file, 'r').readlines()
         for line in data:

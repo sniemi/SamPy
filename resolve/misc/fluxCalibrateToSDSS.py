@@ -75,7 +75,7 @@ class calibrateToSDSS():
 
     def _loadData(self):
         """
-        Loads the FITS files
+        Loads the FITS files using PyFITS and modifies the SDSS flux.
         """
         self.fitting['sdssData'] = pf.open(self.fitting['sdss'])[1].data
         self.fitting['SDSSflux'] = self.fitting['sdssData']['FLUX']*1e-17
@@ -88,7 +88,7 @@ class calibrateToSDSS():
         """
         Calculates the fiber area and the ratio.
 
-        :note: I doesn't necessarily need the boosting factor, it could be removed.
+        :note: Doesn't necessarily need the boosting factor, it could be removed.
         """
         self.fitting['FiberArea'] = np.pi*(self.fitting['FiberDiameter'] / 2.)**2
         self.fitting['slitPixels'] = self.fitting['FiberDiameter'] / \
@@ -102,7 +102,8 @@ class calibrateToSDSS():
 
     def _deriveObservedSpectra(self):
         """
-        Derives a 1D spectral from the 2D input data.
+        Derives a 1D spectrum from the 2D input data.
+        Sums the pixels around the centre of the continuum that match to the SDSS fiber size.
         """
         y = self.fitting['ycenter']
         ymod = self.fitting['slitPix2']
@@ -119,14 +120,9 @@ class calibrateToSDSS():
     def _calculateDifference(self):
         """
         Calculates the difference between the derived observed and SDSS spectra.
-        Interpolates the SDSS spectra to the same wavelength scale.
-
-        :todo: figure out the interpolation
-
+        Interpolates the SDSS spectra to the same wavelength scale. In this interpolation
+        the flux is conserved.
         """
-        #TODO: figure out the interpolation
-        #interp = interpolate.interp1d(self.fitting['SDSSwave'], self.fitting['SDSSflux'])
-        #newflux = interp(self.fitting['obsWavelengths'])
         ms = (self.fitting['SDSSwave'] >= np.min(self.fitting['obsWavelengths'])) &\
              (self.fitting['SDSSwave'] <= np.max(self.fitting['obsWavelengths']))
         newflux = m.frebin(self.fitting['SDSSflux'][ms],
@@ -152,6 +148,8 @@ class calibrateToSDSS():
     def _fitSmoothFunction(self):
         """
         Fits a smooth function to the spectra ratio.
+        Two options can be used, either NumPy polyfit or SciPy curve_fit.
+        By default the NumPy polyfit is being used.
         """
         #with NumPy polyfit
         fx = np.poly1d(np.polyfit(self.fitting['obsWavelengths'][self.fitting['mask']],
@@ -212,7 +210,7 @@ class calibrateToSDSS():
 
     def _outputSensitivity(self):
         """
-        Outputs the sensitivity to a file.
+        Outputs the sensitivity function to an ascii file.
         """
         fh = open('sensitivity.txt', 'w')
         fh.write('#Wavelength sensitivity\n')
@@ -254,7 +252,7 @@ class calibrateToSDSS():
                 
     def run(self):
         """
-        Driver function, runs all required steps.
+        Driver function, runs all the required steps.
         """
         self._readConfigs()
         self._processConfigs()
@@ -271,7 +269,7 @@ class calibrateToSDSS():
 
 def processArgs(printHelp=False):
     """
-    Processes command line arguments
+    Processes command line arguments.
     """
     parser = OptionParser()
 
