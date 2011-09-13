@@ -114,7 +114,7 @@ class FindSlitmaskPosition():
                 xps = np.arange(0, npix-crpix+1)*delta + crval
                 xps = xps[-crpix+1:]
             elif crpix > 0:
-                raise NotImplementedError, 'crpix > 0 not implemented yet'
+                xps = np.arange(crpix-1, npix+crpix-1)*delta + crval
             else:
                 xps = np.arange(0, npix)*delta + crval
 
@@ -128,7 +128,8 @@ class FindSlitmaskPosition():
             for i, f in enumerate(spectrum):
                 res = flux.convolveSpectrum(xps, f, wave, thr)
                 #convert to micro Jansky
-                tmp = res['flux'] * deltal**2 * 3.3356409e4 * 1e6
+                # TODO: double check this conversion to micro Janskys
+                tmp = res['flux'] * deltal**2 * 3.3356409e4 * 1e6 * 2.5
                 #tmp = res['flux'] / width * 1e23
 
                 if tmp < 0.0:
@@ -169,15 +170,12 @@ class FindSlitmaskPosition():
         This method performs several tasks:
          * 1. trims the image (optional, depends on self.cutout)
          * 2. supersamples the original image by a given factor
-         * 3. rotates the image by a POSANGLE
+         * 3. rotates the image by a -POSANGLE
          * 4. gets the plate scale from the rotated header
 
         :param: ext, FITS extension
         :param: factor, the supersampling factor
         """
-        #set rotation
-        self.direct['rotation'] = self.slits['mid']['POSANGLE']
-
         #load images
         fh = pf.open(self.dirfile)
         self.direct['originalHeader0'] = fh[ext].header
@@ -223,6 +221,10 @@ class FindSlitmaskPosition():
             self.direct['supersampledHeader'] = self.direct['originalHeader0']
             self.direct['supersampledFile'] = self.dirfile
 
+
+        #set rotation, note that the rotaion is in minus direction
+        #instead of using SPA one could also calculate this from WCS CD matrix
+        self.direct['rotation'] = -self.slits['mid']['POSANGLE'] + self.direct['originalHeader0']['SPA']
         #make a rotation
         imgR, hdrR = modify.hrot(self.direct['supersampledFile'],
                                  self.direct['rotation'],
