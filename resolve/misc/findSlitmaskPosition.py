@@ -20,7 +20,7 @@ the moment three spectra are recorded simultaneously.
 
 :todo:
  1. Fix the rebinning algorithm so that it conserves flux [DONE]
- 2. Rotations might not work with the slit mask???
+ 2. Rotations might not work with the slit mask??? [FIXED]
  3. supersample the SDSS image, preserve WCS information [DONE]
  4. develop a fitting routine that is not pixel based so that subpixel shifts can happen [DONE, see above]
  5. write the derived RA and DEC information to the spectra FITS header [DONE]
@@ -838,6 +838,7 @@ class FindSlitmaskPosition():
             self.slits[key]['coordinates'] = sky
 
             #record x and y in the slit frame
+            self.slits[key]['coordinatesXY'] = pixels
             self.slits[key]['coordinatesX'] = np.ones(value['pixels'])
             self.slits[key]['coordinatesY'] = np.arange(value['pixels']) + 1
 
@@ -869,16 +870,30 @@ class FindSlitmaskPosition():
     def _writeOutputCoordinates(self):
         """
         Outputs coordinates for each pixel.
+        Pickles all this information to a file named coordinates.pk for
+        further processing.
         """
+        tmpdic = {}
+
         for slit, value in self.slits.items():
+            list = []
+
             fh = open('%s_coordinates.txt' % slit, 'w')
             fh.write('#File written by findSlitmaskPosition.py on %s\n' \
                      % datetime.datetime.isoformat(datetime.datetime.now()))
-            fh.write('x\ty\tRA\tDEC\n')
-            for tmp1, x, y in zip(value['coordinates'], value['coordinatesX'], value['coordinatesY']):
-                fh.write('%i %i %f %f \n' % (x, y, tmp1[0], tmp1[1]))
+            fh.write('#x\ty\tx2\ty2\tRA\tDEC\n')
+            for tmp1, x, y, tmp2 in zip(value['coordinates'],
+                                        value['coordinatesX'],
+                                        value['coordinatesY'],
+                                        value['coordinatesXY']):
+                fh.write('%i %i %f %f %f %f \n' % (x, y, tmp2[0], tmp2[1], tmp1[0], tmp1[1]))
+                list.append([x, y, tmp2[0], tmp2[1], tmp1[0], tmp1[1]])
+
+            tmpdic[slit] = list
 
             fh.close()
+
+        write.cPickleDumpDictionary(tmpdic, 'coordinates.pk')
 
 
     def _makeFinalFITS(self):
