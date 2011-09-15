@@ -38,8 +38,8 @@ class SplitSlicerImages():
 
         :note: this loses comments, should not be used
 
-        :param: hdu, the header to be updated
-        :param: input, input header which is being replicated to hdu
+        :param hdu: the header to be updated
+        :param input: input header which is being replicated to hdu
         """
         keyrejlist = ['SIMPLE', 'BITPIX', 'NAXIS', 'NAXIS1', 'NAXIS2', 'NAXIS3', 'EXTEND']
         keycopylist = [k for k in input.items() if k[0] not in keyrejlist]
@@ -54,7 +54,7 @@ class SplitSlicerImages():
         Uses wild cards on both sides of the identifier.
         Requires that the file ends with .fits
 
-        :param: identifier: to match files
+        :param identifier: to match files
 
         :return: a list of files matching the identifier
         :rtype: list
@@ -76,13 +76,12 @@ class SplitSlicerImages():
 
     def splitFiles(self, filelist=None, ext=0, splity=[215, 456], id='slice'):
         """
-        Splits all the FITS files in the filelist to three separate files
-        one for each slicer.
+        Splits all the FITS files in the filelist to three separate files one for each slicer.
 
-        :param: fileslist, a list of files to be split
-        :param: ext, extension of the fits file
-        :param: splity, y pixel values for splitting
-        :param: id, name identifier for each slice
+        :param fileslist: a list of files to be split
+        :param ext: extension of the fits file
+        :param splity: y pixel values for splitting
+        :param id: name identifier for each slice
         """
         if filelist == None:
             filelist = self.files
@@ -146,4 +145,6 @@ class SplitSlicerImages():
 if __name__ == '__main__':
     split = SplitSlicerImages()
     split.findFiles(identifier='ftbz*.Ne')
+    split.splitFiles()
+    split.findFiles(identifier='ftdbz*spec')
     split.splitFiles()

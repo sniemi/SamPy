@@ -24,13 +24,13 @@ def generateIRAFcopy(scis, arcs, matches, x=[15, 80], out='modifyArcs.cl'):
     Generates a file that can be fed to IRAF
     to generate a punch of temp files for data.
 
-    :param: scis, a list of science images
-    :param: arcs, a list of arc images
-    :param: matches, a dictionary showing a mapping between a science image
+    :param scis: a list of science images
+    :param arcs: a list of arc images
+    :param matches: a dictionary showing a mapping between a science image
             and arc images
-    :param: x, a list of x coordinate positions to describe the cutout region
+    :param x: a list of x coordinate positions to describe the cutout region
             from the science image. These values shuold bracket the sky line.
-    :param: out, name of the IRAF command file
+    :param out: name of the IRAF command file
 
     :return: None
     """
@@ -66,9 +66,9 @@ def findClosestArcs(scis, arcs, tol=8):
     Tries to match science frames with arcs
     that have been taken close in time.
 
-    :param: scis, a list of science files
-    :param: arcs, a list of arc files
-    :param: tol, tolerance how many files before and after
+    :param scis: a list of science files
+    :param arcs: a list of arc files
+    :param tol: tolerance how many files before and after
             the arcs are being identified.
 
     :return: out, mapping between science images and corresponding arcs

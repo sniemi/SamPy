@@ -131,7 +131,7 @@ class velocityField():
         yp = self.info['data'][:,3][msk]
 
         f = maputils.FITSimage(self.info['directImage'])
-        f.set_limits(pxlim=(2050, 2201), pylim=(1081, 1250))
+        f.set_limits(pxlim=(2001, 2221), pylim=(1041, 1281))
 
         fig = plt.figure()
         frame = fig.add_subplot(1,1,1)

@@ -1,5 +1,6 @@
 """
 Transforms science data to either linear or log scale using IRAF and arc files for dispersion solution.
+
 Performs both linear and logarithmic transformations.
 The script calls IRAF from the command line as follows::
 
@@ -15,13 +16,12 @@ import os
 
 def generateIRAFtransformCommand(data, low=5520, high=6820):
     """
-    Creates an ascii file which lists all the IRAF commands
-    required to make both linear and logarithmic transformations.
+    Creates an ascii file which lists all the IRAF commands required to make both linear and logarithmic transformations.
     
-    :param: data, a dictionary holding the files to be transformed
+    :param data: a dictionary holding the files to be transformed
             and the matching arc files.
-    :param: low, minimum wavelength in angstroms
-    :param: high, maximum wavelength in anstroms
+    :param low: minimum wavelength in angstroms
+    :param high: maximum wavelength in anstroms
 
     :return: None
     """
@@ -57,12 +57,11 @@ def findArcs(scis, arcs):
     This works only if the arc file has been named
     properly, as done by modifyArcs.py script.
 
-    :param: scis, a list of science files
-    :param: arcs, a slist of arc files
+    :param scis: a list of science files
+    :param arcs: a slist of arc files
 
-    :return: data, where science file names are keys and
-             related arcs are values (a list)
-    :rtype: a dictionary
+    :return: data, where science file names are keys and related arcs are values (a list)
+    :rtype: dictionary
     """
     #find arcs that match the science frames
     data = {}
