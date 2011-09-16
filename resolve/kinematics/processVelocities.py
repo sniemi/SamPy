@@ -33,7 +33,7 @@ class emsaoVelocity():
         :return: velocity information
         :rtype: dictionary
         """
-        out = o.OrderedDict()
+        out = []
         #read in data and loop over it
         data = open(self.file, 'r').readlines()
         for line in data:
@@ -53,7 +53,7 @@ class emsaoVelocity():
                     evelerr = tmp[5]
                     ez = tmp[8]
             else:
-                out[object] = [file, pixel, cvel, cvelerr, cz, evel, evelerr, ez, object]
+                out.append([file, pixel, cvel, cvelerr, cz, evel, evelerr, ez, object])
         return out
 
 
@@ -67,19 +67,22 @@ class emsaoVelocity():
         :return: reformatted data
         :rtype: dictionary
         """
+        file = []
         pix = []
         cvel = []
         cvelerr = []
         evel = []
         evelerr = []
-        for line in data.values():
+        for line in data:
+            file.append(line[0])
             pix.append(int(line[1]))
             cvel.append(float(line[2]))
             cvelerr.append(float(line[3]))
             evel.append(float(line[5]))
             evelerr.append(float(line[6]))
 
-        out = {}
+        out = o.OrderedDict()
+        out['file'] = file
         out['pixels'] = np.asarray(pix)
         out['cvelocities'] = np.asarray(cvel)
         out['cerrors'] = np.asarray(cvelerr)
@@ -128,7 +131,7 @@ class emsaoVelocity():
 
         fh = open(outfile, 'a')
         writer = csv.writer(fh)
-        writer.writerows(data.values())
+        writer.writerows(data)
         fh.close()
 
 

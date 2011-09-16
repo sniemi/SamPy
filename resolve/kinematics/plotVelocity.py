@@ -52,7 +52,7 @@ class velocityField():
         out = []
 
         #find matches
-        for key, val in vel.items():
+        for val in vel:
             ycoord = int(val[1])
 
             if 's1' in val[0]:
@@ -131,7 +131,7 @@ class velocityField():
         yp = self.info['data'][:,3][msk]
 
         f = maputils.FITSimage(self.info['directImage'])
-        f.set_limits(pxlim=(2001, 2221), pylim=(1041, 1281))
+        f.set_limits(pxlim=(630, 770), pylim=(830, 1090))
 
         fig = plt.figure()
         frame = fig.add_subplot(1,1,1)
@@ -169,5 +169,5 @@ if __name__ == '__main__':
     velocity = velocityField('rotated.fits')
     velocity.loadSDSSimage()
     velocity.combineVelocityCoordinates()
-    velocity.plotVelocity()
+    #velocity.plotVelocity()
     velocity.plotVelocityWCS()
