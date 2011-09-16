@@ -8,7 +8,7 @@ Class to plot velocity fields and SDSS images.
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
 
-:version: 0.1
+:version: 0.2
 """
 import numpy as np
 import pyfits as pf
@@ -22,15 +22,13 @@ from kapteyn import maputils, tabarray
 
 class velocityField():
     """
-    Velocity field.
+    Velocity field plotting class.
     """
-
     def __init__(self, directImage):
         """
-        Constructor
+        Class constructor.
         """
-        self.info = {}
-        self.info['directImage'] = directImage
+        self.info = {'directImage': directImage}
 
 
     def combineVelocityCoordinates(self,
@@ -89,40 +87,16 @@ class velocityField():
         self.info['WCS'] = pywcs.WCS(self.info['hdr'])
 
 
-    def plotVelocity(self):
+    def plotVelocityWCS(self, xlims=(630, 770), ylims=(830, 1090)):
         """
+        Generates a plot with SDSS file on the background and the slicer velocities on the top.
 
-        :Note: there are hard coded values here...
-        """
-        vel = self.info['data'][:,6]
-        msk = vel > 0
-        #vel[msk] -= np.mean(vel[msk])
+        :param xlims: a tuple of xmin and xmax
+        :type xlims: tuple
+        :param ylims: a tuple of ymin and ymax
+        :type ylims: tuple
 
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
-        ax.imshow(self.info['image'],
-                  origin='lower',
-                  cmap=cm.gist_gray_r,
-                  vmax=0.6,
-                  vmin=1e-5)
-        ax.scatter(self.info['data'][:,2][msk],
-                   self.info['data'][:,3][msk],
-                   c=vel[msk],
-                   s=20, marker = 's',
-                   cmap=cm.jet,
-                   edgecolor='none',
-                   alpha=0.8)
-
-        #TODO: remove these hard coded values...
-        ax.set_xlim(2050, 2201)
-        ax.set_ylim(1081, 1250)
-
-        fig.savefig('test.pdf')
-
-
-    def plotVelocityWCS(self):
-        """
-
+        :return: None
         """
         vel = self.info['data'][:,6]
         msk = vel > 0
@@ -131,7 +105,7 @@ class velocityField():
         yp = self.info['data'][:,3][msk]
 
         f = maputils.FITSimage(self.info['directImage'])
-        f.set_limits(pxlim=(630, 770), pylim=(830, 1090))
+        f.set_limits(pxlim=xlims, pylim=ylims)
 
         fig = plt.figure()
         frame = fig.add_subplot(1,1,1)
@@ -149,25 +123,28 @@ class velocityField():
         grat.setp_gratline(wcsaxis=1, linestyle=':')
         grat.setp_ticklabel(rotation=30)
 
-
-        #better to do this in RA and DEC actually...
-        #annim.Marker(x=xp, y=yp, mode='pixels', marker='s', color=vel[msk])
-
-        frame.scatter(xp,
-                      yp,
-                      c=vel[msk],
-                      s=20, marker = 's',
-                      cmap=cm.jet,
-                      edgecolor='none',
-                      alpha=0.8)
+        s = frame.scatter(xp,
+                          yp,
+                          c=vel[msk],
+                          s=15, marker = 's',
+                          cmap=cm.jet,
+                          edgecolor='none',
+                          alpha=0.7)
+        c1 = fig.colorbar(s, ax=frame, shrink=0.7, fraction=0.05)
+        c1.set_label('Velocity [km/s]')
 
         annim.plot()
-        plt.savefig('test2.pdf')
+        plt.savefig('VelocityOverplotted.pdf')
 
 
 if __name__ == '__main__':
-    velocity = velocityField('rotated.fits')
+    #change these
+    inputfile = 'rotated.fits'
+    xlims = (100, 300)
+    ylims = (100, 300)
+
+    #velocity instance
+    velocity = velocityField(inputfile)
     velocity.loadSDSSimage()
     velocity.combineVelocityCoordinates()
-    #velocity.plotVelocity()
-    velocity.plotVelocityWCS()
+    velocity.plotVelocityWCS(xlims=xlims, ylims=ylims)

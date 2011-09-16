@@ -1,10 +1,11 @@
 """
-This file contains SQLite3 related functions.
+SQLite3 database related functions that help to create a new database or to query an old one.
 
 :requires: NumPy
+:requires: SamPy
 
 :author: Sami-Matias Niemi
-:version: 0.1
+:version: 0.2
 """
 import sqlite3
 import re
@@ -137,10 +138,9 @@ def parseColumnNamesSAMTables(filename,
                               commentchar='#',
                               colnumber=2):
     """
-    Parse column names from a text file that follows
-    SExtractor format, i.e., columns are specified in
-    the beginning of the file. Each column are specified
-    in a single line that starts with a comment charachter.
+    Parse column names from a text file that follows SExtractor format, i.e., columns are specified in
+    the beginning of the file. Each column are specified in a single line that starts with a comment character.
+
     The line assumed to follow the following format:
     # number name
     For example:
@@ -162,17 +162,25 @@ def parseColumnNamesSAMTables(filename,
 
 
 def parseASCIITitle(filename,
-                    strip=True):
+                    strip=True,
+                    lower=False,
+                    split=None):
     """
-    Parse a single line ascii information.
-    If strip=True then will remove all dots and replace them with
-    empty spaces.
+    Parse a single line ascii information. Assumes that the first line is the header.
+    Converts all column names to lower case if lower=True, but by default does not.
+
+    If strip=True then will remove all dots and replace them with empty spaces.
 
     :param filename: name of the file to processed
     :type filename: string
     :param strip: a flag whether dots should be stripped from the name
     :type strip: boolean
+    :param lower: a flag whether the column names should be converted to lower case
+    :type lower: boolean
+    :param split: character to be used for splitting the header string
+    :type split: string
 
+    :return: a list of column names
     :rtype: list
     """
     firstLine = open(filename).readline()
@@ -180,18 +188,20 @@ def parseASCIITitle(filename,
         cols = []
         for x in firstLine.split():
             tmp = re.sub(r'[^\w]', '', x.strip('.'))
-            cols.append(tmp)
+            cols.append(tmp.replace('#', '').strip())
     else:
-        cols = [x for x in firstLine.split()]
+        if lower:
+            cols = [x.replace('#', '').strip() for x in firstLine.split(split).lower()]
+        else:
+            cols = [x.replace('#', '').strip() for x in firstLine.split(split)]
     return cols
 
 
 def generateSQLString(columns, format, start):
     """
-    Generates an SQL string from two vectors that
-    describe the name of the column and the format.
-    Can be used to assist when generating a string
-    to create a new table.
+    Generates an SQL string from two vectors that describe the name of the column and the format.
+
+    Can be used to assist when generating a string to create a new table.
     """
     start += '('
     for a, b in zip(columns, format):

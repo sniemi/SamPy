@@ -90,16 +90,18 @@
             
   <div class="section" id="module-SamPy.db.sqlite">
 <span id="sampy-db-sqlite"></span><h1>SamPy.db.sqlite<a class="headerlink" href="#module-SamPy.db.sqlite" title="Permalink to this headline">¶</a></h1>
-<p>This file contains SQLite3 related functions.</p>
+<p>SQLite3 database related functions that help to create a new database or to query an old one.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field"><th class="field-name">requires:</th><td class="field-body">NumPy</td>
 </tr>
+<tr class="field"><th class="field-name">requires:</th><td class="field-body">SamPy</td>
+</tr>
 <tr class="field"><th class="field-name">author:</th><td class="field-body">Sami-Matias Niemi</td>
 </tr>
-<tr class="field"><th class="field-name">version:</th><td class="field-body">0.1</td>
+<tr class="field"><th class="field-name">version:</th><td class="field-body">0.2</td>
 </tr>
 </tbody>
 </table>
@@ -114,7 +116,7 @@
 <td>Calculates the specific star formation rate from a given (SAM) data.</td>
 </tr>
 <tr><td><a class="reference internal" href="SamPy.db.sqlite.generateSQLString.html#SamPy.db.sqlite.generateSQLString" title="SamPy.db.sqlite.generateSQLString"><tt class="xref py py-obj docutils literal"><span class="pre">generateSQLString</span></tt></a>(columns,&nbsp;format,&nbsp;start)</td>
-<td>Generates an SQL string from two vectors that</td>
+<td>Generates an SQL string from two vectors that describe the name of the column and the format.</td>
 </tr>
 <tr><td><a class="reference internal" href="SamPy.db.sqlite.get_data_sqlite.html#SamPy.db.sqlite.get_data_sqlite" title="SamPy.db.sqlite.get_data_sqlite"><tt class="xref py py-obj docutils literal"><span class="pre">get_data_sqlite</span></tt></a>(path,&nbsp;db,&nbsp;query)</td>
 <td>This function can be used to pull out data from an slite3 database.</td>
@@ -125,11 +127,11 @@
 <tr><td><a class="reference internal" href="SamPy.db.sqlite.get_data_sqliteSMNfunctions.html#SamPy.db.sqlite.get_data_sqliteSMNfunctions" title="SamPy.db.sqlite.get_data_sqliteSMNfunctions"><tt class="xref py py-obj docutils literal"><span class="pre">get_data_sqliteSMNfunctions</span></tt></a>(path,&nbsp;db,&nbsp;query)</td>
 <td>Run an SQL query to a database with custom made functions &#8220;toPowerTen&#8221; and &#8220;janskyToMagnitude&#8221;.</td>
 </tr>
-<tr><td><a class="reference internal" href="SamPy.db.sqlite.parseASCIITitle.html#SamPy.db.sqlite.parseASCIITitle" title="SamPy.db.sqlite.parseASCIITitle"><tt class="xref py py-obj docutils literal"><span class="pre">parseASCIITitle</span></tt></a>(filename[,&nbsp;strip])</td>
+<tr><td><a class="reference internal" href="SamPy.db.sqlite.parseASCIITitle.html#SamPy.db.sqlite.parseASCIITitle" title="SamPy.db.sqlite.parseASCIITitle"><tt class="xref py py-obj docutils literal"><span class="pre">parseASCIITitle</span></tt></a>(filename[,&nbsp;strip,&nbsp;lower,&nbsp;split])</td>
 <td>Parse a single line ascii information.</td>
 </tr>
 <tr><td><a class="reference internal" href="SamPy.db.sqlite.parseColumnNamesSAMTables.html#SamPy.db.sqlite.parseColumnNamesSAMTables" title="SamPy.db.sqlite.parseColumnNamesSAMTables"><tt class="xref py py-obj docutils literal"><span class="pre">parseColumnNamesSAMTables</span></tt></a>(filename[,&nbsp;...])</td>
-<td>Parse column names from a text file that follows</td>
+<td>Parse column names from a text file that follows SExtractor format, i.e., columns are specified in</td>
 </tr>
 <tr><td><a class="reference internal" href="SamPy.db.sqlite.toLogTen.html#SamPy.db.sqlite.toLogTen" title="SamPy.db.sqlite.toLogTen"><tt class="xref py py-obj docutils literal"><span class="pre">toLogTen</span></tt></a>(value)</td>
 <td>Takes the 10th base logarithm of the given value.</td>

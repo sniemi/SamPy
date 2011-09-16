@@ -77,8 +77,10 @@
 <dl class="function">
 <dt id="SamPy.resolve.catalogs.createSQLite.generateSQLiteDBfromASCII">
 <tt class="descclassname">SamPy.resolve.catalogs.createSQLite.</tt><tt class="descname">generateSQLiteDBfromASCII</tt><big>(</big><em>output='catalogs.db'</em>, <em>fileidentifier='*.txt'</em><big>)</big><a class="headerlink" href="#SamPy.resolve.catalogs.createSQLite.generateSQLiteDBfromASCII" title="Permalink to this definition">¶</a></dt>
-<dd><p>The script will make a table out from each ascii
-output file.</p>
+<dd><p>Generates a database, each ascii file will be a separate table.</p>
+<p>The first line of the ascii file will be used to identify
+column names. This line should start with # so that it will
+be ignored. Each column name should be separated by a white space.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />

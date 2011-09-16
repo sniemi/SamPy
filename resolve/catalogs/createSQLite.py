@@ -1,19 +1,27 @@
 """
 This module contains a function that can be used to generate an SQLite3 database from ascii files.
 
+:requires: SamPy
+
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
+
+:version: 0.2
 """
 import sqlite3
 import glob as g
 import SamPy.log.Logger as lg
 import SamPy.db.sqlite
 
+
 def generateSQLiteDBfromASCII(output='catalogs.db',
                               fileidentifier='*.txt'):
     """
-    The script will make a table out from each ascii
-    output file.
+    Generates a database, each ascii file will be a separate table.
+
+    The first line of the ascii file will be used to identify
+    column names. This line should start with # so that it will
+    be ignored. Each column name should be separated by a white space.
 
     :param output: name of the output file
     :param fileidentifier: string how to identify input data
@@ -22,42 +30,38 @@ def generateSQLiteDBfromASCII(output='catalogs.db',
     :type fileidentifier: string
     """
 
-    #find all files
+    #find all files matching the file identifier
     files = g.glob(fileidentifier)
-    #create a Connection object that represents the database
-    #to a file
+    #create a connection object to output that represents the database
     conn = sqlite3.connect(output)
 
     for file in files:
         log.info('Processing file %s', file)
-        columns = db.sqlite.parseASCIITitle(file)
+
+        #process columns
+        columns = SamPy.db.sqlite.parseASCIITitle(file)
         formats = []
         for col in columns:
-            if 'Name' in col:
+            if 'name' in col.lower():
                 formats.append('STRING')
-            elif 'Flag' in col:
+            elif 'flag' in col.lower():
                 formats.append('INTEGER')
             else:
                 formats.append('REAL')
 
-        if 'Fall' in file:
-            start = 'create table fall '
-            ins = 'insert into fall values ('
-            for x in range(len(formats)):
-                ins += '?,'
-            ins = ins[:-1] + ')'
+        #name of the table
+        table = file.split('.')[0]
 
-        if 'Spring' in file:
-            start = 'create table spring '
-            ins = 'insert into spring values ('
-            for x in range(len(formats)):
-                ins += '?,'
-            ins = ins[:-1] + ')'
+        start = 'create table %s ' % table
+        ins = 'insert into fall values ('
+        for x in range(len(formats)):
+            ins += '?,'
+        ins = ins[:-1] + ')'
 
         #generate an SQL table creation string
-        sql_create_string = db.sqlite.generateSQLString(columns,
-                                                        formats,
-                                                        start)
+        sql_create_string = SamPy.db.sqlite.generateSQLString(columns,
+                                                              formats,
+                                                              start)
 
         log.info(sql_create_string)
 
@@ -81,19 +85,15 @@ def generateSQLiteDBfromASCII(output='catalogs.db',
 
         log.info('Finished inserting data')
 
-        #create index to make searching faster
-        if 'Spring' in file:
-            indexString = 'CREATE UNIQUE INDEX spring_ids on spring (RA, DEC, SDSSVel)'
-        if 'Fall' in file:
-            indexString = 'CREATE UNIQUE INDEX fall_ids on fall (RA, DEC, SDSSVel)'
-
-
+        #create index on the first column to make searching faster
+        indexString = 'CREATE UNIQUE INDEX ids on %s (%s)' % (table, columns[0])
         c.execute(indexString)
+        
         log.info('%s', indexString)
 
         # Save (commit) the changes
         conn.commit()
-        # We can also close the cursor if we are done with it
+        # We can also close the cursor when we are done with it
         c.close()
 
     log.info('All done, DB file is %s', output)

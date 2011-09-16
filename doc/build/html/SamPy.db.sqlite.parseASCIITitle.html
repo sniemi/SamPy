@@ -93,10 +93,10 @@
 <h1>SamPy.db.sqlite.parseASCIITitle<a class="headerlink" href="#sampy-db-sqlite-parseasciititle" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="SamPy.db.sqlite.parseASCIITitle">
-<tt class="descclassname">SamPy.db.sqlite.</tt><tt class="descname">parseASCIITitle</tt><big>(</big><em>filename</em>, <em>strip=True</em><big>)</big><a class="headerlink" href="#SamPy.db.sqlite.parseASCIITitle" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parse a single line ascii information.
-If strip=True then will remove all dots and replace them with
-empty spaces.</p>
+<tt class="descclassname">SamPy.db.sqlite.</tt><tt class="descname">parseASCIITitle</tt><big>(</big><em>filename</em>, <em>strip=True</em>, <em>lower=False</em>, <em>split=' '</em><big>)</big><a class="headerlink" href="#SamPy.db.sqlite.parseASCIITitle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse a single line ascii information. Assumes that the first line is the header.
+Converts all column names to lower case.</p>
+<p>If strip=True then will remove all dots and replace them with empty spaces.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -104,7 +104,12 @@ empty spaces.</p>
 <tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>filename</strong> (<em>string</em>) &#8211; name of the file to processed</li>
 <li><strong>strip</strong> (<em>boolean</em>) &#8211; a flag whether dots should be stripped from the name</li>
+<li><strong>lower</strong> (<em>boolean</em>) &#8211; a flag whether the column names should be converted to lower case</li>
+<li><strong>split</strong> (<em>string</em>) &#8211; character to be used for splitting the header string</li>
 </ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a list of column names</p>
 </td>
 </tr>
 <tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">list</p>
