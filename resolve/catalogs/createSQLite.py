@@ -42,11 +42,18 @@ def generateSQLiteDBfromASCII(output='catalogs.db',
         columns = SamPy.db.sqlite.parseASCIITitle(file)
         formats = []
         for col in columns:
-            if 'name' in col.lower() or 'tel' in col.lower():
+            if 'name' in col.lower() or\
+               'tel' in col.lower() or\
+               'flags' in col.lower() or\
+               'istherespec' in col.lower() or\
+               'data' in col.lower() or\
+               'setup' in col.lower() or\
+               'frontend' in col.lower() or\
+               'obsshift' in col.lower():
                 formats.append('TEXT')
             elif 'flag' in col.lower():
                 formats.append('INT')
-            elif 'objid' in col.lower():
+            elif 'id' in col.lower():
                 formats.append('BIGINT')
             else:
                 formats.append('DOUBLE')
@@ -88,7 +95,11 @@ def generateSQLiteDBfromASCII(output='catalogs.db',
         log.info('Finished inserting data')
 
         #create index on the first column to make searching faster
-        indexString = 'CREATE UNIQUE INDEX %sids on %s (%s)' % (table, table, columns[0])
+        if 'galex' in table:
+            indexString = 'CREATE UNIQUE INDEX %sids on %s (%s, %s)' % (table, table, columns[0], 'sdssid')
+        else:
+            indexString = 'CREATE UNIQUE INDEX %sids on %s (%s)' % (table, table, columns[0])
+
         c.execute(indexString)
         
         log.info('%s', indexString)

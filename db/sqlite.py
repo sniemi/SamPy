@@ -85,7 +85,7 @@ def get_data_sqlitePowerTen(path, db, query):
     return data
 
 
-def get_data_sqliteSMNfunctions(path, db, query):
+def get_data_sqliteSMNfunctions(path, db, query, toNumpy=True):
     """
     Run an SQL query to a database with custom made functions "toPowerTen" and "janskyToMagnitude".
 
@@ -95,9 +95,11 @@ def get_data_sqliteSMNfunctions(path, db, query):
     :type db: string
     :param query: valid SQL query
     :type query: string
+    :param toNumPy: whether or not to convert to NumPy ndarray
+    :type toNumPy: boolean
     
     :return: all requested data
-    :rtype: ndarray
+    :rtype: list or ndarray
     """
     conn = sqlite3.connect(path + db)
     conn.create_function('janskyToMagnitude', 1, conv.janskyToMagnitude)
@@ -106,7 +108,10 @@ def get_data_sqliteSMNfunctions(path, db, query):
     conn.create_function('SSFR', 2, SSFR)
     c = conn.cursor()
     c.execute(query)
-    data = np.array(c.fetchall())
+    if toNumpy:
+        data = np.array(c.fetchall())
+    else:
+        data = c.fetchall()
     c.close()
     return data
 
