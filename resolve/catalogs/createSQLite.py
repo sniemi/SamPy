@@ -80,7 +80,7 @@ def generateSQLiteDBfromASCII(output='catalogs.db',
         #Create table
         c.execute(sql_create_string)
 
-        log.info('Created table, will start inserting data')
+        log.info('Created table, will start inserting data to %s' % table)
 
         #insert data, line-by-line to save memory
         fh = open(file, 'r')
@@ -92,18 +92,20 @@ def generateSQLiteDBfromASCII(output='catalogs.db',
             if not line.startswith('#'):
                 c.execute(ins, line.split())
 
-        log.info('Finished inserting data')
+        log.info('Finished inserting data to %s' % table)
 
         #create index on the first column to make searching faster
         if 'galex' in table:
             indexString = 'CREATE UNIQUE INDEX %sids on %s (%s, %s)' % (table, table, columns[0], 'sdssid')
+        elif 'kindata' in table:
+            indexString = 'CREATE INDEX %sids on %s (%s)' % (table, table, columns[0])
         else:
             indexString = 'CREATE UNIQUE INDEX %sids on %s (%s)' % (table, table, columns[0])
 
+        log.info('Creating index: %s' % indexString)
         c.execute(indexString)
-        
-        log.info('%s', indexString)
 
+        log.info('Will commit all changes to %s' % table)
         # Save (commit) the changes
         conn.commit()
         # We can also close the cursor when we are done with it
