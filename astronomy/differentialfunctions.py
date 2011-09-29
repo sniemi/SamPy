@@ -101,9 +101,12 @@ def diff_function_log_binning(data, column=0, log=False,
         mmin = N.log10(mmin)
         mmax = N.log10(mmax)
     else:
-        d = data[:, column]
+        if len(N.shape(data)) == 1:
+            d = data
+        else:
+            d = data[:, column]
 
-        #bins
+    #bins
     dm = (mmax - mmin) / float(nbins)
     mbin = (N.arange(nbins) + 0.5) * dm + mmin
     #one could also use N.linspace(mmin, mmax, nbins)
