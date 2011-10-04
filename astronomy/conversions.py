@@ -4,14 +4,42 @@ Functions to do Astronomy related unit conversions.
 :requires: NumPy
 :requires: cosmocalc (http://cxc.harvard.edu/contrib/cosmocalc/)
 
-:version: 0.2
+:version: 0.3
 
-:author: Sami Niemi
+:author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
 """
 import math
 import numpy as np
 from cosmocalc import cosmocalc
+
+
+def ergsperSecondtoLsun(ergss):
+    """
+    Converts ergs per second to solar luminosity in L_sun.
+
+    :param ergss: ergs per second
+    :type ergss: float or ndarray
+
+    :return: luminosity in L_sun
+    :rtype: float or ndarray
+    """
+    return ergss / 3.839e33
+
+
+def wattsperHertztoErgsperArcsecond(data):
+    """
+    Converts Watts per Hertz to ergs per arcsecond.
+
+    1 watt per hertz = 48.4813681 ergs per arcsecond.
+
+    :param data: data to be converted
+    :type data: float or ndarray
+
+    :return: converted value
+    :rtype: float or ndarray
+    """
+    return data * 48.4813681
 
 
 def angstromToHertz(A):
