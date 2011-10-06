@@ -1,5 +1,5 @@
 """
-Different luminosity functions.
+Galaxy luminosity functions at different wavelengths from different papers.
 
 :requires: NumPy
 :requires: SamPy
@@ -7,9 +7,7 @@ Different luminosity functions.
 :version: 0.2
 
 :author: Sami-Matias Niemi
-:contact: niemi@stsci.edu
-
-:todo: add more LFs. There are for example several more from the Bell.
+:contact: sammyniemi2010@gmail.com
 """
 import os
 import numpy as np
@@ -48,7 +46,7 @@ def bellG():
 
 def Herschel100Lapi():
     """
-    Herschel 100 micron band luminosity function at different redshift bins.
+    Herschel 100 micron band luminosity function at different redshift bins from Lapi et al. (2011)
 
     :return: luminosity functions at different bins
     :rtype: dictionary
@@ -71,7 +69,7 @@ def Herschel100Lapi():
 
 def Herschel250Lapi():
     """
-    Herschel 250 micron band luminosity function at different redshift bins.
+    Herschel 250 micron band luminosity function at different redshift bins from Lapi et al. (2011)
 
     :return: luminosity functions at different bins
     :rtype: dictionary
@@ -89,4 +87,21 @@ def Herschel250Lapi():
            'z1.8': data[:, 4:7],
            'z2.2': data[:, 7:10],
            'z3.2': data[:, 10:]}
+    return out
+
+
+def Herschel250Dye():
+    """
+    Herschel 250 micron band luminosity function at different redshift bins from Dye et al. A&A 518, L10 (2010)
+
+    :return: luminosity functions at different bins
+    :rtype: dictionary
+    """
+    file = observation_path + 'lf/Herschel250micDye'
+    data = np.loadtxt(file)
+
+    out = {'Lsun': data[:, 0],
+           'z0.5': data[:, 1],
+           'z0.5max': data[:, 2]}
+
     return out
