@@ -12,7 +12,7 @@ matplotlib.rc('xtick', labelsize=13)
 matplotlib.rc('ytick', labelsize=13)
 matplotlib.rc('axes', linewidth=1.2)
 matplotlib.rcParams['legend.fontsize'] = 11
-matplotlib.rcParams['legend.handlelength'] = 1
+matplotlib.rcParams['legend.handlelength'] = 2
 matplotlib.rcParams['xtick.major.size'] = 5
 matplotlib.rcParams['ytick.major.size'] = 5
 import numpy as N
@@ -354,14 +354,15 @@ def plot_luminosityfunctionKDE(path, database, redshifts,
 def plot_luminosityfunctionPaper(path, database, redshifts,
                                  bands, out_folder,
                                  solid_angle=100*160.,
-                                 ymin=1e-7, ymax=5*10**-2,
+                                 ymin=5e-7, ymax=5*10**-2,
                                  xmin=9.1, xmax=13.1,
                                  H0=70.0, WM=0.28):
     """
     :param solid_angle: area of the sky survey in arcmin**2
                         GOODS = 160, hence 100*160
     """
-    col = ['black', 'red', 'magenta', 'green', 'blue', 'brown']
+    col = ['black', 'red', 'magenta', 'green', 'blue']
+    lin = [':', '--', '-', '-.', '-']
     #make the figure
     fig = P.figure()
     fig.subplots_adjust(left=0.09, bottom=0.08,
@@ -390,7 +391,7 @@ def plot_luminosityfunctionPaper(path, database, redshifts,
             #modify redshift string
             tmp = red.split()
             #rtitle = r'$z = %.0f$' % N.mean(N.array([float(tmp[2]), float(tmp[6])]))
-            rtitle = r'$%s \geq z < %s$' % (tmp[2], tmp[6])
+            rtitle = r'$%s \leq z < %s$' % (tmp[2], tmp[6])
 
             #get a comoving volume
             comovingVol = cv.comovingVolume(solid_angle,
@@ -415,13 +416,13 @@ def plot_luminosityfunctionPaper(path, database, redshifts,
             x = N.append(x, N.max(x) * 1.01)
             y = N.append(y, 1e-10)
             if '100' in b:
-                ax1.plot(x, N.log10(y), color=col[i], marker='None', ls='-', label=rtitle)
+                ax1.plot(x, N.log10(y), color=col[i], marker='None', ls=lin[i], label=rtitle)
             if '160' in b:
-                ax2.plot(x, N.log10(y), color=col[i], marker='None', ls='-', label=rtitle)
+                ax2.plot(x, N.log10(y), color=col[i], marker='None', ls=lin[i], label=rtitle)
             if '250' in b:
-                ax3.plot(x, N.log10(y), color=col[i], marker='None', ls='-', label=rtitle)
+                ax3.plot(x, N.log10(y), color=col[i], marker='None', ls=lin[i], label=rtitle)
             if '350' in b:
-                ax4.plot(x, N.log10(y), color=col[i], marker='None', ls='-', label=rtitle)
+                ax4.plot(x, N.log10(y), color=col[i], marker='None', ls=lin[i], label=rtitle)
 
     #plot observational constrains
     mic100 = lf.Herschel100Lapi()
@@ -432,25 +433,25 @@ def plot_luminosityfunctionPaper(path, database, redshifts,
     x250 = N.log10(mic250['Lsun'])
 
     #mask out missing values
-    msk100z15 = mic100['z1.5'][:, 0] > -80
-    msk100z22 = mic100['z2.2'][:, 0] > -80
-    msk100z32 = mic100['z3.2'][:, 0] > -80
+    msk100z15 = mic100['z1.5'][:, 0] > -6.5
+    msk100z22 = mic100['z2.2'][:, 0] > -6.5
+    msk100z32 = mic100['z3.2'][:, 0] > -6.5
 
-    msk250z15 = mic250['z1.4'][:, 0] > -80
-    msk250z22 = mic250['z2.2'][:, 0] > -80
-    msk250z32 = mic250['z3.2'][:, 0] > -80
+    msk250z15 = mic250['z1.4'][:, 0] > -6.5
+    msk250z22 = mic250['z2.2'][:, 0] > -6.5
+    msk250z32 = mic250['z3.2'][:, 0] > -6.5
 
 
     #PACS100 plots
     ax1.errorbar(x100[msk100z15], mic100['z1.5'][:, 0][msk100z15],
                  yerr=[-mic100['z1.5'][:, 2][msk100z15], mic100['z1.5'][:, 1][msk100z15]],
-                 marker='s', ms=5, ls='None', mfc='r', mec='r')
+                 marker='s', ms=4, ls='None', mfc='r', mec='r', c='r')
     ax1.errorbar(x100[msk100z22], mic100['z2.2'][:, 0][msk100z22],
                  yerr=[-mic100['z2.2'][:, 2][msk100z22], mic100['z2.2'][:, 1][msk100z22]],
-                 marker='o', ms=5, ls='None', mfc='m', mec='m')
+                 marker='o', ms=4, ls='None', mfc='m', mec='m', c='m')
     ax1.errorbar(x100[msk100z32], mic100['z3.2'][:, 0][msk100z32],
                  yerr=[-mic100['z3.2'][:, 2][msk100z32], mic100['z3.2'][:, 1][msk100z32]],
-                 marker='d', ms=5, ls='None', mfc='g', mec='g')
+                 marker='d', ms=4, ls='None', mfc='g', mec='g', c='g')
     #    ax1.scatter(x100[msk100z15], 10**mic100['z1.5'][:,0][msk100z15],
     #                marker='s', s=10,c='k')
     #    ax1.scatter(x100[msk100z22], 10**mic100['z2.2'][:,0][msk100z22],
@@ -461,13 +462,13 @@ def plot_luminosityfunctionPaper(path, database, redshifts,
     #SPIRE250 plots
     ax3.errorbar(x250[msk250z15], mic250['z1.4'][:, 0][msk250z15],
                  yerr=[-mic250['z1.4'][:, 2][msk250z15], mic250['z1.4'][:, 1][msk250z15]],
-                 marker='s', ms=5, ls='None', mfc='r', mec='r', label=r'$1.2 \geq z < 1.6$')
+                 marker='s', ms=4, ls='None', mfc='r', mec='r', c='r', label=r'$1.2 \leq z < 1.6$')
     ax3.errorbar(x250[msk250z22], mic250['z2.2'][:, 0][msk250z22],
                  yerr=[-mic250['z2.2'][:, 2][msk250z22], mic250['z2.2'][:, 1][msk250z22]],
-                 marker='o', ms=5, ls='None', mfc='m', mec='m', label =r'$2.0 \geq z < 2.4$')
+                 marker='o', ms=4, ls='None', mfc='m', mec='m', c='m',  label=r'$2.0 \leq z < 2.4$')
     ax3.errorbar(x250[msk250z32], mic250['z3.2'][:, 0][msk250z32],
                  yerr=[-mic250['z3.2'][:, 2][msk250z32], mic250['z3.2'][:, 1][msk250z32]],
-                 marker='d', ms=5, ls='None', mfc='g', mec='g', label=r'$2.4 \geq z < 4.0$')
+                 marker='d', ms=4, ls='None', mfc='g', mec='g', c='g', label=r'$2.4 \leq z < 4.0$')
     #    ax3.scatter(x250[msk250z15], 10**mic250['z1.4'][:,0][msk250z15],
     #                marker='s', s=10,c='k')
     #    ax3.scatter(x250[msk250z22], 10**mic250['z2.2'][:,0][msk250z22],
@@ -475,6 +476,14 @@ def plot_luminosityfunctionPaper(path, database, redshifts,
     #    ax3.scatter(x250[msk250z32], 10**mic250['z3.2'][:,0][msk250z32],
     #                marker='d', s=10, c='m')
 
+
+    #labels
+    ax4.errorbar([5,], [-10,], yerr=[0.1,],
+                 marker='s', ms=4, ls='None', mfc='r', mec='r', c='r', label=r'$1.2 \leq z < 1.6$')
+    ax4.errorbar([5,], [-10,], yerr=[0.1,],
+                 marker='o', ms=4, ls='None', mfc='m', mec='m', c='m',  label=r'$2.0 \leq z < 2.4$')
+    ax4.errorbar([5,], [-10,], yerr=[0.1,],
+                 marker='d', ms=4, ls='None', mfc='g', mec='g', c='g', label=r'$2.4 \leq z < 4.0$')
 
     #set scales
     #    ax1.set_yscale('log')
@@ -527,8 +536,6 @@ def plot_luminosityfunctionPaper(path, database, redshifts,
            transform=ax4.transAxes)
 
     #legend
-    ax3.legend(scatterpoints=1, fancybox=True, shadow=True,
-               loc='center right')
     ax4.legend(scatterpoints=1, fancybox=True, shadow=True,
                loc='center right')
     #save figure
@@ -546,7 +553,7 @@ if __name__ == '__main__':
     out_folder = hm + '/Research/Herschel/plots/luminosity_functions/'
     obs_data = hm + '/Dropbox/Research/Herschel/obs_data/'
 
-    redshifts = ['FIR.z >= 0.0 and FIR.z < 0.5',
+    redshifts = ['FIR.z >= 0.0 and FIR.z < 0.3',
                  'FIR.z >= 1.2 and FIR.z < 1.6',
                  'FIR.z >= 2.0 and FIR.z < 2.4',
                  'FIR.z >= 2.4 and FIR.z < 4.0',
