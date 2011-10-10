@@ -5,10 +5,9 @@ Pulls data from an sqlite3 database.
 :author: Sam-Matias Niemi
 """
 import matplotlib
-
 matplotlib.use('PS')
 matplotlib.rc('text', usetex=True)
-matplotlib.rcParams['font.size'] = 16
+matplotlib.rcParams['font.size'] = 15
 matplotlib.rc('xtick', labelsize=13)
 matplotlib.rc('ytick', labelsize=13)
 matplotlib.rc('axes', linewidth=1.2)
@@ -20,15 +19,14 @@ import numpy as N
 import pylab as P
 import re, os
 import scipy.stats as SS
-import db.sqlite
+import SamPy.db.sqlite
 import SamPy.astronomy.differentialfunctions as df
 import SamPy.astronomy.conversions as cv
 import SamPy.astronomy.luminosityFunctions as lf
-#from cosmocalc import cosmocalc
 
 
 def plot_luminosityfunction(path, database, redshifts,
-                            band, out_folder, obs_data,
+                            band, out_folder,
                             solid_angle=10 * 160.,
                             ymin=10 ** 3, ymax=2 * 10 ** 6,
                             xmin=0.5, xmax=100,
@@ -41,9 +39,6 @@ def plot_luminosityfunction(path, database, redshifts,
     :param sigma: sigma level of the errors to be plotted
     :param nbins: number of bins (for simulated data)
     """
-    #fudge factor to handle errors that are way large
-    fudge = ymin
-
     #subplot numbers
     columns = 3
     rows = 3
@@ -51,7 +46,7 @@ def plot_luminosityfunction(path, database, redshifts,
     #get data
     query = """select %s from FIR where %s > 7
                and FIR.spire250_obs < 1e6""" % (band, band)
-    total = db.sqlite.get_data_sqlite(path, database, query)
+    total = SamPy.db.sqlite.get_data_sqlite(path, database, query)
 
     #make the figure
     fig = P.figure()
@@ -104,7 +99,7 @@ def plot_luminosityfunction(path, database, redshifts,
     for i, red in enumerate(redshifts):
         query = '''select %s from FIR where %s > 7 and %s
         and FIR.spire250_obs < 1e6''' % (band, band, red)
-        limited = db.sqlite.get_data_sqlite(path, database, query)
+        limited = SamPy.db.sqlite.get_data_sqlite(path, database, query)
         print query, len(limited)
 
         #modify redshift string
@@ -173,7 +168,7 @@ def plot_luminosityfunction(path, database, redshifts,
 
 
 def plot_luminosityfunction2(path, database, redshifts,
-                             band, out_folder, obs_data,
+                             band, out_folder,
                              solid_angle=10 * 160.,
                              ymin=10 ** 3, ymax=2 * 10 ** 6,
                              xmin=0.5, xmax=100,
@@ -190,7 +185,7 @@ def plot_luminosityfunction2(path, database, redshifts,
     #get data
     query = '''select %s from FIR where %s > 7
                and FIR.spire250_obs < 1e6''' % (band, band)
-    total = db.sqlite.get_data_sqlite(path, database, query)
+    total = SamPy.db.sqlite.get_data_sqlite(path, database, query)
 
     #make the figure
     fig = P.figure()
@@ -226,7 +221,7 @@ def plot_luminosityfunction2(path, database, redshifts,
     for i, red in enumerate(redshifts):
         query = '''select %s from FIR where %s > 7 and %s
         and FIR.spire250_obs < 1e6''' % (band, band, red)
-        limited = db.sqlite.get_data_sqlite(path, database, query)
+        limited = SamPy.db.sqlite.get_data_sqlite(path, database, query)
         print query, len(limited)
 
         #modify redshift string
@@ -280,7 +275,7 @@ def plot_luminosityfunction2(path, database, redshifts,
 
 
 def plot_luminosityfunctionKDE(path, database, redshifts,
-                               band, out_folder, obs_data,
+                               band, out_folder,
                                solid_angle=10 * 160.,
                                ymin=10 ** 3, ymax=2 * 10 ** 6,
                                xmin=0.5, xmax=100,
@@ -297,7 +292,7 @@ def plot_luminosityfunctionKDE(path, database, redshifts,
     #get data
     query = '''select %s from FIR where %s > 6
                and FIR.spire250_obs < 1e6''' % (band, band)
-    total = db.sqlite.get_data_sqlite(path, database, query)[:, 0]
+    total = SamPy.db.sqlite.get_data_sqlite(path, database, query)[:, 0]
     print len(total)
     #get the co-moving volume to the backend
     comovingVol = cv.comovingVolume(solid_angle,
@@ -320,7 +315,7 @@ def plot_luminosityfunctionKDE(path, database, redshifts,
     for i, red in enumerate(redshifts):
         query = '''select %s from FIR where %s > 6 and %s
         and FIR.spire250_obs < 1e6''' % (band, band, red)
-        limited = db.sqlite.get_data_sqlite(path, database, query)[:, 0]
+        limited = SamPy.db.sqlite.get_data_sqlite(path, database, query)[:, 0]
         print query, len(limited)
 
         #modify redshift string
@@ -359,10 +354,9 @@ def plot_luminosityfunctionKDE(path, database, redshifts,
 def plot_luminosityfunctionPaper(path, database, redshifts,
                                  bands, out_folder,
                                  solid_angle=100*160.,
-                                 ymin=1e-5, ymax=5*10**-2,
-                                 xmin=8.0, xmax=12.3,
-                                 H0=70.0, WM=0.28,
-                                 zmax=6.0):
+                                 ymin=1e-7, ymax=5*10**-2,
+                                 xmin=9.1, xmax=13.1,
+                                 H0=70.0, WM=0.28):
     """
     :param solid_angle: area of the sky survey in arcmin**2
                         GOODS = 160, hence 100*160
@@ -390,13 +384,13 @@ def plot_luminosityfunctionPaper(path, database, redshifts,
         for i, red in enumerate(redshifts):
             query = '''select %s from FIR where %s > 7.7 and %s
             and FIR.spire250_obs < 1e6''' % (b, b, red)
-            limited = db.sqlite.get_data_sqlite(path, database, query)
+            limited = SamPy.db.sqlite.get_data_sqlite(path, database, query)
             print query, len(limited)
 
             #modify redshift string
             tmp = red.split()
             #rtitle = r'$z = %.0f$' % N.mean(N.array([float(tmp[2]), float(tmp[6])]))
-            rtitle = r'$%s < z \leq %s$' % (tmp[2], tmp[6])
+            rtitle = r'$%s \geq z < %s$' % (tmp[2], tmp[6])
 
             #get a comoving volume
             comovingVol = cv.comovingVolume(solid_angle,
@@ -421,13 +415,13 @@ def plot_luminosityfunctionPaper(path, database, redshifts,
             x = N.append(x, N.max(x) * 1.01)
             y = N.append(y, 1e-10)
             if '100' in b:
-                ax1.plot(x, y, color=col[i], marker='None', ls='-', label=rtitle)
+                ax1.plot(x, N.log10(y), color=col[i], marker='None', ls='-', label=rtitle)
             if '160' in b:
-                ax2.plot(x, y, color=col[i], marker='None', ls='-', label=rtitle)
+                ax2.plot(x, N.log10(y), color=col[i], marker='None', ls='-', label=rtitle)
             if '250' in b:
-                ax3.plot(x, y, color=col[i], marker='None', ls='-', label=rtitle)
+                ax3.plot(x, N.log10(y), color=col[i], marker='None', ls='-', label=rtitle)
             if '350' in b:
-                ax4.plot(x, y, color=col[i], marker='None', ls='-', label=rtitle)
+                ax4.plot(x, N.log10(y), color=col[i], marker='None', ls='-', label=rtitle)
 
     #plot observational constrains
     mic100 = lf.Herschel100Lapi()
@@ -438,45 +432,59 @@ def plot_luminosityfunctionPaper(path, database, redshifts,
     x250 = N.log10(mic250['Lsun'])
 
     #mask out missing values
-    msk100z15 = mic100['z1.5'][:,0] > -80
-    msk100z22 = mic100['z2.2'][:,0] > -80
-    msk100z32 = mic100['z3.2'][:,0] > -80
+    msk100z15 = mic100['z1.5'][:, 0] > -80
+    msk100z22 = mic100['z2.2'][:, 0] > -80
+    msk100z32 = mic100['z3.2'][:, 0] > -80
 
-    msk250z15 = mic100['z1.4'][:,0] > -80
-    msk250z22 = mic100['z2.2'][:,0] > -80
-    msk250z32 = mic100['z3.2'][:,0] > -80
+    msk250z15 = mic250['z1.4'][:, 0] > -80
+    msk250z22 = mic250['z2.2'][:, 0] > -80
+    msk250z32 = mic250['z3.2'][:, 0] > -80
 
 
     #PACS100 plots
-    ax1.errobar(x100[msk100z15], 10**mic100['z1.5'][:,0][msk100z15],
-                yerr=[10**mic100['z1.5'][:,1][msk100z15], 10**mic100['z1.5'][:,2][msk100z15]],
-                marker='s', ms=10, ls='None', mfc='k', mec='k')
-    ax1.errobar(x100[msk100z22], 10**mic100['z2.2'][:,0][msk100z22],
-                yerr=[10**mic100['z2.2'][:,1][msk100z22], 10**mic100['z2.2'][:,2][msk100z22]],
-                marker='s', ms=10, ls='None', mfc='r', mec='r')
-    ax1.errobar(x100[msk100z32], 10**mic100['z3.2'][:,0][msk100z32],
-                yerr=[10**mic100['z3.2'][:,1][msk100z32], 10**mic100['z3.2'][:,2][msk100z32]],
-                marker='s', ms=10, ls='None', mfc='m', mec='m')
+    ax1.errorbar(x100[msk100z15], mic100['z1.5'][:, 0][msk100z15],
+                 yerr=[-mic100['z1.5'][:, 2][msk100z15], mic100['z1.5'][:, 1][msk100z15]],
+                 marker='s', ms=5, ls='None', mfc='r', mec='r')
+    ax1.errorbar(x100[msk100z22], mic100['z2.2'][:, 0][msk100z22],
+                 yerr=[-mic100['z2.2'][:, 2][msk100z22], mic100['z2.2'][:, 1][msk100z22]],
+                 marker='o', ms=5, ls='None', mfc='m', mec='m')
+    ax1.errorbar(x100[msk100z32], mic100['z3.2'][:, 0][msk100z32],
+                 yerr=[-mic100['z3.2'][:, 2][msk100z32], mic100['z3.2'][:, 1][msk100z32]],
+                 marker='d', ms=5, ls='None', mfc='g', mec='g')
+    #    ax1.scatter(x100[msk100z15], 10**mic100['z1.5'][:,0][msk100z15],
+    #                marker='s', s=10,c='k')
+    #    ax1.scatter(x100[msk100z22], 10**mic100['z2.2'][:,0][msk100z22],
+    #                marker='o', s=10, c='r')
+    #    ax1.scatter(x100[msk100z32], 10**mic100['z3.2'][:,0][msk100z32],
+    #                marker='d', s=10, c='m')
 
     #SPIRE250 plots
-    ax3.errobar(x250[msk250z15], 10**mic250['z1.4'][:,0][msk250z15],
-                yerr=[10**mic250['z1.4'][:,1][msk250z15], 10**mic250['z1.4'][:,2][msk250z15]],
-                marker='s', ms=10, ls='None', mfc='k', mec='k')
-    ax3.errobar(x250[msk250z22], 10**mic250['z2.2'][:,0][msk250z22],
-                yerr=[10**mic250['z2.2'][:,1][msk250z22], 10**mic250['z2.2'][:,2][msk250z22]],
-                marker='s', ms=10, ls='None', mfc='k', mec='k')
-    ax3.errobar(x250[msk250z32], 10**mic250['z3.2'][:,0][msk250z32],
-                yerr=[10**mic250['z3.2'][:,1][msk250z32], 10**mic250['z3.2'][:,2][msk250z32]],
-                marker='s', ms=10, ls='None', mfc='k', mec='k')
+    ax3.errorbar(x250[msk250z15], mic250['z1.4'][:, 0][msk250z15],
+                 yerr=[-mic250['z1.4'][:, 2][msk250z15], mic250['z1.4'][:, 1][msk250z15]],
+                 marker='s', ms=5, ls='None', mfc='r', mec='r', label=r'$1.2 \geq z < 1.6$')
+    ax3.errorbar(x250[msk250z22], mic250['z2.2'][:, 0][msk250z22],
+                 yerr=[-mic250['z2.2'][:, 2][msk250z22], mic250['z2.2'][:, 1][msk250z22]],
+                 marker='o', ms=5, ls='None', mfc='m', mec='m', label =r'$2.0 \geq z < 2.4$')
+    ax3.errorbar(x250[msk250z32], mic250['z3.2'][:, 0][msk250z32],
+                 yerr=[-mic250['z3.2'][:, 2][msk250z32], mic250['z3.2'][:, 1][msk250z32]],
+                 marker='d', ms=5, ls='None', mfc='g', mec='g', label=r'$2.4 \geq z < 4.0$')
+    #    ax3.scatter(x250[msk250z15], 10**mic250['z1.4'][:,0][msk250z15],
+    #                marker='s', s=10,c='k')
+    #    ax3.scatter(x250[msk250z22], 10**mic250['z2.2'][:,0][msk250z22],
+    #                marker='o', s=10, c='r')
+    #    ax3.scatter(x250[msk250z32], 10**mic250['z3.2'][:,0][msk250z32],
+    #                marker='d', s=10, c='m')
+
 
     #set scales
-    ax1.set_yscale('log')
-    ax2.set_yscale('log')
-    ax3.set_yscale('log')
-    ax4.set_yscale('log')
+    #    ax1.set_yscale('log')
+    #    ax2.set_yscale('log')
+    #    ax3.set_yscale('log')
+    #    ax4.set_yscale('log')
 
-    ylabel = r'$\phi \ [\mathrm{Mpc}^{-3} \ \mathrm{dex}^{-1}]$'
-    #xlabel = r'$\log_{10}(L_{%s} \ [L_{\odot}])$' % re.search('\d\d\d', band).group()
+    #ylabel = r'$\phi \ [\mathrm{Mpc}^{-3} \ \mathrm{dex}^{-1}]$'
+    ylabel = r'$\log_{10} \left ( \phi \ [\mathrm{Mpc}^{-3} \ \mathrm{dex}^{-1}] \right )$'
+
     xlabel = r'$\log_{10}(L \ [L_{\odot}])$'
 
     #labels
@@ -489,6 +497,8 @@ def plot_luminosityfunctionPaper(path, database, redshifts,
     ax1.set_xticklabels([])
     ax2.set_xticklabels([])
     #limits
+    ymin = N.log10(ymin)
+    ymax = N.log10(ymax)
     ax1.set_ylim(ymin, ymax)
     ax1.set_xlim(xmin + 0.2, xmax)
     ax2.set_ylim(ymin, ymax)
@@ -515,12 +525,10 @@ def plot_luminosityfunctionPaper(path, database, redshifts,
            horizontalalignment='center',
            verticalalignment='center',
            transform=ax4.transAxes)
-    #make grid
-    #ax1.grid()
-    #ax2.grid()
-    #ax3.grid()
-    #ax4.grid()
+
     #legend
+    ax3.legend(scatterpoints=1, fancybox=True, shadow=True,
+               loc='center right')
     ax4.legend(scatterpoints=1, fancybox=True, shadow=True,
                loc='center right')
     #save figure
@@ -533,89 +541,22 @@ if __name__ == '__main__':
     #and my user name is not always the same, this hack is required.
     hm = os.getenv('HOME')
     #constants
-    #path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
     path = hm + '/Research/Herschel/runs/big_volume/'
     database = 'sams.db'
-    #out_folder = hm + '/Dropbox/Research/Herschel/plots/luminosity_functions/'
-    out_folder = hm + '/Dropbox/Research/Herschel/plots/luminosity_functions/big/'
+    out_folder = hm + '/Research/Herschel/plots/luminosity_functions/'
     obs_data = hm + '/Dropbox/Research/Herschel/obs_data/'
 
-    #    redshifts = ['FIR.z >= 0.0 and FIR.z <= 0.5',
-    #                 'FIR.z >= 0.9 and FIR.z <= 1.1',
-    #                 'FIR.z >= 1.9 and FIR.z <= 2.1',
-    #                 'FIR.z >= 2.9 and FIR.z <= 3.1',
-    #                 'FIR.z >= 3.9 and FIR.z <= 4.1',
-    #                 'FIR.z >= 4.9 and FIR.z <= 5.1']
-
-    redshifts = ['FIR.z >= 0.0 and FIR.z <= 0.5',
-                 'FIR.z >= 1.9 and FIR.z <= 2.1',
-                 'FIR.z >= 3.9 and FIR.z <= 4.1',
-                 'FIR.z >= 4.9 and FIR.z <= 5.1']
+    redshifts = ['FIR.z >= 0.0 and FIR.z < 0.5',
+                 'FIR.z >= 1.2 and FIR.z < 1.6',
+                 'FIR.z >= 2.0 and FIR.z < 2.4',
+                 'FIR.z >= 2.4 and FIR.z < 4.0',
+                 'FIR.z >= 4.8 and FIR.z < 5.1']
 
     bands = ['FIR.pacs100',
              'FIR.pacs160',
              'FIR.spire250',
-             'FIR.spire350']#,
-    #'FIR.spire500']
+             'FIR.spire350']
 
     plot_luminosityfunctionPaper(path, database, redshifts, bands, out_folder)
-
-
-    #    for b in bands:
-    #        if '100' in b:
-    #            xmin = 8.5
-    #            xmax = 12.3
-    #            nb = 18
-    #        if '160' in b:
-    #            xmin = 8.5
-    #            xmax = 12.0
-    #            nb = 13
-    #        if '250' in b:
-    #            xmin = 8.5
-    #            xmax = 11.5
-    #            nb = 13
-    #        if '350' in b:
-    #            xmin = 8.5
-    #            xmax = 11.5
-    #            nb = 10
-    #        if '500' in b:
-    #            xmin = 8.5
-    #            xmax = 11.5
-    #            nb = 10
-    #
-    #        print 'Plotting ', b
-
-    #        plot_luminosityfunction(path, database, redshifts, b,
-    #                                out_folder, obs_data,
-    #                                xmin = xmin, xmax = xmax,
-    #                                ymin = 10**-5, ymax = 8*10**-2,
-    #                                nbins = 18, sigma = 5.0,
-    #                                solid_angle = 100*160.)
-
-    #        plot_luminosityfunction2(path, database, redshifts, b,
-    #                                 out_folder, obs_data,
-    #                                 xmin = xmin, xmax = xmax,
-    #                                 ymin = 10**-5, ymax = 5*10**-2,
-    #                                 nbins = nb, sigma = 5.0,
-    #                                 solid_angle = 100*160.)
-
-    #        plot_luminosityfunctionKDE(path, database, redshifts, b,
-    #                                   out_folder, obs_data,
-    #                                   xmin = xmin, xmax = xmax,
-    #                                   ymin = 10**-5, ymax = 5*10**-2,
-    #                                   nbins = nb)
-
-    #    redshifts = ['FIR.z >= 0.0 and FIR.z < 0.1',
-    #                 'FIR.z > 0.1 and FIR.z < 0.2',
-    #                 'FIR.z > 0.2 and FIR.z < 0.3',
-    #                 'FIR.z > 0.3 and FIR.z < 0.4',
-    #                 'FIR.z > 0.4 and FIR.z < 0.5']
-    #
-    #    print 'Plotting the extra plot...'
-    #    plot_luminosityfunction(path, database, redshifts, 'FIR.spire250',
-    #                            out_folder+'spec', obs_data,
-    #                            xmin = 8.1, xmax = 11.3,
-    #                            ymin = 10**-5, ymax = 3*10**-1,
-    #                            nbins = 10, sigma = 5.0)
 
     print 'All done...'
