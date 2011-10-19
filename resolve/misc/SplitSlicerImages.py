@@ -9,6 +9,9 @@ Always check the log file after running this script to see that everything worke
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
 :version: 0.3
+
+:note: I could also modify the script so that the binning would be read from the FITS header
+       and the appropriate y values were selected based on the header information.
 """
 import sys
 from optparse import OptionParser
@@ -70,8 +73,8 @@ class SplitSlicerImages():
         numb = len(self.files)
 
         if numb == 0:
-            self.log.info('Did not find any FITS files containg {0:>s} , will exit'.format(self.identifier))
-            sys.exit('Did not find files...')
+            self.log.info('Did not find any FITS files containg {0:>s}, will exit'.format(self.identifier))
+            sys.exit('Did not find files containg {0:>s}...'.format(self.identifier))
         else:
             self.log.info('Found {0:d} frames...'.format(numb))
 
@@ -198,7 +201,7 @@ if __name__ == '__main__':
                  'ymin3': 469,
                  'ymax3': 650}
     elif opts.binning.strip() == '2':
-        #not tested!
+        #not tested!!
         ycuts = {'ymin1': 33 * 2,
                  'ymax1': 210 * 2,
                  'ymin2': 234 * 2,
@@ -210,9 +213,7 @@ if __name__ == '__main__':
         sys.exit(1)
 
     split = SplitSlicerImages(ycuts)
-    #split.findFiles(identifier='normim')
-    #split.splitFiles()
-    split.findFiles(identifier='ftbz*.Ne')
+    split.findFiles(identifier='ftbz*.Ne') #change the identifiers if you wish to split something else
     split.splitFiles()
-    split.findFiles(identifier='ftdbz*spec')
+    split.findFiles(identifier='ftdbz*spec') #change the identifiers if you wish to split something else
     split.splitFiles()
