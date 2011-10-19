@@ -38,8 +38,8 @@ class SplitSlicerImages():
 
         :note: this loses comments, should not be used
 
-        :param hdu: the header to be updated
-        :param input: input header which is being replicated to hdu
+        :param: hdu, the header to be updated
+        :param: input, input header which is being replicated to hdu
         """
         keyrejlist = ['SIMPLE', 'BITPIX', 'NAXIS', 'NAXIS1', 'NAXIS2', 'NAXIS3', 'EXTEND']
         keycopylist = [k for k in input.items() if k[0] not in keyrejlist]
@@ -54,7 +54,7 @@ class SplitSlicerImages():
         Uses wild cards on both sides of the identifier.
         Requires that the file ends with .fits
 
-        :param identifier: to match files
+        :param: identifier: to match files
 
         :return: a list of files matching the identifier
         :rtype: list
@@ -74,15 +74,24 @@ class SplitSlicerImages():
         return self.files
 
 
-    def splitFiles(self, filelist=None, ext=0, splity=[215, 456], id='slice'):
+    def splitFiles(self, filelist=None, ext=0, splity=[215, 453], id='slice'):
         """
-        Splits all the FITS files in the filelist to three separate files one for each slicer.
+        Splits all the FITS files in the filelist to three separate files
+        one for each slicer.
 
-        :param fileslist: a list of files to be split
-        :param ext: extension of the fits file
-        :param splity: y pixel values for splitting
-        :param id: name identifier for each slice
+        :param: fileslist, a list of files to be split
+        :param: ext, extension of the fits file
+        :param: splity, y pixel values for splitting
+        :param: id, name identifier for each slice
         """
+        #NOTE: these are hardcoded: were set when working on the tutorial
+        ymin1 = 33
+        ymax1 = 210
+        ymin2 = 234
+        ymax2 = 448
+        ymin3 = 469
+        ymax3 = 650
+
         if filelist == None:
             filelist = self.files
 
@@ -101,23 +110,23 @@ class SplitSlicerImages():
                 if i == 0:
                     out = name + '.' + id + str(i + 1) + '.fits'
                     prihdr.update('SLICE', i + 1, comment='int 1,2,3 describing the slice')
-                    prihdr.update('YCUT', '[0:%i)' %(y), comment='y coordinates of the cut')
-                    pf.writeto(out, data[:y, :], prihdr, output_verify='ignore')
+                    prihdr.update('YCUT', '[%i:%i)' %(ymin1, ymax1), comment='y coordinates of the cut')
+                    pf.writeto(out, data[ymin1:ymax1, :], prihdr, output_verify='ignore')
                     #make a note to the log
                     self.log.info('Writing file %s' % out)
                 elif i == 1:
                     out = name + '.' + id + str(i + 1) + '.fits'
                     prihdr.update('SLICE', i + 1, comment='int 1,2,3 describing the slice')
-                    prihdr.update('YCUT', '[%i:%i)'% (splity[0], y), comment='y coordinates of the cut')
-                    pf.writeto(out, data[splity[0]:y, :], prihdr, output_verify='ignore')
+                    prihdr.update('YCUT', '[%i:%i)'% (ymin2, ymax2), comment='y coordinates of the cut')
+                    pf.writeto(out, data[ymin2:ymax2, :], prihdr, output_verify='ignore')
                     #make a note to the log
                     self.log.info('Writing file %s' % out)
 
             #the last slice
             out = name + '.' + id + '3.fits'
             prihdr.update('SLICE', 3, comment='int 1,2,3 describing the slice')
-            prihdr.update('YCUT', '[%i:%i]' % (y, len(data[:,0])), comment='y coordinates of the cut')
-            pf.writeto(out, data[y:, :], prihdr, output_verify='ignore')
+            prihdr.update('YCUT', '[%i:%i)' % (ymin3, ymax3), comment='y coordinates of the cut')
+            pf.writeto(out, data[ymin3:ymax3, :], prihdr, output_verify='ignore')
             #make a log note
             self.log.info('Writing file %s' % out)
 
@@ -144,7 +153,9 @@ class SplitSlicerImages():
 
 if __name__ == '__main__':
     split = SplitSlicerImages()
+    #split.findFiles(identifier='normim')
+    #split.splitFiles()
     split.findFiles(identifier='ftbz*.Ne')
-    split.splitFiles()
+    split.splitFiles() 
     split.findFiles(identifier='ftdbz*spec')
     split.splitFiles()
