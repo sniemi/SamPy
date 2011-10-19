@@ -139,10 +139,10 @@ if __name__ == '__main__':
         processArgs(True)
         sys.exit(1)
 
-    if opts.binning == 3:
-        xcuts = [15, 80]     #this is for binning 3x3
-    elif opts.binning == 2:
-        xcuts = [10, 150]   #this is for binning 2x2
+    if opts.binning.strip() == '3':
+        xcuts = [15, 80]     #this is for binning 3x3, change if needed
+    elif opts.binning.stip() == '2':
+        xcuts = [8, 160]   #this is for binning 2x2, change if needed
     else:
         processArgs(True)
         sys.exit(1)
@@ -166,7 +166,7 @@ if __name__ == '__main__':
 
     #generate the IRAF command file
     matches = findClosestArcs(scis, arcs)
-    generateIRAFcopy(scis, arcs, matches, x=xcuts, out='modifyArcs.cl')
+    generateIRAFcopy(scis, arcs, matches, x=xcuts)
 
     #call IRAF
     os.system('cl -o < modifyArcs.cl')
