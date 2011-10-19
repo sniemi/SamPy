@@ -1,5 +1,6 @@
 """
 Modifies arc FITS files to include a sky line from the science image.
+
 Will combine a small part of the arc file with the science image
 that includes the sky line and copies this part to the original
 arc. Will take a sky line from each science frame and generate
@@ -12,43 +13,41 @@ The script calls IRAF from the command line as follows::
 
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
-
-:version: 0.1
+:version: 0.2
 """
 import glob as g
 import sys, os
+from optparse import OptionParser
 
 
-def generateIRAFcopy(scis, arcs, matches, x=[15, 80], out='modifyArcs.cl'):
+def generateIRAFcopy(scis, arcs, matches, x, out='modifyArcs.cl'):
     """
     Generates a file that can be fed to IRAF
     to generate a punch of temp files for data.
 
-    :param scis: a list of science images
-    :param arcs: a list of arc images
-    :param matches: a dictionary showing a mapping between a science image
-            and arc images
+    :param scis: a list of science image names
+    :type scis: list
+    :param arcs: a list of arc image names
+    :type arcs: list
+    :param matches: a mapping between a science image and arc images
+    :type matches: dictionary
     :param x: a list of x coordinate positions to describe the cutout region
-            from the science image. These values shuold bracket the sky line.
+              from the science image. These values shuold bracket the sky line.
+    :type x: list
     :param out: name of the IRAF command file
+    :type out: string
 
     :return: None
     """
-    am = []
-    sm = []
-
     fh = open(out, 'w')
     fh.write('images\nimmatch\n')
     for arc in arcs:
         for a in arc:
-            #fh.write('imcopy %s a%s\n'% (a, a))
             fh.write('imcopy %s[%i:%i,*] tmp%s\n' % (a, x[0], x[1], a))
-            am.append('tmp%s' % a)
 
     for sci in scis:
         for s in sci:
             fh.write('imcopy %s[%i:%i,*] tmp%s\n' % (s, x[0], x[1], s))
-            sm.append('tmp%s' % s)
 
     for key, values in matches.iteritems():
         fl = key[:-5]
@@ -66,10 +65,12 @@ def findClosestArcs(scis, arcs, tol=8):
     Tries to match science frames with arcs
     that have been taken close in time.
 
-    :param scis: a list of science files
-    :param arcs: a list of arc files
-    :param tol: tolerance how many files before and after
-            the arcs are being identified.
+    :param scis: a list of science file names
+    :type scis: list
+    :param arcs: a list of arc file names
+    :type arcs: list
+    :param tol: tolerance how many files before and after the arcs are being identified.
+    :type tol: int
 
     :return: out, mapping between science images and corresponding arcs
     :rtype: dictionary
@@ -115,7 +116,37 @@ def writeArcLists():
         fh.close()
 
 
+def processArgs(printHelp=False):
+    """
+    Processes command line arguments.
+    """
+    parser = OptionParser()
+
+    parser.add_option('-b', '--binning',
+                      dest='binning',
+                      help='Binning of the data, either 2 for 2x2 or 3 for 3x3',
+                      metavar='integer')
+    if printHelp:
+        parser.print_help()
+    else:
+        return parser.parse_args()
+
+
 if __name__ == '__main__':
+    opts, args = processArgs()
+
+    if opts.binning is None:
+        processArgs(True)
+        sys.exit(1)
+
+    if opts.binning == 3:
+        xcuts = [15, 80]     #this is for binning 3x3
+    elif opts.binning == 2:
+        xcuts = [10, 150]   #this is for binning 2x2
+    else:
+        processArgs(True)
+        sys.exit(1)
+
     #find all science files
     sciencefiles1 = g.glob('ft*spec*.slice1.fits')
     sciencefiles2 = g.glob('ft*spec*.slice2.fits')
@@ -135,7 +166,7 @@ if __name__ == '__main__':
 
     #generate the IRAF command file
     matches = findClosestArcs(scis, arcs)
-    generateIRAFcopy(scis, arcs, matches, out='modifyArcs.cl')
+    generateIRAFcopy(scis, arcs, matches, x=xcuts, out='modifyArcs.cl')
 
     #call IRAF
     os.system('cl -o < modifyArcs.cl')

@@ -26,7 +26,6 @@ import matplotlib.patches as patches
 from matplotlib import cm
 import scipy
 import scipy.ndimage.interpolation as interpolation
-#from SamPy
 import SamPy.smnIO.write as write
 import SamPy.smnIO.read
 import SamPy.image.manipulation as m
