@@ -8,7 +8,7 @@ Always check the log file after running this script to see that everything worke
 
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
-:version: 0.2
+:version: 0.3
 """
 import sys
 from optparse import OptionParser
@@ -70,8 +70,8 @@ class SplitSlicerImages():
         numb = len(self.files)
 
         if numb == 0:
-            self.log.info('Did not find any files, will exit')
-            sys.exit('Did not find any files, will exit')
+            self.log.info('Did not find any FITS files containg {0:>s} , will exit'.format(self.identifier))
+            sys.exit('Did not find files...')
         else:
             self.log.info('Found {0:d} frames...'.format(numb))
 
@@ -189,7 +189,7 @@ if __name__ == '__main__':
         processArgs(True)
         sys.exit(1)
 
-    if opts.binning == 3:
+    if opts.binning.strip() == '3':
         #works for 3x3 binning
         ycuts = {'ymin1': 33,
                  'ymax1': 210,
@@ -197,7 +197,7 @@ if __name__ == '__main__':
                  'ymax2': 448,
                  'ymin3': 469,
                  'ymax3': 650}
-    elif opts.binning == 2:
+    elif opts.binning.strip() == '2':
         #not tested!
         ycuts = {'ymin1': 33 * 2,
                  'ymax1': 210 * 2,
