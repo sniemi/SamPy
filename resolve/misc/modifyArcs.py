@@ -141,8 +141,8 @@ if __name__ == '__main__':
 
     if opts.binning.strip() == '3':
         xcuts = [15, 80]     #this is for binning 3x3, change if needed
-    elif opts.binning.stip() == '2':
-        xcuts = [8, 160]   #this is for binning 2x2, change if needed
+    elif opts.binning.strip() == '2':
+        xcuts = [20, 110]   #this is for binning 2x2, change if needed
     else:
         processArgs(True)
         sys.exit(1)

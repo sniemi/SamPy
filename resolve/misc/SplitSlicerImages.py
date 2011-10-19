@@ -202,12 +202,12 @@ if __name__ == '__main__':
                  'ymax3': 650}
     elif opts.binning.strip() == '2':
         #not tested!!
-        ycuts = {'ymin1': 33 * 2,
-                 'ymax1': 210 * 2,
-                 'ymin2': 234 * 2,
-                 'ymax2': 448 * 2,
-                 'ymin3': 469 * 2,
-                 'ymax3': 650 * 2}
+        ycuts = {'ymin1': 32-1,
+                 'ymax1': 325-1,
+                 'ymin2': 326-1,
+                 'ymax2': 694-1,
+                 'ymin3': 695-1,
+                 'ymax3': 984-1}
     else:
         processArgs(True)
         sys.exit(1)
