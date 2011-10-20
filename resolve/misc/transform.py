@@ -8,20 +8,22 @@ The script calls IRAF from the command line as follows::
 
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
-
-:version: 0.1
+:version: 0.2
 """
 import glob as g
 import os
+
 
 def generateIRAFtransformCommand(data, low=5520, high=6820):
     """
     Creates an ascii file which lists all the IRAF commands required to make both linear and logarithmic transformations.
     
-    :param data: a dictionary holding the files to be transformed
-            and the matching arc files.
+    :param data: names of the files to be transformed and the matching arc files.
+    :type data: dictionary
     :param low: minimum wavelength in angstroms
+    :type low: float or int
     :param high: maximum wavelength in anstroms
+    :param high: float or int
 
     :return: None
     """
@@ -54,11 +56,14 @@ def generateIRAFtransformCommand(data, low=5520, high=6820):
 def findArcs(scis, arcs):
     """
     Finds arc files that are related to the science files.
-    This works only if the arc file has been named
-    properly, as done by modifyArcs.py script.
 
-    :param scis: a list of science files
-    :param arcs: a slist of arc files
+    This function works only if the arc file has been named
+    properly, as done by the modifyArcs.py script.
+
+    :param scis: names of science files
+    :type scis: list or tuple
+    :param arcs: names of arc files
+    :type arcs: list or tuple
 
     :return: data, where science file names are keys and related arcs are values (a list)
     :rtype: dictionary
@@ -80,12 +85,15 @@ def findArcs(scis, arcs):
 
 if __name__ == '__main__':
     #find all files
-    scis = g.glob('ft*RS*slice*')
+    scis = g.glob('ft*spec*slice*')
     arcs = g.glob('arc*.fits')
 
+    #find matching arc files
     data = findArcs(scis, arcs)
+
+    #generate IRAF commands and output to a text file
     generateIRAFtransformCommand(data)
 
-    #run IRAF
+    #call IRAF
     os.system('cl -o < transformlin.cl')
     os.system('cl -o < transformlog.cl')

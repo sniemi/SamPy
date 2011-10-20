@@ -1,4 +1,4 @@
-"""
+    """
 This module contains a function that can be used to generate an SQLite3 database from ascii files.
 
 :requires: SamPy
