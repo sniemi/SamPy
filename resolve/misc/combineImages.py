@@ -27,9 +27,9 @@ def writeCommand(data, outputfile, outfileid='lin'):
     """
     Writes an IRAF command file.
 
-    :param: data,
-    :param: outputfile, name of the output file
-    :param: outfileid, id either lin or log
+    :param data:
+    :param outputfile: name of the output file
+    :param outfileid: id either lin or log
 
     :return: None
     """
@@ -48,9 +48,9 @@ def writeCommand(data, outputfile, outfileid='lin'):
         print fls
 
         str1 = 'imcombine input="%s" output=%smed%s ' % (fls, outfileid, output)
-        str1 = str1 + 'combine=median reject=avsigclip scale=none lthresh=-1000\n'
+        str1 += 'combine=median reject=avsigclip scale=none lthresh=-1000\n'
         str2 = 'imcombine input="%s" output=%ssum%s ' % (fls, outfileid, output)
-        str2 = str2 + 'combine=sum\n'
+        str2 += 'combine=sum\n'
         fh.write(str1)
         fh.write(str2)
 
@@ -65,7 +65,7 @@ def groupFiles(files):
     are of the same target. The identification
     could also be done based on the FITS header.
 
-    :param: files, a list of files that will be grouped
+    :param file: a list of files that will be grouped
 
     :return: a list of grouped file names
     :rtype: list
@@ -99,20 +99,21 @@ if __name__ == '__main__':
     os.system('cl -o < combine_commandslin2.cl')
     os.system('cl -o < combine_commandslin3.cl')
 
-#
-#    #log files
-#    files = g.glob('str_log*RS*.fits')
-#
-#    #pprint.pprint(list(chunks(files, 9)))
-#    slice1 = files[::3]
-#    slice2 = files[1::3]
-#    slice3 = files[2::3]
-#
-#    writeCommand(slice1, 'combine_commandslog1.cl', outfileid='log')
-#    writeCommand(slice2, 'combine_commandslog2.cl', outfileid='log')
-#    writeCommand(slice3, 'combine_commandslog3.cl', outfileid='log')
-#
-#    #call IRAF
-#    os.system('cl -o < combine_commandslog1.cl')
-#    os.system('cl -o < combine_commandslog2.cl')
-#    os.system('cl -o < combine_commandslog3.cl')
+
+    #log files
+    slice1 = g.glob('str_log*RS*slice1.fits')
+    slice2 = g.glob('str_log*RS*slice2.fits')
+    slice3 = g.glob('str_log*RS*slice3.fits')
+
+    s1 = groupFiles(slice1)
+    s2 = groupFiles(slice2)
+    s3 = groupFiles(slice3)
+
+    writeCommand(slice1, 'combine_commandslog1.cl', outfileid='log')
+    writeCommand(slice2, 'combine_commandslog2.cl', outfileid='log')
+    writeCommand(slice3, 'combine_commandslog3.cl', outfileid='log')
+
+    #call IRAF
+    os.system('cl -o < combine_commandslog1.cl')
+    os.system('cl -o < combine_commandslog2.cl')
+    os.system('cl -o < combine_commandslog3.cl')
