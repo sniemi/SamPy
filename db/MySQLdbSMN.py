@@ -4,19 +4,23 @@ Connects to the localhost MySQL db.
 :author: Sami-Matias Niemi
 :version: 0.1
 """
+import sys
+import MySQLdb as M
+
 
 class MySQLdbSMN():
     def __init__(self, sql, database):
-        self.user = 'sami'
-        self.passwd = 'llepsnoom'
+        """
+        Class constructor
+        """
+        self.user = 'sammy'
+        self.passwd = 'Asd1Zxc8'
         self.address = 'localhost'
         self.sql = sql
         self.database = database
 
-    def fetchdata(self):
-        import sys
-        import MySQLdb as M
 
+    def fetchdata(self):
         #Connect to database and get cursor
         try:
             DB = M.connect(host=self.address, user=self.user, passwd=self.passwd, db=self.database, )
@@ -41,14 +45,3 @@ class MySQLdbSMN():
         DB.close()
         #returns 2D-array
         return result
-
-if __name__ == '__main__':
-    sql = 'select mvir, np from FieldEllipticals where type = 0 order by galaxyId'
-    db = MySQLdbSMN(sql, 'FieldEllipticalStudy')
-    dt = db.fetchdata()
-
-    import numpy as N
-
-    data = N.array(dt)
-
-    print data[:, 0]

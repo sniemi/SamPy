@@ -1,19 +1,21 @@
 """
-Functions to inserts dat ato MySQL db.
+Functions to inserts data to MySQL database.
+
+:author: Sami-Matias Niemi
+:contact: sammyniemi2010@gmail.com
 """
 import MySQLdb as M
-#import pymysql as M
 import glob as g
-#Sami's repo
-import log.Logger as lg
-import db.sqlite
+import SamPy.log.Logger as lg
+import SamPy.db.sqlite
+
 
 def addToMySQLDBfromSAMTables(user='sammy',
                               passwd='Asd1Zxc8',
                               host='localhost',
                               database='SAM100GOODS',
                               fileidentifier='*.dat'):
-    '''
+    """
     This little function can be used to add a table to a
     mySQL database from Rachel's GF output.
     
@@ -24,11 +26,16 @@ def addToMySQLDBfromSAMTables(user='sammy',
     should be no need to know the name of the index.
 
     :param user: user name to be used
+    :type user: string
     :param passwd: user password
+    :type passwd: string
     :param host: address of the database host
+    :type host: string
     :param database: name of the database to which insert
+    :type database: string
     :param fileidentifier: string how to identify input data
-    '''
+    :type fileidentifier: string
+    """
     #find all files
     files = g.glob(fileidentifier)
 
@@ -38,7 +45,7 @@ def addToMySQLDBfromSAMTables(user='sammy',
 
     for file in files:
         log.info('Processing file %s', file)
-        columns = db.sqlite.parseColumnNamesSAMTables(file)
+        columns = SamPy.db.sqlite.parseColumnNamesSAMTables(file)
         formats = []
         for col in columns:
             if 'halo_id' in col:
@@ -94,9 +101,9 @@ def addToMySQLDBfromSAMTables(user='sammy',
             ins = ins[:-1] + ')'
 
         #generate an SQL table creation string
-        sql_create_string = db.sqlite.generateSQLString(columns,
-                                                        formats,
-                                                        start)
+        sql_create_string = SamPy.db.sqlite.generateSQLString(columns,
+                                                              formats,
+                                                              start)
 
         #create a cursor instance
         c = M.cursors.Cursor(conn)
@@ -144,7 +151,7 @@ def addToMySQLDBfromSAMTables(user='sammy',
 
 
 if __name__ == '__main__':
-    log_filename = 'insertSAMTablesToSQLite.log'
+    log_filename = 'insertSAMTablesToMySQL.log'
     log = lg.setUpLogger(log_filename)
     addToMySQLDBfromSAMTables()
 

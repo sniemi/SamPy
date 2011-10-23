@@ -10,7 +10,6 @@ if __name__ == '__main__':
     import pylab as P
     import astLib.astCoords as Coords
     from cosmocalc import cosmocalc
-    import cosmology.distances as dist
 
     conversion = 0.000277777778 # degree to arcsecond
 

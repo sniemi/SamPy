@@ -3,7 +3,7 @@ This file contains MillenniumData -class. It can be used  to fetch data from the
 
 File also contains a small example.
 
-:author: Sami-Matias Niemi (sami@not.iac.es)!
+:author: Sami-Matias Niemi
 """
 import os
 
@@ -21,6 +21,7 @@ class MillenniumData():
         self.cookies = '--cookies=on --keep-session-cookies --save-cookies=cookie.txt --load-cookies=cookie.txt'
         self.sql = sql
 
+
     def fetchdata(self):
         command = 'wget --http-user=%s --http-passwd=%s %s -O - \"%s%s\"'\
         % (self.user, self.passwd, self.cookies, self.url, self.sql)
@@ -29,10 +30,12 @@ class MillenniumData():
         cerrr = ''.join(cerr.readlines())
         return res, cin, cerrr
 
+
     def savetofile(self, data, filename):
         output = open(filename, 'a')
         output.write(data)
         output.close()
+
 
     def savetofileseparated(self, data, filename, separator):
         output = open(filename, 'a')
@@ -40,12 +43,14 @@ class MillenniumData():
             output.write(line.replace(',', separator))
         output.close()
 
+
     def dataonly(self, data, splitvalue):
         temp = []
         for line in data.split():
             if len(line) > splitvalue: temp.append(line)
         return temp
 
+    
     def iterateGalaxies(self, galaxies):
         for galaxy in galaxies: yield galaxy
 

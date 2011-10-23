@@ -7,6 +7,7 @@ This file contains a wrapper class to fetch data from a Sybase or MySQL database
 __author__ = 'Sami-Matias Niemi'
 __version__ = '1.0'
 
+
 class DBSMN():
     """
     Wrapper class to fetch data from a database. Separate functions
@@ -18,13 +19,12 @@ class DBSMN():
         """
         Init
         """
-        import sys
-
         self.sql = sql
         self.user = user
         self.password = password
         self.database = database
         self.address = address
+
 
     def fetchSybaseData(self):
         """
@@ -57,6 +57,7 @@ class DBSMN():
         cursor.close()
         DB.close()
         return result
+
 
     def fetchMySQLData(self):
         """
@@ -91,6 +92,7 @@ class DBSMN():
         #returns 2D-array
         return result
 
+    
 if __name__ == '__main__':
     """
     No proper test section written. Do NOT try to execute this file!
