@@ -1,6 +1,10 @@
 """
 This script can be used to flux calibrate an image slicer 2D spectra to SDSS one (of the same target).
 
+:Warning: On should only fit the observed spectrum that has been recorded at the same place
+          as the SDSS spectrum. Otherwise the fitting will artificially throw the flux
+          calibration off.
+
 :requires: PyfITS
 :requires: NumPy
 :requires: SciPy
@@ -35,7 +39,14 @@ class calibrateToSDSS():
     """
     def __init__(self, configfile, debug, section='DEFAULT'):
         """
-        Constructor
+        Class constructor.
+
+        :param configfile: name of the configuration file
+        :type configfile: string
+        :param debug: whether ot output debugging information or not
+        :type debug: boolean
+        :param section: configure file section to read
+        :type section: string
         """
         self.configfile = configfile
         self.section = section
@@ -45,7 +56,7 @@ class calibrateToSDSS():
 
     def _readConfigs(self):
         """
-        Reads the config file information using configParser.
+        Reads in the config file information using configParser.
         """
         self.config = ConfigParser.RawConfigParser()
         self.config.readfp(open(self.configfile))
@@ -53,7 +64,7 @@ class calibrateToSDSS():
 
     def _processConfigs(self):
         """
-        Process configuration information and produce a dictionary describing slits.
+        Processes configuration information read by the __readConfigs method and produces a dictionary describing slits.
         """
         self.fitting['sigma'] = self.config.getfloat(self.section, 'sigma')
         self.fitting['ycenter'] = self.config.getint(self.section, 'ycenter')
@@ -75,7 +86,7 @@ class calibrateToSDSS():
 
     def _loadData(self):
         """
-        Loads the FITS files using PyFITS and modifies the SDSS flux.
+        Loads the FITS files using PyFITS and converts the SDSS flux to flux units.
         """
         self.fitting['sdssData'] = pf.open(self.fitting['sdss'])[1].data
         self.fitting['SDSSflux'] = self.fitting['sdssData']['FLUX']*1e-17
@@ -88,7 +99,10 @@ class calibrateToSDSS():
         """
         Calculates the fiber area and the ratio.
 
-        :note: Doesn't necessarily need the boosting factor, it could be removed.
+        :note: Doesn't necessarily need the boosting factor, it could be removed. Also,
+               at the moment the number of pixels is being rounded to the closest
+               integer, thus the flux might be off because no fractional pixels are
+               considered.
         """
         self.fitting['FiberArea'] = np.pi*(self.fitting['FiberDiameter'] / 2.)**2
         self.fitting['slitPixels'] = self.fitting['FiberDiameter'] / \
@@ -103,6 +117,7 @@ class calibrateToSDSS():
     def _deriveObservedSpectra(self):
         """
         Derives a 1D spectrum from the 2D input data.
+
         Sums the pixels around the centre of the continuum that match to the SDSS fiber size.
         """
         y = self.fitting['ycenter']
@@ -120,6 +135,7 @@ class calibrateToSDSS():
     def _calculateDifference(self):
         """
         Calculates the difference between the derived observed and SDSS spectra.
+
         Interpolates the SDSS spectra to the same wavelength scale. In this interpolation
         the flux is conserved.
         """
@@ -134,8 +150,11 @@ class calibrateToSDSS():
 
     def _generateMask(self):
         """
-        Generates a mask in which Halpha and some other lines have been removed
-        :todo: This is now hard coded, make something better...
+        Generates a mask in which Halpha and some other lines have been masked out.
+
+        :todo: The masking out regions has been hardcoded. This should be changed, as
+               now depending on the redshift of the galaxy the masking region may not
+               fully cover the feature.
         """
         #TODO: remove the hardcoded lines
         halph = [6660, 6757]
@@ -148,8 +167,10 @@ class calibrateToSDSS():
     def _fitSmoothFunction(self):
         """
         Fits a smooth function to the spectra ratio.
+
         Two options can be used, either NumPy polyfit or SciPy curve_fit.
-        By default the NumPy polyfit is being used.
+        By default the NumPy polyfit is being used as it allows the order of the
+        fitting function to be changed easily.
         """
         #with NumPy polyfit
         fx = np.poly1d(np.polyfit(self.fitting['obsWavelengths'][self.fitting['mask']],
@@ -171,6 +192,10 @@ class calibrateToSDSS():
     def _generatePlots(self):
         """
         Generate some plots showing the fit and the spectra.
+
+        These plots are not crucial but rather a convenience when
+        inspecting whether the derived fit was reasonable and how
+        much the flux values have been modified.
         """
         #first
         fig = plt.figure()
@@ -210,7 +235,8 @@ class calibrateToSDSS():
 
     def _outputSensitivity(self):
         """
-        Outputs the sensitivity function to an ascii file.
+        Outputs the sensitivity function to an ascii file. This file can be used later
+        for other calibrations if needed.
         """
         fh = open('sensitivity.txt', 'w')
         fh.write('#Wavelength sensitivity\n')
@@ -221,8 +247,10 @@ class calibrateToSDSS():
 
     def _updateFITSfiles(self):
         """
-        Updates the FITS files. Interpolates the fitted ratio function if
-        the wavelength scale of the file to be updated is different.
+        Updates the FITS files that were given in the configuration file with the derived flux factor.
+
+        Interpolates the fitted ratio function if the wavelength scale of the file
+        to be updated is different.
         """
         #must interpolate the fitted function to right wavelength scale
         interp = interpolate.interp1d(self.fitting['obsWavelengths'], self.fitting['fit'])
@@ -252,7 +280,7 @@ class calibrateToSDSS():
                 
     def run(self):
         """
-        Driver function, runs all the required steps.
+        Driver function that should be called if all steps of the class should be performed.
         """
         self._readConfigs()
         self._processConfigs()
@@ -286,6 +314,7 @@ def processArgs(printHelp=False):
 
 
 if __name__ == '__main__':
+    #the script starts here
     opts, args = processArgs()
 
     if opts.configfile is None:

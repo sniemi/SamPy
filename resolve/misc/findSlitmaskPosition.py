@@ -34,7 +34,7 @@ be interpolated would be smaller.
 :requires: matplotlib
 :requires: SciPy
 :requires: astLib
-:requires: pywcs (this could also be replated with Kapteyn)
+:requires: pywcs (this could also be replaced with Kapteyn)
 :requires: Kapteyn Python package
 :requires: Python 2.6 or newer
 
