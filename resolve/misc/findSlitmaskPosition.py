@@ -3,18 +3,19 @@ Class to fit spectroscopic observations to a direct image.
 
 The class has been designed for image slicer data where at
 the moment three spectra are recorded simultaneously.
-However, the class should be modified in several ways
-to be more flexible. For example, the slitmask shuold
-be generated from all input data with potential rotations
-and offsets. This would constrain the slitmask position
-better and allow a single solution.
+The script is flexible enough that the input can contain
+either a single pointing or single plus offset positions.
+Rotations are not allowed at the moment because there is
+no guarantee that the centering of the rotation and single
+pointing would be the same. Note, however, that in the
+fitting process a rotation can be set to be a free parameter.
 
 The algorithm currently used to find the slit mask position
 is poor. It is very slow when allowing rotations and in
 some cases it finds the position poorly. This algorithm
 should be rewritten from scratch. I have experimented with
 FFT-base image registration techniques which seem to work
-well in case of images. However, our spectral data do not
+well for images. However, our spectral data do not
 allow reconstruction of an image, because we don't have
 information in the dispersion direction. Thus, these
 techniques might be difficult to adapt, even though
@@ -41,7 +42,7 @@ be interpolated would be smaller.
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
 
-:version: 0.5
+:version: 0.7
 """
 import os, sys, datetime
 import ConfigParser
@@ -68,7 +69,7 @@ class FindSlitmaskPosition():
     """
     This class can be used to find a slit mask position in a direct image.
 
-    It fits the slit mask information to profiles built from the direct image
+    Fits the slit mask information to profiles built from the direct image
     to recover the mask position on the sky.
     """
 
@@ -93,9 +94,6 @@ class FindSlitmaskPosition():
         self.section = section
         self.debug = debug
 
-        self._readConfigs()
-        self._processConfigs()
-
 
     def _readConfigs(self):
         """
@@ -108,6 +106,7 @@ class FindSlitmaskPosition():
     def _generateSlitProfile(self, spectrum, hdr):
         """
         Generates a slit profile by convolving the spectrum with a filter transmission curve.
+        Calculates the flux by integrating over the wavelength range.
 
         :param spectrum: 2D spectral image
         :type spectrum: ndarray
@@ -144,46 +143,89 @@ class FindSlitmaskPosition():
             else:
                 xps = np.arange(0, npix) * delta + crval
 
-            minwave = np.min(xps)
-            maxwave = np.max(xps)
-            deltal = maxwave - minwave
-            #width = convert.angstromToHertz(maxwave) - convert.angstromToHertz(minwave)
-
             #go through the spectrum line by line
             out = []
             for i, f in enumerate(spectrum):
                 res = flux.convolveSpectrum(xps, f, wave, thr)
                 #convert to micro Jansky
-                tmp = res['flux'] * deltal ** 2 * 3.3356409e4 * 1e6
+                tmp = res['flux'] * res['effectiveWave'] ** 2 / 2.99792458e18 * 1e23 * 1e6
 
                 if tmp < 0.0:
                     tmp = 0.0
+                    
                 out.append(tmp)
 
             return np.asarray(out)
 
         else:
-            raise NotImplementedError, 'non linear spectrum scaling not implemented yet'
+            raise NotImplementedError, 'non-linear spectrum scaling not implemented yet'
 
 
     def _processSlitfiles(self):
         """
         Reads in the slit and direct image FITS files.
+
         Pulls out some useful header keywords such as POSANGLE, which can be
-        used for the initial guess for rotation.
+        used for the initial guess for rotation. Checks that the POSAGNLEs of
+        all input spectra were the same, because the script does not at the
+        moment support fitting different orientations.
         """
-        #load images
-        for slit in self.slits:
-            fh = pf.open(self.slits[slit]['file'], ignore_missing_end=True)
-            self.slits[slit]['header0'] = fh[0].header
+        posangles = []
+        slicers = []
+
+        for file in self.spectra:
+            self.slits[file] = o.OrderedDict()
+
+            fh = pf.open(file, ignore_missing_end=True)
+            self.slits[file]['header0'] = fh[0].header
             slitimage = fh[0].data
             fh.close()
+
             if slitimage.shape[0] == 1:
                 slitimage = slitimage[0]
-            self.slits[slit]['image'] = slitimage
-            self.slits[slit]['profile'] = self._generateSlitProfile(slitimage, self.slits[slit]['header0'])
-            self.slits[slit]['pixels'] = len(self.slits[slit]['profile'])
-            self.slits[slit]['POSANGLE'] = self.slits[slit]['header0']['POSANGLE']
+
+            #use the lookup table to find slicer information
+            self.slits[file]['slicerName'] = self.inputFileInfo[file][2]
+            width = self.lookupInfo[self.slits[file]['slicerName']][0]
+
+            #save slicer information
+            self.slits[file]['image'] = slitimage
+            self.slits[file]['profile'] = self._generateSlitProfile(slitimage, self.slits[file]['header0'])
+            self.slits[file]['pixels'] = len(self.slits[file]['profile'])
+            self.slits[file]['POSANGLE'] = self.slits[file]['header0']['POSANGLE']
+            self.slits[file]['SLICE'] = self.slits[file]['header0']['SLICE']
+            self.slits[file]['binning'] = self.binning
+            self.slits[file]['file'] = file
+            self.slits[file]['heightSky'] = self.slits[file]['pixels'] * self.sky['platescaleSpectra'] * self.binning
+            self.slits[file]['heightPixels'] = self.slits[file]['heightSky'] / self.direct['platescale']
+            self.slits[file]['widthSky'] = width
+            #self.slits[file]['widthPixels'] = width / self.direct['platescale']
+            self.slits[file]['offset'] = self.inputFileInfo[file][0]
+            self.slits[file]['offsetPixels'] = self.inputFileInfo[file][0] / self.direct['platescale']
+            self.slits[file]['allowedError'] = self.inputFileInfo[file][1]
+
+            posangles.append(self.slits[file]['POSANGLE'])
+            slicers.append(self.slits[file]['slicerName'])
+
+            #save the central file name as this can be used later
+            if self.slits[file]['SLICE'] == 2 and self.slits[file]['offset'] == 0:
+                self.centralFile = file
+
+        #assume that the slicer is same for all files
+        self.sky['offseta'] = self.lookupInfo[self.slits[file]['slicerName']][3]
+        self.sky['offsetb'] = self.lookupInfo[self.slits[file]['slicerName']][4]
+
+
+        #test that the POSANGLES are match
+        #maybe the test should allow +/-1 degree changes...
+        if len(set(posangles)) > 1:
+            if self.debug: print 'POSANGLEs do not match'
+
+        if len(set(slicers)) > 1:
+            if self.debug:
+                print 'Different slicers were found in the inputfile, this has not yet been implemented'
+
+            raise NotImplementedError, 'You have tried to fit different slicers...!'
 
         if self.debug:
             print '\nslits:'
@@ -213,8 +255,8 @@ class FindSlitmaskPosition():
 
         #cut out a region
         if self.cutout:
-            ra = self.slits['mid']['header0']['RA']
-            dec = self.slits['mid']['header0']['DEC']
+            ra = self.slits[self.centralFile]['header0']['RA']
+            dec = self.slits[self.centralFile]['header0']['DEC']
             ra = astCoords.hms2decimal(ra, ':')
             dec = astCoords.dms2decimal(dec, ':')
             wcs = pywcs.WCS(self.direct['originalHeader0'])
@@ -249,10 +291,9 @@ class FindSlitmaskPosition():
             self.direct['supersampledHeader'] = self.direct['originalHeader0']
             self.direct['supersampledFile'] = self.dirfile
 
-
-        #set rotation, note that the rotaion is in minus direction
+        #set rotation, note that the rotation is in minus direction
         #instead of using SPA one could also calculate this from WCS CD matrix
-        self.direct['rotation'] = -self.slits['mid']['POSANGLE'] + self.direct['originalHeader0']['SPA']
+        self.direct['rotation'] = -self.slits[self.centralFile]['POSANGLE'] + self.direct['originalHeader0']['SPA']
         #make a rotation
         imgR, hdrR = modify.hrot(self.direct['supersampledFile'],
                                  self.direct['rotation'],
@@ -262,76 +303,108 @@ class FindSlitmaskPosition():
         self.direct['rotatedHeader'] = hdrR
         self.direct['rotatedFile'] = 'rotated.fits'
 
-        #convert the images from nanomaggies to micro Janskys and remove values < 0.0
+        #convert the images from nanomaggies to micro Janskys
         self.direct['originalImage'] = convert.nanomaggiesToJansky(self.direct['originalImage']) * 1e6
-        #self.direct['originalImage'][self.direct['originalImage'] < 0.0] = 0.0
         self.direct['supersampledImage'] = convert.nanomaggiesToJansky(self.direct['supersampledImage']) * 1e6
-        #self.direct['supersampledImage'][self.direct['supersampledImage'] < 0.0] = 0.0
         self.direct['rotatedImage'] = convert.nanomaggiesToJansky(self.direct['rotatedImage']) * 1e6
-        #self.direct['rotatedImage'][self.direct['rotatedImage'] < 0.0] = 0.0
 
         #WCS info
         self.direct['WCS'] = pywcs.WCS(hdrR)
         #self.direct['WCS'] = wcs.Projection(hdrR)
-
-        #get the plate scale from the header
-        self.direct['platescale'] /= self.direct['factor']
 
         if self.debug:
             print '\ndirect:'
             print self.direct
 
 
+    def _parseInputInfo(self, inputfile):
+        """
+        Parses the ascii input file.
+
+        The expected file format is:
+        filename offset ["] error_allowed slicer_name
+
+        :param inputfile: name of the input file
+        :type inputfile: string
+
+        :return: parsed information
+        :rtype: dictionary
+        """
+        info = o.OrderedDict()
+
+        data = open(inputfile).readlines()
+        for line in data:
+            if line.startswith('#'):
+                continue
+
+            tmp = line.split()
+            #note that we change the sign of the offset to account for the
+            #fact that the GOODMAN field of of view is flipped in x
+            info[tmp[0]] = [-float(tmp[1]), float(tmp[2]), tmp[3]]
+
+        self.inputFileInfo = info
+
+        return self.inputFileInfo
+
+
+    def _parseLookupTable(self, inputfile):
+        """
+        Parses the lookup table information describing image slicers.
+
+        The expected file format is:
+        name width central outrigger offset_along offset_between dates
+
+        :param inputfile: name of the input file
+        :type inputfile: string
+
+        :return: parsed information
+        :rtype: dictionary
+        """
+        info = {}
+
+        data = open(inputfile).readlines()
+        for line in data:
+            if line.startswith('#'):
+                continue
+
+            tmp = line.split()
+            info[tmp[0]] = [float(tmp[1]), float(tmp[2]), float(tmp[3]),
+                            float(tmp[4]), float(tmp[5])]
+
+        self.lookupInfo = info
+
+        return self.lookupInfo
+
+
     def _processConfigs(self):
         """
-        Process configuration information and produces several dictionaries describing the information.
+        Processes configuration information and produces several dictionaries.
+
         These dictionaries will be used later on for example when generating a slit mask or running
         the fitting algorithm. These dictionaries will also hold the direct imaging data as well as
-        the spectroscopic profiles.
+        the spectroscopic profiles. Many of these dictionaries will be modified during the course
+        of this class, information will be added and might also get changed.
         """
-        self.spectra = list(self.config.get(self.section, 'spectra').strip().split(','))
-        self.dirfile = self.config.get(self.section, 'directimage')
-        widths = [float(a) for a in self.config.get(self.section, 'widths').strip().split(',')]
-        heights = [float(a) for a in self.config.get(self.section, 'heights').strip().split(',')]
-        thrs = [float(a) for a in self.config.get(self.section, 'throughputs').strip().split(',')]
-        offseta = self.config.getfloat(self.section, 'offsetalong')
-        offsetb = self.config.getfloat(self.section, 'offsetbetween')
-        binning = self.config.getint(self.section, 'binning')
-        platescaleS = self.config.getfloat(self.section, 'platescaleSpectra')
-        platescaleD = self.config.getfloat(self.section, 'platescaleDirect')
-        factor = self.config.getfloat(self.section, 'supersample')
-        names = list(self.config.get(self.section, 'names').strip().split(','))
-        names = [name.strip() for name in names]
-        filtercurve = self.config.get(self.section, 'throughputfile')
-        postageTolerance = self.config.getfloat(self.section, 'postageTolerance')
-        xsize = self.config.getfloat(self.section, 'xsize')
-        ysize = self.config.getfloat(self.section, 'ysize')
-        self.cutout = self.config.getboolean(self.section, 'cutout')
-
-        for f, n, w, h, t in zip(self.spectra, names, widths, heights, thrs):
-            self.slits[n] = {'widthSky': w,
-                             'widthPixels': w / platescaleS / binning,
-                             'heightSky': h,
-                             'heightPixels': h / platescaleS / binning,
-                             'throughput': 1. / t,
-                             'binning': binning,
-                             'file': f,
-                             'name': n}
+        #get information from the input file
+        self.fileInfo = self._parseInputInfo(self.config.get(self.section, 'inputfile'))
+        self.spectra = self.fileInfo.keys()
+        self.binning = self.config.getint(self.section, 'binning')
+        self.lookupInfo = self._parseLookupTable(self.config.get(self.section, 'lookupTable'))
 
         #sky related
-        self.sky['offseta'] = offseta
-        self.sky['offsetb'] = offsetb
-        self.sky['platescaleSpectra'] = platescaleS
+        self.sky['platescaleSpectra'] = self.config.getfloat(self.section, 'platescaleSpectra')
 
         #direct image information
-        self.direct['filterfile'] = filtercurve
-        self.direct['postageTolerance'] = postageTolerance
-        self.direct['factor'] = factor
-        self.direct['platescale'] = platescaleD
-        self.direct['xsize'] = xsize
-        self.direct['ysize'] = ysize
+        self.dirfile = self.config.get(self.section, 'directimage')
+        self.direct['filterfile'] = self.config.get(self.section, 'throughputfile')
+        self.direct['postageTolerance'] = self.config.getfloat(self.section, 'postageTolerance')
+        self.direct['factor'] = self.config.getfloat(self.section, 'supersample')
+        self.direct['platescale'] = self.config.getfloat(self.section, 'platescaleDirect') / self.direct['factor']
+        self.direct['xsize'] = self.config.getfloat(self.section, 'xsize')
+        self.direct['ysize'] = self.config.getfloat(self.section, 'ysize')
 
         #fitting related
+        self.cutout = self.config.getboolean(self.section, 'cutout')
         self.fitting['xrange'] = self.config.getint(self.section, 'xrange')
         self.fitting['xstep'] = self.config.getint(self.section, 'xstep')
         self.fitting['yrange'] = self.config.getint(self.section, 'yrange')
@@ -358,12 +431,13 @@ class FindSlitmaskPosition():
     def _calculatePosition(self):
         """
         This method can be used to calculate the WCS values.
+        
         Uses the pywcs to calculate the pixel to RA and DEC transformations.
         Uses astLib.astCoords to transform RA and DEC to decimal degrees.
         """
         #get RA and DEC from the header
-        ra = self.slits['mid']['header0']['RA']
-        dec = self.slits['mid']['header0']['DEC']
+        ra = self.slits[self.centralFile]['header0']['RA']
+        dec = self.slits[self.centralFile]['header0']['DEC']
         ra = astCoords.hms2decimal(ra, ':')
         dec = astCoords.dms2decimal(dec, ':')
         pix = self.direct['WCS'].wcs_sky2pix(np.array([[ra, dec], ]), 1)
@@ -378,7 +452,9 @@ class FindSlitmaskPosition():
 
     def _plotGalaxy(self):
         """
-        Very simple script to plot an image of the galaxy
+        Very simple method to plot an image of the galaxy and spectral information
+
+        :Warning: Does not work since version 0.5 of the class.
 
         :Note: At the moment the low and high end clipping values for scaling the image
                has been hardcoded. At some point these could be transferred to be read
@@ -404,9 +480,12 @@ class FindSlitmaskPosition():
         plt.savefig('Galaxy.pdf')
         plt.close()
 
+        #number of spectra
+        spects = len(self.slits.keys()) + 1
+
         #zoomed in version with the spectra
         fig = plt.figure(figsize=(15, 15))
-        ax1 = fig.add_subplot(4, 1, 1)
+        ax1 = fig.add_subplot(spects, 1, 1)
 
         f = maputils.FITSimage(self.direct['rotatedFile'])
         f.set_limits(pxlim=(xp - tol, xp + tol), pylim=(yp - tol, yp + tol))
@@ -421,9 +500,9 @@ class FindSlitmaskPosition():
         annim.plot()
 
         i = 2
-        for slit in self.slits.values():
-            ax = fig.add_subplot(4, 1, i)
-            f = maputils.FITSimage(slit['file'])
+        for slit in self.slits:
+            ax = fig.add_subplot(spects, 1, i)
+            f = maputils.FITSimage(slit)
             #f.set_imageaxes('Wavelength [AA]','Pixels')
             m = f.Annotatedimage(ax)
             m.Image()
@@ -445,7 +524,8 @@ class FindSlitmaskPosition():
 
     def _plotInitialSlitPositions(self):
         """
-        Very simple script to plot an image of the galaxy.
+        Very simple method to plot an image of the galaxy.
+        Overplots the initial slit mask position.
         """
         tol = np.floor(self.direct['postageTolerance'] / self.direct['platescale']) # pixels
         xp = self.direct['xposition']
@@ -456,9 +536,15 @@ class FindSlitmaskPosition():
         ax.imshow(np.log10(self.direct['rotatedImage'].copy()), origin='lower')
 
         for slit in self.slits.values():
+            if abs(slit['offsetPixels']) < 1:
+                ec = 'k'
+            else:
+                ec = 'b'
+
             patch = patches.Rectangle(slit['xy'],
                                       slit['xmax'] - slit['xmin'],
                                       slit['ymax'] - slit['ymin'],
+                                      ec=ec,
                                       fill=False)
             ax.add_patch(patch)
 
@@ -476,7 +562,8 @@ class FindSlitmaskPosition():
 
     def _plotFinalSlitPositions(self):
         """
-        Very simple script to plot an image of the galaxy.
+        Very simple method to plot an image of the galaxy.
+        Overplots the final slit mask over the image.
         """
         fig = plt.figure(1)
         ax = fig.add_subplot(111)
@@ -491,18 +578,21 @@ class FindSlitmaskPosition():
         for slit in self.slits.values():
             w = slit['width']
             h = slit['height']
-            if slit['name'] == 'mid':
-                patch = patches.Rectangle((self.result['xcenter'] - w / 2.,
-                                           self.result['ycenter'] - h / 2.),
-                                                                           w, h, fill=False)
-            elif slit['name'] == 'low':
-                patch = patches.Rectangle((self.result['xcenter'] - w / 2. - self.direct['xshiftSky'],
-                                           self.result['ycenter'] - h / 2. - self.direct['yshiftSky']),
-                                                                                                      w, h, fill=False)
-            elif slit['name'] == 'up':
-                patch = patches.Rectangle((self.result['xcenter'] - w / 2. + self.direct['xshiftSky'],
-                                           self.result['ycenter'] - h / 2. + self.direct['yshiftSky']),
-                                                                                                      w, h, fill=False)
+
+            if abs(slit['offsetPixels']) < 1:
+                ec = 'k'
+            else:
+                ec = 'b'
+
+            if slit['SLICE'] == 2:
+                patch = patches.Rectangle((self.result['xcenter'] - w / 2. + slit['offsetPixels'],
+                                           self.result['ycenter'] - h / 2.), w, h, ec=ec, fill=False)
+            elif slit['SLICE'] == 1:
+                patch = patches.Rectangle((self.result['xcenter'] - w / 2. - self.direct['xshiftSky']  + slit['offsetPixels'],
+                                           self.result['ycenter'] - h / 2. - self.direct['yshiftSky']), w, h, ec=ec, fill=False)
+            elif slit['SLICE'] == 3:
+                patch = patches.Rectangle((self.result['xcenter'] - w / 2. + self.direct['xshiftSky']  + slit['offsetPixels'],
+                                           self.result['ycenter'] - h / 2. + self.direct['yshiftSky']), w, h, ec=ec, fill=False)
 
 
             #t2 = matplotlib.transforms.Affine2D().rotate_deg(self.result['rotation']) + ax.transData
@@ -523,11 +613,9 @@ class FindSlitmaskPosition():
 
     def _generateSlitMask(self):
         """
-        Generates a slit mask that can be used for the direct image.
-
-        :Note: At the moment this method can be used to generate a single slit mask
-               with three slits. In the future this method should be changed to allow
-               a creation of a slitmask containing rotations and offsets.
+        Generates a slit mask that can be used with the direct image.
+        Assumes that the slice numbers are as follows:
+        1 = bottom, 2 =  middle, 3 = top
         """
         #calculate the x and y offsets between the slits on the sky in the direct image frame
         ymod = self.sky['offseta'] / self.direct['platescale']
@@ -540,19 +628,23 @@ class FindSlitmaskPosition():
             wd = self.slits[slit]['widthSky'] / self.direct['platescale'] / 2.
             hd = self.slits[slit]['heightSky'] / self.direct['platescale'] / 2.
 
-            if slit == 'mid':
-                self.slits[slit]['xmin'] = np.round(self.direct['xposition'] - wd)
-                self.slits[slit]['xmax'] = np.round(self.direct['xposition'] + wd)
+            #this is the offset that must be applied if offset position
+            osx = self.slits[slit]['offsetPixels']
+
+            #three different slices, 1 = bottom, 2 =  middle, 3 = top
+            if self.slits[slit]['SLICE'] == 2:
+                self.slits[slit]['xmin'] = np.round(self.direct['xposition'] - wd + osx)
+                self.slits[slit]['xmax'] = np.round(self.direct['xposition'] + wd + osx)
                 self.slits[slit]['ymin'] = np.round(self.direct['yposition'] - hd)
                 self.slits[slit]['ymax'] = np.round(self.direct['yposition'] + hd)
-            elif slit == 'up':
-                self.slits[slit]['xmin'] = np.round(self.direct['xposition'] - wd + xmod)
-                self.slits[slit]['xmax'] = np.round(self.direct['xposition'] + wd + xmod)
+            elif self.slits[slit]['SLICE'] == 3:
+                self.slits[slit]['xmin'] = np.round(self.direct['xposition'] - wd + xmod + osx)
+                self.slits[slit]['xmax'] = np.round(self.direct['xposition'] + wd + xmod + osx)
                 self.slits[slit]['ymin'] = np.round(self.direct['yposition'] - hd + ymod)
                 self.slits[slit]['ymax'] = np.round(self.direct['yposition'] + hd + ymod)
-            elif slit == 'low':
-                self.slits[slit]['xmin'] = np.round(self.direct['xposition'] - wd - xmod)
-                self.slits[slit]['xmax'] = np.round(self.direct['xposition'] + wd - xmod)
+            elif self.slits[slit]['SLICE'] == 1:
+                self.slits[slit]['xmin'] = np.round(self.direct['xposition'] - wd - xmod + osx)
+                self.slits[slit]['xmax'] = np.round(self.direct['xposition'] + wd - xmod + osx)
                 self.slits[slit]['ymin'] = np.round(self.direct['yposition'] - hd - ymod)
                 self.slits[slit]['ymax'] = np.round(self.direct['yposition'] + hd - ymod)
 
@@ -604,14 +696,14 @@ class FindSlitmaskPosition():
             #must rebin/interpolate to the right scale, conserve surface flux
             new = m.frebin(vals['profile'], int(vals['height']), total=True)
             model = np.append(model, new)
-            self.fitting[vals['name']] = new
+            self.fitting[vals['file']] = new
 
         if self.normalize:
             model /= np.max(model)
 
         #mask out negative values and especially those equal to zero
         msk = model > 0.0
-        self.fitting['model'] = model[msk] * 10.0
+        self.fitting['model'] = model[msk]
         self.fitting['mask'] = msk
 
         #basic model information
@@ -715,7 +807,7 @@ class FindSlitmaskPosition():
         #choose the method
         if 'chi' in self.fitting['method']:
             self.result['rotation'] = minpos[0]
-            self.result['posangle'] = minpos[0] + self.slits['mid']['POSANGLE']
+            self.result['posangle'] = minpos[0] + self.slits[self.centralFile]['POSANGLE']
             self.result['x'] = minpos[1]
             self.result['y'] = minpos[2]
             self.result['bestfit'] = dir
@@ -724,7 +816,7 @@ class FindSlitmaskPosition():
             self.result['pvalue'] = minpos[5]
         elif 'corr' in self.fitting['method']:
             self.result['rotation'] = minpos2[0]
-            self.result['posangle'] = minpos[0] + self.slits['mid']['POSANGLE']
+            self.result['posangle'] = minpos[0] + self.slits[self.centralFile]['POSANGLE']
             self.result['x'] = minpos2[1]
             self.result['y'] = minpos2[2]
             self.result['bestfit'] = dir2
@@ -742,6 +834,9 @@ class FindSlitmaskPosition():
     def _plotModelProfile(self):
         """
         Plots model profile.
+
+        :Note: The x-axis is in pixels, but in reality the different slits are a slightly
+               offsetted (along the slit direction) so the continuums will not match in x.
         """
         fig = plt.figure()
         ax = fig.add_subplot(111)
@@ -917,7 +1012,10 @@ class FindSlitmaskPosition():
     def _writeDS9region(self):
         """
         Writes a ds9 region file. The region file contains small boxes for each slit pixel.
+
         This can be used to inspect that the slitmask RAs and DECs are sensible.
+        The small boxes should align with the major axis of the galaxy if the PA was
+        the same as the major axis. 
         """
         fh = open('slitsFittedPositions.reg', 'w')
         fh.write('#File written by findSlitmaskPosition.py on %s\n'\
@@ -933,15 +1031,18 @@ class FindSlitmaskPosition():
     def _writeOutputCoordinates(self):
         """
         Outputs coordinates for each pixel.
-        Pickles all this information to a file named coordinates.pk for further processing.
-        The pickled filename has been hardcoded.
+        The output files are named as original_input_file_name_coordinates.txt
+
+        Pickles all the information to a file named coordinates.pk for further processing.
+        The pickled filename has been hardcoded, but this should not matter as any program
+        using this file should know the filename.
         """
         tmpdic = {}
 
         for slit, value in self.slits.items():
             list = []
 
-            fh = open('%s_coordinates.txt' % slit, 'w')
+            fh = open('%s_coordinates.txt' % slit[:-5], 'w')
             fh.write('#File written by findSlitmaskPosition.py on %s\n'\
             % datetime.datetime.isoformat(datetime.datetime.now()))
             fh.write('#x\ty\tx2\ty2\tRA\tDEC\n')
@@ -961,7 +1062,8 @@ class FindSlitmaskPosition():
 
     def _makeFinalFITS(self):
         """
-        Combines the tree separate FITS files to a single file where each slice is a separate header.
+        Combines the separate input FITS files to a single file where each slice is a separate extension.
+
         Updates the header to contain RA and DEC information so that the mapping between pixels
         and WCS can be derived from the header information.
         """
@@ -983,7 +1085,7 @@ class FindSlitmaskPosition():
             hdu = pf.ImageHDU(data=data, header=hdr)
 
             #update header
-            hdu.header.update('SNAME', value['name'], 'Name of the slit')
+            hdu.header.update('SNAME', value['slicerName'], 'The slicer ID')
             hdu.header.update('RA2', value['RA'], 'Fitted RA at the centre of the slit in degrees')
             hdu.header.update('DEC2', value['DEC'], 'Fitted DEC at the centre of the slit in degrees')
             hdu.header.update('PSANGLE2', self.result['posangle'], 'Fitted position angle')
@@ -1035,11 +1137,13 @@ class FindSlitmaskPosition():
         because it is time consuming and useful only for debugging
         purposes.
         """
+        self._readConfigs()
+        self._processConfigs()
         self._processSlitfiles()
         self._processDirectImage()
         self._calculatePosition()
         self._generateSlitMask()
-        self._plotGalaxy()
+        #self._plotGalaxy()
         self._plotInitialSlitPositions()
         self._fitSlitsToDirectImage()
         self._plotModelProfile()
