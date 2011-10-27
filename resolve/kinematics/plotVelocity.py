@@ -10,7 +10,7 @@ Class to plot velocity fields and SDSS images.
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
 
-:version: 0.6
+:version: 0.7
 """
 import matplotlib
 matplotlib.rcParams['font.size'] = 16
@@ -80,8 +80,13 @@ class velocityField():
         #finds the middle slit based on the header information and SLICE keyword
         #does not consider offset position
         files = self.info['data'][:, 12]
-        slices = np.array([pf.open(file)[0].header['SLICE'] for file in files if 'off' not in file])
-        midmsk = slices == 2
+        slices = []
+        for file in files:
+            if 'off' in files:
+                slices.append(-5)
+            else:
+                slices.append(pf.open(file)[0].header['SLICE'])
+        midmsk = np.asarray(slices) == 2
 
         #tries to figure out good limits automatically, this step might fail
         #depending on the galaxy
