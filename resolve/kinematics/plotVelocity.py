@@ -10,7 +10,7 @@ Class to plot velocity fields and SDSS images.
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
 
-:version: 0.4
+:version: 0.6
 """
 import matplotlib
 matplotlib.rcParams['font.size'] = 16
@@ -27,7 +27,7 @@ from kapteyn import maputils
 
 class velocityField():
     """
-    Velocity field plotting class.
+    Class to plot velocity fields.
     """
 
     def __init__(self, directImage):
@@ -39,22 +39,19 @@ class velocityField():
 
     def loadVelocityField(self, input='velocityField.pk'):
         """
-        Loads velocity field information.
+        Loads velocity field information from the pickled velocityField.pk
+        file. This file is created by processVelocities.py so if that script
+        was not run it won't be present and one cannot use this script to
+        do the plot.
         """
-        tmp = read.cPickledData(input)
-        self.info['coordinates'] = tmp['coordinates']
-        self.info['velocities'] = tmp['velocities']
-        self.info['data'] = tmp['data']
-        self.info['low'] = tmp['low']
-        self.info['mid'] = tmp['mid']
-        self.info['up'] = tmp['up']
+        self.info['data'] = np.array(read.cPickledData(input)['data'])
 
 
     def loadSDSSimage(self, ext=0):
         """
         Loads SDSS image and header.
 
-        :param ext: FITS extension
+        :param ext: FITS extension, default = 0
         :type ext: int
         """
         fh = pf.open(self.info['directImage'])
@@ -65,63 +62,65 @@ class velocityField():
         self.info['WCS'] = pywcs.WCS(self.info['hdr'])
 
 
-    def plotVelocityWCS(self, xlims=(630, 770), ylims=(830, 1090), clipmin=1e-4, clipmax=0.7):
+    def plotVelocityWCS(self):
         """
         Generates a plot with SDSS file on the background and the slicer velocities on the top.
         will also plot the centre slit velocity curve.
 
-        :param xlims: a tuple of xmin and xmax
-        :type xlims: tuple
-        :param ylims: a tuple of ymin and ymax
-        :type ylims: tuple
-        :param yclipmin: a minimum value to be used to clip the background image
-        :type yclipmin: float
-        :param yclipmax: a maximum value to be used to clip the background image
-        :type yclipmax: float
-
         :return: None
         """
-        yshift = -2
+        #shift y values by one, because of indexing difference between IRAF and Python
+        yshift = -1
 
         #data manipulation
-        vel = self.info['data'][:, 6]
-        msk = vel > 0
-        #vel[msk] -= np.mean(vel[msk])
-        xp = self.info['data'][:, 2][msk]
-        yp = self.info['data'][:, 3][msk]
-        #only mid
-        midmsk = self.info['mid'][:, 6] > 0
+        vel = self.info['data'][:, 6].astype(np.float)
+        err = self.info['data'][:, 7].astype(np.float)
+        xp = self.info['data'][:, 2].astype(np.float)
+        yp = self.info['data'][:, 3].astype(np.float) + yshift
+        #finds the middle slit based on the header information and SLICE keyword
+        #does not consider offset position
+        files = self.info['data'][:, 12]
+        slices = np.array([pf.open(file)[0].header['SLICE'] for file in files if 'off' not in file])
+        midmsk = slices == 2
 
-        #settings
-        cbfontsize = 13
+        #tries to figure out good limits automatically, this step might fail
+        #depending on the galaxy
+        ylims = (np.min(yp) * 0.93, np.max(yp) * 1.07)
+        xlims = (np.min(xp) * 0.85, np.max(xp) * 1.15)
+        tmpdata = pf.open(self.info['directImage'], memmap=1)[0].data
+        tmp = tmpdata[int(np.floor(ylims[0]) * 1.1):int(np.ceil(ylims[1]) * .9),
+              int(np.floor(xlims[0]) * 1.1):int(np.ceil(xlims[1]) * .9)]
+        clipmin = np.min(tmp) * 0.05 #the multiplier is rather arbitrary
+        clipmax = np.max(tmp) * 0.45 #the multiplier is rather arbitrary
+        ticks = np.linspace(clipmin, clipmax, 4)
+        ticks = [np.round(tick, 1) for tick in ticks]
 
+        #font settings
+        cbfontsize = 10
+
+        #opens the FITS file and sets limits
         f = maputils.FITSimage(self.info['directImage'])
         f.set_limits(pxlim=xlims, pylim=ylims)
 
+        #creates a figure and generates two subplots (grids)
         fig = plt.figure(figsize=(10, 8))
         gs = gridspec.GridSpec(1, 2, width_ratios=[3, 1])
         ax1 = plt.subplot(gs[0])
         ax2 = plt.subplot(gs[1], title='Center Slit')
-        gs.update(wspace=0.0, hspace=0.0, left=0.0, right=0.94, top=0.96, bottom=0.07)
-        #old method
-        #[left, bottom, width, height]
-        #rect_img = [0.0, 0.06, 0.8, 0.85]
-        #rect_sct = [0.80, 0.06, 0.15, 0.85]
-        #ax1 = plt.axes(rect_img)
-        #ax2 = plt.axes(rect_sct)
+        gs.update(wspace=0.0, hspace=0.0, top=0.96, bottom=0.07)
 
+        #plots the background SDSS image
         annim = f.Annotatedimage(ax1, cmap='binary', clipmin=clipmin, clipmax=clipmax)
-        annim.Image()#alpha=0.95)
+        annim.Image(alpha=0.95)
         #cont = annim.Contours(levels=np.arange(1e-4, 1, 1e-1))
 
-        #colour bar
-        inset_axes2 = inset_locator.inset_axes(ax1, width='45%', height='1%', loc=2)
-        units = r'flux (nanomaggies)'
+        #colour bar 1: this is the SDSS background image in nanomaggies
+        inset_axes2 = inset_locator.inset_axes(ax1, width='43%', height='1.5%', loc=2)
         colbar = annim.Colorbar(frame=inset_axes2, fontsize=cbfontsize,
-                                orientation='horizontal',
-                                ticks=[0.0, 0.2, 0.4, 0.6])
-        colbar.set_label(label=units)#, fontsize=13)
+                                orientation='horizontal',ticks=ticks)
+        colbar.set_label(label=r'flux (nanomaggies)')
 
+        #modifies the axis labels
         grat = annim.Graticule()
         grat.setp_gratline(wcsaxis=0, linestyle=':', zorder=1)
         grat.setp_gratline(wcsaxis=1, linestyle=':', zorder=1)
@@ -132,78 +131,62 @@ class velocityField():
         grat.setp_ticklabel(plotaxis=['top', 'right'], visible=False)
         #grat.setp_ticklabel(plotaxis=['right'], visible=False)
 
-        #add ruler
-        #ymid = np.mean(self.info['mid'][:, 3][midmsk])
-        #xmid = np.mean(self.info['mid'][:, 2][midmsk])
-        #ysize = (ylims[1] - ylims[0]) / 2.35
-        xmid = xlims[1] - 5
-        #ruler1 = annim.Ruler(x1=xmid+1, y1=ymid-ysize,
-        #                     x2=xmid+1, y2=ymid+ysize,
-        #                     mscale=0.8, fliplabelside=True,
-        #                     lambda0=0.0, step=5.0/3600.)
-        ruler1 = annim.Ruler(x1=xmid, y1=ylims[0] + 22,
-                             x2=xmid, y2=ylims[1] - 22,
-                             mscale=0.9, fliplabelside=True,
+        #adds a ruler
+        ymid = np.mean(yp[midmsk])
+        ysize = (np.max(yp) - np.min(yp)) * 0.7
+        xpos = xlims[1] - 5
+        ruler1 = annim.Ruler(x1=xpos, y1=ymid - ysize,
+                             x2=xpos, y2=ymid + ysize,
+                             mscale=0.8, fliplabelside=True,
                              lambda0=0.0, step=5.0 / 3600.)
-
         ruler1.setp_line(color='k', lw=1.3)
         ruler1.setp_label(color='k', fontsize=12)
 
         annim.plot()
 
         #overplot image slicer velocity field
-        s = ax1.scatter(xp,
-                        yp + yshift,
-                        c=vel[msk],
-                        s=30,
-                        marker='s',
-                        cmap=cm.jet,
-                        edgecolor='none',
-                        alpha=0.9)
+        s = ax1.scatter(xp, yp, c=vel, s=30, marker='s', cmap=cm.jet, edgecolor='none', alpha=0.9)
 
         #set colour bar and modify font sizes
-        inset_axes = inset_locator.inset_axes(ax1, width='45%', height='1%', loc=1)
-        c1 = plt.colorbar(s, cax=inset_axes,
-                          orientation='horizontal',
-                          ticks=[5500, 5600, 5700])
+        inset_axes = inset_locator.inset_axes(ax1, width='43%', height='1.5%', loc=1)
+        c1 = plt.colorbar(s, cax=inset_axes, orientation='horizontal')
         #inset_axes.xaxis.set_ticks_position('top')
         c1.set_label('Velocity (km s$^{-1}$)')
-        t = c1.ax.get_xticklabels()
-        for j in t:
+        ticks = np.linspace(int(np.ceil(np.min(vel))), int(np.floor(np.max(vel))), 4)
+        ticks = [int(tick) for tick in ticks]
+        c1.set_ticks(ticks)
+        for j in c1.ax.get_xticklabels():
             j.set_fontsize(cbfontsize)
 
         #the second plot
-        ax2.errorbar(self.info['mid'][:, 6][midmsk],
-                     self.info['mid'][:, 3][midmsk] + yshift,
-                     xerr=self.info['mid'][:, 7][midmsk],
+        ax2.errorbar(vel[midmsk], yp[midmsk], xerr=err[midmsk],
                      marker='o', ms=4, ls='None')
-
 
         #set limits
         ax2.set_ylim(ylims[0], ylims[1])
-        ax2.set_xlim(np.min(self.info['mid'][:, 6][midmsk]) * 0.985,
-                     np.max(self.info['mid'][:, 6][midmsk]) * 1.015)
+        ax2.set_xlim(np.min(vel[midmsk]) * 0.985,
+                     np.max(vel[midmsk]) * 1.015)
 
-        #modify ticks
+        #modify ticks, plot only every second on x and remove y ticks
         ax2.set_yticklabels([])
         ax2.set_yticks([])
-        #ax2.set_xticks(ax2.get_xticks()[::2])
-        ax2.set_xticks([5500, 5700])
+        ax2.set_xticks(ax2.get_xticks()[::2])
 
+        #set label on x
         ax2.set_xlabel('Velocity (km s$^{-1}$)')
 
+        #save figure
         plt.savefig('VelocityField.pdf')
 
 
 if __name__ == '__main__':
-    #change these
-    xlims = (640, 775)
-    ylims = (870, 1085)
-
+    #input file to read, change if needed
+    #however, roated.fits is the default because it has been
+    #oriented so that the major axis of the galaxy is vertical
     inputfile = 'rotated.fits'
 
-    #velocity instance
+    #velocity instance, do the actualy plot
     velocity = velocityField(inputfile)
-    velocity.loadSDSSimage()
     velocity.loadVelocityField()
-    velocity.plotVelocityWCS(xlims=xlims, ylims=ylims)
+    velocity.loadSDSSimage()
+    velocity.plotVelocityWCS()

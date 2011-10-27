@@ -18,7 +18,7 @@ values are rather arbitrary.
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
 
-:version: 0.4
+:version: 0.6
 """
 import csv
 import numpy as np
@@ -138,52 +138,32 @@ class emsaoVelocity():
 
         #output
         out = []
-        low = []
-        mid = []
-        up = []
-
-        #find matches
-        for val in vel:
-            pos = ''
-            ycoord = int(val[1])
-
-            if 's1' in val[0]:
-                data = coords['low']
-                pos = 'low'
-            elif 's2' in val[0]:
-                data = coords['mid']
-                pos = 'mid'
-            else:
-                data = coords['up']
-                pos = 'up'
-
-            for line in data:
-                if line[1] == ycoord:
-                    #list so we can add them together, which is more like append...
-                    tmp = line + [float(val[2]), float(val[3]), float(val[4]), float(val[5]),
-                                  float(val[6]), float(val[7])]
-                    out.append(tmp)
-
-                    #this is not very efficient way...
-                    if pos == 'low':
-                        low.append(tmp)
-                    elif pos == 'mid':
-                        mid.append(tmp)
-                    else:
-                        up.append(tmp)
+        #loop over all time and space...
+        for file in coords.keys():
+            for coordline in coords[file]:
+                for velline in vel:
+                    if velline[0] == file.replace('.fits', '') and int(velline[1]) == coordline[1]:
+                        #this is match but need to test if there's any useful veocity info
+                        if float(velline[2]) > 0.0 or float(velline[5]) > 0.0:
+                            tmp = coordline + [float(velline[2]), float(velline[3]),
+                                               float(velline[4]), float(velline[5]),
+                                               float(velline[6]), float(velline[7]), file]
+                            out.append(tmp)
 
         info = {'coordinates': coords,
                 'velocities': vel,
-                'data': np.asarray(out),
-                'low': np.asarray(low),
-                'mid': np.asarray(mid),
-                'up': np.asarray(up)}
+                'data': out}
+
         self.velocityField = info
+        write.cPickleDumpDictionary(self.velocityField, 'velocityField.pk')
 
 
     def generatePlot(self):
         """
         Makes a quick plot of parsed data for visualization.
+        
+        This plot is only so useful given that the x-axis is in pixels,
+        thus the centre of the galaxy is not aligned for different slices.
         """
         data = self.velocityInfo2
 
@@ -215,59 +195,26 @@ class emsaoVelocity():
         :param outfile: name of the ascii output file
         :type outfile: string
         """
-        write.cPickleDumpDictionary(self.velocityField, 'velocityField.pk')
-
         fh = open(outfile, 'w')
-        fh.write('#slit x_coord y_crood ra dec combine_vel error cz emission_vel error ez\n')
+        fh.write('#file x_coord y_crood ra dec combine_vel error cz emission_vel error ez\n')
 
         #combine information
-        for line in self.velocityField['coordinates']['low']:
-            found = False
-            for x in self.velocityField['low']:
-                if line[1] == x[1]:
-                    #found velocity information
-                    found = True
-                    output = 'low, 1, ' + str(line[1]) + ', ' + str(line[4]) + ', ' + str(line[5])
-                    output += ', ' + str(x[6]) + ', ' + str(x[7]) + ', ' + str(x[8]) + ', ' + str(x[9])
-                    output += ', ' + str(x[10]) + ', ' + str(x[11])
+        for file in sorted(self.velocityField['coordinates'].keys()):
+            for line in self.velocityField['coordinates'][file]:
+                found = False
+                for x in self.velocityField['data']:
+                    if line[1] == x[1] and x[12] == file:
+                        #found velocity information
+                        found = True
+                        output = x[12] + ', ' + str(int(x[0])) + ', ' + str(x[1]) + ', ' + str(x[4]) + ', ' + str(x[5])
+                        output += ', ' + str(x[6]) + ', ' + str(x[7]) + ', ' + str(x[8]) + ', ' + str(x[9])
+                        output += ', ' + str(x[10]) + ', ' + str(x[11])
+                        fh.write(output + '\n')
+                        break
+                if not found:
+                    output = file +', 1, ' + str(line[1]) + ', ' + str(line[4]) + ', ' + str(line[5])
+                    output += ', -99.99' * 6
                     fh.write(output + '\n')
-                    break
-            if not found:
-                output = 'low, 1, ' + str(line[1]) + ', ' + str(line[4]) + ', ' + str(line[5])
-                output += ', -99.99' * 6
-                fh.write(output + '\n')
-
-        for line in self.velocityField['coordinates']['mid']:
-            found = False
-            for x in self.velocityField['mid']:
-                if line[1] == x[1]:
-                    #found velocity information
-                    found = True
-                    output = 'mid, 1, ' + str(line[1]) + ', ' + str(line[4]) + ', ' + str(line[5])
-                    output += ', ' + str(x[6]) + ', ' + str(x[7]) + ', ' + str(x[8]) + ', ' + str(x[9])
-                    output += ', ' + str(x[10]) + ', ' + str(x[11])
-                    fh.write(output + '\n')
-                    break
-            if not found:
-                output = 'mid, 1, ' + str(line[1]) + ', ' + str(line[4]) + ', ' + str(line[5])
-                output += ', -99.99' * 6
-                fh.write(output + '\n')
-
-        for line in self.velocityField['coordinates']['up']:
-            found = False
-            for x in self.velocityField['up']:
-                if line[1] == x[1]:
-                    #found velocity information
-                    found = True
-                    output = 'up, 1, ' + str(line[1]) + ', ' + str(line[4]) + ', ' + str(line[5])
-                    output += ', ' + str(x[6]) + ', ' + str(x[7]) + ', ' + str(x[8]) + ', ' + str(x[9])
-                    output += ', ' + str(x[10]) + ', ' + str(x[11])
-                    fh.write(output + '\n')
-                    break
-            if not found:
-                output = 'up, 1, ' + str(line[1]) + ', ' + str(line[4]) + ', ' + str(line[5])
-                output += ', -99.99' * 6
-                fh.write(output + '\n')
 
         fh.close()
 
