@@ -1,9 +1,12 @@
 """
 This script can be used to flux calibrate an image slicer 2D spectra to SDSS one (of the same target).
 
-:Warning: On should only fit the observed spectrum that has been recorded at the same place
-          as the SDSS spectrum. Otherwise the fitting will artificially throw the flux
-          calibration off.
+Matches the slit width to SDSS fiber, takes into account the difference in area covered
+using a boosting factor and fractional pixels.
+
+.. Warning:: On should only fit the observed spectrum that has been recorded at the same place
+             as the SDSS spectrum. Otherwise the fitting will artificially throw the flux
+             calibration off.
 
 :requires: PyfITS
 :requires: NumPy
@@ -14,7 +17,7 @@ This script can be used to flux calibrate an image slicer 2D spectra to SDSS one
 :author: Sami-Matias Niemi
 :contact: sniemi@unc.edu
 
-:version: 0.3
+:version: 0.5
 """
 import os, sys, datetime
 import ConfigParser
@@ -27,9 +30,6 @@ from matplotlib import pyplot as plt
 import SamPy.fits.basics as basics
 import SamPy.fitting.fits as ff
 import SamPy.image.manipulation as m
-#import scipy.optimize as optimize
-
-__author__ = 'Sami-Matias Niemi'
 
 
 class calibrateToSDSS():
@@ -97,21 +97,25 @@ class calibrateToSDSS():
 
     def _calculateArea(self):
         """
-        Calculates the fiber area and the ratio.
+        Calculates the fiber area and the ratio of the fiber to slit area.
 
-        :note: Doesn't necessarily need the boosting factor, it could be removed. Also,
-               at the moment the number of pixels is being rounded to the closest
-               integer, thus the flux might be off because no fractional pixels are
-               considered.
+        Calculates the number of pixels around the center that should be included.
+        Calculates also the fraction that the full pixels do not cover to be used
+        later to take into account the "missing flux".
         """
         self.fitting['FiberArea'] = np.pi*(self.fitting['FiberDiameter'] / 2.)**2
         self.fitting['slitPixels'] = self.fitting['FiberDiameter'] / \
                                      self.fitting['platescale'] / \
                                      self.fitting['binning']
-        self.fitting['slitPix2'] = int(self.fitting['slitPixels'] / 2.)
+        self.fitting['slitPix2'] = int(np.floor((self.fitting['slitPixels'] - 1.0) / 2.))
+        self.fitting['slitPixFractional'] = self.fitting['slitPixels'] - (2*self.fitting['slitPix2'] + 1.)
         self.fitting['boosting'] = self.fitting['FiberArea'] / \
-                                   (self.fitting['width'] *
-                                    self.fitting['slitPix2'] * 2.)
+                                   (self.fitting['width'] * self.fitting['slitPixels'])
+
+        print self.fitting['slitPixels']
+        print self.fitting['slitPix2']
+        print self.fitting['slitPixFractional']
+        print self.fitting['boosting']
 
 
     def _deriveObservedSpectra(self):
@@ -119,15 +123,27 @@ class calibrateToSDSS():
         Derives a 1D spectrum from the 2D input data.
 
         Sums the pixels around the centre of the continuum that match to the SDSS fiber size.
+        Multiplies the flux in the pixels next to the last full ones to include with the
+        fractional flux we would otherwise be "missing".
         """
+        #y center and how many full pixels on either side we can include that would still
+        #be within the SDSS fiber
         y = self.fitting['ycenter']
         ymod = self.fitting['slitPix2']
-        self.fitting['obsSpectrum'] = np.sum(self.fitting['obsData'][y-ymod:y+ymod+1, :], axis=0)*\
+
+        #modify the lines of the fractional pixel information
+        self.fitting['obsData'][y+ymod+1, :] *= (self.fitting['slitPixFractional'] / 2.)
+        self.fitting['obsData'][y-ymod-1, :] *= (self.fitting['slitPixFractional'] / 2.)
+
+        #sum the flux
+        self.fitting['obsSpectrum'] = np.sum(self.fitting['obsData'][y-ymod-1:y+ymod+2, :], axis=0) / \
                                       self.fitting['boosting']
-        
+
+        #match the resolution, i.e. convolve the observed spectrum with a Gaussian
         self.fitting['obsSpectraConvolved'] = filt.gaussian_filter1d(self.fitting['obsSpectrum'],
                                                                      self.fitting['sigma'])
 
+        #get a wavelength scale
         self.fitting['obsWavelengths'] = basics.getWavelengths(self.fitting['observed'],
                                                                len(self.fitting['obsSpectraConvolved']))
 
@@ -159,8 +175,8 @@ class calibrateToSDSS():
         #TODO: remove the hardcoded lines
         halph = [6660, 6757]
         msk = ~((self.fitting['obsWavelengths'] >= halph[0]) & (self.fitting['obsWavelengths'] <= halph[1])) & \
-              ~((self.fitting['obsWavelengths'] >= 6004) & (self.fitting['obsWavelengths'] <= 6042)) & \
-              ~((self.fitting['obsWavelengths'] >= 6040) & (self.fitting['obsWavelengths'] <= 6068))
+              ~((self.fitting['obsWavelengths'] >= 6000) & (self.fitting['obsWavelengths'] <= 6040)) & \
+              ~((self.fitting['obsWavelengths'] >= 6030) & (self.fitting['obsWavelengths'] <= 6070))
         self.fitting['mask'] = msk
 
 
@@ -168,25 +184,16 @@ class calibrateToSDSS():
         """
         Fits a smooth function to the spectra ratio.
 
-        Two options can be used, either NumPy polyfit or SciPy curve_fit.
-        By default the NumPy polyfit is being used as it allows the order of the
-        fitting function to be changed easily.
+        Uses the NumPy polyfit to do the fitting.
         """
-        #with NumPy polyfit
         fx = np.poly1d(np.polyfit(self.fitting['obsWavelengths'][self.fitting['mask']],
                                   self.fitting['spectraRatio'][self.fitting['mask']],
                                   self.fitting['order']))
         self.fitting['fit'] = fx(self.fitting['obsWavelengths'])
-        #with scipy curvefit
-        #popt, pconv = optimize.curve_fit(ff.polynomial5,
-        #                                 self.fitting['obsWavelengths'][self.fitting['mask']],
-        #                                 self.fitting['spectraRatio'][self.fitting['mask']])
-        #self.fitting['fit2'] = ff.polynomial5(self.fitting['obsWavelengths'], *popt)
 
         if self.debug:
             print '\nFitting parameters:'
             print fx
-            #print popt
 
 
     def _generatePlots(self):
