@@ -65,7 +65,7 @@ def nanomaggiesToJansky(nanomaggie):
     :return: Janskys
     :rtype: either a float or ndarray
     """
-    return nanomaggie * 3.361e-6
+    return nanomaggie * 3.631e-6
 
 
 def janskyToMagnitude(jansky):

@@ -142,7 +142,7 @@ class calibrateToSDSS():
         ms = (self.fitting['SDSSwave'] >= np.min(self.fitting['obsWavelengths'])) &\
              (self.fitting['SDSSwave'] <= np.max(self.fitting['obsWavelengths']))
         newflux = m.frebin(self.fitting['SDSSflux'][ms],
-                           len(self.fitting['obsSpectraConvolved']))#, total=True)
+                           len(self.fitting['obsSpectraConvolved']), total=True)
 
         self.fitting['spectraRatio'] = self.fitting['obsSpectraConvolved'] / newflux
         self.fitting['interpFlux'] = newflux
