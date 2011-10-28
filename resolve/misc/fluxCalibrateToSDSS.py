@@ -112,11 +112,6 @@ class calibrateToSDSS():
         self.fitting['boosting'] = self.fitting['FiberArea'] / \
                                    (self.fitting['width'] * self.fitting['slitPixels'])
 
-        print self.fitting['slitPixels']
-        print self.fitting['slitPix2']
-        print self.fitting['slitPixFractional']
-        print self.fitting['boosting']
-
 
     def _deriveObservedSpectra(self):
         """
