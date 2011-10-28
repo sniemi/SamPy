@@ -147,13 +147,16 @@ class calibrateToSDSS():
         """
         Calculates the difference between the derived observed and SDSS spectra.
 
-        Interpolates the SDSS spectra to the same wavelength scale. In this interpolation
-        the flux is conserved.
+        Interpolates the SDSS spectra to the same wavelength scale.
+
+        .. Warning:: We do not conserve flux here when interpolating. This is because
+                     we do not actually interpolate flux but flux density which is per
+                     angstrom.
         """
         ms = (self.fitting['SDSSwave'] >= np.min(self.fitting['obsWavelengths'])) &\
              (self.fitting['SDSSwave'] <= np.max(self.fitting['obsWavelengths']))
-        newflux = m.frebin(self.fitting['SDSSflux'][ms],
-                           len(self.fitting['obsSpectraConvolved']), total=True)
+        newflux = m.frebin(self.fitting['SDSSflux'][ms],    
+                           len(self.fitting['obsSpectraConvolved']))#, total=True)
 
         self.fitting['spectraRatio'] = self.fitting['obsSpectraConvolved'] / newflux
         self.fitting['interpFlux'] = newflux
