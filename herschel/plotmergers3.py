@@ -1,3 +1,11 @@
+"""
+Generates some prediction plots for the Herschel I paper.
+
+:author: Sami-Matias Niemi
+:contact: sammy@sammyniemi.com
+
+:version: 0.5
+"""
 import matplotlib
 matplotlib.use('PS')
 #matplotlib.use('Agg')
@@ -9,12 +17,12 @@ matplotlib.rcParams['legend.fontsize'] = 12
 matplotlib.rcParams['legend.handlelength'] = 3
 matplotlib.rcParams['xtick.major.size'] = 5
 matplotlib.rcParams['ytick.major.size'] = 5
-import pylab as P
 import os
+import pylab as P
 import numpy as N
-#Sami's repository
-import db.sqlite as sq
-import astronomy.datamanipulation as dm
+import SamPy.db.sqlite as sq
+import SamPy.astronomy.datamanipulation as dm
+
 
 def plotMergerFractions(query,
                         xlabel, ylabel,
@@ -26,9 +34,13 @@ def plotMergerFractions(query,
                         ymin=-0.001,
                         ymax=1.01,
                         logscale=False):
+    """
+    Plot merger fractions.
+    """
     #get data, all galaxies
     data = sq.get_data_sqliteSMNfunctions(path, db, query)
-    mstar = N.log10(data[:, 0])
+    #mstar = N.log10(data[:, 0])
+    mstar = data[:, 0]
     tmerge = data[:, 1]
     tmajor = data[:, 2]
     print N.min(mstar), N.max(mstar)
@@ -63,7 +75,7 @@ def plotMergerFractions(query,
                              mergerFraction2, majorMergerFraction2):
         print a + b + c + d + e
 
-        #make the figure
+    #make the figure
     if 'ps' in output:
         fig = P.figure()
     else:
@@ -71,7 +83,7 @@ def plotMergerFractions(query,
     fig.subplots_adjust(left=0.08, bottom=0.07,
                         right=0.97, top=0.93)
     ax1 = fig.add_subplot(111)
-    #draw lines
+    #draw lines ["-","--","-.",":"]
     ax1.plot(mids, noMergerFraction, 'k-', lw=2.6,
              label='Never Merged')
     #    ax1.plot(mids, mergerFraction, ls = '--', lw = 2.6,
@@ -82,13 +94,13 @@ def plotMergerFractions(query,
     #             label = 'Major Merger: $T \leq 250$ Myr')
     #    ax1.plot(mids, majorMergerFraction2, ls = '-.', lw = 2.6,
     #             label = 'Major Merger: $250 < T \leq 500$ Myr')
-    ax1.plot(mids, majorMergerFraction, ls='--', lw=2.6,
+    ax1.plot(mids, majorMergerFraction, ls='-', lw=2.6, c='0.3',
              label='Young Major Merger')
-    ax1.plot(mids, mergerFraction, ls='--', lw=2.6,
+    ax1.plot(mids, mergerFraction, ls='-.', lw=2.6, c='0.2',
              label='Young Minor Merger')
-    ax1.plot(mids, majorMergerFraction2, ls='-.', lw=2.6,
+    ax1.plot(mids, majorMergerFraction2, ls='--', lw=2.6, c='0.4',
              label='Old Major Merger')
-    ax1.plot(mids, mergerFraction2, ls='-.', lw=2.6,
+    ax1.plot(mids, mergerFraction2, ls=':', lw=2.6, c='0.5',
              label='Old Minor Merger')
     #labels
     ax1.set_xlabel(xlabel)
@@ -100,8 +112,6 @@ def plotMergerFractions(query,
            horizontalalignment='center',
            verticalalignment='center',
            transform=ax1.transAxes)
-    #make grid
-    #ax1.grid()
     #legend and save
     P.legend(loc='upper left')
     P.savefig(out_folder + output)
@@ -296,14 +306,14 @@ def plotMergerFractions3(query,
     P.legend(loc='lower left')
     P.savefig(out_folder + output)
 
+    
 if __name__ == '__main__':
-    #find the home directory, because the output is to dropbox 
-    #and my user name is not always the same, this hack is required.
+    #find the home directory, because
+    #my user name is not always the same.
     hm = os.getenv('HOME')
     #constants
-    #path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
     path = hm + '/Research/Herschel/runs/big_volume/'
-    out_folder = hm + '/Dropbox/Research/Herschel/plots/mergers/big/'
+    out_folder = hm + '/Research/Herschel/plots/mergers/'
     db = 'sams.db'
 
     ylab = r'$\mathrm{Fraction \ of \ Sample}$'
@@ -324,10 +334,11 @@ if __name__ == '__main__':
                 FIR.gal_id = galprop.gal_id and
                 FIR.halo_id = galprop.halo_id
                 '''
-    xlab = r'$\log_{10} \left ( \frac{S_{160}}{S_{4.5}} \right )$'
-    plotMergerFractions(query, xlab, ylab, 'FractionMergerPACS160IRAC2{0:>s}'.format(type),
-                        out_folder, mstarmin=1.0, mstarmax=3.5, mbins=11,
-                        logscale=False, ymax=1.0)
+    #xlab = r'$\log_{10} \left ( \frac{S_{160}}{S_{4.5}} \right )$'
+    xlab = r'$\frac{S_{160}}{S_{4.5}}$'
+    plotMergerFractions(query, xlab, ylab, 'FractionMergerPACS160IRAC2BW{0:>s}'.format(type),
+                        out_folder, mstarmin=1.0, mstarmax=2000.0, mbins=10, ymax=1.0)
+                        #out_folder, mstarmin=1.0, mstarmax=3.5, mbins=11, ymax=1.0)
 ################################################################################
 #    query = '''select FIR.spire250_obs / FIR.irac_ch4_obs, galprop.tmerge, galprop.tmajmerge
 #                from FIR, galprop where

@@ -3,6 +3,7 @@ Plots luminosity functions at different redshifts.
 Pulls data from an sqlite3 database.
 
 :author: Sam-Matias Niemi
+:contact: sammy@sammyniemi.com
 """
 import matplotlib
 matplotlib.use('PS')

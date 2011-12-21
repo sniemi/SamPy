@@ -4,10 +4,10 @@ A (random) collection of functions for data manipulation.
 :requires: NumPy
 :requires: SciPy
 
-:version: 0.1
+:version: 0.2
 
 :author: Sami-Matias Niemi
-:contact: sniemi@unc.edu
+:contact: sammy@sammyniemi.com
 """
 import numpy as N
 import scipy.stats as ss
@@ -20,12 +20,12 @@ def percentile_bins(xdata, ydata, xmin, xmax,
 
     :param xdata: numpy array of xdata
     :param ydata: numpy arrya of ydata
-    :param xmax: maximumx value of x that data are binned to
+    :param xmax: maximum value of x that data are binned to
     :param xmin: minimum value of x that data are binned to
     :param nxbins: number of bins in x
     :param log: if True, xbins are logarithmically spaced, else linearly
     :param limit: the minimum number of values in a bin for which the
-                median and percentiles are returned for.
+                  median and percentiles are returned for.
 
     :return: mid points of the bins, median, 16 per cent percentile, and 84 per cent percentile.
     """
@@ -113,6 +113,9 @@ def binAndReturnMergerFractions(mstar,
                                 mstarmax=11.5,
                                 mbins=10,
                                 logscale=False):
+    """
+    Bin the data and return different merger fractions.
+    """
     out = []
     #bins
     if logscale:
@@ -143,6 +146,9 @@ def binAndReturnMergerFractions2(mstar,
                                  mstarmax=11.5,
                                  mbins=10,
                                  logscale=False):
+    """
+    Bin the data and return different merger fractions.
+    """
     out = []
     #bins
     if logscale:
@@ -172,6 +178,9 @@ def binAndReturnFractions(x,
                           xmax=11.5,
                           xbins=10,
                           logscale=False):
+    """
+    Bin the data and return different merger fractions.
+    """
     out = []
     #bins
     if logscale:

@@ -1,3 +1,8 @@
+"""
+Plots flux distribution as a function of redshift for
+IR luminous galaxies. The plot is presented in the
+Herschel I paper of Niemi et al.
+"""
 import matplotlib
 matplotlib.use('Agg')
 matplotlib.rc('text', usetex=True)
@@ -14,10 +19,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator, NullFormatter
 from matplotlib import cm
-#Sami's repo
-import db.sqlite
-import astronomy.conversions as cv
-import sandbox.MyTools as M
+import SamPy.db.sqlite
+import SamPy.astronomy.conversions as cv
+import SamPy.sandbox.MyTools as M
 
 __author__ = 'Sami-Matias Niemi'
 __version__ = 0.1
@@ -28,10 +32,9 @@ def scatterHistograms(xdata,
                       xlabel,
                       ylabel,
                       output):
-    '''
-    This functions generates a scatter plot and
-    projected histograms to both axes.
-    '''
+    """
+    This functions generates a scatter plot and projected histograms to both axes.
+    """
     #constants
     xmin = 2.0
     xmax = 4.0
@@ -89,11 +92,11 @@ def scatterHistograms(xdata,
 
     #KDE
     x = M.AnaKDE([xdata, ydata])
-    x_vec, y_vec, zm, lvls, d0, d1 = x.contour(np.linspace(xmin-0.1, xmax+0.1, 50),
-                                               np.linspace(ymin-0.1, ymax+0.1, 50),
+    x_vec, y_vec, zm, lvls, d0, d1 = x.contour(np.linspace(xmin - 0.1, xmax + 0.1, 50),
+                                               np.linspace(ymin - 0.1, ymax + 0.1, 50),
                                                return_data=True)
     axScatter.contourf(x_vec, y_vec, zm,
-                       levels=np.linspace(0.002, 0.92*np.max(zm), 10),
+                       levels=np.linspace(0.002, 0.92 * np.max(zm), 10),
                        cmap=cm.get_cmap('gist_yarg'),
                        alpha=0.8)
 
@@ -125,12 +128,12 @@ def scatterHistograms(xdata,
                       hatch='x')
     #set legend of x histogram
     plt.legend((x1[2][0], x2[2][0]),
-               ('All Galaxies', r'$S_{160}> 5\ \mathrm{mJy}$'),
-               shadow=False,
-               fancybox=False,
-               bbox_to_anchor=(0.01, 1.34),
-               loc=2,
-               borderaxespad=0.)
+        ('All Galaxies', r'$S_{160}> 5\ \mathrm{mJy}$'),
+                                   shadow=False,
+                                   fancybox=False,
+                                   bbox_to_anchor=(0.01, 1.34),
+                                   loc=2,
+                                   borderaxespad=0.)
     #make y histogram
     axHisty.hist(ydata,
                  bins=ybins,
@@ -171,7 +174,10 @@ def scatterHistograms(xdata,
 def plotFluxRedshiftDistribution(path,
                                  database,
                                  out_folder,
-                                 band = 'spire250_obs'):
+                                 band='spire250_obs'):
+    """
+    Driver function.
+    """
     query = '''select FIR.%s, FIR.z
     from FIR where
     FIR.%s > 1e-6 and
@@ -180,7 +186,7 @@ def plotFluxRedshiftDistribution(path,
     FIR.%s < 1e5
     ''' % (band, band, band)
     #get data
-    data = db.sqlite.get_data_sqlite(path, database, query)
+    data = SamPy.db.sqlite.get_data_sqlite(path, database, query)
     #convert fluxes to mJy
     flux = np.log10(data[:, 0] * 1e3) # log of mJy
     redshift = data[:, 1]
@@ -197,7 +203,7 @@ def plotFluxRedshiftDistribution(path,
     ylabel = r'$\log_{10} ( S_{%s} \ [\mathrm{mJy}] )$' % wave
 
     #output folder and file name
-    output = "%sFluxRedshiftDist%s.png"% (out_folder, wave)
+    output = "%sFluxRedshiftDist%s.png" % (out_folder, wave)
 
     #generate the plot
     scatterHistograms(redshift,
@@ -206,13 +212,13 @@ def plotFluxRedshiftDistribution(path,
                       ylabel,
                       output)
 
+
 if __name__ == '__main__':
     #find the home directory, because the output is to dropbox
     #and my user name is not always the same, this hack is required.
     hm = os.getenv('HOME')
 
     #constants
-    #path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
     path = hm + '/Research/Herschel/runs/big_volume/'
     database = 'sams.db'
     out_folder = hm + '/Dropbox/Research/Herschel/plots/flux_dist/'

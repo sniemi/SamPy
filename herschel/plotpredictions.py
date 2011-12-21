@@ -1,24 +1,33 @@
+"""
+Generates some prediction plots for the Herschel I paper.
+
+:author: Sami-Matias Niemi
+:contact: sammy@sammyniemi.com
+
+:version: 0.5
+"""
 import matplotlib
 matplotlib.use('PS')
-#matplotlib.use('Agg')
 matplotlib.rc('text', usetex=True)
 matplotlib.rcParams['font.size'] = 16
 matplotlib.rc('xtick', labelsize=14)
 matplotlib.rc('axes', linewidth=1.5)
-#matplotlib.rcParams['legend.fontsize'] = 10
-matplotlib.rcParams['legend.fontsize'] = 12
-matplotlib.rcParams['legend.handlelength'] = 2
+matplotlib.rcParams['legend.fontsize'] = 10
+#matplotlib.rcParams['legend.fontsize'] = 12
+#matplotlib.rcParams['legend.handlelength'] = 2
+matplotlib.rcParams['legend.handlelength'] = 1.7
 matplotlib.rcParams['xtick.major.size'] = 5
 matplotlib.rcParams['ytick.major.size'] = 5
 matplotlib.rcParams['legend.fancybox'] = True
 matplotlib.rcParams['legend.shadow'] = True
 import os
+from itertools import cycle, count
 import pylab as P
 import numpy as N
-#Sami's repository
-import db.sqlite as sq
-import astronomy.datamanipulation as dm
-import fitting.fits as fit
+import SamPy.db.sqlite as sq
+import SamPy.astronomy.datamanipulation as dm
+import SamPy.fitting.fits as fit
+
 
 def plot_sfrs(path, db, redshifts, out_folder,
               xmin=0.0, xmax=2.3, fluxlimit=5,
@@ -26,12 +35,17 @@ def plot_sfrs(path, db, redshifts, out_folder,
     '''
     Plots SFR
     '''
+    lines = ["-","--","-.",":"]
+    linecycler = cycle(lines)
+    colour = count(0.1, 0.1)
+
     #figure
     fig = P.figure()
     ax = fig.add_subplot(111)
 
     for reds in redshifts:
-        query = '''select galprop.mstardot, FIR.pacs160_obs*1000
+        #query = '''select galprop.mstardot, FIR.pacs160_obs*1000
+        query = '''select galprop.mstardot, FIR.spire250_obs*1000
                 from FIR, galprop where
                 %s and
                 FIR.gal_id = galprop.gal_id and
@@ -60,6 +74,7 @@ def plot_sfrs(path, db, redshifts, out_folder,
         msk = y50d > -10
         ax.errorbar(xbin_midd[msk], y50d[msk],
                     yerr=[y50d[msk] - y16d[msk], y84d[msk] - y50d[msk]],
+                    ls=next(linecycler), c=str(colour.next()),
                     label='$z = %.1f$' % zz)
 
         print '\nStraight line fit for z = %.1f' % zz
@@ -68,29 +83,30 @@ def plot_sfrs(path, db, redshifts, out_folder,
         #tmp = fit.linearregression(xd, yd, 
         #                           report = True)
 
-    ax.axvline(N.log10(fluxlimit), ls=':', color='green')
-    #label = '$S_{160} =$ %.1f mJy' % fluxlimit)
+    #ax.axvline(N.log10(fluxlimit), ls=':', color='green')
+    ax.axvline(N.log10(fluxlimit), ls=':', color='0.25')
 
     if obs:
-        data = N.loadtxt('/Users/sammy/Dropbox/Research/Herschel/LaceySFRs.txt')
+        data = N.loadtxt('/Users/sammy/Research/Herschel/LaceySFRs.txt')
         data[:, 2] = N.log10(10 ** data[:, 2] / (1. / (1. / 0.7)))
         msk1 = data[:, 0] < 15
         msk2 = (data[:, 0] > 15) & (data[:, 0] < 35)
         msk3 = (data[:, 0] > 35) & (data[:, 0] < 55)
         msk4 = (data[:, 0] > 55) & (data[:, 0] < 70)
         msk5 = (data[:, 0] > 70) & (data[:, 0] < 80)
-        ax.plot(data[msk1][:, 1], data[msk1][:, 2],
-                'b--', label='$\mathrm{L10:}\ z = 0.25$')
-        ax.plot(data[msk2][:, 1], data[msk2][:, 2],
-                'r--', label='$\mathrm{L10:}\ z = 1.0$')
-        ax.plot(data[msk3][:, 1], data[msk3][:, 2],
-                'c--', label='$\mathrm{L10:}\ z = 2.0$')
-        ax.plot(data[msk4][:, 1], data[msk4][:, 2],
-                'm--', label='$\mathrm{L10:}\ z = 3.0$')
-        ax.plot(data[msk5][:, 1], data[msk5][:, 2],
-                'y--', label='$\mathrm{L10:}\ z = 4.0$')
+        ax.plot(data[msk1][:, 1], data[msk1][:, 2], c='0.1',
+                ls='--', label='$\mathrm{L10:}\ z = 0.25$')
+        ax.plot(data[msk2][:, 1], data[msk2][:, 2], c='0.2',
+                ls='--', label='$\mathrm{L10:}\ z = 1.0$')
+        ax.plot(data[msk3][:, 1], data[msk3][:, 2], c='0.3',
+                ls='--', label='$\mathrm{L10:}\ z = 2.0$')
+        ax.plot(data[msk4][:, 1], data[msk4][:, 2], c='0.4',
+                ls='--', label='$\mathrm{L10:}\ z = 3.0$')
+        ax.plot(data[msk5][:, 1], data[msk5][:, 2], c='0.5',
+                ls='--', label='$\mathrm{L10:}\ z = 4.0$')
 
-    ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
+    #ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
+    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
     ax.set_ylabel('$\log_{10}(\dot{M}_{\star} \ [M_{\odot}\mathrm{yr}^{-1}])$')
 
     ax.set_xlim(xmin, xmax)
@@ -98,16 +114,20 @@ def plot_sfrs(path, db, redshifts, out_folder,
 
     P.legend(loc='lower right')
     if obs:
-        P.savefig(out_folder + 'sfrOBS.ps')
+        P.savefig(out_folder + 'sfrOBSBW.ps')
     else:
-        P.savefig(out_folder + 'sfr.ps')
+        P.savefig(out_folder + 'sfrBW.ps')
 
 
 def plot_ssfr(path, db, redshifts, out_folder,
               xmin=0.0, xmax=2.3, fluxlimit=5):
-    '''
+    """
     Plots SSFR. 
-    '''
+    """
+    lines = ["-","--","-.",":"]
+    linecycler = cycle(lines)
+    colour = count(0.1, 0.1)
+
     #figure
     fig = P.figure()
     ax = fig.add_subplot(111)
@@ -142,11 +162,11 @@ def plot_ssfr(path, db, redshifts, out_folder,
         msk = y50d > -20
         ax.errorbar(xbin_midd[msk], y50d[msk],
                     yerr=[y50d[msk] - y16d[msk], y84d[msk] - y50d[msk]],
+                    ls=next(linecycler), c=str(colour.next()),
                     label='$z = %.1f$' % zz)
 
-    ax.axvline(N.log10(fluxlimit), ls=':', color='green')
-    #label = '$S_{160} =$ %.1f mJy' % fluxlimit)
-
+    #ax.axvline(N.log10(fluxlimit), ls=':', color='green')
+    ax.axvline(N.log10(fluxlimit), ls=':', color='0.25')
 
     ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
     ax.set_ylabel(r'$\log_{10} \left (\frac{\dot{M}_{\star}}{M_{\star}} \ [\mathrm{yr}^{-1}] \right )$')
@@ -160,15 +180,20 @@ def plot_ssfr(path, db, redshifts, out_folder,
 
 def plot_stellarmass(path, db, redshifts, out_folder,
                      xmin=0.0, xmax=2.3, fluxlimit=5):
-    '''
-    Plots 
-    '''
+    """
+    Plots stellar mass
+    """
+    lines = ["-","--","-.",":"]
+    linecycler = cycle(lines)
+    colour = count(0.1, 0.1)
+
     #figure
     fig = P.figure()
     ax = fig.add_subplot(111)
 
     for i, reds in enumerate(redshifts):
-        query = '''select galprop.mstar, FIR.pacs160_obs*1000
+        #query = '''select galprop.mstar, FIR.pacs160_obs*1000
+        query = '''select galprop.mstar, FIR.spire250_obs*1000
                 from FIR, galprop where
                 %s and
                 FIR.gal_id = galprop.gal_id and
@@ -197,25 +222,31 @@ def plot_stellarmass(path, db, redshifts, out_folder,
         add = eval('0.0%s' % str(i))
         ax.errorbar(xbin_midd[msk] + add, y50d[msk],
                     yerr=[y50d[msk] - y16d[msk], y84d[msk] - y50d[msk]],
+                    ls=next(linecycler), c=str(colour.next()),
                     label='$z = %.1f$' % zz)
 
-    ax.axvline(N.log10(fluxlimit), ls=':', color='green')
+    #ax.axvline(N.log10(fluxlimit), ls=':', color='green')
+    ax.axvline(N.log10(fluxlimit), ls=':', color='0.25')
 
-    ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
+    #ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
+    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
     ax.set_ylabel('$\log_{10}(M_{\star} \ [M_{\odot}])$')
 
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(8.9, 11.8)
 
     P.legend(loc='lower right')
-    P.savefig(out_folder + 'mstellar.ps')
+    P.savefig(out_folder + 'mstellar2.ps')
 
 
 def plot_Lbol(path, db, redshifts, out_folder,
               xmin=0.0, xmax=2.3, fluxlimit=5):
-    '''
+    """
     Plots pacs 160 flux versus bolometric luminosity
-    '''
+    """
+    lines = ["-","--","-.",":"]
+    linecycler = cycle(lines)
+    colour = count(0.1, 0.1)
     #figure
     fig = P.figure()
     ax = fig.add_subplot(111)
@@ -246,9 +277,11 @@ def plot_Lbol(path, db, redshifts, out_folder,
         add = eval('0.0%s' % str(i))
         ax.errorbar(xbin_midd[msk] + add, y50d[msk],
                     yerr=[y50d[msk] - y16d[msk], y84d[msk] - y50d[msk]],
+                    ls=next(linecycler), c=str(colour.next()),
                     label='$z = %.1f$' % zz)
 
-    ax.axvline(N.log10(fluxlimit), ls=':', color='green')
+    #ax.axvline(N.log10(fluxlimit), ls=':', color='green')
+    ax.axvline(N.log10(fluxlimit), ls=':', color='0.25')
 
     ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
     ax.set_ylabel('$\log_{10}(L_{\mathrm{bol}} \ [L_{\odot}])$')
@@ -259,17 +292,22 @@ def plot_Lbol(path, db, redshifts, out_folder,
     P.legend(loc='lower right')
     P.savefig(out_folder + 'Lbol.ps')
 
+
 def plot_Ldust(path, db, redshifts, out_folder,
-              xmin=0.0, xmax=2.3, fluxlimit=5):
-    '''
-    Plots pacs 160 flux versus dust luminosity
-    '''
+               xmin=0.0, xmax=2.3, fluxlimit=5):
+    """
+    Plots pacs 160 / spire 250 flux versus dust luminosity
+    """
+    lines = ["-","--","-.",":"]
+    linecycler = cycle(lines)
+    colour = count(0.1, 0.1)
     #figure
     fig = P.figure()
     ax = fig.add_subplot(111)
 
     for i, reds in enumerate(redshifts):
-        query = '''select FIR.L_dust, FIR.pacs160_obs
+        #query = '''select FIR.L_dust, FIR.pacs160_obs
+        query = '''select FIR.L_dust, FIR.spire250_obs
                 from FIR where %s and FIR.L_dust > 0 and FIR.L_dust < 1e8''' % reds
         #tmp
         tmp = reds.split()
@@ -294,31 +332,38 @@ def plot_Ldust(path, db, redshifts, out_folder,
         add = eval('0.0%s' % str(i))
         ax.errorbar(xbin_midd[msk] + add, y50d[msk],
                     yerr=[y50d[msk] - y16d[msk], y84d[msk] - y50d[msk]],
+                    ls=next(linecycler), c=str(colour.next()),
                     label='$z = %.1f$' % zz)
 
-    ax.axvline(N.log10(fluxlimit), ls=':', color='green')
+    #ax.axvline(N.log10(fluxlimit), ls=':', color='green')
+    ax.axvline(N.log10(fluxlimit), ls=':', color='0.25')
 
-    ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
+    #ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
+    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
     ax.set_ylabel('$\log_{10}(L_{\mathrm{dust}} \ [L_{\odot}])$')
 
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(8.9, 13.0)
 
     P.legend(loc='lower right')
-    P.savefig(out_folder + 'Ldust.ps')
+    P.savefig(out_folder + 'Ldust2.ps')
 
 
-def plot_coldgas(path, db, reshifts, out_folder,
+def plot_coldgas(path, db, redshifts, out_folder,
                  xmin=0.0, xmax=2.3, fluxlimit=5):
-    '''
+    """
     Plots 
-    '''
+    """
+    lines = ["-","--","-.",":"]
+    linecycler = cycle(lines)
+    colour = count(0.1, 0.1)
     #figure
     fig = P.figure()
     ax = fig.add_subplot(111)
 
     for i, reds in enumerate(redshifts):
-        query = '''select galprop.mcold, FIR.pacs160_obs*1000
+        #query = '''select galprop.mcold, FIR.pacs160_obs*1000
+        query = '''select galprop.mcold, FIR.spire250_obs*1000
                 from FIR, galprop where
                 %s and
                 FIR.gal_id = galprop.gal_id and
@@ -347,21 +392,24 @@ def plot_coldgas(path, db, reshifts, out_folder,
         add = eval('0.0%s' % str(i))
         ax.errorbar(xbin_midd[msk] + add, y50d[msk],
                     yerr=[y50d[msk] - y16d[msk], y84d[msk] - y50d[msk]],
+                    ls=next(linecycler), c=str(colour.next()),
                     label='$z = %.1f$' % zz)
 
-    ax.axvline(N.log10(fluxlimit), ls=':', color='green')
+    #ax.axvline(N.log10(fluxlimit), ls=':', color='green')
+    ax.axvline(N.log10(fluxlimit), ls=':', color='0.25')
 
-    ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
+    #ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
+    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
     ax.set_ylabel('$\log_{10}(M_{\mathrm{coldgas}} \ [M_{\odot}])$')
 
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(8.8, 11.5)
 
     P.legend(loc='lower right')
-    P.savefig(out_folder + 'mcold.ps')
+    P.savefig(out_folder + 'mcold2.ps')
 
 
-def plot_massratios(path, db, reshifts, out_folder,
+def plot_massratios(path, db, redshifts, out_folder,
                     xmin=0.0, xmax=2.0, fluxlimit=5):
     '''
     Plots 
@@ -574,7 +622,7 @@ def plot_starburst(path, db, reshifts, out_folder,
     P.savefig(out_folder + 'mburstratio.ps')
 
 
-def plot_BHmass(path, db, reshifts, out_folder,
+def plot_BHmass(path, db, redshifts, out_folder,
                 xmin=0.0, xmax=2.0, fluxlimit=5):
     '''
     Plots 
@@ -629,17 +677,22 @@ def plot_BHmass(path, db, reshifts, out_folder,
 
 def plot_DMmass(path, db, redshifts, out_folder,
                 xmin=0.0, xmax=2.5, fluxlimit=5):
-    '''
-    Plots 
-    '''
+    """
+    Generates a dark matter halo mass prediction plot.
+    """
+    lines = ["-","--","-.",":"]
+    linecycler = cycle(lines)
+    colour = count(0.1, 0.1)
+
     #figure
     fig = P.figure()
     ax = fig.add_subplot(111)
 
     for i, reds in enumerate(redshifts):
-        query = '''select galprop.mhalo, FIR.spire250_obs*1000
+        #query = '''select galprop.mhalo, FIR.spire250_obs*1000
+        query = '''select galprop.mhalo, FIR.pacs160_obs*1000
                 from FIR, galprop where
-                %s and
+                %s and 
                 FIR.gal_id = galprop.gal_id and
                 FIR.halo_id = galprop.halo_id
                 ''' % reds
@@ -667,18 +720,22 @@ def plot_DMmass(path, db, redshifts, out_folder,
         add = eval('0.0%s' % str(i))
         ax.errorbar(xbin_midd[msk] + add, y50d[msk],
                     yerr=[y50d[msk] - y16d[msk], y84d[msk] - y50d[msk]],
+                    ls=next(linecycler), c=str(colour.next()),
                     label='$z = %.1f$' % zz)
 
-    ax.axvline(N.log10(fluxlimit), ls=':', color='green')
+    #ax.axvline(N.log10(fluxlimit), ls=':', color='green')
+    #BW
+    ax.axvline(N.log10(fluxlimit), ls=':', color='0.25')
 
-    ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    #ax.set_xlabel('$\log_{10}(S_{250} \ [\mathrm{mJy}])$')
+    ax.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
     ax.set_ylabel('$\log_{10}(M_{\mathrm{dm}} \ [M_{\odot}])$')
 
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(10.98, 13.3)
 
     P.legend(loc='lower right')
-    P.savefig(out_folder + 'DMmass.ps')
+    P.savefig(out_folder + 'DMmass2.ps')
 
 
 def plot_Age(path, db, redshifts, out_folder,
@@ -895,6 +952,10 @@ def plot_mergerfraction2(path, db, redshifts, out_folder, outname,
     '''
     Plots
     '''
+    lines = ["-","--","-.",":"]
+    linecycler = cycle(lines)
+    colour = count(0.1, 0.1)
+
     #figure
     if png:
         fig = P.figure(figsize=(10, 10))
@@ -902,13 +963,16 @@ def plot_mergerfraction2(path, db, redshifts, out_folder, outname,
     else:
         fig = P.figure()
         type = '.ps'
+
     fig.subplots_adjust(left=0.09, bottom=0.08,
                         right=0.93, top=0.95,
                         wspace=0.0, hspace=0.0)
+
     ax1 = fig.add_subplot(221)
     ax2 = fig.add_subplot(222)
     ax3 = fig.add_subplot(223)
     ax4 = fig.add_subplot(224)
+
     #loop over all the redshifts
     for i, reds in enumerate(redshifts):
         if obs:
@@ -929,7 +993,7 @@ def plot_mergerfraction2(path, db, redshifts, out_folder, outname,
                     FIR.gal_id = galprop.gal_id and
                     FIR.halo_id = galprop.halo_id
                     ''' % reds
-            #tmp
+        #tmp
         tmp = reds.split()
         zz = N.mean(N.array([float(tmp[2]), float(tmp[6])]))
         #get data
@@ -938,9 +1002,12 @@ def plot_mergerfraction2(path, db, redshifts, out_folder, outname,
             x = N.log10(data[:, 0] * 1e3)
         else:
             x = data[:, 0]
+
         tmerge = data[:, 1]
         tmajor = data[:, 2]
+
         print N.min(x), N.max(x)
+
         #masks
         nomergeMask = tmerge < 0.0
         majorsMask = (tmajor >= 0.0) & (tmajor <= mergetimelimit)
@@ -975,21 +1042,29 @@ def plot_mergerfraction2(path, db, redshifts, out_folder, outname,
                                  mergerFraction2, majorMergerFraction2):
             print a + b + c + d + e
 
+        #linestyle and colour
+        ls = next(linecycler)
+        c = str(colour.next())
+
         #plots
-        ax1.plot(mids, majorMergerFraction, label='$z = %.1f$' % zz)
-        ax2.plot(mids, majorMergerFraction2, label='$z = %.1f$' % zz)
-        ax3.plot(mids, mergerFraction, label='$z = %.1f$' % zz)
+        ax1.plot(mids, majorMergerFraction, c=c, ls=ls, label='$z = %.1f$' % zz)
+        ax2.plot(mids, majorMergerFraction2, c=c, ls=ls, label='$z = %.1f$' % zz)
+        ax3.plot(mids, mergerFraction, c=c, ls=ls, label='$z = %.1f$' % zz)
         if neverMerged:
-            ax4.plot(mids, noMergerFraction, label='$z = %.1f$' % zz)
+            ax4.plot(mids, noMergerFraction, c=c, ls=ls, label='$z = %.1f$' % zz)
         else:
-            ax4.plot(mids, mergerFraction2, label='$z = %.1f$' % zz)
+            ax4.plot(mids, mergerFraction2, c=c, ls=ls, label='$z = %.1f$' % zz)
 
     #set obs limit
     if obs:
-        ax1.axvline(N.log10(fluxlimit), ls=':', color='green')
-        ax2.axvline(N.log10(fluxlimit), ls=':', color='green')
-        ax3.axvline(N.log10(fluxlimit), ls=':', color='green')
-        ax4.axvline(N.log10(fluxlimit), ls=':', color='green')
+        #ax1.axvline(N.log10(fluxlimit), ls=':', color='green')
+        #ax2.axvline(N.log10(fluxlimit), ls=':', color='green')
+        #ax3.axvline(N.log10(fluxlimit), ls=':', color='green')
+        #ax4.axvline(N.log10(fluxlimit), ls=':', color='green')
+        ax1.axvline(N.log10(fluxlimit), ls=':', color='0.25')
+        ax2.axvline(N.log10(fluxlimit), ls=':', color='0.25')
+        ax3.axvline(N.log10(fluxlimit), ls=':', color='0.25')
+        ax4.axvline(N.log10(fluxlimit), ls=':', color='0.25')
         #labels
     if obs:
         ax3.set_xlabel('$\log_{10}(S_{160} \ [\mathrm{mJy}])$')
@@ -1042,14 +1117,14 @@ def plot_mergerfraction2(path, db, redshifts, out_folder, outname,
     ax4.legend()#loc = 'center right')
     P.savefig(out_folder + outname + type)
 
+
 if __name__ == '__main__':
     #find the home directory, because the output is to dropbox 
     #and my user name is not always the same, this hack is required.
     hm = os.getenv('HOME')
     #constants
-    #path = hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/'
     path = hm + '/Research/Herschel/runs/big_volume/'
-    out_folder = hm + '/Dropbox/Research/Herschel/plots/predictions/big/250/'
+    out_folder = hm + '/Research/Herschel/plots/predictions/'
     db = 'sams.db'
 
     redshifts = ['FIR.z > 0.1 and FIR.z < 0.3',
@@ -1064,19 +1139,18 @@ if __name__ == '__main__':
     print 'Output folder: ', out_folder
 
     #These plots are in the paper
-#    plot_sfrs(path, db, redshifts, out_folder, obs=False)
-#    plot_mergerfraction2(path, db, redshifts, out_folder, 'MergeFractions',
-#                         xbin = [10,8,7,7,5,5], png = False, neverMerged = True)
+#    plot_sfrs(path, db, redshifts, out_folder)#, obs=False)
+    plot_mergerfraction2(path, db, redshifts, out_folder, 'MergeFractions',
+                         xbin = [10,8,7,7,5,5], png=False, neverMerged=True)
 #    plot_stellarmass(path, db, redshifts, out_folder)
 #    plot_coldgas(path, db, redshifts, out_folder)
-#    plot_ssfr(path, db, redshifts, out_folder)
-#    plot_Lbol(path, db, redshifts, out_folder)
 #    plot_Ldust(path, db, redshifts, out_folder)
-
-    plot_DMmass(path, db, redshifts, out_folder)
+#    plot_DMmass(path, db, redshifts, out_folder)
 
 
     #TEST plots
+#    plot_Lbol(path, db, redshifts, out_folder)
+#    plot_ssfr(path, db, redshifts, out_folder)
 #    plot_mergerfraction(path, db, redshifts, out_folder, 'MergeFractions',
 #                        xbin = [10,8,9,7,5,5], png = False)
 #    plot_sfrs(path, db, redshifts, out_folder, obs = True)

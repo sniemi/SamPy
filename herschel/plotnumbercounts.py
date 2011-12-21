@@ -1,6 +1,13 @@
+"""
+Generate the number count plots for the Herschel I paper.
+
+:version: 0.5
+
+:author: Sami-Matias Niemi
+:contact: sammy@sammyniemi.com
+"""
 import matplotlib
-#matplotlib.use('PS')
-matplotlib.use('AGG')
+matplotlib.use('PS')
 matplotlib.rc('text', usetex=True)
 matplotlib.rcParams['font.size'] = 17
 matplotlib.rc('xtick', labelsize=14)
@@ -12,17 +19,17 @@ matplotlib.rcParams['ytick.major.size'] = 5
 import numpy as N
 import pylab as P
 import re, os
-#Sami's repo
-import db.sqlite
-import smnIO.sextutils as sex
+import SamPy.db.sqlite
+import SamPy.smnIO.sextutils as sex
+
 
 def diff_function(data, column=0, log=False,
                   wgth=None, mmax=15.5, mmin=9.0,
                   nbins=35, h=0.7, volume=250, nvols=1,
                   physical_units=False, verbose=False):
-    '''
+    """
     Calculates a differential function from data.
-    '''
+    """
     #number of galaxies
     if len(N.shape(data)) == 1:
         ngal = len(data)
@@ -92,7 +99,7 @@ def plot_number_counts(path, database, band, redshifts,
                        xmin=0.5, xmax=100,
                        nbins=15, sigma=3.0,
                        write_out=False):
-    '''
+    """
     160 (arcminutes squared) = 0.0444444444 square degrees
     Simulation was 10 times the GOODS realization, so
     area = 0.44444444, thus, the weighting is 1/0.44444444
@@ -101,7 +108,7 @@ def plot_number_counts(path, database, band, redshifts,
     :param sigma: sigma level of the errors to be plotted
     :param nbins: number of bins (for simulated data)
     :param area: actually 1 / area, used to weight galaxies
-    '''
+    """
     #fudge factor to handle errors that are way large
     fudge = ymin
 
@@ -116,9 +123,9 @@ def plot_number_counts(path, database, band, redshifts,
         wave = re.search('\d\d', band).group()
 
     #get data and convert to mJy
-    query = '''select FIR.%s from FIR
-               where FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, band, band)
-    fluxes = db.sqlite.get_data_sqlite(path, database, query) * 10 ** 3
+    query = """select FIR.%s from FIR
+               where FIR.%s < 10000 and FIR.%s > 1e-15""" % (band, band, band)
+    fluxes = SamPy.db.sqlite.get_data_sqlite(path, database, query) * 10 ** 3
 
     #weight each galaxy
     wghts = N.zeros(len(fluxes)) + area
@@ -210,7 +217,7 @@ def plot_number_counts(path, database, band, redshifts,
         y = g[:, 1] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
         err = g[:, 2] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
         c0 = ax.errorbar(x, y, yerr=[err, err], ls='None',
-                         marker='D', mec='m', c='magenta',
+                         marker='D', mec='0.8', c='0.8',
                          lw=0.9, ms=3, mew=0.9)
     if 'spire350' in band:
         d = N.loadtxt(obs_data + 'GlennResults350', comments='#', usecols=(0, 1, 2, 3))
@@ -226,7 +233,7 @@ def plot_number_counts(path, database, band, redshifts,
         y = g[:, 1] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
         err = g[:, 2] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
         c0 = ax.errorbar(x, y, yerr=[err, err], ls='None',
-                         marker='D', mec='m', c='magenta',
+                         marker='D', mec='0.8', c='0.8',
                          lw=0.9, ms=3, mew=0.9)
     if 'spire500' in band:
         d = N.loadtxt(obs_data + 'GlennResults500', comments='#', usecols=(0, 1, 2, 3))
@@ -242,7 +249,7 @@ def plot_number_counts(path, database, band, redshifts,
         y = g[:, 1] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
         err = g[:, 2] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
         c0 = ax.errorbar(x, y, yerr=[err, err], ls='None',
-                         marker='D', mec='m', c='magenta',
+                         marker='D', mec='0.8', c='0.8',
                          lw=0.9, ms=3, mew=0.9)
 
         #set scale
@@ -257,21 +264,21 @@ def plot_number_counts(path, database, band, redshifts,
         p = P.Rectangle((0, 0), 1, 1, fc='#728FCE', alpha=0.2)
         sline = '%i$\sigma$ errors' % sigma
         P.legend((z0, p, b0[0], a0),
-                 ('Our Model', sline, 'Berta et al. 2010', 'Altieri et al. 2010'),
-                 'lower left')
+            ('Our Model', sline, 'Berta et al. 2010', 'Altieri et al. 2010'),
+                                   'lower left')
     if 'spire' in band:
         p = P.Rectangle((0, 0), 1, 1, fc='#728FCE', alpha=0.2)
         sline = '%i$\sigma$ errors' % sigma
         P.legend((z0, p, g0[0], c0),
-                 ('Our Model', sline, 'Glenn et al. 2010', 'Clements et al. 2010'),
-                 'lower left')
+            ('Our Model', sline, 'Glenn et al. 2010', 'Clements et al. 2010'),
+                                   'lower left')
 
     #redshift limited plots
     for i, red in enumerate(redshifts):
         #get data and convert to mJy
-        query = '''select FIR.%s from FIR 
-                   where %s and FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, red, band, band)
-        fluxes = db.sqlite.get_data_sqlite(path, database, query) * 10 ** 3
+        query = """select FIR.%s from FIR 
+                   where %s and FIR.%s < 10000 and FIR.%s > 1e-15""" % (band, red, band, band)
+        fluxes = SamPy.db.sqlite.get_data_sqlite(path, database, query) * 10 ** 3
 
         #modify redshift string
         tmp = red.split()
@@ -417,7 +424,7 @@ def plot_number_counts(path, database, band, redshifts,
         axs.set_ylim(ymin, ymax)
 
         #remove unnecessary ticks and add units
-        if i % 2 == 0:
+        if not i % 2:
             axs.set_yticklabels([])
             axs.set_xticks(axs.get_xticks()[1:])
         if i == 2 or i == 3:
@@ -427,7 +434,7 @@ def plot_number_counts(path, database, band, redshifts,
         if i == 1:
             axs.set_ylabel(
                 r'$\frac{\mathrm{d}N(S_{%s})}{\mathrm{d}S_{%s}} \times S_{%s}^{2.5} \quad [\mathrm{deg}^{-2} \ \mathrm{mJy}^{1.5}]$' % (
-                wave, wave, wave))
+                    wave, wave, wave))
 
     #save figure
     P.savefig(out_folder + 'numbercounts_%s.ps' % band)
@@ -441,7 +448,7 @@ def plot_number_counts2(path, database, band, redshifts,
                         xmin=0.5, xmax=100,
                         nbins=15, sigma=3.0,
                         write_out=False):
-    '''
+    """
     160 (arcminutes squared) = 0.0444444444 square degrees
     Simulation was 10 times the GOODS realization, so
     area = 0.44444444, thus, the weighting is 1/0.44444444
@@ -450,7 +457,7 @@ def plot_number_counts2(path, database, band, redshifts,
     :param sigma: sigma level of the errors to be plotted
     :param nbins: number of bins (for simulated data)
     :param area: actually 1 / area, used to weight galaxies
-    '''
+    """
     #fudge factor to handle errors that are way large
     fudge = ymin
 
@@ -465,9 +472,9 @@ def plot_number_counts2(path, database, band, redshifts,
         wave = re.search('\d\d', band).group()
 
     #get data and convert to mJy
-    query = '''select FIR.%s from FIR
-               where FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, band, band)
-    fluxes = db.sqlite.get_data_sqlite(path, database, query) * 10 ** 3
+    query = """select FIR.%s from FIR
+               where FIR.%s < 10000 and FIR.%s > 1e-15""" % (band, band, band)
+    fluxes = SamPy.db.sqlite.get_data_sqlite(path, database, query) * 10 ** 3
 
     #weight each galaxy
     wghts = N.zeros(len(fluxes)) + area
@@ -559,7 +566,7 @@ def plot_number_counts2(path, database, band, redshifts,
         y = g[:, 1] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
         err = g[:, 2] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
         c0 = ax.errorbar(x, y, yerr=[err, err], ls='None',
-                         marker='D', mec='m', c='magenta',
+                         marker='D', mec='0.8', c='0.8',
                          lw=0.9, ms=3, mew=0.9)
     if 'spire350' in band:
         d = N.loadtxt(obs_data + 'GlennResults350', comments='#', usecols=(0, 1, 2, 3))
@@ -575,7 +582,7 @@ def plot_number_counts2(path, database, band, redshifts,
         y = g[:, 1] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
         err = g[:, 2] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
         c0 = ax.errorbar(x, y, yerr=[err, err], ls='None',
-                         marker='D', mec='m', c='magenta',
+                         marker='D', mec='0.8', c='0.8',
                          lw=0.9, ms=3, mew=0.9)
     if 'spire500' in band:
         d = N.loadtxt(obs_data + 'GlennResults500', comments='#', usecols=(0, 1, 2, 3))
@@ -591,7 +598,7 @@ def plot_number_counts2(path, database, band, redshifts,
         y = g[:, 1] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
         err = g[:, 2] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
         c0 = ax.errorbar(x, y, yerr=[err, err], ls='None',
-                         marker='D', mec='m', c='magenta',
+                         marker='D', mec='0.8', c='0.8',
                          lw=0.9, ms=3, mew=0.9)
 
         #set scale
@@ -605,21 +612,21 @@ def plot_number_counts2(path, database, band, redshifts,
         p = P.Rectangle((0, 0), 1, 1, fc='#728FCE', alpha=0.2)
         sline = '%i$\sigma$ errors' % sigma
         P.legend((z0, p, b0[0], a0),
-                 ('Our Model', sline, 'Berta et al. 2010', 'Altieri et al. 2010'),
-                 'lower left')
+            ('Our Model', sline, 'Berta et al. 2010', 'Altieri et al. 2010'),
+                                   'lower left')
     if 'spire' in band:
         p = P.Rectangle((0, 0), 1, 1, fc='#728FCE', alpha=0.2)
         sline = '%i$\sigma$ errors' % sigma
         P.legend((z0, p, g0[0], c0),
-                 ('Our Model', sline, 'Glenn et al. 2010', 'Clements et al. 2010'),
-                 'lower left')
+            ('Our Model', sline, 'Glenn et al. 2010', 'Clements et al. 2010'),
+                                   'lower left')
 
     #redshift limited plots
     for i, red in enumerate(redshifts):
         #get data and convert to mJy
-        query = '''select FIR.%s from FIR 
-                   where %s and FIR.%s < 1e6 and FIR.%s > 1e-15''' % (band, red, band, band)
-        fluxes = db.sqlite.get_data_sqlite(path, database, query) * 10 ** 3
+        query = """select FIR.%s from FIR 
+                   where %s and FIR.%s < 1e6 and FIR.%s > 1e-15""" % (band, red, band, band)
+        fluxes = SamPy.db.sqlite.get_data_sqlite(path, database, query) * 10 ** 3
         #modify redshift string
         tmp = red.split()
         rtitle = r'$%s < z \leq %s$' % (tmp[2], tmp[6])
@@ -792,7 +799,7 @@ def plot_number_counts2(path, database, band, redshifts,
         if i == 1:
             axs.set_ylabel(
                 r'$\frac{\mathrm{d}N(S_{%s})}{\mathrm{d}S_{%s}} \times S_{%s}^{2.5} \quad [\mathrm{deg}^{-2} \ \mathrm{mJy}^{1.5}]$' % (
-                wave, wave, wave))
+                    wave, wave, wave))
             axs.yaxis.set_label_coords(-0.11, 1.0)
             #save figure
     P.savefig(out_folder + 'numbercounts_%s.ps' % band)
@@ -806,7 +813,7 @@ def plot_number_counts3(path, database, band, redshifts,
                         xmin=0.5, xmax=100,
                         nbins=15, sigma=3.0,
                         write_out=True):
-    '''
+    """
     160 (arcminutes squared) = 0.0444444444 square degrees
     Simulation was 10 times the GOODS realization, so
     area = 0.44444444, thus, the weighting is 1/0.44444444
@@ -815,7 +822,7 @@ def plot_number_counts3(path, database, band, redshifts,
     :param sigma: sigma level of the errors to be plotted
     :param nbins: number of bins (for simulated data)
     :param area: actually 1 / area, used to weight galaxies
-    '''
+    """
     #fudge factor to handle errors that are way large
     fudge = ymin
 
@@ -830,9 +837,9 @@ def plot_number_counts3(path, database, band, redshifts,
         wave = re.search('\d\d', band).group()
 
     #get data and convert to mJy
-    query = '''select FIR.%s from FIR
-               where FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, band, band)
-    fluxes = db.sqlite.get_data_sqlite(path, database, query) * 10 ** 3
+    query = """select FIR.%s from FIR
+               where FIR.%s < 10000 and FIR.%s > 1e-15""" % (band, band, band)
+    fluxes = SamPy.db.sqlite.get_data_sqlite(path, database, query) * 10 ** 3
 
     #weight each galaxy
     wghts = N.zeros(len(fluxes)) + area
@@ -889,26 +896,26 @@ def plot_number_counts3(path, database, band, redshifts,
     if 'pacs100' in band:
         d = N.loadtxt(obs_data + 'BertaResults', comments='#', usecols=(0, 1, 2))
         b0 = ax.errorbar(d[:, 0], d[:, 1], yerr=d[:, 1] * d[:, 2], ls='None',
-                         marker='*', mec='c', c='c')
+                         marker='*', mec='0.4', c='0.4')
         a = N.loadtxt(obs_data + 'Altieri100', comments='#', usecols=(0, 1, 2, 3))
         x = a[:, 0]
         y = a[:, 1]
         high = a[:, 2] - y
         low = N.abs(a[:, 3] - y)
         #yerr = [how much to take away from the y, how much to add to y]
-        a0 = ax.errorbar(x, y, yerr=[low, high], c='m', marker='D',
-                         ls='None', mec='m', lw=1.3, ms=3, mew=1.3)
+        a0 = ax.errorbar(x, y, yerr=[low, high], c='0.8', marker='D',
+                         ls='None', mec='0.8', lw=1.3, ms=3, mew=1.3)
     if 'pacs160' in band:
         d = N.loadtxt(obs_data + 'BertaResults', comments='#', usecols=(0, 3, 4))
         b0 = ax.errorbar(d[:, 0], d[:, 1], yerr=d[:, 1] * d[:, 2], ls='None',
-                         marker='*', mec='c', c='c')
+                         marker='*', mec='0.4', c='0.4')
         a = N.loadtxt(obs_data + 'Altieri160', comments='#', usecols=(0, 1, 2, 3))
         x = a[:, 0]
         y = a[:, 1]
         high = a[:, 2] - y
         low = N.abs(a[:, 3] - y)
-        a0 = ax.errorbar(x, y, yerr=[low, high], c='m', marker='D',
-                         ls='None', mec='m', lw=1.3, ms=3, mew=1.3)
+        a0 = ax.errorbar(x, y, yerr=[low, high], c='0.8', marker='D',
+                         ls='None', mec='0.8', lw=1.3, ms=3, mew=1.3)
     if 'spire250' in band:
         #Glenn et al results
         d = N.loadtxt(obs_data + 'GlennResults250', comments='#', usecols=(0, 1, 2, 3))
@@ -917,14 +924,14 @@ def plot_number_counts3(path, database, band, redshifts,
         yp = 10 ** (d[:, 2] + d[:, 1]) * x ** 2.5 * 10 ** -3
         yl = 10 ** (d[:, 1] - d[:, 3]) * x ** 2.5 * 10 ** -3
         g0 = ax.errorbar(x, y, yerr=[y - yl, yp - y], ls='None',
-                         marker='*', mec='c', c='c')
+                         marker='*', mec='0.4', c='0.4')
         #Clements et al results
         g = N.loadtxt(obs_data + 'Clements250', comments='#', usecols=(0, 5, 6))
         x = g[:, 0]
         y = g[:, 1] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
         err = g[:, 2] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
         c0 = ax.errorbar(x, y, yerr=[err, err], ls='None',
-                         marker='D', mec='m', c='magenta',
+                         marker='D', mec='0.8', c='0.8',
                          lw=0.9, ms=3, mew=0.9)
     if 'spire350' in band:
         d = N.loadtxt(obs_data + 'GlennResults350', comments='#', usecols=(0, 1, 2, 3))
@@ -933,14 +940,14 @@ def plot_number_counts3(path, database, band, redshifts,
         yp = 10 ** (d[:, 2] + d[:, 1]) * x ** 2.5 * 10 ** -3
         yl = 10 ** (d[:, 1] - d[:, 3]) * x ** 2.5 * 10 ** -3
         g0 = ax.errorbar(x, y, yerr=[y - yl, yp - y], ls='None',
-                         marker='*', mec='c', c='c')
+                         marker='*', mec='0.4', c='0.4')
         #Clements et al results
         g = N.loadtxt(obs_data + 'Clements350', comments='#', usecols=(0, 5, 6))
         x = g[:, 0]
         y = g[:, 1] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
         err = g[:, 2] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
         c0 = ax.errorbar(x, y, yerr=[err, err], ls='None',
-                         marker='D', mec='m', c='magenta',
+                         marker='D', mec='0.8', c='0.8',
                          lw=0.9, ms=3, mew=0.9)
     if 'spire500' in band:
         d = N.loadtxt(obs_data + 'GlennResults500', comments='#', usecols=(0, 1, 2, 3))
@@ -949,14 +956,14 @@ def plot_number_counts3(path, database, band, redshifts,
         yp = 10 ** (d[:, 2] + d[:, 1]) * x ** 2.5 * 10 ** -3
         yl = 10 ** (d[:, 1] - d[:, 3]) * x ** 2.5 * 10 ** -3
         g0 = ax.errorbar(x, y, yerr=[y - yl, yp - y], ls='None',
-                         marker='*', mec='c', c='c')
+                         marker='*', mec='0.4', c='0.4')
         #Clements et al results
         g = N.loadtxt(obs_data + 'Clements500', comments='#', usecols=(0, 5, 6))
         x = g[:, 0]
         y = g[:, 1] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
         err = g[:, 2] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
         c0 = ax.errorbar(x, y, yerr=[err, err], ls='None',
-                         marker='D', mec='m', c='magenta',
+                         marker='D', mec='0.8', c='0.8',
                          lw=0.9, ms=3, mew=0.9)
 
         #set scale
@@ -971,21 +978,21 @@ def plot_number_counts3(path, database, band, redshifts,
         p = P.Rectangle((0, 0), 1, 1, fc='#728FCE', alpha=0.2)
         sline = '%i$\sigma$ errors' % sigma
         P.legend((z0, p, b0[0], a0),
-                 ('Our Model', sline, 'Berta et al. 2010', 'Altieri et al. 2010'),
-                 'lower left')
+            ('Our Model', sline, 'Berta et al. 2010', 'Altieri et al. 2010'),
+                                   'lower left')
     if 'spire' in band:
         p = P.Rectangle((0, 0), 1, 1, fc='#728FCE', alpha=0.2)
         sline = '%i$\sigma$ errors' % sigma
         P.legend((z0, p, g0[0], c0),
-                 ('Our Model', sline, 'Glenn et al. 2010', 'Clements et al. 2010'),
-                 'lower left')
+            ('Our Model', sline, 'Glenn et al. 2010', 'Clements et al. 2010'),
+                                   'lower left')
 
     #redshift limited plots
     for i, red in enumerate(redshifts):
         #get data and convert to mJy
-        query = '''select FIR.%s from FIR 
-                   where %s and FIR.%s < 10000 and FIR.%s > 1e-15''' % (band, red, band, band)
-        fluxes = db.sqlite.get_data_sqlite(path, database, query) * 10 ** 3
+        query = """select FIR.%s from FIR 
+                   where %s and FIR.%s < 10000 and FIR.%s > 1e-15""" % (band, red, band, band)
+        fluxes = SamPy.db.sqlite.get_data_sqlite(path, database, query) * 10 ** 3
 
         #modify redshift string
         tmp = red.split()
@@ -1050,7 +1057,7 @@ def plot_number_counts3(path, database, band, redshifts,
                 data[:, 2][msk] = 0.999
                 lw = y * data[:, 2]
                 axs.errorbar(x, y, yerr=[lw, up], ls='None',
-                             marker='*', mec='c', c='c')
+                             marker='*', mec='0.4', c='0.4')
             if i == 1:
                 data = N.loadtxt(fl, usecols=(0, 4, 5, 6), comments='#')
                 x = 10 ** data[:, 0]
@@ -1060,7 +1067,7 @@ def plot_number_counts3(path, database, band, redshifts,
                 data[:, 2][msk] = 0.999
                 lw = y * data[:, 2]
                 axs.errorbar(x, y, yerr=[lw, up], ls='None',
-                             marker='*', mec='c', c='c')
+                             marker='*', mec='0.4', c='0.4')
             if i == 2:
                 data = N.loadtxt(fl, usecols=(0, 7, 8, 9), comments='#')
                 x = 10 ** data[:, 0]
@@ -1070,7 +1077,7 @@ def plot_number_counts3(path, database, band, redshifts,
                 data[:, 2][msk] = 0.999
                 lw = y * data[:, 2]
                 axs.errorbar(x, y, yerr=[lw, up], ls='None',
-                             marker='*', mec='c', c='c')
+                             marker='*', mec='0.4', c='0.4')
             if i == 3:
                 data = N.loadtxt(fl, usecols=(0, 10, 11, 12), comments='#')
                 x = 10 ** data[:, 0]
@@ -1080,30 +1087,30 @@ def plot_number_counts3(path, database, band, redshifts,
                 data[:, 2][msk] = 0.999
                 lw = y * data[:, 2]
                 axs.errorbar(x, y, yerr=[lw, up], ls='None',
-                             marker='*', mec='c', c='c')
+                             marker='*', mec='0.4', c='0.4')
 
                 #get the GOODS results
-            #                obsGOODS = sex.se_catalog(goods)
-            #                msk = obsGOODS.f100_mjy > -1
-            #                print len(obsGOODS.f100_mjy[msk])
-            #                wghtsGOODS = N.zeros(len(obsGOODS.f100_mjy)) + 22.5
-            #                bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f100_mjy[msk],
-            #                                                         wgth = wghtsGOODS[msk],
-            #                                                         mmax = 15,
-            #                                                         mmin = 1.1,
-            #                                                         nbins = 6)
-            #                xGOODS = 10**bGOODS
-            #                swp = 1. / (N.log(10)*xGOODS)
-            #                yGOODS = nGOODS*swp*(xGOODS**2.5)
-            #                msk = nuGOODS > 0
-            #                errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
-            #                upGOODS = yGOODS[msk] + errGOODS
-            #                lwGOODS = yGOODS[msk] - errGOODS
-            #                #plot GOODS
-            #                print xGOODS, yGOODS
-            #                gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
-            #                                   ls = 'None', mec = 'black',
-            #                                   c = 'black', marker = 'D')
+                #                obsGOODS = sex.se_catalog(goods)
+                #                msk = obsGOODS.f100_mjy > -1
+                #                print len(obsGOODS.f100_mjy[msk])
+                #                wghtsGOODS = N.zeros(len(obsGOODS.f100_mjy)) + 22.5
+                #                bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f100_mjy[msk],
+                #                                                         wgth = wghtsGOODS[msk],
+                #                                                         mmax = 15,
+                #                                                         mmin = 1.1,
+                #                                                         nbins = 6)
+                #                xGOODS = 10**bGOODS
+                #                swp = 1. / (N.log(10)*xGOODS)
+                #                yGOODS = nGOODS*swp*(xGOODS**2.5)
+                #                msk = nuGOODS > 0
+                #                errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
+                #                upGOODS = yGOODS[msk] + errGOODS
+                #                lwGOODS = yGOODS[msk] - errGOODS
+                #                #plot GOODS
+                #                print xGOODS, yGOODS
+                #                gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
+                #                                   ls = 'None', mec = 'black',
+                #                                   c = 'black', marker = 'D')
 
         if 'pacs160' in band:
             fl = obs_data + 'data_160um_4_Sami_Niemi_20101126.txt'
@@ -1116,7 +1123,7 @@ def plot_number_counts3(path, database, band, redshifts,
                 data[:, 2][msk] = 0.999
                 lw = y * data[:, 2]
                 axs.errorbar(x, y, yerr=[lw, up], ls='None',
-                             marker='*', mec='c', c='c')
+                             marker='*', mec='0.4', c='0.4')
             if i == 1:
                 data = N.loadtxt(fl, usecols=(0, 4, 5, 6), comments='#')
                 x = 10 ** data[:, 0]
@@ -1126,7 +1133,7 @@ def plot_number_counts3(path, database, band, redshifts,
                 data[:, 2][msk] = 0.999
                 lw = y * data[:, 2]
                 axs.errorbar(x, y, yerr=[lw, up], ls='None',
-                             marker='*', mec='c', c='c')
+                             marker='*', mec='0.4', c='0.4')
             if i == 2:
                 data = N.loadtxt(fl, usecols=(0, 7, 8, 9), comments='#')
                 x = 10 ** data[:, 0]
@@ -1136,7 +1143,7 @@ def plot_number_counts3(path, database, band, redshifts,
                 data[:, 2][msk] = 0.999
                 lw = y * data[:, 2]
                 axs.errorbar(x, y, yerr=[lw, up], ls='None',
-                             marker='*', mec='c', c='c')
+                             marker='*', mec='0.4', c='0.4')
             if i == 3:
                 data = N.loadtxt(fl, usecols=(0, 10, 11, 12), comments='#')
                 x = 10 ** data[:, 0]
@@ -1146,29 +1153,29 @@ def plot_number_counts3(path, database, band, redshifts,
                 data[:, 2][msk] = 0.999
                 lw = y * data[:, 2]
                 axs.errorbar(x, y, yerr=[lw, up], ls='None',
-                             marker='*', mec='c', c='c')
+                             marker='*', mec='0.4', c='0.4')
                 #get the GOODS results
-            #                obsGOODS = sex.se_catalog(goods)
-            #                msk = obsGOODS.f160_mjy > -1
-            #                print len(obsGOODS.f160_mjy[msk])
-            #                wghtsGOODS = N.zeros(len(obsGOODS.f160_mjy)) + 22.5
-            #                bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f160_mjy[msk],
-            #                                                         wgth = wghtsGOODS[msk],
-            #                                                         mmax = 30,
-            #                                                         mmin = 4,
-            #                                                         nbins = 6)
-            #                xGOODS = 10**bGOODS
-            #                swp = 1. / (N.log(10)*xGOODS)
-            #                yGOODS = nGOODS*swp*(xGOODS**2.5)
-            #                msk = nuGOODS > 0
-            #                errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
-            #                upGOODS = yGOODS[msk] + errGOODS
-            #                lwGOODS = yGOODS[msk] - errGOODS
-            #                #plot GOODS
-            #                print xGOODS, yGOODS
-            #                gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
-            #                                   ls = 'None', mec = 'black',
-            #                                   c = 'black', marker = 'D')
+                #                obsGOODS = sex.se_catalog(goods)
+                #                msk = obsGOODS.f160_mjy > -1
+                #                print len(obsGOODS.f160_mjy[msk])
+                #                wghtsGOODS = N.zeros(len(obsGOODS.f160_mjy)) + 22.5
+                #                bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f160_mjy[msk],
+                #                                                         wgth = wghtsGOODS[msk],
+                #                                                         mmax = 30,
+                #                                                         mmin = 4,
+                #                                                         nbins = 6)
+                #                xGOODS = 10**bGOODS
+                #                swp = 1. / (N.log(10)*xGOODS)
+                #                yGOODS = nGOODS*swp*(xGOODS**2.5)
+                #                msk = nuGOODS > 0
+                #                errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
+                #                upGOODS = yGOODS[msk] + errGOODS
+                #                lwGOODS = yGOODS[msk] - errGOODS
+                #                #plot GOODS
+                #                print xGOODS, yGOODS
+                #                gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
+                #                                   ls = 'None', mec = 'black',
+                #                                   c = 'black', marker = 'D')
 
         #set scales
         axs.set_xscale('log')
@@ -1187,7 +1194,7 @@ def plot_number_counts3(path, database, band, redshifts,
         if i == 1:
             axs.set_ylabel(
                 r'$\frac{\mathrm{d}N(S_{%s})}{\mathrm{d}S_{%s}} \times S_{%s}^{2.5} \quad [\mathrm{deg}^{-2} \ \mathrm{mJy}^{1.5}]$' % (
-                wave, wave, wave))
+                    wave, wave, wave))
 
     #save figure
     P.savefig(out_folder + 'numbercounts3_%s.ps' % band)
@@ -1198,26 +1205,25 @@ def plotTemplateComparison(database, band, redshifts,
                            ymin=10 ** 3, ymax=2 * 10 ** 6,
                            xmin=0.5, xmax=100,
                            nbins=15, sigma=3.0):
+    """
+    Plots results from three different templates to the same plot.
+    Plots also the observational constrains.
+    """
     hm = os.getenv('HOME')
     #constants
-    path = [hm + '/Dropbox/Research/Herschel/runs/ce01/',
-            hm + '/Dropbox/Research/Herschel/runs/cp11/',
+    path = [hm + '/Research/Herschel/runs/ce01/',
+            hm + '/Research/Herschel/runs/cp11/',
             hm + '/Research/Herschel/runs/big_volume/']
-            #hm + '/Dropbox/Research/Herschel/runs/reds_zero_dust_evolve/']
     out_folder = hm + '/Dropbox/Research/Herschel/plots/number_counts/'
     ar = [2.25, #10 times goods
           2.25, #10 times goods
           0.225] #big volume
-          #2.25] #10 times goods
     #obs data
-    obs_data = hm + '/Dropbox/Research/Herschel/obs_data/'
+    obs_data = hm + '/Research/Herschel/obs_data/'
     #GOODS observations, file given by Kuang
-    goods = hm + '/Dropbox/Research/Herschel/obs_data/goodsh_goodsn_allbands_z2-4.cat'
+    goods = hm + '/Research/Herschel/obs_data/goodsh_goodsn_allbands_z2-4.cat'
     #mips 24 counts
-    mips24 = hm + '/Dropbox/Research/Herschel/obs_data/mips_acsmatch.cat'
-
-    #fudge factor to handle errors that are way large
-    fudge = ymin
+    mips24 = hm + '/Research/Herschel/obs_data/mips_acsmatch.cat'
 
     #The 10-5 square degrees number of rows in the plot
     if 'pacs' in band:
@@ -1247,12 +1253,14 @@ def plotTemplateComparison(database, band, redshifts,
     ttle = []
     sss = []
     #loop over the models
-    for p, area, color in zip(path, ar, ['r', 'b', 'g']):
+    #for p, area, color in zip(path, ar, ['r', 'b', 'g']):
+    #BW
+    for p, area, color, marker in zip(path, ar, ['0.8', '0.5', '0.3'], ['+', 'x', 'o']):
         print p
         #get data and convert to mJy
-        query = '''select FIR.%s from FIR
-                   where FIR.%s < 1e8 and FIR.%s > 1e-15''' % (band, band, band)
-        fluxes = db.sqlite.get_data_sqlite(p, database, query) * 1e3
+        query = """select FIR.%s from FIR
+                   where FIR.%s < 1e8 and FIR.%s > 1e-15""" % (band, band, band)
+        fluxes = SamPy.db.sqlite.get_data_sqlite(p, database, query) * 1e3
 
         #weight each galaxy
         wghts = N.zeros(len(fluxes)) + area
@@ -1274,7 +1282,7 @@ def plotTemplateComparison(database, band, redshifts,
         y = n * swap * (x ** 2.5)
 
         #plot the knots
-        z0 = ax.plot(x, y, color=color, ls='None', marker='o')
+        z0 = ax.plot(x, y, color=color, ls='None', marker=marker)
 
         #poisson error
         mask = nu > 0
@@ -1282,33 +1290,32 @@ def plotTemplateComparison(database, band, redshifts,
         up = y[mask] + err
         lw = y[mask] - err
         lw[lw < ymin] = ymin
-        s0 = ax.fill_between(x[mask], up, lw, alpha=0.2,
-                             color=color)
+        s0 = ax.fill_between(x[mask], up, lw, alpha=0.2, color=color)
 
-        #plot observational contrains
+        #plot observational constrains
         if 'pacs100' in band:
             d = N.loadtxt(obs_data + 'BertaResults', comments='#', usecols=(0, 1, 2))
             b0 = ax.errorbar(d[:, 0], d[:, 1], yerr=d[:, 1] * d[:, 2], ls='None',
-                             marker='*', mec='c', c='c')
+                             marker='*', mec='0.3', c='0.3')
             a = N.loadtxt(obs_data + 'Altieri100', comments='#', usecols=(0, 1, 2, 3))
             x = a[:, 0]
             y = a[:, 1]
             high = a[:, 2] - y
             low = N.abs(a[:, 3] - y)
             #yerr = [how much to take away from the y, how much to add to y]
-            a0 = ax.errorbar(x, y, yerr=[low, high], c='m', marker='D',
-                             ls='None', mec='m', lw=1.3, ms=3, mew=1.3)
+            a0 = ax.errorbar(x, y, yerr=[low, high], c='0.2', marker='D',
+                             ls='None', mec='0.2', lw=1.3, ms=3, mew=1.3)
         if 'pacs160' in band:
             d = N.loadtxt(obs_data + 'BertaResults', comments='#', usecols=(0, 3, 4))
             b0 = ax.errorbar(d[:, 0], d[:, 1], yerr=d[:, 1] * d[:, 2], ls='None',
-                             marker='*', mec='c', c='c')
+                             marker='*', mec='0.3', c='0.3')
             a = N.loadtxt(obs_data + 'Altieri160', comments='#', usecols=(0, 1, 2, 3))
             x = a[:, 0]
             y = a[:, 1]
             high = a[:, 2] - y
             low = N.abs(a[:, 3] - y)
-            a0 = ax.errorbar(x, y, yerr=[low, high], c='m', marker='D',
-                             ls='None', mec='m', lw=1.3, ms=3, mew=1.3)
+            a0 = ax.errorbar(x, y, yerr=[low, high], c='0.2', marker='D',
+                             ls='None', mec='0.2', lw=1.3, ms=3, mew=1.3)
         if 'spire250' in band:
             #Glenn et al results
             d = N.loadtxt(obs_data + 'GlennResults250', comments='#', usecols=(0, 1, 2, 3))
@@ -1317,14 +1324,14 @@ def plotTemplateComparison(database, band, redshifts,
             yp = 10 ** (d[:, 2] + d[:, 1]) * x ** 2.5 * 10 ** -3
             yl = 10 ** (d[:, 1] - d[:, 3]) * x ** 2.5 * 10 ** -3
             g0 = ax.errorbar(x, y, yerr=[y - yl, yp - y], ls='None',
-                             marker='*', mec='c', c='c')
+                             marker='*', mec='0.3', c='0.3')
             #Clements et al results
             g = N.loadtxt(obs_data + 'Clements250', comments='#', usecols=(0, 5, 6))
             x = g[:, 0]
             y = g[:, 1] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
             err = g[:, 2] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
             c0 = ax.errorbar(x, y, yerr=[err, err], ls='None',
-                             marker='D', mec='m', c='magenta',
+                             marker='D', mec='0.2', c='0.2',
                              lw=0.9, ms=3, mew=0.9)
         if 'spire350' in band:
             d = N.loadtxt(obs_data + 'GlennResults350', comments='#', usecols=(0, 1, 2, 3))
@@ -1333,14 +1340,14 @@ def plotTemplateComparison(database, band, redshifts,
             yp = 10 ** (d[:, 2] + d[:, 1]) * x ** 2.5 * 10 ** -3
             yl = 10 ** (d[:, 1] - d[:, 3]) * x ** 2.5 * 10 ** -3
             g0 = ax.errorbar(x, y, yerr=[y - yl, yp - y], ls='None',
-                             marker='*', mec='c', c='c')
+                             marker='*', mec='0.3', c='0.3')
             #Clements et al results
             g = N.loadtxt(obs_data + 'Clements350', comments='#', usecols=(0, 5, 6))
             x = g[:, 0]
             y = g[:, 1] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
             err = g[:, 2] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
             c0 = ax.errorbar(x, y, yerr=[err, err], ls='None',
-                             marker='D', mec='m', c='magenta',
+                             marker='D', mec='0.2', c='0.2',
                              lw=0.9, ms=3, mew=0.9)
         if 'spire500' in band:
             d = N.loadtxt(obs_data + 'GlennResults500', comments='#', usecols=(0, 1, 2, 3))
@@ -1349,14 +1356,14 @@ def plotTemplateComparison(database, band, redshifts,
             yp = 10 ** (d[:, 2] + d[:, 1]) * x ** 2.5 * 10 ** -3
             yl = 10 ** (d[:, 1] - d[:, 3]) * x ** 2.5 * 10 ** -3
             g0 = ax.errorbar(x, y, yerr=[y - yl, yp - y], ls='None',
-                             marker='*', mec='c', c='c')
+                             marker='*', mec='0.3', c='0.3')
             #Clements et al results
             g = N.loadtxt(obs_data + 'Clements500', comments='#', usecols=(0, 5, 6))
             x = g[:, 0]
             y = g[:, 1] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
             err = g[:, 2] * (10 ** 3) ** 1.5 / (180 / N.pi) ** 2
             c0 = ax.errorbar(x, y, yerr=[err, err], ls='None',
-                             marker='D', mec='m', c='magenta',
+                             marker='D', mec='0.2', c='0.2',
                              lw=0.9, ms=3, mew=0.9)
 
             #set scale
@@ -1378,9 +1385,9 @@ def plotTemplateComparison(database, band, redshifts,
         #redshift limited plots
         for i, red in enumerate(redshifts):
             #get data and convert to mJy
-            query = '''select FIR.%s from FIR 
-                       where %s and FIR.%s < 1e8 and FIR.%s > 1e-15''' % (band, red, band, band)
-            fluxes = db.sqlite.get_data_sqlite(p, database, query) * 1e3
+            query = """select FIR.%s from FIR 
+                       where %s and FIR.%s < 1e8 and FIR.%s > 1e-15""" % (band, red, band, band)
+            fluxes = SamPy.db.sqlite.get_data_sqlite(p, database, query) * 1e3
 
             #modify redshift string
             tmp = red.split()
@@ -1408,7 +1415,7 @@ def plotTemplateComparison(database, band, redshifts,
             y = n * swap * (x ** 2.5)
 
             #plot the knots
-            axs.plot(x, y, color=color, ls='None', marker='o')
+            axs.plot(x, y, color=color, ls='None', marker=marker)
 
             #poisson error
             mask = nu > 0
@@ -1463,7 +1470,7 @@ def plotTemplateComparison(database, band, redshifts,
                     data[:, 2][msk] = 0.999
                     lw = y * data[:, 2]
                     axs.errorbar(x, y, yerr=[lw, up], ls='None',
-                                 marker='*', mec='c', c='c')
+                                 marker='*', mec='0.3', c='0.3')
                 if i == 1:
                     data = N.loadtxt(fl, usecols=(0, 4, 5, 6), comments='#')
                     x = 10 ** data[:, 0]
@@ -1473,7 +1480,7 @@ def plotTemplateComparison(database, band, redshifts,
                     data[:, 2][msk] = 0.999
                     lw = y * data[:, 2]
                     axs.errorbar(x, y, yerr=[lw, up], ls='None',
-                                 marker='*', mec='c', c='c')
+                                 marker='*', mec='0.3', c='0.3')
                 if i == 2:
                     data = N.loadtxt(fl, usecols=(0, 7, 8, 9), comments='#')
                     x = 10 ** data[:, 0]
@@ -1483,7 +1490,7 @@ def plotTemplateComparison(database, band, redshifts,
                     data[:, 2][msk] = 0.999
                     lw = y * data[:, 2]
                     axs.errorbar(x, y, yerr=[lw, up], ls='None',
-                                 marker='*', mec='c', c='c')
+                                 marker='*', mec='0.3', c='0.3')
                 if i == 3:
                     data = N.loadtxt(fl, usecols=(0, 10, 11, 12), comments='#')
                     x = 10 ** data[:, 0]
@@ -1493,30 +1500,30 @@ def plotTemplateComparison(database, band, redshifts,
                     data[:, 2][msk] = 0.999
                     lw = y * data[:, 2]
                     axs.errorbar(x, y, yerr=[lw, up], ls='None',
-                                 marker='*', mec='c', c='c')
+                                 marker='*', mec='0.3', c='0.3')
 
-                #                    #get the GOODS results
-                #                    obsGOODS = sex.se_catalog(goods)
-                #                    msk = obsGOODS.f100_mjy > -1
-                #                    #print len(obsGOODS.f100_mjy[msk])
-                #                    wghtsGOODS = N.zeros(len(obsGOODS.f100_mjy)) + 22.5
-                #                    bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f100_mjy[msk],
-                #                                                             wgth = wghtsGOODS[msk],
-                #                                                             mmax = 15,
-                #                                                             mmin = 1.1,
-                #                                                             nbins = 6)
-                #                    xGOODS = 10**bGOODS
-                #                    swp = 1. / (N.log(10)*xGOODS)
-                #                    yGOODS = nGOODS*swp*(xGOODS**2.5)
-                #                    msk = nuGOODS > 0
-                #                    errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
-                #                    upGOODS = yGOODS[msk] + errGOODS
-                #                    lwGOODS = yGOODS[msk] - errGOODS
-                #                    #plot GOODS
-                #                    #print xGOODS, yGOODS
-                #                    gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
-                #                                       ls = 'None', mec = 'black',
-                #                                       c = 'black', marker = 'D')
+#                    #get the GOODS results
+#                    obsGOODS = sex.se_catalog(goods)
+#                    msk = obsGOODS.f100_mjy > -1
+#                    #print len(obsGOODS.f100_mjy[msk])
+#                    wghtsGOODS = N.zeros(len(obsGOODS.f100_mjy)) + 22.5
+#                    bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f100_mjy[msk],
+#                                                             wgth = wghtsGOODS[msk],
+#                                                             mmax = 15,
+#                                                             mmin = 1.1,
+#                                                             nbins = 6)
+#                    xGOODS = 10**bGOODS
+#                    swp = 1. / (N.log(10)*xGOODS)
+#                    yGOODS = nGOODS*swp*(xGOODS**2.5)
+#                    msk = nuGOODS > 0
+#                    errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
+#                    upGOODS = yGOODS[msk] + errGOODS
+#                    lwGOODS = yGOODS[msk] - errGOODS
+#                    #plot GOODS
+#                    #print xGOODS, yGOODS
+#                    gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
+#                                       ls = 'None', mec = 'black',
+#                                       c = 'black', marker = 'D')
 
             if 'pacs160' in band:
                 fl = obs_data + 'data_160um_4_Sami_Niemi_20101126.txt'
@@ -1529,7 +1536,7 @@ def plotTemplateComparison(database, band, redshifts,
                     data[:, 2][msk] = 0.999
                     lw = y * data[:, 2]
                     axs.errorbar(x, y, yerr=[lw, up], ls='None',
-                                 marker='*', mec='c', c='c')
+                                 marker='*', mec='0.3', c='0.3')
                 if i == 1:
                     data = N.loadtxt(fl, usecols=(0, 4, 5, 6), comments='#')
                     x = 10 ** data[:, 0]
@@ -1539,7 +1546,7 @@ def plotTemplateComparison(database, band, redshifts,
                     data[:, 2][msk] = 0.999
                     lw = y * data[:, 2]
                     axs.errorbar(x, y, yerr=[lw, up], ls='None',
-                                 marker='*', mec='c', c='c')
+                                 marker='*', mec='0.3', c='0.3')
                 if i == 2:
                     data = N.loadtxt(fl, usecols=(0, 7, 8, 9), comments='#')
                     x = 10 ** data[:, 0]
@@ -1549,7 +1556,7 @@ def plotTemplateComparison(database, band, redshifts,
                     data[:, 2][msk] = 0.999
                     lw = y * data[:, 2]
                     axs.errorbar(x, y, yerr=[lw, up], ls='None',
-                                 marker='*', mec='c', c='c')
+                                 marker='*', mec='0.3', c='0.3')
                 if i == 3:
                     data = N.loadtxt(fl, usecols=(0, 10, 11, 12), comments='#')
                     x = 10 ** data[:, 0]
@@ -1559,90 +1566,90 @@ def plotTemplateComparison(database, band, redshifts,
                     data[:, 2][msk] = 0.999
                     lw = y * data[:, 2]
                     axs.errorbar(x, y, yerr=[lw, up], ls='None',
-                                 marker='*', mec='c', c='c')
-                #                    #get the GOODS results
-                #                    obsGOODS = sex.se_catalog(goods)
-                #                    msk = obsGOODS.f160_mjy > -1
-                #                    wghtsGOODS = N.zeros(len(obsGOODS.f160_mjy)) + 22.5
-                #                    bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f160_mjy[msk],
-                #                                                             wgth = wghtsGOODS[msk],
-                #                                                             mmax = 30,
-                #                                                             mmin = 4,
-                #                                                             nbins = 6)
-                #                    xGOODS = 10**bGOODS
-                #                    swp = 1. / (N.log(10)*xGOODS)
-                #                    yGOODS = nGOODS*swp*(xGOODS**2.5)
-                #                    msk = nuGOODS > 0
-                #                    errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
-                #                    upGOODS = yGOODS[msk] + errGOODS
-                #                    lwGOODS = yGOODS[msk] - errGOODS
-                #                    #plot GOODS
-                #                    gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
-                #                                       ls = 'None', mec = 'black',
-                #                                       c = 'black', marker = 'D')
-                #            if 'spire250' in band and i == 2:
-                #                #get the GOODS results
-                #                obsGOODS = sex.se_catalog(goods)
-                #                msk = obsGOODS.f250_mjy > -1
-                #                wghtsGOODS = N.zeros(len(obsGOODS.f250_mjy)) + 22.5
-                #                bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f250_mjy[msk],
-                #                                                         wgth = wghtsGOODS[msk],
-                #                                                         mmax = 40.0,
-                #                                                         mmin = 4.0,
-                #                                                         nbins = 5)
-                #                xGOODS = 10**bGOODS
-                #                swp = 1. / (N.log(10)*xGOODS)
-                #                yGOODS = nGOODS*swp*(xGOODS**2.5)
-                #                msk = nuGOODS > 0
-                #                errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
-                #                upGOODS = yGOODS[msk] + errGOODS
-                #                lwGOODS = yGOODS[msk] - errGOODS
-                #                #plot GOODS
-                #                gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
-                #                                   ls = 'None', mec = 'black',
-                #                                   c = 'black', marker = 'D')
-                #            if 'spire350' in band and i == 2:
-                #                #get the GOODS results
-                #                obsGOODS = sex.se_catalog(goods)
-                #                msk = obsGOODS.f350_mjy > -1
-                #                wghtsGOODS = N.zeros(len(obsGOODS.f350_mjy)) + 22.5
-                #                bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f350_mjy[msk],
-                #                                                         wgth = wghtsGOODS[msk],
-                #                                                         mmax = 66.0,
-                #                                                         mmin = 6.0,
-                #                                                         nbins = 4)
-                #                xGOODS = 10**bGOODS
-                #                swp = 1. / (N.log(10)*xGOODS)
-                #                yGOODS = nGOODS*swp*(xGOODS**2.5)
-                #                msk = nuGOODS > 0
-                #                errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
-                #                upGOODS = yGOODS[msk] + errGOODS
-                #                lwGOODS = yGOODS[msk] - errGOODS
-                #                #plot GOODS
-                #                gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
-                #                                   ls = 'None', mec = 'black',
-                #                                   c = 'black', marker = 'D')
-                #            if 'spire500' in band and i == 2:
-                #                #get the GOODS results
-                #                obsGOODS = sex.se_catalog(goods)
-                #                msk = obsGOODS.f500_mjy > -1
-                #                wghtsGOODS = N.zeros(len(obsGOODS.f500_mjy)) + 22.5
-                #                bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f500_mjy[msk],
-                #                                                         wgth = wghtsGOODS[msk],
-                #                                                         mmax = 60.0,
-                #                                                         mmin = 5.0,
-                #                                                         nbins = 3)
-                #                xGOODS = 10**bGOODS
-                #                swp = 1. / (N.log(10)*xGOODS)
-                #                yGOODS = nGOODS*swp*(xGOODS**2.5)
-                #                msk = nuGOODS > 0
-                #                errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
-                #                upGOODS = yGOODS[msk] + errGOODS
-                #                lwGOODS = yGOODS[msk] - errGOODS
-                #                #plot GOODS
-                #                gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
-                #                                   ls = 'None', mec = 'black',
-                #                                   c = 'black', marker = 'D')
+                                 marker='*', mec='0.3', c='0.3')
+#                    #get the GOODS results
+#                    obsGOODS = sex.se_catalog(goods)
+#                    msk = obsGOODS.f160_mjy > -1
+#                    wghtsGOODS = N.zeros(len(obsGOODS.f160_mjy)) + 22.5
+#                    bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f160_mjy[msk],
+#                                                             wgth = wghtsGOODS[msk],
+#                                                             mmax = 30,
+#                                                             mmin = 4,
+#                                                             nbins = 6)
+#                    xGOODS = 10**bGOODS
+#                    swp = 1. / (N.log(10)*xGOODS)
+#                    yGOODS = nGOODS*swp*(xGOODS**2.5)
+#                    msk = nuGOODS > 0
+#                    errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
+#                    upGOODS = yGOODS[msk] + errGOODS
+#                    lwGOODS = yGOODS[msk] - errGOODS
+#                    #plot GOODS
+#                    gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
+#                                       ls = 'None', mec = 'black',
+#                                       c = 'black', marker = 'D')
+#            if 'spire250' in band and i == 2:
+#                #get the GOODS results
+#                obsGOODS = sex.se_catalog(goods)
+#                msk = obsGOODS.f250_mjy > -1
+#                wghtsGOODS = N.zeros(len(obsGOODS.f250_mjy)) + 22.5
+#                bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f250_mjy[msk],
+#                                                         wgth = wghtsGOODS[msk],
+#                                                         mmax = 40.0,
+#                                                         mmin = 4.0,
+#                                                         nbins = 5)
+#                xGOODS = 10**bGOODS
+#                swp = 1. / (N.log(10)*xGOODS)
+#                yGOODS = nGOODS*swp*(xGOODS**2.5)
+#                msk = nuGOODS > 0
+#                errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
+#                upGOODS = yGOODS[msk] + errGOODS
+#                lwGOODS = yGOODS[msk] - errGOODS
+#                #plot GOODS
+#                gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
+#                                   ls = 'None', mec = 'black',
+#                                   c = 'black', marker = 'D')
+#            if 'spire350' in band and i == 2:
+#                #get the GOODS results
+#                obsGOODS = sex.se_catalog(goods)
+#                msk = obsGOODS.f350_mjy > -1
+#                wghtsGOODS = N.zeros(len(obsGOODS.f350_mjy)) + 22.5
+#                bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f350_mjy[msk],
+#                                                         wgth = wghtsGOODS[msk],
+#                                                         mmax = 66.0,
+#                                                         mmin = 6.0,
+#                                                         nbins = 4)
+#                xGOODS = 10**bGOODS
+#                swp = 1. / (N.log(10)*xGOODS)
+#                yGOODS = nGOODS*swp*(xGOODS**2.5)
+#                msk = nuGOODS > 0
+#                errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
+#                upGOODS = yGOODS[msk] + errGOODS
+#                lwGOODS = yGOODS[msk] - errGOODS
+#                #plot GOODS
+#                gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
+#                                   ls = 'None', mec = 'black',
+#                                   c = 'black', marker = 'D')
+#            if 'spire500' in band and i == 2:
+#                #get the GOODS results
+#                obsGOODS = sex.se_catalog(goods)
+#                msk = obsGOODS.f500_mjy > -1
+#                wghtsGOODS = N.zeros(len(obsGOODS.f500_mjy)) + 22.5
+#                bGOODS, nGOODS, nuGOODS =  diff_function(obsGOODS.f500_mjy[msk],
+#                                                         wgth = wghtsGOODS[msk],
+#                                                         mmax = 60.0,
+#                                                         mmin = 5.0,
+#                                                         nbins = 3)
+#                xGOODS = 10**bGOODS
+#                swp = 1. / (N.log(10)*xGOODS)
+#                yGOODS = nGOODS*swp*(xGOODS**2.5)
+#                msk = nuGOODS > 0
+#                errGOODS = swp[msk] * (xGOODS[msk]**2.5) * 22.5 * N.sqrt(nuGOODS[msk]) * sigma
+#                upGOODS = yGOODS[msk] + errGOODS
+#                lwGOODS = yGOODS[msk] - errGOODS
+#                #plot GOODS
+#                gds = axs.errorbar(xGOODS, yGOODS, yerr = [lwGOODS, upGOODS],
+#                                   ls = 'None', mec = 'black',
+#                                   c = 'black', marker = 'D')
 
             #set scales
             axs.set_xscale('log')
@@ -1662,7 +1669,7 @@ def plotTemplateComparison(database, band, redshifts,
                 if i == 1:
                     axs.set_ylabel(
                         r'$\frac{\mathrm{d}N(S_{%s})}{\mathrm{d}S_{%s}} \times S_{%s}^{2.5} \quad [\mathrm{deg}^{-2} \ \mathrm{mJy}^{1.5}]$' % (
-                        wave, wave, wave))
+                            wave, wave, wave))
 
             if 'spire' in band:
                 #remove unnecessary ticks and add units
@@ -1676,7 +1683,7 @@ def plotTemplateComparison(database, band, redshifts,
                 if i == 1:
                     axs.set_ylabel(
                         r'$\frac{\mathrm{d}N(S_{%s})}{\mathrm{d}S_{%s}} \times S_{%s}^{2.5} \quad [\mathrm{deg}^{-2} \ \mathrm{mJy}^{1.5}]$' % (
-                        wave, wave, wave))
+                            wave, wave, wave))
                     axs.yaxis.set_label_coords(-0.11, 1.0)
 
             if 'mips' in band:
@@ -1691,31 +1698,33 @@ def plotTemplateComparison(database, band, redshifts,
                 if i == 1:
                     axs.set_ylabel(
                         r'$\frac{\mathrm{d}N(S_{%s})}{\mathrm{d}S_{%s}} \times S_{%s}^{2.5} \quad [\mathrm{deg}^{-2} \ \mathrm{mJy}^{1.5}]$' % (
-                        wave, wave, wave))
+                            wave, wave, wave))
                     axs.yaxis.set_label_coords(-0.11, 1.0)
 
         if p == path[-1]:
             if 'pacs100' in band or 'pacs160' in band:
                 sline = '%i$\sigma$ errors' % sigma
                 P.legend((sss[0], sss[1], sss[2], b0[0], a0[0]), #, gds),
-                         (ttle[0], ttle[1], ttle[2], 'Berta et al. 2010', 'Altieri et al. 2010'), #, 'GOODS-N'),
-                         'upper right', shadow=True, fancybox=True, numpoints=1)
+                    (ttle[0], ttle[1], ttle[2], 'Berta et al. 2010', 'Altieri et al. 2010'), #, 'GOODS-N'),
+                                                               'upper right', shadow=True, fancybox=True, numpoints=1)
             elif 'spire' in band:
                 sline = '%i$\sigma$ errors' % sigma
                 P.legend((sss[0], sss[1], sss[2], g0[0], c0[0]), #, gds),
-                         (ttle[0], ttle[1], ttle[2], 'Glenn et al. 2010', 'Clements et al. 2010'), #, 'GOODS-N'),
-                         'upper right', shadow=True, fancybox=True, numpoints=1)
+                    (ttle[0], ttle[1], ttle[2], 'Glenn et al. 2010', 'Clements et al. 2010'), #, 'GOODS-N'),
+                                                               'upper right', shadow=True, fancybox=True, numpoints=1)
             elif 'mips' in band:
                 sline = '%i$\sigma$ errors' % sigma
                 P.legend((sss[0], sss[1], sss[2], gds),
-                         (ttle[0], ttle[1], ttle[2], 'GOODS-S'),
-                         'upper right', shadow=True, fancybox=True, numpoints=1)
+                    (ttle[0], ttle[1], ttle[2], 'GOODS-S'),
+                                                      'upper right', shadow=True, fancybox=True, numpoints=1)
 
 
     #save figure
-    P.savefig(out_folder + 'numbercountComparison_%s.ps' % band)
+    #P.savefig(out_folder + 'numbercountComparison_%s.ps' % band)
+    P.savefig(out_folder + 'numbercountComparisonBW_%s.ps' % band)
     P.close()
 
+    
 if __name__ == '__main__':
     #find the home directory, because the output is to dropbox 
     #and my user name is not always the same, this hack is required.
@@ -1734,11 +1743,11 @@ if __name__ == '__main__':
     #constants, should not require any changes
     #input database name
     database = 'sams.db'
-    obs_data = hm + '/Dropbox/Research/Herschel/obs_data/'
+    obs_data = hm + '/Research/Herschel/obs_data/'
     #GOODS-N observations, file given by Kuang
-    goods = hm + '/Dropbox/Research/Herschel/obs_data/goodsh_goodsn_allbands_z2-4.cat'
+    goods = hm + '/Research/Herschel/obs_data/goodsh_goodsn_allbands_z2-4.cat'
     #mips 24 counts
-    mips = hm + '/Dropbox/Research/Herschel/obs_data/mips_acsmatch.cat'
+    mips = hm + '/Research/Herschel/obs_data/mips_acsmatch.cat'
 
     #5sigma limits of GOODS-N observations given by Kuang
     depths = {'pacs100_obs': 1.7,
@@ -1755,7 +1764,7 @@ if __name__ == '__main__':
              'spire250_obs',
              'spire350_obs',
              'spire500_obs']#,
-             #'mips24_obs', ]
+    #'mips24_obs', ]
     #'IRAS12_obs',
     #'iras60_obs']
 

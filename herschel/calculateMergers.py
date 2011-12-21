@@ -1,7 +1,11 @@
+"""
+This script calculates merger fractions.
+These results are presented in the Herschel I paper
+of Niemi et al. 2011.
+"""
 import os
 import numpy as N
-#Sami's repository
-import db.sqlite as sq
+import SamPy.db.sqlite as sq
     
 if __name__ == '__main__':
     #find the home directory, because the output is to dropbox 
