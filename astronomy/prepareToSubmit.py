@@ -4,22 +4,22 @@ Prepares a LaTex article for submission.
 Performs the following actions:
 
     1. Strips out all comments (lines starting with %) from the LaTex file.
-    2. Renames all figures as fig1, fig2, etc.
-    3. Reduces figure file sizes for arXiv.org submission (optional), requires GhostScript
-    4. Compresses everything into a tar ball.
+    2. Renames all figures as fig1, fig2, etc. and updates the tex file
+    3. Converts (E)PS figures to PDFs for arXiv.org submission (optional), requires GhostScript
+    4. Crops the PDF bounding boxes for arXiv.org submission (optional), requires GhostScript
+    5. Compresses everything into a single tar ball.
 
 Run::
 
-    python prepareToSubmit.py [-t] [-x] [-r] [-o] -i <filename.tex>
-
+    python prepareToSubmit.py [-t] [-x] [-m] [-o] -i <filename.tex>
 
 
 
 :author: Sami-Matias Niemi
 :contact: sammy@sammyniemi.com
 
-:version: 0.1
-:date: 7/DEC/2011
+:version: 0.2
+:date: 6/JAN/2012
 """
 import glob as g
 import sys, os, shutil, re, logging, subprocess
@@ -29,6 +29,12 @@ from optparse import OptionParser
 def processArgs(printHelp=False):
     """
     Processes command line arguments.
+
+    :param printHelp: if True then execution is halted and help is printed to stout
+    :type printHelp: boolean
+
+    :return: parsed command line arguments
+    :rtype: instance
     """
     parser = OptionParser()
 
@@ -36,22 +42,19 @@ def processArgs(printHelp=False):
                       dest='input',
                       help='Name of the latex file, for example, document.tex',
                       metavar='string')
-
     parser.add_option('-o', '--output',
                       dest='output',
                       help='Name of the output folder. Default is "submit"',
                       metavar='string')
-
     parser.add_option('-x', '--xiv',
                       dest='xiv',
                       default=False,
                       action='store_true',
-                      help='Reduces the figures for arXiv.org submission',
+                      help='Converts the figures to PDFs for arXiv.org submission',
                       metavar='boolean')
-
-    parser.add_option('-r', '--resolution',
-                      dest='resolution',
-                      help='Resolution of JPEG images in case of arXiv.org submission. Default is 150 dpi.',
+    parser.add_option('-m', '--margin',
+                      dest='margin',
+                      help='Size of the bounding box margin in case of arXiv.org submission. Default is 2.',
                       metavar='integer')
 
     if printHelp:
@@ -84,7 +87,7 @@ def processTex(filename, outdir):
     """
     Process the given tex file:
 
-      1. Remove all comments starting with %
+      1. Remove all lines starting with %
       2. Find all figures and rename them as fig1., fig2. etc.
 
     :param filename: name of the tex file to be processed
@@ -94,7 +97,6 @@ def processTex(filename, outdir):
 
     :return: names of new figures
     :rtype: dict
-
     """
     #output file handler
     fh = open(outdir + '/' + filename, 'w')
@@ -134,7 +136,7 @@ def directorySize(directory):
     :param directory: name of the root directory
     :type directory: string
 
-    :return: cumulative size of a given directory
+    :return: cumulative size of a given directory in kB
     :rtype: float
     """
     fs = 0.
@@ -146,18 +148,17 @@ def directorySize(directory):
     return fs / 1024.
 
 
-def reduceFileSize(resolution, path):
+def reduceFileSize(path, margin):
     """
-    Uses GhostScript to reduce file sizes of the images.
+    Uses GhostScript to convert the (E)PS files to PDFs.
+    This often helps to reduce the file sizes.
 
-    If the create JPEG file is larger than the original, will
-    use the original file. If the input image is PNG then does
-    nothing.
+    If the input image is PNG then does nothing.
 
-    :param resolution: new resolution
-    :type resolution: int
     :param path: path of the submission folder
     :type path: string
+    :param margin: size of the bounding box margin
+    :type margin: int
 
     :return: mapping of file names that were compressed
     :rtype: dict
@@ -170,11 +171,14 @@ def reduceFileSize(resolution, path):
     for file in files.itervalues():
         if 'png' not in file:
             sp = os.path.splitext(file)
-            newfile = 'reduced' + sp[0] + '.ps'
-            cmd = 'gs -r{0:d} -dEPSCrop -dTextAlphaBits=4 -sDEVICE=pswrite -sOutputFile={1:>s} -dBATCH -dNOPAUSE {2:>s}'.format(
-                resolution, newfile, file)
-            logging.debug(cmd)
+            newfile = sp[0] + '.pdf'
 
+            #converts the file to PDF
+            if 'eps' in file:
+                cmd = 'epstopdf {0:>s} {1:>s}'.format(file, newfile)
+            else:
+                cmd = 'ps2pdf {0:>s} {1:>s}'.format(file, newfile)
+            logging.debug(cmd)
             try:
                 subprocess.call(cmd, shell=True, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
             except:
@@ -182,20 +186,20 @@ def reduceFileSize(resolution, path):
                 os.chdir('../')
                 break
 
+            #crops the bounding box
+            cmd = 'pdfcrop --margins {0:d} {1:>s} {2:>s}'.format(margin, newfile, newfile)
+            logging.debug(cmd)
+            try:
+                subprocess.call(cmd, shell=True, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+            except:
+                logging.error('Could not crop the bounding box of {0:>s}...\n'.format(newfile))
+
+            #gets file sizes
             old = os.path.getsize(file) / 1024.
             new = os.path.getsize(newfile) / 1024.
 
-            if new > 1000.:
-                logging.info(
-                    'For {0:>s} the compression resulted to a file larger than 1MB, will try again...'.format(file))
-                #try more aggressive compression
-                os.remove(newfile)
-                cmd = 'gs -r{0:d} -dEPSCrop -dTextAlphaBits=4 -sDEVICE=pswrite -sOutputFile={1:>s} -dBATCH -dNOPAUSE {2:>s}'.format(
-                    int(resolution / 2), newfile, file)
-                logging.debug(cmd)
-                subprocess.call(cmd, shell=True, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
-
-                new = os.path.getsize(newfile) / 1024.
+            if new > 500.:
+                logging.info('{0:>s} is larger than 500kB, '.format(file))
 
             #test size?
             if new < old:
@@ -215,7 +219,7 @@ def reduceFileSize(resolution, path):
 
 def changeFilenames(reduced, path, input):
     """
-    Changes the figure filenames in the tex files for those files that were compressed.
+    Changes the figure filenames in the tex files.
 
     :param reduced: mapping of the compressed and original file names
     :type reduced: dict
@@ -284,21 +288,20 @@ if __name__ == '__main__':
     #test the size of the files in the directory
     logging.info('The new {0:>s} folder is about {1:.2f} kB\n'.format(output, directorySize(output)))
 
-    #tries to reduce the file size if arXiv.org submission
-    if opts.xiv:
-        if opts.resolution is None:
-            resolution = 150
-        else:
-            resolution = opts.resolution
+    #tries to reduce the file size by converting all PS files to PDFs if arXiv.org submission
+    if opts.margin is None:
+        margin = 2
+    else:
+        margin = int(opts.margin)
 
-        reduced = reduceFileSize(resolution, output)
-        changeFilenames(reduced, output, opts.input)
+    reduced = reduceFileSize(output, margin)
+    changeFilenames(reduced, output, opts.input)
 
     #tries to create a tar ball
     try:
         logging.info('Will create a tar ball using the following files:')
-        subprocess.call('tar cvzf submit.tar.gz submit', shell=True)
-        logging.info('The tar ball is about {0:.2f} kB'.format(os.stat('submit.tar.gz').st_size / 1024.))
+        subprocess.call('tar cvzf {0:>s}.tar.gz submit'.format(output), shell=True)
+        logging.info('The tar ball is about {0:.2f} kB'.format(os.stat('{0:>s}.tar.gz'.format(output)).st_size / 1024.))
     except:
         logging.error('Did not find tar, cannot create a tar ball...')
         
