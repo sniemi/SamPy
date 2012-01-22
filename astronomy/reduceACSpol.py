@@ -26,7 +26,7 @@ import pyraf
 from pyraf import iraf
 from iraf import stsdas, hst_calib, acs, calacs
 import astrodither as a
-from astrodither import astrodrizzle, tweakreg
+from astrodither import astrodrizzle, tweakreg, pixtopix
 
 
 class sourceFinding():
@@ -101,7 +101,7 @@ class sourceFinding():
         """
         Derive contours using the diskStructure function.
         """
-        if ~hasattr(self, 'mask'):
+        if not hasattr(self, 'mask'):
             self.find()
 
         self.opened = ndimage.binary_opening(self.mask,
@@ -113,7 +113,7 @@ class sourceFinding():
         """
         Derives sizes for each object.
         """
-        if ~hasattr(self, 'label_im'):
+        if not hasattr(self, 'label_im'):
             self.find()
 
         self.sizes = np.asarray(ndimage.sum(self.mask, self.label_im, range(self.nb_labels + 1)))
@@ -124,7 +124,7 @@ class sourceFinding():
         """
         Derive fluxes or counts.
         """
-        if ~hasattr(self, 'label_im'):
+        if not hasattr(self, 'label_im'):
             self.find()
 
         self.fluxes = np.asarray(ndimage.sum(self.image, self.label_im, range(1, self.nb_labels + 1)))
@@ -135,7 +135,7 @@ class sourceFinding():
         """
         Cleans up small connected components and large structures.
         """
-        if ~hasattr(self, 'sizes'):
+        if not hasattr(self, 'sizes'):
             self.getSizes()
 
         mask_size = (self.sizes < self.settings['clean_size_min']) | (self.sizes > self.settings['clean_size_max'])
@@ -152,7 +152,7 @@ class sourceFinding():
         :return: xposition, yposition, center-of-masses
         :rtype: list
         """
-        if ~hasattr(self, 'label_clean'):
+        if not hasattr(self, 'label_clean'):
             self.cleanSample()
 
         self.cms = ndimage.center_of_mass(self.image,
@@ -172,10 +172,10 @@ class sourceFinding():
 
         :return: None
         """
-        if ~hasattr(self, 'opened'):
+        if not hasattr(self, 'opened'):
             self.getContours()
 
-        if ~hasattr(self, 'xcms'):
+        if not hasattr(self, 'xcms'):
             self.getCenterOfMass()
 
         plt.figure(1, figsize=(18, 8))
@@ -207,7 +207,7 @@ class sourceFinding():
 
         :return: None
         """
-        if ~hasattr(self, 'xcms'):
+        if not hasattr(self, 'xcms'):
             self.getCenterOfMass()
 
         fh = open(self.settings['output'], 'w')
@@ -419,7 +419,7 @@ class reduceACSWFCpoli():
             tweakreg.TweakReg(f, editpars=False, **params)
 
         #run astrodrizzle separately for each POL
-        kwargs = dict(final_pixfrac=1.0, updatewcs=False)
+        kwargs = dict(final_pixfrac=1.0, updatewcs=False, final_wcs=False)
         for f in self.input:
             astrodrizzle.AstroDrizzle(input=f, mdriztab=False, editpars=False, **kwargs)
 
@@ -461,7 +461,7 @@ class reduceACSWFCpoli():
             elif 'POL120' in line:
                 pol120.write(out)
             else:
-                print 'Problem:', line
+                print 'Skipping line:', line
 
         pol0.close()
         pol60.close()
@@ -474,15 +474,15 @@ class reduceACSWFCpoli():
 
         for file in pol0:
             x, y = pixtopix.tran(file + "[sci,1]", 'POL0V_drz_sci.fits', 'backward', coords='POL0coords.txt',
-                                 output=file.replace('.fits', '') + '.coords', verbose=True)
+                                 output=file.replace('.fits', '') + '.coords', verbose=False)
 
         for file in pol60:
             x, y = pixtopix.tran(file + "[sci,1]", 'POL60V_drz_sci.fits', 'backward', coords='POL60coords.txt',
-                                 output=file.replace('.fits', '') + '.coords', verbose=True)
+                                 output=file.replace('.fits', '') + '.coords', verbose=False)
 
         for file in pol120:
             x, y = pixtopix.tran(file + "[sci,1]", 'POL120V_drz_sci.fits', 'backward', coords='POL120coords.txt',
-                                 output=file.replace('.fits', '') + '.coords', verbose=True)
+                                 output=file.replace('.fits', '') + '.coords', verbose=False)
         del x
         del y
 
@@ -493,12 +493,12 @@ class reduceACSWFCpoli():
             data = open(f).readlines()
             out = open(f, 'w')
             reg = open(f.replace('.coords', '.reg'), 'w')
+            reg.write('#File written on {0:>s}\n'.format(datetime.datetime.isoformat(datetime.datetime.now())))
             for line in data:
                 if not line.startswith('#'):
                     out.write(line)
                     tmp = line.split()
-                    reg.write('#File written on {0:>s}\n'.format(datetime.datetime.isoformat(datetime.datetime.now())))
-                    reg.write('fk5; point %f %f # point=box 3\n' % (tmp[0], tmp[1]))
+                    reg.write('fk5; point {0:>s} {1:>s} # point=box 3\n'.format(tmp[0], tmp[1]))
             out.close()
             reg.close()
 
