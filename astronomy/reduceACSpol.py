@@ -558,7 +558,7 @@ class reduceACSWFCpoli():
         tweakreg.TweakReg('*_backup.fits', editpars=False, **params)
 
         #we now have separately drizzled POL images
-        kwargs = {'final_pixfrac': 0.8, 'skysub': False,
+        kwargs = {'final_pixfrac': 1.0, 'skysub': False,
                   'final_outnx': 2300, 'final_outny': 2300,
                   'final_ra': 128.8369, 'final_dec': -45.1791,
                   'updatewcs': False, 'final_wcs': True,
