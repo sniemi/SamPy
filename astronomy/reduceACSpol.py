@@ -11,7 +11,7 @@ Reduces ACS WFC polarimetry data.
 :author: Sami-Matias Niemi
 :contact: sammy@sammyniemi.com
 
-:version: 0.2
+:version: 0.3
 """
 import os, glob, shutil, datetime
 from optparse import OptionParser
@@ -27,6 +27,7 @@ from pyraf import iraf
 from iraf import stsdas, hst_calib, acs, calacs
 import astrodither as a
 from astrodither import astrodrizzle, tweakreg, pixtopix
+import acstools
 
 
 class sourceFinding():
@@ -370,7 +371,7 @@ class reduceACSWFCpoli():
 
     def omitPHOTCORR(self):
         """
-        Sets PHOTCORR keyword to omit to prevent crashing.
+        Sets PHOTCORR keyword to OMIT to prevent crashing.
 
         :note: find a proper fix for this.
         :note: Change from iraf to pyfits.
@@ -383,7 +384,7 @@ class reduceACSWFCpoli():
 
     def runCalACS(self):
         """
-        Call calACS and process all given files.
+        Calls calACS and processes all given files or associations.
         """
         if self.input is None:
             self.input = [x for x in self.associations if 'POL' in x]
@@ -398,16 +399,34 @@ class reduceACSWFCpoli():
             os.remove(f)
 
 
+    def destripeFLT(self):
+        """
+        Uses the acs_destripe routine from the acstools to remove the bias striping.
+
+        Renames the original FLT files as _flt_orig.fits.
+        The destriped files are called as _flt_destripe.fits.
+        """
+        acstools.acs_destripe.clean('*_flt.fits',
+                                    'destripe',
+                                    clobber=False,
+                                    maxiter=20,
+                                    sigrej=2.0)
+        for f in glob.glob('*_flt.fits'):
+            shutil.move(f, f.replace('_flt.fits', '_flt_orig.fits'))
+        for f in glob.glob('*_flt_destripe.fits'):
+            shutil.copy(f, f.replace('_flt.destripe.fits', '_flt.fits'))
+
+
     def updateHeader(self):
         """
-        Call astrodrizzle's updatenpol to update the headers of the FLT files.
+        Calls astrodrizzle's updatenpol to update the headers of the FLT files.
         """
-        a.updatenpol.update('*flt.fits', self.settings['jref'])
+        a.updatenpol.update('*_flt.fits', self.settings['jref'])
 
 
     def initialProcessing(self):
         """
-        Do initial processing:
+        Does the initial processing as follows:
 
             1. run tweakreg to each different POL filter separately
             2. use astrodrizzle to combine images of the same POL filter using
@@ -430,6 +449,11 @@ class reduceACSWFCpoli():
     def findImprovedAlignment(self):
         """
         Tries to find stars to be used for improved alignment.
+
+        Generates coordinate lists for each POL file and for every _flt file.
+        Maps all the positions to uncorrected/distorted frame using pixtopix transformation.
+        Finally, runs the tweakreg to find improved alignment and updates the WCS in the
+        headers.
         """
         #find some good stars
         source = sourceFinding(pf.open(self.settings['sourceImage'])[1].data)
@@ -519,7 +543,9 @@ class reduceACSWFCpoli():
 
     def doFinalDrizzle(self):
         """
+        Does final drizzling.
 
+        :return: None
         """
         #copy the first round files to backup and check the shifts
         drzs = glob.glob('*POL*_drz*.fits')
@@ -544,6 +570,7 @@ class reduceACSWFCpoli():
 
     def runAll(self):
         """
+        Runs all steps of the pipeline at one go.
 
         :return: None
         """
@@ -551,6 +578,7 @@ class reduceACSWFCpoli():
         self.copyRaws()
         self.omitPHOTCORR()
         self.runCalACS()
+        self.destripeFLT()
         self.updateHeader()
         self.initialProcessing()
         self.findImprovedAlignment()
