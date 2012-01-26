@@ -11,7 +11,7 @@ Reduces ACS WFC polarimetry data.
 :author: Sami-Matias Niemi
 :contact: sammy@sammyniemi.com
 
-:version: 0.3
+:version: 0.4
 """
 import os, glob, shutil, datetime
 from optparse import OptionParser
@@ -25,9 +25,18 @@ from pytools import asnutil
 import pyraf
 from pyraf import iraf
 from iraf import stsdas, hst_calib, acs, calacs
-import astrodither as a
-from astrodither import astrodrizzle, tweakreg, pixtopix
 import acstools
+
+try:
+    #for some reason the package is called different on mac osx and linux
+    import drizzlepac as a
+except:
+    import astrodither as a
+try:
+    #for some reason the package is called different on mac osx and linux
+    from drizzlepac import astrodrizzle, tweakreg, pixtopix
+except:
+    from astrodither import astrodrizzle, tweakreg, pixtopix
 
 
 class sourceFinding():
@@ -47,9 +56,9 @@ class sourceFinding():
         """
         self.image = image
         #set default parameter values and then update using kwargs
-        self.settings = dict(above_background=3.5,
-                             clean_size_min=10,
-                             clean_size_max=100,
+        self.settings = dict(above_background=5.0,
+                             clean_size_min=30,
+                             clean_size_max=140,
                              sigma=3.0,
                              disk_struct=3,
                              output='objects.txt')
@@ -434,14 +443,20 @@ class reduceACSWFCpoli():
 
         """
         #run tweakreg to improve the alignment
-        for f in self.input:
-            params = dict(shiftfile=True, outshifts=f.split('_')[0] + '_shifts.txt',
-                          outwcs=f.split('_')[0] + '_shifts_wcs.fits', minobj=40, searchrad=1.5, searchunits='pixels',
-                          updatehdr=True, verbose=False, use2dhist=True, residplot='residuals', see2dplot=False)
-            tweakreg.TweakReg(f, editpars=False, **params)
+        #for f in self.input:
+        #    params = dict(shiftfile=True, outshifts=f.split('_')[0] + '_shifts.txt',
+        #                  outwcs=f.split('_')[0] + '_shifts_wcs.fits',
+        #                  minobj=40, searchrad=2, searchunits='pixels',
+        #                  updatehdr=True, verbose=False, use2dhist=True,
+        #                  residplot='residuals', see2dplot=False)
+        #    tweakreg.TweakReg(f, editpars=False, **params)
 
         #run astrodrizzle separately for each POL
-        kwargs = dict(final_pixfrac=1.0, updatewcs=False, final_wcs=False, build=True)
+        kwargs = dict(final_pixfrac=1.0,
+                      updatewcs=True,
+                      final_wcs=False,
+                      build=True,
+                      skysub=False)
         for f in self.input:
             astrodrizzle.AstroDrizzle(input=f, mdriztab=False, editpars=False, **kwargs)
 
@@ -462,7 +477,7 @@ class reduceACSWFCpoli():
         #find improved locations for each star
         acc = []
         for x, y in zip(results['xcms'], results['ycms']):
-            acc.append(iraf.imcntr('POL*_drz.fits[1]', x_init=x, y_init=y, cboxsize=7, Stdout=1))
+            acc.append(iraf.imcntr('POL*_drz.fits[1]', x_init=x, y_init=y, cboxsize=3, Stdout=1))
         o = open('tmp.txt', 'w')
         o.write('#File written on {0:>s}\n'.format(datetime.datetime.isoformat(datetime.datetime.now())))
         for line in acc:
@@ -500,16 +515,19 @@ class reduceACSWFCpoli():
         pol120 = [line.split()[0].split('_raw')[0] + '_flt.fits' for line in data if 'POL120' in line.split()[2]]
 
         for file in pol0:
-            x, y = pixtopix.tran(file + "[sci,1]", 'POL0V_drz.fits', 'backward', coords='POL0coords.txt',
-                                 output=file.replace('.fits', '') + '.coords', verbose=False)
+            x, y = pixtopix.tran(file + '[1]', 'POL0V_drz.fits[1]', 'backward',
+                                 coords='POL0coords.txt', output=file.replace('.fits', '') + '.coords',
+                                 verbose=False)
 
         for file in pol60:
-            x, y = pixtopix.tran(file + "[sci,1]", 'POL60V_drz.fits', 'backward', coords='POL60coords.txt',
-                                 output=file.replace('.fits', '') + '.coords', verbose=False)
+            x, y = pixtopix.tran(file + '[1]', 'POL60V_drz.fits[1]', 'backward',
+                                 coords='POL60coords.txt', output=file.replace('.fits', '') + '.coords',
+                                 verbose=False)
 
         for file in pol120:
-            x, y = pixtopix.tran(file + "[sci,1]", 'POL120V_drz.fits', 'backward', coords='POL120coords.txt',
-                                 output=file.replace('.fits', '') + '.coords', verbose=False)
+            x, y = pixtopix.tran(file + '[1]', 'POL120V_drz.fits[1]', 'backward',
+                                 coords='POL120coords.txt', output=file.replace('.fits', '') + '.coords',
+                                 verbose=False)
         del x
         del y
 
@@ -525,7 +543,7 @@ class reduceACSWFCpoli():
                 if not line.startswith('#'):
                     out.write(line)
                     tmp = line.split()
-                    reg.write('circle({0:>s},{1:>s},5)\n'.format(tmp[0], tmp[1]))
+                    reg.write('image;circle({0:>s},{1:>s},5)\n'.format(tmp[0], tmp[1]))
             out.close()
             reg.close()
 
@@ -535,9 +553,9 @@ class reduceACSWFCpoli():
             out.write('%s %s\n' % (f.replace('.coords', '.fits'), f))
         out.close()
 
-        params = {'catfile': 'regcatalog.txt', 'shiftfile': True, 'outshifts': 'flt_shifts.txt', 'updatehdr': True,
-                  'verbose': False, 'minobj': 5, 'use2dhist': True, 'residplot': 'residuals', 'see2dplot': False,
-                  'searchrad': 4, 'searchunits': 'pixels'}
+        params = {'catfile': 'regcatalog.txt', 'shiftfile': True, 'outshifts': 'flt_shifts.txt',
+                  'updatehdr': True, 'verbose': False, 'minobj': 5, 'use2dhist': True,
+                  'see2dplot': False, 'searchrad': 5, 'searchunits': 'pixels'}
         tweakreg.TweakReg('*_flt.fits', editpars=False, **params)
 
 
@@ -548,14 +566,14 @@ class reduceACSWFCpoli():
         :return: None
         """
         #copy the first round files to backup and check the shifts
-        drzs = glob.glob('*POL*_drz*.fits')
-        for drz in drzs:
-            shutil.move(drz, drz.replace('_drz.fits', '_backup.fits'))
-        params = {'outshifts': 'backup_shifts.txt', 'updatehdr': True,
-                  'verbose': False, 'minobj': 35, 'use2dhist': True,
-                  'residplot': 'residuals', 'see2dplot': False,
-                  'searchrad': 5, 'searchunits': 'pixels'}
-        tweakreg.TweakReg('*_backup.fits', editpars=False, **params)
+        #drzs = glob.glob('*POL*_drz*.fits')
+        #for drz in drzs:
+        #    shutil.move(drz, drz.replace('_drz.fits', '_backup.fits'))
+        #params = {'outshifts': 'backup_shifts.txt', 'updatehdr': True,
+        #          'verbose': False, 'minobj': 15, 'use2dhist': True,
+        #          'residplot': 'residuals', 'see2dplot': False,
+        #          'searchrad': 5, 'searchunits': 'pixels'}
+        #tweakreg.TweakReg('*_backup.fits', editpars=False, **params)
 
         #we now have separately drizzled POL images
         kwargs = {'final_pixfrac': 1.0, 'skysub': False,
@@ -578,7 +596,7 @@ class reduceACSWFCpoli():
         self.copyRaws()
         self.omitPHOTCORR()
         self.runCalACS()
-        self.destripeFLT()
+        #self.destripeFLT()
         self.updateHeader()
         self.initialProcessing()
         self.findImprovedAlignment()
@@ -606,8 +624,11 @@ if __name__ == '__main__':
 
     opts, args = processArgs()
 
-    settings = dict(jref='/data/puppis0/niemi/pulsar/data/12240/refs/',
-                    mtab='/data/puppis0/niemi/pulsar/data/12240/refs/')
+    settings = dict(jref='/Users/sammy/Research/pulsar/data/12240/refs/',
+                    mtab='/Users/sammy/Research/pulsar/data/12240/refs/')
+
+    #settings = dict(jref='/astro/data/puppis0/niemi/pulsar/data/12240/refs/',
+    #                mtab='/astro/data/puppis0/niemi/pulsar/data/12240/refs/')
 
     if opts.input is None:
         reduce = reduceACSWFCpoli(opts.input, **settings)
@@ -617,6 +638,7 @@ if __name__ == '__main__':
         reduce.copyRaws()
         reduce.omitPHOTCORR()
         reduce.runCalACS()
+        #self.destripeFLT()
         reduce.updateHeader()
         reduce.initialProcessing()
         reduce.findImprovedAlignment()
