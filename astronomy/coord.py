@@ -5,7 +5,7 @@ Provides matching for a list of RAs and DECs.
 :requires: NumPy
 
 :author: Sami-Matias Niemi
-:contact: sniemi@unc.edu
+:contact: sammy@sammyniemi.com
 
 :version: 0.1
 """
@@ -13,6 +13,34 @@ import math
 import numpy as np
 from numpy.core.records import fromarrays
 import astLib.astCoords as astCoords
+
+
+def angsep(ra1deg, dec1deg, ra2deg, dec2deg):
+    """
+    Determine separation in degrees between two celestial objects arguments are RA and Dec in decimal degrees.
+    """
+    ra1rad = ra1deg * np.pi / 180
+    dec1rad = dec1deg * np.pi / 180
+    ra2rad = ra2deg * np.pi / 180
+    dec2rad = dec2deg * np.pi / 180
+
+    # calculate scalar product for determination
+    # of angular separation
+    x = np.cos(ra1rad) * np.cos(dec1rad) * np.cos(ra2rad) * np.cos(dec2rad)
+    y = np.sin(ra1rad) * np.cos(dec1rad) * np.sin(ra2rad) * np.cos(dec2rad)
+    z = np.sin(dec1rad) * np.sin(dec2rad)
+
+    rad = np.arccos(x + y + z)
+
+    # use Pythargoras approximation if rad < 1 arcsec
+    sep = np.choose(rad < 0.000004848, (
+          np.sqrt((np.cos(dec1rad) * (ra1rad - ra2rad)) ** 2 + (dec1rad - dec2rad) ** 2), rad))
+
+    # Angular separation
+    sep = sep * 180 / np.pi
+
+    return sep
+
 
 def match(ra1, dec1, ra2, dec2, tol, allmatches=False):
     """
@@ -38,7 +66,7 @@ def match(ra1, dec1, ra2, dec2, tol, allmatches=False):
     DEG_PER_AMIN = 1. / 60.             # degrees per arcmin
     DEG_PER_ASEC = DEG_PER_AMIN / 60.   # degrees per arcsec
     RAD_PER_DEG = math.pi / 180.        # radians per degree
-    
+
     isorted = ra2.argsort()
     sdec2 = dec2[isorted]
     sra2 = ra2[isorted]
@@ -121,7 +149,7 @@ def indmatch(ra1, dec1, ra2, dec2, tol, one=True):
     i2 = m.ind[c]
     if one:
         dl = 0
-        # :todo: this is horribly written, shuold do better
+        # :todo: this is horribly written, should do better
         for x in i2:
             tmp = np.where(i2 == x)[0]
             if len(tmp) > 1:

@@ -11,7 +11,7 @@ Reduces ACS WFC polarimetry data.
 :author: Sami-Matias Niemi
 :contact: sammy@sammyniemi.com
 
-:version: 0.4
+:version: 0.5
 """
 import os, glob, shutil, datetime
 from optparse import OptionParser
@@ -24,16 +24,16 @@ from scipy import ndimage
 from pytools import asnutil
 import pyraf
 from pyraf import iraf
-from iraf import stsdas, hst_calib, acs, calacs
+from iraf import stsdas, hst_calib, acs, calacs, images, immatch, sregister, blkavg
 import acstools
 
 try:
-    #for some reason the package is called different on mac osx and linux
+    #different naming convention in linux and macosx
     import drizzlepac as a
 except:
     import astrodither as a
 try:
-    #for some reason the package is called different on mac osx and linux
+    #different naming convention in linux and macosx
     from drizzlepac import astrodrizzle, tweakreg, pixtopix
 except:
     from astrodither import astrodrizzle, tweakreg, pixtopix
@@ -56,10 +56,10 @@ class sourceFinding():
         """
         self.image = image
         #set default parameter values and then update using kwargs
-        self.settings = dict(above_background=5.0,
-                             clean_size_min=30,
-                             clean_size_max=140,
-                             sigma=3.0,
+        self.settings = dict(above_background=10.0,
+                             clean_size_min=9,
+                             clean_size_max=110,
+                             sigma=1.5,
                              disk_struct=3,
                              output='objects.txt')
         self.settings.update(kwargs)
@@ -263,7 +263,7 @@ class reduceACSWFCpoli():
         """
         Init.
 
-        :param input:
+        :param input: FITS association
         :type input: string
         :param kwargs: additional keyword arguments
         :type kwargs: dictionary
@@ -312,8 +312,11 @@ class reduceACSWFCpoli():
         for raw in raws:
             hdr = pf.open(raw)[0].header
             print raw, hdr['FILTER1'], hdr['FILTER2'], hdr['PA_V3']
-            out.write('%s %s %s %s\n' % (raw, hdr['FILTER1'], hdr['FILTER2'], hdr['PA_V3']))
-            data[raw] = (hdr['FILTER1'], hdr['FILTER2'], hdr['PA_V3'])
+            if 'POL' in hdr['FILTER1'] or 'POL' in hdr['FILTER2']:
+                out.write('%s %s %s %s\n' % (raw, hdr['FILTER1'], hdr['FILTER2'], hdr['PA_V3']))
+                data[raw] = (hdr['FILTER1'], hdr['FILTER2'], hdr['PA_V3'])
+            else:
+                print 'skipping line, no POL filter data'
 
         out.close()
 
@@ -350,11 +353,18 @@ class reduceACSWFCpoli():
         os.chdir(orig)
 
         self.associations = asns
+        
+        if self.input is None:
+            self.input = [x for x in self.associations if 'POL' in x]
+        else:
+            self.input = glob.glob(self.input)
 
 
     def copyRaws(self):
         """
         Copy all _raw, _spt, and _asn files to a temporary working directory.
+
+        :Note: One should run either copyRaws or copyFLTs but usually not both!
         """
         #make a new dir
         path = 'tmp'
@@ -364,13 +374,41 @@ class reduceACSWFCpoli():
             for d in glob.glob('./%s/*.*' % path):
                 os.remove(d)
 
-        for fle in glob.glob('./raw/*_raw*.fits'):
+        for fle in glob.glob('./raw/*_raw.fits'):
             shutil.copy(fle, path)
 
-        for fle in glob.glob('./support/*_spt*.fits'):
+        for fle in glob.glob('./support/*_spt.fits'):
             shutil.copy(fle, path)
 
-        for fle in glob.glob('./asn/*_asn*.fits'):
+        for fle in glob.glob('./asn/*_asn.fits'):
+            shutil.copy(fle, path)
+
+        #change the current working directory to tmp
+        os.chdir(os.getcwd() + '/' + path)
+        iraf.chdir(os.getcwd())
+
+
+    def copyFLTs(self):
+        """
+        Copy all _flt, _spt, and _asn files to a temporary working directory.
+
+        :Note: One should run either copyRaws or copyFLTs but usually not both!
+        """
+        #make a new dir
+        path = 'tmp'
+        try:
+            os.mkdir(path)
+        except:
+            for d in glob.glob('./%s/*.*' % path):
+                os.remove(d)
+
+        for fle in glob.glob('./opus/*_flt.fits'):
+            shutil.copy(fle, path)
+
+        for fle in glob.glob('./support/*_spt.fits'):
+            shutil.copy(fle, path)
+
+        for fle in glob.glob('./asn/*_asn.fits'):
             shutil.copy(fle, path)
 
         #change the current working directory to tmp
@@ -395,11 +433,6 @@ class reduceACSWFCpoli():
         """
         Calls calACS and processes all given files or associations.
         """
-        if self.input is None:
-            self.input = [x for x in self.associations if 'POL' in x]
-        else:
-            self.input = glob.glob(self.input)
-
         for f in self.input:
             calacs.run(input=f)
 
@@ -437,26 +470,13 @@ class reduceACSWFCpoli():
         """
         Does the initial processing as follows:
 
-            1. run tweakreg to each different POL filter separately
-            2. use astrodrizzle to combine images of the same POL filter using
+            1. use astrodrizzle to combine images of the same POL filter using
                the shifts file generated by the tweakreg at point one.
 
         """
-        #run tweakreg to improve the alignment
-        #for f in self.input:
-        #    params = dict(shiftfile=True, outshifts=f.split('_')[0] + '_shifts.txt',
-        #                  outwcs=f.split('_')[0] + '_shifts_wcs.fits',
-        #                  minobj=40, searchrad=2, searchunits='pixels',
-        #                  updatehdr=True, verbose=False, use2dhist=True,
-        #                  residplot='residuals', see2dplot=False)
-        #    tweakreg.TweakReg(f, editpars=False, **params)
-
         #run astrodrizzle separately for each POL
-        kwargs = dict(final_pixfrac=1.0,
-                      updatewcs=True,
-                      final_wcs=False,
-                      build=True,
-                      skysub=False)
+        kwargs = dict(final_pixfrac=1.0, final_fillval=1.0, preserve=False,
+                      updatewcs=True, final_wcs=False, build=True, skysub=False)
         for f in self.input:
             astrodrizzle.AstroDrizzle(input=f, mdriztab=False, editpars=False, **kwargs)
 
@@ -477,7 +497,7 @@ class reduceACSWFCpoli():
         #find improved locations for each star
         acc = []
         for x, y in zip(results['xcms'], results['ycms']):
-            acc.append(iraf.imcntr('POL*_drz.fits[1]', x_init=x, y_init=y, cboxsize=3, Stdout=1))
+            acc.append(iraf.imcntr('POL*_drz.fits[1]', x_init=x, y_init=y, cboxsize=45, Stdout=1))
         o = open('tmp.txt', 'w')
         o.write('#File written on {0:>s}\n'.format(datetime.datetime.isoformat(datetime.datetime.now())))
         for line in acc:
@@ -490,24 +510,34 @@ class reduceACSWFCpoli():
         pol0 = open('POL0coords.txt', 'w')
         pol60 = open('POL60coords.txt', 'w')
         pol120 = open('POL120coords.txt', 'w')
+        pol0r = open('POL0coords.reg', 'w')
+        pol60r = open('POL60coords.reg', 'w')
+        pol120r = open('POL120coords.reg', 'w')
 
         for line in data:
             tmp = line.split(':')
             x = tmp[1].replace('y', '').strip()
             y = tmp[2].strip()
             out = '%s %s\n' % (x, y)
+            reg = 'image;circle(%s,%s,5)\n' %( x, y)
             if 'POL0' in line:
                 pol0.write(out)
+                pol0r.write(reg)
             elif 'POL60' in line:
                 pol60.write(out)
+                pol60r.write(reg)
             elif 'POL120' in line:
                 pol120.write(out)
+                pol120r.write(reg)
             else:
                 print 'Skipping line:', line
 
         pol0.close()
         pol60.close()
         pol120.close()
+        pol0r.close()
+        pol60r.close()
+        pol120r.close()
 
         data = open('../rawFiles.txt').readlines()
         pol0 = [line.split()[0].split('_raw')[0] + '_flt.fits' for line in data if 'POL0' in line.split()[2]]
@@ -515,17 +545,17 @@ class reduceACSWFCpoli():
         pol120 = [line.split()[0].split('_raw')[0] + '_flt.fits' for line in data if 'POL120' in line.split()[2]]
 
         for file in pol0:
-            x, y = pixtopix.tran(file + '[1]', 'POL0V_drz.fits[1]', 'backward',
+            x, y = pixtopix.tran(file + "[1]", 'POL0V_drz.fits[1]', 'backward',
                                  coords='POL0coords.txt', output=file.replace('.fits', '') + '.coords',
                                  verbose=False)
 
         for file in pol60:
-            x, y = pixtopix.tran(file + '[1]', 'POL60V_drz.fits[1]', 'backward',
+            x, y = pixtopix.tran(file + "[1]", 'POL60V_drz.fits[1]', 'backward',
                                  coords='POL60coords.txt', output=file.replace('.fits', '') + '.coords',
                                  verbose=False)
 
         for file in pol120:
-            x, y = pixtopix.tran(file + '[1]', 'POL120V_drz.fits[1]', 'backward',
+            x, y = pixtopix.tran(file + "[1]", 'POL120V_drz.fits[1]', 'backward',
                                  coords='POL120coords.txt', output=file.replace('.fits', '') + '.coords',
                                  verbose=False)
         del x
@@ -553,35 +583,67 @@ class reduceACSWFCpoli():
             out.write('%s %s\n' % (f.replace('.coords', '.fits'), f))
         out.close()
 
-        params = {'catfile': 'regcatalog.txt', 'shiftfile': True, 'outshifts': 'flt_shifts.txt',
-                  'updatehdr': True, 'verbose': False, 'minobj': 5, 'use2dhist': True,
-                  'see2dplot': False, 'searchrad': 5, 'searchunits': 'pixels'}
+        params = {'catfile': 'regcatalog.txt', 'shiftfile': True, 'outshifts': 'flt1_shifts.txt', 'updatehdr': True,
+                  'verbose': False, 'minobj': 15, 'use2dhist': False, 'see2dplot': False,
+                  'searchrad': 50, 'searchunits': 'pixels', 'tolerance' : 50.0, 'separation' : 30.0, 'nclip' : 3}
         tweakreg.TweakReg('*_flt.fits', editpars=False, **params)
+        params.update({'outshifts' : 'flt_shifts.txt', 'searchrad' : 15, 'tolerance' : 3})
+        tweakreg.TweakReg('*_flt.fits', editpars=False, **params)
+        #params = {'updatehdr': True, 'verbose': False, 'minobj': 15, 'use2dhist': True, 'see2dplot': False,
+        #          'searchrad': 2.5, 'searchunits': 'pixels'}
+        #tweakreg.TweakReg('*_flt.fits', editpars=False, **params)
 
 
-    def doFinalDrizzle(self):
+    def registerPOLs(self):
         """
-        Does final drizzling.
+        Aligns and registers the POL files. In addition, produces block averages files.
 
         :return: None
         """
         #copy the first round files to backup and check the shifts
-        #drzs = glob.glob('*POL*_drz*.fits')
-        #for drz in drzs:
-        #    shutil.move(drz, drz.replace('_drz.fits', '_backup.fits'))
-        #params = {'outshifts': 'backup_shifts.txt', 'updatehdr': True,
-        #          'verbose': False, 'minobj': 15, 'use2dhist': True,
-        #          'residplot': 'residuals', 'see2dplot': False,
-        #          'searchrad': 5, 'searchunits': 'pixels'}
-        #tweakreg.TweakReg('*_backup.fits', editpars=False, **params)
+        drzs = glob.glob('*POL*_drz*.fits')
+        for drz in drzs:
+            shutil.move(drz, drz.replace('_drz.fits', '_backup.fits'))
+        params = {'outshifts': 'backup_shifts.txt', 'updatehdr': True,
+                      'verbose': False, 'minobj': 20, 'use2dhist': True,
+                      'residplot': 'residuals', 'see2dplot': False,
+                      'searchrad': 35, 'searchunits': 'pixels'}
+        #we can do this twice to get the alignment really good
+        tweakreg.TweakReg('*_backup.fits', editpars=False, **params)
+        tweakreg.TweakReg('*_backup.fits', editpars=False, **params)
 
-        #we now have separately drizzled POL images
+        #user sregister to resample to separate POL frames to a single WCS frame
+        sregister('POL*_backup.fits[1]', 'POL0V_backup.fits[1]', 'P0lin_sci.fits,P60lin_sci.fits,P120lin_sci.fits',
+                  fitgeometry='rscale', calctype='double', interpolant='linear', fluxconserve=self.yes)
+        sregister('POL*_backup.fits[1]', 'POL0V_backup.fits[1]', 'P0drz_sci.fits,P60drz_sci.fits,P120drz_sci.fits',
+                  fitgeometry='rscale', calctype='double', interpolant='drizzle', fluxconserve=self.yes)
+        sregister('POL*_backup.fits[3]', 'POL0V_backup.fits[1]', 'P0lin_wht.fits,P60lin_wht.fits,P120lin_wht.fits',
+                  fitgeometry='rscale', calctype='double', interpolant='linear', fluxconserve=self.yes)
+        sregister('POL*_backup.fits[3]', 'POL0V_backup.fits[1]', 'P0drz_wht.fits,P60drz_wht.fits,P120drz_wht.fits',
+                  fitgeometry='rscale', calctype='double', interpolant='drizzle', fluxconserve=self.yes)
+
+        #average in 10x10x10 blocks
+        blkavg('P0lin_sci.fits', 'P0lin_smt.fits', b1=10, b2=10, b3=10, option='average')
+        blkavg('P60lin_sci.fits', 'P60lin_smt.fits', b1=10, b2=10, b3=10, option='average')
+        blkavg('P120lin_sci.fits', 'P120lin_smt.fits', b1=10, b2=10, b3=10, option='average')
+        blkavg('P0drz_sci.fits', 'P0drz_smt.fits', b1=10, b2=10, b3=10, option='average')
+        blkavg('P60drz_sci.fits', 'P60drz_smt.fits', b1=10, b2=10, b3=10, option='average')
+        blkavg('P120drz_sci.fits', 'P120drz_smt.fits', b1=10, b2=10, b3=10, option='average')
+
+
+    def doFinalDrizzle(self):
+        """
+        Does the final drizzling.
+
+        :return: None
+        """
+        #we can now perform the final drizzle to drizzle all FLT images to POL frames
         kwargs = {'final_pixfrac': 1.0, 'skysub': False,
                   'final_outnx': 2300, 'final_outny': 2300,
                   'final_ra': 128.8369, 'final_dec': -45.1791,
-                  'updatewcs': False, 'final_wcs': True,
-                  'build' : True}
-
+                  'updatewcs': False, 'final_wcs': True, 'preserve' : False,
+                  'build' : True,  'final_fillval' : 1.0, #' final_wht_scl' : 'expsq',
+                  'final_refimage' : 'jbj901akq_flt.fits[1]'}
         for f in self.input:
             astrodrizzle.AstroDrizzle(input=f, mdriztab=False, editpars=False, **kwargs)
 
@@ -596,10 +658,11 @@ class reduceACSWFCpoli():
         self.copyRaws()
         self.omitPHOTCORR()
         self.runCalACS()
-        #self.destripeFLT()
+        self.destripeFLT()
         self.updateHeader()
         self.initialProcessing()
         self.findImprovedAlignment()
+        self.registerPOLs()
         self.doFinalDrizzle()
 
 
@@ -613,6 +676,12 @@ def processArgs(printHelp=False):
                       dest='input',
                       help='Input association FILE to be processed [*POL*_asn.fits].',
                       metavar='string')
+
+    parser.add_option('-p', '--pipeline',
+                      dest='pipeline',
+                      action='store_true',
+                      help='Use OPUS FLT files. Assumes that _flt files are in ./opus/ folder.',
+                      metavar='boolean')
     if printHelp:
         parser.print_help()
     else:
@@ -630,19 +699,18 @@ if __name__ == '__main__':
     #settings = dict(jref='/astro/data/puppis0/niemi/pulsar/data/12240/refs/',
     #                mtab='/astro/data/puppis0/niemi/pulsar/data/12240/refs/')
 
-    if opts.input is None:
-        reduce = reduceACSWFCpoli(opts.input, **settings)
-        reduce.runAll()
-    else:
-        reduce = reduceACSWFCpoli(opts.input, **settings)
-        reduce.copyRaws()
-        reduce.omitPHOTCORR()
-        reduce.runCalACS()
-        #self.destripeFLT()
+    reduce = reduceACSWFCpoli(opts.input, **settings)
+
+    if opts.pipeline:
+        reduce.createAssociations()
+        reduce.copyFLTs()
         reduce.updateHeader()
         reduce.initialProcessing()
         reduce.findImprovedAlignment()
+        reduce.registerPOLs()
         reduce.doFinalDrizzle()
+    else:
+        reduce.runAll()
 
     elapsed = time() - start
     print 'Processing took {0:.1f} minutes'.format(elapsed / 60.)
