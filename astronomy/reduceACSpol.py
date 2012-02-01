@@ -11,15 +11,20 @@ Reduces ACS WFC polarimetry data.
 :author: Sami-Matias Niemi
 :contact: sammy@sammyniemi.com
 
-:version: 0.5
+:version: 0.6
 """
+import matplotlib
+matplotlib.use('PDF')
 import os, glob, shutil, datetime
 from optparse import OptionParser
-from itertools import groupby
+from itertools import groupby, izip, count
 from time import time
 import numpy as np
 import pyfits as pf
 import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
+from matplotlib.ticker import NullFormatter
+import scipy.stats
 from scipy import ndimage
 from pytools import asnutil
 import pyraf
@@ -38,7 +43,7 @@ try:
 except:
     from astrodither import astrodrizzle, tweakreg, pixtopix
 
-
+    
 class sourceFinding():
     """
     This class provides methods for source finding.
@@ -95,7 +100,8 @@ class sourceFinding():
         print 'Background: average={0:.4f} and rms={1:.4f}'.format(mean, rms)
 
         #find objects above the background
-        self.mask = ndimage.median_filter(self.image, self.settings['sigma']) > rms * self.settings['above_background'] + mean
+        self.mask = ndimage.median_filter(self.image, self.settings['sigma']) > rms * self.settings[
+                                                                                      'above_background'] + mean
         #mask_pix = im > rms * above_background + mean
         #mask = (mask + mask_pix) >= 1
 
@@ -272,7 +278,8 @@ class reduceACSWFCpoli():
         self.settings = dict(asndir='asn', rawdir='raw',
                              jref='/grp/hst/cdbs/jref/',
                              mtab='/grp/hst/cdbs/mtab/',
-                             sourceImage='POL0V_drz.fits')
+                             sourceImage='POL0V_drz.fits',
+                             sigma=5.0)
         self.settings.update(kwargs)
 
         #add env variables to both system and IRAF
@@ -353,7 +360,7 @@ class reduceACSWFCpoli():
         os.chdir(orig)
 
         self.associations = asns
-        
+
         if self.input is None:
             self.input = [x for x in self.associations if 'POL' in x]
         else:
@@ -459,6 +466,91 @@ class reduceACSWFCpoli():
             shutil.copy(f, f.replace('_flt.destripe.fits', '_flt.fits'))
 
 
+    def destripeFLTSMN(self):
+        """
+        Uses an algorithm developed by SMN to destripe the ACS FLT frames.
+        This is an extremely simple method in which the median of each row
+        is being first subtracted from the row after which a median of the
+        full frame is being added back to each row to not to remove any sky/
+        background. Each pixel that is known to be bad is being masked using
+        the DQ array. In addition, any good pixel above sigma is not taken
+        into account. This allows to exclude bright objects and cosmic rays.
+        Note that such masking is not extremely accurate, but given the fact
+        that the algorithm deals with medians, it should suffice.
+        """
+        nullfmt = NullFormatter()
+
+        for input in glob.glob('*_flt.fits'):
+            shutil.copy(input, input.replace('_flt.fits', '_flt_orig.fits'))
+
+            inp = input.replace('.fits', '')
+
+            fh = pf.open(input, mode='update')
+            data = fh[1].data
+            org = data.copy()
+            dqarr = fh[3].data
+
+            medians = []
+
+            for i, l, dq in izip(count(), data, dqarr):
+                msk = ~(dq > 0)
+                d = l[msk]
+                #mask additionally everything above x sigma
+                sig = np.median(d) + self.settings['sigma'] * np.std(d)
+                msk2 = d < sig
+                median = np.median(d[msk2])
+                if ~np.isnan(median):
+                    data[i] -= median
+                    medians.append(median)
+                else:
+                    print 'Will not remove nan median on line %i' % i
+
+            medians = np.asarray(medians)
+
+            #add back the background
+            md = org[~(dqarr > 0)]
+            background = np.median(md[md < (np.median(md) + self.settings['sigma'] * np.std(md))])
+            data += background
+
+            fh.close()
+
+            #generate a ratio plot
+            plt.figure()
+            plt.title(inp)
+            ims = plt.imshow(data / org, origin='lower', vmin=0.98, vmax=1.02)
+            cb = plt.colorbar(ims)
+            cb.set_label('Destriped / Original')
+            plt.savefig(inp + 'ratio.pdf')
+            plt.close()
+
+            #calculate Gaussian KDE and evaluate it
+            est2 = []
+            vals = medians - background
+            kde = scipy.stats.gaussian_kde(vals)
+            for x in np.arange(np.int(np.min(vals)), np.int(np.max(vals)), 0.1):
+                y = kde.evaluate(x)[0]
+                est2.append([x, y])
+            est2 = np.asarray(est2)
+
+            #generate a plot showing the distribution of median subtractions
+            plt.figure()
+            gs = gridspec.GridSpec(2, 1, height_ratios=[4, 1])
+            gs.update(wspace=0.0, hspace=0.0, top=0.96, bottom=0.07)
+            axScatter = plt.subplot(gs[0])
+            axHist = plt.subplot(gs[1])
+            axScatter.set_title(inp)
+            axScatter.plot(medians - background, np.arange(len(medians)), 'bo')
+            axScatter.xaxis.set_major_formatter(nullfmt)
+            n, bins, patches = axHist.hist(medians - background, bins=35, normed=True)
+            axHist.plot(est2[:, 0], est2[:, 1], 'r-', label='Gaussian KDE')
+            axHist.set_xlabel('Medians - Background')
+            axScatter.set_ylabel('Row')
+            axScatter.set_ylim(-1, 2046)
+            axHist.legend()
+            plt.savefig(inp + 'dist.pdf')
+            plt.close()
+
+
     def updateHeader(self):
         """
         Calls astrodrizzle's updatenpol to update the headers of the FLT files.
@@ -519,7 +611,7 @@ class reduceACSWFCpoli():
             x = tmp[1].replace('y', '').strip()
             y = tmp[2].strip()
             out = '%s %s\n' % (x, y)
-            reg = 'image;circle(%s,%s,5)\n' %( x, y)
+            reg = 'image;circle(%s,%s,5)\n' % ( x, y)
             if 'POL0' in line:
                 pol0.write(out)
                 pol0r.write(reg)
@@ -585,9 +677,9 @@ class reduceACSWFCpoli():
 
         params = {'catfile': 'regcatalog.txt', 'shiftfile': True, 'outshifts': 'flt1_shifts.txt', 'updatehdr': True,
                   'verbose': False, 'minobj': 15, 'use2dhist': False, 'see2dplot': False,
-                  'searchrad': 50, 'searchunits': 'pixels', 'tolerance' : 50.0, 'separation' : 30.0, 'nclip' : 3}
+                  'searchrad': 50, 'searchunits': 'pixels', 'tolerance': 50.0, 'separation': 30.0, 'nclip': 3}
         tweakreg.TweakReg('*_flt.fits', editpars=False, **params)
-        params.update({'outshifts' : 'flt_shifts.txt', 'searchrad' : 15, 'tolerance' : 3})
+        params.update({'outshifts': 'flt_shifts.txt', 'searchrad': 15, 'tolerance': 3})
         tweakreg.TweakReg('*_flt.fits', editpars=False, **params)
         #params = {'updatehdr': True, 'verbose': False, 'minobj': 15, 'use2dhist': True, 'see2dplot': False,
         #          'searchrad': 2.5, 'searchunits': 'pixels'}
@@ -605,9 +697,9 @@ class reduceACSWFCpoli():
         for drz in drzs:
             shutil.move(drz, drz.replace('_drz.fits', '_backup.fits'))
         params = {'outshifts': 'backup_shifts.txt', 'updatehdr': True,
-                      'verbose': False, 'minobj': 20, 'use2dhist': True,
-                      'residplot': 'residuals', 'see2dplot': False,
-                      'searchrad': 35, 'searchunits': 'pixels'}
+                  'verbose': False, 'minobj': 20, 'use2dhist': True,
+                  'residplot': 'residuals', 'see2dplot': False,
+                  'searchrad': 35, 'searchunits': 'pixels'}
         #we can do this twice to get the alignment really good
         tweakreg.TweakReg('*_backup.fits', editpars=False, **params)
         tweakreg.TweakReg('*_backup.fits', editpars=False, **params)
@@ -641,9 +733,9 @@ class reduceACSWFCpoli():
         kwargs = {'final_pixfrac': 1.0, 'skysub': False,
                   'final_outnx': 2300, 'final_outny': 2300,
                   'final_ra': 128.8369, 'final_dec': -45.1791,
-                  'updatewcs': False, 'final_wcs': True, 'preserve' : False,
-                  'build' : True,  'final_fillval' : 1.0, #' final_wht_scl' : 'expsq',
-                  'final_refimage' : 'jbj901akq_flt.fits[1]'}
+                  'updatewcs': False, 'final_wcs': True, 'preserve': False,
+                  'build': True, 'final_fillval': 1.0, #' final_wht_scl' : 'expsq',
+                  'final_refimage': 'jbj901akq_flt.fits[1]'}
         for f in self.input:
             astrodrizzle.AstroDrizzle(input=f, mdriztab=False, editpars=False, **kwargs)
 
@@ -659,6 +751,7 @@ class reduceACSWFCpoli():
         self.omitPHOTCORR()
         self.runCalACS()
         self.destripeFLT()
+        #self.destripeFLTSMN()
         self.updateHeader()
         self.initialProcessing()
         self.findImprovedAlignment()
@@ -704,6 +797,7 @@ if __name__ == '__main__':
     if opts.pipeline:
         reduce.createAssociations()
         reduce.copyFLTs()
+        reduce.destripeFLTSMN()
         reduce.updateHeader()
         reduce.initialProcessing()
         reduce.findImprovedAlignment()
