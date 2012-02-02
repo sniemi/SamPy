@@ -20,7 +20,7 @@ from kapteyn import maputils
 from matplotlib import pyplot as plt
 
 
-def stokesParameters(pol0, pol60, pol120):
+def stokesParameters(pol0, pol60, pol120, acsWFC=True):
     """
     Calculates Stokes parameters from polarized images.
 
@@ -30,27 +30,49 @@ def stokesParameters(pol0, pol60, pol120):
     :type pol60: ndarray
     :param pol120: POL120 data
     :type pol120: ndarray
+    :param acsWFC: for ACS WFC a correction are being applied
+    :type acsWFC: boolean
 
-    :return: Stoke I, Q, U, polarized intensity, and normalized polarized intensity
+    :Note: the ACS WFC correction factors are from Biretta et al. 2004 (ISR)
+
+    :return: Stokes I, Q, and U, polarized fraction, degree of (linear) polarization,
+             and electric-vector position angle
     :rtype: dictionary
     """
+    if acsWFC:
+        pol60 *= 0.979
+        pol120 *= 1.014
+
     I = (2 / 3.) * (pol0 + pol60 + pol120)
     Q = (2 / 3.) * (2. * pol0 - pol60 - pol120)
     U = (2 / np.sqrt(3)) * (pol60 - pol120)
-    Poli = np.sqrt(Q ** 2 + U ** 2)
-    PP = (np.sqrt(Q ** 2 + U ** 2) / I)
 
-    out = dict(StokesI=I, StokesQ=Q, StokesU=U, PolInt=Poli, NormPI=PP)
+    PU = U / I
+    PQ = Q / I
+    
+    if acsWFC:
+        PU -= 0.022*np.sin(np.deg2rad(2*42.))
+        PQ -= 0.022*np.cos(np.deg2rad(2*42.))
+
+    Poli = np.sqrt(PQ*PQ + PU*PU)
+    PP = Poli / I
+    Edeg = 0.5 * np.rad2deg(np.arctan(U/Q)) - 38.2
+
+    out = dict(StokesI=I, StokesQ=Q, StokesU=U, PolInt=Poli, degreeP=PP, Edeg=Edeg)
     return out
 
 
 def generateStokes(files, **kwargs):
     """
+    Calculates Stokes parameters and the fractional polarization from a
+    set of files with different polarizers.
 
     :param files: POL filter - FITS file mapping
     :type files: dictionary
+    :param kwargs: keyword arguments
+    :type kwargs: dict
 
-    :return: stoke parameters: Q, U, I, and polarized intensity, normalized intensity
+    :return: Stokes parameters: Q, U, I, and polarized intensity, normalized intensity
              and 0th header of the first FITS file in the dictionary (for WCS)
     :rtype: dictionary
     """
@@ -58,27 +80,49 @@ def generateStokes(files, **kwargs):
                     sigma=3.0,
                     ext=1,
                     saveFITS=True,
-                    generatePlots=True)
+                    generatePlots=True,
+                    acsWFC=True,
+                    expFudge=1000.0)
     settings.update(kwargs)
-
-    #header of the first file, needed for WCS
-    hdr = pf.open(files.values()[0])[0].header
 
     #load data
     for key, value in files.iteritems():
-        data = pf.open(value)[settings['ext']].data
+        fh = pf.open(value)
+        data = fh[settings['ext']].data
+        hdr = fh[settings['ext']].header
+
+        #convert from count rate to cnts / electrons
+        #data *= hdr['EXPTIME']
+        data *= settings['expFudge']
+        hdr['EXPTIME'] = settings['expFudge']
+        hdr.update('FILTNAM1', hdr['FILTER1'])
+        hdr.update('FILTNAM2', hdr['FILTER2'])
+
         if settings['smoothing']:
             data = ndimage.gaussian_filter(data, sigma=settings['sigma'])
-        files[key] = data
+        files[key] = [data, hdr]
 
-    stokes = stokesParameters(files['POL0'], files['POL60'], files['POL120'])
+        if os.path.isfile(value.replace('.fits', '_mod.fits')):
+            os.remove(value.replace('.fits', '_mod.fits'))
+        fh.writeto(value.replace('.fits', '_mod.fits'))
+
+    stokes = stokesParameters(files['POL0'][0],
+                              files['POL60'][0],
+                              files['POL120'][0],
+                              settings['acsWFC'])
 
     #write out the FITS files
     if settings['saveFITS']:
         for key, value in stokes.iteritems():
-            hdu = pf.PrimaryHDU(value, header=hdr)
+            if 'Edeg' in key:
+                #convert the electric vector position angle to sky
+                value += float(files['POL0'][1]['PA_V3'])
+
+            hdu = pf.PrimaryHDU(value, header=files['POL0'][1])
+
             if os.path.isfile(key + '.fits'):
                 os.remove(key + '.fits')
+
             hdu.writeto(key + '.fits')
 
     if settings['generatePlots']:
@@ -97,17 +141,20 @@ def generateStokes(files, **kwargs):
             plt.savefig(key + '.pdf')
             plt.close()
 
-    return stokes.update(dict(header=hdr))
+    return stokes
 
 
 if __name__ == '__main__':
     start = time()
 
-    files = dict(POL0='POL0V_drz_single_sci.fits',
-                 POL60='POL60V_drz_single_sci.fits',
-                 POL120='POL120V_drz_single_sci.fits')
+    files = dict(POL0='P0drz_sci.fits',
+                 POL60='P60drz_sci.fits',
+                 POL120='P120drz_sci.fits')
 
-    generateStokes(files, **{'ext': 0, 'smoothing': True, 'sigma': 1.5})
+    generateStokes(files, **{'ext': 0,
+                             'smoothing': False,
+                             'sigma': 2.5,
+                             'generatePlots' : False})
 
     elapsed = time() - start
     print 'Processing took {0:.1f} minutes'.format(elapsed / 60.)

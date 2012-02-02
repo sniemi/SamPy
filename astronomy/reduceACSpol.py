@@ -568,7 +568,8 @@ class reduceACSWFCpoli():
         """
         #run astrodrizzle separately for each POL
         kwargs = dict(final_pixfrac=1.0, final_fillval=1.0, preserve=False,
-                      updatewcs=True, final_wcs=False, build=True, skysub=False)
+                      updatewcs=True, final_wcs=False, build=True, skysub=False,
+                      final_wht_type='ERR')
         for f in self.input:
             astrodrizzle.AstroDrizzle(input=f, mdriztab=False, editpars=False, **kwargs)
 
@@ -709,9 +710,9 @@ class reduceACSWFCpoli():
                   fitgeometry='rscale', calctype='double', interpolant='linear', fluxconserve=self.yes)
         sregister('POL*_backup.fits[1]', 'POL0V_backup.fits[1]', 'P0drz_sci.fits,P60drz_sci.fits,P120drz_sci.fits',
                   fitgeometry='rscale', calctype='double', interpolant='drizzle', fluxconserve=self.yes)
-        sregister('POL*_backup.fits[3]', 'POL0V_backup.fits[1]', 'P0lin_wht.fits,P60lin_wht.fits,P120lin_wht.fits',
+        sregister('POL*_backup.fits[2]', 'POL0V_backup.fits[1]', 'P0lin_wht.fits,P60lin_wht.fits,P120lin_wht.fits',
                   fitgeometry='rscale', calctype='double', interpolant='linear', fluxconserve=self.yes)
-        sregister('POL*_backup.fits[3]', 'POL0V_backup.fits[1]', 'P0drz_wht.fits,P60drz_wht.fits,P120drz_wht.fits',
+        sregister('POL*_backup.fits[2]', 'POL0V_backup.fits[1]', 'P0drz_wht.fits,P60drz_wht.fits,P120drz_wht.fits',
                   fitgeometry='rscale', calctype='double', interpolant='drizzle', fluxconserve=self.yes)
 
         #average in 10x10x10 blocks
@@ -734,7 +735,7 @@ class reduceACSWFCpoli():
                   'final_outnx': 2300, 'final_outny': 2300,
                   'final_ra': 128.8369, 'final_dec': -45.1791,
                   'updatewcs': False, 'final_wcs': True, 'preserve': False,
-                  'build': True, 'final_fillval': 1.0, #' final_wht_scl' : 'expsq',
+                  'build': True, 'final_fillval': 1.0, ' final_wht_type': 'ERR',
                   'final_refimage': 'jbj901akq_flt.fits[1]'}
         for f in self.input:
             astrodrizzle.AstroDrizzle(input=f, mdriztab=False, editpars=False, **kwargs)
