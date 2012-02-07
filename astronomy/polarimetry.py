@@ -9,7 +9,7 @@ Functions related to polarimetry.
 :author: Sami-Matias Niemi
 :contact: sammy@sammyniemi.com
 
-:version: 0.1
+:version: 0.2
 """
 from time import time
 import os, os.path
@@ -50,9 +50,9 @@ def stokesParameters(pol0, pol60, pol120, acsWFC=True):
     PU = U / I
     PQ = Q / I
     
-    if acsWFC:
-        PU -= 0.022*np.sin(np.deg2rad(2*42.))
-        PQ -= 0.022*np.cos(np.deg2rad(2*42.))
+    #if acsWFC:
+    #    PU -= 0.022*np.sin(np.deg2rad(2*42.))
+    #    PQ -= 0.022*np.cos(np.deg2rad(2*42.))
 
     Poli = np.sqrt(PQ*PQ + PU*PU)
     PP = Poli / I
@@ -91,12 +91,21 @@ def generateStokes(files, **kwargs):
         data = fh[settings['ext']].data
         hdr = fh[settings['ext']].header
 
+        if settings['ext'] != 0:
+            hdr0 = fh[0].header
+            for k, value in hdr0.iteritems():
+                if ~hdr.has_key(k):
+                    if 'NAXIS' in k or 'COUNT' in k:
+                        pass
+                    else:
+                        hdr.update(k, value)
+
         #convert from count rate to cnts / electrons
-        #data *= hdr['EXPTIME']
-        data *= settings['expFudge']
-        hdr['EXPTIME'] = settings['expFudge']
-        hdr.update('FILTNAM1', hdr['FILTER1'])
-        hdr.update('FILTNAM2', hdr['FILTER2'])
+        if type(settings['expFudge']) == type(1) or type(settings['expFudge']) == type(1.0):
+            data *= float(settings['expFudge'])
+            hdr.update('EXPTIME', settings['expFudge'])
+            hdr.update('FILTNAM1', hdr['FILTER1'])
+            hdr.update('FILTNAM2', hdr['FILTER2'])
 
         if settings['smoothing']:
             data = ndimage.gaussian_filter(data, sigma=settings['sigma'])
@@ -147,14 +156,15 @@ def generateStokes(files, **kwargs):
 if __name__ == '__main__':
     start = time()
 
-    files = dict(POL0='P0drz_sci.fits',
-                 POL60='P60drz_sci.fits',
-                 POL120='P120drz_sci.fits')
+    files = dict(POL0='POL0V_drz.fits',
+                 POL60='POL60V_drz.fits',
+                 POL120='POL120V_drz.fits')
 
-    generateStokes(files, **{'ext': 0,
+    generateStokes(files, **{'ext': 1,
                              'smoothing': False,
-                             'sigma': 2.5,
-                             'generatePlots' : False})
+                             'sigma': 2.0,
+                             'generatePlots' : False,
+                             'expFudge' : 500})
 
     elapsed = time() - start
     print 'Processing took {0:.1f} minutes'.format(elapsed / 60.)

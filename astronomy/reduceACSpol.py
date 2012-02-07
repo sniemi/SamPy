@@ -24,7 +24,7 @@ import pyfits as pf
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from matplotlib.ticker import NullFormatter
-import scipy.stats
+from scipy.stats import gaussian_kde
 from scipy import ndimage
 from pytools import asnutil
 import pyraf
@@ -516,7 +516,7 @@ class reduceACSWFCpoli():
 
             #generate a ratio plot
             plt.figure()
-            plt.title(inp)
+            plt.title(inp.replace('_','\_'))
             ims = plt.imshow(data / org, origin='lower', vmin=0.98, vmax=1.02)
             cb = plt.colorbar(ims)
             cb.set_label('Destriped / Original')
@@ -526,7 +526,7 @@ class reduceACSWFCpoli():
             #calculate Gaussian KDE and evaluate it
             est2 = []
             vals = medians - background
-            kde = scipy.stats.gaussian_kde(vals)
+            kde = gaussian_kde(vals)
             for x in np.arange(np.int(np.min(vals)), np.int(np.max(vals)), 0.1):
                 y = kde.evaluate(x)[0]
                 est2.append([x, y])
@@ -538,7 +538,7 @@ class reduceACSWFCpoli():
             gs.update(wspace=0.0, hspace=0.0, top=0.96, bottom=0.07)
             axScatter = plt.subplot(gs[0])
             axHist = plt.subplot(gs[1])
-            axScatter.set_title(inp)
+            axScatter.set_title(inp.replace('_','\_'))
             axScatter.plot(medians - background, np.arange(len(medians)), 'bo')
             axScatter.xaxis.set_major_formatter(nullfmt)
             n, bins, patches = axHist.hist(medians - background, bins=35, normed=True)
@@ -568,8 +568,7 @@ class reduceACSWFCpoli():
         """
         #run astrodrizzle separately for each POL
         kwargs = dict(final_pixfrac=1.0, final_fillval=1.0, preserve=False,
-                      updatewcs=True, final_wcs=False, build=True, skysub=False,
-                      final_wht_type='ERR')
+                      updatewcs=True, final_wcs=False, build=True, skysub=False)
         for f in self.input:
             astrodrizzle.AstroDrizzle(input=f, mdriztab=False, editpars=False, **kwargs)
 
@@ -735,7 +734,7 @@ class reduceACSWFCpoli():
                   'final_outnx': 2300, 'final_outny': 2300,
                   'final_ra': 128.8369, 'final_dec': -45.1791,
                   'updatewcs': False, 'final_wcs': True, 'preserve': False,
-                  'build': True, 'final_fillval': 1.0, ' final_wht_type': 'ERR',
+                  'build': True, 'final_fillval': 1.0, #'final_wht_type': 'ERR',
                   'final_refimage': 'jbj901akq_flt.fits[1]'}
         for f in self.input:
             astrodrizzle.AstroDrizzle(input=f, mdriztab=False, editpars=False, **kwargs)
