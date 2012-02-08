@@ -9,15 +9,88 @@ Functions related to polarimetry.
 :author: Sami-Matias Niemi
 :contact: sammy@sammyniemi.com
 
-:version: 0.2
+:version: 0.3
 """
 from time import time
 import os, os.path
 import numpy as np
 import pyfits as pf
+import scipy.special as ss
 from scipy import ndimage
 from kapteyn import maputils
 from matplotlib import pyplot as plt
+
+
+def debias(pol, polerr, limit=0.01):
+    """
+    This function returns the debiased value of the fractional polarization using the
+    estimate of the most probable value of POL from the fit to the peak of the Rice
+    distribution given by solving Equ. A2 of Wardle & Kronberg (ApJ, 194, 249, 1974).
+
+    An initial estimate of debiased polarization is given by determining the Bessel
+    functions of (POLobs*POLobs/POLERR*POLERR). Then the initial estimate of debiased
+    polarization allows improved values for the Bessel functions of (POLobs*POLreal/
+    POLERR*POLERR) to be obtained. The procedure is iterated until convergence in
+    successive values of debiased polarization is achieved to the limit (1% default)
+    of POLERR.
+
+    :Note: this functions works only with single inputs not arrays! Thus, it should
+           be rewritten...
+
+    :param pol: Initial value of polarization
+    :type pol: float
+    :param polerr: Polarization error
+    :type: polerr: float
+
+    :return: debiased polarization
+    :rtype: float
+    """
+    RR = pol*pol/(polerr*polerr)
+    per = (pol - (polerr*polerr/pol))
+
+    #special case
+    if RR > 81.0:
+        #Values of Modified Bessell functions > 6E33,
+        #so use asymptotic expression for POLDB
+        tmp = (pol*pol) - (polerr*polerr)
+        if tmp > 0.0:
+            POLDB = np.sqrt(tmp)
+        else:
+            POLDB = 0.0
+        return POLDB
+
+    #set the values to dummies for inital run
+    POL0 = 0
+    POLDB = polerr
+
+
+    while np.abs(POLDB - POL0) > (limit*polerr):
+        #Calculate the debiassed value of polarization
+        POLDB = (ss.i0(RR)/ss.i1(RR)) * per
+        if POLDB > 0.0:
+            POL0 = POLDB
+        else:
+            return 0.0
+
+        #Recalculate RR with the new value of POL
+        RR = (pol*POLDB) / (polerr*polerr)
+
+        #special case
+        if RR > 81.0:
+            tmp = (pol*pol) - (polerr*polerr)
+            if tmp > 0.0:
+                POLDB = np.sqrt(tmp)
+            else:
+                POLDB = 0.0
+            return POLDB
+
+
+        #Calculate the new debiassed value of polarization
+        POLDB = (ss.i0(RR)/ss.i1(RR)) * per
+        if POLDB < 0.0:
+            return 0.0
+
+    return POLDB
 
 
 def stokesParameters(pol0, pol60, pol120, acsWFC=True):
@@ -43,22 +116,56 @@ def stokesParameters(pol0, pol60, pol120, acsWFC=True):
         pol60 *= 0.979
         pol120 *= 1.014
 
+    #set all negative values to 1
+    pol0[pol0 < 0.0] = 1.0
+    pol60[pol60 < 0.0] = 1.0
+    pol120[pol120 < 0.0] = 1.0
+
+    #calculate Stokes parameters
     I = (2 / 3.) * (pol0 + pol60 + pol120)
     Q = (2 / 3.) * (2. * pol0 - pol60 - pol120)
     U = (2 / np.sqrt(3)) * (pol60 - pol120)
 
-    PU = U / I
-    PQ = Q / I
-    
+    #PU = U / I
+    #PQ = Q / I
     #if acsWFC:
     #    PU -= 0.022*np.sin(np.deg2rad(2*42.))
     #    PQ -= 0.022*np.cos(np.deg2rad(2*42.))
 
-    Poli = np.sqrt(PQ*PQ + PU*PU)
-    PP = Poli / I
-    Edeg = 0.5 * np.rad2deg(np.arctan(U/Q)) - 38.2
+    #assume naively that errors are square roots of the input counts
+    p0err = np.sqrt(pol0)
+    p60err = np.sqrt(pol60)
+    p120err = np.sqrt(pol120)
 
-    out = dict(StokesI=I, StokesQ=Q, StokesU=U, PolInt=Poli, degreeP=PP, Edeg=Edeg)
+    #add errors in quadrature
+    Ierr = np.sqrt(p0err*p0err + p60err*p60err + p120err*p120err)
+    Uerr = Ierr
+    Qerr = np.sqrt(p60err*p60err + p120err*p120err)
+
+    #derive error in polarization
+    polerr = np.sqrt(( ((Q*Qerr)**2) + ((U*Uerr)**2)) / (Q*Q + U*U))
+
+
+    #polarized intensity
+    pol = np.sqrt(Q*Q + U*U)
+
+    #debias 
+    Poli = pol.copy()
+    for y in range(Poli.shape[0]):
+        for x in range(Poli.shape[1]):
+            Poli[y,x] = debias(pol[y,x], polerr[y,x])
+
+    degp = Poli / I * 100.
+
+    if acsWFC:
+        #Edeg = 0.5 * np.rad2deg(np.arctan(U/Q)) - 38.2
+        Edeg = 90. / np.pi * np.arctan2(U, Q) - 38.2
+    else:
+        Edeg = 0.5 * np.rad2deg(np.arctan(U/Q))
+
+    out = dict(StokesI=I, StokesQ=Q, StokesU=U,
+               polInt=pol, degreeP=degp, polErr=polerr,
+               Edeg=Edeg)
     return out
 
 
@@ -85,7 +192,7 @@ def generateStokes(files, **kwargs):
                     expFudge=1000.0)
     settings.update(kwargs)
 
-    #load data
+    #load data to a dictionary
     for key, value in files.iteritems():
         fh = pf.open(value)
         data = fh[settings['ext']].data
@@ -100,25 +207,31 @@ def generateStokes(files, **kwargs):
                     else:
                         hdr.update(k, value)
 
-        #convert from count rate to cnts / electrons
+        #convert from cps to cnts/electrons using a fudge time
         if type(settings['expFudge']) == type(1) or type(settings['expFudge']) == type(1.0):
             data *= float(settings['expFudge'])
             hdr.update('EXPTIME', settings['expFudge'])
-            hdr.update('FILTNAM1', hdr['FILTER1'])
-            hdr.update('FILTNAM2', hdr['FILTER2'])
+
+        #add some keywords, because hstpolima reads wrong ones
+        hdr.update('FILTNAM1', hdr['FILTER1'])
+        hdr.update('FILTNAM2', hdr['FILTER2'])
 
         if settings['smoothing']:
             data = ndimage.gaussian_filter(data, sigma=settings['sigma'])
+
+        #add to dictionary
         files[key] = [data, hdr]
 
         if os.path.isfile(value.replace('.fits', '_mod.fits')):
             os.remove(value.replace('.fits', '_mod.fits'))
+
         fh.writeto(value.replace('.fits', '_mod.fits'))
+        fh.close()
 
     stokes = stokesParameters(files['POL0'][0],
                               files['POL60'][0],
                               files['POL120'][0],
-                              settings['acsWFC'])
+                              acsWFC=settings['acsWFC'])
 
     #write out the FITS files
     if settings['saveFITS']:
@@ -164,7 +277,7 @@ if __name__ == '__main__':
                              'smoothing': False,
                              'sigma': 2.0,
                              'generatePlots' : False,
-                             'expFudge' : 500})
-
+                             'expFudge' : False})
+    
     elapsed = time() - start
     print 'Processing took {0:.1f} minutes'.format(elapsed / 60.)
