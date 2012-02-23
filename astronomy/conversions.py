@@ -14,6 +14,26 @@ import numpy as np
 from cosmocalc import cosmocalc
 
 
+C = 2.99792458e18 # speed of light in Angstrom/sec
+H = 6.62620E-27   # Planck's constant in ergs * sec
+HC = H * C
+ABZERO = -48.60   # magnitude zero points
+STZERO = -21.10
+
+
+def FnutoFlambda(Fnu, wavelength):
+    """
+
+    :param Fnu: Fnu [ers/s/cm**2/Hz]
+    :type Fnu: float or ndarray
+    :param wavelength: wavelength [AA]
+    :type wavelength: float or ndarray
+
+    :return: Flambda [ergs/s/cm**2/AA]
+    """
+    return Fnu / wavelength / wavelength * C
+
+
 def ergsperSecondtoLsun(ergss):
     """
     Converts ergs per second to solar luminosity in L_sun.
