@@ -7,9 +7,9 @@ FITS file modifications such as rebinning and rotation with the WCS being update
 :requires: NumPy
 
 :author: Sami-Matias Niemi
-:contact: sniemi@unc.edu
+:contact: sammy@sammyniemi.com
 
-:version: 0.1
+:version: 0.2
 """
 import os, datetime
 import pyfits as pf
@@ -192,15 +192,13 @@ def hrot2(img, hdr, angle, xc=None, yc=None, pivot=False):
     Rotate an image and updates the FITS header with updated astrometry.
 
     param img: image as a ndarray
-    param hdr: PyFITS header instance
+    param hdr: PyFITS header instance or None
     param xc: X Center of rotation (None for center of image)
     param yc: Y Center of rotation (None for center of image)
     param angle: rotation angle, in degrees
 
     :return: rotated_image, rotated_header
     """
-    wcs = pywcs.WCS(hdr)
-
     ysize, xsize = img.shape
 
     xc_new = (xsize - 1) / 2.
@@ -219,33 +217,37 @@ def hrot2(img, hdr, angle, xc=None, yc=None, pivot=False):
     #update astrometry
     theta = np.deg2rad(angle)
     rot_mat = np.matrix([[np.cos(theta), np.sin(theta)],
-        [-np.sin(theta), np.cos(theta)]])
+                        [-np.sin(theta), np.cos(theta)]])
 
-    #WCS info
-    crpix = wcs.wcs.crpix
-    cd = wcs.wcs.cd
-
-    ncrpix = (rot_mat.T * (crpix - 1 - np.matrix([xc, yc])).T + 1).T
-
-    if pivot:
-        ncrpix = np.array([xc, yc]) + ncrpix
+    if hdr is None:
+        return imgrot, None
     else:
-        ncrpix = np.array([xc_new, yc_new]) + ncrpix
+        #WCS info
+        wcs = pywcs.WCS(hdr)
+        crpix = wcs.wcs.crpix
+        cd = wcs.wcs.cd
 
-    hdr['CRPIX1'] = ncrpix[0, 0]
-    hdr['CRPIX2'] = ncrpix[0, 1]
+        ncrpix = (rot_mat.T * (crpix - 1 - np.matrix([xc, yc])).T + 1).T
 
-    newcd = np.asmatrix(cd) * rot_mat
-    hdr['CD1_1'] = newcd[0, 0]
-    hdr['CD1_2'] = newcd[0, 1]
-    hdr['CD2_1'] = newcd[1, 0]
-    hdr['CD2_2'] = newcd[1, 1]
+        if pivot:
+            ncrpix = np.array([xc, yc]) + ncrpix
+        else:
+            ncrpix = np.array([xc_new, yc_new]) + ncrpix
 
-    #crota = np.rad2deg(np.arctan(newcd[1,0], newcd[1,1]))
-    #hdr['CROTA1'] = crota
-    #hdr['CROTA2'] = crota
+        hdr['CRPIX1'] = ncrpix[0, 0]
+        hdr['CRPIX2'] = ncrpix[0, 1]
 
-    return imgrot, hdr
+        newcd = np.asmatrix(cd) * rot_mat
+        hdr['CD1_1'] = newcd[0, 0]
+        hdr['CD1_2'] = newcd[0, 1]
+        hdr['CD2_1'] = newcd[1, 0]
+        hdr['CD2_2'] = newcd[1, 1]
+
+        #crota = np.rad2deg(np.arctan(newcd[1,0], newcd[1,1]))
+        #hdr['CROTA1'] = crota
+        #hdr['CROTA2'] = crota
+
+        return imgrot, hdr
 
 
 def hextract(imagefile, xstart, xstop, ystart, ystop, ext=0, output='resized.fits'):
@@ -257,7 +259,7 @@ def hextract(imagefile, xstart, xstop, ystart, ystop, ext=0, output='resized.fit
     :param xstop: last X pixel to extract
     :param ystart: first Y pixel to extract
     :param ystop: last Y pixel to extract
-    :param ext, FITS file extension
+    :param ext: FITS file extension
     """
     #read in the file
     fh = pf.open(imagefile)
