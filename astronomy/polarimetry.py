@@ -9,7 +9,7 @@ Functions related to polarimetry.
 :author: Sami-Matias Niemi
 :contact: sammy@sammyniemi.com
 
-:version: 0.3
+:version: 0.4
 """
 from time import time
 import os, os.path
@@ -63,7 +63,6 @@ def debias(pol, polerr, limit=0.01):
     POL0 = 0
     POLDB = polerr
 
-
     while np.abs(POLDB - POL0) > (limit*polerr):
         #Calculate the debiassed value of polarization
         POLDB = (ss.i0(RR)/ss.i1(RR)) * per
@@ -93,16 +92,32 @@ def debias(pol, polerr, limit=0.01):
     return POLDB
 
 
-def stokesParameters(pol0, pol60, pol120, acsWFC=True):
+def getBasics(header):
+    """
+    Return basic information from the header:
+
+        1. bias
+        2. gain
+        3. readnoise
+
+    :Note: This function is useful for ACS WFC polarimetry data.
+
+    :return: bias, gain, readnoise
+    :rtype: list
+    """
+    bias = header['CCDOFSTB']
+    gain = header['CCDGAIN']
+    readnoise = header['READNSEB']
+    return bias, gain, readnoise
+
+
+def stokesParameters(files, acsWFC=True):
     """
     Calculates Stokes parameters from polarized images.
 
-    :param pol0: POL0 data
-    :type pol0: ndarray
-    :param pol60: POL60 data
-    :type pol60: ndarray
-    :param pol120: POL120 data
-    :type pol120: ndarray
+    :param files: dictionary of form POLx : [image data, header], wher
+                  x is in [0, 60, 120]
+    :type files: dict
     :param acsWFC: for ACS WFC a correction are being applied
     :type acsWFC: boolean
 
@@ -112,11 +127,23 @@ def stokesParameters(pol0, pol60, pol120, acsWFC=True):
              and electric-vector position angle
     :rtype: dictionary
     """
+    pol0 = files['POL0'][0]
+    pol60 = files['POL60'][0]
+    pol120 = files['POL120'][0]
+    hdr0 = files['POL0'][1]
+    hdr60 = files['POL60'][1]
+    hdr120 = files['POL120'][1]
+
+    bias0, gain0, readnoise0 = getBasics(hdr0)
+    bias60, gain60, readnoise60 = getBasics(hdr60)
+    bias120, gain120, readnoise120 = getBasics(hdr120)
+
+    #correct of instrumental polarization
     if acsWFC:
         pol60 *= 0.979
         pol120 *= 1.014
 
-    #set all negative values to 1
+    #values are supposed to be in counts, thus set all negative values to 1
     pol0[pol0 < 0.0] = 1.0
     pol60[pol60 < 0.0] = 1.0
     pol120[pol120 < 0.0] = 1.0
@@ -132,10 +159,10 @@ def stokesParameters(pol0, pol60, pol120, acsWFC=True):
     #    PU -= 0.022*np.sin(np.deg2rad(2*42.))
     #    PQ -= 0.022*np.cos(np.deg2rad(2*42.))
 
-    #assume naively that errors are square roots of the input counts
-    p0err = np.sqrt(pol0)
-    p60err = np.sqrt(pol60)
-    p120err = np.sqrt(pol120)
+    #errimage = sqrt(((image*exptime - bias)/gain) + (readnoise/gain)^2) / exptime
+    p0err = np.sqrt(((pol0 - bias0)/gain0) + (readnoise0/gain0)**2)
+    p60err = np.sqrt(((pol60 - bias60)/gain60) + (readnoise60/gain60)**2)
+    p120err = np.sqrt(((pol120 - bias120)/gain120) + (readnoise120/gain120)**2)
 
     #add errors in quadrature
     Ierr = np.sqrt(p0err*p0err + p60err*p60err + p120err*p120err)
@@ -144,7 +171,6 @@ def stokesParameters(pol0, pol60, pol120, acsWFC=True):
 
     #derive error in polarization
     polerr = np.sqrt(( ((Q*Qerr)**2) + ((U*Uerr)**2)) / (Q*Q + U*U))
-
 
     #polarized intensity
     pol = np.sqrt(Q*Q + U*U)
@@ -155,6 +181,7 @@ def stokesParameters(pol0, pol60, pol120, acsWFC=True):
         for x in range(Poli.shape[1]):
             Poli[y,x] = debias(pol[y,x], polerr[y,x])
 
+    #degree of polarization in units of per cent
     degp = Poli / I * 100.
 
     if acsWFC:
@@ -228,10 +255,7 @@ def generateStokes(files, **kwargs):
         fh.writeto(value.replace('.fits', '_mod.fits'))
         fh.close()
 
-    stokes = stokesParameters(files['POL0'][0],
-                              files['POL60'][0],
-                              files['POL120'][0],
-                              acsWFC=settings['acsWFC'])
+    stokes = stokesParameters(files, acsWFC=settings['acsWFC'])
 
     #write out the FITS files
     if settings['saveFITS']:
