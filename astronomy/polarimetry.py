@@ -1,5 +1,5 @@
 """
-Functions related to polarimetry.
+Functions related to polarimetry, especially HST ACS WFC.
 
 :requires: NumPy
 :requires: SciPy
@@ -9,7 +9,7 @@ Functions related to polarimetry.
 :author: Sami-Matias Niemi
 :contact: sammy@sammyniemi.com
 
-:version: 0.4
+:version: 0.5
 """
 from time import time
 import os, os.path
@@ -98,7 +98,7 @@ def getBasics(header):
 
         1. bias
         2. gain
-        3. readnoise
+        3. readout noise
 
     :Note: This function is useful for ACS WFC polarimetry data.
 
@@ -115,11 +115,14 @@ def stokesParameters(files, acsWFC=True):
     """
     Calculates Stokes parameters from polarized images.
 
-    :param files: dictionary of form POLx : [image data, header], wher
+    :param files: dictionary of form POLx : [image data, header], where
                   x is in [0, 60, 120]
     :type files: dict
     :param acsWFC: for ACS WFC a correction are being applied
     :type acsWFC: boolean
+
+    Assumes that the input arrays are in counts/electrons not in count rate.
+    Uses the header information to scale each array to 10000s exposure time.
 
     :Note: the ACS WFC correction factors are from Biretta et al. 2004 (ISR)
 
@@ -137,6 +140,11 @@ def stokesParameters(files, acsWFC=True):
     bias0, gain0, readnoise0 = getBasics(hdr0)
     bias60, gain60, readnoise60 = getBasics(hdr60)
     bias120, gain120, readnoise120 = getBasics(hdr120)
+
+    #scale to 10000s
+    pol0 = pol0 / hdr0['EXPTIME'] * 10000.
+    pol60 = pol60 / hdr60['EXPTIME'] * 10000.
+    pol120 = pol120 / hdr120['EXPTIME'] * 10000.
 
     #correct of instrumental polarization
     if acsWFC:
@@ -159,7 +167,7 @@ def stokesParameters(files, acsWFC=True):
     #    PU -= 0.022*np.sin(np.deg2rad(2*42.))
     #    PQ -= 0.022*np.cos(np.deg2rad(2*42.))
 
-    #errimage = sqrt(((image*exptime - bias)/gain) + (readnoise/gain)^2) / exptime
+    #error images
     p0err = np.sqrt(((pol0 - bias0)/gain0) + (readnoise0/gain0)**2)
     p60err = np.sqrt(((pol60 - bias60)/gain60) + (readnoise60/gain60)**2)
     p120err = np.sqrt(((pol120 - bias120)/gain120) + (readnoise120/gain120)**2)
@@ -220,7 +228,7 @@ def generateStokes(files, **kwargs):
     settings.update(kwargs)
 
     #load data to a dictionary
-    for key, value in files.iteritems():
+    for key, value in files.items():
         fh = pf.open(value)
         data = fh[settings['ext']].data
         hdr = fh[settings['ext']].header
