@@ -1,53 +1,53 @@
-'''
-This is the ultimate statistical tool!
-Calculates pretty much anything you can think of.
-This version uses two input files!
+"""
+This is a simple statistics tool to calculate basic statistics from an input file.
 
 :requires: Scipy
 :requires: Numpy
 
 :date: 2008
 :author: Sami-Matias Niemi
-'''
+"""
+from optparse import OptionParser
+from scipy.stats import *
+import numpy as N
+import sys
+
+
 def process_args():
-    from optparse import OptionParser
     parser = OptionParser()
     parser.add_option("-o", "--output", dest="output",
-                  help="Writes data to file named filename. This is optional choice.", metavar="filename")
+        help="Writes data to file named filename. This is optional choice.", metavar="filename")
     parser.add_option("-i", "--input", dest="input",
-                  help="Reads data from input file called filename", metavar="filename")
+        help="Reads data from input file called filename", metavar="filename")
     parser.add_option("-v", "--verbose", action="store_true", dest="verbose",
-                      help="Verbose mode on. This is optional choice.")
+        help="Verbose mode on. This is optional choice.")
     parser.add_option("-s", "--separator", dest="delim",
-                      help="Sets the data separator/delimiter to given char. This is optional choice.", metavar = "separator")
+        help="Sets the data separator/delimiter to given char. This is optional choice.", metavar="separator")
     parser.add_option("-c", "--column1", dest="column1",
-                      help="The column1 to be processed. Numbering begins from 0.", metavar = "number")
-    parser.add_option("-x", "--column2", dest="column2", 
-                      help="The column2 to be processed. Numbering begins from 0. This is optional choice!", metavar = "number")
+        help="The column1 to be processed. Numbering begins from 0.", metavar="number")
+    parser.add_option("-x", "--column2", dest="column2",
+        help="The column2 to be processed. Numbering begins from 0. This is optional choice!", metavar="number")
     return parser.parse_args()
 
+
 if __name__ == '__main__':
-    from scipy.stats import *
-    #from numpy import * #Maybe not needed?
-    import numpy as N
-    import sys
-    
+
     (opts, args) = process_args()
-    
+
     if (opts.input is None):
         print "\nYou did not give input file!\nWill exit now!\n"
         sys.exit()
-        
+
     if (opts.column1 is None):
         print "You did not give the column!\nWill exit now!\n"
         sys.exit()
-    
+
     if opts.delim is None: alldata = N.loadtxt(opts.input, delimiter=" ", skiprows=0)
     else: alldata = N.loadtxt(opts.input, delimiter="%s" % opts.delim, skiprows=0)
-    
-    if int(opts.column1) != 0: data1 = alldata[:,int(opts.column1)]
+
+    if int(opts.column1) != 0: data1 = alldata[:, int(opts.column1)]
     else: data1 = alldata
-    
+
     if (opts.column2 is None):
         #Only one column statistics here
         count1 = len(data1)
@@ -60,7 +60,7 @@ if __name__ == '__main__':
         gmean1 = gmean(data1)
         hmean1 = hmean(data1)
         kurtosis1 = kurtosis(data1)
-        kurtosisp1 = kurtosis(data1, fisher = False)
+        kurtosisp1 = kurtosis(data1, fisher=False)
         kurtosist1 = kurtosistest(data1)
         moment1 = moment(data1)
         normaltest1 = normaltest(data1)
@@ -79,7 +79,7 @@ if __name__ == '__main__':
         per175 = scoreatpercentile(data1, 75)
     else:
         #Two column statistics here
-        data2 = alldata[:,int(opts.column2)]
+        data2 = alldata[:, int(opts.column2)]
         count1 = len(data1)
         mean1 = N.mean(data1)
         median1 = N.median(data1)
@@ -90,7 +90,7 @@ if __name__ == '__main__':
         gmean1 = gmean(data1)
         hmean1 = hmean(data1)
         kurtosis1 = kurtosis(data1)
-        kurtosisp1 = kurtosis(data1, fisher = False)
+        kurtosisp1 = kurtosis(data1, fisher=False)
         kurtosist1 = kurtosistest(data1)
         moment11 = moment(data1, moment=1)
         moment12 = moment(data1, moment=2)
@@ -116,7 +116,7 @@ if __name__ == '__main__':
         gmean2 = gmean(data2)
         hmean2 = hmean(data2)
         kurtosis2 = kurtosis(data2)
-        kurtosisp2 = kurtosis(data2, fisher = False)
+        kurtosisp2 = kurtosis(data2, fisher=False)
         kurtosist2 = kurtosistest(data2)
         moment2 = moment(data2)
         normaltest2 = normaltest(data2)
@@ -133,16 +133,16 @@ if __name__ == '__main__':
         moment23 = moment(data2, moment=3)
         per225 = scoreatpercentile(data2, 25)
         per275 = scoreatpercentile(data2, 75)
-        
+
         #tests between the two datasets
-        corrcoef = corrcoef(data1,data2)
-        kendalltau = kendalltau(data1,data2)
-        ks = ks_2samp(data1,data2)
-        mannw = mannwhitneyu(data1,data2)
-        pearsonr = pearsonr(data1,data2)
-        spearmanr = spearmanr(data1,data2)
-        
-        
+        corrcoef = corrcoef(data1, data2)
+        kendalltau = kendalltau(data1, data2)
+        ks = ks_2samp(data1, data2)
+        mannw = mannwhitneyu(data1, data2)
+        pearsonr = pearsonr(data1, data2)
+        spearmanr = spearmanr(data1, data2)
+
+
     #outputs
     if opts.verbose == True:
         print "The verbose output!"
@@ -164,7 +164,7 @@ if __name__ == '__main__':
             print "Kurtosis test (Z-score, 2-tail Z-probability): %f, %s" % (kurtosist1[0], kurtosist1[1])
             print "Skewness: %f " % skew1
             print "Skewness test (Z-score, 2-tail Z-probability): %f, %s" % (skewt1[0], skewt1[1])
-            print "Normality test (Chi**2 score,2-tail probability): %f, %s" % (normaltest1[0], normaltest1[1]) 
+            print "Normality test (Chi**2 score,2-tail probability): %f, %s" % (normaltest1[0], normaltest1[1])
             print "Standard error of mean: %f" % sem1
             print "Sum: %f" % sum1
             print "Square of Sums: %f" % sos1
@@ -192,7 +192,7 @@ if __name__ == '__main__':
             print "Kurtosis test (Z-score, 2-tail Z-probability): %f, %s" % (kurtosist1[0], kurtosist1[1])
             print "Skewness: %f " % skew1
             print "Skewness test (Z-score, 2-tail Z-probability): %f, %s" % (skewt1[0], skewt1[1])
-            print "Normality test (Chi**2 score,2-tail probability): %f, %s" % (normaltest1[0], normaltest1[1]) 
+            print "Normality test (Chi**2 score,2-tail probability): %f, %s" % (normaltest1[0], normaltest1[1])
             print "Standard error of mean: %f" % sem1
             print "Sum: %f" % sum1
             print "Square of Sums: %f" % sos1
@@ -231,16 +231,19 @@ if __name__ == '__main__':
             print "25th (1st quartile) percentile: %f" % per225
             print "75th (3rd quartile) percentile: %f" % per275
             print "Statistical tests between columns %i and %i" % (int(opts.column1), int(opts.column2))
-            print "Correlation Coefficients:\n %f, %f, %f, %f" % (corrcoef[0,0], corrcoef[0,1], corrcoef[1,0], corrcoef[1,1])
-            print "Kendall's tau (Kendall's tau, two-tailed p-value):\n %f, %s" % (kendalltau[0],kendalltau[1])
-            print "Kolmogorov-Smirnov (KS D-value, p-value):\n %f, %s" % (ks[0],ks[1])
+            print "Correlation Coefficients:\n %f, %f, %f, %f" % (
+            corrcoef[0, 0], corrcoef[0, 1], corrcoef[1, 0], corrcoef[1, 1])
+            print "Kendall's tau (Kendall's tau, two-tailed p-value):\n %f, %s" % (kendalltau[0], kendalltau[1])
+            print "Kolmogorov-Smirnov (KS D-value, p-value):\n %f, %s" % (ks[0], ks[1])
             print "Mann-Whitney U (u-statistic, one-tailed p-value (i.e., p(z(U)))):\n %f, %s" % (mannw[0], mannw[1])
-            print "Pearson Correlation Coefficient (Pearson's correlation coefficient, 2-tailed p-value):\n %f, %s" % (pearsonr[0], pearsonr[1])
-            print "Spearman rank-order Correlation Coefficient (Spearman correlation coefficient, 2-tailed p-value):\n %f, %s" % (spearmanr[0], spearmanr[1]) 
-                
+            print "Pearson Correlation Coefficient (Pearson's correlation coefficient, 2-tailed p-value):\n %f, %s" % (
+            pearsonr[0], pearsonr[1])
+            print "Spearman rank-order Correlation Coefficient (Spearman correlation coefficient, 2-tailed p-value):\n %f, %s" % (
+            spearmanr[0], spearmanr[1])
+
     if (opts.output is not None):
         file = open(opts.output, 'w')
-        if (opts.column2 is None):        
+        if (opts.column2 is None):
             file.write("Statistics of column %i \n" % int(opts.column1))
             file.write("Count: %i \n" % count1)
             file.write("Mean: %f \n" % mean1)
@@ -258,7 +261,7 @@ if __name__ == '__main__':
             file.write("Kurtosis test (Z-score, 2-tail Z-probability): %f, %s \n" % (kurtosist1[0], kurtosist1[1]))
             file.write("Skewness: %f \n" % skew1)
             file.write("Skewness test (Z-score, 2-tail Z-probability): %f, %s \n" % (skewt1[0], skewt1[1]))
-            file.write("Normality test (Chi**2 score,2-tail probability): %f, %s \n" % (normaltest1[0], normaltest1[1])) 
+            file.write("Normality test (Chi**2 score,2-tail probability): %f, %s \n" % (normaltest1[0], normaltest1[1]))
             file.write("Standard error of mean: %f \n" % sem1)
             file.write("Sum: %f \n" % sum1)
             file.write("Square of Sums: %f \n" % sos1)
@@ -286,7 +289,7 @@ if __name__ == '__main__':
             file.write("Kurtosis test (Z-score, 2-tail Z-probability): %f, %s \n" % (kurtosist1[0], kurtosist1[1]))
             file.write("Skewness: %f \n" % skew1)
             file.write("Skewness test (Z-score, 2-tail Z-probability): %f, %s \n" % (skewt1[0], skewt1[1]))
-            file.write("Normality test (Chi**2 score,2-tail probability): %f, %s \n" % (normaltest1[0], normaltest1[1])) 
+            file.write("Normality test (Chi**2 score,2-tail probability): %f, %s \n" % (normaltest1[0], normaltest1[1]))
             file.write("Standard error of mean: %f \n" % sem1)
             file.write("Sum: %f \n" % sum1)
             file.write("Square of Sums: %f \n" % sos1)
@@ -325,12 +328,19 @@ if __name__ == '__main__':
             file.write("25th (1st quartile) percentile: %f\n" % per225)
             file.write("75th (3rd quartile) percentile: %f\n" % per275)
             file.write("Statistical tests between columns %i and %i \n" % (int(opts.column1), int(opts.column2)))
-            file.write("Correlation Coefficients:\n %f, %f, %f, %f \n" % (corrcoef[0,0], corrcoef[0,1], corrcoef[1,0], corrcoef[1,1]))
-            file.write("Kendall's tau (Kendall's tau, two-tailed p-value):\n %f, %s \n" % (kendalltau[0],kendalltau[1]))
-            file.write("Kolmogorov-Smirnov (KS D-value, p-value):\n %f, %s \n" % (ks[0],ks[1]))
-            file.write("Mann-Whitney U (u-statistic, one-tailed p-value (i.e., p(z(U)))):\n %f, %s \n" % (mannw[0], mannw[1]))
-            file.write("Pearson Correlation Coefficient (Pearson's correlation coefficient, 2-tailed p-value):\n %f, %s \n" % (pearsonr[0], pearsonr[1]))
-            file.write("Spearman rank-order Correlation Coefficient (Spearman correlation coefficient, 2-tailed p-value):\n %f, %s \n" % (spearmanr[0], spearmanr[1])) 
+            file.write("Correlation Coefficients:\n %f, %f, %f, %f \n" % (
+            corrcoef[0, 0], corrcoef[0, 1], corrcoef[1, 0], corrcoef[1, 1]))
+            file.write(
+                "Kendall's tau (Kendall's tau, two-tailed p-value):\n %f, %s \n" % (kendalltau[0], kendalltau[1]))
+            file.write("Kolmogorov-Smirnov (KS D-value, p-value):\n %f, %s \n" % (ks[0], ks[1]))
+            file.write(
+                "Mann-Whitney U (u-statistic, one-tailed p-value (i.e., p(z(U)))):\n %f, %s \n" % (mannw[0], mannw[1]))
+            file.write(
+                "Pearson Correlation Coefficient (Pearson's correlation coefficient, 2-tailed p-value):\n %f, %s \n" % (
+                pearsonr[0], pearsonr[1]))
+            file.write(
+                "Spearman rank-order Correlation Coefficient (Spearman correlation coefficient, 2-tailed p-value):\n %f, %s \n" % (
+                spearmanr[0], spearmanr[1]))
         file.flush()
-        file.close()   
-    #END
+        file.close()
+        #END

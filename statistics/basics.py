@@ -4,7 +4,7 @@ Basic functions that are related to statistics.
 :requires: NumPy
 
 :author: Sami-Matias Niemi
-:contact: sniemi@unc.edu
+:contact: sammy@sammyniemi.com
 
 :version: 0.1
 """

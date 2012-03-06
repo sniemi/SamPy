@@ -1,10 +1,10 @@
-    """
+"""
 This module contains a function that can be used to generate an SQLite3 database from ascii files.
 
 :requires: SamPy
 
 :author: Sami-Matias Niemi
-:contact: sniemi@unc.edu
+:contact: sammy@sammyniemi.com
 
 :version: 0.2
 """
