@@ -1,17 +1,19 @@
 """
 Functions to do Astronomy related unit conversions.
 
+:requires: astLib
 :requires: NumPy
 :requires: cosmocalc (http://cxc.harvard.edu/contrib/cosmocalc/)
 
-:version: 0.3
+:version: 0.4
 
 :author: Sami-Matias Niemi
-:contact: sniemi@unc.edu
+:contact: sammy@sammyniemi.com
 """
 import math
 import numpy as np
 from cosmocalc import cosmocalc
+import astLib.astCoords as Coords
 
 
 C = 2.99792458e18 # speed of light in Angstrom/sec
@@ -19,10 +21,62 @@ H = 6.62620E-27   # Planck's constant in ergs * sec
 HC = H * C
 ABZERO = -48.60   # magnitude zero points
 STZERO = -21.10
+DEGTOARCSEC = 0.000277777778 # degree to arcsecond
+
+
+def angularSeparationToPhysical(separation, diameterDistance):
+    """
+    Converts angular separation on the sky [degrees] to physical [kpc].
+
+    :param separation: separation on the sky [degrees]
+    :type separation: float or ndarray
+    :param diameterDistance: diameter distance [kpc / arcsecond]
+    :type diameterDistance: float or ndarray
+
+    :return: physical distance [kpc]
+    :rtype: float or ndarray
+    """
+
+    pd = separation * diameterDistance / DEGTOARCSEC
+    return pd
+
+
+def physicalSeparation(inputdata, redshift, H0=71.0, OmegaM=0.28):
+    """
+    Calculates the physical distances between objects of given RAs and DECs at a given redshift.
+
+    :param inputdata: coordinates (RA and DEC) of the objects. The input data should
+                      consist of four keys value pairs::
+
+                        RA1: RA of the object from which to calculate the distance (float)
+                        DEC1: DEC of the object from which to calculate the distance (float)
+                        RA2: RAs of the objects (float or numpy array)
+                        DEC2: DECs of the objects (float or numpy array)
+
+    :type inputdata: dict
+    :param redshift: cosmological redshift of the object
+    :type redshift: float
+    :param H0: Hubble value [71/km/s/Mpc]
+    :type H0: float
+    :param OmegaM: Matter density
+    :type OmegaM: float [0.28]
+
+    :return: physical distance [distance], scale at a given redshift 1 arcsec = kpc [scale],
+             separation on the sky in arcseconds [separation], cosmological parameters [cosmology]
+    :rtype: dict
+    """
+    sep = Coords.calcAngSepDeg(inputdata['RA1'], inputdata['DEC1'],
+                               inputdata['RA2'], inputdata['DEC2'])
+    d = cosmocalc(redshift, H0, OmegaM)
+    dd = d['PS_kpc']
+    pd = angularSeparationToPhysical(sep, dd)
+    return dict(distance=pd, scale=dd, separation=sep/DEGTOARCSEC, redshift=redshift,
+                cosmology=d)
 
 
 def FnutoFlambda(Fnu, wavelength):
     """
+    Converts F_nu to F_lambda.
 
     :param Fnu: Fnu [ers/s/cm**2/Hz]
     :type Fnu: float or ndarray

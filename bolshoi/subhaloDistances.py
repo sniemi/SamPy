@@ -23,7 +23,7 @@ matplotlib.rcParams['legend.handlelength'] = 3
 matplotlib.rcParams['xtick.major.size'] = 5
 matplotlib.rcParams['ytick.major.size'] = 5
 import pylab as P
-import numpy as N
+import numpy as np
 import astLib.astCoords as Coords
 import os
 import SamPy.db.sqlite as sq
@@ -31,86 +31,14 @@ import SamPy.smnIO.write as wr
 import SamPy.smnIO.read as read
 import SamPy.astronomy.datamanipulation as dm
 import SamPy.cosmology.distances as dist
+import SamPy.astronomy.conversions as conv
 from cosmocalc import cosmocalc
 from time import time
 from matplotlib import cm
 import mpl_toolkits.axes_grid.inset_locator as inset_locator
 
 
-def mkRedshiftPlot(x, y, outFolder):
-    """
-    Generate a redshift plot
-    """
-    aa = []
-    bb = []
-
-    fig = P.figure(figsize=(12, 12))
-    ax = fig.add_subplot(111)
-    for r, a in zip(x, y):
-        if a.shape[0] > 0:
-            tmp = [r for foo in range(len(a))]
-            ax.scatter(tmp, a, s=2, c='b', marker='o')
-            aa += tmp
-            bb += a.tolist()
-
-    #percentiles
-    xbin_midd, y50d, y16d, y84d = dm.percentile_bins(N.array(aa),
-        N.array(bb),
-        0,
-        9.5)
-    md = (y50d > 0) & (y16d > 0) & (y84d > 0)
-    ax.plot(xbin_midd[md], y50d[md], 'r-')
-    ax.plot(xbin_midd[md], y16d[md], 'r--')
-    ax.plot(xbin_midd[md], y84d[md], 'r--')
-
-    ax.set_xlabel('Redshift')
-    ax.set_ylabel('Projected Distance [kpc]')
-
-    #ax.set_xlim(0, 1.01)
-    ax.set_ylim(0, 1e2)
-
-    P.savefig(outFolder + 'test.png')
-    P.close()
-
-
-def mkMassPlot(x, y, outFolder):
-    """
-    Generate a mass plot
-    """
-    aa = []
-    bb = []
-
-    fig = P.figure(figsize=(12, 12))
-    ax = fig.add_subplot(111)
-    for r, a in zip(x, y):
-        if a.shape[0] > 0:
-            if len(a[a > 2e3]) < 1:
-                tmp = [r for foo in range(len(a))]
-                ax.scatter(tmp, a, s=2, c='b', marker='o')
-                aa += tmp
-                bb += a.tolist()
-
-    #percentiles
-    xbin_midd, y50d, y16d, y84d = dm.percentile_bins(N.array(aa),
-        N.array(bb),
-        9.0,
-        11.5,
-        nxbins=10)
-    md = (y50d > 0) & (y16d > 0) & (y84d > 0)
-    ax.plot(xbin_midd[md], y50d[md], 'r-')
-    ax.plot(xbin_midd[md], y16d[md], 'r--')
-    ax.plot(xbin_midd[md], y84d[md], 'r--')
-
-    ax.set_xlabel(r'$\log_{10} ( M_{\mathrm{dm}} \ [M_{\odot}] )$')
-    ax.set_ylabel('Projected Distance [kpc]')
-
-    #ax.set_xlim(9, 12)
-    ax.set_ylim(0, 1e2)
-
-    P.savefig(outFolder + 'test2.png')
-
-
-def findValues(data, group=3):
+def _findValues(data, group=3):
     """
     Finds redshift and physical distance from raw data.
     Data are first grouped by group=3 column
@@ -158,14 +86,14 @@ def findValues(data, group=3):
     return dict
 
 
-def getAndProcessData(home, outfile='SubDists2.pkl'):
+def _getAndProcessData(home, outfile='SubDists2.pkl'):
     """
-    Retrieve data
+    Retrieve data.
     """
     path = home + '/Research/CANDELS/v2s/'
     db = 'sams.db'
 
-    #SQL query where all the magic happens
+    #SQL query where all the magic happens.. or doesn't
     query = """select l1.redshift, l1.ra, l1.dec, l1.halo_id, l1.gal_id, l1.mhalo from testing l1
                inner join
                (
@@ -182,10 +110,9 @@ def getAndProcessData(home, outfile='SubDists2.pkl'):
 
     #pull out data
     data = sq.get_data_sqliteSMNfunctions(path, db, query)
-    #wr.cPickleDumpDictionary(data, 'data.pkl')
 
     #group data
-    grouped = findValues(data)
+    grouped = _findValues(data)
 
     #dump it to a picked file
     wr.cPickleDumpDictionary(grouped, outfile)
@@ -193,46 +120,36 @@ def getAndProcessData(home, outfile='SubDists2.pkl'):
     return grouped
 
 
-def quickTest(id=1242422):
+def quickTest(id=1242422, output='SingleHalo.pdf',
+              db='database.db', path='Users/sammy/Research/CANDELS/v2/'):
     """
-    A single halo test
-    """
-    path = os.getenv('HOME') + '/Research/CANDELS/v2/'
-    db = 'database.db'
+    A single halo test.
 
-    query = 'select redshift, ra, dec, mhalo from lcone where halo_id = {0:d}'.format(id)
+    :param id: halo_id of the testable dark matter halo
+    :type id: int
+    :param output: name of the output file
+    :type output: string
+    :param db: name of the SQLite database file
+    :type db: string
+    :param path: full path of the database file
+    :type path: string
+
+    :return: None
+    """
     #pull out data
-    data = sq.get_data_sqliteSMNfunctions(path,
-                                          db,
-                                          query)
+    query = 'select redshift, ra, dec, mhalo, rhalo from lcone where halo_id = {0:d}'.format(id)
+    data = sq.get_data_sqliteSMNfunctions(path, db, query)
 
     #redshift
     z = data[0, 0]
-    print set(data[:, 0])
 
-    #look the diameter distance from the lookup table
-    dd = cosmocalc(z, 71.0, 0.28)['PS_kpc']
-    print 'Scale 1\"=', dd, 'kpc'
+    #calculate the separations
+    inp = dict(RA1=data[0, 1], DEC1=data[0, 2], RA2=data[1:, 1], DEC2=data[1:, 2])
+    result = conv.physicalSeparation(inp, z)
+    print result
 
-    #the first halo, assume it to be the main halo
-    RADeg1 = data[0, 1]
-    decDeg1 = data[0, 2]
-    #the following haloes, assume to be subhaloes
-    RADeg2 = data[1:, 1]
-    decDeg2 = data[1:, 2]
-
-    #calculate the angular separation on the sky
-    sep = Coords.calcAngSepDeg(RADeg1, decDeg1, RADeg2, decDeg2)
-
-    conversion = 0.000277777778 # degree to arcsecond
-
-    print (sep / conversion)
-
-    physical_distance = sep * dd / conversion
-
-    print physical_distance
-
-    text = r'halo\_id=%i, z=%.3f, mass=%.2f, scale=%.3f' % (id, z, data[0,3], dd)
+    #make a plot
+    text = r'halo\_id=%i, z=%.3f, mass=%.2f, scale=%.3f' % (id, z, data[0,3], result['scale'])
 
     P.figure(figsize=(12,12))
     ax1 = P.subplot(221)
@@ -240,13 +157,14 @@ def quickTest(id=1242422):
     ax3 = P.subplot(223)
     ax4 = P.subplot(224)
 
-    ax1.hist(sep*1e4, bins=12)
-    ax2.hist(physical_distance, bins=12)
+    ax1.hist(result['distance']/(1e3*data[0, 4]), bins=12)
+    ax2.hist(result['distance'], bins=12)
 
-    ax3.scatter((RADeg2-RADeg1)*1e4, (decDeg2-decDeg1)*1e4, c='b', s=100, marker='o', alpha=0.45)
+    RAs, DECs = (inp['RA2']-inp['RA1'])*1e4, (inp['DEC2']-inp['DEC1'])*1e4
+    ax3.scatter(RAs, DECs, c='b', s=100, marker='o', alpha=0.45)
     ax3.scatter(0, 0, c='k', s=120, marker='s')
 
-    s4 = ax4.scatter((RADeg2-RADeg1)*1e4, (decDeg2-decDeg1)*1e4, c=data[1:, 3], s=80,
+    s4 = ax4.scatter(RAs, DECs, c=data[1:, 3], s=80,
                      marker='o', alpha=0.6, cmap=cm.get_cmap('jet'), vmin=9.5, vmax=11.0)
     ax4.scatter(0, 0, c='k', s=120, marker='s')
 
@@ -256,34 +174,37 @@ def quickTest(id=1242422):
     for j in c.ax.get_xticklabels():
         j.set_fontsize(12)
 
-    ax1.set_xlabel(r'Projected Separation [$10^{-4}$ deg]')
+    ax1.set_xlabel(r'Projected Distance / Radius of the Main Halo')
     ax2.set_xlabel(r'Projected Distance [kpc]')
     ax3.set_xlabel(r'$\Delta$RA [$10^{-4}$ deg]')
     ax4.set_xlabel(r'$\Delta$RA [$10^{-4}$ deg]')
     ax3.set_ylabel(r'$\Delta$DEC [$10^{-4}$ deg]')
 
-    #ax3.set_xlim(-3.8, 3.8)
-    #ax3.set_ylim(-1.8, 2.0)
-    #ax4.set_xlim(-3.8, 3.8)
-    #ax4.set_ylim(-1.8, 2.0)
-
     P.annotate(text,
         (0.5, 0.95), xycoords='figure fraction',
         ha='center', va='center', fontsize=12)
 
-    P.savefig('SingleHalo.pdf')
+    P.savefig(output)
 
 
-def getDataSlow():
+def getDataSlow(db='database.db', path='Users/sammy/Research/CANDELS/v2/'):
     """
-    Get data.
+    Get data from the lcone table in db.
+
+    :param db: name of the SQLite database file.
+    :type db: string
+    :param path: full path of the database file
+    :type path: string
 
     :Warning: This is extremely slow way to pull out data from a database.
               Should be rewritten using table joins etc. so that less queries
               could be performed.
+
+    :return: redshift, halo mass and radius, projected distances of subhalo galaxies [kpc],
+             halo_id of the main halo
+    :rtype: dict
     """
-    path = os.getenv('HOME') + '/Research/CANDELS/v2/'
-    db = 'database.db'
+
     conversion = 0.000277777778 # degree to arcsecond
 
     redshifts = ['redshift < 0.5 and',
@@ -297,21 +218,24 @@ def getDataSlow():
 
     for i, red in enumerate(redshifts):
         print red
-        qr = 'select halo_id from lcone where %s gal_id > 1 limit 20000' % red
-        #qr = 'select halo_id from lcone where %s mhalo > 12.7 limit 10000' % red
+        qr = 'select halo_id from lcone where %s gal_id > 1' % red
+        #qr = 'select halo_id from lcone where %s mhalo > 12.7' % red
         #pull out data
         ids = sq.get_data_sqliteSMNfunctions(path, db, qr)
 
-        uids = N.unique(ids)
+        uids = np.unique(ids)
         print len(uids), 'haloes'
 
         saveid = []
         saveorig = []
         savedist = []
+        savemhalo = []
+        saverhalo = []
+        saveredshift = []
 
         #we should now look for each unique id
         for id in uids:
-            query = 'select redshift, ra, dec, halo_id from lcone where halo_id = {0:d}'.format(id)
+            query = 'select redshift, ra, dec, halo_id, mhalo, rhalo from lcone where halo_id = {0:d}'.format(id)
             #print query
             data = sq.get_data_sqliteSMNfunctions(path, db, query)
 
@@ -341,38 +265,36 @@ def getDataSlow():
 
             physical_distance = sep * dd / conversion
 
+            #these are all the main halo parameters
+            saveredshift.append(z)
             saveid.append(int(data[0, 3]))
+            savemhalo.append(data[0, 4])
+            saverhalo.append(data[0, 5])
+
             savedist.append(physical_distance)
             saveorig.append(id)
 
-        out = dict(halo_ids=saveid, distances=savedist, original=saveorig)
+        out = dict(halo_ids=saveid, distances=savedist, original=saveorig,
+                   mhalo=savemhalo, rhalo=saverhalo, redshift=saveredshift)
+
         wr.cPickleDumpDictionary(out, 'distances%i.pickle' % (i+1))
 
 
-def plotDistribution():
+def plotDistributionRedshift(output='DistancesRedshift.pdf', normalize=True, average=False):
     """
-    Simple histogram
-    """
-    data = read.cPickledData('distances.pickle')
-    
-    distances = []
-    for line in data['distances']:
-        for value in line:
-            distances.append(value)
+    Projected separation as a function of redshift bin.
 
-    fig = P.figure()
-    ax = P.subplot(111)
-    ax.hist(distances, bins=20)
-    ax.set_xlabel('Projected Distances of Subhalo Galaxies [kpc]')
-    P.savefig('Distances.pdf')
+    :param output: name of the output file
+    :type output: string
+    :param normalize: whether to normalize the projected distance with the size of the main halo
+    :type normalize: bool
+    :param average: whether to take the average of the subhalo distances or not
+    :type average: bool
 
-
-def plotDistributionRedshift():
+    :return: None
     """
-    Projected separation as a function of redshift bin
-    """
-    #masslimit = r'$\log_{10} \left( M_{dm} [\mathrm{M}_{\odot}]  \right) > 12.7$'
-    masslimit = 'No Halo Mass Limit'
+    #title = r'$\log_{10} \left( M_{dm} [\mathrm{M}_{\odot}]  \right) > 12.7$'
+    title = 'No Halo Mass Limit'
 
     fig = P.figure()
 
@@ -386,15 +308,26 @@ def plotDistributionRedshift():
                  'redshift >= 6.0 and redshift < 7.0 and']
 
     for i, red in enumerate(redshifts):
-
+        #read the pickled data in
         data = read.cPickledData('distances%i.pickle' % (i+1))
 
+        #collect distance information and normalize and average if needed
         distances = []
-        for line in data['distances']:
-            for value in line:
-                distances.append(value)
+        for dists, rhalo in zip(data['distances'], data['rhalo']):
+            tmp = []
+            for value in dists:
+                if normalize:
+                    tmp.append(value/(1e3*rhalo))
+                else:
+                    tmp.append(value)
+            if average:
+                distances.append(np.mean(np.asarray(tmp)))
+            else:
+                distances += tmp
 
         ax = P.subplot(4, 2, i+1)
+
+        #write the redshift of the subplot
         tmp = red.split()
         if i > 0:
             txt = r'$' + tmp[2] + ' \leq z < ' + tmp[6] +'$'
@@ -402,17 +335,18 @@ def plotDistributionRedshift():
             txt = r'$z < 0.5$'
         ax.text(0.5, 0.9, txt, ha='center', va='center', fontsize=12, transform=ax.transAxes)
 
+        #plot histogram if enough data
         if len(distances) > 1:
             ax.hist(distances, bins=20)
 
-
-    P.annotate('Projected Distances of Subhalo Galaxies [kpc]',
+    #add one x-label
+    P.annotate('Projected Distances / Virial Radius of the Main Halo',
                (0.5, 0.03), xycoords='figure fraction',
                ha='center', va='center', fontsize=12)
-    P.annotate(masslimit,
-        (0.5, 0.95), xycoords='figure fraction',
-        ha='center', va='center', fontsize=12)
-    P.savefig('DistancesRedshift.pdf')
+
+    #write title and save figure
+    P.annotate(title, (0.5, 0.95), xycoords='figure fraction', ha='center', va='center', fontsize=12)
+    P.savefig(output)
 
 
 if __name__ == '__main__':
