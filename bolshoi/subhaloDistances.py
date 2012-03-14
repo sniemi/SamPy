@@ -5,12 +5,15 @@ Find subhalo galaxy distances from the main halo as a function of redshift, halo
           One should improve them before using. One could remove several
           loops and do many things with table joins which are now separate loops.
 
-:requires: astLib.astCoords
+:requires: astLib
 :requires: cosmocalc
 :requires: NumPy
+:requires: SamPy
 
 :author: Sami-Matias Niemi
 :cotact: sammy@sammyniemi.com
+
+:version: 0.4
 """
 import matplotlib
 matplotlib.use('PDF')
@@ -25,7 +28,6 @@ matplotlib.rcParams['ytick.major.size'] = 5
 import pylab as P
 import numpy as np
 import astLib.astCoords as Coords
-import os
 import SamPy.db.sqlite as sq
 import SamPy.smnIO.write as wr
 import SamPy.smnIO.read as read
@@ -121,7 +123,7 @@ def _getAndProcessData(home, outfile='SubDists2.pkl'):
 
 
 def quickTest(id=1242422, output='SingleHalo.pdf',
-              db='database.db', path='Users/sammy/Research/CANDELS/v2/'):
+              db='database.db', path='/Users/sammy/Research/CANDELS/v2/'):
     """
     A single halo test.
 
@@ -187,7 +189,7 @@ def quickTest(id=1242422, output='SingleHalo.pdf',
     P.savefig(output)
 
 
-def getDataSlow(db='database.db', path='Users/sammy/Research/CANDELS/v2/'):
+def getDataSlow(db='database.db', path='/Users/sammy/Research/CANDELS/v2/'):
     """
     Get data from the lcone table in db.
 
@@ -280,7 +282,7 @@ def getDataSlow(db='database.db', path='Users/sammy/Research/CANDELS/v2/'):
         wr.cPickleDumpDictionary(out, 'distances%i.pickle' % (i+1))
 
 
-def plotDistributionRedshift(output='DistancesRedshift.pdf', normalize=True, average=False):
+def plotDistributionRedshift(output, normalize=True, average=False):
     """
     Projected separation as a function of redshift bin.
 
@@ -337,24 +339,137 @@ def plotDistributionRedshift(output='DistancesRedshift.pdf', normalize=True, ave
 
         #plot histogram if enough data
         if len(distances) > 1:
-            ax.hist(distances, bins=20)
+            ax.hist(distances, bins=np.linspace(0, 1, 20), normed=True)
+
+        if normalize:
+            ax.set_xlim(0.0, 0.8)
+            ax.set_yticks([])
 
     #add one x-label
-    P.annotate('Projected Distances / Virial Radius of the Main Halo',
-               (0.5, 0.03), xycoords='figure fraction',
-               ha='center', va='center', fontsize=12)
+    if normalize:
+        P.annotate('Projected Distances / Virial Radius of the Main Halo',
+                   (0.5, 0.03), xycoords='figure fraction',
+                   ha='center', va='center', fontsize=12)
+    else:
+        P.annotate('Projected Distance [kpc]', (0.5, 0.03), xycoords='figure fraction',
+                    ha='center', va='center', fontsize=12)
 
     #write title and save figure
     P.annotate(title, (0.5, 0.95), xycoords='figure fraction', ha='center', va='center', fontsize=12)
     P.savefig(output)
 
 
+def plotDistributionRedshiftMasslimits(output, massmin=12.0, massmax=12.5, normalize=True, average=False):
+    """
+    Projected separation as a function of redshift bin.
+
+    :param output: name of the output file
+    :type output: string
+    :param massmin: minimum dark matter halo mass
+    :type massmin: float
+    :param massmax: maximum dark matter halo mass
+    :type massmax: float
+    :param normalize: whether to normalize the projected distance with the size of the main halo
+    :type normalize: bool
+    :param average: whether to take the average of the subhalo distances or not
+    :type average: bool
+
+    :return: None
+    """
+    fig = P.figure()
+
+    title = r'$%.1f \leq \log_{10} \left( M_{dm} [\mathrm{M}_{\odot}]  \right) < %.1f$' % (massmin, massmax)
+
+    redshifts = ['redshift < 0.5 and',
+                 'redshift >= 0.5 and redshift < 1.0 and',
+                 'redshift >= 1.0 and redshift < 2.0 and',
+                 'redshift >= 2.0 and redshift < 3.0 and',
+                 'redshift >= 3.0 and redshift < 4.0 and',
+                 'redshift >= 4.0 and redshift < 5.0 and',
+                 'redshift >= 5.0 and redshift < 6.0 and',
+                 'redshift >= 6.0 and redshift < 7.0 and']
+
+    for i, red in enumerate(redshifts):
+        #read the pickled data in
+        data = read.cPickledData('distances%i.pickle' % (i+1))
+
+        mass = np.asarray(data['mhalo'])
+        msk = (mass >= massmin) & (mass < massmax)
+
+        dm = np.asarray(data['distances'])[msk]
+        rm = np.asarray(data['rhalo'])[msk]
+
+        #collect distance information and normalize and average if needed
+        distances = []
+        for dists, rhalo in zip(dm, rm):
+            tmp = []
+            for value in dists:
+                if normalize:
+                    tmp.append(value/(1e3*rhalo))
+                else:
+                    tmp.append(value)
+            if average:
+                distances.append(np.mean(np.asarray(tmp)))
+            else:
+                distances += tmp
+
+        ax = P.subplot(4, 2, i+1)
+
+        #write the redshift of the subplot
+        tmp = red.split()
+        if i > 0:
+            txt = r'$' + tmp[2] + ' \leq z < ' + tmp[6] +'$'
+        else:
+            txt = r'$z < 0.5$'
+        ax.text(0.5, 0.9, txt, ha='center', va='center', fontsize=12, transform=ax.transAxes)
+
+        #plot histogram if enough data
+        if len(distances) > 1:
+            ax.hist(distances, bins=np.linspace(0, 1, 20), normed=True)
+
+        if normalize:
+            ax.set_xlim(0.0, 0.8)
+            ax.set_yticks([])
+
+    #add one x-label
+    if normalize:
+        P.annotate('Projected Distances / Virial Radius of the Main Halo',
+            (0.5, 0.03), xycoords='figure fraction',
+            ha='center', va='center', fontsize=12)
+    else:
+        P.annotate('Projected Distance [kpc]', (0.5, 0.03), xycoords='figure fraction',
+            ha='center', va='center', fontsize=12)
+
+    #write title and save figure
+    P.annotate(title, (0.5, 0.95), xycoords='figure fraction', ha='center', va='center', fontsize=12)
+    P.savefig(output)
+
+
+
 if __name__ == '__main__':
     start = time()
 
-    quickTest(id=1334)
-    #getDataSlow()
-    #plotDistributionRedshift()
+    getDataSlow()
+
+    #quickTest(id=1334)
+
+    plotDistributionRedshift('DistancesRedshift.pdf')
+    #plotDistributionRedshift('DistancesRedshiftAvg.pdf', average=True)
+
+    #mass binned plots
+    plotDistributionRedshiftMasslimits('DistancesRedshiftMass1.pdf', massmin=11.0, massmax=11.5)
+    plotDistributionRedshiftMasslimits('DistancesRedshiftMass2.pdf', massmin=11.5, massmax=12.0)
+    plotDistributionRedshiftMasslimits('DistancesRedshiftMass3.pdf', massmin=12.0, massmax=12.5)
+    plotDistributionRedshiftMasslimits('DistancesRedshiftMass4.pdf', massmin=12.5, massmax=13.0)
+    plotDistributionRedshiftMasslimits('DistancesRedshiftMass5.pdf', massmin=13.5, massmax=14.0)
+    plotDistributionRedshiftMasslimits('DistancesRedshiftMass6.pdf', massmin=14.0, massmax=15.0)
+
+    plotDistributionRedshiftMasslimits('DistancesRedshiftMassAvg1.pdf', massmin=11.0, massmax=11.5, average=True)
+    plotDistributionRedshiftMasslimits('DistancesRedshiftMassAvg2.pdf', massmin=11.5, massmax=12.0, average=True)
+    plotDistributionRedshiftMasslimits('DistancesRedshiftMassAvg3.pdf', massmin=12.0, massmax=12.5, average=True)
+    plotDistributionRedshiftMasslimits('DistancesRedshiftMassAvg4.pdf', massmin=12.5, massmax=13.0, average=True)
+    plotDistributionRedshiftMasslimits('DistancesRedshiftMassAvg5.pdf', massmin=13.5, massmax=14.0, average=True)
+    plotDistributionRedshiftMasslimits('DistancesRedshiftMassAvg6.pdf', massmin=14.0, massmax=15.0, average=True)
 
     elapsed = time() - start
     print 'Processing took {0:.1f} minutes'.format(elapsed / 60.)
