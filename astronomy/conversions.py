@@ -24,6 +24,19 @@ STZERO = -21.10
 DEGTOARCSEC = 0.000277777778 # degree to arcsecond
 
 
+def squareDegFromArcSecSquared(arcsecsq):
+    """
+    Converts arc second squared to square degrees.
+
+    :param arcsecsq: arc seconds squared
+    :type arcsecsq: float or ndarray
+
+    :return: square degrees
+    :rtype: float or ndarray
+    """
+    return arcsecsq * 7.71604938e-8
+
+
 def angularSeparationToPhysical(separation, diameterDistance):
     """
     Converts angular separation on the sky [degrees] to physical [kpc].
