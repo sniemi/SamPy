@@ -227,7 +227,7 @@ class sourceFinding():
             self.getCenterOfMass()
 
         fh = open(self.settings['output'], 'w')
-        rg = open(self.settings['output'], 'w')
+        rg = open(self.settings['output'].split('.')[0]+'.reg', 'w')
         fh.write('#X coordinate in pixels [starts from 1]\n')
         fh.write('#Y coordinate in pixels [starts from 1]\n')
         rg.write('#File written on {0:>s}\n'.format(datetime.datetime.isoformat(datetime.datetime.now())))
@@ -235,6 +235,7 @@ class sourceFinding():
             fh.write('%10.3f %10.3f\n' % (x + 1, y + 1))
             rg.write('circle({0:.3f},{1:.3f},5)\n'.format(x + 1, y + 1))
         fh.close()
+        rg.close()
 
 
     def runAll(self):
