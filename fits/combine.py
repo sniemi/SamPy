@@ -16,7 +16,7 @@ This script provides a quick way of combining fits files
 :date: 26/11/2008 Initial Release
 
 :author: Sami-Matias Niemi
-:contact: niemi@stsci.edu
+:contact: smn2@mssl.ucl.ac.uk
 """
 from optparse import OptionParser
 import pyfits
