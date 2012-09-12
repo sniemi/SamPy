@@ -20,9 +20,9 @@ def frebin(image, nsout, nlout=1, total=False):
     Conserves flux by ensuring that each input pixel is equally represented
     in the output array.
 
-    :todo: one could do the binning faster if old and new outputs are modulo 0
+    .. todo:: one could do the binning faster if old and new outputs are modulo 0
 
-    :note: modelled after the IDL code frebin.pro, so this may not be the fastest solution
+    .. Note:: modelled after the IDL code frebin.pro, so this may not be the fastest solution
 
     :param image: input image, 1-d or 2-d ndarray
     :param nsout: number of samples in the output image, numeric scalar
