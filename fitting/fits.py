@@ -1,11 +1,11 @@
 """
 Various functions which can be fitted to given data.
 
-:author: Sami-Matias Niemi
-:contact: sniemi@unc.edu
-
 :requires: NumPy
 :requires: SciPy
+
+:author: Sami-Matias Niemi
+:contact: smn2@mssl.ucl.ac.uk
 
 :version: 0.1
 """
@@ -22,10 +22,10 @@ def polynomial5(x, p0, p1, p2, p3, p4):
 
 
 def _gaussianMoments2D(data):
-    '''
+    """
     :return: (height, x, y, width_x, width_y) the gaussian parameters of a 2D distribution
              by calculating its moments
-    '''
+    """
     total = data.sum()
     X, Y = np.indices(data.shape)
     x = (X * data).sum() / total
@@ -39,21 +39,21 @@ def _gaussianMoments2D(data):
 
 
 def _gaussian2D(height, center_x, center_y, width_x, width_y):
-    '''
+    """
     Returns a 2 dimensional gaussian function with the given parameters.
-    '''
+    """
     width_x = float(width_x)
     width_y = float(width_y)
     return lambda x, y: height * np.exp(-(((center_x - x) / width_x) ** 2 + ((center_y - y) / width_y) ** 2) / 2)
 
 
 def Gaussian2D(data):
-    '''
+    """
     Fits a 2D Gaussian to a given data.
     Uses scipy.optimize.leastsq for fitting.
 
     :param data: data
-    '''
+    """
     params = _gaussianMoments2D(data)
     errfunc = lambda p: np.ravel(_gaussian2D(*p)(*np.indices(data.shape)) - data)
     p, success = scipy.optimize.leastsq(errfunc, params)
@@ -61,7 +61,7 @@ def Gaussian2D(data):
 
 
 def Gaussian(ydata, xdata=None, initials=None):
-    '''
+    """
     Fits a single Gaussian to a given data.
     Uses scipy.optimize.leastsq for fitting.
 
@@ -71,7 +71,7 @@ def Gaussian(ydata, xdata=None, initials=None):
 
     :return: coefficients, best fit params, success
     :rtype: dictionary
-    '''
+    """
     # define a gaussian fitting function where
     # p[0] = amplitude
     # p[1] = mean
@@ -87,7 +87,7 @@ def Gaussian(ydata, xdata=None, initials=None):
 
     # fit a gaussian to the correlation function
     p1, success = scipy.optimize.leastsq(errfunc, initials[:],\
-                                         args=(xdata, ydata))
+        args=(xdata, ydata))
 
     # compute the best fit function from the best fit parameters
     corrfit = fitfunc(p1, xdata)
