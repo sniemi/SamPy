@@ -270,7 +270,6 @@ def insertIntoDB(server, user, passwd, db, data, verbose = False):
 
     if verbose: print "Inserting into DB!"
 
-    # TODO: Should do some error-catching
     conn = MySQLdb.connect(host   = server,
                            user   = user,
                            passwd = passwd,

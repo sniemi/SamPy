@@ -106,9 +106,6 @@ if (fiber == "F4") | (botthar == 1):  ratio=0.5     # F4/F5
 
 print fiber, fwhm, ratio
 
-#### todo: handle  BINNING
-
-
 # Check FITS headers to determine the image X,Y size
 xsize = int(iraf.images.imutil.hselect(datadir+image1+"[1]", "NAXIS1", "yes", Stdout=1)[0])
 ysize = int(iraf.images.imutil.hselect(datadir+image1+"[1]", "NAXIS2", "yes", Stdout=1)[0])

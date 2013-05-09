@@ -926,7 +926,6 @@ def mhb(h, p, obs, label):
     central = p.gal_id == 1
     btt = 10.0**(p.mbulge - p.mstar)
 
-    #TODO, maybe change this?
     early = btt >= 0.5
     late = btt <= 0.5
     print 'Number of galaxies %i, early types %i and late %i' % (len(p), len(p.mstar[early]), len(p.mstar[late]))

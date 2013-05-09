@@ -47,14 +47,19 @@ def _gaussian2D(height, center_x, center_y, width_x, width_y):
     return lambda x, y: height * np.exp(-(((center_x - x) / width_x) ** 2 + ((center_y - y) / width_y) ** 2) / 2)
 
 
-def Gaussian2D(data):
+def Gaussian2D(data, intials=None):
     """
     Fits a 2D Gaussian to a given data.
     Uses scipy.optimize.leastsq for fitting.
 
     :param data: data
+    :param intials: [height, x, y, widthx, widthy]
     """
-    params = _gaussianMoments2D(data)
+    if intials is None:
+        params = _gaussianMoments2D(data)
+    else:
+        params = intials
+
     errfunc = lambda p: np.ravel(_gaussian2D(*p)(*np.indices(data.shape)) - data)
     p, success = scipy.optimize.leastsq(errfunc, params)
     return p
