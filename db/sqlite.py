@@ -10,7 +10,10 @@ SQLite3 database related functions that help to create a new database or to quer
 import sqlite3
 import re
 import numpy as np
-import SamPy.astronomy.conversions as conv
+try:
+    import SamPy.astronomy.conversions as conv
+except:
+    print 'IMPORT ERROR (SamPy: sqlite): conversions not available'
 
 
 def toPowerTen(value):
