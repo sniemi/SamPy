@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
     #open connection to the FTP server
     ftp = ftplib.FTP('ftpix.iap.fr')
-    ftp.login('VISSIM','!!!VISsim')
+    ftp.login('VISSIM','set_your_own_passwd')
 
     #get existing files, note however, that this does
     #not check the file size, so files that were
